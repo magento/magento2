@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-use Laminas\Code\Generator\DocBlock\Tag;
-use Laminas\Code\Generator\ParameterGenerator;
-use Laminas\Code\Generator\ValueGenerator;
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\AbstractMemberGenerator;
+use Laminas\Code\Generator\DocBlock\Tag;
+use Laminas\Code\Generator\DocBlockGenerator;
 use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\ParameterGenerator;
 use Laminas\Code\Generator\PropertyGenerator;
+use Laminas\Code\Generator\ValueGenerator;
+use Magento\Framework\Code\Generator\ClassGenerator;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Framework\Code\Generator\ClassGenerator
@@ -84,8 +85,7 @@ class ClassGeneratorTest extends TestCase
                     'name' => 'data',
                     'type' => 'array',
                     'defaultValue' => [],
-                    'passedByReference' => true,
-                    'variadic' => false
+                    'passedByReference' => true
                 ],
             ],
             'body' => 'return 1;',
@@ -265,13 +265,10 @@ class ClassGeneratorTest extends TestCase
         $this->assertEquals($expectedVisibility, $actualObject->getVisibility());
     }
 
-    /**
-     * Correct behaviour of addMethodFromGenerator is already tested in testAddMethods
-     */
-    public function testAddMethodFromGenerator()
+    public function testAddMethodFromGenerator(): void
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('addMethodFromGenerator() expects string for name');
+        $this->expectExceptionMessage('addMethodFromGenerator() expects non-empty string for name');
         $invalidMethod = new MethodGenerator();
         $this->_model->addMethodFromGenerator($invalidMethod);
     }
@@ -312,22 +309,18 @@ class ClassGeneratorTest extends TestCase
         }
     }
 
-    /**
-     * Correct behaviour of addPropertyFromGenerator is already tested in testAddProperties
-     */
-    public function testAddPropertyFromGenerator()
+    public function testAddPropertyFromGenerator(): void
     {
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('addPropertyFromGenerator() expects string for name');
+        $this->expectExceptionMessage('addPropertyFromGenerator() expects non-empty string for name');
         $invalidProperty = new PropertyGenerator();
         $this->_model->addPropertyFromGenerator($invalidProperty);
     }
 
-    /**
-     * @dataProvider providerNamespaces
-     * @param string $actualNamespace
+    /**     * @param string $actualNamespace
      * @param string $expectedNamespace
      */
+    #[DataProvider('providerNamespaces')]
     public function testNamespaceName($actualNamespace, $expectedNamespace)
     {
         $this->assertEquals(
@@ -341,7 +334,7 @@ class ClassGeneratorTest extends TestCase
      * DataProvider for testNamespaceName
      * @return array
      */
-    public function providerNamespaces()
+    public static function providerNamespaces()
     {
         return [
             ['Laminas', 'Laminas'],

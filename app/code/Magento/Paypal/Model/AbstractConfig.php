@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model;
 
@@ -292,20 +292,33 @@ abstract class AbstractConfig implements ConfigInterface
                 break;
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
-                $disabledFunding = $this->_scopeConfig->getValue(
-                    'paypal/style/disable_funding_options',
+                $isWpsEnabled = $this->_scopeConfig->isSetFlag(
+                    'payment/' . Config::METHOD_WPS_EXPRESS .'/active',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 );
-                $isExpressCreditEnabled = $disabledFunding
-                    ? strpos($disabledFunding, 'CREDIT') === false
-                    : true;
-                $isEnabled = $isExpressCreditEnabled
-                || $this->_scopeConfig->isSetFlag(
-                    'payment/' . Config::METHOD_WPP_BML .'/active',
-                    ScopeInterface::SCOPE_STORE,
-                    $this->_storeId
-                );
+                if ($isWpsEnabled) {
+                    $isEnabled = $this->_scopeConfig->isSetFlag(
+                        'payment/' . Config::METHOD_WPS_BML .'/active',
+                        ScopeInterface::SCOPE_STORE,
+                        $this->_storeId
+                    );
+                } else {
+                    $disabledFunding = $this->_scopeConfig->getValue(
+                        'paypal/style/disable_funding_options',
+                        ScopeInterface::SCOPE_STORE,
+                        $this->_storeId
+                    );
+                    $isExpressCreditEnabled = $disabledFunding
+                        ? strpos($disabledFunding, 'CREDIT') === false
+                        : true;
+                    $isEnabled = $isExpressCreditEnabled
+                        || $this->_scopeConfig->isSetFlag(
+                            'payment/' . Config::METHOD_WPP_BML .'/active',
+                            ScopeInterface::SCOPE_STORE,
+                            $this->_storeId
+                        );
+                }
                 $method = Config::METHOD_WPP_BML;
                 break;
             case Config::METHOD_PAYMENT_PRO:

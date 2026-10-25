@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,11 @@ class DownloadableLinksDataProvider implements BuyRequestDataProviderInterface
 
         if (isset($cartItemData['data']) && isset($cartItemData['data']['sku'])) {
             $sku = $cartItemData['data']['sku'];
-            $product = $this->productRepository->get($sku);
+            try {
+                $product = $this->productRepository->get($sku);
+            } catch (NoSuchEntityException $e) {
+                throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
+            }
 
             if ($product->getLinksPurchasedSeparately() && isset($cartItemData['downloadable_product_links'])) {
                 $downloadableLinks = $cartItemData['downloadable_product_links'];

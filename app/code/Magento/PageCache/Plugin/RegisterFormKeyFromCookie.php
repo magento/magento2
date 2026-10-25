@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -96,6 +95,7 @@ class RegisterFormKeyFromCookie
         $cookieMetadata->setDomain($this->sessionConfig->getCookieDomain());
         $cookieMetadata->setPath($this->sessionConfig->getCookiePath());
         $cookieMetadata->setSecure($this->sessionConfig->getCookieSecure());
+        $cookieMetadata->setSameSite('Lax');
         $lifetime = $this->sessionConfig->getCookieLifetime();
         if ($lifetime !== 0) {
             $cookieMetadata->setDuration($lifetime);

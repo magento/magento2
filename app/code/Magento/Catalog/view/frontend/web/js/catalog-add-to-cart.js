@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -34,7 +34,7 @@ define([
             if (this.options.bindSubmit) {
                 this._bindSubmit();
             }
-            $(this.options.addToCartButtonSelector).attr('disabled', false);
+            $(this.options.addToCartButtonSelector).prop('disabled', false);
         },
 
         /**
@@ -101,7 +101,7 @@ define([
             formData = new FormData(form[0]);
 
             $.ajax({
-                url: form.attr('action'),
+                url: form.prop('action'),
                 data: formData,
                 type: 'post',
                 dataType: 'json',
@@ -132,7 +132,19 @@ define([
                         $('body').trigger(self.options.processStop);
                     }
 
-                    if (res.backUrl) {
+                    if (res.messages) {
+                        $(self.options.messagesSelector).html(res.messages);
+                    }
+
+                    if (res.product && res.product.statusText) {
+                        $(self.options.productStatusSelector)
+                            .removeClass('available')
+                            .addClass('unavailable')
+                            .find('span')
+                            .html(res.product.statusText);
+                    }
+
+                    if (res.backUrl && !res.displayMessages) {
                         eventData = {
                             'form': form,
                             'redirectParameters': []
@@ -153,22 +165,11 @@ define([
                         return;
                     }
 
-                    if (res.messages) {
-                        $(self.options.messagesSelector).html(res.messages);
-                    }
-
                     if (res.minicart) {
                         $(self.options.minicartSelector).replaceWith(res.minicart);
                         $(self.options.minicartSelector).trigger('contentUpdated');
                     }
 
-                    if (res.product && res.product.statusText) {
-                        $(self.options.productStatusSelector)
-                            .removeClass('available')
-                            .addClass('unavailable')
-                            .find('span')
-                            .html(res.product.statusText);
-                    }
                     self.enableAddToCartButton(form);
                 },
 
@@ -201,7 +202,7 @@ define([
 
             addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
             addToCartButton.find('span').text(addToCartButtonTextWhileAdding);
-            addToCartButton.attr('title', addToCartButtonTextWhileAdding);
+            addToCartButton.prop('title', addToCartButtonTextWhileAdding);
         },
 
         /**
@@ -213,14 +214,14 @@ define([
                 addToCartButton = $(form).find(this.options.addToCartButtonSelector);
 
             addToCartButton.find('span').text(addToCartButtonTextAdded);
-            addToCartButton.attr('title', addToCartButtonTextAdded);
+            addToCartButton.prop('title', addToCartButtonTextAdded);
 
             setTimeout(function () {
                 var addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
 
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
                 addToCartButton.find('span').text(addToCartButtonTextDefault);
-                addToCartButton.attr('title', addToCartButtonTextDefault);
+                addToCartButton.prop('title', addToCartButtonTextDefault);
             }, 1000);
         }
     });

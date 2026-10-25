@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,7 @@ use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 class RuleHelper extends Helper
 {
     /**
-     * Delete all Catalog Price Rules obe by one.
+     * Deletes all Catalog Price Rules one by one.
      *
      * @param string $emptyRow
      * @param string $modalAceptButton

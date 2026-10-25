@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,11 +79,12 @@ class Builder
         $aggregations = [];
         $buckets = $request->getAggregation();
 
-        $dataProvider = $this->dataProviderFactory->create(
-            $this->dataProviderContainer[$request->getIndex()],
-            $this->query
-        );
         foreach ($buckets as $bucket) {
+            $dataProvider = $this->dataProviderFactory->create(
+                $this->dataProviderContainer[$request->getIndex()],
+                $this->query,
+                $bucket->getField()
+            );
             $bucketAggregationBuilder = $this->aggregationContainer[$bucket->getType()];
             $aggregations[$bucket->getName()] = $bucketAggregationBuilder->build(
                 $bucket,

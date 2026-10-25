@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model\Address;
 
@@ -18,6 +18,8 @@ class AddressDataGenerator
     public function generateAddress()
     {
         return [
+            // mt_rand() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             'postcode' => mt_rand(10000, 99999)
         ];
     }

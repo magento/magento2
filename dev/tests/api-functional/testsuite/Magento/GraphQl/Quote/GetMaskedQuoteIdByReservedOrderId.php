@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,6 +57,7 @@ class GetMaskedQuoteIdByReservedOrderId
     public function execute(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
+        $quote->setSharedStoreIds(['*']);
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());

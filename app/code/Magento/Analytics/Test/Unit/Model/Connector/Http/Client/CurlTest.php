@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\Connector\Http\Client;
 
+use Laminas\Http\Exception\RuntimeException;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Magento\Analytics\Model\Connector\Http\Client\Curl;
 use Magento\Analytics\Model\Connector\Http\ConverterInterface;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\HTTP\ResponseFactory;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -24,6 +27,7 @@ use Psr\Log\LoggerInterface;
  */
 class CurlTest extends TestCase
 {
+
     /**
      * @var Curl
      */
@@ -50,15 +54,15 @@ class CurlTest extends TestCase
     private $converterMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->curlAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $curlFactoryMock
@@ -76,7 +80,7 @@ class CurlTest extends TestCase
                 'curlFactory' => $curlFactoryMock,
                 'responseFactory' => $this->responseFactoryMock,
                 'converter' => $this->converterMock,
-                'logger' => $this->loggerMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
@@ -86,7 +90,7 @@ class CurlTest extends TestCase
      *
      * @return array
      */
-    public function getTestData()
+    public static function getTestData()
     {
         return [
             [
@@ -94,7 +98,7 @@ class CurlTest extends TestCase
                     'version' => '1.1',
                     'body'=> ['name' => 'value'],
                     'url' => 'http://www.mystore.com',
-                    'method' => ZendClient::POST,
+                    'method' => Request::METHOD_POST
                 ]
             ]
         ];
@@ -103,13 +107,15 @@ class CurlTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @throws \Zend_Http_Exception
-     * @dataProvider getTestData
+     * @throws RuntimeException
      */
+    #[DataProvider('getTestData')]
     public function testRequestSuccess(array $data)
     {
         $responseString = 'This is response.';
-        $response = new  \Zend_Http_Response(201, [], $responseString);
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_201);
+        $response->setContent($responseString);
         $this->curlAdapterMock->expects($this->once())
             ->method('write')
             ->with(
@@ -122,14 +128,8 @@ class CurlTest extends TestCase
         $this->curlAdapterMock->expects($this->once())
             ->method('read')
             ->willReturn($responseString);
-        $this->curlAdapterMock
-            ->method('getErrno')
-            ->willReturn(0);
-
-        $this->responseFactoryMock
-            ->method('create')
-            ->with($responseString)
-            ->willReturn($response);
+        $this->curlAdapterMock->method('getErrno')->willReturn(0);
+        $this->responseFactoryMock->method('create')->with($responseString)->willReturn($response);
 
         $this->assertEquals(
             $response,
@@ -146,12 +146,13 @@ class CurlTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @throws \Zend_Http_Exception
-     * @dataProvider getTestData
+     * @throws RuntimeException
      */
+    #[DataProvider('getTestData')]
     public function testRequestError(array $data)
     {
-        $response = new  \Zend_Http_Response(0, []);
+        $response = new Response();
+        $response->setCustomStatusCode(Response::STATUS_CODE_CUSTOM);
         $this->curlAdapterMock->expects($this->once())
             ->method('write')
             ->with(
@@ -196,7 +197,7 @@ class CurlTest extends TestCase
     private function createJsonConverter()
     {
         $converterMock = $this->getMockBuilder(JsonConverter::class)
-            ->setMethodsExcept(['getContentTypeHeader'])
+            ->onlyMethods(['getContentTypeHeader','toBody'])
             ->disableOriginalConstructor()
             ->getMock();
         $converterMock->method('toBody')->willReturnCallback(function ($value) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,27 +14,22 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FileResolverTest extends TestCase
 {
     /**
-     * Files resolver
-     *
      * @var FileResolver
      */
     protected $model;
 
     /**
-     * Filesystem
-     *
      * @var \Magento\Framework\Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * File iterator factory
-     *
      * @var FileIteratorFactory|MockObject
      */
     protected $iteratorFactory;
@@ -44,6 +39,9 @@ class FileResolverTest extends TestCase
      */
     protected $moduleReader;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->iteratorFactory = $this->getMockBuilder(FileIteratorFactory::class)
@@ -63,15 +61,10 @@ class FileResolverTest extends TestCase
         );
     }
 
-    /**
-     * Test for get method with primary scope
-     *
-     * @dataProvider providerGet
-     * @param string $filename
-     * @param array $fileList
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+    /**     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testGetPrimary($filename, $fileList)
+    #[DataProvider('providerGet')]
+    public function testGetPrimary($filename, $fileList): void
     {
         $scope = 'primary';
         $directory = $this->createMock(Read::class);
@@ -84,10 +77,15 @@ class FileResolverTest extends TestCase
         )->willReturn(
             $fileList
         );
-        $i = 1;
+        $willReturnArgs = [];
+
         foreach ($fileList as $file) {
-            $directory->expects($this->at($i++))->method('getAbsolutePath')->willReturn($file);
+            $willReturnArgs[] = $file;
         }
+        $directory
+            ->method('getAbsolutePath')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+
         $this->filesystem->expects(
             $this->once()
         )->method(
@@ -109,14 +107,10 @@ class FileResolverTest extends TestCase
         $this->assertTrue($this->model->get($filename, $scope));
     }
 
-    /**
-     * Test for get method with global scope
-     *
-     * @dataProvider providerGet
-     * @param string $filename
-     * @param array $fileList
+    /**     * @return void
      */
-    public function testGetGlobal($filename, $fileList)
+    #[DataProvider('providerGet')]
+    public function testGetGlobal($filename, $fileList): void
     {
         $scope = 'global';
         $this->moduleReader->expects(
@@ -131,14 +125,10 @@ class FileResolverTest extends TestCase
         $this->assertEquals($fileList, $this->model->get($filename, $scope));
     }
 
-    /**
-     * Test for get method with default scope
-     *
-     * @dataProvider providerGet
-     * @param string $filename
-     * @param array $fileList
+    /**     * @return void
      */
-    public function testGetDefault($filename, $fileList)
+    #[DataProvider('providerGet')]
+    public function testGetDefault($filename, $fileList): void
     {
         $scope = 'some_scope';
         $this->moduleReader->expects(
@@ -154,11 +144,11 @@ class FileResolverTest extends TestCase
     }
 
     /**
-     * Data provider for get tests
+     * Data provider for get tests.
      *
      * @return array
      */
-    public function providerGet()
+    public static function providerGet(): array
     {
         return [
             ['di.xml', ['di.xml', 'anotherfolder/di.xml']],

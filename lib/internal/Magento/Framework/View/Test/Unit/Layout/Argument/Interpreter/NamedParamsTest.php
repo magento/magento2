@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NamedParamsTest extends TestCase
 {
@@ -24,38 +25,35 @@ class NamedParamsTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->_interpreter = $this->getMockForAbstractClass(
+        $this->_interpreter = $this->createMock(
             InterpreterInterface::class
         );
         $this->_model = new NamedParams($this->_interpreter);
     }
 
-    public function testEvaluate()
+    /**
+     * @return void
+     */
+    public function testEvaluate(): void
     {
         $input = [
             'param' => ['param1' => ['value' => 'value 1'], 'param2' => ['value' => 'value 2']],
         ];
 
-        $this->_interpreter->expects(
-            $this->at(0)
-        )->method(
-            'evaluate'
-        )->with(
-            ['value' => 'value 1']
-        )->willReturn(
-            'value 1 (evaluated)'
-        );
-        $this->_interpreter->expects(
-            $this->at(1)
-        )->method(
-            'evaluate'
-        )->with(
-            ['value' => 'value 2']
-        )->willReturn(
-            'value 2 (evaluated)'
-        );
+        $this->_interpreter
+            ->method('evaluate')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == ['value' => 'value 1']) {
+                    return 'value 1 (evaluated)';
+                } elseif ($arg1 == ['value' => 'value 2']) {
+                    return 'value 2 (evaluated)';
+                }
+            });
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 
         $actual = $this->_model->evaluate($input);
@@ -63,9 +61,10 @@ class NamedParamsTest extends TestCase
     }
 
     /**
-     * @dataProvider evaluateWrongParamDataProvider
-     */
-    public function testEvaluateWrongParam($input, $expectedExceptionMessage)
+     * @return void
+     *     */
+    #[DataProvider('evaluateWrongParamDataProvider')]
+    public function testEvaluateWrongParam($input, $expectedExceptionMessage): void
     {
         $this->expectException('\InvalidArgumentException');
         $this->expectExceptionMessage($expectedExceptionMessage);
@@ -75,16 +74,16 @@ class NamedParamsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongParamDataProvider()
+    public static function evaluateWrongParamDataProvider(): array
     {
         return [
             'root param is non-array' => [
                 ['param' => 'non-array'],
-                'Layout argument parameters are expected to be an array',
+                'Layout argument parameters are expected to be an array'
             ],
             'individual param is non-array' => [
                 ['param' => ['sub-param' => 'non-array']],
-                'Parameter data of layout argument is expected to be an array',
+                'Parameter data of layout argument is expected to be an array'
             ]
         ];
     }

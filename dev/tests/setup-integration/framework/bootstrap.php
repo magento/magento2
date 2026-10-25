@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -11,6 +11,12 @@ require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 //to handle different types of errors on CI
 require __DIR__ . '/../../error_handler.php';
+
+error_reporting(E_ALL);
+
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.max_nesting_level', '200');
+}
 
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
@@ -83,7 +89,10 @@ try {
     $application->createInstallDir();
     //We do not want to install anything
     $application->initialize([]);
-    $application->cleanup();
+
+    if ($settings->getAsBoolean('TESTS_CLEANUP')) {
+        $application->cleanup();
+    }
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 

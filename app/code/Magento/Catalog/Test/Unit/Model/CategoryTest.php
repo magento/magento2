@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
@@ -31,6 +32,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +42,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Category
      */
@@ -145,52 +149,56 @@ class CategoryTest extends TestCase
      */
     private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->registry = $this->createMock(Registry::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->categoryTreeResource = $this->createMock(Tree::class);
         $this->categoryTreeFactory = $this->createPartialMock(
             TreeFactory::class,
             ['create']
         );
-        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $this->storeCollectionFactory = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
         );
-        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
         $this->productCollectionFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
             ['create']
         );
         $this->catalogConfig = $this->createMock(Config::class);
-        $this->filterManager = $this->getMockBuilder(FilterManager::class)
-            ->addMethods(['translitUrl'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterManager = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['translitUrl']
+        );
         $this->flatState = $this->createMock(State::class);
-        $this->flatIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
-        $this->productIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $this->flatIndexer = $this->createMock(IndexerInterface::class);
+        $this->productIndexer = $this->createMock(IndexerInterface::class);
         $this->categoryUrlPathGenerator = $this->createMock(
             CategoryUrlPathGenerator::class
         );
-        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
         $this->resource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
         $this->indexerRegistry = $this->createPartialMock(IndexerRegistry::class, ['get']);
 
         $this->metadataServiceMock = $this->createMock(
             CategoryAttributeRepositoryInterface::class
         );
-        $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeValueFactory = $this->createMock(AttributeValueFactory::class);
 
         $this->category = $this->getCategoryModel();
     }
 
-    public function testFormatUrlKey()
+    /**
+     * @return void
+     */
+    public function testFormatUrlKey(): void
     {
         $strIn = 'Some string';
         $resultString = 'some';
@@ -202,33 +210,31 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @codingStandardsIgnoreStart
-     * @codingStandardsIgnoreEnd
+     * @return void
      */
-    public function testMoveWhenCannotFindParentCategory()
+    public function testMoveWhenCannotFindParentCategory(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Sorry, but we can\'t find the new parent category you selected.');
-        $this->markTestIncomplete('MAGETWO-31165');
+        $this->markTestSkipped('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             Category::class,
             ['getId', 'setStoreId', 'load']
         );
         $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
         $parentCategory->expects($this->any())->method('load')->willReturnSelf();
-        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
+        $this->categoryRepository->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->category->move(1, 2);
     }
 
     /**
-     * @codingStandardsIgnoreStart
-     * @codingStandardsIgnoreEnd
+     * @return void
      */
-    public function testMoveWhenCannotFindNewCategory()
+    public function testMoveWhenCannotFindNewCategory(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Sorry, but we can\'t find the new category you selected.');
@@ -236,49 +242,49 @@ class CategoryTest extends TestCase
             Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->method('getId')->willReturn(5);
         $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
         $parentCategory->expects($this->any())->method('load')->willReturnSelf();
-        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
+        $this->categoryRepository->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->category->move(1, 2);
     }
 
     /**
-     * @codingStandardsIgnoreStart
-     * @codingStandardsIgnoreEnd
+     * @return void
      */
-    public function testMoveWhenParentCategoryIsSameAsChildCategory()
+    public function testMoveWhenParentCategoryIsSameAsChildCategory(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage(
             'We can\'t move the category because the parent category name matches the child category name.'
         );
-        $this->markTestIncomplete('MAGETWO-31165');
+        $this->markTestSkipped('MAGETWO-31165');
         $parentCategory = $this->createPartialMock(
             Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->method('getId')->willReturn(5);
         $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
         $parentCategory->expects($this->any())->method('load')->willReturnSelf();
-        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
+        $this->categoryRepository->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->category->setId(5);
         $this->category->move(1, 2);
     }
 
-    public function testMovePrimaryWorkflow()
+    /**
+     * @return void
+     */
+    public function testMovePrimaryWorkflow(): void
     {
-        $indexer = $this->getMockBuilder(\stdClass::class)->addMethods(['isScheduled'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $indexer = $this->createMock(IndexerInterface::class);
         $indexer->expects($this->once())->method('isScheduled')->willReturn(true);
         $this->indexerRegistry->expects($this->once())
             ->method('get')
@@ -288,28 +294,32 @@ class CategoryTest extends TestCase
             Category::class,
             ['getId', 'setStoreId', 'load']
         );
-        $parentCategory->expects($this->any())->method('getId')->willReturn(5);
+        $parentCategory->method('getId')->willReturn(5);
         $parentCategory->expects($this->any())->method('setStoreId')->willReturnSelf();
         $parentCategory->expects($this->any())->method('load')->willReturnSelf();
-        $this->categoryRepository->expects($this->any())->method('get')->willReturn($parentCategory);
+        $this->categoryRepository->method('get')->willReturn($parentCategory);
 
         $store = $this->createMock(Store::class);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->category->setId(3);
         $this->category->move(5, 7);
     }
 
-    public function testGetUseFlatResourceFalse()
+    /**
+     * @return void
+     */
+    public function testGetUseFlatResourceFalse(): void
     {
         $this->assertFalse($this->category->getUseFlatResource());
     }
 
-    public function testGetUseFlatResourceTrue()
+    /**
+     * @return void
+     */
+    public function testGetUseFlatResourceTrue(): void
     {
-        $this->flatState->expects($this->any())
-            ->method('isAvailable')
-            ->willReturn(true);
+        $this->flatState->method('isAvailable')->willReturn(true);
 
         $category = $this->getCategoryModel();
         $this->assertTrue($category->getUseFlatResource());
@@ -318,7 +328,7 @@ class CategoryTest extends TestCase
     /**
      * @return object
      */
-    protected function getCategoryModel()
+    protected function getCategoryModel(): object
     {
         return $this->objectManager->getObject(
             Category::class,
@@ -341,7 +351,7 @@ class CategoryTest extends TestCase
                 'resource' => $this->resource,
                 'indexerRegistry' => $this->indexerRegistry,
                 'metadataService' => $this->metadataServiceMock,
-                'customAttributeFactory' => $this->attributeValueFactory,
+                'customAttributeFactory' => $this->attributeValueFactory
             ]
         );
     }
@@ -349,13 +359,13 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function reindexFlatEnabledTestDataProvider()
+    public static function reindexFlatEnabledTestDataProvider(): array
     {
         return [
             'set 1' => [false, false, 1, 1],
             'set 2' => [true,  false, 0, 1],
             'set 3' => [false, true,  1, 0],
-            'set 4' => [true,  true,  0, 0],
+            'set 4' => [true,  true,  0, 0]
         ];
     }
 
@@ -365,23 +375,22 @@ class CategoryTest extends TestCase
      * @param $expectedFlatReindexCalls
      * @param $expectedProductReindexCall
      *
-     * @dataProvider reindexFlatEnabledTestDataProvider
+     * @return void
      */
+    #[DataProvider('reindexFlatEnabledTestDataProvider')]
     public function testReindexFlatEnabled(
         $flatScheduled,
         $productScheduled,
         $expectedFlatReindexCalls,
         $expectedProductReindexCall
-    ) {
+    ): void {
         $affectedProductIds = ["1", "2"];
         $this->category->setAffectedProductIds($affectedProductIds);
         $pathIds = ['path/1/2', 'path/2/3'];
         $this->category->setData('path_ids', $pathIds);
         $this->category->setId('123');
 
-        $this->flatState->expects($this->any())
-            ->method('isFlatEnabled')
-            ->willReturn(true);
+        $this->flatState->method('isFlatEnabled')->willReturn(true);
 
         $this->flatIndexer->expects($this->exactly(1))
             ->method('isScheduled')
@@ -395,23 +404,19 @@ class CategoryTest extends TestCase
             ->method('reindexList')
             ->with($pathIds);
 
-        $this->indexerRegistry->expects($this->at(0))
+        $this->indexerRegistry
             ->method('get')
-            ->with(State::INDEXER_ID)
-            ->willReturn($this->flatIndexer);
-
-        $this->indexerRegistry->expects($this->at(1))
-            ->method('get')
-            ->with(Product::INDEXER_ID)
-            ->willReturn($this->productIndexer);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [State::INDEXER_ID] => $this->flatIndexer,
+                [Product::INDEXER_ID] => $this->productIndexer
+            });
         $this->category->reindex();
     }
 
     /**
      * @return array
      */
-    public function reindexFlatDisabledTestDataProvider()
+    public static function reindexFlatDisabledTestDataProvider(): array
     {
         return [
             [false, null, null, null, null, null, 0],
@@ -422,8 +427,7 @@ class CategoryTest extends TestCase
             [false, ["1", "2"], 0, 1, null, null,  1],
             [false, null, 1, 1, null, null, 0],
             [false, ["1", "2"], null, null, 0, 1,  1],
-            [false, ["1", "2"], null, null, 1, 0,  1],
-
+            [false, ["1", "2"], null, null, 1, 0,  1]
         ];
     }
 
@@ -434,8 +438,9 @@ class CategoryTest extends TestCase
      * @param int|string $isAnchor
      * @param int $expectedProductReindexCall
      *
-     * @dataProvider reindexFlatDisabledTestDataProvider
+     * @return void
      */
+    #[DataProvider('reindexFlatDisabledTestDataProvider')]
     public function testReindexFlatDisabled(
         $productScheduled,
         $affectedIds,
@@ -444,7 +449,7 @@ class CategoryTest extends TestCase
         $isActiveOrig,
         $isActive,
         $expectedProductReindexCall
-    ) {
+    ): void {
         $this->category->setAffectedProductIds($affectedIds);
         $this->category->setData('is_anchor', $isAnchor);
         $this->category->setOrigData('is_anchor', $isAnchorOrig);
@@ -457,9 +462,7 @@ class CategoryTest extends TestCase
         $this->category->setData('path_ids', $pathIds);
         $this->category->setId('123');
 
-        $this->flatState->expects($this->any())
-            ->method('isFlatEnabled')
-            ->willReturn(false);
+        $this->flatState->method('isFlatEnabled')->willReturn(false);
 
         $this->productIndexer
             ->method('isScheduled')
@@ -468,7 +471,7 @@ class CategoryTest extends TestCase
             ->method('reindexList')
             ->with($pathIds);
 
-        $this->indexerRegistry->expects($this->at(0))
+        $this->indexerRegistry
             ->method('get')
             ->with(Product::INDEXER_ID)
             ->willReturn($this->productIndexer);
@@ -476,18 +479,21 @@ class CategoryTest extends TestCase
         $this->category->reindex();
     }
 
-    public function testGetCustomAttributes()
+    /**
+     * @return void
+     */
+    public function testGetCustomAttributes(): void
     {
         $interfaceAttributeCode = 'name';
         $customAttributeCode = 'description';
         $initialCustomAttributeValue = 'initial description';
         $newCustomAttributeValue = 'new description';
 
-        $interfaceAttribute = $this->getMockForAbstractClass(MetadataObjectInterface::class);
+        $interfaceAttribute = $this->createMock(MetadataObjectInterface::class);
         $interfaceAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($interfaceAttributeCode);
-        $colorAttribute = $this->getMockForAbstractClass(MetadataObjectInterface::class);
+        $colorAttribute = $this->createMock(MetadataObjectInterface::class);
         $colorAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($customAttributeCode);
@@ -527,7 +533,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function getImageWithAttributeCodeDataProvider()
+    public static function getImageWithAttributeCodeDataProvider(): array
     {
         return [
             ['testimage', 'http://www.example.com/catalog/category/testimage'],
@@ -539,16 +545,15 @@ class CategoryTest extends TestCase
      * @param string|bool $value
      * @param string|bool $url
      *
-     * @dataProvider getImageWithAttributeCodeDataProvider
+     * @return void
      */
-    public function testGetImageWithAttributeCode($value, $url)
+    #[DataProvider('getImageWithAttributeCodeDataProvider')]
+    public function testGetImageWithAttributeCode($value, $url): void
     {
         $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $store = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $storeManager->method('getStore')->willReturn($store);
 
         $store->expects($this->any())
             ->method('getBaseUrl')
@@ -570,14 +575,15 @@ class CategoryTest extends TestCase
         $this->assertEquals($url, $result);
     }
 
-    public function testGetImageWithoutAttributeCode()
+    /**
+     * return void
+     */
+    public function testGetImageWithoutAttributeCode(): void
     {
         $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $store = $this->createPartialMock(Store::class, ['getBaseUrl']);
 
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $storeManager->method('getStore')->willReturn($store);
 
         $store->expects($this->any())
             ->method('getBaseUrl')

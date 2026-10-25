@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define('globalNavigationScroll', [
@@ -224,7 +224,7 @@ define('globalNavigation', [
 
             if (e.which === 13) {
                 this._close(e);
-                $(selectors.topLevelHref, menuItem).focus();
+                $(selectors.topLevelHref, menuItem).trigger('focus');
             }
         },
 
@@ -594,13 +594,13 @@ define('collapsable', [
             var self = this;
 
             this.element
-                .on('show', function (e) {
+                .on('show.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.addClass(self.options.openedClass);
                     e.stopPropagation();
                 })
-                .on('hide', function (e) {
+                .on('hide.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.removeClass(self.options.openedClass);
@@ -615,7 +615,6 @@ define('collapsable', [
 define('js/theme', [
     'jquery',
     'mage/smart-keyboard-handler',
-    'mage/ie-class-fixer',
     'collapsable',
     'domReady!'
 ], function ($, keyboardHandler) {

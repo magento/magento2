@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -52,21 +52,13 @@ class EmailNotificationTest extends TestCase
     private $inlineTranslationMock;
 
     /**
-     * @var ObjectManagerInterface|MockObject
+     * @inheritDoc
      */
-    private $objectManagerMock;
-
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMock();
-        $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
@@ -74,23 +66,26 @@ class EmailNotificationTest extends TestCase
             [
                 'inlineTranslation' => $this->inlineTranslationMock,
                 'scopeConfig' => $this->scopeConfigMock,
-                'transportBuilder' => $this->transportBuilderMock,
+                'transportBuilder' => $this->transportBuilderMock
             ]
         );
     }
 
-    public function testSendErrors()
+    /**
+     * @return void
+     */
+    public function testSendErrors(): void
     {
         $exception = 'Sitemap Exception';
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
-        $this->scopeConfigMock->expects($this->at(0))
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with(
-                Observer::XML_PATH_ERROR_TEMPLATE,
-                ScopeInterface::SCOPE_STORE
-            )
-            ->willReturn('error-recipient@example.com');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Observer::XML_PATH_ERROR_TEMPLATE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return ['error-recipient@example.com'];
+                }
+            });
 
         $this->inlineTranslationMock->expects($this->once())
             ->method('suspend');

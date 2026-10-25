@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class SecurityCookieTest extends TestCase
 
         $this->cookieMetadataMock = $this->createPartialMock(
             PublicCookieMetadata::class,
-            ['setPath', 'setDuration']
+            ['setPath', 'setDuration', 'setSameSite']
         );
 
         $this->cookieReaderMock = $this->createPartialMock(
@@ -116,6 +116,11 @@ class SecurityCookieTest extends TestCase
         $this->cookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/' . $frontName)
+            ->willReturnSelf();
+
+        $this->cookieMetadataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Strict')
             ->willReturnSelf();
 
         $this->phpCookieManagerMock->expects($this->once())

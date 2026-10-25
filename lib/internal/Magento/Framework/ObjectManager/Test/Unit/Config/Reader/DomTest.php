@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,10 +45,10 @@ class DomTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
+        $this->fileResolverMock = $this->createMock(FileResolverInterface::class);
         $this->converterMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
         $this->schemaLocatorMock = $this->createMock(SchemaLocator::class);
-        $this->validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $this->validationStateMock = $this->createMock(ValidationStateInterface::class);
 
         $this->model = new Dom(
             $this->fileResolverMock,

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config\Spi;
 
 /**
  * Allows to use custom callbacks and functions before applying fallback
+ *
+ * @api
  */
 interface PreProcessorInterface
 {

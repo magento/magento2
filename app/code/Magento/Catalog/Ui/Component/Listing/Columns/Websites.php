@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,15 +23,17 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * Column name
      */
-    const NAME = 'websites';
+    public const NAME = 'websites';
 
     /**
      * Data for concatenated website names value.
+     *
+     * @var string
      */
     private $websiteNames = 'website_names';
 
     /**
-     * Store manager
+     * Store manager property
      *
      * @var StoreManagerInterface
      */
@@ -56,7 +58,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
         StoreManagerInterface $storeManager,
         array $components = [],
         array $data = [],
-        Helper $resourceHelper = null
+        ?Helper $resourceHelper = null
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -68,6 +70,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
      * @inheritdoc
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function prepareDataSource(array $dataSource)
     {

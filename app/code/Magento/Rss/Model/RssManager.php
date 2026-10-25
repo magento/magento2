@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Rss\Model;
 
@@ -20,6 +20,11 @@ class RssManager implements RssManagerInterface
      * @var \Magento\Framework\App\Rss\DataProviderInterface[]
      */
     protected $providers;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

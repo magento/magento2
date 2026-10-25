@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 .ui-datepicker {
     display: none;
@@ -265,4 +265,8 @@
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
+}
+
+.ui-timepicker-div .ui_tpicker_unit_hide {
+    display:none;
 }

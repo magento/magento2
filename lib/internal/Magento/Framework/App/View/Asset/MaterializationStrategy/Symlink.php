@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
@@ -38,7 +38,7 @@ class Symlink implements StrategyInterface
      */
     public function isSupported(Asset\LocalInterface $asset)
     {
-        $sourceParts = explode('/', $asset->getSourceFile());
+        $sourceParts = explode('/', $asset->getSourceFile() ?? '');
         if (in_array(DirectoryList::TMP_MATERIALIZATION_DIR, $sourceParts)) {
             return false;
         }

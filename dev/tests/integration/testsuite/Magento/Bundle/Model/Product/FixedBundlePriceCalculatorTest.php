@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -16,11 +17,11 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -54,12 +55,12 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -95,11 +96,11 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             '#1 Testing price for fixed bundle product with one simple' => [
-                'strategy' => $this->getProductWithOneSimple(),
+                'strategyModifiers' => self::getProductWithOneSimple(),
                 'expectedResults' => [
                     //  110 + 10 (price from simple1)
                     'minimalPrice' => 120,
@@ -109,7 +110,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for fixed bundle product with three simples and different qty' => [
-                'strategy' => $this->getProductWithDifferentQty(),
+                'strategyModifiers' => self::getProductWithDifferentQty(),
                 'expectedResults' => [
                     // 110 + 10 (min price from simples)
                     'minimalPrice' => 120,
@@ -119,7 +120,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for fixed bundle product with three simples and different price' => [
-                'strategy' => $this->getProductWithDifferentPrice(),
+                'strategyModifiers' => self::getProductWithDifferentPrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -129,7 +130,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#4 Testing price for fixed bundle product with three simples' => [
-                'strategy' => $this->getProductWithSamePrice(),
+                'strategyModifiers' => self::getProductWithSamePrice(),
                 'expectedResults' => [
                     //  110 + 10
                     'minimalPrice' => 120,
@@ -139,10 +140,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #5 Testing price for fixed bundle product 
+                #5 Testing price for fixed bundle product
                 with fixed sub items, fixed options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -156,10 +157,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #6 Testing price for fixed bundle product 
+                #6 Testing price for fixed bundle product
                 with percent sub items, percent options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -173,10 +174,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #7 Testing price for fixed bundle product 
+                #7 Testing price for fixed bundle product
                 with fixed sub items, percent options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -190,10 +191,10 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #8 Testing price for fixed bundle product 
+                #8 Testing price for fixed bundle product
                 with percent sub items, fixed options and without any discounts
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -212,7 +213,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * Fixed bundle product with one simple
      * @return array
      */
-    private function getProductWithOneSimple()
+    private static function getProductWithOneSimple()
     {
         $optionsData = [
             [
@@ -242,7 +243,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * Fixed bundle product with three simples and different qty
      * @return array
      */
-    private function getProductWithDifferentQty()
+    private static function getProductWithDifferentQty()
     {
         $optionsData = [
             [
@@ -284,7 +285,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * Fixed bundle product with three simples and different price
      * @return array
      */
-    private function getProductWithSamePrice()
+    private static function getProductWithSamePrice()
     {
         $optionsData = [
             [
@@ -326,7 +327,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * Fixed bundle product with three simples
      * @return array
      */
-    private function getProductWithDifferentPrice()
+    private static function getProductWithDifferentPrice()
     {
         $optionsData = [
             [
@@ -370,7 +371,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
      * @param $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [

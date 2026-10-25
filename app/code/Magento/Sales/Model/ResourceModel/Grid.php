@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
+use Magento\Sales\Model\Grid\LastUpdateTimeCache;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderWithCutoffInterface;
 
 /**
- * Class Grid
+ * Sales order grid resource model.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends AbstractGrid
 {
@@ -41,14 +45,24 @@ class Grid extends AbstractGrid
     protected $columns;
 
     /**
-     * @var NotSyncedDataProviderInterface
+     * @var NotSyncedDataProviderWithCutoffInterface
      */
     private $notSyncedDataProvider;
 
     /**
+     * @var LastUpdateTimeCache
+     */
+    private $lastUpdateTimeCache;
+
+    /**
      * Order grid rows batch size
      */
-    const BATCH_SIZE = 100;
+    public const BATCH_SIZE = 100;
+
+    /**
+     * Maximum reconciliation iterations per cron run.
+     */
+    private const MAX_REFRESH_ITERATIONS = 1000;
 
     /**
      * @param Context $context
@@ -58,7 +72,8 @@ class Grid extends AbstractGrid
      * @param array $joins
      * @param array $columns
      * @param string $connectionName
-     * @param NotSyncedDataProviderInterface $notSyncedDataProvider
+     * @param NotSyncedDataProviderWithCutoffInterface|null $notSyncedDataProvider
+     * @param LastUpdateTimeCache|null $lastUpdateTimeCache
      */
     public function __construct(
         Context $context,
@@ -68,16 +83,22 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        NotSyncedDataProviderInterface $notSyncedDataProvider = null
+        ?NotSyncedDataProviderWithCutoffInterface $notSyncedDataProvider = null,
+        ?LastUpdateTimeCache $lastUpdateTimeCache = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;
         $this->orderIdField = $orderIdField;
         $this->joins = $joins;
         $this->columns = $columns;
-        $this->notSyncedDataProvider =
-            $notSyncedDataProvider ?: ObjectManager::getInstance()->get(NotSyncedDataProviderInterface::class);
+        $this->notSyncedDataProvider = $notSyncedDataProvider ??
+            ObjectManager::getInstance()->get(NotSyncedDataProviderWithCutoffInterface::class);
+        $this->lastUpdateTimeCache = $lastUpdateTimeCache ??
+            ObjectManager::getInstance()->get(LastUpdateTimeCache::class);
+
         parent::__construct($context, $connectionName);
+
+        $this->connection = $this->_resources->getConnection('sales');
     }
 
     /**
@@ -118,15 +139,42 @@ class Grid extends AbstractGrid
      */
     public function refreshBySchedule()
     {
-        $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
-        foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
-            $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
-            $fetchResult = $this->getConnection()->fetchAll($select);
-            $this->getConnection()->insertOnDuplicate(
-                $this->getTable($this->gridTableName),
-                $fetchResult,
-                array_keys($this->columns)
-            );
+        $cutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->sub(new \DateInterval('PT1S'))
+            ->format('Y-m-d H:i:s');
+
+        $lastUpdatedAt = null;
+        $iteration = 0;
+        while ($iteration < self::MAX_REFRESH_ITERATIONS) {
+            $iteration++;
+            $notSyncedIds = $this->notSyncedDataProvider
+                ->getIdsWithCutoff($this->mainTableName, $this->gridTableName, $cutoff);
+            if (empty($notSyncedIds)) {
+                break;
+            }
+            foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
+                $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
+                $fetchResult = $this->getConnection()->fetchAll($select);
+
+                foreach ($fetchResult as &$row) {
+                    if (array_key_exists('updated_at', $row)) {
+                        $row['updated_at'] = $cutoff;
+                    }
+                }
+                unset($row);
+
+                $this->getConnection()->insertOnDuplicate(
+                    $this->getTable($this->gridTableName),
+                    $fetchResult,
+                    array_keys($this->columns)
+                );
+
+                $timestamps = array_column($fetchResult, 'updated_at');
+                if ($timestamps) {
+                    $lastUpdatedAt = max(max($timestamps), $lastUpdatedAt);
+                    $this->lastUpdateTimeCache->save($this->gridTableName, $lastUpdatedAt);
+                }
+            }
         }
     }
 
@@ -145,7 +193,7 @@ class Grid extends AbstractGrid
      *
      * @return \Magento\Framework\DB\Select
      */
-    protected function getGridOriginSelect()
+    public function getGridOriginSelect()
     {
         $select = $this->getConnection()->select()
             ->from([$this->mainTableName => $this->getTable($this->mainTableName)], []);
@@ -172,5 +220,16 @@ class Grid extends AbstractGrid
         }
         $select->columns($columns);
         return $select;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMainTable()
+    {
+        if (empty($this->mainTableName)) {
+            throw new LocalizedException(new \Magento\Framework\Phrase('Empty main table name'));
+        }
+        return $this->mainTableName;
     }
 }

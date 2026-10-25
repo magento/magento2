@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Command\Command;
-use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
 
 /**
  * Resizes product images according to theme view definitions.
@@ -28,7 +27,12 @@ class ImagesResizeCommand extends Command
     /**
      * Asynchronous image resize mode
      */
-    const ASYNC_RESIZE = 'async';
+    public const ASYNC_RESIZE = 'async';
+
+    /**
+     * Do not process images marked as hidden from product page
+     */
+    public const SKIP_HIDDEN_IMAGES = 'skip_hidden_images';
 
     /**
      * @var ImageResizeScheduler
@@ -51,31 +55,28 @@ class ImagesResizeCommand extends Command
     private $progressBarFactory;
 
     /**
-     * @var ProductImage
+     * @var bool
      */
-    private $productImage;
+    private $skipHiddenImages = false;
 
     /**
      * @param State $appState
      * @param ImageResize $imageResize
      * @param ImageResizeScheduler $imageResizeScheduler
      * @param ProgressBarFactory $progressBarFactory
-     * @param ProductImage $productImage
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
         ImageResize $imageResize,
         ImageResizeScheduler $imageResizeScheduler,
-        ProgressBarFactory $progressBarFactory,
-        ProductImage $productImage
+        ProgressBarFactory $progressBarFactory
     ) {
         parent::__construct();
         $this->appState = $appState;
         $this->imageResize = $imageResize;
         $this->imageResizeScheduler = $imageResizeScheduler;
         $this->progressBarFactory = $progressBarFactory;
-        $this->productImage = $productImage;
     }
 
     /**
@@ -102,6 +103,12 @@ class ImagesResizeCommand extends Command
                 InputOption::VALUE_NONE,
                 'Resize image in asynchronous mode'
             ),
+            new InputOption(
+                self::SKIP_HIDDEN_IMAGES,
+                null,
+                InputOption::VALUE_NONE,
+                'Do not process images marked as hidden from product page'
+            ),
         ];
     }
 
@@ -110,8 +117,9 @@ class ImagesResizeCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->skipHiddenImages = $input->getOption(self::SKIP_HIDDEN_IMAGES);
         $result = $input->getOption(self::ASYNC_RESIZE) ?
             $this->executeAsync($output) : $this->executeSync($output);
 
@@ -129,7 +137,7 @@ class ImagesResizeCommand extends Command
         try {
             $errors = [];
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
-            $generator = $this->imageResize->resizeFromThemes();
+            $generator = $this->imageResize->resizeFromThemes(null, $this->skipHiddenImages);
 
             /** @var ProgressBar $progress */
             $progress = $this->progressBarFactory->create(
@@ -194,7 +202,7 @@ class ImagesResizeCommand extends Command
             $progress = $this->progressBarFactory->create(
                 [
                     'output' => $output,
-                    'max' => $this->productImage->getCountUsedProductImages()
+                    'max' => $this->imageResize->getCountProductImages($this->skipHiddenImages)
                 ]
             );
             $progress->setFormat(
@@ -205,7 +213,7 @@ class ImagesResizeCommand extends Command
                 $progress->setOverwrite(false);
             }
 
-            $productImages = $this->productImage->getUsedProductImages();
+            $productImages = $this->imageResize->getProductImages($this->skipHiddenImages);
             foreach ($productImages as $image) {
                 $result = $this->imageResizeScheduler->schedule($image['filepath']);
 

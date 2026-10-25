@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
+use Magento\Newsletter\Model\Queue;
+
 /**
  * Newsletter queue edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -227,7 +227,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => $queue->getTemplate()->getTemplateStyles()
                 ]
             );
-        } elseif (\Magento\Newsletter\Model\Queue::STATUS_NEVER != $queue->getQueueStatus()) {
+        } elseif (Queue::STATUS_NEVER != $queue->getQueueStatus() && $queue->getQueueStatus() != Queue::STATUS_PAUSE) {
             $fieldset->addField(
                 'text',
                 'textarea',

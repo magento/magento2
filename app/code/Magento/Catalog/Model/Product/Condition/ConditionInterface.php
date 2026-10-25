@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Condition;
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 /**
  * Interface \Magento\Catalog\Model\Product\Condition\ConditionInterface
  *
+ * @api
  */
 interface ConditionInterface
 {

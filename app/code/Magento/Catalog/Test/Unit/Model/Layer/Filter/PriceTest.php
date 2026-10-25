@@ -1,24 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
 use Magento\Catalog\Model\Layer\Filter\DataProvider\PriceFactory;
 use Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory;
 use Magento\Catalog\Model\Layer\Filter\Dynamic\Auto;
 use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\Price as FilterPrice;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Price as PriceResource;
 use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
 use Magento\Catalog\Model\Layer\Filter\ItemFactory;
 use Magento\Catalog\Model\Layer\State;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,17 +34,21 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+    /**
+     * @var DataBuilder|MockObject
+     */
     private $itemDataBuilder;
 
+    /**
+     * @var PriceResource|MockObject
+     */
     private $resource;
 
-    /** @var Auto|MockObject */
-    private $algorithm;
-
     /**
-     * @var \Magento\Catalog\Model\Price|MockObject
+     * @var Auto|MockObject
      */
-    private $price;
+    private $algorithm;
 
     /**
      * @var Layer|MockObject
@@ -53,118 +61,124 @@ class PriceTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\Price
+     * @var FilterPrice
      */
     private $target;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var  ItemFactory|MockObject */
+    /**
+     * @var  ItemFactory|MockObject
+     */
     private $filterItemFactory;
 
-    /** @var  State|MockObject */
+    /**
+     * @var  State|MockObject
+     */
     private $state;
 
     /**
+     * @var  Attribute|MockObject
+     */
+    private $attribute;
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $dataProviderFactory = $this->getMockBuilder(
-            PriceFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $dataProviderFactory = $this->createPartialMock(PriceFactory::class, ['create']);
 
-        $this->dataProvider = $this->getMockBuilder(Price::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setPriceId', 'getPrice', 'getResource'])
-            ->getMock();
-        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['applyPriceRange'])
-            ->getMock();
-        $this->dataProvider->expects($this->any())
-            ->method('getResource')
-            ->willReturn($this->resource);
+        $this->resource = $this->createPartialMock(
+            PriceResource::class,
+            ['applyPriceRange']
+        );
+
+        $priceData = [];
+        $this->dataProvider = $this->createPartialMockWithReflection(
+            Price::class,
+            ['setResource', 'getResource']
+        );
+        $dataProvider = $this->dataProvider;
+        $this->dataProvider->method('setResource')->willReturnCallback(
+            function ($res) use (&$priceData, $dataProvider) {
+                $priceData['resource'] = $res;
+                return $dataProvider;
+            }
+        );
+        $this->dataProvider->method('getResource')->willReturnCallback(function () use (&$priceData) {
+            return $priceData['resource'] ?? null;
+        });
+        $this->dataProvider->setResource($this->resource);
 
         $dataProviderFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->dataProvider);
 
-        $this->layer = $this->getMockBuilder(Layer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getState'])
-            ->getMock();
+        $this->layer = $this->createPartialMock(Layer::class, ['getState']);
 
-        $this->state = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
-            ->getMock();
-        $this->layer->expects($this->any())
-            ->method('getState')
-            ->willReturn($this->state);
+        $this->state = $this->createPartialMock(State::class, ['addFilter']);
+        $this->layer->method('getState')->willReturn($this->state);
 
-        $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addItemData', 'build'])
-            ->getMock();
+        $this->itemDataBuilder = $this->createPartialMock(DataBuilder::class, ['addItemData', 'build']);
 
-        $this->filterItemFactory = $this->getMockBuilder(
-            ItemFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->filterItemFactory = $this->createPartialMock(ItemFactory::class, ['create']);
 
-        $filterItem = $this->getMockBuilder(
-            Item::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
-            ->getMock();
-        $filterItem->expects($this->any())
-            ->method($this->anything())->willReturnSelf();
-        $this->filterItemFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($filterItem);
+        $filterItem = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setFilter', 'setData', 'setCount', 'setLabel', 'setValueString']
+        );
+        $filterItem->method('setFilter')->willReturnSelf();
+        $filterItem->method('setData')->willReturnSelf();
+        $filterItem->method('setCount')->willReturnSelf();
+        $filterItem->method('setLabel')->willReturnSelf();
+        $filterItem->method('setValueString')->willReturnSelf();
+        $this->filterItemFactory->method('create')->willReturn($filterItem);
 
-        $escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
-            ->getMock();
+        $escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
         $escaper->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
-            ->getMock();
-        $algorithmFactory = $this->getMockBuilder(AlgorithmFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $attributeData = [];
+        $this->attribute = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['setAttributeCode', 'getAttributeCode', 'getFrontend', 'getBackend', 'getSource',
+             'getDefaultFrontendLabel', 'getStoreLabel', 'getIsRequired', '_construct']
+        );
+        $attribute = $this->attribute;
+        $this->attribute->method('setAttributeCode')->willReturnCallback(
+            function ($code) use (&$attributeData, $attribute) {
+                $attributeData['attribute_code'] = $code;
+                return $attribute;
+            }
+        );
+        $this->attribute->method('getAttributeCode')->willReturnCallback(function () use (&$attributeData) {
+            return $attributeData['attribute_code'] ?? null;
+        });
+        $this->attribute->method('getFrontend')->willReturn(null);
+        $this->attribute->method('getBackend')->willReturn(null);
+        $this->attribute->method('getSource')->willReturn(null);
+        $this->attribute->method('getDefaultFrontendLabel')->willReturn(null);
+        $this->attribute->method('getStoreLabel')->willReturn(null);
+        $this->attribute->method('getIsRequired')->willReturn(false);
+        $this->attribute->method('_construct')->willReturn(null);
 
-        $this->algorithm = $this->getMockBuilder(Auto::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getItemsData'])
-            ->getMock();
+        $algorithmFactory = $this->createPartialMock(AlgorithmFactory::class, ['create']);
 
-        $algorithmFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->algorithm);
+        $this->algorithm = $this->createPartialMock(Auto::class, ['getItemsData']);
+
+        $algorithmFactory->method('create')->willReturn($this->algorithm);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Layer\Filter\Price::class,
+            FilterPrice::class,
             [
                 'dataProviderFactory' => $dataProviderFactory,
                 'layer' => $this->layer,
@@ -179,29 +193,21 @@ class PriceTest extends TestCase
     /**
      * @param $requestValue
      * @param $idValue
-     * @param $isIdUsed
-     * @dataProvider applyWithEmptyRequestDataProvider
+     *
+     * @return void
      */
-    public function testApplyWithEmptyRequest($requestValue, $idValue)
+    #[DataProvider('applyWithEmptyRequestDataProvider')]
+    public function testApplyWithEmptyRequest($requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
         $idField = 'id';
 
         $this->target->setRequestVar($requestField);
 
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with($requestField)
-            ->willReturnCallback(
-                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                    switch ($field) {
-                        case $requestField:
-                            return $requestValue;
-                        case $idField:
-                            return $idValue;
-                    }
-                }
-            );
+        $this->request->method('getParam')->willReturnMap([
+            [$requestField, null, $requestValue],
+            [$idField, null, $idValue],
+        ]);
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -210,28 +216,28 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider()
+    public static function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0,
+                'idValue' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false,
+                'idValue' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null,
+                'idValue' => null
             ]
         ];
     }
 
-    /** @var  Attribute|MockObject */
-    private $attribute;
-
-    public function testApply()
+    /**
+     * @return void
+     */
+    public function testApply(): void
     {
         $priceId = '15-50';
         $requestVar = 'test_request_var';
@@ -249,16 +255,15 @@ class PriceTest extends TestCase
         $this->target->apply($this->request);
     }
 
-    public function testGetItems()
+    /**
+     * @return void
+     */
+    public function testGetItems(): void
     {
         $this->target->setAttributeModel($this->attribute);
         $attributeCode = 'attributeCode';
-        $this->attribute->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn($attributeCode);
-        $this->algorithm->expects($this->any())
-            ->method('getItemsData')
-            ->willReturn([]);
+        $this->attribute->setAttributeCode($attributeCode);
+        $this->algorithm->method('getItemsData')->willReturn([]);
         $this->target->getItems();
     }
 }

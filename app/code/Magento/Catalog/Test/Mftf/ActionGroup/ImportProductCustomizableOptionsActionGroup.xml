@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,7 +15,8 @@
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
-
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="scrollToClickImportOptions"/>
+        <waitForElementClickable selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="waitForElementClickImportOptions"/>
         <click selector="{{AdminProductCustomizableOptionsSection.importOptions}}" stepKey="clickImportOptions"/>
         <waitForElementVisible selector="{{AdminProductImportOptionsSection.selectProductTitle}}" stepKey="waitForTitleVisible"/>
         <conditionalClick selector="{{AdminProductImportOptionsSection.resetFiltersButton}}" dependentSelector="{{AdminProductImportOptionsSection.resetFiltersButton}}" visible="true" stepKey="clickResetFilters"/>

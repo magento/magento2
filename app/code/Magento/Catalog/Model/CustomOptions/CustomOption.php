@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\CustomOptions;
 
@@ -18,13 +18,18 @@ use Magento\Catalog\Model\Webapi\Product\Option\Type\File\Processor as FileProce
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
     /**
+     * @var FileProcessor
+     */
+    private $fileProcessor;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
+     * @param FileProcessor $fileProcessor
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
-     * @param FileProcessor $fileProcessor
      * @param array $data
      */
     public function __construct(
@@ -33,8 +38,8 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionInterf
         ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         FileProcessor $fileProcessor,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->fileProcessor = $fileProcessor;

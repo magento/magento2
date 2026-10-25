@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
@@ -12,6 +12,9 @@
             <object key="msrp" dataType="msrp_settings_config">
                 <object key="fields" dataType="msrp_settings_config">
                     <object key="enabled" dataType="enabled">
+                        <field key="value">string</field>
+                    </object>
+                    <object key="display_price_type" dataType="display_price_type">
                         <field key="value">string</field>
                     </object>
                 </object>

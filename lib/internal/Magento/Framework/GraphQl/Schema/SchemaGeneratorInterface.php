@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Schema;
 
 /**
  * GraphQL schema generator interface.
+ *
+ * @api
  */
 interface SchemaGeneratorInterface
 {
@@ -19,5 +21,5 @@ interface SchemaGeneratorInterface
      *
      * @return Schema
      */
-    public function generate() : Schema;
+    public function generate(): Schema;
 }

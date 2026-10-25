@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,8 +22,8 @@ $registry->register('isSecureArea', true);
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-
-foreach (['simple1', 'simple2'] as $sku) {
+for ($i = 1; $i <= 6; $i++) {
+    $sku = 'simple' . $i;
     try {
         $product = $productRepository->get($sku, false, null, true);
         $productRepository->delete($product);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View;
 
@@ -187,21 +187,27 @@ interface LayoutInterface
     /**
      * Block Factory
      *
-     * @param  string $type
-     * @param  string $name
-     * @param  array $arguments
-     * @return Element\BlockInterface
+     * @template T of Element\BlockInterface
+     *
+     * @param class-string<T> $type
+     * @param string $name
+     * @param array $arguments
+     *
+     * @return T
      */
     public function createBlock($type, $name = '', array $arguments = []);
 
     /**
      * Add a block to registry, create new object if needed
      *
-     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
+     * @template T of Element\BlockInterface
+     *
+     * @param class-string<T>|T $block
      * @param string $name
      * @param string $parent
      * @param string $alias
-     * @return Element\BlockInterface
+     *
+     * @return T
      */
     public function addBlock($block, $name = '', $parent = '', $alias = '');
 
@@ -252,8 +258,11 @@ interface LayoutInterface
     /**
      * Get block singleton
      *
-     * @param string $type
-     * @return Element\BlockInterface
+     * @template T of Element\BlockInterface
+     *
+     * @param class-string<T> $type
+     *
+     * @return T
      */
     public function getBlockSingleton($type);
 
@@ -294,7 +303,7 @@ interface LayoutInterface
      * Save block in blocks registry
      *
      * @param string $name
-     * @param  Element\BlockInterface $block
+     * @param Element\BlockInterface $block
      * @return LayoutInterface
      */
     public function setBlock($name, $block);

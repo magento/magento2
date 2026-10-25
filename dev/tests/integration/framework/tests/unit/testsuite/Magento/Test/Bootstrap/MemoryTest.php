@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,15 +9,19 @@
  */
 namespace Magento\Test\Bootstrap;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\TestFramework\MemoryLimit;
+
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\TestFramework\Bootstrap\Memory
      */
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\MemoryLimit|\PHPUnit\Framework\MockObject\MockObject
+     * @var MemoryLimit|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_memoryLimit;
 
@@ -28,8 +32,11 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_memoryLimit = $this->createPartialMock(\Magento\TestFramework\MemoryLimit::class, ['printStats']);
-        $this->_activationPolicy = $this->createPartialMock(\stdClass::class, ['register_shutdown_function']);
+        $this->_memoryLimit = $this->createPartialMock(MemoryLimit::class, ['printStats']);
+        $this->_activationPolicy = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['register_shutdown_function']
+        );
         $this->_object = new \Magento\TestFramework\Bootstrap\Memory(
             $this->_memoryLimit,
             [$this->_activationPolicy, 'register_shutdown_function']

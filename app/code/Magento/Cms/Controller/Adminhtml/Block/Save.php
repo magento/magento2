@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Controller\Adminhtml\Block;
 
@@ -45,8 +45,8 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
         Context $context,
         Registry $coreRegistry,
         DataPersistorInterface $dataPersistor,
-        BlockFactory $blockFactory = null,
-        BlockRepositoryInterface $blockRepository = null
+        ?BlockFactory $blockFactory = null,
+        ?BlockRepositoryInterface $blockRepository = null
     ) {
         $this->dataPersistor = $dataPersistor;
         $this->blockFactory = $blockFactory
@@ -121,9 +121,9 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block implements HttpPostAc
 
         if ($redirect ==='continue') {
             $resultRedirect->setPath('*/*/edit', ['block_id' => $model->getId()]);
-        } else if ($redirect === 'close') {
+        } elseif ($redirect === 'close') {
             $resultRedirect->setPath('*/*/');
-        } else if ($redirect === 'duplicate') {
+        } elseif ($redirect === 'duplicate') {
             $duplicateModel = $this->blockFactory->create(['data' => $data]);
             $duplicateModel->setId(null);
             $duplicateModel->setIdentifier($data['identifier'] . '-' . uniqid());

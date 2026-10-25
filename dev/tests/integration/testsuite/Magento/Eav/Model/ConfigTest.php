@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model;
 
@@ -188,5 +188,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');
         $this->assertEquals('bar', $updatedAttributeAfterCacheClean->getFrontendLabel());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
+        }
     }
 }

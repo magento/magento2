@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -131,6 +131,11 @@ define([
                 data: '<spa>n id="id1">Some string</span>',
                 expected: 'n id="id1"&gt;Some string',
                 allowedTags: ['span']
+            },
+            'link with script content': {
+                data: '<a href="javascript:void">Click</a>',
+                expected: '<a>Click</a>',
+                allowedTags: ['a']
             }
         };
     }

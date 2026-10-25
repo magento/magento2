@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,6 +31,8 @@ use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,6 +42,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -131,43 +134,25 @@ class SaveTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder(
-            ShipmentLoader::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['setShipmentId', 'setOrderId', 'setShipment', 'setTracking', 'load'])
-            ->getMock();
-        $this->validationResult = $this->getMockBuilder(ValidatorResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->labelGenerator = $this->getMockBuilder(LabelGenerator::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->shipmentSender = $this->getMockBuilder(ShipmentSender::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['send'])
-            ->getMock();
+        $this->shipmentLoader = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['load', 'setShipmentId', 'setOrderId', 'setShipment', 'setTracking']
+        );
+        $this->validationResult = $this->createMock(ValidatorResultInterface::class);
+        $this->labelGenerator = $this->createMock(LabelGenerator::class);
+        $this->shipmentSender = $this->createPartialMock(ShipmentSender::class, ['send']);
         $this->shipmentSender->expects($this->any())
             ->method('send')
             ->willReturn(true);
-        $this->salesData = $this->getMockBuilder(SalesData::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['canSendNewShipmentEmail'])
-            ->getMock();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->salesData = $this->createPartialMock(SalesData::class, ['canSendNewShipmentEmail']);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
             'getRequest', 'getResponse', 'getMessageManager', 'getRedirect',
             'getObjectManager', 'getSession', 'getActionFlag', 'getHelper',
             'getResultRedirectFactory', 'getFormKeyValidator'
         ]);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->createMock(Http::class);
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create', 'get']
@@ -176,10 +161,10 @@ class SaveTest extends TestCase
             Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
         );
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice', 'getCommentText'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', 'getCommentText']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
 
@@ -232,9 +217,7 @@ class SaveTest extends TestCase
             ->method('getFormKeyValidator')
             ->willReturn($this->formKeyValidator);
 
-        $this->shipmentValidatorMock = $this->getMockBuilder(ShipmentValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->shipmentValidatorMock = $this->createMock(ShipmentValidatorInterface::class);
 
         $this->saveAction = $objectManagerHelper->getObject(
             Save::class,
@@ -257,16 +240,18 @@ class SaveTest extends TestCase
      * @param string $sendEmail
      * @param bool $emailEnabled
      * @param bool $shouldEmailBeSent
-     * @dataProvider executeDataProvider
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         $formKeyIsValid,
         $isPost,
         $sendEmail,
         $emailEnabled,
         $shouldEmailBeSent
-    ) {
+    ): void {
         $this->formKeyValidator->expects($this->any())
             ->method('validate')
             ->willReturn($formKeyIsValid);
@@ -305,7 +290,7 @@ class SaveTest extends TestCase
                         ['order_id', null, $orderId],
                         ['shipment_id', null, $shipmentId],
                         ['shipment', null, $shipmentData],
-                        ['tracking', null, $tracking],
+                        ['tracking', null, $tracking]
                     ]
                 );
 
@@ -345,16 +330,13 @@ class SaveTest extends TestCase
                 ->willReturn(true);
             $saveTransaction = $this->getMockBuilder(Transaction::class)
                 ->disableOriginalConstructor()
-                ->setMethods([])
                 ->getMock();
-            $saveTransaction->expects($this->at(0))
+            $saveTransaction
                 ->method('addObject')
-                ->with($shipment)->willReturnSelf();
-            $saveTransaction->expects($this->at(1))
-                ->method('addObject')
-                ->with($order)->willReturnSelf();
-            $saveTransaction->expects($this->at(2))
-                ->method('save');
+                ->willReturnCallback(fn($param) => match ([$param]) {
+                    [$shipment] => $saveTransaction,
+                    [$order] => $saveTransaction
+                });
 
             $this->session->expects($this->once())
                 ->method('getCommentText')
@@ -389,17 +371,136 @@ class SaveTest extends TestCase
     }
 
     /**
+     * Test that canSendNewShipmentEmail is called with correct store ID
+     */
+    #[DataProvider('storeIdDataProvider')]
+    public function testCanSendNewShipmentEmailWithStoreId(
+        int $storeId,
+        bool $sendEmailRequested,
+        bool $emailEnabledForStore,
+        bool $shouldSendEmail
+    ): void {
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+
+        $shipmentId = 1000012;
+        $orderId = 10003;
+        $shipmentData = ['items' => [], 'send_email' => $sendEmailRequested ? 'on' : ''];
+
+        $this->request->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['order_id', null, $orderId],
+                ['shipment_id', null, $shipmentId],
+                ['shipment', null, $shipmentData],
+                ['tracking', null, []]
+            ]);
+
+        $order = $this->createPartialMock(Order::class, ['setCustomerNoteNotify', 'getStoreId', '__wakeup']);
+        $order->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $shipment = $this->createPartialMock(
+            Shipment::class,
+            ['load', 'save', 'register', 'getOrder', 'getOrderId', '__wakeup']
+        );
+        $shipment->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($order);
+        $shipment->expects($this->any())
+            ->method('getOrderId')
+            ->willReturn($orderId);
+
+        if ($sendEmailRequested) {
+            $this->salesData->expects($this->once())
+                ->method('canSendNewShipmentEmail')
+                ->with($storeId)
+                ->willReturn($emailEnabledForStore);
+        } else {
+            $this->salesData->expects($this->never())
+                ->method('canSendNewShipmentEmail');
+        }
+
+        if ($shouldSendEmail) {
+            $this->shipmentSender->expects($this->once())
+                ->method('send')
+                ->with($shipment);
+        } else {
+            $this->shipmentSender->expects($this->never())
+                ->method('send');
+        }
+
+        $this->shipmentLoader->expects($this->once())
+            ->method('load')
+            ->willReturn($shipment);
+
+        $this->setupCommonMocks($shipment, $order, $orderId);
+
+        $this->saveAction->execute();
+    }
+
+    /**
+     * Test that email is not sent when disabled for specific store but enabled globally
+     */
+    public function testEmailNotSentWhenDisabledForSpecificStore(): void
+    {
+        $storeId = 2;
+        $this->testCanSendNewShipmentEmailWithStoreId(
+            $storeId,
+            true,
+            false,
+            false
+        );
+    }
+
+    /**
+     * Test that email is sent when enabled for specific store even if disabled globally
+     */
+    public function testEmailSentWhenEnabledForSpecificStore(): void
+    {
+        $storeId = 2;
+        $this->testCanSendNewShipmentEmailWithStoreId(
+            $storeId,
+            true,
+            true,
+            true
+        );
+    }
+
+    /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function storeIdDataProvider(): array
+    {
+        return [
+            'default_store_email_requested_enabled' => [1, true, true, true],
+            'default_store_email_requested_disabled' => [1, true, false, false],
+            'custom_store_email_requested_enabled' => [2, true, true, true],
+            'custom_store_email_requested_disabled' => [2, true, false, false],
+            'custom_store_email_not_requested' => [2, false, true, false],
+            'multistore_environment_store_3' => [3, true, true, true],
+            'multistore_environment_store_5_disabled' => [5, true, false, false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function executeDataProvider(): array
     {
         /**
-        * bool $formKeyIsValid
-        * bool $isPost
-        * string $sendEmail
-        * bool $emailEnabled
-        * bool $shouldEmailBeSent
-        */
+         * bool $formKeyIsValid
+         * bool $isPost
+         * string $sendEmail
+         * bool $emailEnabled
+         * bool $shouldEmailBeSent
+         */
         return [
             [false, false, '', false, false],
             [true, false, '', false, false],
@@ -413,9 +514,57 @@ class SaveTest extends TestCase
     }
 
     /**
-     * @param array $arguments
+     * Setup common mocks needed for successful execution
      */
-    protected function prepareRedirect(array $arguments = [])
+    private function setupCommonMocks(MockObject $shipment, MockObject $order, int $orderId): void
+    {
+        $shipment->expects($this->once())
+            ->method('register')
+            ->willReturnSelf();
+
+        $order->expects($this->once())
+            ->method('setCustomerNoteNotify');
+
+        $this->labelGenerator->expects($this->any())
+            ->method('create')
+            ->willReturn(true);
+
+        $saveTransaction = $this->getMockBuilder(Transaction::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $saveTransaction->method('addObject')->willReturnSelf();
+
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with(Transaction::class)
+            ->willReturn($saveTransaction);
+
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with(Session::class)
+            ->willReturn($this->session);
+
+        $this->session->expects($this->once())
+            ->method('getCommentText')
+            ->with(true);
+
+        $this->shipmentValidatorMock->expects($this->once())
+            ->method('validate')
+            ->willReturn($this->validationResult);
+
+        $this->validationResult->expects($this->once())
+            ->method('hasMessages')
+            ->willReturn(false);
+
+        $this->prepareRedirect(['order_id' => $orderId]);
+    }
+
+    /**
+     * @param array $arguments
+     *
+     * @return void
+     */
+    protected function prepareRedirect(array $arguments = []): void
     {
         $this->actionFlag->expects($this->any())
             ->method('get')

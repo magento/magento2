@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase\HttpClient;
 
@@ -10,7 +10,7 @@ namespace Magento\TestFramework\TestCase\HttpClient;
  */
 class CurlClient
 {
-    const EMPTY_REQUEST_BODY = 'Empty body';
+    public const EMPTY_REQUEST_BODY = 'Empty body';
 
     /**
      * Perform HTTP GET request
@@ -38,9 +38,10 @@ class CurlClient
      * @param string $url
      * @param array $data
      * @param array $headers
+     * @param bool $flushCookies
      * @return array
      */
-    public function getWithFullResponse($url, $data = [], $headers = []): array
+    public function getWithFullResponse($url, $data = [], $headers = [], $flushCookies = false): array
     {
         if (!empty($data)) {
             $url .= '?' . http_build_query($data);
@@ -48,6 +49,31 @@ class CurlClient
 
         $curlOpts = [];
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET;
+        if ($flushCookies) {
+            $curlOpts[CURLOPT_COOKIELIST] = 'ALL';
+        }
+        return $this->invokeApi($url, $curlOpts, $headers);
+    }
+
+    /**
+     * Perform a HTTP POST request and return the full response
+     *
+     * @param string $url
+     * @param array|string $data
+     * @param array $headers
+     * @param bool $flushCookies
+     * @return array
+     */
+    public function postWithFullResponse($url, $data, $headers = [], $flushCookies = false): array
+    {
+        $curlOpts = [];
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST;
+        $headers[] = 'Content-Length: ' . strlen($data);
+        $curlOpts[CURLOPT_POSTFIELDS] = $data;
+        if ($flushCookies) {
+            $curlOpts[CURLOPT_COOKIELIST] = 'ALL';
+        }
+
         return $this->invokeApi($url, $curlOpts, $headers);
     }
 
@@ -157,9 +183,6 @@ class CurlClient
             throw new \Exception($error);
         }
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        curl_close($curl);
-
         $meta = $resp["meta"];
         if ($meta && $meta['http_code'] >= 400) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
@@ -182,6 +205,7 @@ class CurlClient
         $curlOpts = [
             CURLOPT_RETURNTRANSFER => true, // return result instead of echoing
             CURLOPT_SSL_VERIFYPEER => false, // stop cURL from verifying the peer's certificate
+            CURLOPT_SSL_VERIFYHOST => false, // stop cURL from verifying the peer's hostname
             CURLOPT_FOLLOWLOCATION => false, // follow redirects, Location: headers
             CURLOPT_MAXREDIRS => 10, // but don't redirect more than 10 times
             CURLOPT_HTTPHEADER => [],

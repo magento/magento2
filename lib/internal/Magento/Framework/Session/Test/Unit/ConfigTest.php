@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\Session\Config
  */
+
 namespace Magento\Framework\Session\Test\Unit;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,12 +23,15 @@ use Magento\Framework\ValidatorFactory;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -67,9 +71,7 @@ class ConfigTest extends TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
         $this->validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);
@@ -83,9 +85,8 @@ class ConfigTest extends TestCase
         $this->assertEquals($preVal, $this->config->getOptions());
     }
 
-    /**
-     * @dataProvider optionsProvider
-     */
+    /**     */
+    #[DataProvider('optionsProvider')]
     public function testSetOptions($option, $getter, $value)
     {
         $this->getModel($this->validatorMock);
@@ -97,7 +98,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function optionsProvider()
+    public static function optionsProvider()
     {
         return [
             ['save_path', 'getSavePath', __DIR__],
@@ -121,7 +122,8 @@ class ConfigTest extends TestCase
             ['use_trans_sid', 'getUseTransSid', true],
             ['hash_function', 'getHashFunction', 'md5'],
             ['hash_bits_per_character', 'getHashBitsPerCharacter', 5],
-            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href']
+            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href'],
+            ['cookie_samesite', 'getCookieSameSite', 'Lax']
         ];
     }
 
@@ -129,7 +131,6 @@ class ConfigTest extends TestCase
     {
         $this->getModel($this->validatorMock);
         $appStateProperty = new \ReflectionProperty(Config::class, 'options');
-        $appStateProperty->setAccessible(true);
         $original = $appStateProperty->getValue($this->config);
         $valueForTest = ['test' => 'test2'];
         $appStateProperty->setValue($this->config, $valueForTest);
@@ -163,12 +164,15 @@ class ConfigTest extends TestCase
 
     public function testSettingInvalidCookieLifetime()
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $returnMap =
+            [
+                ['foobar_bogus', false],
+                ['Lax', true]
+            ];
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
-            ->willReturn(false);
+            ->willReturnMap($returnMap);
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime('foobar_bogus');
@@ -177,12 +181,15 @@ class ConfigTest extends TestCase
 
     public function testSettingInvalidCookieLifetime2()
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $returnMap =
+            [
+                [-1, false],
+                ['Lax', true]
+            ];
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
-            ->willReturn(false);
+            ->willReturnMap($returnMap);
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime(-1);
@@ -227,12 +234,15 @@ class ConfigTest extends TestCase
 
     public function testSettingInvalidCookieDomain()
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $returnMap =
+            [
+                [24, false],
+                ['Lax', true]
+            ];
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
-            ->willReturn(false);
+            ->willReturnMap($returnMap);
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain(24);
@@ -241,12 +251,15 @@ class ConfigTest extends TestCase
 
     public function testSettingInvalidCookieDomain2()
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $returnMap =
+            [
+                ['D:\\WINDOWS\\System32\\drivers\\etc\\hosts', false],
+                ['Lax', true]
+            ];
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
-            ->willReturn(false);
+            ->willReturnMap($returnMap);
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain('D:\\WINDOWS\\System32\\drivers\\etc\\hosts');
@@ -325,30 +338,35 @@ class ConfigTest extends TestCase
     /**
      * @param bool $isValidSame
      * @param bool $isValid
-     * @param array $expected
-     * @dataProvider constructorDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('constructorDataProvider')]
     public function testConstructor($isValidSame, $isValid, $expected)
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $validatorMock = $this->createMock(ValidatorInterface::class);
+
         if ($isValidSame) {
+            $returnMap =
+                [
+                    [7200, $isValid],
+                    ['/', $isValid],
+                    ['init.host', $isValid],
+                    ['Lax', true]
+                ];
             $validatorMock->expects($this->any())
                 ->method('isValid')
-                ->willReturn($isValid);
+                ->willReturnMap($returnMap);
         } else {
-            for ($x = 0; $x<6; $x++) {
-                if ($x % 2 == 0) {
-                    $validatorMock->expects($this->at($x))
-                        ->method('isValid')
-                        ->willReturn(false);
-                } else {
-                    $validatorMock->expects($this->at($x))
-                        ->method('isValid')
-                        ->willReturn(true);
-                }
-            }
+            $returnMap =
+                [
+                    [3600, true],
+                    [7200, false],
+                    ['/', true],
+                    ['init.host', true],
+                    ['Lax', true]
+                ];
+            $validatorMock->expects($this->any())
+                ->method('isValid')
+                ->willReturnMap($returnMap);
         }
 
         $this->getModel($validatorMock);
@@ -359,7 +377,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function constructorDataProvider()
+    public static function constructorDataProvider()
     {
         return [
             'all valid' => [
@@ -372,7 +390,8 @@ class ConfigTest extends TestCase
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
-                    'session.save_handler' => 'files'
+                    'session.save_handler' => 'files',
+                    'session.cookie_samesite' => 'Lax'
                 ],
             ],
             'all invalid' => [
@@ -382,7 +401,8 @@ class ConfigTest extends TestCase
                     'session.cache_limiter' => 'private_no_expire',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
-                    'session.save_handler' => 'files'
+                    'session.save_handler' => 'files',
+                    'session.cookie_samesite' => 'Lax'
                 ],
             ],
             'invalid_valid' => [
@@ -395,7 +415,8 @@ class ConfigTest extends TestCase
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
-                    'session.save_handler' => 'files'
+                    'session.save_handler' => 'files',
+                    'session.cookie_samesite' => 'Lax'
                 ],
             ],
         ];
@@ -422,10 +443,10 @@ class ConfigTest extends TestCase
             'init.host'
         );
 
-        $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
-            ->setMethods(['setInstanceName', 'create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->validatorFactoryMock = $this->createPartialMockWithReflection(
+            ValidatorFactory::class,
+            ['create', 'setInstanceName']
+        );
         $this->validatorFactoryMock->expects($this->any())
             ->method('setInstanceName')
             ->willReturnSelf();
@@ -433,7 +454,7 @@ class ConfigTest extends TestCase
             ->method('create')
             ->willReturn($validator);
 
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $getValueReturnMap = [
             ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
             ['web/cookie/cookie_path', 'store', null, ''],
@@ -442,7 +463,7 @@ class ConfigTest extends TestCase
             ->willReturnMap($getValueReturnMap);
 
         $filesystemMock = $this->createMock(Filesystem::class);
-        $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $dirMock = $this->createMock(WriteInterface::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($dirMock);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,42 +29,69 @@ use PHPUnit\Framework\TestCase;
  */
 class FeedTest extends TestCase
 {
-    /** @var Feed */
+    /**
+     * @var Feed
+     */
     protected $feed;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var InboxFactory|MockObject */
+    /**
+     * @var InboxFactory|MockObject
+     */
     protected $inboxFactory;
 
-    /** @var Inbox|MockObject */
+    /**
+     * @var Inbox|MockObject
+     */
     protected $inboxModel;
 
-    /** @var CurlFactory|MockObject */
+    /**
+     * @var CurlFactory|MockObject
+     */
     protected $curlFactory;
 
-    /** @var Curl|MockObject */
+    /**
+     * @var Curl|MockObject
+     */
     protected $curl;
 
-    /** @var ConfigInterface|MockObject */
+    /**
+     * @var ConfigInterface|MockObject
+     */
     protected $backendConfig;
 
-    /** @var CacheInterface|MockObject */
+    /**
+     * @var CacheInterface|MockObject
+     */
     protected $cacheManager;
 
-    /** @var State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     protected $appState;
 
-    /** @var DeploymentConfig|MockObject */
+    /**
+     * @var DeploymentConfig|MockObject
+     */
     protected $deploymentConfig;
 
-    /** @var ProductMetadata|MockObject */
+    /**
+     * @var ProductMetadata|MockObject
+     */
     protected $productMetadata;
 
-    /** @var UrlInterface|MockObject */
+    /**
+     * @var UrlInterface|MockObject
+     */
     protected $urlBuilder;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->inboxFactory = $this->createPartialMock(
@@ -73,10 +101,7 @@ class FeedTest extends TestCase
         $this->curlFactory = $this->createPartialMock(CurlFactory::class, ['create']);
         $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
-        $this->inboxModel = $this->createPartialMock(Inbox::class, [
-            '__wakeup',
-            'parse'
-        ]);
+        $this->inboxModel = $this->createMock(Inbox::class);
         $this->backendConfig = $this->createPartialMock(
             ConfigInterface::class,
             [
@@ -97,12 +122,9 @@ class FeedTest extends TestCase
         );
 
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-
         $this->productMetadata = $this->createMock(ProductMetadata::class);
-
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
             Feed::class,
@@ -120,11 +142,13 @@ class FeedTest extends TestCase
     }
 
     /**
-     * @dataProvider checkUpdateDataProvider
      * @param bool $callInbox
      * @param string $curlRequest
+     *
+     * @return void
      */
-    public function testCheckUpdate($callInbox, $curlRequest)
+    #[DataProvider('checkUpdateDataProvider')]
+    public function testCheckUpdate(bool $callInbox, string $curlRequest): void
     {
         $mockName    = 'Test Product Name';
         $mockVersion = '0.0.0';
@@ -144,16 +168,19 @@ class FeedTest extends TestCase
 
         $lastUpdate = 0;
         $this->cacheManager->expects($this->once())->method('load')->willReturn($lastUpdate);
-        $this->curlFactory->expects($this->at(0))->method('create')->willReturn($this->curl);
-        $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
+        $this->curlFactory
+            ->method('create')
+            ->willReturn($this->curl);
+        $this->curl->expects($this->once())->method('setOptions')->with($configValues)->willReturnSelf();
         $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);
-        $this->backendConfig->expects($this->at(0))->method('getValue')->willReturn('1');
         $this->backendConfig->expects($this->once())->method('isSetFlag')->willReturn(false);
-        $this->backendConfig->expects($this->at(1))->method('getValue')
-            ->willReturn('http://feed.magento.com');
+        $this->backendConfig
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls('1', 'http://feed.magento.com');
         $this->deploymentConfig->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)
             ->willReturn('Sat, 6 Sep 2014 16:46:11 UTC');
+
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
                 ->willReturn($this->inboxModel);
@@ -188,7 +215,7 @@ class FeedTest extends TestCase
     /**
      * @return array
      */
-    public function checkUpdateDataProvider()
+    public static function checkUpdateDataProvider(): array
     {
         return [
             [
@@ -246,7 +273,7 @@ class FeedTest extends TestCase
                             </channel>
                         </rss>'
                 // @codingStandardsIgnoreEnd
-            ],
+            ]
         ];
     }
 }

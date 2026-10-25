@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class CheckoutAgreementsListTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(
             Collection::class
         );
@@ -68,7 +68,7 @@ class CheckoutAgreementsListTest extends TestCase
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $this->attributesJoinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
-        $agreementMock = $this->getMockForAbstractClass(AgreementInterface::class);
+        $agreementMock = $this->createMock(AgreementInterface::class);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$agreementMock]);
         $this->assertEquals([$agreementMock], $this->model->getList($searchCriteriaMock));
     }

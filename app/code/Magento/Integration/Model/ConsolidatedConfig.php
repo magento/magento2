@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model;
 
@@ -46,7 +46,7 @@ class ConsolidatedConfig
     public function __construct(
         Cache\TypeConsolidated $configCacheType,
         Config\Consolidated\Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->configCacheType = $configCacheType;
         $this->configReader = $configReader;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,14 +34,14 @@ class AreaTest extends TestCase
     {
         $this->classesScannerMock = $this->getMockBuilder(ClassesScanner::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMock();
 
         $this->classReaderDecoratorMock = $this->getMockBuilder(
             ClassReaderDecorator::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getConstructor'])
+            ->onlyMethods(['getConstructor'])
             ->getMock();
 
         $this->model = new Area(

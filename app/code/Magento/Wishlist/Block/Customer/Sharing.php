@@ -1,24 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Wishlist customer sharing block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Captcha\Block\Captcha;
 
 /**
- * Class Sharing
+ * Wishlist customer sharing block
  *
  * @api
  * @since 100.0.2
- * @package Magento\Wishlist\Block\Customer
  */
 class Sharing extends \Magento\Framework\View\Element\Template
 {

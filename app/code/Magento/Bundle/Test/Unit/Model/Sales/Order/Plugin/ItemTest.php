@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,22 +9,33 @@ namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Plugin;
 
 use Magento\Catalog\Model\Product\Type;
 use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ItemTest extends TestCase
 {
+    /**
+     * @var \Magento\Bundle\Model\Sales\Order\Plugin\Item
+     */
     private $plugin;
 
+    /**
+     * @var (Item&MockObject)|MockObject
+     */
     private $itemMock;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
-        $this->itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createMock(Item::class);
         $this->plugin = new \Magento\Bundle\Model\Sales\Order\Plugin\Item();
     }
 
+    /**
+     * @return void
+     */
     public function testAfterGetQtyToCancelIfProductIsBundle()
     {
         $qtyToCancel = 10;
@@ -40,18 +51,19 @@ class ItemTest extends TestCase
         $this->assertEquals($qtyToCancel, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
     }
 
+    /**
+     * @return void
+     */
     public function testAfterGetQtyToCancelIfParentProductIsBundle()
     {
         $qtyToCancel = 10;
         $result = 5;
-        $parentItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentItemMock = $this->createMock(Item::class);
         $this->itemMock
             ->expects($this->once())
             ->method('getProductType')
             ->willReturn(Type::TYPE_SIMPLE);
-        $this->itemMock->expects($this->any())->method('getParentItem')->willReturn($parentItemMock);
+        $this->itemMock->method('getParentItem')->willReturn($parentItemMock);
         $parentItemMock->expects($this->once())
             ->method('getProductType')
             ->willReturn(Type::TYPE_BUNDLE);
@@ -67,7 +79,7 @@ class ItemTest extends TestCase
             ->expects($this->once())
             ->method('getProductType')
             ->willReturn(Type::TYPE_SIMPLE);
-        $this->itemMock->expects($this->any())->method('getParentItem')->willReturn(false);
+        $this->itemMock->method('getParentItem')->willReturn(false);
         $this->itemMock->expects($this->never())->method('isDummy');
         $this->itemMock->expects($this->never())->method('getQtyToInvoice');
         $this->assertEquals($result, $this->plugin->afterGetQtyToCancel($this->itemMock, $result));
@@ -81,10 +93,8 @@ class ItemTest extends TestCase
 
     public function testAfterIsProcessingAvailableForProductWhenParentIsBundle()
     {
-        $parentItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->itemMock->expects($this->any())->method('getParentItem')->willReturn($parentItemMock);
+        $parentItemMock = $this->createMock(Item::class);
+        $this->itemMock->method('getParentItem')->willReturn($parentItemMock);
         $parentItemMock->expects($this->once())
             ->method('getProductType')
             ->willReturn(Type::TYPE_BUNDLE);

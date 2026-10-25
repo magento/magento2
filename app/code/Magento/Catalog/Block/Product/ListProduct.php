@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
@@ -15,16 +16,19 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Helper\Output as OutputHelper;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Product list
@@ -42,15 +46,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $_defaultToolbarBlock = Toolbar::class;
 
     /**
-     * Product Collection
-     *
      * @var AbstractCollection
      */
     protected $_productCollection;
 
     /**
-     * Catalog layer
-     *
      * @var Layer
      */
     protected $_catalogLayer;
@@ -71,6 +71,21 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $categoryRepository;
 
     /**
+     * @var SpecialPriceBulkResolverInterface
+     */
+    private SpecialPriceBulkResolverInterface $specialPriceBulkResolver;
+
+    /**
+     * @var array|null
+     */
+    private ?array $specialPriceMap = null;
+
+    /**
+     * @var CollectionFactory
+     */
+    private CollectionFactory $productCollectionFactory;
+
+    /**
      * @param Context $context
      * @param PostHelper $postDataHelper
      * @param Resolver $layerResolver
@@ -78,6 +93,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param Data $urlHelper
      * @param array $data
      * @param OutputHelper|null $outputHelper
+     * @param SpecialPriceBulkResolverInterface|null $specialPriceBulkResolver
+     * @param CollectionFactory|null $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -86,13 +103,19 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
         array $data = [],
-        ?OutputHelper $outputHelper = null
+        ?OutputHelper $outputHelper = null,
+        ?SpecialPriceBulkResolverInterface $specialPriceBulkResolver = null,
+        ?CollectionFactory $collectionFactory = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $this->specialPriceBulkResolver = $specialPriceBulkResolver ??
+            ObjectManager::getInstance()->get(SpecialPriceBulkResolverInterface::class);
         $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
+        $this->productCollectionFactory = $collectionFactory ??
+            ObjectManager::getInstance()->get(CollectionFactory::class);
         parent::__construct(
             $context,
             $data
@@ -141,14 +164,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getLoadedProductCollection()
     {
-        $collection = $this->_getProductCollection();
-
-        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
-        foreach ($collection as $product) {
-            $product->setData('category_id', $categoryId);
-        }
-
-        return $collection;
+        return $this->_getProductCollection();
     }
 
     /**
@@ -202,7 +218,19 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->addToolbarBlock($collection);
 
         if (!$collection->isLoaded()) {
-            $collection->load();
+            try {
+                $products = $collection->getItems();
+                if ($categoryId = $this->getLayer()->getCurrentCategory()->getId()) {
+                    foreach ($products as $product) {
+                        $product->setData('category_id', $categoryId);
+                    }
+                }
+            } catch (\Throwable) {
+                $this->setData('has_error', true);
+                $collection = $this->productCollectionFactory->create();
+                $collection->addFieldToFilter('entity_id', ['in' => []]);
+                $this->_productCollection = $collection;
+            }
         }
 
         return parent::_beforeToHtml();
@@ -422,11 +450,21 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * (rendering happens in the scope of product list, but not single product)
      *
      * @return Render
+     * @throws LocalizedException
      */
     protected function getPriceRender()
     {
-        return $this->getLayout()->getBlock('product.price.render.default')
-            ->setData('is_product_list', true);
+        $block = $this->getLayout()->getBlock('product.price.render.default');
+        $block->setData('is_product_list', true);
+
+        if ($this->specialPriceMap === null) {
+            $this->specialPriceMap = $this->specialPriceBulkResolver->generateSpecialPriceMap(
+                (int)$this->_storeManager->getStore()->getId(),
+                $this->_getProductCollection()
+            );
+        }
+
+        return $block->setData('special_price_map', $this->specialPriceMap);
     }
 
     /**
@@ -461,7 +499,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // if the product is associated with any category
             if ($categories->count()) {
                 // show products from this category
-                $this->setCategoryId(current($categories->getIterator())->getId());
+                $this->setCategoryId($categories->getIterator()->current()->getId());
             }
         }
 

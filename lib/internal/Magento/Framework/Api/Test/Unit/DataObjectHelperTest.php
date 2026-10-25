@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,9 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -72,6 +75,9 @@ class DataObjectHelperTest extends TestCase
      */
     protected $joinProcessorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -89,7 +95,7 @@ class DataObjectHelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->joinProcessorMock = $this->getMockBuilder(JoinProcessor::class)
-            ->setMethods(['extractExtensionAttributes'])
+            ->onlyMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->joinProcessorMock->expects($this->any())
@@ -109,7 +115,10 @@ class DataObjectHelperTest extends TestCase
         );
     }
 
-    public function testPopulateWithArrayWithSimpleAttributes()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithSimpleAttributes(): void
     {
         $id = 5;
         $countryId = 15;
@@ -122,17 +131,13 @@ class DataObjectHelperTest extends TestCase
         /** @var Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $regionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
         $data = [
             'id' => $id,
@@ -141,18 +146,21 @@ class DataObjectHelperTest extends TestCase
             'default_shipping' => $isDefaultShipping,
             'region' => [
                 'region_id' => $regionId,
-                'region' => $region,
+                'region' => $region
             ],
         ];
 
-        $this->methodsMapProcessor->expects($this->at(0))
+        $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->with(AddressInterface::class, 'getStreet')
-            ->willReturn('string[]');
-        $this->methodsMapProcessor->expects($this->at(1))
-            ->method('getMethodReturnType')
-            ->with(AddressInterface::class, 'getRegion')
-            ->willReturn(RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == AddressInterface::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == AddressInterface::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -172,7 +180,10 @@ class DataObjectHelperTest extends TestCase
         $this->assertEquals($regionId, $addressDataObject->getRegion()->getRegionId());
     }
 
-    public function testPopulateWithArrayWithCustomAttribute()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithCustomAttribute(): void
     {
         $id = 5;
 
@@ -200,7 +211,7 @@ class DataObjectHelperTest extends TestCase
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
-                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
 
@@ -230,7 +241,10 @@ class DataObjectHelperTest extends TestCase
         );
     }
 
-    public function testPopulateWithArrayWithCustomAttributes()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithCustomAttributes(): void
     {
         $id = 5;
 
@@ -258,7 +272,7 @@ class DataObjectHelperTest extends TestCase
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
-                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
 
@@ -267,7 +281,7 @@ class DataObjectHelperTest extends TestCase
             CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                 [
                     AttributeInterface::ATTRIBUTE_CODE => $customAttributeCode,
-                    AttributeInterface::VALUE => $customAttributeValue,
+                    AttributeInterface::VALUE => $customAttributeValue
                 ],
             ],
         ];
@@ -294,26 +308,84 @@ class DataObjectHelperTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithOrderPaymentAttributes(): void
+    {
+        $method = 'companycredit';
+        $customerPaymentId = null;
+        $additionalData = null;
+        $poNumber = 'ReferenceNumber934829dek2';
+        $cc_type = "Debit";
+        $cc_number_enc = "393993138";
+        $cc_last_4 = "3982";
+        $cc_owner = "John Doe";
+        $cc_exp_month = "05";
+        $cc_exp_year = "24";
+        $cc_number = '1234567890';
+        $cc_cid = null;
+        $cc_ss_issue = null;
+        $cc_ss_start_month = "0";
+        $cc_ss_start_year = "0";
+
+        /** @var OrderPaymentInterface $orderPaymentObject */
+        $orderPaymentObject = $this->objectManager->getObject(
+            Payment::class,
+            ['dataObjectHelper' => $this->dataObjectHelper]
+        );
+
+        $data = [
+            'method' => $method,
+            'customer_payment_id' => $customerPaymentId,
+            'additionalData' => $additionalData,
+            'additionalInformation' => [],
+            'po_number' => $poNumber,
+            'cc_type' => $cc_type,
+            'cc_number_enc' => $cc_number_enc,
+            'cc_last_4' => $cc_last_4,
+            'cc_owner' => $cc_owner,
+            'cc_exp_month' => $cc_exp_month,
+            'cc_exp_year' => $cc_exp_year,
+            'cc_number' => $cc_number,
+            'cc_cid' => $cc_cid,
+            'cc_ss_issue' => $cc_ss_issue,
+            'cc_ss_start_month' => $cc_ss_start_month,
+            'cc_ss_start_year' => $cc_ss_start_year
+        ];
+        $this->dataObjectHelper->populateWithArray(
+            $orderPaymentObject,
+            $data,
+            OrderPaymentInterface::class
+        );
+        $this->assertEquals($method, $orderPaymentObject->getMethod());
+        $this->assertEquals($cc_exp_month, $orderPaymentObject->getCcExpMonth());
+        $this->assertEquals($cc_exp_year, $orderPaymentObject->getCcExpYear());
+        $this->assertEquals($cc_last_4, $orderPaymentObject->getCcLast4());
+        $this->assertEquals($cc_owner, $orderPaymentObject->getCcOwner());
+        $this->assertEquals($cc_number_enc, $orderPaymentObject->getCcNumberEnc());
+        $this->assertEquals($poNumber, $orderPaymentObject->getPoNumber());
+        $this->assertEquals($cc_type, $orderPaymentObject->getCcType());
+    }
+
+    /**
      * @param array $data1
      * @param array $data2
-     * @dataProvider dataProviderForTestMergeDataObjects
+     *
+     * @return void
      */
-    public function testMergeDataObjects($data1, $data2)
+    #[DataProvider('dataProviderForTestMergeDataObjects')]
+    public function testMergeDataObjects($data1, $data2): void
     {
         /** @var Address $addressDataObject */
         $firstAddressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $firstRegionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         $firstRegionDataObject->setRegionId($data1['region']['region_id']);
@@ -330,17 +402,13 @@ class DataObjectHelperTest extends TestCase
 
         $secondAddressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $secondRegionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         $secondRegionDataObject->setRegionId($data2['region']['region_id']);
@@ -359,14 +427,18 @@ class DataObjectHelperTest extends TestCase
             ->method('buildOutputDataArray')
             ->with($secondAddressDataObject, get_class($firstAddressDataObject))
             ->willReturn($data2);
-        $this->methodsMapProcessor->expects($this->at(0))
+        $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->with(Address::class, 'getStreet')
-            ->willReturn('string[]');
-        $this->methodsMapProcessor->expects($this->at(1))
-            ->method('getMethodReturnType')
-            ->with(Address::class, 'getRegion')
-            ->willReturn(RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == Address::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == Address::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
+
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -388,7 +460,7 @@ class DataObjectHelperTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestMergeDataObjects()
+    public static function dataProviderForTestMergeDataObjects(): array
     {
         return [
             [
@@ -399,7 +471,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ],
                 [
@@ -409,7 +481,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ]
             ],
@@ -419,7 +491,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ],
                 [
@@ -429,7 +501,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ]
             ]

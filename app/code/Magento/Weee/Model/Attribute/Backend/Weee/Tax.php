@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax,
-        ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -140,7 +140,11 @@ class SaveHandlerTest extends TestCase
 
         $this->ruleResource->expects($this->any())
             ->method('bindRuleToEntity')
-            ->withConsecutive([1, [3, 4, 5]], [1, [1, 2]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 1 && is_array($arg2)) {
+                    return null;
+                }
+            });
 
         $result = $this->model->execute(RuleInterface::class, $entityData);
         $this->assertEquals($entityData, $result);

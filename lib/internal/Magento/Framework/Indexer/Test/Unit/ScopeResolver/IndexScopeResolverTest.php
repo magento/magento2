@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
@@ -39,13 +40,11 @@ class IndexScopeResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->setMethods(['getTableName'])
+            ->onlyMethods(['getTableName'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -61,9 +60,8 @@ class IndexScopeResolverTest extends TestCase
     /**
      * @param string $indexName
      * @param Dimension[] $dimensions
-     * @param string $expected
-     * @dataProvider resolveDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($indexName, array $dimensions, $expected)
     {
         $dimensions = array_map(
@@ -72,9 +70,7 @@ class IndexScopeResolverTest extends TestCase
             },
             $dimensions
         );
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $scope = $this->createMock(ScopeInterface::class);
 
         $scope->expects($this->any())->method('getId')->willReturn(1);
 
@@ -90,37 +86,37 @@ class IndexScopeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             [
-                'index' => 'some_index',
+                'indexName' => 'some_index',
                 'dimensions' => [],
                 'expected' => 'some_index'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['scope', 'name']],
                 'expected' => 'index_name_scope1'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['index', 20]],
                 'expected' => 'index_name_index20'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['first', 10], ['second', 20]],
                 // actually you will get exception here thrown in ScopeResolverInterface
                 'expected' => 'index_name_first10_second20'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['second', 10], ['first', 20]],
                 'expected' => 'index_name_first20_second10'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [[-1, 10], ['first', 20]],
                 'expected' => 'index_name_-110_first20'
             ]
@@ -135,7 +131,7 @@ class IndexScopeResolverTest extends TestCase
     private function createDimension($name, $value)
     {
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->any())

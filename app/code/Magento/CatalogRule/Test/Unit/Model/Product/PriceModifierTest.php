@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Product\PriceModifier;
 use Magento\CatalogRule\Model\Rule;
@@ -47,8 +48,8 @@ class PriceModifierTest extends TestCase
     /**
      * @param int|null $resultPrice
      * @param int $expectedPrice
-     * @dataProvider modifyPriceDataProvider
      */
+    #[DataProvider('modifyPriceDataProvider')]
     public function testModifyPriceIfPriceExists($resultPrice, $expectedPrice)
     {
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($this->ruleMock);
@@ -68,7 +69,7 @@ class PriceModifierTest extends TestCase
     /**
      * @return array
      */
-    public function modifyPriceDataProvider()
+    public static function modifyPriceDataProvider()
     {
         return ['resulted_price_exists' => [150, 150], 'resulted_price_not_exists' => [null, 100]];
     }

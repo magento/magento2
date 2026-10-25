@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,6 @@
 
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForAdvancedReportingPageLoad"/>
-        <seeInCurrentUrl url="reports/advanced-reporting" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <seeInCurrentUrl url="report"  stepKey="seeAssertAdvancedReportingPageUrl"/>
     </actionGroup>
 </actionGroups>

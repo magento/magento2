@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Translation\Model\Inline;
 
+use DOMDocument;
+use Normalizer;
+use Laminas\Filter\FilterInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Translation\Model\ResourceModel\StringFactory;
 use Magento\Translation\Model\ResourceModel\StringUtils;
@@ -15,6 +19,7 @@ use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Filter\Input\MaliciousCode;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Escaper;
 
@@ -22,13 +27,14 @@ use Magento\Framework\Escaper;
  * Parses content and applies necessary html element wrapping and client scripts for inline translation.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Parser implements ParserInterface
 {
     /**
      * data-translate html element attribute name
      */
-    const DATA_TRANSLATE = 'data-translate';
+    public const DATA_TRANSLATE = 'data-translate';
 
     /**
      * @var Escaper
@@ -108,6 +114,27 @@ class Parser implements ParserInterface
     ];
 
     /**
+     * List of filter expressions for translations
+     *
+     * @var array
+     */
+    private $filterTagsExpression = [
+        '/&lt;\/?(script|meta|link|frame|iframe|object|embed|form|input|style)[^&]*&gt;/i',
+        '/&lt;[^&]*(ondblclick|onclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|' .
+            'onmouseout|onmouseover|onmouseup|onload|onunload|onerror)[^&]*&gt;/i',
+        '/\b(alert|eval|setTimeout|setInterval|Function|setImmediate|requestAnimationFrame|document\.(write' .
+            '|writeln)|innerHTML|outerHTML|insertAdjacentHTML|console\.(log|error|warn|info|debug))\s*[=(]/i',
+        '/\b(window|this|self)\s*\[\s*[\'"]?(alert|eval)[\'"]?\s*\]/i',
+    ];
+
+    /**
+     * Flag to track if filter expressions have been added
+     *
+     * @var bool
+     */
+    private $filterExpressionsAdded = false;
+
+    /**
      * @var StringFactory
      */
     protected $_resourceFactory;
@@ -118,7 +145,7 @@ class Parser implements ParserInterface
     protected $_storeManager;
 
     /**
-     * @var \Zend_Filter_Interface
+     * @var FilterInterface
      */
     protected $_inputFilter;
 
@@ -148,28 +175,36 @@ class Parser implements ParserInterface
     private $relatedCacheTypes;
 
     /**
+     * @var Normalizer
+     */
+    private $normalizer;
+
+    /**
      * Initialize base inline translation model
      *
      * @param StringUtilsFactory $resource
      * @param StoreManagerInterface $storeManager
-     * @param \Zend_Filter_Interface $inputFilter
+     * @param FilterInterface $inputFilter
      * @param State $appState
      * @param TypeListInterface $appCache
      * @param InlineInterface $translateInline
      * @param Escaper $escaper
      * @param CacheManager $cacheManager
      * @param array $relatedCacheTypes
+     * @param Normalizer|null $normalizer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StringUtilsFactory $resource,
         StoreManagerInterface $storeManager,
-        \Zend_Filter_Interface $inputFilter,
+        FilterInterface $inputFilter,
         State $appState,
         TypeListInterface $appCache,
         InlineInterface $translateInline,
         Escaper $escaper,
         CacheManager $cacheManager,
-        array $relatedCacheTypes = []
+        array $relatedCacheTypes = [],
+        ?Normalizer $normalizer = null
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -180,6 +215,8 @@ class Parser implements ParserInterface
         $this->escaper = $escaper;
         $this->cacheManager = $cacheManager;
         $this->relatedCacheTypes = $relatedCacheTypes;
+        $this->normalizer = $normalizer
+            ?? ObjectManager::getInstance()->get(Normalizer::class);
     }
 
     /**
@@ -201,6 +238,7 @@ class Parser implements ParserInterface
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
+        $this->filterExternalLinks($translateParams);
 
         /** @var $validStoreId int */
         $validStoreId = $this->_storeManager->getStore()->getId();
@@ -256,10 +294,120 @@ class Parser implements ParserInterface
      */
     protected function _filterTranslationParams(array &$translateParams, array $fieldNames)
     {
+        $this->addTranslationFilterExpression();
         foreach ($translateParams as &$param) {
             foreach ($fieldNames as $fieldName) {
                 $param[$fieldName] = $this->_inputFilter->filter($param[$fieldName]);
             }
+        }
+    }
+
+    /**
+     * Sanitize external links in translations
+     *
+     * @param array $translateParams
+     * @return void
+     */
+    private function filterExternalLinks(array &$translateParams): void
+    {
+        foreach ($translateParams as &$param) {
+            if (isset($param['custom']) && is_string($param['custom'])) {
+                $param['custom'] = $this->removeExternalLinks($param['custom']);
+            }
+        }
+    }
+
+    /**
+     * Remove external links from HTML content, converting them to plain text
+     *
+     * @param string $content
+     * @return string
+     */
+    private function removeExternalLinks(string $content): string
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return $content;
+        }
+        $dom = new DOMDocument('1.0', 'UTF-8');
+        libxml_use_internal_errors(true);
+        $wrapper = '<div>' . $content . '</div>';
+        $dom->loadHTML(
+            '<?xml encoding="UTF-8"?>' . $wrapper,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+        $xpath = new \DOMXPath($dom);
+        foreach ($xpath->query('//a[@href]') as $anchor) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $href = trim(html_entity_decode($anchor->getAttribute('href'), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+            if ($this->isExternal($href)) {
+                $anchor->parentNode->replaceChild($dom->createTextNode($anchor->textContent), $anchor);
+            }
+        }
+        $wrapper = $dom->getElementsByTagName('div')->item(0);
+        $result = '';
+        foreach ($wrapper->childNodes as $child) {
+            $result .= $dom->saveHTML($child);
+        }
+        return $result;
+    }
+
+    /**
+     * Method to verify if the href is external
+     *
+     * @param string $href
+     * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function isExternal(string $href): bool
+    {
+        $href = preg_replace('/[\x00-\x1F\x7F]+/u', '', $href);
+        $href = trim($href);
+
+        if ($href === '' || $href[0] === '#') {
+            return false;
+        }
+
+        if (class_exists(Normalizer::class) && $this->normalizer !== null) {
+            $normalized = $this->normalizer->normalize($href, Normalizer::FORM_KC);
+            if ($normalized !== false) {
+                $href = $normalized;
+            }
+        }
+
+        if (strncmp($href, '//', 2) === 0 || strncasecmp($href, 'www.', 4) === 0) {
+            return true;
+        }
+
+        if (preg_match('/^[a-z0-9.-]+\.[a-z]{2,}/i', $href)) {
+            return true;
+        }
+
+        $colonPos = strpos($href, ':');
+        if ($colonPos === false) {
+            return false;
+        }
+
+        $scheme = preg_replace('/\s+/', '', substr($href, 0, $colonPos));
+        return $scheme !== '' && preg_match('/^[a-z][a-z0-9+\-.]*$/i', $scheme);
+    }
+
+    /**
+     * Add additional filters to translation strings
+     *
+     * @return void
+     */
+    private function addTranslationFilterExpression(): void
+    {
+        if ($this->filterExpressionsAdded) {
+            return;
+        }
+        if ($this->_inputFilter instanceof MaliciousCode) {
+            foreach ($this->filterTagsExpression as $expression) {
+                $this->_inputFilter->addExpression($expression);
+            }
+            $this->filterExpressionsAdded = true;
         }
     }
 
@@ -344,7 +492,7 @@ class Parser implements ParserInterface
      */
     protected function _getTagLocation($matches, $options)
     {
-        $tagName = strtolower($options['tagName']);
+        $tagName = isset($options['tagName']) ? strtolower($options['tagName']) : '';
 
         return $options['tagList'][$tagName] ?? (ucfirst($tagName) . ' Text');
     }
@@ -386,6 +534,8 @@ class Parser implements ParserInterface
      */
     protected function _applySimpleTagsFormat($tagHtml, $tagName, $trArr)
     {
+        $tagHtml = $tagHtml !== null ? $tagHtml : '';
+        $tagName = $tagName !== null ? $tagName : '';
         $simpleTags = substr(
             $tagHtml,
             0,
@@ -418,18 +568,45 @@ class Parser implements ParserInterface
         $trArr = [];
         $next = 0;
         while (preg_match($regexp, $text, $matches, PREG_OFFSET_CAPTURE, $next)) {
+
             $trArr[] = json_encode(
                 [
-                    'shown' => htmlspecialchars_decode($matches[1][0]),
-                    'translated' => htmlspecialchars_decode($matches[2][0]),
-                    'original' => htmlspecialchars_decode($matches[3][0]),
-                    'location' => htmlspecialchars_decode($locationCallback($matches, $options)),
+                    'shown' => $this->unescape((string)$matches[1][0], $options),
+                    'translated' => $this->unescape((string)$matches[2][0], $options),
+                    'original' => $this->unescape((string)$matches[3][0], $options),
+                    'location' => $this->unescape((string) $locationCallback($matches, $options), $options),
                 ]
             );
-            $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
+
+            if (!str_contains($text, 'text/x-magento-init')) {
+                $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));
+            } else {
+                $text = substr_replace($text, $matches[3][0], $matches[0][1], strlen($matches[0][0]));
+            }
             $next = $matches[0][1];
         }
         return $trArr;
+    }
+
+    /**
+     * Unescape string based on the context
+     *
+     * Unescape special characters and unicode characters to prevent double escaping
+     *
+     * @param string $string
+     * @param array $options
+     * @return string
+     */
+    private function unescape(string $string, array $options): string
+    {
+        if ($string && !ctype_digit($string) && isset($options['tagName']) && $options['tagName'] === 'script') {
+            $decodedString = json_decode('["' . $string . '"]', true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $string = implode($decodedString);
+            }
+        }
+
+        return htmlspecialchars_decode($string);
     }
 
     /**
@@ -475,7 +652,7 @@ class Parser implements ParserInterface
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . str_replace("\"", "&quot;", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);
@@ -563,6 +740,7 @@ class Parser implements ParserInterface
      * @param callable $formatCallback
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _translateTags(string &$content, array $tagsList, callable $formatCallback)
     {
@@ -616,7 +794,7 @@ class Parser implements ParserInterface
                         && $tagBodyOpenStartPosition > $tagMatch[0][1]
                     ) {
                         $tagHtmlHead = $formatCallback($tagHtml, $tagName, $trArr);
-                        $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
+                        $headTranslateTags .= $tagHtmlHead !== null ? substr($tagHtmlHead, strlen($tagHtml)) : '';
                     } else {
                         $tagHtml = $formatCallback($tagHtml, $tagName, $trArr);
                     }
@@ -649,13 +827,14 @@ class Parser implements ParserInterface
      */
     private function _findEndOfTag($body, $tagName, $from)
     {
+        $body = $body !== null ? $body : '';
         $openTag = '<' . $tagName;
         $closeTag = ($this->_isJson ? '<\\/' : '</') . $tagName;
         $tagLength = strlen($tagName);
         $length = $tagLength + 1;
         $end = $from + 1;
         while (substr_count($body, $openTag, $from, $length) !== substr_count($body, $closeTag, $from, $length)) {
-            $end = strpos($body, (string) $closeTag, $end + $tagLength + 1);
+            $end = strpos($body, $closeTag, $end + $tagLength + 1);
             if ($end === false) {
                 return false;
             }
@@ -688,7 +867,6 @@ class Parser implements ParserInterface
                 ],
                 JSON_HEX_QUOT
             );
-
             $spanHtml = $this->_getDataTranslateSpan(
                 '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]

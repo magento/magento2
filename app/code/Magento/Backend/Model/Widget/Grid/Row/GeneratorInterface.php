@@ -1,9 +1,7 @@
 <?php
 /**
- * Row Generator Interface
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model\Widget\Grid\Row;
 
@@ -14,9 +12,10 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 interface GeneratorInterface
 {
     /**
+     * Generate row url
+     *
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @api
      */
     public function getUrl($item);
 }

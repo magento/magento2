@@ -1,0 +1,11 @@
+
+File "/var/www/html/app/code/Magento/Downloadable/Test/Mftf/Test/AdminDeleteDownloadableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontCatalogSearchMainSection from module(s): magento/module-catalog-search
+	 StoreFrontQuickSearchActionGroup from module(s): magento/module-search
+
+File "/var/www/html/app/code/Magento/Downloadable/Test/Mftf/Test/AdminProductTypeSwitchingOnEditingTest/AdminDownloadableProductTypeSwitchingToConfigurableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminSimpleProductTypeSwitchingToConfigurableProductTest from module(s): magento/module-configurable-product

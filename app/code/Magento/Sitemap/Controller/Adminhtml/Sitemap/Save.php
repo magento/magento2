@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class Save extends Sitemap implements HttpPostActionInterface
     /**
      * Maximum length of sitemap filename
      */
-    const MAX_FILENAME_LENGTH = 32;
+    public const MAX_FILENAME_LENGTH = 32;
 
     /**
      * @var StringLength
@@ -128,7 +128,7 @@ class Save extends Sitemap implements HttpPostActionInterface
     protected function clearSiteMap(\Magento\Sitemap\Model\Sitemap $model)
     {
         /** @var Filesystem $directory */
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
 
         if ($this->getRequest()->getParam('sitemap_id')) {
             $model->load($this->getRequest()->getParam('sitemap_id'));

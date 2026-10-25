@@ -1,17 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
-class Cache
+class Cache implements ResetAfterRequestInterface
 {
     /**
      * @var ConfigInterface
@@ -66,6 +67,7 @@ class Cache
                 ]);
                 $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
                 foreach ($images as $imageId => $imageData) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $this->data[$theme->getCode() . $imageId] = array_merge(['id' => $imageId], $imageData);
                 }
             }
@@ -126,5 +128,13 @@ class Cache
         $this->imageHelper->save();
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

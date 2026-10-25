@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price\Validation;
@@ -11,6 +11,16 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
  */
 class InvalidSkuProcessor
 {
+    /**
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     */
+    private $productIdLocator;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
     /**
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository

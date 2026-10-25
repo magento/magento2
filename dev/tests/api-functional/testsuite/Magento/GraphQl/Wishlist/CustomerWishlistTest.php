@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -261,7 +261,7 @@ QUERY;
             $addToWishlistResponse['addProductsToWishlist']['wishlist']['items_count'],
             'Count is greater than 0'
         );
-        $message = 'The product is disabled';
+        $message = 'Could not find a product with SKU "' . $sku . '"';
         $this->assertEquals(
             $message,
             $addToWishlistResponse['addProductsToWishlist']['user_errors'][0]['message']

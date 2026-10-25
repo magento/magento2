@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\ReportXml\DB\Assembler;
 
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
@@ -13,6 +15,8 @@ use Magento\Analytics\ReportXml\DB\SelectBuilder;
  * Introduces family of SQL assemblers
  * Each assembler populates SelectBuilder with config information
  * @see usage examples at \Magento\Analytics\ReportXml\QueryFactory
+ *
+ * @api
  */
 interface AssemblerInterface
 {

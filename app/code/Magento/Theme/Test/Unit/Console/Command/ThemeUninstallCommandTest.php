@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
+use ArrayIterator;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\MaintenanceMode;
@@ -25,6 +26,7 @@ use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Magento\Theme\Model\ThemeValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -69,8 +71,6 @@ class ThemeUninstallCommandTest extends TestCase
     private $backupRollbackFactory;
 
     /**
-     * Theme Validator
-     *
      * @var ThemeValidator|MockObject
      */
     private $themeValidator;
@@ -95,6 +95,9 @@ class ThemeUninstallCommandTest extends TestCase
      */
     private $tester;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
@@ -128,19 +131,18 @@ class ThemeUninstallCommandTest extends TestCase
         $this->tester = new CommandTester($this->command);
     }
 
-    public function testExecuteFailedValidationNotPackage()
+    /**
+     * @return void
+     */
+    public function testExecuteFailedValidationNotPackage(): void
     {
-        $this->themePackageInfo->expects($this->at(0))->method('getPackageName')->willReturn('dummy');
-        $this->themePackageInfo->expects($this->at(1))->method('getPackageName')->willReturn('magento/theme-a');
+        $this->themePackageInfo
+            ->method('getPackageName')
+            ->willReturnOnConsecutiveCalls('dummy', 'magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
         $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
@@ -154,18 +156,16 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function testExecuteFailedValidationNotTheme()
+    /**
+     * @return void
+     */
+    public function testExecuteFailedValidationNotTheme(): void
     {
         $this->themePackageInfo->expects($this->exactly(2))->method('getPackageName')->willReturn('');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(false);
         $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
@@ -175,7 +175,10 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function testExecuteFailedValidationMixed()
+    /**
+     * @return void
+     */
+    public function testExecuteFailedValidationMixed(): void
     {
         $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
@@ -184,29 +187,23 @@ class ThemeUninstallCommandTest extends TestCase
                     ['area/vendor/test1', 'dummy1'],
                     ['area/vendor/test2', 'magento/theme-b'],
                     ['area/vendor/test3', ''],
-                    ['area/vendor/test4', 'dummy2'],
+                    ['area/vendor/test4', 'dummy2']
                 ]
             );
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
-        $this->collection->expects($this->at(1))->method('hasTheme')->willReturn(true);
-        $this->collection->expects($this->at(3))->method('hasTheme')->willReturn(true);
-        $this->collection->expects($this->at(5))->method('hasTheme')->willReturn(false);
-        $this->collection->expects($this->at(7))->method('hasTheme')->willReturn(true);
+        $this->collection
+            ->method('hasTheme')
+            ->willReturnOnConsecutiveCalls(true, true, false, true);
         $this->tester->execute([
             'theme' => [
                 'area/vendor/test1',
                 'area/vendor/test2',
                 'area/vendor/test3',
-                'area/vendor/test4',
+                'area/vendor/test4'
             ],
         ]);
         $this->assertStringContainsString(
@@ -223,41 +220,51 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function setUpPassValidation()
+    /**
+     * @return void
+     */
+    public function setUpPassValidation(): void
     {
         $this->themePackageInfo->expects($this->any())->method('getPackageName')->willReturn('magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->themeDependencyChecker->expects($this->any())->method('checkChildTheme')->willReturn([]);
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
     }
 
-    public function setupPassChildThemeCheck()
+    /**
+     * @return void
+     */
+    public function setupPassChildThemeCheck(): void
     {
         $theme = $this->createMock(Theme::class);
         $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
-        $this->collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([]));
+        $this->collection->expects($this->any())->method('getIterator')->willReturn(new ArrayIterator([]));
     }
 
-    public function setupPassThemeInUseCheck()
+    /**
+     * @return void
+     */
+    public function setupPassThemeInUseCheck(): void
     {
         $this->themeValidator->expects($this->once())->method('validateIsThemeInUse')->willReturn([]);
     }
 
-    public function setupPassDependencyCheck()
+    /**
+     * @return void
+     */
+    public function setupPassDependencyCheck(): void
     {
         $this->dependencyChecker->expects($this->once())->method('checkDependencies')->willReturn([]);
     }
 
-    public function testExecuteFailedThemeInUseCheck()
+    /**
+     * @return void
+     */
+    public function testExecuteFailedThemeInUseCheck(): void
     {
         $this->setUpPassValidation();
         $this->setupPassChildThemeCheck();
@@ -274,7 +281,10 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function testExecuteFailedDependencyCheck()
+    /**
+     * @return void
+     */
+    public function testExecuteFailedDependencyCheck(): void
     {
         $this->setUpPassValidation();
         $this->setupPassThemeInUseCheck();
@@ -291,7 +301,10 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function setUpExecute()
+    /**
+     * @return void
+     */
+    public function setUpExecute(): void
     {
         $this->setUpPassValidation();
         $this->setupPassThemeInUseCheck();
@@ -307,7 +320,10 @@ class ThemeUninstallCommandTest extends TestCase
             ->with($this->isInstanceOf(OutputInterface::class), $this->anything());
     }
 
-    public function testExecuteWithBackupCode()
+    /**
+     * @return void
+     */
+    public function testExecuteWithBackupCode(): void
     {
         $this->setUpExecute();
         $backupRollback = $this->createMock(BackupRollback::class);
@@ -318,7 +334,10 @@ class ThemeUninstallCommandTest extends TestCase
         $this->tester->getDisplay();
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->never())->method('clearMaterializedViewFiles');
@@ -335,7 +354,10 @@ class ThemeUninstallCommandTest extends TestCase
         );
     }
 
-    public function testExecuteCleanStaticFiles()
+    /**
+     * @return void
+     */
+    public function testExecuteCleanStaticFiles(): void
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
@@ -354,9 +376,11 @@ class ThemeUninstallCommandTest extends TestCase
 
     /**
      * @param $themePath
-     * @dataProvider dataProviderThemeFormat
+     *
+     * @return void
      */
-    public function testExecuteWrongThemeFormat($themePath)
+    #[DataProvider('dataProviderThemeFormat')]
+    public function testExecuteWrongThemeFormat($themePath): void
     {
         $this->tester->execute(['theme' => [$themePath]]);
         $this->assertStringContainsString(
@@ -368,7 +392,7 @@ class ThemeUninstallCommandTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderThemeFormat()
+    public static function dataProviderThemeFormat(): array
     {
         return [
             ['test1'],
@@ -380,7 +404,7 @@ class ThemeUninstallCommandTest extends TestCase
             ['vendor/test1/'],
             ['/vendor/test1/'],
             ['area/vendor/test1/'],
-            ['/area/vendor/test1'],
+            ['/area/vendor/test1']
         ];
     }
 }

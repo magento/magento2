@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -75,7 +75,7 @@ define([
          */
         wipeButtonsConfiguration: function () {
             $(this.buttonConfiguration).removeClass('disabled')
-                .removeAttr('disabled');
+                .prop('disabled', false);
         },
 
         /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile;
@@ -50,7 +50,7 @@ foreach ($product->getOptions() as $option) {
 }
 
 $requestInfo = new DataObject(['qty' => 1, 'options' => $options]);
-$validatorFile = $objectManager->get(ValidatorFileMock::class)->getInstance();
+$validatorFile = $objectManager->create(ValidatorFileMock::class, ['name' => 'testName'])->getInstance();
 $objectManager->addSharedInstance($validatorFile, ValidatorFile::class);
 
 $quote->setReservedOrderId('test_order_item_with_items_and_custom_options');

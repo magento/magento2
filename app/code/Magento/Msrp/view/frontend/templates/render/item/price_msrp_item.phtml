@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 ?>
 
@@ -34,7 +34,7 @@
     <?php endif; ?>
     <?php if ($_catalogHelper->isShowPriceOnGesture($_product)): ?>
         <?php $priceElementId = 'product-price-' . $_id . $block->getIdSuffix(); ?>
-        <span id="<?= /* @noEscape */ $priceElementId ?>"/>
+        <span id="<?= /* @noEscape */ $priceElementId ?>"></span>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none", '#'. $priceElementId) ?>
 
         <?php $popupId = 'msrp-popup-' . $_id . $block->getRandomString(20); ?>

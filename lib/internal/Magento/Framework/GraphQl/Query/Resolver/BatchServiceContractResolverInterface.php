@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Resolve multiple brunches/leaves by executing a batch service contract.
+ *
+ * @api
  */
 interface BatchServiceContractResolverInterface
 {

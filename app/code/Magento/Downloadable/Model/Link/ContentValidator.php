@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Link;
 
@@ -49,7 +49,7 @@ class ContentValidator
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
         DomainValidator $domainValidator,
-        File $fileHelper = null
+        ?File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;

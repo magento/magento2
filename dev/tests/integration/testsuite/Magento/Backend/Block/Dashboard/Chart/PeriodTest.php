@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,6 +52,7 @@ class PeriodTest extends TestCase
     {
         $html = $this->block->toHtml();
         $dropDownList = [
+            __('Today'),
             __('Last 24 Hours'),
             __('Last 7 Days'),
             __('Current Month'),

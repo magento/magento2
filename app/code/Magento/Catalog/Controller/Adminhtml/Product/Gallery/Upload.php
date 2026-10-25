@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 
@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class Upload
+ * The product gallery upload controller
  */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -20,7 +20,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -33,8 +33,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private $allowedMimeTypes = [
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
-        'gif' => 'image/png',
-        'png' => 'image/gif'
+        'gif' => 'image/gif',
+        'png' => 'image/png'
     ];
 
     /**
@@ -62,9 +62,9 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Image\AdapterFactory $adapterFactory = null,
-        \Magento\Framework\Filesystem $filesystem = null,
-        \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
+        ?\Magento\Framework\Image\AdapterFactory $adapterFactory = null,
+        ?\Magento\Framework\Filesystem $filesystem = null,
+        ?\Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -97,19 +97,24 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             $result = $uploader->save(
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
-
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',
                 ['result' => $result, 'action' => $this]
             );
 
-            unset($result['tmp_name']);
-            unset($result['path']);
+            if (is_array($result)) {
+                unset($result['tmp_name']);
+                unset($result['path']);
 
-            $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
-            $result['file'] = $result['file'] . '.tmp';
-        } catch (\Exception $e) {
+                $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
+                $result['file'] = $result['file'] . '.tmp';
+            } else {
+                $result = ['error' => 'Something went wrong while saving the file(s).'];
+            }
+        } catch (LocalizedException $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
+        } catch (\Throwable $e) {
+            $result = ['error' => 'Something went wrong while saving the file(s).', 'errorcode' => 0];
         }
 
         /** @var \Magento\Framework\Controller\Result\Raw $response */

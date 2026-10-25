@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -13,8 +13,9 @@ define([
     'uiLayout',
     'uiCollection',
     'uiRegistry',
-    'mage/translate'
-], function (ko, utils, _, layout, uiCollection, registry, $t) {
+    'mage/translate',
+    'jquery'
+], function (ko, utils, _, layout, uiCollection, registry, $t, $) {
     'use strict';
 
     /**
@@ -583,8 +584,8 @@ define([
                 updatedCollection;
 
             if (this.elems().filter(function (el) {
-                    return el.position || el.position === 0;
-                }).length !== this.getChildItems().length) {
+                return el.position || el.position === 0;
+            }).length !== this.getChildItems().length) {
 
                 return false;
             }
@@ -654,7 +655,10 @@ define([
 
             startIndex = page || this.startIndex;
 
-            return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
+            if (dataRecord.length) {
+                return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
+            }
+            return [];
         },
 
         /**
@@ -685,14 +689,16 @@ define([
          * @param {Number|String} prop - additional property to element
          */
         processingAddChild: function (ctx, index, prop) {
+            var newTotal,
+                newPages;
+
             this.bubble('addChild', false);
 
-            if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
-                this.pages(this.pages() + 1);
-                this.nextPage();
-            } else if (~~this.currentPage() !== this.pages()) {
-                this.currentPage(this.pages());
-            }
+            newTotal = this.relatedData.length + 1;
+            newPages = Math.ceil(newTotal / this.pageSize);
+
+            this.pages(newPages);
+            this.currentPage(newPages);
 
             this.addChild(ctx, index, prop);
         },
@@ -800,7 +806,7 @@ define([
             var max = 0,
                 pos;
 
-            this.elems.each(function (record) {
+            this.recordData.each(function (record) {
                 pos = ~~record.position;
                 pos > max ? max = pos : false;
             });
@@ -973,6 +979,18 @@ define([
 
             /* After change page size need to check existing current page */
             this._reducePages();
+        },
+
+        /**
+         * Update page size based on select change event.
+         * The value needs to be retrieved from select as ko value handler is executed after the event handler.
+         *
+         * @param {Object} component
+         * @param {jQuery.Event} event
+         */
+        updatePageSize: function (component, event) {
+            this.pageSize = $(event.target).val();
+            this.reload();
         },
 
         /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,14 @@ namespace Magento\Webapi\Test\Unit\Model\Soap;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Server;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FaultTest extends TestCase
 {
-    const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
+    private const WSDL_URL = 'http://host.com/?wsdl&services=customerV1';
 
     /**
      * @var MockObject
@@ -44,7 +47,16 @@ class FaultTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Escaper::class,
+                $this->getMockBuilder(Escaper::class)
+                ->disableOriginalConstructor()->onlyMethods([])->getMock()
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         /** Initialize SUT. */
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
@@ -142,9 +154,8 @@ XML;
 
     /**
      * Test getSoapFaultMessage method.
-     *
-     * @dataProvider dataProviderForGetSoapFaultMessageTest
      */
+    #[DataProvider('dataProviderForGetSoapFaultMessageTest')]
     public function testGetSoapFaultMessage(
         $faultReason,
         $faultCode,
@@ -166,7 +177,7 @@ XML;
      *
      * @return array
      */
-    public function dataProviderForGetSoapFaultMessageTest()
+    public static function dataProviderForGetSoapFaultMessageTest()
     {
         /** Include file with all expected SOAP fault XMLs. */
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';

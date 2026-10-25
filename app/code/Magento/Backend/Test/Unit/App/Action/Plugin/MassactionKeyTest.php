@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,18 @@ namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
 use Magento\Backend\App\AbstractAction;
 use Magento\Backend\App\Action\Plugin\MassactionKey;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class MassactionKeyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MassactionKey
      */
@@ -31,44 +36,45 @@ class MassactionKeyTest extends TestCase
      */
     protected $subjectMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        
         $this->subjectMock = $this->createMock(AbstractAction::class);
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
+        $this->requestMock = $this->createPartialMockWithReflection(
+            Http::class,
             ['getPost', 'setPostValue']
         );
 
-        $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
             MassactionKey::class,
             [
                 'subject' => $this->subjectMock,
-                'request' => $this->requestMock,
+                'request' => $this->requestMock
             ]
         );
     }
 
     /**
-     * @param $postData array|string
+     * @param array|string $postData
      * @param array $convertedData
-     * @dataProvider beforeDispatchDataProvider
+     *
+     * @return void
      */
-    public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
-    {
-        $this->requestMock->expects($this->at(0))
+    #[DataProvider('beforeDispatchDataProvider')]
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists(
+        $postData,
+        array $convertedData
+    ): void {
+        $this->requestMock
             ->method('getPost')
-            ->with('massaction_prepare_key')
-            ->willReturn('key');
-        $this->requestMock->expects($this->at(1))
-            ->method('getPost')
-            ->with('key')
-            ->willReturn($postData);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['massaction_prepare_key'] => 'key',
+                ['key'] => $postData
+            });
         $this->requestMock->expects($this->once())
             ->method('setPostValue')
             ->with('key', $convertedData);
@@ -79,7 +85,7 @@ class MassactionKeyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeDispatchDataProvider()
+    public static function beforeDispatchDataProvider(): array
     {
         return [
             'post_data_is_array' => [['key'], ['key']],
@@ -87,7 +93,10 @@ class MassactionKeyTest extends TestCase
         ];
     }
 
-    public function testBeforeDispatchWhenMassactionPrepareKeyRequestNotExists()
+    /**
+     * @return void
+     */
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestNotExists(): void
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule\Action\Discount;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Rule;
@@ -14,11 +15,13 @@ use Magento\SalesRule\Model\Rule\Action\Discount\ByPercent;
 use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ByPercentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ByPercent
      */
@@ -41,14 +44,14 @@ class ByPercentTest extends TestCase
         $this->validator = $this->getMockBuilder(
             Validator::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getItemPrice', 'getItemBasePrice', 'getItemOriginalPrice', 'getItemBaseOriginalPrice']
             )->getMock();
 
         $this->discountDataFactory = $this->getMockBuilder(
             DataFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
 
@@ -65,9 +68,9 @@ class ByPercentTest extends TestCase
      * @param $validItemData
      * @param $expectedRuleDiscountQty
      * @param $expectedDiscountData
-     * @dataProvider calculateDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('calculateDataProvider')]
     public function testCalculate(
         $qty,
         $ruleData,
@@ -79,33 +82,30 @@ class ByPercentTest extends TestCase
         $discountData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setAmount', 'setBaseAmount', 'setOriginalAmount', 'setBaseOriginalAmount']
             )->getMock();
 
         $this->discountDataFactory->expects($this->once())->method('create')->willReturn($discountData);
 
-        $rule = $this->getMockBuilder(
-            Rule::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['getDiscountAmount', 'getDiscountQty']
-            )->getMock();
+        $rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getDiscountAmount', 'getDiscountQty']
+        );
 
-        $item = $this->getMockBuilder(
-            AbstractItem::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getDiscountAmount',
-                    'getBaseDiscountAmount',
-                    'getDiscountPercent',
-                    'setDiscountPercent',
-                    'getQuote',
-                    'getAddress',
-                    'getOptionByCode',
-                ]
-            )->getMock();
+        $item = $this->createPartialMockWithReflection(
+            AbstractItem::class,
+            [
+                'getDiscountAmount',
+                'getBaseDiscountAmount',
+                'getDiscountPercent',
+                'setDiscountPercent',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode',
+                'getQty',
+            ]
+        );
 
         $this->validator->expects(
             $this->atLeastOnce()
@@ -173,7 +173,10 @@ class ByPercentTest extends TestCase
         )->willReturn(
             $itemData['baseDiscountAmount']
         );
-        if (!$ruleData['discountQty'] || $ruleData['discountQty'] > $qty) {
+        if (isset($itemData['qty'])) {
+            $item->expects($this->atLeastOnce())->method('getQty')->willReturn($itemData['qty']);
+        }
+        if (!$ruleData['discountQty'] || $ruleData['discountQty'] >= $qty) {
             $item->expects(
                 $this->atLeastOnce()
             )->method(
@@ -207,7 +210,7 @@ class ByPercentTest extends TestCase
     /**
      * @return array
      */
-    public function calculateDataProvider()
+    public static function calculateDataProvider()
     {
         return [
             [
@@ -227,7 +230,79 @@ class ByPercentTest extends TestCase
                     'originalAmount' => 51,
                     'baseOriginalAmount' => 34.5,
                 ],
-            ]
+            ],
+            [
+                'qty' => 5,
+                'ruleData' => ['discountAmount' => 30, 'discountQty' => 5],
+                'itemData' => ['discountAmount' => 10, 'baseDiscountAmount' => 50, 'discountPercent' => 55],
+                'validItemData' => [
+                    'price' => 50,
+                    'basePrice' => 45,
+                    'originalPrice' => 60,
+                    'baseOriginalPrice' => 55,
+                ],
+                'expectedRuleDiscountQty' => 85,
+                'expectedDiscountData' => [
+                    'amount' => 72,
+                    'baseAmount' => 52.5,
+                    'originalAmount' => 87,
+                    'baseOriginalAmount' => 67.5,
+                ],
+            ],
+            [
+                'qty' => 3,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 50, 'baseDiscountAmount' => 50, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 67.8,
+                    'baseAmount' => 67.8,
+                    'originalAmount' => 67.8,
+                    'baseOriginalAmount' => 67.8,
+                ],
+            ],
+            [
+                'qty' => 5,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 50, 'baseDiscountAmount' => 50, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 113.0,
+                    'baseAmount' => 113.0,
+                    'originalAmount' => 113.0,
+                    'baseOriginalAmount' => 113.0,
+                ],
+            ],
+            [
+                'qty' => 5,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 0, 'baseDiscountAmount' => 0, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 123.0,
+                    'baseAmount' => 123.0,
+                    'originalAmount' => 123.0,
+                    'baseOriginalAmount' => 123.0,
+                ],
+            ],
         ];
     }
 
@@ -235,14 +310,14 @@ class ByPercentTest extends TestCase
      * @param int $step
      * @param int|float $qty
      * @param int $expected
-     * @dataProvider fixQuantityDataProvider
      */
+    #[DataProvider('fixQuantityDataProvider')]
     public function testFixQuantity($step, $qty, $expected)
     {
-        $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountStep'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $rule = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getDiscountStep']
+        );
         $rule->expects($this->once())->method('getDiscountStep')->willReturn($step);
 
         $this->assertEquals($expected, $this->model->fixQuantity($qty, $rule));
@@ -251,7 +326,7 @@ class ByPercentTest extends TestCase
     /**
      * @return array
      */
-    public function fixQuantityDataProvider()
+    public static function fixQuantityDataProvider()
     {
         return [
             ['step' => 0, 'qty' => 23, 'expected' => 23],

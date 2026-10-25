@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -114,7 +114,7 @@ define([], function () {
                             // SKIP instead of REJECT because REJECT also rejects child nodes
                             : NodeFilter.FILTER_SKIP;
                     },
-                false
+                    false
                 ),
                 nodesToRemove = [];
 
@@ -145,7 +145,7 @@ define([], function () {
                     function () {
                         return NodeFilter.FILTER_ACCEPT;
                     },
-                false
+                    false
                 ),
                 i,
                 attribute,
@@ -158,6 +158,7 @@ define([], function () {
                     nodeName = treeWalker.currentNode.nodeName.toLowerCase();
 
                     if (this.generallyAllowedAttributes.indexOf(attribute.name) === -1 || // eslint-disable-line max-depth,max-len
+                        this._checkHrefValue(attribute) ||
                         this.forbiddenAttributesByElement[nodeName] &&
                         this.forbiddenAttributesByElement[nodeName].indexOf(attribute.name) !== -1
                     ) {
@@ -169,6 +170,17 @@ define([], function () {
             attributesToRemove.forEach(function (attributeToRemove) {
                 attributeToRemove.ownerElement.removeAttribute(attributeToRemove.name);
             });
+        },
+
+        /**
+         * Check that attribute contains script content
+         *
+         * @param {Object} attribute
+         * @private
+         */
+        _checkHrefValue: function (attribute) {
+            return attribute.nodeName.toLowerCase() === 'href' &&
+                attribute.nodeValue.toLowerCase().replace(/\s/g, '').startsWith('javascript');
         }
     };
 });

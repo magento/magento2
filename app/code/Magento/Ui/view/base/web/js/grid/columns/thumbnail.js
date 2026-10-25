@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -87,7 +87,7 @@ define([
                         linkText: $.mage.__('Go to Details Page')
                     }
                 ),
-                previewPopup = $('<div/>').html(modalHtml);
+                previewPopup = $('<div></div>').html(modalHtml);
 
             previewPopup.modal({
                 title: this.getAlt(row),

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Authorization\Model\ResourceModel;
 
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
+use Magento\Framework\Cache\CacheConstants;
 
 /**
  * Admin role resource model
@@ -13,14 +14,14 @@ use Magento\Authorization\Model\Acl\Role\User as RoleUser;
 class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Rule table
+     * Authorization rule table name
      *
      * @var string
      */
     protected $_ruleTable;
 
     /**
-     * Cache
+     * Cache frontend instance
      *
      * @var \Magento\Framework\Cache\FrontendInterface
      */
@@ -101,7 +102,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $role)
     {
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
+        $this->_cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
         return $this;
     }
 
@@ -119,7 +120,7 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
 
-        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
+        $this->_cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
 
         return $this;
     }

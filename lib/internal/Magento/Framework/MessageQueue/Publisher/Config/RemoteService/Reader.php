@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\RemoteService;
 
@@ -58,17 +58,15 @@ class Reader implements ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function read($scope = null)
     {
         $result = [];
-        $connectionName = $this->defaultValueProvider->getConnection();
         $connections = [
-            $connectionName => [
-                'name' => $connectionName,
+            'amqp' => [
+                'name' => 'amqp',
                 'exchange' => $this->defaultValueProvider->getExchange(),
                 'disabled' => false,
             ]

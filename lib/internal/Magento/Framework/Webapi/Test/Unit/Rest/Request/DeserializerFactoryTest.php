@@ -1,9 +1,7 @@
 <?php
 /**
- * Test Webapi Json Deserializer Request Rest Controller.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +20,7 @@ class DeserializerFactoryTest extends TestCase
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Request deserializer adapter is not set.');
         $interpreterFactory = new DeserializerFactory(
-            $this->getMockForAbstractClass(ObjectManagerInterface::class),
+            $this->createMock(ObjectManagerInterface::class),
             []
         );
         $interpreterFactory->get('contentType');
@@ -36,7 +34,7 @@ class DeserializerFactoryTest extends TestCase
         )->disableOriginalConstructor()
         ->getMock();
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->willReturn($validInterpreterMock);
 
         $interpreterFactory = new DeserializerFactory(
@@ -52,7 +50,7 @@ class DeserializerFactoryTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Server cannot understand Content-Type HTTP header media type text_xml');
         $interpreterFactory = new DeserializerFactory(
-            $this->getMockForAbstractClass(ObjectManagerInterface::class),
+            $this->createMock(ObjectManagerInterface::class),
             $expectedMetadata
         );
         $interpreterFactory->get('text_xml');
@@ -62,7 +60,7 @@ class DeserializerFactoryTest extends TestCase
     {
         $expectedMetadata = ['text_xml' => ['type' => 'text/xml', 'model' => 'Xml']];
         $invalidInterpreter = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Response\Rest\Renderer\Json::class
+            \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
         )->disableOriginalConstructor()
         ->getMock();
 
@@ -70,7 +68,7 @@ class DeserializerFactoryTest extends TestCase
         $this->expectExceptionMessage(
             'The deserializer must implement "Magento\Framework\Webapi\Rest\Request\DeserializerInterface".'
         );
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->willReturn($invalidInterpreter);
 
         $interpreterFactory = new DeserializerFactory(

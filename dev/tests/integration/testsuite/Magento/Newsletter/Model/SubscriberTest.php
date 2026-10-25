@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Mail\EmailMessage;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Mail\EmailMessage;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
@@ -20,33 +20,49 @@ use PHPUnit\Framework\TestCase;
  * Class checks subscription behavior.
  *
  * @see \Magento\Newsletter\Model\Subscriber
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubscriberTest extends TestCase
 {
     private const CONFIRMATION_SUBSCRIBE = 'You have been successfully subscribed to our newsletter.';
     private const CONFIRMATION_UNSUBSCRIBE = 'You have been unsubscribed from the newsletter.';
 
-    /** @var ObjectManagerInterface */
-    private $objectManager;
-
-    /** @var SubscriberFactory */
+    /**
+     * @var SubscriberFactory
+     */
     private $subscriberFactory;
 
-    /** @var TransportBuilderMock */
+    /**
+     * @var TransportBuilderMock
+     */
     private $transportBuilder;
 
-    /** @var CustomerRepositoryInterface */
+    /**
+     * @var CustomerRepositoryInterface
+     */
     private $customerRepository;
+
+    /**
+     * @var QueueFactory
+     */
+    private $queueFactory;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $subscriberCollectionFactory;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->subscriberFactory = $this->objectManager->get(SubscriberFactory::class);
-        $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
-        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->subscriberFactory = $objectManager->get(SubscriberFactory::class);
+        $this->transportBuilder = $objectManager->get(TransportBuilderMock::class);
+        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+        $this->queueFactory = $objectManager->get(QueueFactory::class);
+        $this->subscriberCollectionFactory = $objectManager->get(CollectionFactory::class);
     }
 
     /**
@@ -60,11 +76,12 @@ class SubscriberTest extends TestCase
     {
         $subscriber = $this->subscriberFactory->create();
         $subscriber->subscribe('customer_confirm@example.com');
+        $emailMessage = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         // confirmationCode 'ysayquyajua23iq29gxwu2eax2qb6gvy' is taken from fixture
         $this->assertStringContainsString(
             '/newsletter/subscriber/confirm/id/' . $subscriber->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $emailMessage
         );
         $this->assertEquals(Subscriber::STATUS_NOT_ACTIVE, $subscriber->getSubscriberStatus());
     }
@@ -137,6 +154,27 @@ class SubscriberTest extends TestCase
     }
 
     /**
+     * Test subscribe and verify customer subscription status
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     *
+     * @return void
+     */
+    public function testSubscribeAndVerifyCustomerSubscriptionStatus(): void
+    {
+        $customer = $this->customerRepository->getById(1);
+        $subscriptionBefore = $customer->getExtensionAttributes()
+            ->getIsSubscribed();
+        $subscriber = $this->subscriberFactory->create();
+        $subscriber->subscribeCustomerById($customer->getId());
+
+        $customer = $this->customerRepository->getById(1);
+
+        $this->assertFalse($subscriptionBefore);
+        $this->assertTrue($customer->getExtensionAttributes()->getIsSubscribed());
+    }
+
+    /**
      * @magentoConfigFixture current_store newsletter/subscription/confirm 1
      *
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
@@ -154,6 +192,36 @@ class SubscriberTest extends TestCase
         $this->assertConfirmationParagraphExists(
             self::CONFIRMATION_SUBSCRIBE,
             $this->transportBuilder->getSentMessage()
+        );
+    }
+
+    /**
+     * Unsubscribe and check queue
+     *
+     * @magentoDataFixture Magento/Newsletter/_files/queue.php
+     *
+     * @return void
+     */
+    public function testUnsubscribeCustomer(): void
+    {
+        $firstSubscriber = $this->subscriberFactory->create()
+            ->load('customer@example.com', 'subscriber_email');
+        $secondSubscriber = $this->subscriberFactory->create()
+            ->load('customer_two@example.com', 'subscriber_email');
+
+        $queue = $this->queueFactory->create()
+            ->load('CustomerSupport', 'newsletter_sender_name');
+        $queue->addSubscribersToQueue([$firstSubscriber->getId(), $secondSubscriber->getId()]);
+
+        $secondSubscriber->unsubscribe();
+
+        $collection = $this->subscriberCollectionFactory->create()
+            ->useQueue($queue);
+
+        $this->assertCount(1, $collection);
+        $this->assertEquals(
+            'customer@example.com',
+            $collection->getFirstItem()->getData('subscriber_email')
         );
     }
 
@@ -200,7 +268,10 @@ class SubscriberTest extends TestCase
         $messageContent = $this->getMessageRawContent($message);
 
         $emailDom = new \DOMDocument();
-        $emailDom->loadHTML($messageContent);
+        $emailDom->loadHTML(
+            $messageContent,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOERROR | LIBXML_NOWARNING
+        );
 
         $emailXpath = new \DOMXPath($emailDom);
         $greeting = $emailXpath->query("//p[contains(text(), '$expectedMessage')]");
@@ -216,7 +287,6 @@ class SubscriberTest extends TestCase
      */
     private function getMessageRawContent(EmailMessage $message): string
     {
-        $emailParts = $message->getBody()->getParts();
-        return current($emailParts)->getRawContent();
+        return quoted_printable_decode($message->getBody()->bodyToString());
     }
 }

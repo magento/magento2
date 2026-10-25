@@ -1,0 +1,104 @@
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsAbandonedCartsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsAbandonedCartsSearchEmailWithPlusTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsBestsellersNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsCouponsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsDownloadsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsInvoicedNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsLowStockDisableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsLowStockNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsNewNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrderCountNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrderTotalDatePickerTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrderTotalNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrderedGroupedBySkuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 colorProductAttribute2 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrderedNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsOrdersNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsProductsInCartNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsRefreshStatisticsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsTaxNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminReportsViewsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/Reports/Test/Mftf/Test/AdminSalesReportsForMultiWebsiteWithDifferentCurrencyTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCurrencyRatesPageActionGroup from module(s): magento/module-currency-symbol
+	 AdminSetCurrencyRatesActionGroup from module(s): magento/module-currency-symbol

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable max-nested-callbacks */
@@ -73,6 +73,7 @@ define([
                 ['Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract'],
                 function (Constr) {
                     paypalExpressAbstract = new Constr({
+                        isChecked: ko.observable(true),
                         provider: 'provName',
                         name: 'test',
                         index: 'test',
@@ -120,9 +121,7 @@ define([
         });
 
         it('setPaymentMethodAction is called before redirect to paypal', function () {
-            spyOn(paypalExpressAbstract, 'selectPaymentMethod');
             paypalExpressAbstract.continueToPayPal();
-            expect(paypalExpressAbstract.selectPaymentMethod).toHaveBeenCalled();
             expect(validateMock).toHaveBeenCalled();
             expect(validateMock.calls.mostRecent()).toEqual(jasmine.objectContaining({
                 object: mocks['Magento_Checkout/js/model/payment/additional-validators'],

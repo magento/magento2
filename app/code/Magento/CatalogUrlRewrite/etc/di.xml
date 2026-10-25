@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -45,17 +45,6 @@
                     <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogUrlRewrite\Observer\CategoryUrlPathAutogeneratorObserver">
-        <arguments>
-            <argument name="invalidValues" xsi:type="array">
-                <item name="0" xsi:type="string">admin</item>
-                <item name="1" xsi:type="string">soap</item>
-                <item name="2" xsi:type="string">rest</item>
-                <item name="3" xsi:type="string">graphql</item>
-                <item name="4" xsi:type="string">standard</item>
             </argument>
         </arguments>
     </type>

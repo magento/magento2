@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectRecentlyViewedProductWidgetFromInsertWidgetSlideOutActionGroup" extends="AdminInsertRecentlyViewedWidgetActionGroup">
+        <annotations>
+            <description>Fills out the Widget Options form for the Recently Viewed Products widget from the Insert Widget slide out.</description>
+        </annotations>
+        <remove keyForRemoval="expandContentSectionIfNotVisible"/>
+        <remove keyForRemoval="clickNextShowHideEditorIfVisible"/>
+        <remove keyForRemoval="checkCMSContent"/>
+        <remove keyForRemoval="clickNextSave"/>
+        <remove keyForRemoval="waitForPageActionSave"/>
+        <remove keyForRemoval="waitForSaveSuccess"/>
+    </actionGroup>
+</actionGroups>

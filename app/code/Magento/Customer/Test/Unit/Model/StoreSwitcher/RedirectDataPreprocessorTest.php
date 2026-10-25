@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -93,10 +94,10 @@ class RedirectDataPreprocessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processDataProvider
      * @param int|null $customerId
      * @param array $data
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(?int $customerId, array $data): void
     {
         $this->session->method('isLoggedIn')
@@ -109,7 +110,7 @@ class RedirectDataPreprocessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             [1, []],

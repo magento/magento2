@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Shipment\Sender;
 
@@ -106,14 +106,13 @@ class EmailSender extends Sender implements SenderInterface
     public function send(
         OrderInterface $order,
         ShipmentInterface $shipment,
-        ShipmentCommentCreationInterface $comment = null,
+        ?ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
+        $this->identityContainer->setStore($order->getStore());
         $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
-            $this->identityContainer->setStore($order->getStore());
-
             $transport = [
                 'order' => $order,
                 'order_id' => $order->getId(),

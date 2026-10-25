@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ProductAttributeGroupRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(AttributeGroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(AttributeGroupRepositoryInterface::class);
         $this->groupFactoryMock = $this->createPartialMock(
             GroupFactory::class,
             ['create']
@@ -64,8 +64,8 @@ class ProductAttributeGroupRepositoryTest extends TestCase
 
     public function testSave()
     {
-        $groupMock = $this->getMockForAbstractClass(AttributeGroupInterface::class);
-        $expectedResult = $this->getMockForAbstractClass(AttributeGroupInterface::class);
+        $groupMock = $this->createMock(AttributeGroupInterface::class);
+        $expectedResult = $this->createMock(AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('save')->with($groupMock)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->model->save($groupMock));
@@ -73,8 +73,8 @@ class ProductAttributeGroupRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
-        $expectedResult = $this->getMockForAbstractClass(AttributeGroupInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $expectedResult = $this->createMock(AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->model->getList($searchCriteriaMock));

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,14 @@ namespace Magento\Catalog\Test\Unit\Plugin\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\PageCache\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExecuteTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var Execute */
     protected $execute;
 
@@ -27,60 +29,34 @@ class ExecuteTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
-            ->getMock();
-        $this->typeList = $this->getMockBuilder(TypeListInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['invalidate'])
-            ->getMockForAbstractClass();
-
+        $this->config = $this->createPartialMock(Config::class, ['isEnabled']);
+        $this->typeList = $this->createMock(TypeListInterface::class);
         $this->execute = new Execute($this->config, $this->typeList);
     }
 
     public function testAfterExecute()
     {
-        $subject = $this->getMockBuilder(AbstractAction::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $subject = $this->createMock(AbstractAction::class);
+        $result = $this->createMock(AbstractAction::class);
 
-        $result = $this->getMockBuilder(AbstractAction::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->config->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->typeList->expects($this->never())->method('invalidate');
 
-        $this->config->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(false);
-        $this->typeList->expects($this->never())
-            ->method('invalidate');
-
-        $this->assertEquals(
-            $result,
-            $this->execute->afterExecute($subject, $result)
-        );
+        $actualResult = $this->execute->afterExecute($subject, $result);
+        
+        $this->assertEquals($result, $actualResult);
     }
 
     public function testAfterExecuteInvalidate()
     {
-        $subject = $this->getMockBuilder(AbstractAction::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $subject = $this->createMock(AbstractAction::class);
+        $result = $this->createMock(AbstractAction::class);
 
-        $result = $this->getMockBuilder(AbstractAction::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->config->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->typeList->expects($this->once())->method('invalidate')->with('full_page');
 
-        $this->config->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
-        $this->typeList->expects($this->once())
-            ->method('invalidate')
-            ->with('full_page');
-
-        $this->assertEquals(
-            $result,
-            $this->execute->afterExecute($subject, $result)
-        );
+        $actualResult = $this->execute->afterExecute($subject, $result);
+        
+        $this->assertEquals($result, $actualResult);
     }
 }

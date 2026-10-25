@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting payment method and placing order by customer
@@ -89,6 +90,7 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -98,12 +100,51 @@ class SetPaymentMethodAndPlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
      *
-     * @dataProvider dataProviderSetPaymentOnCartWithException
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderSetPaymentOnCartWithException')]
     public function testSetPaymentOnCartWithException(string $input, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
+
+        $query = <<<QUERY
+mutation {
+  setPaymentMethodAndPlaceOrder(
+    input: {
+      {$input}
+    }
+  ) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage($message);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     *
+     * @param string $input
+     * @param string $message
+     * @throws \Exception
+     */
+    #[DataProvider('dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck')]
+    public function testSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $input = str_replace('cart_id_value', $maskedQuoteId, $input);
@@ -129,7 +170,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetPaymentOnCartWithException(): array
+    public static function dataProviderSetPaymentOnCartWithException(): array
     {
         return [
             'place_order_with_out_of_stock_products' => [
@@ -138,6 +179,22 @@ QUERY;
                     code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
                     }',
                 'Unable to place order: Some of the products are out of stock.',
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(): array
+    {
+        return [
+            'place_order_with_out_of_stock_products' => [
+                'cart_id: "cart_id_value"
+                  payment_method: {
+                    code: "' . Checkmo::PAYMENT_METHOD_CHECKMO_CODE . '"
+                    }',
+                'Unable to place order: There are no source items with the in stock status',
             ],
         ];
     }

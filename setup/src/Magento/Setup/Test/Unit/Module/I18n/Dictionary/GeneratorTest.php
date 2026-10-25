@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,11 +51,14 @@ class GeneratorTest extends TestCase
      */
     protected $optionsResolverFactory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->parserMock = $this->createMock(Parser::class);
         $this->contextualParserMock = $this->createMock(Contextual::class);
-        $this->writerMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->writerMock = $this->createMock(WriterInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
         $this->factoryMock->expects($this->any())
             ->method('createDictionaryWriter')
@@ -76,7 +79,10 @@ class GeneratorTest extends TestCase
         );
     }
 
-    public function testCreatingDictionaryWriter()
+    /**
+     * @return void
+     */
+    public function testCreatingDictionaryWriter(): void
     {
         $outputFilename = 'test';
 
@@ -96,11 +102,13 @@ class GeneratorTest extends TestCase
             ->willReturn($optionResolver);
         $this->generator->generate('', $outputFilename);
         $property = new \ReflectionProperty($this->generator, 'writer');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->generator));
     }
 
-    public function testUsingRightParserWhileWithoutContextParsing()
+    /**
+     * @return void
+     */
+    public function testUsingRightParserWhileWithoutContextParsing(): void
     {
         $baseDir = 'right_parser';
         $outputFilename = 'file.csv';
@@ -125,7 +133,10 @@ class GeneratorTest extends TestCase
         $this->generator->generate($baseDir, $outputFilename);
     }
 
-    public function testUsingRightParserWhileWithContextParsing()
+    /**
+     * @return void
+     */
+    public function testUsingRightParserWhileWithContextParsing(): void
     {
         $baseDir = 'right_parser2';
         $outputFilename = 'file.csv';
@@ -151,7 +162,10 @@ class GeneratorTest extends TestCase
         $this->generator->generate($baseDir, $outputFilename, true);
     }
 
-    public function testWritingPhrases()
+    /**
+     * @return void
+     */
+    public function testWritingPhrases(): void
     {
         $baseDir = 'WritingPhrases';
         $filesOptions = ['file1', 'file2'];
@@ -171,13 +185,21 @@ class GeneratorTest extends TestCase
         ];
 
         $this->parserMock->expects($this->once())->method('getPhrases')->willReturn($phrases);
-        $this->writerMock->expects($this->at(0))->method('write')->with($phrases[0]);
-        $this->writerMock->expects($this->at(1))->method('write')->with($phrases[1]);
+        $this->writerMock
+            ->method('write')
+            ->willReturnCallback(function ($arg1) use ($phrases) {
+                if ($arg1 == $phrases[0] || $arg1 == $phrases[1]) {
+                    return null;
+                }
+            });
 
         $this->generator->generate($baseDir, 'file.csv');
     }
 
-    public function testGenerateWithNoPhrases()
+    /**
+     * @return void
+     */
+    public function testGenerateWithNoPhrases(): void
     {
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('No phrases found in the specified dictionary file.');

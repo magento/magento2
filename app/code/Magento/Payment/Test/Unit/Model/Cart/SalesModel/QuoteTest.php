@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Cart\SalesModel\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,8 +70,8 @@ class QuoteTest extends TestCase
      * @param string $name
      * @param int $qty
      * @param float $price
-     * @dataProvider getAllItemsDataProvider
      */
+    #[DataProvider('getAllItemsDataProvider')]
     public function testGetAllItems($pItem, $name, $qty, $price)
     {
         $itemMock = $this->createMock(AbstractItem::class);
@@ -96,7 +97,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getAllItemsDataProvider()
+    public static function getAllItemsDataProvider()
     {
         return [
             ['parent item 1', 'name 1', 1, 0.1],
@@ -122,8 +123,8 @@ class QuoteTest extends TestCase
     /**
      * @param int $isVirtual
      * @param string $getterMethod
-     * @dataProvider getterDataProvider
      */
+    #[DataProvider('getterDataProvider')]
     public function testGetter($isVirtual, $getterMethod)
     {
         $address = $this->createMock(Address::class);
@@ -150,7 +151,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getterDataProvider()
+    public static function getterDataProvider()
     {
         return [
             [0, 'getBaseTaxAmount'],

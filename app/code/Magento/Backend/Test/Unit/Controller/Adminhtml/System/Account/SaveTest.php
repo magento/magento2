@@ -1,10 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Unit test for \Magento\Backend\Controller\Adminhtml\System\Account controller
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\System\Account;
 
 use Magento\Backend\App\Action\Context;
@@ -18,10 +18,15 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Message\Manager as MessageManager;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\Validator\Locale;
 use Magento\User\Model\User;
@@ -29,145 +34,158 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit test for \Magento\Backend\Controller\Adminhtml\System\Account controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends TestCase
 {
-    /** @var Account */
-    protected $_controller;
+    use MockCreationTrait;
 
-    /** @var MockObject|RequestInterface */
-    protected $_requestMock;
+    /**
+     * @var Account
+     */
+    protected $controller;
 
-    /** @var MockObject|ResponseInterface */
-    protected $_responseMock;
+    /**
+     * @var MockObject|RequestInterface
+     */
+    protected $requestMock;
 
-    /** @var MockObject|ObjectManager */
-    protected $_objectManagerMock;
+    /**
+     * @var MockObject|ResponseInterface
+     */
+    protected $responseMock;
 
-    /** @var MockObject|\Magento\Framework\Message\ManagerInterface */
-    protected $_messagesMock;
+    /**
+     * @var MockObject|ObjectManager
+     */
+    protected $objectManagerMock;
 
-    /** @var MockObject|Data */
-    protected $_helperMock;
+    /**
+     * @var MockObject|MessageManagerInterface
+     */
+    protected $messagesMock;
 
-    /** @var MockObject|Session */
-    protected $_authSessionMock;
+    /**
+     * @var MockObject|Data
+     */
+    protected $helperMock;
 
-    /** @var MockObject|User */
-    protected $_userMock;
+    /**
+     * @var MockObject|Session
+     */
+    protected $authSessionMock;
 
-    /** @var MockObject|Locale */
-    protected $_validatorMock;
+    /**
+     * @var MockObject|User
+     */
+    protected $userMock;
 
-    /** @var MockObject|Manager */
-    protected $_managerMock;
+    /**
+     * @var MockObject|Locale
+     */
+    protected $validatorMock;
 
-    /** @var MockObject|TranslateInterface */
-    protected $_translatorMock;
+    /**
+     * @var MockObject|Manager
+     */
+    protected $managerMock;
 
-    /** @var MockObject|EventManagerInterface */
+    /**
+     * @var MockObject|TranslateInterface
+     */
+    protected $translatorMock;
+
+    /**
+     * @var MockObject|EventManagerInterface
+     */
     protected $eventManagerMock;
 
+    /**
+     * @var HelperObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getOriginalPathInfo'])
-            ->getMock();
-        $this->_responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->_objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
-            ->getMock();
-        $frontControllerMock = $this->getMockBuilder(FrontController::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerHelper = new HelperObjectManager($this);
+        $this->requestMock = $this->createPartialMock(Http::class, ['getOriginalPathInfo']);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->objectManagerMock = $this->createPartialMock(ObjectManager::class, ['get', 'create']);
+        $frontControllerMock = $this->createMock(FrontController::class);
 
-        $this->_helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
-            ->getMock();
-        $this->_messagesMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addSuccessMessage'])
-            ->getMockForAbstractClass();
+        $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
+        $this->messagesMock = $this->createPartialMock(
+            MessageManager::class,
+            ['addSuccessMessage']
+        );
 
-        $this->_authSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
-            ->getMock();
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
 
-        $this->_userMock = $this->getMockBuilder(User::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'load', 'save', 'sendNotificationEmailsIfRequired',
-                    'performIdentityCheck', 'validate', '__sleep', '__wakeup'
-                ]
-            )
-            ->getMock();
+        $this->userMock = $this->createPartialMock(
+            User::class,
+            [
+                'load',
+                'save',
+                'sendNotificationEmailsIfRequired',
+                'performIdentityCheck',
+                'validate',
+                '__sleep',
+                '__wakeup'
+            ]
+        );
 
-        $this->_validatorMock = $this->getMockBuilder(Locale::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isValid'])
-            ->getMock();
+        $this->validatorMock = $this->createPartialMock(Locale::class, ['isValid']);
 
-        $this->_managerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['switchBackendInterfaceLocale'])
-            ->getMock();
+        $this->managerMock = $this->createPartialMock(Manager::class, ['switchBackendInterfaceLocale']);
 
-        $this->_translatorMock = $this->getMockBuilder(TranslateInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->translatorMock = $this->createMock(TranslateInterface::class);
 
-        $resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
+        $resultRedirect = $this->createMock(Redirect::class);
         $resultFactory->expects($this->atLeastOnce())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->addMethods(['getFrontController', 'getTranslator'])
-            ->onlyMethods([
+        $contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            [
+                'getFrontController',
+                'getTranslator',
                 'getRequest',
                 'getResponse',
                 'getObjectManager',
                 'getHelper',
                 'getMessageManager',
                 'getResultFactory'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
-        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
-        $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManagerMock);
+            ]
+        );
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $contextMock->expects($this->any())->method('getFrontController')->willReturn($frontControllerMock);
-        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helperMock);
-        $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->_messagesMock);
-        $contextMock->expects($this->any())->method('getTranslator')->willReturn($this->_translatorMock);
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
+        $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messagesMock);
+        $contextMock->expects($this->any())->method('getTranslator')->willReturn($this->translatorMock);
         $contextMock->expects($this->once())->method('getResultFactory')->willReturn($resultFactory);
 
         $args = ['context' => $contextMock];
 
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_controller = $testHelper->getObject(
-            Save::class,
-            $args
-        );
+        $this->controller = $this->objectManagerHelper->getObject(Save::class, $args);
     }
 
-    public function testSaveAction()
+    /**
+     * @return void
+     */
+    public function testSaveAction(): void
     {
         $userId = 1;
         $requestParams = [
@@ -178,15 +196,16 @@ class SaveTest extends TestCase
             'firstname' => 'Bar',
             'lastname' => 'Dummy',
             'email' => 'test@example.com',
-            Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password',
+            Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password'
         ];
 
-        $testedMessage = 'You saved the account.';
+        $testedMessage = "The password, username, firstname, lastname and email of this account"
+            ." have been modified successfully.";
 
-        $this->_authSessionMock->expects($this->any())->method('getUser')->willReturn($this->_userMock);
+        $this->authSessionMock->expects($this->any())->method('getUser')->willReturn($this->userMock);
 
-        $this->_userMock->expects($this->any())->method('load')->willReturnSelf();
-        $this->_validatorMock->expects(
+        $this->userMock->expects($this->any())->method('load')->willReturnSelf();
+        $this->validatorMock->expects(
             $this->once()
         )->method(
             'isValid'
@@ -195,55 +214,30 @@ class SaveTest extends TestCase
         )->willReturn(
             true
         );
-        $this->_managerMock->expects($this->any())->method('switchBackendInterfaceLocale');
+        $this->managerMock->expects($this->any())->method('switchBackendInterfaceLocale');
 
-        $this->_objectManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'get'
-        )->with(
-            Session::class
-        )->willReturn(
-            $this->_authSessionMock
-        );
-        $this->_objectManagerMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            User::class
-        )->willReturn(
-            $this->_userMock
-        );
-        $this->_objectManagerMock->expects(
-            $this->at(2)
-        )->method(
-            'get'
-        )->with(
-            Locale::class
-        )->willReturn(
-            $this->_validatorMock
-        );
-        $this->_objectManagerMock->expects(
-            $this->at(3)
-        )->method(
-            'get'
-        )->with(
-            Manager::class
-        )->willReturn(
-            $this->_managerMock
-        );
+        $this->objectManagerMock
+            ->method('get')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Session::class] => $this->authSessionMock,
+                [Locale::class] => $this->validatorMock,
+                [Manager::class] => $this->managerMock
+            });
+        $this->objectManagerMock
+            ->method('create')
+            ->with(User::class)
+            ->willReturn($this->userMock);
 
-        $this->_userMock->setUserId($userId);
-        $this->_userMock->expects($this->once())->method('performIdentityCheck')->willReturn(true);
-        $this->_userMock->expects($this->once())->method('save');
-        $this->_userMock->expects($this->once())->method('validate')->willReturn(true);
-        $this->_userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');
+        $this->userMock->setUserId($userId);
+        $this->userMock->expects($this->once())->method('performIdentityCheck')->willReturn(true);
+        $this->userMock->expects($this->once())->method('save');
+        $this->userMock->expects($this->once())->method('validate')->willReturn(true);
+        $this->userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');
 
-        $this->_requestMock->setParams($requestParams);
+        $this->requestMock->setParams($requestParams);
 
-        $this->_messagesMock->expects($this->once())->method('addSuccessMessage')->with($testedMessage);
+        $this->messagesMock->expects($this->once())->method('addSuccessMessage')->with($testedMessage);
 
-        $this->_controller->execute();
+        $this->controller->execute();
     }
 }

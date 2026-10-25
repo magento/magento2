@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\File;
@@ -79,7 +79,7 @@ class Mime
     /**
      * @param Filesystem|null $filesystem
      */
-    public function __construct(Filesystem $filesystem = null)
+    public function __construct(?Filesystem $filesystem = null)
     {
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
     }

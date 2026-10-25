@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,16 +52,15 @@ class FaviconTest extends TestCase
     protected $mediaDir;
 
     /**
-     * Initialize testable object
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->store = $this->getMockBuilder(
+        $this->store = $this->createMock(
             Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -69,12 +68,8 @@ class FaviconTest extends TestCase
         $this->scopeManager = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->getMock();
-        $this->fileStorageDatabase = $this->getMockBuilder(Database::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileStorageDatabase = $this->createMock(Database::class);
+        $filesystem = $this->createMock(Filesystem::class);
         $this->mediaDir = $this->getMockBuilder(
             ReadInterface::class
         )->getMock();
@@ -92,17 +87,21 @@ class FaviconTest extends TestCase
     }
 
     /**
-     * cover negative case for getFaviconFile
+     * cover negative case for getFaviconFile.
+     *
+     * @return void
      */
-    public function testGetFaviconFileNegative()
+    public function testGetFaviconFileNegative(): void
     {
         $this->assertFalse($this->object->getFaviconFile());
     }
 
     /**
-     * cover positive case for getFaviconFile and checkIsFile
+     * cover positive case for getFaviconFile and checkIsFile.
+     *
+     * @return void
      */
-    public function testGetFaviconFile()
+    public function testGetFaviconFile(): void
     {
         $scopeConfigValue = 'path';
         $urlToMediaDir = 'http://magento.url/media/';
@@ -123,15 +122,17 @@ class FaviconTest extends TestCase
         $this->fileStorageDatabase->expects($this->once())
             ->method('saveFileToFilesystem')
             ->willReturn(true);
-        $this->mediaDir->expects($this->at(0))
+        $this->mediaDir
             ->method('isFile')
-            ->with($expectedFile)
-            ->willReturn(false);
-        $this->mediaDir->expects($this->at(1))
-            ->method('isFile')
-            ->with($expectedFile)
-            ->willReturn(true);
-
+            ->willReturnCallback(function ($expectedFile) {
+                static $count = 0;
+                if ($count == 0) {
+                    $count++;
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         $results = $this->object->getFaviconFile();
         $this->assertEquals(
             $expectedUrl,
@@ -141,9 +142,11 @@ class FaviconTest extends TestCase
     }
 
     /**
-     * cover getDefaultFavicon
+     * cover getDefaultFavicon.
+     *
+     * @return void
      */
-    public function testGetDefaultFavicon()
+    public function testGetDefaultFavicon(): void
     {
         $this->assertEquals('Magento_Theme::favicon.ico', $this->object->getDefaultFavicon());
     }

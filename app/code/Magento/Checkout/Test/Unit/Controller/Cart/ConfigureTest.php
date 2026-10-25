@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,13 +78,16 @@ class ConfigureTest extends TestCase
      */
     protected $cartMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->cartMock = $this->getMockBuilder(Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -119,11 +122,11 @@ class ConfigureTest extends TestCase
     }
 
     /**
-     * Test checks controller call product view and send parameter to it
+     * Test checks controller call product view and send parameter to it.
      *
      * @return void
      */
-    public function testPrepareAndRenderCall()
+    public function testPrepareAndRenderCall(): void
     {
         $quoteId = 1;
         $actualProductId = 1;
@@ -146,15 +149,13 @@ class ConfigureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         //expects
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('id')
-            ->willReturn($quoteId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('product_id')
-            ->willReturn($actualProductId);
-        $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['id'] => $quoteId,
+                ['product_id'] => $actualProductId,
+            });
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $quoteItemMock->expects($this->exactly(1))->method('getBuyRequest')->willReturn($buyRequestMock);
 
@@ -162,7 +163,7 @@ class ConfigureTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_PAGE, [])
             ->willReturn($pageMock);
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('get')
             ->with(View::class)
             ->willReturn($viewMock);
@@ -188,11 +189,11 @@ class ConfigureTest extends TestCase
 
     /**
      * Test checks controller redirect user to cart
-     * if user request product id in cart edit page is not same as quota product id
+     * if user request product id in cart edit page is not same as quota product id.
      *
      * @return void
      */
-    public function testRedirectWithWrongProductId()
+    public function testRedirectWithWrongProductId(): void
     {
         $quotaId = 1;
         $productIdInQuota = 1;
@@ -212,7 +213,7 @@ class ConfigureTest extends TestCase
                 ['id', null, $quotaId],
                 ['product_id', null, $productIdInRequest]
             ]);
-        $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);
         $quoteItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getId')->willReturn($productIdInQuota);

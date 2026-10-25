@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,7 +11,7 @@
     <actionGroup name="AdminClickRefundOfflineOnNewMemoPageActionGroup">
         <annotations>
             <description>Click the Refund Offline button on the New Memo page</description>
-        </annotations> 
+        </annotations>
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccesMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ $customer = $objectManager->create(Customer::class);
 $customerResource = $objectManager->create(CustomerResource::class);
 
 $customer->setWebsiteId(1)
+    ->setCreatedAt('1999-01-02')
     ->setEntityTypeId(1)
     ->setAttributeSetId(0)
     ->setEmail('customer@example.com')
@@ -42,6 +43,7 @@ $customers[] = $customer;
 
 $customer = $objectManager->create(Customer::class);
 $customer->setWebsiteId(1)
+    ->setCreatedAt('1999-03-04')
     ->setEntityTypeId(1)
     ->setAttributeSetId(0)
     ->setEmail('julie.worrell@example.com')
@@ -59,6 +61,7 @@ $customers[] = $customer;
 
 $customer = $objectManager->create(Customer::class);
 $customer->setWebsiteId(1)
+    ->setCreatedAt('1999-05-06')
     ->setEntityTypeId(1)
     ->setAttributeSetId(0)
     ->setEmail('david.lamar@example.com')

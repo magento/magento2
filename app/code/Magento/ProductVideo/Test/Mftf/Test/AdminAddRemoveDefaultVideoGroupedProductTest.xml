@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,12 +20,11 @@
             <group value="catalog"/>
             <group value="groupedProduct"/>
             <group value="productVideo"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <createData entity="SimpleProduct2" after="setYoutubeApiKeyConfig" stepKey="createFirstSimpleProduct"/>
+            <remove keyForRemoval="setYoutubeApiKeyConfig"/>
+            <createData entity="SimpleProduct2" before="createProduct" stepKey="createFirstSimpleProduct"/>
             <createData entity="SimpleProduct2" after="createFirstSimpleProduct" stepKey="createSecondSimpleProduct"/>
             <createData entity="ApiGroupedProduct" stepKey="createProduct"/>
             <createData entity="OneSimpleProductLink" after="createProduct" stepKey="addFirstProduct">
@@ -38,8 +37,28 @@
             </updateData>
         </before>
         <after>
-            <deleteData createDataKey="createFirstSimpleProduct" after="setYoutubeApiKeyDefaultConfig" stepKey="deleteFirstSimpleProduct"/>
-            <deleteData createDataKey="createSecondSimpleProduct" before="deleteProduct" stepKey="deleteSecondSimpleProduct"/>
+            <remove keyForRemoval="setYoutubeApiKeyDefaultConfig"/>
+            <deleteData createDataKey="createFirstSimpleProduct" after="deleteProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" after="deleteFirstSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
         </after>
+
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoPresentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage">
+            <argument name="videoType" value="vimeo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoAbsentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoAbsentInStorefrontProductPage">
+            <argument name="dataTypeAttribute" value="'vimeo'"/>
+        </actionGroup>
     </test>
 </tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class ToolbarPlugin
         if ($order
             && !empty($order['customer_id'])
             && $this->config->isEnabled()
-            && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button')
+            && $this->authorization->isAllowed('Magento_LoginAsCustomer::login')
         ) {
             $customerId = (int)$order['customer_id'];
             $buttonList->add(

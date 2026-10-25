@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,6 +40,7 @@ class AlertsTest extends TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/productalert/allow_stock 1
+     * @magentoConfigFixture current_store catalog/productalert/allow_price 1
      *
      * @return void
      */
@@ -47,10 +48,15 @@ class AlertsTest extends TestCase
     {
         $meta = $this->stockAlertsModifier->modifyMeta([]);
         $this->assertArrayHasKey('alerts', $meta);
-        $content = $meta['alerts']['children'][Alerts::DATA_SCOPE_STOCK]['arguments']['data']['config']['content'];
+        $stockContent = $meta['alerts']['children'][Alerts::DATA_SCOPE_STOCK]['arguments']['data']['config']['content'];
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath("//div[@data-grid-id='alertStock']", $content)
+            Xpath::getElementsCountForXpath("//div[@data-grid-id='alertStock']", $stockContent)
+        );
+        $priceContent = $meta['alerts']['children'][Alerts::DATA_SCOPE_PRICE]['arguments']['data']['config']['content'];
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath("//div[@data-grid-id='alertPrice']", $priceContent)
         );
     }
 }

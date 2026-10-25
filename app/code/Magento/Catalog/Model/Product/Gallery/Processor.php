@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -77,7 +77,7 @@ class Processor
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
-        \Magento\Framework\File\Mime $mime = null
+        ?\Magento\Framework\File\Mime $mime = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->fileStorageDb = $fileStorageDb;
@@ -417,7 +417,7 @@ class Processor
      */
     public function duplicateImageFromTmp($file)
     {
-        $file = $this->getFilenameFromTmp($file);
+        $file = $this->getFilenameFromTmp((string)$file);
 
         $destinationFile = $this->getUniqueFileName($file, true);
         if ($this->fileStorageDb->checkDbUsage()) {

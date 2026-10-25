@@ -1,17 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\Catalog\Block\Product\View;
 
 /**
  * Product additional info block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Catalog\Block\Product\View;
-
-/**
  * @api
  * @since 100.0.2
  */
@@ -28,6 +25,8 @@ class Additional extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Catalog::product/view/additional.phtml';
 
     /**
+     * Return the HTML for the child list
+     *
      * @return array
      */
     public function getChildHtmlList()

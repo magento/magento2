@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Model\Import\ErrorProcessing;
@@ -25,6 +25,11 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      * @var ProcessingError[]
      */
     protected $items = [];
+
+    /**
+     * @var ProcessingError[]
+     */
+    private $itemsByRowColumnAndCode = [];
 
     /**
      * @var int[]
@@ -87,13 +92,15 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
             $this->processInvalidRow($rowNumber);
         }
         $errorMessage = $this->getErrorMessage($errorCode, $errorMessage, $columnName);
-
         /** @var ProcessingError $newError */
         $newError = $this->errorFactory->create();
         $newError->init($errorCode, $errorLevel, $rowNumber, $columnName, $errorMessage, $errorDescription);
+        $rowNumber = $rowNumber ?? '';
         $this->items['rows'][$rowNumber][] = $newError;
         $this->items['codes'][$errorCode][] = $newError;
         $this->items['messages'][$errorMessage][] = $newError;
+        $columnName = $columnName ?? '';
+        $this->itemsByRowColumnAndCode[$rowNumber][$columnName][$errorCode] = $newError;
         return $this;
     }
 
@@ -266,13 +273,13 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     /**
      * Get an error via row number
      *
-     * @param int $rowNumber
+     * @param int|null $rowNumber
      * @return ProcessingError[]
      */
     public function getErrorByRowNumber($rowNumber)
     {
         $result = [];
-        if (isset($this->items['rows'][$rowNumber])) {
+        if ($rowNumber !== null && isset($this->items['rows'][$rowNumber])) {
             $result = $this->items['rows'][$rowNumber];
         }
 
@@ -356,7 +363,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         $this->errorStatistics = [];
         $this->invalidRows = [];
         $this->skippedRows = [];
-
+        $this->itemsByRowColumnAndCode = [];
         return $this;
     }
 
@@ -370,13 +377,9 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     protected function isErrorAlreadyAdded($rowNum, $errorCode, $columnName = null)
     {
-        $errors = $this->getErrorsByCode([$errorCode]);
-        foreach ($errors as $error) {
-            if ($rowNum == $error->getRowNumber() && $columnName == $error->getColumnName()) {
-                return true;
-            }
-        }
-        return false;
+        $rowNum = $rowNum ?? '';
+        $columnName = $columnName ?? '';
+        return isset($this->itemsByRowColumnAndCode[$rowNum][$columnName][$errorCode]);
     }
 
     /**

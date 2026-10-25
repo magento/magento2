@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
-use \Magento\Bundle\Api\Data\LinkInterface;
+use Magento\Bundle\Api\Data\LinkInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -17,11 +18,11 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/fixed_bundle_product_with_catalog_rule.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForFixedBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -49,14 +50,14 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             '
                 #1 Testing price for fixed bundle product
                 with catalog price rule and without sub items and options
             ' => [
-                'strategy' => $this->getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // 110 * 0.9
                     'minimalPrice' => 99,
@@ -70,7 +71,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #2 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -87,7 +88,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #3 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -104,7 +105,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #4 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -121,7 +122,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #5 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration2(
+                'strategyModifiers' => self::getBundleConfiguration2(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -138,7 +139,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #6 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -155,7 +156,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #7 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -172,7 +173,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #8 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -189,7 +190,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #9 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration3(
+                'strategyModifiers' => self::getBundleConfiguration3(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -206,7 +207,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #10 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -223,7 +224,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #11 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -240,7 +241,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #12 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -257,7 +258,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #13 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration4(
+                'strategyModifiers' => self::getBundleConfiguration4(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -274,7 +275,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #14 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -291,7 +292,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #15 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -308,7 +309,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #16 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -325,7 +326,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #17 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration5(
+                'strategyModifiers' => self::getBundleConfiguration5(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -342,7 +343,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #18 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -359,7 +360,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #19 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -376,7 +377,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #20 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -393,7 +394,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #21 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration6(
+                'strategyModifiers' => self::getBundleConfiguration6(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -410,7 +411,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #22 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -427,7 +428,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #23 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -444,7 +445,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #24 Testing price for fixed bundle product
                 with catalog price rule, fixed sub items and percent options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_FIXED,
                     self::CUSTOM_OPTION_PRICE_TYPE_PERCENT
                 ),
@@ -461,7 +462,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
                 #25 Testing price for fixed bundle product
                 with catalog price rule, percent sub items and fixed options
             ' => [
-                'strategy' => $this->getBundleConfiguration7(
+                'strategyModifiers' => self::getBundleConfiguration7(
                     LinkInterface::PRICE_TYPE_PERCENT,
                     self::CUSTOM_OPTION_PRICE_TYPE_FIXED
                 ),
@@ -480,7 +481,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * Fixed bundle product with catalog price rule and without sub items and options
      * @return array
      */
-    private function getBundleConfiguration1()
+    private static function getBundleConfiguration1()
     {
         return [];
     }
@@ -491,7 +492,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration2($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration2($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -538,7 +539,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration3($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -585,7 +586,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration4($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration4($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -638,7 +639,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration5($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration5($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -691,7 +692,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration6($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration6($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [
@@ -744,7 +745,7 @@ class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
      * @param string $customOptionsPriceType
      * @return array
      */
-    private function getBundleConfiguration7($selectionsPriceType, $customOptionsPriceType)
+    private static function getBundleConfiguration7($selectionsPriceType, $customOptionsPriceType)
     {
         $optionsData = [
             [

@@ -1,12 +1,11 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Utility;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class FilesTest extends \PHPUnit\Framework\TestCase
@@ -158,5 +157,25 @@ class FilesTest extends \PHPUnit\Framework\TestCase
             $file = str_replace('\\', '/', $file);
         }
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests if underscores are allowed in extended static files in theme.
+     *
+     * @magentoComponentsDir Magento/Framework/App/Utility/_files/design
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testAllowUnderscoreInExtendedFiles()
+    {
+        $this->assertNotEmpty(
+            array_filter(
+                $this->model->getStaticPreProcessingFiles('*.less'),
+                function ($resource) {
+                    return $resource[3] === 'Module_Third_Party'
+                        && $resource[4] === 'css/source/_module.less';
+                }
+            )
+        );
     }
 }

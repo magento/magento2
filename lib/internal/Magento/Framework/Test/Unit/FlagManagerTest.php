@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
 use Magento\Framework\FlagManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -41,15 +42,9 @@ class FlagManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagResourceMock = $this->getMockBuilder(FlagResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->flagFactoryMock = $this->createMock(FlagFactory::class);
+        $this->flagResourceMock = $this->createMock(FlagResource::class);
+        $this->flagMock = $this->createMock(Flag::class);
 
         $this->flagManager = new FlagManager(
             $this->flagFactoryMock,
@@ -85,10 +80,9 @@ class FlagManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider flagExistDataProvider
-     *
      * @param bool $isFlagExist
      */
+    #[DataProvider('flagExistDataProvider')]
     public function testDeleteFlag($isFlagExist)
     {
         $flagCode = 'flag';
@@ -131,7 +125,7 @@ class FlagManagerTest extends TestCase
      *
      * @return array
      */
-    public function flagExistDataProvider()
+    public static function flagExistDataProvider()
     {
         return [
             [true],

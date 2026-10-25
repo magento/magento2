@@ -1,19 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
+use Exception;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form\Element\DataType\Date;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DateTest extends TestCase
@@ -37,16 +40,23 @@ class DateTest extends TestCase
     private $objectManagerHelper;
 
     /**
+     * @var DateFormatterFactory|MockObject
+     */
+    private $dateFormatterFactoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->method('getProcessor')->willReturn($this->processorMock);
+        $this->dateFormatterFactoryMock = $this->createMock(DateFormatterFactory::class);
     }
 
     /**
@@ -150,8 +160,8 @@ class DateTest extends TestCase
      * @param string $dateStr
      * @param bool $setUtcTimeZone
      * @param string $convertedDate
-     * @dataProvider convertDatetimeDataProvider
      */
+    #[DataProvider('convertDatetimeDataProvider')]
     public function testConvertDatetime(string $dateStr, bool $setUtcTimeZone, string $convertedDate)
     {
         $this->localeDateMock->method('getConfigTimezone')
@@ -174,12 +184,85 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function convertDatetimeDataProvider(): array
+    public static function convertDatetimeDataProvider(): array
     {
         return [
             ['2019-09-30T12:32:00.000Z', false, '2019-09-30 12:32:00'],
             ['2019-09-30T12:32:00.000', false, '2019-09-30 12:32:00'],
             ['2019-09-30T12:32:00.000Z', true, '2019-09-30 19:32:00'],
+        ];
+    }
+
+    /**
+     * Test to Convert given date to default (UTC) timezone
+     *
+     * @param string $dateStr
+     * @param bool $setUtcTimeZone
+     * @param string $convertedDate
+     */
+    #[DataProvider('convertDateFormatDataProvider')]
+    public function testConvertDateFormat(
+        string $date,
+        string $locale,
+        string $expected
+    ): void {
+        $realDateFormatterFactory = new DateFormatterFactory();
+        
+        $this->localeResolverMock
+            ->expects($this->any())
+            ->method('getLocale')
+            ->willReturn($locale);
+            
+        $this->date = $this->objectManagerHelper->getObject(
+            Date::class,
+            [
+                'localeResolver' => $this->localeResolverMock,
+                'dateFormatterFactory' => $realDateFormatterFactory
+            ]
+        );
+        
+        $result = $this->date->convertDateFormat($date);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * DataProvider for testConvertDateFormat()
+     *
+     * @return array
+     */
+    public static function convertDateFormatDataProvider(): array
+    {
+        return [
+            [
+                '2023-10-15',
+                'en_US',
+                '10/15/2023'
+            ],
+            [
+                '10/15/2023',
+                'en_US',
+                '10/15/2023'
+            ],
+            [
+                '2023-10-15',
+                'en_GB',
+                '15/10/2023'
+            ],
+            [
+                '15/10/2023',
+                'en_GB',
+                '15/10/2023'
+            ],
+            [
+                '2023-10-15',
+                'ja_JP',
+                '2023/10/15'
+            ],
+            [
+                '2023/10/15',
+                'ja_JP',
+                '2023/10/15'
+            ]
         ];
     }
 }

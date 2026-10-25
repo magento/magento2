@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View;
 
 /**
  * Interface for Template Engine
+ *
+ * @api
  */
 interface TemplateEngineInterface
 {
@@ -19,7 +23,7 @@ interface TemplateEngineInterface
      * @param \Magento\Framework\View\Element\BlockInterface $block
      * @param string $templateFile
      * @param array $dictionary
-     * @return string rendered template
+     * @return string
      */
     public function render(
         \Magento\Framework\View\Element\BlockInterface $block,

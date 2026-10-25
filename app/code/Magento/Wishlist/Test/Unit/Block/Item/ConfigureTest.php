@@ -1,15 +1,14 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Wishlist\Block\Item\Configure
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Item;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
@@ -21,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Configure
      */
@@ -43,20 +44,10 @@ class ConfigureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->wishlistDataMock = $this->getMockBuilder(
-            Data::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->contextMock = $this->getMockBuilder(
-            Context::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->wishlistDataMock = $this->createMock(Data::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $escaperMock = $this->createMock(Escaper::class);
         $escaperMock->method('escapeHtml')
             ->willReturnCallback(
                 function ($string) {
@@ -77,10 +68,7 @@ class ConfigureTest extends TestCase
     public function testGetWishlistOptions()
     {
         $typeId = 'simple';
-        $product = $this->getMockBuilder(
-            Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(Product::class);
         $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
         $this->registryMock->expects($this->once())
             ->method('registry')
@@ -108,12 +96,12 @@ class ConfigureTest extends TestCase
 
     public function testSetLayout()
     {
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['setCustomAddToCartUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setCustomAddToCartUrl']
+        );
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
@@ -141,12 +129,12 @@ class ConfigureTest extends TestCase
 
     public function testSetLayoutWithNoItem()
     {
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->addMethods(['setCustomAddToCartUrl'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setCustomAddToCartUrl']
+        );
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
@@ -169,7 +157,7 @@ class ConfigureTest extends TestCase
 
     public function testSetLayoutWithNoBlockAndItem()
     {
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
 
         $layoutMock->expects($this->once())
             ->method('getBlock')

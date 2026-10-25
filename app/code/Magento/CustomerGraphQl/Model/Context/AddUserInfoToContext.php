@@ -1,20 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
-use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
+use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * @inheritdoc
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class AddUserInfoToContext implements ContextParametersProcessorInterface
+class AddUserInfoToContext implements UserContextParametersProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var UserContextInterface
@@ -22,11 +31,79 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
     private $userContext;
 
     /**
+     * @var UserContextInterface
+     */
+    private UserContextInterface $userContextFromConstructor;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
+     * @var Share
+     */
+    private $configShare;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var CustomerInterface|null
+     */
+    private ?CustomerInterface $loggedInCustomerData = null;
+
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
+    /**
      * @param UserContextInterface $userContext
+     * @param Session $session
+     * @param CustomerRepository $customerRepository
+     * @param Share $configShare
+     * @param StoreManagerInterface $storeManager
+     * @param HttpRequest|null $request
      */
     public function __construct(
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        Session $session,
+        CustomerRepository $customerRepository,
+        Share $configShare,
+        StoreManagerInterface $storeManager,
+        ?HttpRequest $request = null
     ) {
+        $this->userContext = $userContext;
+        $this->userContextFromConstructor = $userContext;
+        $this->session = $session;
+        $this->customerRepository = $customerRepository;
+        $this->configShare = $configShare;
+        $this->storeManager = $storeManager;
+        $this->request = $request ?? ObjectManager::getInstance()->get(HttpRequest::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userContext = $this->userContextFromConstructor;
+        $this->loggedInCustomerData = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUserContext(UserContextInterface $userContext): void
+    {
         $this->userContext = $userContext;
     }
 
@@ -35,20 +112,49 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
      */
     public function execute(ContextParametersInterface $contextParameters): ContextParametersInterface
     {
+        $this->loggedInCustomerData = null;
         $currentUserId = $this->userContext->getUserId();
         if (null !== $currentUserId) {
-            $currentUserId = (int)$currentUserId;
+            $currentUserId = (int) $currentUserId;
         }
         $contextParameters->setUserId($currentUserId);
 
         $currentUserType = $this->userContext->getUserType();
         if (null !== $currentUserType) {
-            $currentUserType = (int)$currentUserType;
+            $currentUserType = (int) $currentUserType;
         }
         $contextParameters->setUserType($currentUserType);
 
-        $contextParameters->addExtensionAttribute('is_customer', $this->isCustomer($currentUserId, $currentUserType));
+        $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
+        $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
+
+        if (!$isCustomer
+            && !empty($currentUserId)
+            && $currentUserType === UserContextInterface::USER_TYPE_CUSTOMER
+        ) {
+            $contextParameters->setUserId(0);
+        }
+
+        if ($isCustomer) {
+            $this->loggedInCustomerData = $this->customerRepository->getById($currentUserId);
+            $this->session->setCustomerData($this->loggedInCustomerData);
+            $this->session->setCustomerGroupId($this->loggedInCustomerData->getGroupId());
+        }
         return $contextParameters;
+    }
+
+    /**
+     * Get logged in customer data
+     *
+     * @return CustomerInterface|null
+     */
+    public function getLoggedInCustomerData(): ?CustomerInterface
+    {
+        if ($this->loggedInCustomerData !== null) {
+            return $this->loggedInCustomerData;
+        }
+
+        return $this->session->isLoggedIn() ? $this->session->getCustomerData() : null;
     }
 
     /**
@@ -60,6 +166,28 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
      */
     private function isCustomer(?int $customerId, ?int $customerType): bool
     {
-        return !empty($customerId) && !empty($customerType) && $customerType !== UserContextInterface::USER_TYPE_GUEST;
+        $result = !empty($customerId)
+            && !empty($customerType)
+            && $customerType === UserContextInterface::USER_TYPE_CUSTOMER;
+
+        if ($result && $this->configShare->isWebsiteScope()) {
+            $customer = $this->customerRepository->getById($customerId);
+            return (int) $customer->getWebsiteId() === (int) $this->getEffectiveStore()->getWebsiteId();
+        }
+        return $result;
+    }
+
+    /**
+     * Resolve the store to use for website-scope validation.
+     *
+     * @return StoreInterface
+     */
+    private function getEffectiveStore(): StoreInterface
+    {
+        $storeCode = trim((string) $this->request->getHeader('Store'));
+        if (!empty($storeCode)) {
+            return $this->storeManager->getStore($storeCode);
+        }
+        return $this->storeManager->getStore();
     }
 }

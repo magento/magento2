@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
@@ -66,5 +66,5 @@ interface CartManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null);
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null);
 }

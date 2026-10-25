@@ -1,8 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
+/* eslint-disable max-nested-callbacks */
 define([
     'underscore',
     'Magento_Ui/js/grid/sticky/sticky'
@@ -46,6 +47,7 @@ define([
                 expect(stickyObj.initListeners).toHaveBeenCalled();
             });
             it('has initOnScroll method', function () {
+                spyOn(document, 'addEventListener').and.callFake(function () {});
                 stickyObj.initOnScroll();
                 expect(stickyObj.lastHorizontalScrollPos).toBeDefined();
             });

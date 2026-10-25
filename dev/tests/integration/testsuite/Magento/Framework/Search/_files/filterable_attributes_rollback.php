@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Model\Product;
@@ -38,6 +38,11 @@ foreach (range(1, 2) as $index) {
     }
 }
 $attribute->loadByCode($productEntityTypeId, 'date_attribute');
+if ($attribute->getId()) {
+    $attribute->delete();
+}
+
+$attribute->loadByCode($productEntityTypeId, 'decimal_attribute');
 if ($attribute->getId()) {
     $attribute->delete();
 }

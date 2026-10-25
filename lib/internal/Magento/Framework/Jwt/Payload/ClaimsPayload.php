@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\Framework\Jwt\Payload;
+
+use Magento\Framework\Jwt\ClaimInterface;
+
+class ClaimsPayload implements ClaimsPayloadInterface
+{
+    public const CONTENT_TYPE = 'json';
+
+    /**
+     * @var ClaimInterface[]
+     */
+    private $claims;
+
+    /**
+     * @param ClaimInterface[] $claims
+     */
+    public function __construct(array $claims)
+    {
+        $this->claims = [];
+        foreach ($claims as $claim) {
+            $this->claims[$claim->getName()] = $claim;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getClaims(): array
+    {
+        return $this->claims;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContent(): string
+    {
+        $data = [];
+        foreach ($this->claims as $claim) {
+            $data[$claim->getName()] = $claim->getValue();
+        }
+
+        return json_encode((object)$data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContentType(): ?string
+    {
+        return null;
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Fedex\Setup\Patch\Data;
@@ -97,6 +97,7 @@ class ConfigureFedexDefaults implements DataPatchInterface, PatchVersionInterfac
             } elseif (stripos($mapOld['path'], 'free_method') !== false && isset($codes['method'][$mapOld['value']])) {
                 $mapNew = $codes['method'][$mapOld['value']];
             } elseif (stripos($mapOld['path'], 'allowed_methods') !== false) {
+                $mapNew = [];
                 foreach (explode(',', $mapOld['value']) as $shippingMethod) {
                     if (isset($codes['method'][$shippingMethod])) {
                         $mapNew[] = $codes['method'][$shippingMethod];

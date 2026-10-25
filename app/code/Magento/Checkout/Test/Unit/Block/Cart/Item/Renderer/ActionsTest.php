@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,11 +40,9 @@ class ActionsTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->model = $objectManagerHelper->getObject(
             Actions::class,
@@ -60,9 +58,7 @@ class ActionsTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
 
         $this->assertEquals($this->model, $this->model->setItem($itemMock));
         $this->assertEquals($itemMock, $this->model->getItem());
@@ -82,9 +78,7 @@ class ActionsTest extends TestCase
         /**
          * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $this->model->setItem($itemMock);
 
         $this->layoutMock->expects($this->once())
@@ -93,9 +87,7 @@ class ActionsTest extends TestCase
             ->willReturn($childNames);
 
         /** @var Generic|MockObject $childMockOne */
-        $childMockOne = $this->getMockBuilder(Generic::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $childMockOne = $this->createMock(Generic::class);
         $childMockOne->expects($this->once())
             ->method('setItem')
             ->with($itemMock);

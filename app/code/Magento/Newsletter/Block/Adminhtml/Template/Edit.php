@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Newsletter Template Edit Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
@@ -21,8 +19,6 @@ use Magento\Framework\App\TemplateTypesInterface;
 class Edit extends Widget
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -216,7 +212,9 @@ class Edit extends Widget
      */
     public function getJsTemplateName()
     {
-        return addcslashes($this->getModel()->getTemplateCode(), "\"\r\n\\");
+        $templateCode = $this->getModel()->getTemplateCode();
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return $templateCode ? addcslashes($templateCode, "\"\r\n\\") : '';
     }
 
     /**

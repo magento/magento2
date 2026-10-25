@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Config\Dom;
 
@@ -32,9 +32,9 @@ class NodePathMatcher
      */
     protected function simplifyXpath($xpath)
     {
-        $result = $xpath;
+        $result = $xpath ?: '';
         $result = preg_replace('/\[@[^\]]+?\]/', '', $result);
-        $result = preg_replace('/\/[^:]+?\:/', '/', $result);
-        return $result;
+
+        return preg_replace('/\/[^:]+?\:/', '/', $result);
     }
 }

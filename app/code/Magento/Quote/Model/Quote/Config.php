@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote;
 
@@ -23,7 +23,7 @@ class Config
     /**
      * @return array
      */
-    public function getProductAttributes()
+    public function getProductAttributes(): array
     {
         return $this->_attributeConfig->getAttributeNames('quote_item');
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,8 @@ namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Carrier\Tablerate;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate\Grid;
 use Magento\OfflineShipping\Model\Carrier\Tablerate;
@@ -50,38 +52,41 @@ class GridTest extends TestCase
      */
     protected $collectionFactoryMock;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
+        // Initialize ObjectManager to avoid "ObjectManager isn't initialized" errors
+        $this->objectManager->prepareObjectManager();
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->context = $objectManager->getObject(
-            Context::class,
-            ['storeManager' => $this->storeManagerMock]
-        );
+        $filesystemMock = $this->createMock(Filesystem::class);
+        $directoryWriteMock = $this->createMock(WriteInterface::class);
+        $filesystemMock->method('getDirectoryWrite')->willReturn($directoryWriteMock);
 
-        $this->backendHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
+        $this->context->method('getFilesystem')->willReturn($filesystemMock);
+        $this->context->method('getStoreManager')->willReturn($this->storeManagerMock);
 
-        $this->collectionFactoryMock =
-            $this->getMockBuilder(
-                CollectionFactory::class
-            )->disableOriginalConstructor()
-                ->getMock();
+        $this->backendHelperMock = $this->createMock(Data::class);
 
-        $this->tablerateMock = $this->getMockBuilder(Tablerate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
 
-        $this->model = new Grid(
-            $this->context,
-            $this->backendHelperMock,
-            $this->collectionFactoryMock,
-            $this->tablerateMock
+        $this->tablerateMock = $this->createMock(Tablerate::class);
+
+        $this->model = $this->objectManager->getObject(
+            Grid::class,
+            [
+                'context' => $this->context,
+                'backendHelper' => $this->backendHelperMock,
+                'collectionFactory' => $this->collectionFactoryMock,
+                'tablerate' => $this->tablerateMock
+            ]
         );
     }
 
@@ -89,10 +94,10 @@ class GridTest extends TestCase
     {
         $websiteId = 1;
 
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $websiteMock = $this->createPartialMock(
+            Website::class,
+            ['getId']
+        );
 
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsite')
@@ -111,10 +116,10 @@ class GridTest extends TestCase
     {
         $websiteId = 10;
 
-        $websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
+        $websiteMock = $this->createPartialMock(
+            Website::class,
+            ['getId']
+        );
 
         $websiteMock->expects($this->once())
             ->method('getId')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Payment\Block\Info;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -50,13 +51,13 @@ class InfoTest extends TestCase
         $helper = new ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
             StoreManager::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
         $this->_eventManager = $this->getMockBuilder(
             ManagerInterface::class
-        )->setMethods(
+        )->onlyMethods(
             ['dispatch']
         )->disableOriginalConstructor()
             ->getMock();
@@ -73,13 +74,13 @@ class InfoTest extends TestCase
     }
 
     /**
-     * @dataProvider getIsSecureModeDataProvider
      * @param bool $isSecureMode
      * @param bool $methodInstance
      * @param bool $store
      * @param string $storeCode
      * @param bool $expectedResult
      */
+    #[DataProvider('getIsSecureModeDataProvider')]
     public function testGetIsSecureMode($isSecureMode, $methodInstance, $store, $storeCode, $expectedResult)
     {
         if (isset($store)) {
@@ -105,7 +106,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getIsSecureModeDataProvider()
+    public static function getIsSecureModeDataProvider()
     {
         return [
             [false, true, null, null, false],
@@ -125,7 +126,7 @@ class InfoTest extends TestCase
     {
         $methodInstance = $this->getMockBuilder(
             AbstractMethod::class
-        )->setMethods(
+        )->onlyMethods(
             ['getStore']
         )->disableOriginalConstructor()
             ->getMock();
@@ -164,9 +165,7 @@ class InfoTest extends TestCase
         $this->assertNotNull($result);
     }
 
-    /**
-     * @dataProvider getValueAsArrayDataProvider
-     */
+    #[DataProvider('getValueAsArrayDataProvider')]
     public function testGetValueAsArray($value, $escapeHtml, $expected)
     {
         $result = $this->_object->getValueAsArray($value, $escapeHtml);
@@ -176,7 +175,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getValueAsArrayDataProvider()
+    public static function getValueAsArrayDataProvider()
     {
         return [
             [[], true, []],

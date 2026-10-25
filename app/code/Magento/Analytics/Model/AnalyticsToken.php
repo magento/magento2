@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -16,6 +16,8 @@ class AnalyticsToken
 {
     /**
      * Path to value of Magento BI token into config.
+     *
+     * @var string
      */
     private $tokenPath = 'analytics/general/token';
 

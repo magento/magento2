@@ -1,16 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
+use Magento\Quote\Model\Quote\Item\Option;
 
 /**
  * Quote resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends AbstractDb
 {
@@ -25,23 +25,43 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $hasDataChanges = $this->isModified($object);
         $object->setIsOptionsSaved(false);
 
         $result = parent::save($object);
 
-        if ($hasDataChanges && !$object->isOptionsSaved()) {
+        if (!$object->isOptionsSaved() && ($hasDataChanges || $this->hasOptionsChanged($object))) {
             $object->saveItemOptions();
         }
         return $result;
     }
 
     /**
-     * {@inheritdoc}
+     * Check if quote item options have changed.
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    private function hasOptionsChanged(AbstractModel $object): bool
+    {
+        $hasDataChanges = false;
+        $options = $object->getOptions() ?? [];
+        foreach ($options as $option) {
+            /** @var Option $option */
+            if (!$option->getId() || $option->getResource()->hasDataChanged($option)) {
+                $hasDataChanges = true;
+                break;
+            }
+        }
+        return $hasDataChanges;
+    }
+
+    /**
+     * @inheritdoc
      */
     protected function prepareDataForUpdate($object)
     {

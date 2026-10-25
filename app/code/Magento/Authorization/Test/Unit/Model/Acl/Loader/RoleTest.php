@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RoleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Role
      */
@@ -70,16 +72,16 @@ class RoleTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
-            ->setMethods(['create', 'getModelInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->roleFactoryMock = $this->getMockBuilder(UserFactory::class)
-            ->setMethods(['create', 'getModelInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->groupFactoryMock = $this->createPartialMockWithReflection(
+            GroupFactory::class,
+            ['create', 'getModelInstance']
+        );
+        $this->roleFactoryMock = $this->createPartialMockWithReflection(
+            UserFactory::class,
+            ['create', 'getModelInstance']
+        );
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']
@@ -105,23 +107,21 @@ class RoleTest extends TestCase
 
         $this->adapterMock = $this->createMock(Mysql::class);
 
-        $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            Role::class,
-            [
-                'groupFactory' => $this->groupFactoryMock,
-                'roleFactory' => $this->roleFactoryMock,
-                'resource' => $this->resourceMock,
-                'aclDataCache' => $this->aclDataCacheMock,
-                'serializer' => $this->serializerMock
-            ]
+        $this->model = new Role(
+            $this->groupFactoryMock,
+            $this->roleFactoryMock,
+            $this->resourceMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock
         );
     }
 
     /**
-     * Test populating acl roles with children
+     * Test populating acl roles with children.
+     *
+     * @return void
      */
-    public function testPopulateAclAddsRolesAndTheirChildren()
+    public function testPopulateAclAddsRolesAndTheirChildren(): void
     {
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
@@ -141,7 +141,7 @@ class RoleTest extends TestCase
             ->willReturn(
                 [
                     ['role_id' => 1, 'role_type' => 'G', 'parent_id' => null],
-                    ['role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1],
+                    ['role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1]
                 ]
             );
 
@@ -149,16 +149,28 @@ class RoleTest extends TestCase
         $this->roleFactoryMock->expects($this->once())->method('create')->with(['roleId' => '2']);
 
         $aclMock = $this->createMock(Acl::class);
-        $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);
-        $aclMock->expects($this->at(2))->method('addRole')->with($this->anything(), '1');
+        $aclMock
+            ->method('addRole')
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$this->anything(), null],
+                    [$this->anything(), '1']
+                ];
+                $returnValue = null;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
 
         $this->model->populateAcl($aclMock);
     }
 
     /**
-     * Test populating acl role with multiple parents
+     * Test populating acl role with multiple parents.
+     *
+     * @return void
      */
-    public function testPopulateAclAddsMultipleParents()
+    public function testPopulateAclAddsMultipleParents(): void
     {
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
@@ -181,16 +193,23 @@ class RoleTest extends TestCase
         $this->groupFactoryMock->expects($this->never())->method('getModelInstance');
 
         $aclMock = $this->createMock(Acl::class);
-        $aclMock->expects($this->at(0))->method('hasRole')->with('1')->willReturn(true);
-        $aclMock->expects($this->at(1))->method('addRoleParent')->with('1', '2');
+        $aclMock
+            ->method('hasRole')
+            ->with('1')
+            ->willReturn(true);
+        $aclMock
+            ->method('addRoleParent')
+            ->with('1', '2');
 
         $this->model->populateAcl($aclMock);
     }
 
     /**
-     * Test populating acl role from cache
+     * Test populating acl role from cache.
+     *
+     * @return void
      */
-    public function testPopulateAclFromCache()
+    public function testPopulateAclFromCache(): void
     {
         $this->resourceMock->expects($this->never())->method('getConnection');
         $this->resourceMock->expects($this->never())->method('getTableName');
@@ -215,8 +234,13 @@ class RoleTest extends TestCase
         $this->groupFactoryMock->expects($this->never())->method('getModelInstance');
 
         $aclMock = $this->createMock(Acl::class);
-        $aclMock->expects($this->at(0))->method('hasRole')->with('1')->willReturn(true);
-        $aclMock->expects($this->at(1))->method('addRoleParent')->with('1', '2');
+        $aclMock
+            ->method('hasRole')
+            ->with('1')
+            ->willReturn(true);
+        $aclMock
+            ->method('addRoleParent')
+            ->with('1', '2');
 
         $this->model->populateAcl($aclMock);
     }

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\EntityManager\Db;
 
+use Exception;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 
-/**
- * Class UpdateRow
- */
 class UpdateRow
 {
     /**
@@ -41,6 +39,8 @@ class UpdateRow
     }
 
     /**
+     * Method to prepare data.
+     *
      * @param EntityMetadataInterface $metadata
      * @param AdapterInterface $connection
      * @param array $data
@@ -50,13 +50,13 @@ class UpdateRow
     {
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
-            $columnName = strtolower($column['COLUMN_NAME']);
+            $columnName = strtolower($column['COLUMN_NAME'] ?? '');
             if ($this->canNotSetTimeStamp($columnName, $column, $data) || $column['IDENTITY']) {
                 continue;
             }
 
             if (isset($data[$columnName])) {
-                $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
+                $output[strtolower($column['COLUMN_NAME'] ?? '')] = $data[strtolower($column['COLUMN_NAME'] ?? '')];
             } elseif (!empty($column['NULLABLE'])) {
                 $output[strtolower($column['COLUMN_NAME'])] = null;
             }
@@ -97,6 +97,8 @@ class UpdateRow
     }
 
     /**
+     * Method to can not set time stamp.
+     *
      * @param string $columnName
      * @param string $column
      * @param array $data
@@ -109,9 +111,12 @@ class UpdateRow
     }
 
     /**
+     * Method to execute.
+     *
      * @param string $entityType
      * @param array $data
      * @return array
+     * @throws Exception
      */
     public function execute($entityType, $data)
     {

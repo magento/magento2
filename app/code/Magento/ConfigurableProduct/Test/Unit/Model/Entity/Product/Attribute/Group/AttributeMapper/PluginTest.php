@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,18 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Plugin
      */
@@ -48,30 +54,22 @@ class PluginTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->registry = $this->createPartialMock(Registry::class, ['registry']);
 
-        $this->attributeFactory = $this->getMockBuilder(
-            AttributeFactory::class
-        )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeFactory = $this->createPartialMock(
+            AttributeFactory::class,
+            ['create']
+        );
 
-        $this->attribute = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
-        )
-            ->setMethods(['getUsedAttributes', 'getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createPartialMock(
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class,
+            ['getUsedAttributes']
+        );
 
-        $this->magentoObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->magentoObject = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getId', 'setId']
+        );
         $this->model = $helper->getObject(
             Plugin::class,
             ['registry' => $this->registry, 'attributeFactory' => $this->attributeFactory]
@@ -84,16 +82,12 @@ class PluginTest extends TestCase
         $expected = ['is_configurable' => 1];
 
         /** @var MockObject $attributeMapper */
-        $attributeMapper = $this->getMockBuilder(
+        $attributeMapper = $this->createMock(
             AttributeMapperInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         /** @var Attribute|MockObject $attribute */
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attribute = $this->createMock(Attribute::class);
 
         $proceed = function (Attribute $attribute) {
             return [];
@@ -113,7 +107,7 @@ class PluginTest extends TestCase
             ->with('current_attribute_set')
             ->willReturn($this->magentoObject);
 
-        $this->magentoObject->expects($this->once())->method('getId')->willReturn($attrSetId);
+        $this->magentoObject->method('getId')->willReturn($attrSetId);
 
         $result = $this->model->aroundMap($attributeMapper, $proceed, $attribute);
         $this->assertEquals($expected, $result);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml\Grid;
@@ -51,6 +51,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @var \Magento\Reports\Model\ResourceModel\Report\Collection\Factory
      */
     protected $_resourceFactory;
+
+    /**
+     * @var string
+     */
+    protected $_columnGroupBy;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context

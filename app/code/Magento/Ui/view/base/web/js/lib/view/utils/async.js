@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -76,7 +76,7 @@ define([
      * Internal method used to normalize argumnets passed
      * to 'async' module methods.
      *
-     * @param {(String|Objetc)} selector
+     * @param {(String|Object)} selector
      * @param {(HTMLElement|Object|String)} [ctx]
      * @returns {Object}
      */

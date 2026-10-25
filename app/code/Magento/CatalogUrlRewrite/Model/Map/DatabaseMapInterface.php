@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Model\Map;
 
 /**
@@ -11,6 +13,8 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
  * Is used to get data by a unique key from a temporary table in mysql to prevent memory usage
  * It internally holds the knowledge the creation of the actual data and it initializes itself when we call getData
  * We should always call destroyTableAdapter when we don't need anymore the temporary tables
+ *
+ * @api
  */
 interface DatabaseMapInterface
 {

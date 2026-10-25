@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
@@ -12,6 +12,8 @@
             <argument name="productName" type="string"/>
         </arguments>
         <waitForPageLoad stepKey="waitForGridToAppear"/>
+        <scrollTo selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="scrollToProductNameFilter"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="waitForProductNameFilterVisible"/>
         <fillField userInput="{{productName}}" selector="{{AdminCreateNewReviewSection.filterProductName}}" stepKey="searchReview"/>
         <click selector="{{AdminCreateNewReviewSection.searchButton}}" stepKey="startSearch"/>
         <waitForPageLoad stepKey="waitForResults"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -132,5 +132,21 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
         $collection->clear()->load();
         $product = $collection->getFirstItem();
         $this->assertEquals(20, $product->getData('min_price'));
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_equal_zero.php
+     */
+    public function testGetMinPriceWhenTierPriceEqualZero()
+    {
+        $product = $this->productRepository->get('simple-2');
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->addIdFilter($product->getId());
+        $collection->addPriceData(0);
+        $collection->load();
+        $product = $collection->getFirstItem();
+        $this->assertEquals(0, $product->getData('tier_price'));
+        $this->assertEquals(0, $product->getData('min_price'));
     }
 }

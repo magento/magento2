@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Transparent;
 
@@ -18,7 +18,7 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
-use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\Session\SessionManager as Session;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
@@ -28,8 +28,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 class Response extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     private $coreRegistry;
@@ -83,8 +81,8 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         ResponseValidator $responseValidator,
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
-        Session $sessionTransparent = null,
-        PaymentFailuresInterface $paymentFailures = null
+        ?Session $sessionTransparent = null,
+        ?PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;

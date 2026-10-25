@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,10 +17,12 @@ use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test that initial scopes config are loaded if database is available
  * @magentoAppIsolation enabled
+ * @magentoCache config disabled
  */
 class InitialConfigSourceTest extends TestCase
 {
@@ -95,8 +97,8 @@ class InitialConfigSourceTest extends TestCase
      * @param string $defaultWebsite
      * @param bool $offline
      * @throws LocalizedException
-     * @dataProvider getDefaultDataProvider
      */
+    #[DataProvider('getDefaultDataProvider')]
     public function testGetWebsites(array $websites, string $defaultWebsite, bool $offline = false): void
     {
         if ($offline) {
@@ -111,7 +113,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @return array
      */
-    public function getDefaultDataProvider(): array
+    public static function getDefaultDataProvider(): array
     {
         return [
             [

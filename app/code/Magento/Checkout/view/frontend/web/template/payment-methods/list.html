@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
  -->
 <div if="isPaymentMethodsAvailable()"
@@ -13,7 +13,7 @@
              class="step-title"
              data-role="title">
         </div>
-        <each args="data: getRegion($group().displayArea), as: 'method'" render=""/>
+        <each args="data: getRegion($group().displayArea), as: 'method'" render=""></each>
     </div>
 </div>
 <div ifnot="isPaymentMethodsAvailable()"

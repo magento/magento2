@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePanel;
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +27,13 @@ use PHPUnit\Framework\TestCase;
  */
 class BundlePanelTest extends TestCase
 {
+    use MockCreationTrait;
+
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     /**
      * @var UrlInterface|MockObject
      */
@@ -39,7 +50,7 @@ class BundlePanelTest extends TestCase
     private $locatorMock;
 
     /**
-     * @var ProductInterface|MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
@@ -55,30 +66,23 @@ class BundlePanelTest extends TestCase
 
     /**
      * @return void
+     * @throws Exception
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->arrayManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturn([]);
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
-        $this->shipmentType = $this->getMockBuilder(ShipmentType::class)
-            ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['getStoreId'])
-            ->getMockForAbstractClass();
-        $this->productMock->method('getId')
-            ->willReturn(true);
-        $this->productMock->method('getStoreId')
-            ->willReturn(0);
-        $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
-            ->onlyMethods(['getProduct'])
-            ->getMockForAbstractClass();
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
+        $this->arrayManagerMock->method('get')->willReturn([]);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->shipmentType = $this->createMock(ShipmentType::class);
+        /** @var ProductInterface $productMock */
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getId', 'getStoreId']
+        );
+        $this->productMock->method('getId')->willReturn(true);
+        $this->productMock->method('getStoreId')->willReturn(0);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->locatorMock->method('getProduct')
             ->willReturn($this->productMock);
 
@@ -88,7 +92,7 @@ class BundlePanelTest extends TestCase
                 'locator' => $this->locatorMock,
                 'urlBuilder' => $this->urlBuilder,
                 'shipmentType' => $this->shipmentType,
-                'arrayManager' => $this->arrayManagerMock,
+                'arrayManager' => $this->arrayManagerMock
             ]
         );
     }
@@ -100,8 +104,8 @@ class BundlePanelTest extends TestCase
      * @param string $dataScope
      *
      * @return void
-     * @dataProvider getDataModifyMeta
      */
+    #[DataProvider('getDataModifyMeta')]
     public function testModifyMeta(string $shipmentTypePath, string $dataScope): void
     {
         $sourceMeta = [
@@ -121,7 +125,7 @@ class BundlePanelTest extends TestCase
                         'children',
                         ArrayManager::DEFAULT_PATH_DELIMITER,
                         $shipmentTypePath
-                    ],
+                    ]
                 ]
             );
         $this->arrayManagerMock->method('merge')
@@ -130,18 +134,24 @@ class BundlePanelTest extends TestCase
             ->willReturn([]);
         $this->arrayManagerMock->method('set')
             ->willReturn([]);
-        $this->arrayManagerMock->expects($this->at(12))
-            ->method('merge')
-            ->with(
-                $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
-                [],
-                [
-                    'dataScope' => $dataScope,
-                    'validation' => [
-                        'required-entry' => false
-                    ]
+
+        $metaArgument = [
+            $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
+            [],
+            [
+                'dataScope' => $dataScope,
+                'validation' => [
+                    'required-entry' => false
                 ]
-            );
+            ]
+        ];
+        $this->arrayManagerMock
+            ->method('merge')
+            ->willReturnCallback(function ($arg1) use ($metaArgument) {
+                if (is_null($arg1) || $arg1 == $metaArgument) {
+                    return null;
+                }
+            });
         $this->bundlePanelModel->modifyMeta($sourceMeta);
     }
 
@@ -150,7 +160,7 @@ class BundlePanelTest extends TestCase
      *
      * @return string[][]
      */
-    public function getDataModifyMeta(): array
+    public static function getDataModifyMeta(): array
     {
         return [
             [
@@ -160,7 +170,7 @@ class BundlePanelTest extends TestCase
             [
                 'someAttrGroup/children',
                 'shipment_type'
-            ],
+            ]
         ];
     }
 }

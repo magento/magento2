@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element;
 
@@ -116,6 +116,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheKeyInfo()
     {
+        $this->_block->setTemplate('non-existing-template.phtml');
         $this->assertArrayHasKey('template', $this->_block->getCacheKeyInfo());
     }
 }

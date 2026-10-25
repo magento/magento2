@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
@@ -34,10 +35,10 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Visitor extends AbstractModel
 {
-    const VISITOR_TYPE_CUSTOMER = 'c';
-    const VISITOR_TYPE_VISITOR = 'v';
-    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
-    const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
+    public const VISITOR_TYPE_CUSTOMER = 'c';
+    public const VISITOR_TYPE_VISITOR = 'v';
+    public const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+    public const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
     private const SECONDS_24_HOURS = 86400;
 
     /**
@@ -103,7 +104,6 @@ class Visitor extends AbstractModel
      * @param array $ignores
      * @param array $data
      * @param RequestSafetyInterface|null $requestSafety
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -114,12 +114,12 @@ class Visitor extends AbstractModel
         ScopeConfigInterface $scopeConfig,
         DateTime $dateTime,
         IndexerRegistry $indexerRegistry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
         array $data = [],
-        RequestSafetyInterface $requestSafety = null
+        ?RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;
@@ -196,6 +196,24 @@ class Visitor extends AbstractModel
     }
 
     /**
+     * @inheritdoc
+     */
+    public function beforeSave()
+    {
+        $this->unsetData("session_id");
+        return parent::beforeSave();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave()
+    {
+        $this->setSessionId($this->session->getSessionId());
+        return parent::afterSave();
+    }
+
+    /**
      * Save visitor by request
      *
      * Used in event "controller_action_postdispatch"
@@ -251,7 +269,7 @@ class Visitor extends AbstractModel
     public function isModuleIgnored($observer)
     {
         if (is_array($this->ignores) && $observer) {
-            $curModule = $this->requestSafety->getRouteName();
+            $curModule = $this->requestSafety->getRouteName() ?? '';
             if (isset($this->ignores[$curModule])) {
                 return true;
             }
@@ -274,6 +292,13 @@ class Visitor extends AbstractModel
         if (!$this->getCustomerId()) {
             $this->setDoCustomerLogin(true);
             $this->setCustomerId($customer->getId());
+            $currentTime = (new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT);
+            $this->setCreatedAt($currentTime);
+            if (!$this->getId()) {
+                $this->setLastVisitAt($currentTime);
+                $this->save();
+                $this->session->setVisitorData($this->getData());
+            }
         }
         return $this;
     }

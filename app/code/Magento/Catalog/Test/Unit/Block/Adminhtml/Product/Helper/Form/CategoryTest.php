@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
@@ -26,21 +29,28 @@ class CategoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->authorization = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->authorization = $this->createMock(AuthorizationInterface::class);
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
     }
 
     /**
-     * @dataProvider isAllowedDataProvider
      * @param $isAllowed
      */
+    #[DataProvider('isAllowedDataProvider')]
     public function testIsAllowed($isAllowed)
     {
-        $this->authorization->expects($this->any())
-            ->method('isAllowed')
-            ->willReturn($isAllowed);
+        $this->authorization->method('isAllowed')->willReturn($isAllowed);
         $model = $this->objectManager->getObject(
             Category::class,
             ['authorization' => $this->authorization]
@@ -60,7 +70,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             [true],
@@ -74,9 +84,7 @@ class CategoryTest extends TestCase
             Category::class,
             ['authorization' => $this->authorization]
         );
-        $this->authorization->expects($this->any())
-            ->method('isAllowed')
-            ->willReturn(false);
+        $this->authorization->method('isAllowed')->willReturn(false);
         $this->assertEmpty($model->getAfterElementHtml());
     }
 }

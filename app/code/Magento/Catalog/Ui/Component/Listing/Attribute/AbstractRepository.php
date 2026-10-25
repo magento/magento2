@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
@@ -11,6 +11,11 @@ namespace Magento\Catalog\Ui\Component\Listing\Attribute;
  */
 abstract class AbstractRepository implements RepositoryInterface
 {
+    /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
     /**
      * @var null|\Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */

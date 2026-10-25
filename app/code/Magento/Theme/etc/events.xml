@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
@@ -11,5 +11,11 @@
     </event>
     <event name="theme_save_after">
         <observer name="check_theme_is_assigned" instance="Magento\Theme\Observer\CheckThemeIsAssignedObserver" />
+    </event>
+    <event name="admin_system_config_changed_section_general">
+        <observer name="move_store_level_design_config_to_website_scope_on_single_store_mode" instance="Magento\Theme\Observer\MoveStoreLevelDesignConfigToWebsiteScopeOnSingleStoreMode" />
+    </event>
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_layout_cache" instance="Magento\Theme\Observer\InvalidateLayoutCacheObserver"/>
     </event>
 </config>

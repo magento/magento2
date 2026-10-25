@@ -1,19 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\CustomerAuthUpdate;
-use Magento\Customer\Model\CustomerRegistry;
+use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\Authorization\Test\Fixture\Role;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\User\Test\Fixture\User;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * GraphQl tests for @see \Magento\CustomerGraphQl\Model\Customer\GetCustomer.
+ */
 class GetCustomerTest extends GraphQlAbstract
 {
     /**
@@ -22,155 +33,144 @@ class GetCustomerTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
-     * @var CustomerAuthUpdate
-     */
-    private $customerAuthUpdate;
-
-    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
-        $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testGetCustomer()
+    #[
+        DataFixture(Customer::class, ['firstname' => 'John', 'lastname' => 'Smith'], 'customer')
+    ]
+    public function testGetCustomer(): void
     {
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-
-        $query = <<<QUERY
-query {
-    customer {
-        id
-        firstname
-        lastname
-        email
-    }
-}
-QUERY;
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        $customerEmail = DataFixtureStorageManager::getStorage()->get('customer')->getEmail();
+        $this->assertEquals(
+            [
+                'customer' => [
+                    'firstname' => 'John',
+                    'lastname' => 'Smith',
+                    'email' => $customerEmail
+                ]
+            ],
+            $this->graphQlQuery(
+                $this->getCustomerQuery(),
+                [],
+                '',
+                $this->getCustomerAuthHeaders($customerEmail)
+            )
         );
-
-        $this->assertNull($response['customer']['id']);
-        $this->assertEquals('John', $response['customer']['firstname']);
-        $this->assertEquals('Smith', $response['customer']['lastname']);
-        $this->assertEquals($currentEmail, $response['customer']['email']);
     }
 
-    /**
-     */
-    public function testGetCustomerIfUserIsNotAuthorized()
+    public function testGetCustomerIfUserIsNotAuthorized(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
 
-        $query = <<<QUERY
-query {
-    customer {
-        firstname
-        lastname
-        email
-    }
-}
-QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlQuery($this->getCustomerQuery());
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testGetCustomerIfAccountIsLocked()
+    #[
+        DataFixture(Role::class, as: 'role'),
+        DataFixture(User::class, ['role_id' => '$role.id$'], 'admin_user')
+    ]
+    public function testGetCustomerIfUserHasWrongType(): void
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The account is locked.');
+        $adminUser = DataFixtureStorageManager::getStorage()->get('admin_user');
+        $adminToken = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class)
+            ->createAdminAccessToken($adminUser->getUserName(), TestBootstrap::ADMIN_PASSWORD);
 
-        $this->lockCustomer(1);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
 
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-
-        $query = <<<QUERY
-query {
-    customer {
-        firstname
-        lastname
-        email
-    }
-}
-QUERY;
         $this->graphQlQuery(
-            $query,
+            $this->getCustomerQuery(),
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            ['Authorization' => 'Bearer ' . $adminToken]
         );
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
-     */
-    public function testAccountIsNotConfirmed()
+    #[
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testGetCustomerIfAccountIsLocked(): void
     {
-        $customerEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
-        $customer = $this->customerRepository->getById(1)->setConfirmation(
-            \Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $this->lockCustomer->execute((int)$customer->getId());
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
+        $this->graphQlQuery(
+            $this->getCustomerQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($customer->getEmail())
         );
-        $this->customerRepository->save($customer);
-        $query = <<<QUERY
-query {
-    customer {
-        firstname
-        lastname
-        email
     }
-}
-QUERY;
-        $this->graphQlQuery($query, [], '', $headersMap);
+
+    #[
+        Config('customer/create_account/confirm', true),
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testAccountIsNotConfirmed(): void
+    {
+        $this->expectExceptionMessage("This account isn't confirmed. Verify and try again.");
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $customerEntity = $this->customerRepository->getById((int)$customer->getId())
+            ->setConfirmation(AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED);
+        $this->customerRepository->save($customerEntity);
+
+        $this->graphQlQuery(
+            $this->getCustomerQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($customer->getEmail())
+        );
     }
 
     /**
+     * Get headers with customer authorization token
+     *
      * @param string $email
-     * @param string $password
      * @return array
      */
-    private function getCustomerAuthHeaders(string $email, string $password): array
+    private function getCustomerAuthHeaders(string $email): array
     {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, 'password');
+
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**
-     * @param int $customerId
-     * @return void
+     * Get basic customer query
+     *
+     * @return string
      */
-    private function lockCustomer(int $customerId): void
+    private function getCustomerQuery(): string
     {
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-        $customerSecure->setLockExpires('2030-12-31 00:00:00');
-        $this->customerAuthUpdate->saveAuth($customerId);
+        return <<<QUERY
+            query {
+                customer {
+                    firstname
+                    lastname
+                    email
+                }
+            }
+        QUERY;
     }
 }

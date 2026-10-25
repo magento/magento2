@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config;
 
@@ -28,7 +28,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\MessageQueue\Config\Reader\Env $envReader,
         \Magento\Framework\MessageQueue\Config\Reader\Env\Validator $envValidator,
         $cacheId = 'message_queue_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
         $envValidator->validate($envReader->read(), $this->get());

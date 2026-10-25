@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -260,6 +260,8 @@ class ImagesFixture extends Fixture
         $productImagesDirectoryPath = $mediaDirectory->getRelativePath($this->mediaConfig->getBaseMediaPath());
 
         for ($i = 1; $i <= $this->getImagesToGenerate(); $i++) {
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $imageName = md5($i) . '.jpg';
             $imageFullName = DIRECTORY_SEPARATOR . substr($imageName, 0, 1)
                 . DIRECTORY_SEPARATOR . substr($imageName, 1, 1)

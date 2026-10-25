@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
@@ -9,8 +9,6 @@ use Magento\Sales\Model\ResourceModel\Report\Bestsellers as BestsellersReport;
 
 /**
  * Sales resource helper interface
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 interface HelperInterface
 {

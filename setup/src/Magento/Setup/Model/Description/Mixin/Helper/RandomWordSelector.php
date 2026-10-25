@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model\Description\Mixin\Helper;
 
@@ -27,6 +27,8 @@ class RandomWordSelector
         $randWords = [];
         $wordsSize = count($words);
         while ($count) {
+            // mt_rand() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $randWords[] = $words[mt_rand(0, $wordsSize - 1)];
             $count--;
         }

@@ -1,46 +1,50 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Model\Template;
 
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Backend\Model\UrlInterface;
 use Magento\Email\Model\Template\Css\Processor;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\MailException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
 use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
-use Magento\Framework\Filter\VariableResolver\StrategyResolver;
+use Magento\Framework\Filter\VariableResolver\StrictResolver;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Information as StoreInformation;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
-use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -115,11 +119,6 @@ class FilterTest extends TestCase
     private $configVariables;
 
     /**
-     * @var Emogrifier
-     */
-    private $emogrifier;
-
-    /**
      * @var CssInliner
      */
     private $cssInliner;
@@ -140,7 +139,7 @@ class FilterTest extends TestCase
     private $pubDirectoryRead;
 
     /**
-     * @var MockObject|StrategyResolver
+     * @var MockObject|StrictResolver
      */
     private $variableResolver;
 
@@ -148,6 +147,16 @@ class FilterTest extends TestCase
      * @var array
      */
     private $directiveProcessors;
+
+    /**
+     * @var StoreInformation
+     */
+    private $storeInformation;
+
+    /**
+     * @var store
+     */
+    private $store;
 
     protected function setUp(): void
     {
@@ -157,9 +166,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->escaper = $this->objectManager->getObject(Escaper::class);
 
@@ -167,21 +174,15 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->coreVariableFactory = $this->getMockBuilder(VariableFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->layout = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layout = $this->createMock(LayoutInterface::class);
 
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
@@ -191,11 +192,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->backendUrlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->emogrifier = $this->objectManager->getObject(Emogrifier::class);
+        $this->backendUrlBuilder = $this->createMock(UrlInterface::class);
 
         $this->configVariables = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
@@ -217,7 +214,7 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->variableResolver =
-            $this->getMockBuilder(StrategyResolver::class)
+            $this->getMockBuilder(StrictResolver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -235,14 +232,24 @@ class FilterTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock(),
         ];
+
+        $this->store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeInformation = $this->getMockBuilder(StoreInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
      * @param array|null $mockedMethods Methods to mock
      * @return Filter|MockObject
      */
-    protected function getModel($mockedMethods = null)
+    protected function getModel($mockedMethods = [])
     {
+        $this->objectManager->prepareObjectManager([]);
+
         return $this->getMockBuilder(Filter::class)
             ->setConstructorArgs(
                 [
@@ -257,18 +264,28 @@ class FilterTest extends TestCase
                     $this->layoutFactory,
                     $this->appState,
                     $this->backendUrlBuilder,
-                    $this->emogrifier,
                     $this->configVariables,
-                    [],
-                    $this->cssInliner,
-                    $this->directiveProcessors,
                     $this->variableResolver,
                     $this->cssProcessor,
-                    $this->pubDirectory
+                    $this->pubDirectory,
+                    $this->cssInliner,
+                    [],
+                    $this->directiveProcessors,
+                    $this->storeInformation
                 ]
             )
-            ->setMethods($mockedMethods)
+            ->onlyMethods($mockedMethods)
             ->getMock();
+    }
+
+    /**
+     * Test exception handling of filter method
+     */
+    public function testFilterExceptionHandler()
+    {
+        $filter = $this->getModel();
+        $filteredValue = $filter->filter(null);
+        $this->assertTrue(is_string($filteredValue));
     }
 
     /**
@@ -277,9 +294,8 @@ class FilterTest extends TestCase
      * @param $html
      * @param $css
      * @param $expectedResults
-     *
-     * @dataProvider applyInlineCssDataProvider
      */
+    #[DataProvider('applyInlineCssDataProvider')]
     public function testApplyInlineCss($html, $css, $expectedResults)
     {
         $filter = $this->getModel(['getCssFilesContent']);
@@ -288,7 +304,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')
@@ -366,7 +381,7 @@ class FilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyInlineCssDataProvider()
+    public static function applyInlineCssDataProvider()
     {
         return [
             'Ensure styles get inlined' => [
@@ -399,7 +414,6 @@ class FilterTest extends TestCase
             ->getMock();
         $reflectionClass = new \ReflectionClass(Filter::class);
         $reflectionProperty = $reflectionClass->getProperty('cssProcessor');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($filter, $cssProcessor);
         $cssProcessor->expects($this->any())
             ->method('process')
@@ -411,23 +425,25 @@ class FilterTest extends TestCase
     public function testConfigDirectiveAvailable()
     {
         $path = "web/unsecure/base_url";
-        $availableConfigs = [['value' => $path]];
+        $availableConfigs = ['value' => $path];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
@@ -439,20 +455,75 @@ class FilterTest extends TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->never())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
+
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetCountry()
+    {
+        $path = "general/store_information/country_id";
+        $availableConfigs = ['value' => $path];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedCountry = 'United States';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getAvailableVars')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['country_id' => 'US', 'country' => 'United States']));
+
+        $this->assertEquals($expectedCountry, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetRegion()
+    {
+        $path = "general/store_information/region_id";
+        $availableConfigs = ['value' => $path];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedRegion = 'Texas';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getAvailableVars')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['region_id' => '57', 'region' => 'Texas']));
+
+        $this->assertEquals($expectedRegion, $this->getModel()->configDirective($construction));
     }
 
     /**
@@ -494,5 +565,123 @@ class FilterTest extends TestCase
             " http=\"https://url\" https=\"http://url\""
         ];
         $model->protocolDirective($data);
+    }
+
+    #[DataProvider('dataProviderUrlModelCompanyRedirect')]
+    public function testStoreDirectiveForCompanyRedirect($className, $backendModelClass)
+    {
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getCode')->willReturn('frvw');
+
+        $this->backendUrlBuilder = $this->createMock($className);
+
+        $this->backendUrlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->willReturn('http://m246ceeeb2b.test/frvw/');
+
+        if ($backendModelClass) {
+            $this->backendUrlBuilder->expects($this->never())->method('setScope');
+        } else {
+            $this->backendUrlBuilder->expects($this->once())->method('setScope')->willReturnSelf();
+        }
+        $this->assertInstanceOf($className, $this->backendUrlBuilder);
+        $result = $this->getModel()->storeDirective(["{{store url=''}}",'store',"url=''"]);
+        $this->assertEquals('http://m246ceeeb2b.test/frvw/', $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function dataProviderUrlModelCompanyRedirect(): array
+    {
+        return [
+            [
+                UrlInterface::class,
+                0
+            ],
+            [
+                BackendModelUrl::class,
+                1
+            ]
+        ];
+    }
+
+    /**
+     * Test block directive cache key functionality
+     *
+     * @param bool $hasCacheKey
+     * @param bool $expectGetCacheKey
+     * @param bool $expectSetData
+     */
+    #[DataProvider('blockDirectiveCacheKeyDataProvider')]
+    public function testBlockDirectiveCacheKey($hasCacheKey, $expectGetCacheKey, $expectSetData)
+    {
+        $block = $this->getMockBuilder(AbstractBlock::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->willReturn($block);
+
+        $block->expects($this->once())
+            ->method('hasData')
+            ->with('cache_key')
+            ->willReturn($hasCacheKey);
+
+        if ($expectGetCacheKey) {
+            $block->expects($this->once())
+                ->method('getCacheKey')
+                ->willReturn('test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('getCacheKey');
+        }
+
+        if ($expectSetData) {
+            $block->expects($this->once())
+                ->method('setDataUsingMethod')
+                ->with('cache_key', 'test_cache_key');
+        } else {
+            $block->expects($this->never())
+                ->method('setDataUsingMethod');
+        }
+
+        $block->expects($this->once())
+            ->method('toHtml')
+            ->willReturn('block html');
+
+        $construction = [
+            '{{block class="Magento\\Framework\\View\\Element\\AbstractBlock"}}',
+            'block',
+            ' class="Magento\\Framework\\View\\Element\\AbstractBlock"'
+        ];
+
+        $filter = $this->getModel();
+        $result = $filter->blockDirective($construction);
+        $this->assertEquals('block html', $result);
+    }
+
+    /**
+     * Data provider for testBlockDirectiveCacheKey
+     *
+     * @return array
+     */
+    public static function blockDirectiveCacheKeyDataProvider()
+    {
+        return [
+            'block without cache key' => [
+                'hasCacheKey' => false,
+                'expectGetCacheKey' => true,
+                'expectSetData' => true
+            ],
+            'block with existing cache key' => [
+                'hasCacheKey' => true,
+                'expectGetCacheKey' => false,
+                'expectSetData' => false
+            ]
+        ];
     }
 }

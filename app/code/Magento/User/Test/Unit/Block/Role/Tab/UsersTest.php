@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\User\Block\Role\Tab\Users;
@@ -31,31 +33,28 @@ class UsersTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         /** @var Collection|MockObject $userCollectionFactoryMock $userCollectionMock */
-        $userCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $userCollectionMock = $this->createMock(Collection::class);
         /** @var CollectionFactory|MockObject $userCollectionFactoryMock */
-        $userCollectionFactoryMock = $this->getMockBuilder(
-            CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $userCollectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         /** @var RequestInterface|MockObject $requestMock */
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $requestMock = $this->createMock(RequestInterface::class);
         $userCollectionFactoryMock->expects($this->any())->method('create')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('load')->willReturn($userCollectionMock);
         $userCollectionMock->expects($this->any())->method('getItems');
 
-        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->model = $objectManager->getObject(
             Users::class,
             [

@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @deprecated 100.1.0
+ * @see Nothing
  */
-class CartItemProcessorsPool
+class CartItemProcessorsPool implements ResetAfterRequestInterface
 {
     /**
      * @var CartItemProcessorInterface[]
@@ -26,6 +28,7 @@ class CartItemProcessorsPool
     /**
      * @param ConfigInterface $objectManagerConfig
      * @deprecated 100.1.0
+     * @see Nothing
      */
     public function __construct(ConfigInterface $objectManagerConfig)
     {
@@ -33,8 +36,11 @@ class CartItemProcessorsPool
     }
 
     /**
+     * Get cart item processors.
+     *
      * @return CartItemProcessorInterface[]
      * @deprecated 100.1.0
+     * @see Nothing
      */
     public function getCartItemProcessors()
     {
@@ -56,5 +62,13 @@ class CartItemProcessorsPool
         }
 
         return $this->cartItemProcessors;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cartItemProcessors = [];
     }
 }

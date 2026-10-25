@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,8 +10,10 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\From\Element;
 use Magento\Backend\Helper\Data;
 use Magento\Customer\Block\Adminhtml\Form\Element\Image;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,12 +40,21 @@ class ImageTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->backendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
         $this->image = $objectManager->getObject(
             Image::class,
             [
@@ -69,7 +80,7 @@ class ImageTest extends TestCase
             ->willReturnArgument(0);
         $this->backendHelperMock->expects($this->once())
             ->method('getUrl')
-            ->with('customer/index/viewfile', ['image' => $value])
+            ->with('customer/index/viewfile', ['file' => $value])
             ->willReturn($url);
 
         $this->assertStringContainsString($url, $this->image->getElementHtml());

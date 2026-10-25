@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Config\Model\Placeholder\Environment;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class EnvironmentTest extends TestCase
@@ -27,9 +28,7 @@ class EnvironmentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = new Environment(
             $this->deploymentConfigMock
@@ -41,8 +40,8 @@ class EnvironmentTest extends TestCase
      * @param string $scope
      * @param string $scopeId
      * @param string $expected
-     * @dataProvider getGenerateDataProvider
      */
+    #[DataProvider('getGenerateDataProvider')]
     public function testGenerate($path, $scope, $scopeId, $expected)
     {
         $this->assertSame(
@@ -54,7 +53,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function getGenerateDataProvider()
+    public static function getGenerateDataProvider()
     {
         return [
             [
@@ -81,8 +80,8 @@ class EnvironmentTest extends TestCase
     /**
      * @param string $placeholder
      * @param bool $expected
-     * @dataProvider getIsPlaceholderDataProvider
      */
+    #[DataProvider('getIsPlaceholderDataProvider')]
     public function testIsApplicable($placeholder, $expected)
     {
         $this->assertSame(
@@ -94,7 +93,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function getIsPlaceholderDataProvider()
+    public static function getIsPlaceholderDataProvider()
     {
         return [
             [Environment::PREFIX . 'TEST', true],
@@ -109,8 +108,8 @@ class EnvironmentTest extends TestCase
     /**
      * @param string $template
      * @param string $expected
-     * @dataProvider restoreDataProvider
      */
+    #[DataProvider('restoreDataProvider')]
     public function testRestore($template, $expected)
     {
         $this->assertSame(
@@ -122,7 +121,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function restoreDataProvider()
+    public static function restoreDataProvider()
     {
         return [
             [Environment::PREFIX . 'TEST__CONFIG', 'test/config'],

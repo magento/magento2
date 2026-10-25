@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model;
 
@@ -43,7 +43,6 @@ use Magento\Framework\App\ObjectManager;
  * @method string getUpdatedAt()
  * @method \Magento\CatalogSearch\Model\Advanced setUpdatedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -51,65 +50,48 @@ use Magento\Framework\App\ObjectManager;
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * User friendly search criteria list
-     *
      * @var array
      */
     protected $_searchCriterias = [];
 
     /**
-     * Product collection
-     *
      * @var ProductCollection
      */
     protected $_productCollection;
 
     /**
-     * Initialize dependencies
-     *
-     * @deprecated 101.0.2
+     * @deprecated 101.0.2 No longer used internally; constructor argument retained for backward compatibility.
+     * @see \Magento\Catalog\Model\Config
      * @var Config
      */
     protected $_catalogConfig;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Product factory
-     *
      * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Advanced Collection Factory
-     *
      * @deprecated
      * @see $collectionProvider
      * @var ProductCollectionFactory
@@ -156,8 +138,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         ProductCollectionFactory $productCollectionFactory,
         AdvancedFactory $advancedFactory,
         array $data = [],
-        ItemCollectionProviderInterface $collectionProvider = null,
-        ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
+        ?ItemCollectionProviderInterface $collectionProvider = null,
+        ?ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -197,12 +179,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
-            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
-                if (!trim($values[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-            }
+
             $value = $values[$attribute->getAttributeCode()];
+
+            if (($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea')
+                && (!is_string($value) || !trim($value))
+            ) {
+                continue;
+            }
+
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;
@@ -210,6 +195,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
+                foreach ($value as $key => $element) {
+                    if (is_array($element)) {
+                        $value[$key] = 0;
+                    }
+                }
+
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
                 $currency = $store->getCurrentCurrencyCode();
@@ -351,23 +342,30 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
-     *
      * @param EntityAttribute $attribute
      * @param mixed $value
+     *
      * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
+     * @todo: Move this code to block
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
         $from = null;
         $to = null;
         if (is_array($value)) {
+            foreach ($value as $key => $element) {
+                if (is_array($element)) {
+                    $value[$key] = '';
+                }
+            }
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
                     $from = '';
                     $to = '';
+
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);
@@ -404,14 +402,14 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 $value[$key] = $attribute->getSource()->getOptionText($val);
 
                 if (is_array($value[$key])) {
-                    $value[$key] = $value[$key]['label'];
+                    $value[$key] = $value[$key]['label'] ?? '';
                 }
             }
             $value = implode(', ', $value);
         } elseif ($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect') {
             $value = $attribute->getSource()->getOptionText($value);
             if (is_array($value)) {
-                $value = $value['label'];
+                $value = $value['label'] ?? '';
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
             if (is_numeric($value)) {

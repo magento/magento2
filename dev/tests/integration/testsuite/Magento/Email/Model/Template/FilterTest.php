@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model\Template;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Theme\Block\Html\Footer;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppIsolation enabled
@@ -97,12 +98,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider layoutDirectiveDataProvider
      *
      * @param string $area
      * @param string $directiveParams
      * @param string $expectedOutput
      */
+    #[DataProvider('layoutDirectiveDataProvider')]
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
@@ -125,7 +126,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function layoutDirectiveDataProvider()
+    public static function layoutDirectiveDataProvider()
     {
         $result = [
             'area parameter - omitted' => [
@@ -158,15 +159,17 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param $expectedResult
      * @param array $variables
      * @internal param $translatorData
-     * @dataProvider transDirectiveDataProvider
+     * @magentoConfigFixture default_store dev/translate_inline/active 1
+     * @magentoAppArea frontend
      */
+    #[DataProvider('transDirectiveDataProvider')]
     public function testTransDirective($directive, $translations, $expectedResult, $variables = [])
     {
         $renderer = Phrase::getRenderer();
 
         $translator = $this->getMockBuilder(\Magento\Framework\Translate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $translator->method('getData')
@@ -188,7 +191,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function transDirectiveDataProvider()
+    public static function transDirectiveDataProvider()
     {
         return [
             [
@@ -270,12 +273,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider cssDirectiveDataProvider
      *
      * @param int $templateType
      * @param string $directiveParams
      * @param string $expectedOutput
      */
+    #[DataProvider('cssDirectiveDataProvider')]
     public function testCssDirective($templateType, $directiveParams, $expectedOutput)
     {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
@@ -299,7 +302,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function cssDirectiveDataProvider()
+    public static function cssDirectiveDataProvider()
     {
         return [
             'CSS from theme' => [
@@ -349,20 +352,22 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoConfigFixture default_store dev/static/sign 0
-     * @dataProvider inlinecssDirectiveDataProvider
      *
      * @param string $templateText
      * @param string $expectedOutput
      * @param bool $productionMode
      * @param bool $plainTemplateMode
      * @param bool $isChildTemplateMode
+     * @param bool $expectedOutputIsRegex
      */
+    #[DataProvider('inlinecssDirectiveDataProvider')]
     public function testInlinecssDirective(
         $templateText,
         $expectedOutput,
         $productionMode = false,
         $plainTemplateMode = false,
-        $isChildTemplateMode = false
+        $isChildTemplateMode = false,
+        $expectedOutputIsRegex = false
     ) {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $this->objectManager->get(
@@ -377,13 +382,18 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
         $this->objectManager->get(\Magento\Framework\App\State::class)->setMode($appMode);
 
-        $this->assertStringContainsString($expectedOutput, $this->model->filter($templateText));
+        $result = $this->model->filter($templateText);
+        if ($expectedOutputIsRegex) {
+            $this->assertMatchesRegularExpression($expectedOutput, $result);
+        } else {
+            $this->assertStringContainsString($expectedOutput, $result);
+        }
     }
 
     /**
      * @return array
      */
-    public function inlinecssDirectiveDataProvider()
+    public static function inlinecssDirectiveDataProvider()
     {
         return [
             'CSS from theme' => [
@@ -408,11 +418,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 false,
                 true,
             ],
-            'Child template mode results in unmodified directive' => [
+            'Child template mode results in a deferred placeholder, not rendered or raw markup' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
-                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                '/^<html><p><\/p> :deferred:[A-Za-z0-9]{64}:<\/html>$/',
                 false,
                 false,
+                true,
                 true,
             ],
             'Production mode - File with compilation error results in structurally unmodified markup' => [
@@ -433,10 +444,10 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider
      *
      * @param string $templateText
      */
+    #[DataProvider('inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider')]
     public function testInlinecssDirectiveThrowsExceptionWhenMissingParameter($templateText)
     {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
@@ -452,7 +463,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider()
+    public static function inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider()
     {
         return [
             'Missing "file" parameter' => [

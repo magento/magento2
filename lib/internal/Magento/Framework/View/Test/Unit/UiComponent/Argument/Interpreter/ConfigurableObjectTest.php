@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit tests for ConfigurableObject
@@ -50,10 +51,10 @@ class ConfigurableObjectTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->interpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->interpreter = $this->createMock(InterpreterInterface::class);
         $this->classReader = $this->createMock(ClassReader::class);
-        $this->objectManagerConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->objectManagerConfig = $this->createMock(ConfigInterface::class);
         $this->configurableObject = $objectManager->getObject(
             ConfigurableObject::class,
             [
@@ -65,13 +66,16 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 'classReader' => $this->classReader,
                 'objectManagerConfig' => $this->objectManagerConfig,
+                'deniedClassList' => [
+                    \Foo\Bar\ClassC::class,
+                    \Foo\Bar\InterfaceC::class,
+                ],
             ]
         );
     }
 
-    /**
-     * @dataProvider validDataProvider
-     */
+    /**     */
+    #[DataProvider('validDataProvider')]
     public function testValidCombinations(
         $data,
         $expectedClass,
@@ -109,9 +113,8 @@ class ConfigurableObjectTest extends TestCase
         self::assertSame('an object yay!', $actualResult);
     }
 
-    /**
-     * @dataProvider invalidDataProvider
-     */
+    /**     */
+    #[DataProvider('invalidDataProvider')]
     public function testInvalidCombinations(
         $data,
         $expectedClass,
@@ -151,7 +154,7 @@ class ConfigurableObjectTest extends TestCase
         self::assertSame('an object yay!', $actualResult);
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             // Test most basic syntax with no arguments
@@ -226,7 +229,7 @@ class ConfigurableObjectTest extends TestCase
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             [
@@ -267,6 +270,27 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 \InvalidArgumentException::class,
                 'Class argument is invalid: MyFooClass'
+            ],
+            [
+                [
+                    'argument' => [
+                        'class' => ['value' => 'MyFooClass'],
+                        'myarg' => ['value' => 'bar'],
+                    ],
+                ],
+                'MyFooClass',
+                [
+                    ['MyFooClass', ['Something', 'skipme']],
+                    ['Something', ['dontcare', 'SomethingElse']],
+                    ['SomethingElse', [\Foo\Bar\ClassC::class, 'unrelated']],
+                    ['skipme', []],
+                    ['dontcare', []],
+                    ['unrelated', [\Foo\Bar\InterfaceC::class]],
+                    [\Foo\Bar\ClassC::class, []],
+                    [\Foo\Bar\InterfaceC::class, []],
+                ],
+                \InvalidArgumentException::class,
+                'Class argument is invalid: MyFooClass',
             ],
         ];
     }

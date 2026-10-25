@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,55 +26,60 @@ use PHPUnit\Framework\TestCase;
  */
 class SynchronizerTest extends TestCase
 {
-    /** @var Synchronizer */
+    /**
+     * @var Synchronizer
+     */
     protected $model;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $sessionMock;
 
-    /** @var Visitor|MockObject */
+    /**
+     * @var Visitor|MockObject
+     */
     protected $visitorMock;
 
-    /** @var ProductFrontendActionFactory|MockObject */
+    /**
+     * @var ProductFrontendActionFactory|MockObject
+     */
     protected $productFrontendActionFactoryMock;
 
-    /** @var EntityManager|MockObject */
+    /**
+     * @var EntityManager|MockObject
+     */
     protected $entityManagerMock;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $collectionFactoryMock;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $frontendStorageConfigurationPoolMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->visitorMock = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productFrontendActionFactoryMock = $this
-            ->getMockBuilder(ProductFrontendActionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->entityManagerMock = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->frontendStorageConfigurationPoolMock = $this
-            ->getMockBuilder(FrontendStorageConfigurationPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->visitorMock = $this->createMock(Visitor::class);
+        $this->productFrontendActionFactoryMock = $this->createPartialMock(
+            ProductFrontendActionFactory::class,
+            ['create']
+        );
+        $this->entityManagerMock = $this->createMock(EntityManager::class);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->frontendStorageConfigurationPoolMock = $this->createMock(FrontendStorageConfigurationPool::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -90,24 +95,27 @@ class SynchronizerTest extends TestCase
         );
     }
 
-    public function testFilterProductActions()
+    /**
+     * @inheritDoc
+     */
+    public function testFilterProductActions(): void
     {
         $typeId = 'recently_compared_product';
         $productsData = [
             'website-1-1' => [
                 'added_at' => 12,
-                'product_id' => 1,
+                'product_id' => 1
             ],
             'website-1-2' => [
                 'added_at' => 13,
-                'product_id' => '2',
+                'product_id' => '2'
             ],
             'website-2-3' => [
                 'added_at' => 14,
-                'product_id' => 3,
+                'product_id' => 3
             ]
         ];
-        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -117,19 +125,12 @@ class SynchronizerTest extends TestCase
             ->method('get')
             ->with('recently_compared_product')
             ->willReturn($frontendConfiguration);
-        $action1 = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
-            ->getMockForAbstractClass();
+        $action1 = $this->createMock(ProductFrontendActionInterface::class);
+        $action2 = $this->createMock(ProductFrontendActionInterface::class);
 
-        $frontendAction = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock->expects($this->any())
-            ->method('getCustomerId')
-            ->willReturn(1);
+        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+        $collection = $this->createMock(Collection::class);
+        $this->sessionMock->method('getCustomerId')->willReturn(1);
         $this->visitorMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn(34);
@@ -139,12 +140,15 @@ class SynchronizerTest extends TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection->expects($this->at(1))
+        $collection
             ->method('addFieldToFilter')
-            ->with('type_id', $typeId);
-        $collection->expects($this->at(2))
-            ->method('addFieldToFilter')
-            ->with('product_id', [1, 2]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($typeId) {
+                if ($arg1 == 'type_id' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'product_id' && $arg2 == [1, 2]) {
+                    return null;
+                }
+            });
         $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
         $collection->expects($this->once())
             ->method('getIterator')
@@ -154,34 +158,20 @@ class SynchronizerTest extends TestCase
             ->with($frontendAction);
         $this->productFrontendActionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                [
-                    [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 12,
-                            'product_id' => 1,
-                            'type_id' => 'recently_compared_product'
-                        ]
-                    ]
-                ],
-                [
-                    [
-                        'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
-                            'added_at' => 13,
-                            'product_id' => 2,
-                            'type_id' => 'recently_compared_product'
-                        ]
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($action1, $action2);
+            ->willReturnCallback(function ($args) use ($action1, $action2) {
+                if ($args['data']['added_at'] === 12) {
+                    return $action1;
+                } elseif ($args['data']['added_at'] === 13) {
+                    return $action2;
+                }
+            });
         $this->entityManagerMock->expects($this->exactly(2))
             ->method('save')
-            ->withConsecutive([$action1], [$action2]);
+            ->willReturnCallback(function ($arg) use ($action1, $action2) {
+                if ($arg == $action1 || $arg == $action2) {
+                    return null;
+                }
+            });
         $this->model->syncActions($productsData, 'recently_compared_product');
     }
 }

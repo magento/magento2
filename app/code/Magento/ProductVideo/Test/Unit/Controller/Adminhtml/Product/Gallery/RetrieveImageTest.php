@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
@@ -28,6 +29,7 @@ use Magento\MediaStorage\Model\ResourceModel\File\Storage\File;
 use Magento\ProductVideo\Controller\Adminhtml\Product\Gallery\RetrieveImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,7 +72,7 @@ class RetrieveImageTest extends TestCase
     protected $curlMock;
 
     /**
-     * @var MockObject|\Magento\MediaStorage\Model\ResourceModel\File\Storage\File
+     * @var MockObject|File
      */
     protected $storageFileMock;
 
@@ -99,9 +101,14 @@ class RetrieveImageTest extends TestCase
      */
     private $fileDriverMock;
 
+    /**
+     * @var Raw|MockObject
+     */
+    private $responseMock;
+
     private function setupObjectManagerForCheckImageExist($return)
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
@@ -119,8 +126,8 @@ class RetrieveImageTest extends TestCase
             ->createMock(NotProtectedExtension::class);
         $this->rawFactoryMock =
             $this->createPartialMock(RawFactory::class, ['create']);
-        $response = new DataObject();
-        $this->rawFactoryMock->expects($this->once())->method('create')->willReturn($response);
+        $this->responseMock = $this->createMock(Raw::class);
+        $this->rawFactoryMock->expects($this->once())->method('create')->willReturn($this->responseMock);
         $this->configMock = $this->createMock(Config::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->adapterMock =
@@ -131,15 +138,14 @@ class RetrieveImageTest extends TestCase
         $this->adapterFactoryMock->expects($this->once())->method('create')->willReturn($this->abstractAdapter);
         $this->curlMock = $this->createMock(Curl::class);
         $this->storageFileMock = $this->createMock(File::class);
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->fileDriverMock = $this->getMockForAbstractClass(DriverInterface::class);
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $managerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($managerMock);
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->fileDriverMock = $this->createMock(DriverInterface::class);
+        $this->contextMock->method('getRequest')->willReturn($this->request);
+        $managerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->contextMock->method('getRequest')->willReturn($this->request);
+        $this->contextMock->method('getObjectManager')->willReturn($managerMock);
+        $this->fileDriverMock->method('stat')
+            ->willReturn(['size' => 200]);
 
         $this->image = $objectManager->getObject(
             RetrieveImage::class,
@@ -163,7 +169,7 @@ class RetrieveImageTest extends TestCase
      */
     public function testExecute()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturn(
+        $this->request->method('getParam')->willReturn(
             'https://example.com/test.jpg'
         );
         $readInterface = $this->createMock(
@@ -172,12 +178,24 @@ class RetrieveImageTest extends TestCase
         $writeInterface = $this->createMock(
             WriteInterface::class
         );
-        $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($readInterface);
-        $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
-        $this->abstractAdapter->expects($this->any())->method('validateUploadFile')->willReturn('true');
+        $writeInterface->method('getDriver')
+            ->willReturn($this->fileDriverMock);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($readInterface);
+        $readInterface->method('getAbsolutePath')->willReturn('');
+        $this->abstractAdapter->method('validateUploadFile')->willReturn('true');
         $this->validatorMock->expects($this->once())->method('isValid')->with('jpg')->willReturn('true');
         $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($writeInterface);
         $this->curlMock->expects($this->once())->method('read')->willReturn('testimage');
+        $this->responseMock->expects(self::once())
+            ->method('setContents')
+            ->with(json_encode([
+                'name' => 'test.jpg',
+                'type' => null,
+                'error' => 0,
+                'size' => 200,
+                'url' => null,
+                'file' => '/t/e/test.jpg'
+            ], JSON_THROW_ON_ERROR));
 
         $this->image->execute();
     }
@@ -187,16 +205,18 @@ class RetrieveImageTest extends TestCase
      */
     public function testExecuteInvalidFileImage()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturn(
+        $this->request->method('getParam')->willReturn(
             'https://example.com/test.jpg'
         );
         $readInterface = $this->createMock(ReadInterface::class);
         $writeInterface = $this->createMock(WriteInterface::class);
-        $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($readInterface);
-        $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
+        $writeInterface->method('getDriver')
+            ->willReturn($this->fileDriverMock);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($readInterface);
+        $readInterface->method('getAbsolutePath')->willReturn('');
         $this->abstractAdapter->expects($this->any())
             ->method('validateUploadFile')
-            ->willThrowException(new \Exception('Invalid File.'));
+            ->willThrowException(new Exception('Invalid File.'));
         $this->validatorMock->expects($this->once())->method('isValid')->with('jpg')->willReturn('true');
         $this->curlMock->expects($this->once())->method('read')->willReturn('testimage');
         $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($writeInterface);
@@ -211,13 +231,15 @@ class RetrieveImageTest extends TestCase
      */
     public function testExecuteInvalidFileType()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturn(
+        $this->request->method('getParam')->willReturn(
             'https://example.com/test.php'
         );
         $readInterface = $this->createMock(ReadInterface::class);
         $writeInterface = $this->createMock(WriteInterface::class);
-        $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($readInterface);
-        $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
+        $writeInterface->method('getDriver')
+            ->willReturn($this->fileDriverMock);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($readInterface);
+        $readInterface->method('getAbsolutePath')->willReturn('');
         $this->abstractAdapter->expects($this->never())->method('validateUploadFile');
         $this->validatorMock->expects($this->once())->method('isValid')->with('php')->willReturn(false);
         $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($writeInterface);

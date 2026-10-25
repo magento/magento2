@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,10 @@ namespace Magento\Framework\Test\Unit\Data\Form\Element;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Hidden;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,6 +29,17 @@ class HiddenTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $escaper = $objectManager->getObject(
             Escaper::class
         );
@@ -39,9 +53,8 @@ class HiddenTest extends TestCase
 
     /**
      * @param mixed $value
-     *
-     * @dataProvider getElementHtmlDataProvider
      */
+    #[DataProvider('getElementHtmlDataProvider')]
     public function testGetElementHtml($value)
     {
         $form = $this->createMock(Form::class);
@@ -61,11 +74,11 @@ class HiddenTest extends TestCase
     /**
      * @return array
      */
-    public function getElementHtmlDataProvider()
+    public static function getElementHtmlDataProvider()
     {
         return [
             ['some_value'],
-            ['store_ids[]' => ['1', '2']],
+            [['1', '2']],
         ];
     }
 }

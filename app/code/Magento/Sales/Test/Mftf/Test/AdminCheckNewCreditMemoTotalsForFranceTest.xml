@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckNewCreditMemoTotalsForFranceTest" extends="AdminCreateCreditMemoWithCashOnDeliveryTest">
+    <test name="AdminCheckNewCreditMemoTotalsForFranceTest" extends="AdminCreateCreditMemoForOrderWithCashOnDeliveryTest">
         <annotations>
             <stories value="Credit memo entity for France locale"/>
             <title value="Credit memo entity for France locale"/>

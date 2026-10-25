@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,10 +32,9 @@ class EventFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new EventFactory($this->_objectManagerMock);
-        $this->_expectedObject = $this->getMockBuilder(Event::class)
-            ->getMock();
+        $this->_expectedObject = $this->createMock(Event::class);
     }
 
     public function testCreate()

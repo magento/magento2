@@ -1,10 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
-
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
@@ -45,21 +44,15 @@ class ReindexRuleGroupWebsiteTest extends TestCase
      */
     private $tableSwapperMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->activeTableSwitcherMock =
-            $this->getMockBuilder(ActiveTableSwitcher::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->tableSwapperMock = $this->getMockForAbstractClass(
-            IndexerTableSwapperInterface::class
-        );
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
+        $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
+        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
         $this->model = new ReindexRuleGroupWebsite(
             $this->dateTimeMock,
             $this->resourceMock,
@@ -68,13 +61,17 @@ class ReindexRuleGroupWebsiteTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $timeStamp = (int)gmdate('U');
         $insertString = 'insert_string';
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
-        $this->resourceMock->expects($this->at(0))->method('getConnection')->willReturn($connectionMock);
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $this->resourceMock
+            ->method('getConnection')
+            ->willReturn($connectionMock);
         $this->dateTimeMock->expects($this->once())->method('gmtTimestamp')->willReturn($timeStamp);
 
         $this->tableSwapperMock->expects($this->any())
@@ -82,7 +79,7 @@ class ReindexRuleGroupWebsiteTest extends TestCase
             ->willReturnMap(
                 [
                     ['catalogrule_group_website', 'catalogrule_group_website_replica'],
-                    ['catalogrule_product', 'catalogrule_product_replica'],
+                    ['catalogrule_product', 'catalogrule_product_replica']
                 ]
             );
 
@@ -93,13 +90,11 @@ class ReindexRuleGroupWebsiteTest extends TestCase
                     ['catalogrule_group_website', 'default', 'catalogrule_group_website'],
                     ['catalogrule_product', 'default', 'catalogrule_product'],
                     ['catalogrule_group_website_replica', 'default', 'catalogrule_group_website_replica'],
-                    ['catalogrule_product_replica', 'default', 'catalogrule_product_replica'],
+                    ['catalogrule_product_replica', 'default', 'catalogrule_product_replica']
                 ]
             );
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
 
         $connectionMock->expects($this->once())->method('delete')->with('catalogrule_group_website_replica');
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

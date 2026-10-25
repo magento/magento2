@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,12 +26,12 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class for category url rewrites tests
  *
  * @magentoDbIsolation enabled
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteTest extends TestCase
@@ -82,11 +82,12 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
-     * @dataProvider categoryProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('categoryProvider')]
     public function testUrlRewriteOnCategorySave(array $data): void
     {
         $categoryModel = $this->categoryFactory->create();
@@ -110,7 +111,7 @@ class CategoryUrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function categoryProvider(): array
+    public static function categoryProvider(): array
     {
         return [
             'without_url_key' => [
@@ -147,12 +148,13 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     * @dataProvider productRewriteProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('productRewriteProvider')]
     public function testCategoryProductUrlRewrite(array $data): void
     {
         $category = $this->categoryRepository->get(402);
@@ -164,7 +166,7 @@ class CategoryUrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function productRewriteProvider(): array
+    public static function productRewriteProvider(): array
     {
         return [
             [
@@ -187,12 +189,13 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
-     * @dataProvider existingUrlProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('existingUrlProvider')]
     public function testUrlRewriteOnCategorySaveWithExistingUrlKey(array $data): void
     {
         $this->expectException(UrlAlreadyExistsException::class);
@@ -206,7 +209,7 @@ class CategoryUrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function existingUrlProvider(): array
+    public static function existingUrlProvider(): array
     {
         return [
             'with_specified_existing_product_url_key' => [
@@ -251,12 +254,13 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @magentoDataFixture Magento/Catalog/_files/catalog_category_with_slash.php
-     * @dataProvider categoryMoveProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('categoryMoveProvider')]
     public function testUrlRewriteOnCategoryMove(array $data): void
     {
         $categoryId = $data['data']['id'];
@@ -271,7 +275,7 @@ class CategoryUrlRewriteTest extends TestCase
     /**
      * @return array
      */
-    public function categoryMoveProvider(): array
+    public static function categoryMoveProvider(): array
     {
         return [
             'append_category' => [
@@ -310,6 +314,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoAppArea adminhtml
      * @return void
@@ -326,6 +331,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      * @return void
@@ -349,6 +355,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @return void

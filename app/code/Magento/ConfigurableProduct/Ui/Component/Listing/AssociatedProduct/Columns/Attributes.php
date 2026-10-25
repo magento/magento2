@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns;
 
@@ -59,9 +59,15 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
         if (isset($dataSource['data']['items'])) {
             $attributes = $this->getAttributes();
             $fieldName = $this->getData('name');
-            foreach ($dataSource['data']['items'] as & $item) {
+            foreach ($dataSource['data']['items'] as $key => & $item) {
                 $attrStrings = [];
                 foreach ($attributes as $attributeCode => $attribute) {
+                    if ($item['required_options'] === "1") {
+                        unset($dataSource['data']['items'][$key]);
+                        $dataSource['data']['totalRecords']--;
+                        continue;
+                    }
+
                     if (isset($item[$attributeCode]) && isset($attribute['options'][$item[$attributeCode]])) {
                         $attrStrings[] = $attribute['label'] . ': ' . $attribute['options'][$item[$attributeCode]];
                     }
@@ -71,6 +77,7 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
             }
         }
 
+        $dataSource['data']['items'] = array_values($dataSource['data']['items']);
         return $dataSource;
     }
 

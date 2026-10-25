@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,9 @@ class OrderPayments
     public function getOrderPaymentMethod(OrderInterface $orderModel): array
     {
         $orderPayment = $orderModel->getPayment();
+        if (!$orderPayment) {
+            return [];
+        }
         return [
             [
                 'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? '',

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -106,7 +106,7 @@ define([
                 errorOption,
                 allOptions = [];
 
-            newOption.label = $.trim(newOption.label);
+            newOption.label = newOption.label.trim();
 
             if (_.isEmpty(newOption.label)) {
                 return false;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
@@ -9,7 +9,7 @@ namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currency;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 
 /**
- * Class SaveRates
+ * Class for save rates.
  */
 class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency implements HttpPostActionInterface
 {
@@ -26,7 +26,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                 foreach ($data as $currencyCode => $rate) {
                     foreach ($rate as $currencyTo => $value) {
                         $value = abs(
-                            $this->_objectManager->get(\Magento\Framework\Locale\FormatInterface::class)
+                            (float) $this->_objectManager->get(\Magento\Framework\Locale\FormatInterface::class)
                                 ->getNumber($value)
                         );
                         $data[$currencyCode][$currencyTo] = $value;

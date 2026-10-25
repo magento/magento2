@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Dashboard\Orders;
 
@@ -14,7 +14,6 @@ use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
  * Adminhtml dashboard recent orders grid
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
@@ -152,7 +151,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
                 'header' => __('Total'),
                 'sortable' => false,
                 'type' => 'currency',
-                'currency_code' => $baseCurrencyCode,
+                'currency_code' => $this->escapeHtml($baseCurrencyCode),
                 'index' => 'revenue'
             ]
         );

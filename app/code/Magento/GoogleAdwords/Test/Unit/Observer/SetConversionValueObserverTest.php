@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,16 +10,20 @@ namespace Magento\GoogleAdwords\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAdwords\Helper\Data;
 use Magento\GoogleAdwords\Observer\SetConversionValueObserver;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SetConversionValueObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -56,10 +60,10 @@ class SetConversionValueObserverTest extends TestCase
         $this->_registryMock = $this->createMock(Registry::class);
         $this->_collectionMock = $this->createMock(Collection::class);
         $this->_eventObserverMock = $this->createMock(Observer::class);
-        $this->_eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getOrderIds'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getOrderIds']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(
@@ -75,7 +79,7 @@ class SetConversionValueObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForDisabled()
+    public static function dataProviderForDisabled()
     {
         return [[false, false], [false, true], [true, false]];
     }
@@ -83,9 +87,9 @@ class SetConversionValueObserverTest extends TestCase
     /**
      * @param bool $isActive
      * @param bool $isDynamic
-     * @dataProvider dataProviderForDisabled
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('dataProviderForDisabled')]
     public function testSetConversionValueWhenAdwordsDisabled($isActive, $isDynamic)
     {
         $this->_helperMock->expects(
@@ -108,16 +112,16 @@ class SetConversionValueObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForOrdersIds()
+    public static function dataProviderForOrdersIds()
     {
         return [[[]], ['']];
     }
 
     /**
      * @param $ordersIds
-     * @dataProvider dataProviderForOrdersIds
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('dataProviderForOrdersIds')]
     public function testSetConversionValueWhenAdwordsActiveWithoutOrdersIds($ordersIds)
     {
         $this->_helperMock->expects($this->once())->method('isGoogleAdwordsActive')->willReturn(true);
@@ -156,7 +160,7 @@ class SetConversionValueObserverTest extends TestCase
             $this->_eventMock
         );
 
-        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
+        $orderMock = $this->createMock(OrderInterface::class);
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
 
         $iteratorMock = new \ArrayIterator([$orderMock]);
@@ -173,15 +177,14 @@ class SetConversionValueObserverTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'register'
-        )->withConsecutive(
-            [
-                Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
-                $conversionCurrency
-            ],
-            [
-                Data::CONVERSION_VALUE_REGISTRY_NAME,
-                $conversionValue,
-            ]
+        ) ->willReturnCallback(
+            function ($arg1, $arg2) use ($conversionCurrency, $conversionValue) {
+                if ($arg1 === Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME && $arg2 == $conversionCurrency) {
+                    return null;
+                } elseif ($arg1 === Data::CONVERSION_VALUE_REGISTRY_NAME && $arg2 == $conversionValue) {
+                    return null;
+                }
+            }
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));

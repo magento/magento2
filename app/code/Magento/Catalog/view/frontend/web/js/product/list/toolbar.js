@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -144,6 +144,10 @@ define([
                 paramData = this.getUrlParams(),
                 currentPage = this.getCurrentPage(),
                 form, params, key, input, formKey, newPage;
+
+            if (currentPage > 1 && paramName === this.options.mode) {
+                delete paramData[this.options.page];
+            }
 
             if (currentPage > 1 && paramName === this.options.limit) {
                 newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;

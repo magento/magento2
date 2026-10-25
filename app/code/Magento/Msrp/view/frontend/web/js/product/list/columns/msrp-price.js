@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -22,7 +22,9 @@ define([
                 dialogContentClass: 'active',
                 closeOnMouseLeave: false,
                 autoPosition: true,
-                dialogClass: 'popup map-popup-wrapper',
+                classes: {
+                    'ui-dialog': 'popup map-popup-wrapper'
+                },
                 position: {
                     my: 'left top',
                     collision: 'fit none',
@@ -51,7 +53,7 @@ define([
             this.popupOptions.triggerTarget = $trigger;
 
             $popup.dropdownDialog(this.popupOptions)
-                  .dropdownDialog('open');
+                .dropdownDialog('open');
         },
 
         /**
@@ -87,6 +89,26 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getPrice.
+         *
+         * @param {Object} row
+         * @returns {String}
+         */
+        getPriceUnsanitizedHtml: function (row) {
+            return this.getPrice(row);
+        },
+
+        /**
+         * Get msrp_price property of a price.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} final price html
+         */
+        getMsrpPriceUnsanitizedHtml: function (row) {
+            return this.getPrice(row)['msrp_price'];
+        },
+
+        /**
          * Returns path to the columns' body template.
          *
          * @returns {String}
@@ -114,12 +136,30 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getMsrpPriceMessage.
+         *
+         * @returns {String}
+         */
+        getMsrpPriceMessageUnsanitizedHtml: function (row) {
+            return this.getMsrpPriceMessage(row);
+        },
+
+        /**
          * Get msrp price supporting text, when actual price is hidden.
          *
          * @returns {String}
          */
         getExplanationMessage: function (row) {
             return this.getPrice(row)['explanation_message'];
+        },
+
+        /**
+         * UnsanitizedHtml version of getExplanationMessage.
+         *
+         * @returns {String}
+         */
+        getExplanationMessageUnsanitizedHtml: function (row) {
+            return this.getExplanationMessage(row);
         }
     });
 });

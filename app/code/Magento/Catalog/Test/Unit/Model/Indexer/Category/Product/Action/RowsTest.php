@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Action;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Config;
@@ -107,22 +109,25 @@ class RowsTest extends TestCase
      */
     private $rowsModel;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp() : void
     {
-        $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
-        $this->resource->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Visibility::class,
+                $this->createMock(Visibility::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
+        $this->workingStateProvider = $this->createMock(WorkingStateProvider::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->resource->method('getConnection')->willReturn($this->connection);
+        $this->select = $this->createMock(Select::class);
         $this->select->expects($this->any())
             ->method('from')
             ->willReturnSelf();
@@ -138,33 +143,16 @@ class RowsTest extends TestCase
         $this->select->expects($this->any())
             ->method('columns')
             ->willReturnSelf();
-        $this->connection->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->queryGenerator = $this->getMockBuilder(QueryGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cacheContext = $this->getMockBuilder(CacheContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventManager = $this->getMockBuilder(EventManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
-        $this->tableMaintainer = $this->getMockBuilder(TableMaintainer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connection->method('select')->willReturn($this->select);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->config = $this->createMock(Config::class);
+        $this->queryGenerator = $this->createMock(QueryGenerator::class);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->cacheContext = $this->createMock(CacheContext::class);
+        $this->eventManager = $this->createMock(EventManagerInterface::class);
+        $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
+        $this->indexer = $this->createMock(IndexerInterface::class);
+        $this->tableMaintainer = $this->createMock(TableMaintainer::class);
 
         $this->rowsModel = new Rows(
             $this->resource,
@@ -180,76 +168,41 @@ class RowsTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithIndexerWorking() : void
     {
         $categoryId = '1';
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->any())
-            ->method('getRootCategoryId')
-            ->willReturn($categoryId);
-        $store->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
+        $store = $this->createMock(Store::class);
+        $store->method('getRootCategoryId')->willReturn($categoryId);
+        $store->method('getId')->willReturn(1);
 
-        $attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->config->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($attribute);
+        $attribute = $this->createMock(AbstractAttribute::class);
+        $this->config->method('getAttribute')->willReturn($attribute);
 
-        $table = $this->getMockBuilder(Table::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->connection->expects($this->any())
-            ->method('newTable')
-            ->willReturn($table);
+        $table = $this->createMock(Table::class);
+        $this->connection->method('newTable')->willReturn($table);
 
-        $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
-        $this->metadataPool->expects($this->any())
-            ->method('getMetadata')
-            ->willReturn($metadata);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPool->method('getMetadata')->willReturn($metadata);
 
-        $this->connection->expects($this->any())
-            ->method('fetchAll')
-            ->willReturn([]);
+        $this->connection->method('fetchAll')->willReturn([]);
 
-        $this->connection->expects($this->any())
-            ->method('fetchOne')
-            ->willReturn($categoryId);
-        $this->indexerRegistry->expects($this->at(0))
+        $this->connection->method('fetchOne')->willReturn($categoryId);
+        $this->indexerRegistry
             ->method('get')
-            ->with(ProductCategoryIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(1))
-            ->method('get')
-            ->with(ProductCategoryIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(2))
-            ->method('get')
-            ->with(CategoryProductIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(3))
-            ->method('get')
-            ->with(ProductCategoryIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexerRegistry->expects($this->at(4))
-            ->method('get')
-            ->with(CategoryProductIndexer::INDEXER_ID)
-            ->willReturn($this->indexer);
-        $this->indexer->expects($this->any())
-            ->method('getId')
-            ->willReturn(ProductCategoryIndexer::INDEXER_ID);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [ProductCategoryIndexer::INDEXER_ID] => $this->indexer,
+                [CategoryProductIndexer::INDEXER_ID] => $this->indexer
+            });
+
+        $this->indexer->method('getId')->willReturn(ProductCategoryIndexer::INDEXER_ID);
         $this->workingStateProvider->expects($this->any())
             ->method('isWorking')
             ->with(ProductCategoryIndexer::INDEXER_ID)
             ->willReturn(true);
-        $this->storeManager->expects($this->any())
-            ->method('getStores')
-            ->willReturn([$store]);
+        $this->storeManager->method('getStores')->willReturn([$store]);
 
         $this->connection->expects($this->once())
             ->method('delete');

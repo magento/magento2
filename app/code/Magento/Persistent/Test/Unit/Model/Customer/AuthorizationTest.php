@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\Customer;
 
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Persistent\Helper\Session as PersistentSession;
 use Magento\Persistent\Model\Customer\Authorization as PersistentAuthorization;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Model\Customer\AuthorizationComposite as CustomerAuthorizationComposite;
@@ -21,6 +23,8 @@ use Magento\Customer\Model\Customer\AuthorizationComposite as CustomerAuthorizat
  */
 class AuthorizationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PersistentSession|MockObject
      */
@@ -47,14 +51,13 @@ class AuthorizationTest extends TestCase
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
-            ->onlyMethods(['isPersistent'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->onlyMethods(['isLoggedIn'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            ['getIsCustomerEmulated', 'getCustomerId']
+        );
 
         $this->persistentCustomerAuthorization = new PersistentAuthorization(
             $this->customerSessionMock,
@@ -69,44 +72,67 @@ class AuthorizationTest extends TestCase
     /**
      * Validate if isAuthorized() will return proper permission value for logged in/ out persistent customers
      *
-     * @dataProvider persistentLoggedInCombinations
      * @param bool $isPersistent
-     * @param bool $isLoggedIn
-     * @param bool $isAllowedExpectation
+     * @param int|null $customerId
+     * @param bool|null $isCustomerEmulated
+     * @param bool $shouldBeAllowed
      */
+    #[DataProvider('persistentLoggedInCombinations')]
     public function testIsAuthorized(
         bool $isPersistent,
-        bool $isLoggedIn,
-        bool $isAllowedExpectation
+        ?int $customerId,
+        ?bool $isCustomerEmulated,
+        bool $shouldBeAllowed
     ): void {
-        $this->persistentSessionMock->method('isPersistent')->willReturn($isPersistent);
-        $this->customerSessionMock->method('isLoggedIn')->willReturn($isLoggedIn);
+        $this->persistentSessionMock->expects($this->any())->method('isPersistent')->willReturn($isPersistent);
+        $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
+        
+        // getIsCustomerEmulated() is only called when isPersistent is true AND customerId is truthy
+        // This is due to short-circuit evaluation in the Authorization::isAllowed() method
+        if ($isPersistent && $customerId) {
+            $this->customerSessionMock->expects($this->once())
+                ->method('getIsCustomerEmulated')
+                ->willReturn($isCustomerEmulated);
+        } else {
+            $this->customerSessionMock->expects($this->never())
+                ->method('getIsCustomerEmulated');
+        }
+
         $isAllowedResult = $this->customerAuthorizationComposite->isAllowed('self');
 
-        $this->assertEquals($isAllowedExpectation, $isAllowedResult);
+        $this->assertEquals($shouldBeAllowed, $isAllowedResult);
     }
 
     /**
      * @return array
      */
-    public function persistentLoggedInCombinations(): array
+    public static function persistentLoggedInCombinations(): array
     {
         return [
-            [
-                true,
-                false,
-                false
+            'Emulated persistent Customer ID#1 should not be authorized' => [
+                'isPersistent' => true,
+                'customerId' => 1,
+                'isCustomerEmulated' => true,
+                'shouldBeAllowed' => false
             ],
-            [
-                true,
-                true,
-                true
+            'Logged-in persistent Customer ID#1 should be authorized' => [
+                'isPersistent' => true,
+                'customerId' => 1,
+                'isCustomerEmulated' => false,
+                'shouldBeAllowed' => true
             ],
-            [
-                false,
-                false,
-                true
+            'Logged-in Customer ID#1 without persistency should be authorized' => [
+                'isPersistent' => false,
+                'customerId' => 1,
+                'isCustomerEmulated' => false,
+                'shouldBeAllowed' => true
             ],
+            'Persistent Customer ID/ isCustomerEmulated = null (API Request) should be authorized' => [
+                'isPersistent' => true,
+                'customerId' => null,
+                'isCustomerEmulated' => null,
+                'shouldBeAllowed' => true
+            ]
         ];
     }
 }

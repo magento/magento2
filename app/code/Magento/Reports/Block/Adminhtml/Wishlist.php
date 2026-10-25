@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml;
@@ -10,7 +10,7 @@ namespace Magento\Reports\Block\Adminhtml;
  * Adminhtml wishlist report page content block
  *
  * @deprecated 100.3.3
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @see Nothing
  */
 class Wishlist extends \Magento\Backend\Block\Template
 {

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\CollectionFactory;
 use Magento\Framework\Mview\View\StateInterface;
+use Magento\Framework\Mview\View\Subscription;
 
 /**
  * Class for removing old triggers that were created by mview
@@ -30,6 +32,16 @@ class TriggerCleaner
      * @var ViewFactory
      */
     private $viewFactory;
+
+    /**
+     * @var array
+     */
+    private $processedTriggers = [];
+
+    /**
+     * @var array
+     */
+    private $DbTriggers = [];
 
     /**
      * @param CollectionFactory $viewCollectionFactory
@@ -54,48 +66,91 @@ class TriggerCleaner
      */
     public function removeTriggers(): bool
     {
+        $this->getDbTriggers();
+
         // Get list of views that are enabled
         $viewCollection = $this->viewCollectionFactory->create();
         $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
-        // Unsubscribe existing view to remove triggers from db
+        // Check triggers declaration for the enabled views and update them if any changes
         foreach ($viewList as $view) {
-            $view->unsubscribe();
+            $subscriptions = $view->getSubscriptions();
+            foreach ($subscriptions as $subscriptionConfig) {
+                /* @var $subscription Subscription */
+                $subscription = $view->initSubscriptionInstance($subscriptionConfig);
+                $viewTriggers = $subscription->create(false)->getTriggers();
+                $this->processViewTriggers($viewTriggers, $subscription);
+            }
         }
 
         // Remove any remaining triggers from db that are not linked to a view
-        $triggerTableNames = $this->getTableNamesWithTriggers();
-        foreach ($triggerTableNames as $tableName) {
-            $view = $this->createViewByTableName($tableName);
-            $view->unsubscribe();
-            $view->getState()->delete();
-        }
-
-        // Restore the previous state of the views to add triggers back to db
-        foreach ($viewList as $view) {
-            $view->subscribe();
+        $remainingTriggers = array_diff_key($this->DbTriggers, $this->processedTriggers);
+        foreach ($remainingTriggers as $trigger) {
+            $view = $this->createViewByTableName($trigger['EVENT_OBJECT_TABLE']);
+            if ($view->getActionClass()) {
+                $view->unsubscribe();
+                $view->getState()->delete();
+            }
         }
 
         return true;
     }
 
     /**
-     * Retrieve list of table names that have triggers
+     * Process and update View Triggers if changes were made
      *
-     * @return array
+     * @param array $viewTriggers
+     * @param Subscription $subscription
+     * @return void
      */
-    private function getTableNamesWithTriggers(): array
+    private function processViewTriggers(array $viewTriggers, Subscription $subscription): void
+    {
+        foreach ($viewTriggers as $viewTrigger) {
+            if ($this->shouldUpdateTrigger($viewTrigger)) {
+                $subscription->saveTrigger($viewTrigger);
+            }
+            $this->processedTriggers[$viewTrigger->getName()] = true;
+        }
+    }
+
+    /**
+     * Determine whether an existing DB trigger needs to be recreated.
+     *
+     * @param Trigger $viewTrigger
+     * @return bool
+     */
+    private function shouldUpdateTrigger(Trigger $viewTrigger): bool
+    {
+        if (!array_key_exists($viewTrigger->getName(), $this->DbTriggers)) {
+            return true;
+        }
+
+        $expectedStatement = $this->normalizeTriggerStatement(
+            implode(PHP_EOL, $this->getStatementsFromViewTrigger($viewTrigger))
+        );
+        $dbStatement = $this->normalizeTriggerStatement(
+            $this->DbTriggers[$viewTrigger->getName()]['ACTION_STATEMENT']
+        );
+
+        return $expectedStatement !== $dbStatement;
+    }
+
+    /**
+     * Retrieve list of all triggers from DB
+     *
+     * @return void
+     */
+    private function getDbTriggers(): void
     {
         $connection = $this->resource->getConnection();
         $dbName = $this->resource->getSchemaName(ResourceConnection::DEFAULT_CONNECTION);
         $sql = $connection->select()
             ->from(
                 ['information_schema.TRIGGERS'],
-                ['EVENT_OBJECT_TABLE']
+                ['TRIGGER_NAME', 'ACTION_STATEMENT', 'EVENT_OBJECT_TABLE']
             )
-            ->distinct(true)
             ->where('TRIGGER_SCHEMA = ?', $dbName);
-        return $connection->fetchCol($sql);
+        $this->DbTriggers = $connection->fetchAssoc($sql);
     }
 
     /**
@@ -123,5 +178,46 @@ class TriggerCleaner
         $view->getState()->setMode(StateInterface::MODE_ENABLED);
 
         return $view;
+    }
+
+    /**
+     * Get trigger statements for further analyze
+     *
+     * @param Trigger $trigger
+     * @return string[]
+     */
+    private function getStatementsFromViewTrigger(Trigger $trigger): array
+    {
+        $statements = $trigger->getStatements();
+
+        //Check for staged entity attribute subscription
+        $statement = array_shift($statements);
+        if (str_contains($statement, 'SET')) {
+            $splitStatements = explode(PHP_EOL, $statement);
+            $statements += $splitStatements;
+        } else {
+            array_unshift($statements, $statement);
+        }
+
+        return $statements;
+    }
+
+    /**
+     * Normalize trigger statements so equivalent SQL can be compared reliably.
+     *
+     * @param string $statement
+     * @return string
+     */
+    private function normalizeTriggerStatement(string $statement): string
+    {
+        $statement = trim($statement);
+
+        if (preg_match('/^BEGIN\s+(.*)\s+END;?$/is', $statement, $matches)) {
+            $statement = $matches[1];
+        }
+
+        $statement = preg_replace('/\s*;\s*/', ';', $statement);
+
+        return trim((string)preg_replace('/\s+/', ' ', $statement));
     }
 }

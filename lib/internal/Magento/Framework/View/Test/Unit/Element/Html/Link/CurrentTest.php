@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Html\Link\Current;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Element\Html\Link\Current
@@ -52,7 +53,9 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test get Url
+     * Test get Url.
+     *
+     * @return void
      */
     public function testGetUrl(): void
     {
@@ -62,7 +65,7 @@ class CurrentTest extends TestCase
         $this->_urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->with($pathStub)
-            ->will($this->returnValue($urlStub));
+            ->willReturn($urlStub);
 
         $this->currentLink->setPath($pathStub);
 
@@ -70,68 +73,87 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test if set current
+     * Test if set current.
+     *
+     * @return void
      */
     public function testIsCurrentIfIsset(): void
     {
+        $pathStub = '';
+        $this->_urlBuilderMock->method('getUrl')
+            ->with($pathStub)
+            ->willReturn('http://example.com/');
+        $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());
     }
 
     /**
-     * Test if the current url is the same as link path
+     * Test if the current url is the same as link path.
      *
      * @param string $pathStub
      * @param string $urlStub
      * @param array $request
      * @param bool $expected
-     * @dataProvider isCurrentDataProvider
-     */
+     *
+     * @return void     */
+    #[DataProvider('isCurrentDataProvider')]
     public function testIsCurrent($pathStub, $urlStub, $request, $expected): void
     {
         $this->_requestMock->expects($this->any())
             ->method('getPathInfo')
-            ->will($this->returnValue($request['pathInfoStub']));
+            ->willReturn($request['pathInfoStub']);
         $this->_requestMock->expects($this->any())
             ->method('getModuleName')
-            ->will($this->returnValue($request['moduleStub']));
+            ->willReturn($request['moduleStub']);
         $this->_requestMock->expects($this->any())
             ->method('getControllerName')
-            ->will($this->returnValue($request['controllerStub']));
+            ->willReturn($request['controllerStub']);
         $this->_requestMock->expects($this->any())
             ->method('getActionName')
-            ->will($this->returnValue($request['actionStub']));
+            ->willReturn($request['actionStub']);
 
-        $this->_urlBuilderMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with($pathStub)
-            ->will($this->returnValue($urlStub));
-        $this->_urlBuilderMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with($request['mcaStub'])
-            ->will($this->returnValue($request['getUrl']));
+        $withArgs = $willReturnArgs = [];
+
+        $withArgs[] = [$pathStub];
+        $willReturnArgs[] = $urlStub;
+        $withArgs[] = [$request['mcaStub']];
+        $willReturnArgs[] = $request['getUrl'];
+        $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
 
         if ($request['mcaStub'] == '') {
-            $this->_urlBuilderMock->expects($this->at(2))
-                ->method('getUrl')
-                ->with('*/*/*', ['_current' => false, '_use_rewrite' => true])
-                ->will($this->returnValue($urlStub));
+            $willReturnArgs[] = $urlStub;
+        } else {
+            $willReturnArgs[] = '';
         }
+        $this->_urlBuilderMock
+            ->method('getUrl')
+            ->willReturnCallback(function ($arg) use ($withArgs, $willReturnArgs) {
+                static $callCount = 0;
+                $currentWithArg = $withArgs[$callCount];
+                $currentReturnArg = (array) $willReturnArgs[$callCount];
+                $callCount++;
+                if ($arg == $currentWithArg[0]) {
+                    return  $currentReturnArg;
+                }
+            });
 
         $this->currentLink->setPath($pathStub);
         $this->assertEquals($expected, $this->currentLink->isCurrent());
     }
 
     /**
-     * Data provider for is current
+     * Data provider for is current.
+     *
+     * @return array
      */
-    public function isCurrentDataProvider(): array
+    public static function isCurrentDataProvider(): array
     {
         return [
             'url with MCA' => [
                 'pathStub' => 'test/path',
                 'urlStub' => 'http://example.com/asdasd',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '/test/index/',
                     'moduleStub' => 'test',
                     'controllerStub' => 'index',
@@ -139,12 +161,12 @@ class CurrentTest extends TestCase
                     'mcaStub' => 'test/index',
                     'getUrl' => 'http://example.com/asdasd/'
                 ],
-                'excepted' => true
+                'expected' => true
             ],
             'url with CMS' => [
                 'pathStub' => 'test',
                 'urlStub' => 'http://example.com/test',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '//test//',
                     'moduleStub' => 'cms',
                     'controllerStub' => 'page',
@@ -152,12 +174,12 @@ class CurrentTest extends TestCase
                     'mcaStub' => '',
                     'getUrl' => 'http://example.com/'
                 ],
-                'excepted' => true
+                'expected' => true
             ],
             'Test if is current false' => [
                 'pathStub' => 'test/path',
                 'urlStub' => 'http://example.com/tests',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '/test/index/',
                     'moduleStub' => 'test',
                     'controllerStub' => 'index',
@@ -165,7 +187,7 @@ class CurrentTest extends TestCase
                     'mcaStub' => 'test/index',
                     'getUrl' => 'http://example.com/asdasd/'
                 ],
-                'excepted' => false
+                'expected' => false
             ]
         ];
     }

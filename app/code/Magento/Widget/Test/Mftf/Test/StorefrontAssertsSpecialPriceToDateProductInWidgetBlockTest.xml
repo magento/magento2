@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertsSpecialPriceToDateProductInWidgetBlockTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Catalog Products list widget"/>
+            <title value="Storefront Asserts widget with condition Special date to"/>
+            <description value="Testcase verifies Only 1 product which have special price to date have to be displayed in widget block."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4492"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">9</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">1</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createThirdSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Open Product On Admin Side-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPage">
+                <argument name="productId" value="$createFirstSimpleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingDialog"/>
+            <generateDate date="now" format="m/d/Y" stepKey="generateTodayDate"/>
+            <generateDate date="+1 day" format="m/d/Y" stepKey="generateTomorrowDate"/>
+            <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="waitForSpecialPriceToBeVisible"/>
+            <fillField userInput="1" selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" stepKey="fillSpecialPrice"/>
+            <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPriceFrom}}" stepKey="waitForSpecialPriceFromToBeVisible"/>
+            <fillField userInput="{$generateTodayDate}" selector="{{AdminProductFormAdvancedPricingSection.specialPriceFrom}}" stepKey="fillSpecialPriceFrom"/>
+            <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.specialPriceTo}}" stepKey="waitForSpecialPriceToToBeVisible"/>
+            <fillField userInput="{$generateTomorrowDate}" selector="{{AdminProductFormAdvancedPricingSection.specialPriceTo}}" stepKey="fillSpecialPriceTo"/>
+            <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDone"/>
+            <!--Save the product-->
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        </before>
+        <after>
+            <!--Delete widget catalog product list-->
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidgetCatalogProductList">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+        </after>
+        <actionGroup ref="AdminCreateCatalogProductsListWidgetWithTwoConditionsActionGroup" stepKey="createProductListWidget">
+            <argument name="widget" value="CatalogProductsListWidget"/>
+            <argument name="title" value="Some Title"/>
+            <argument name="displayPageControl" value="1"/>
+            <argument name="numberOfProductsToDisplay" value="10"/>
+            <argument name="condition" value="Category"/>
+            <argument name="conditionsOperator" value="is"/>
+            <argument name="conditionParameter" value="$createCategory.id$"/>
+            <argument name="secondCondition" value="Special Price"/>
+            <argument name="secondConditionOperator" value="is"/>
+            <argument name="secondConditionParameter" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveWidget"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Open category page -->
+        <!-- Navigates to category page -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.widgetProduct($$createFirstSimpleProduct.name$$)}}" stepKey="assertFirstSimpleProduct"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryProductSection.widgetProduct($$createSecondSimpleProduct.name$$)}}" stepKey="assertSecondSimpleProductIsNotAvaiable"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryProductSection.widgetProduct($$createThirdSimpleProduct.name$$)}}" stepKey="assertThirdSimpleProductIsNotAvaiable"/>
+    </test>
+</tests>

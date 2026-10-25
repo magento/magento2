@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
@@ -20,50 +20,23 @@ use Magento\Quote\Model\QuoteRepository;
 class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 {
     /**
-     * @var QuoteIdToMaskedQuoteIdInterface
-     */
-    private $quoteIdToMaskedQuoteId;
-
-    /**
-     * @var GetCartForUser
-     */
-    private $getCartForUser;
-
-    /**
-     * @var AssignShippingAddressToCart
-     */
-    private $assignShippingAddressToCart;
-
-    /**
-     * @var GetShippingAddress
-     */
-    private $getShippingAddress;
-
-    /**
-     * @var QuoteRepository
-     */
-    private $quoteRepository;
-
-    /**
+     * SetShippingAddressesOnCart Constructor
+     *
      * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
      * @param GetCartForUser $getCartForUser
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
-     * @param QuoteRepository|null $quoteRepository
+     * @param QuoteRepository $quoteRepository
+     * @param Uid $uidEncoder
      */
     public function __construct(
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
-        GetCartForUser $getCartForUser,
-        AssignShippingAddressToCart $assignShippingAddressToCart,
-        GetShippingAddress $getShippingAddress,
-        QuoteRepository $quoteRepository = null
+        private readonly QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        private readonly GetCartForUser                  $getCartForUser,
+        private readonly AssignShippingAddressToCart     $assignShippingAddressToCart,
+        private readonly GetShippingAddress              $getShippingAddress,
+        private readonly QuoteRepository                 $quoteRepository,
+        private readonly Uid                             $uidEncoder
     ) {
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
-        $this->getCartForUser = $getCartForUser;
-        $this->assignShippingAddressToCart = $assignShippingAddressToCart;
-        $this->getShippingAddress = $getShippingAddress;
-        $this->quoteRepository = $quoteRepository
-            ?? ObjectManager::getInstance()->get(QuoteRepository::class);
     }
 
     /**
@@ -77,6 +50,14 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             );
         }
         $shippingAddressInput = current($shippingAddressesInput) ?? [];
+
+        if (isset($shippingAddressInput['customer_address_uid'])) {
+            $shippingAddressInput['customer_address_id'] = (int) $this->uidEncoder->decode(
+                (string) $shippingAddressInput['customer_address_uid']
+            );
+            unset($shippingAddressInput['customer_address_uid']);
+        }
+
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
 
         if (!$customerAddressId

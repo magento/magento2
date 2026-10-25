@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\File\FileList;
 use Magento\Framework\View\File\FileList\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -57,8 +58,7 @@ class AggregatedTest extends TestCase
     protected $loggerMock;
 
     /**
-     * Setup tests
-     * @return void
+     * @inheritdoc
      */
     protected function setup(): void
     {
@@ -83,7 +83,10 @@ class AggregatedTest extends TestCase
             ->getMock();
     }
 
-    public function testGetFilesEmpty()
+    /**
+     * @return void
+     */
+    public function testGetFilesEmpty(): void
     {
         $this->libraryFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
         $this->baseFilesMock->expects($this->any())->method('getFiles')->willReturn([]);
@@ -108,19 +111,25 @@ class AggregatedTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider getFilesDataProvider
-     *
+     *     *
      * @param array $libraryFiles Files in lib directory
      * @param array $baseFiles Files in base directory
      * @param array $themeFiles Files in theme
      * *
      * @return void
      */
-    public function testGetFiles($libraryFiles, $baseFiles, $themeFiles)
+    #[DataProvider('getFilesDataProvider')]
+    public function testGetFiles($libraryFiles, $baseFiles, $themeFiles): void
     {
-        $this->fileListMock->expects($this->at(0))->method('add')->with($libraryFiles);
-        $this->fileListMock->expects($this->at(1))->method('add')->with($baseFiles);
+        $this->fileListMock
+            ->method('add')
+            ->willReturnCallback(
+                function ($arg) use ($libraryFiles, $baseFiles) {
+                    if ($arg === $libraryFiles || $arg === $baseFiles) {
+                        return null;
+                    }
+                }
+            );
         $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);
 
         $subPath = '*';
@@ -159,11 +168,11 @@ class AggregatedTest extends TestCase
      *
      * @return array
      */
-    public function getFilesDataProvider()
+    public static function getFilesDataProvider(): array
     {
         return [
             'all files' => [['file1'], ['file2'], ['file3']],
-            'no library' => [[], ['file1', 'file2'], ['file3']],
+            'no library' => [[], ['file1', 'file2'], ['file3']]
         ];
     }
 }

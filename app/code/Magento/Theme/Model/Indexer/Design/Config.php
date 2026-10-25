@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Indexer\Design;
 
@@ -55,6 +55,11 @@ class Config implements ActionInterface
      * @var HandlerPool
      */
     protected $handlerPool;
+
+    /**
+     * @var array
+     */
+    private $data = [];
 
     /**
      * Config constructor
@@ -169,7 +174,7 @@ class Config implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin'] =
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin']
                         ?: $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
-                if ($fieldsetName != 0) {
+                if ((int) $fieldsetName !== 0) {
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'] =
                         $this->data['fieldsets'][$fieldsetName]['name'] . '_'
                         . $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];

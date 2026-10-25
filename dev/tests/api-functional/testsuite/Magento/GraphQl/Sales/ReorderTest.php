@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -185,10 +188,16 @@ class ReorderTest extends GraphQlAbstract
         $expectedResponse['cart']['items'][0]['quantity'] = 20;
 
         $this->assertResponseFields($response['reorderItems'], $expectedResponse);
+        $customer = ObjectManager::getInstance()->get(CustomerRepository::class)
+            ->get(self::CUSTOMER_EMAIL);
+        $quoteRepository = ObjectManager::getInstance()->get(QuoteRepository::class);
+        $quote = $quoteRepository->getActiveForCustomer($customer->getId());
+        $quote->setIsActive(false);
+        $quoteRepository->save($quote);
     }
 
     /**
-     * Assert that simple product is not available.
+     * Assert that simple product is not available
      */
     private function assertProductNotAvailable()
     {
@@ -196,7 +205,9 @@ class ReorderTest extends GraphQlAbstract
         $expectedResponse = [
             'userInputErrors' => [
                 [
-                    'path' => ['orderNumber'],
+                    'path' => [
+                        'orderNumber'
+                    ],
                     'code' => 'NOT_SALABLE',
                 ],
             ],

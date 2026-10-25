@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,18 +42,8 @@ class StockConfigurationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->getMockForAbstractClass(
-            ConfigInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->scopeConfig = $this->getMockForAbstractClass(
-            ScopeConfigInterface::class,
-            ['isSetFlag'],
-            '',
-            false
-        );
+        $this->config = $this->createMock(ConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->minsaleqtyHelper = $this->createMock(Minsaleqty::class);
 

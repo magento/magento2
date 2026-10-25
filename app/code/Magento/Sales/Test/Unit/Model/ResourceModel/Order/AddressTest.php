@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Address\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Address;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -58,7 +59,7 @@ class AddressTest extends TestCase
     protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Address::class,
+            OrderAddress::class,
             ['getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
         $this->orderMock = $this->createPartialMock(Order::class, ['getId']);
@@ -98,10 +99,6 @@ class AddressTest extends TestCase
             ->method('validate')
             ->with($this->addressMock)
             ->willReturn([]);
-        $this->entitySnapshotMock->expects($this->once())
-            ->method('isModified')
-            ->with($this->addressMock)
-            ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
             ->willReturn(1);
@@ -116,10 +113,6 @@ class AddressTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We can\'t save the address:');
-        $this->entitySnapshotMock->expects($this->once())
-            ->method('isModified')
-            ->with($this->addressMock)
-            ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
             ->willReturn(true);

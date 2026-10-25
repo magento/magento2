@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model\Widget\Grid\Row;
 
@@ -36,11 +36,11 @@ class UrlGeneratorFactory
      */
     public function createUrlGenerator($generatorClassName, array $arguments = [])
     {
-        $rowUrlGenerator = $this->_objectManager->create($generatorClassName, $arguments);
-        if (false === $rowUrlGenerator instanceof \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface) {
+        // Validate the type BEFORE instantiation.
+        if (!is_a($generatorClassName, \Magento\Backend\Model\Widget\Grid\Row\GeneratorInterface::class, true)) {
             throw new \InvalidArgumentException('Passed wrong parameters');
         }
 
-        return $rowUrlGenerator;
+        return $this->_objectManager->create($generatorClassName, $arguments);
     }
 }

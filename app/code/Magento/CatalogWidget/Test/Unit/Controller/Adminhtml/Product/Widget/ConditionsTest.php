@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,15 @@ use Magento\CatalogWidget\Model\Rule\Condition\Product;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConditionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Conditions
      */
@@ -44,13 +47,16 @@ class ConditionsTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->rule = $this->createMock(Rule::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setBody', 'sendResponse'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setBody']
+        );
         $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -70,28 +76,32 @@ class ConditionsTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $type = 'Magento\CatalogWidget\Model\Rule\Condition\Product|attribute_set_id';
-        $this->request->expects($this->at(0))
-            ->method('getParam')->with('id')->willReturn('1--1');
-        $this->request->expects($this->at(1))
-            ->method('getParam')->with('type')->willReturn($type);
-        $this->request->expects($this->at(2))
-            ->method('getParam')->with('form')
-            ->willReturn('request_form_param_value');
+        $this->request
+            ->method('getParam')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['id'] => '1--1',
+                ['type'] => $type,
+                ['form'] => 'request_form_param_value'
+            });
 
-        $condition = $this->getMockBuilder(Product::class)
-            ->setMethods([
+        $condition = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'asHtmlRecursive',
                 'setId',
                 'setType',
                 'setRule',
                 'setPrefix',
                 'setAttribute',
-                'asHtmlRecursive',
-                'setJsFormObject',
-            ])->disableOriginalConstructor()
-            ->getMock();
+                'setJsFormObject'
+            ]
+        );
         $condition->expects($this->once())
             ->method('setId')->with('1--1')->willReturnSelf();
         $condition->expects($this->once())

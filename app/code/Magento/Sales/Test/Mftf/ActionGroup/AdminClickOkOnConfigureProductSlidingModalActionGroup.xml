@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickOkOnConfigureProductSlidingModalActionGroup">
+        <annotations>
+            <description>Clicks the "Ok" button on the "Configure Product" sliding modal on the Create Order page</description>
+        </annotations>
+
+       <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
+       <waitForPageLoad stepKey="waitForAddingConfiguredProduct"/>
+        
+    </actionGroup>
+</actionGroups>

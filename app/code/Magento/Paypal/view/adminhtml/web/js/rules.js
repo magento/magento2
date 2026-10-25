@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 define([
     'uiClass',
@@ -161,7 +161,7 @@ define([
             var solutionConfiguration = solution.find(buttonConfiguration);
 
             unlock || typeof unlock === 'undefined' ?
-                solutionConfiguration.removeClass('disabled').removeAttr('disabled') :
+                solutionConfiguration.removeClass('disabled').prop('disabled', false) :
                 solutionConfiguration.addClass('disabled').attr('disabled', 'disabled');
         },
 

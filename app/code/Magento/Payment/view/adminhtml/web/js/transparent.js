@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 /* global FORM_KEY */
@@ -142,7 +142,7 @@ define([
                 .on('submit', function (event) {
                     event.stopPropagation();
                 });
-            $(tmpl).appendTo(iframe).submit();
+            $(tmpl).appendTo(iframe).trigger('submit');
             iframe.html('');
         },
 

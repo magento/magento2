@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 /**
  * Entity attribute option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -160,5 +159,23 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $select;
+    }
+
+    /**
+     * Get all store labels for a given option ID
+     *
+     * @param int $optionId
+     * @return array<int, string> [store_id => label]
+     */
+    public function getStoreLabelsByOptionId(int $optionId): array
+    {
+        $connection = $this->getConnection();
+        $table = $this->getTable('eav_attribute_option_value');
+
+        $select = $connection->select()
+            ->from($table, ['store_id', 'value'])
+            ->where('option_id = ?', $optionId);
+
+        return $connection->fetchPairs($select);
     }
 }

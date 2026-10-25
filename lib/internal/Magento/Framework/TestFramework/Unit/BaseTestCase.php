@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\TestFramework\Unit;
 
@@ -50,7 +50,7 @@ abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function booleanDataProvider()
+    public static function booleanDataProvider()
     {
         return [[true], [false]];
     }

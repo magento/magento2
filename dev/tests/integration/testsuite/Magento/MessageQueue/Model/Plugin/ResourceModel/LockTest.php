@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\MessageQueue\Model\Plugin\ResourceModel;
@@ -48,6 +48,8 @@ class LockTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
         $maintenanceMode = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $code = md5('consumer.name-1');
         $this->lock->setMessageCode($code);
         $this->writer->saveLock($this->lock);

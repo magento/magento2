@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation;
+use Magento\Framework\Search\Request\Aggregation\TermBucket;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -46,17 +47,11 @@ class AggregationTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->fieldMapper = $this->createMock(FieldMapperInterface::class);
 
-        $this->requestInterface = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestInterface = $this->createMock(RequestInterface::class);
 
-        $this->requestBucketInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBucketInterface = $this->createMock(BucketInterface::class);
 
         $this->model = $helper->getObject(
             Aggregation::class,
@@ -146,27 +141,21 @@ class AggregationTest extends TestCase
             'type' => 'product',
             'body' => [],
         ];
-        $bucketName = 'price_bucket';
+        $bucketName = 'category_bucket';
+
+        $requestBucketInterface = new TermBucket(
+            $bucketName,
+            'category_ids',
+            []
+        );
 
         $this->requestInterface
             ->method('getAggregation')
-            ->willReturn([$this->requestBucketInterface]);
+            ->willReturn([$requestBucketInterface]);
 
         $this->fieldMapper
             ->method('getFieldName')
             ->willReturn('price');
-
-        $this->requestBucketInterface
-            ->method('getField')
-            ->willReturn('price');
-
-        $this->requestBucketInterface
-            ->method('getType')
-            ->willReturn(BucketInterface::TYPE_TERM);
-
-        $this->requestBucketInterface
-            ->method('getName')
-            ->willReturn($bucketName);
 
         $result = $this->model->build($this->requestInterface, $query);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 ?>
 <?php /** @var  $block \Magento\Sales\Block\Order\View*/?>
@@ -17,7 +17,7 @@
                         <?= /* @noEscape */
                         $block->formatDate($_historyItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?>
                     </dt>
-                    <dd class="comment-content"><?= $block->escapeHtml($_historyItem->getComment()) ?></dd>
+                    <dd class="comment-content"><?= $block->escapeHtml($_historyItem->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></dd>
                 <?php endforeach; ?>
             </dl>
         </div>

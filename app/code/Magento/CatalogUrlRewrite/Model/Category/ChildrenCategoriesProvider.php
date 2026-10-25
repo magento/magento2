@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class ChildrenCategoriesProvider
+class ChildrenCategoriesProvider implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -15,20 +16,32 @@ class ChildrenCategoriesProvider
     protected $childrenIds = [];
 
     /**
+     * Get Children Categories
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
+     * @param int|null $storeId
      * @return \Magento\Catalog\Model\Category[]
      */
-    public function getChildren(Category $category, $recursive = false)
+    public function getChildren(Category $category, $recursive = false, ?int $storeId = null)
     {
-        return $category->isObjectNew() ? [] : $category->getResourceCollection()
+        if ($category->isObjectNew()) {
+            return [];
+        }
+        $collection = $category->getResourceCollection()
             ->addAttributeToSelect('url_path')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('name')
             ->addIdFilter($this->getChildrenIds($category, $recursive));
+        if ($storeId !== null) {
+            $collection->setStoreId($storeId);
+        }
+        return $collection;
     }
 
     /**
+     * Retrieve category children ids
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return int[]
@@ -49,5 +62,13 @@ class ChildrenCategoriesProvider
             $this->childrenIds[$cacheKey] = $connection->fetchCol($select, $bind);
         }
         return $this->childrenIds[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->childrenIds = [];
     }
 }

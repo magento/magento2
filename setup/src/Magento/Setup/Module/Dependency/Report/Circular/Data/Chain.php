@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\Dependency\Report\Circular\Data;
 
@@ -10,6 +10,11 @@ namespace Magento\Setup\Module\Dependency\Report\Circular\Data;
  */
 class Chain
 {
+    /**
+     * @var array
+     */
+    private $modules;
+
     /**
      * Chain construct
      *

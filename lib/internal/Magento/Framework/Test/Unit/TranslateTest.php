@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\App\Language\Dictionary;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\State;
@@ -21,12 +22,14 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
 use Magento\Framework\Translate\ResourceInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\FileSystem as FilesystemView;
 use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,81 +39,109 @@ use PHPUnit\Framework\TestCase;
  */
 class TranslateTest extends TestCase
 {
-    /** @var Translate */
+    use MockCreationTrait;
+    /**
+     * @var Translate
+     */
     protected $translate;
 
-    /** @var DesignInterface|MockObject */
+    /**
+     * @var DesignInterface|MockObject
+     */
     protected $viewDesign;
 
-    /** @var FrontendInterface|MockObject */
+    /**
+     * @var FrontendInterface|MockObject
+     */
     protected $cache;
 
-    /** @var FilesystemView|MockObject */
+    /**
+     * @var FilesystemView|MockObject
+     */
     protected $viewFileSystem;
 
-    /** @var ModuleList|MockObject */
+    /**
+     * @var ModuleList|MockObject
+     */
     protected $moduleList;
 
-    /** @var Reader|MockObject */
+    /**
+     * @var Reader|MockObject
+     */
     protected $modulesReader;
 
-    /** @var ScopeResolverInterface|MockObject */
+    /**
+     * @var ScopeResolverInterface|MockObject
+     */
     protected $scopeResolver;
 
-    /** @var ResourceInterface|MockObject */
+    /**
+     * @var ResourceInterface|MockObject
+     */
     protected $resource;
 
-    /** @var ResolverInterface|MockObject */
+    /**
+     * @var ResolverInterface|MockObject
+     */
     protected $locale;
 
-    /** @var State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     protected $appState;
 
-    /** @var Filesystem|MockObject */
+    /**
+     * @var Filesystem|MockObject
+     */
     protected $filesystem;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $request;
 
-    /** @var Csv|MockObject */
+    /**
+     * @var Csv|MockObject
+     */
     protected $csvParser;
 
-    /** @var  Dictionary|MockObject */
+    /**
+     * @var  Dictionary|MockObject
+     */
     protected $packDictionary;
 
-    /** @var ReadInterface|MockObject */
+    /**
+     * @var ReadInterface|MockObject
+     */
     protected $directory;
 
-    /** @var DriverInterface|MockObject */
+    /**
+     * @var DriverInterface|MockObject
+     */
     protected $fileDriver;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->viewDesign = $this->getMockForAbstractClass(DesignInterface::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->viewDesign = $this->createMock(DesignInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
         $this->viewFileSystem = $this->createMock(FilesystemView::class);
         $this->moduleList = $this->createMock(ModuleList::class);
         $this->modulesReader = $this->createMock(Reader::class);
-        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
-        $this->resource = $this->getMockForAbstractClass(ResourceInterface::class);
-        $this->locale = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->resource = $this->createMock(ResourceInterface::class);
+        $this->locale = $this->createMock(ResolverInterface::class);
         $this->appState = $this->createMock(State::class);
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getParam', 'getControllerModule']
-        );
+        $this->request = $this->createMock(Http::class);
         $this->csvParser = $this->createMock(Csv::class);
         $this->packDictionary = $this->createMock(Dictionary::class);
-        $this->directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->directory = $this->createMock(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->directory);
-        $this->fileDriver = $this->getMockForAbstractClass(DriverInterface::class);
+        $this->fileDriver = $this->createMock(DriverInterface::class);
 
         $this->translate = new Translate(
             $this->viewDesign,
@@ -129,7 +160,7 @@ class TranslateTest extends TestCase
             $this->fileDriver
         );
 
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);
@@ -149,8 +180,10 @@ class TranslateTest extends TestCase
      * @param string $area
      * @param bool $forceReload
      * @param array $cachedData
-     * @dataProvider dataProviderLoadDataCachedTranslation
+     *
+     * @return void
      */
+    #[DataProvider('dataProviderLoadDataCachedTranslation')]
     public function testLoadDataCachedTranslation($area, $forceReload, $cachedData): void
     {
         $this->expectsSetConfig('Magento/luma');
@@ -170,22 +203,24 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderLoadDataCachedTranslation(): array
+    public static function dataProviderLoadDataCachedTranslation(): array
     {
         $cachedData = ['cached 1' => 'translated 1', 'cached 2' => 'translated 2'];
         return [
             ['adminhtml', false, $cachedData],
             ['frontend', false, $cachedData],
-            [null, false, $cachedData],
+            [null, false, $cachedData]
         ];
     }
 
     /**
      * @param string $area
      * @param bool $forceReload
-     * @dataProvider dataProviderForTestLoadData
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('dataProviderForTestLoadData')]
     public function testLoadData($area, $forceReload): void
     {
         $this->expectsSetConfig('Magento/luma');
@@ -210,14 +245,14 @@ class TranslateTest extends TestCase
             'module original' => 'module translated',
             'module theme' => 'module-theme original translated',
             'module pack' => 'module-pack original translated',
-            'module db' => 'module-db original translated',
+            'module db' => 'module-db original translated'
         ];
         $this->modulesReader->expects($this->any())->method('getModuleDir')->willReturn('/app/module');
         $themeData = [
             'theme original' => 'theme translated',
             'module theme' => 'theme translated overwrite',
             'module pack' => 'theme-pack translated overwrite',
-            'module db' => 'theme-db translated overwrite',
+            'module db' => 'theme-db translated overwrite'
         ];
         $this->csvParser->expects($this->any())
             ->method('getDataPairs')
@@ -225,7 +260,7 @@ class TranslateTest extends TestCase
                 [
                     ['/app/module/en_US.csv', 0, 1, $moduleData],
                     ['/app/module/en_GB.csv', 0, 1, $moduleData],
-                    ['/theme.csv', 0, 1, $themeData],
+                    ['/theme.csv', 0, 1, $themeData]
                 ]
             );
         $this->fileDriver->expects($this->any())
@@ -234,7 +269,7 @@ class TranslateTest extends TestCase
                 [
                     ['/app/module/en_US.csv', true],
                     ['/app/module/en_GB.csv', true],
-                    ['/theme.csv', true],
+                    ['/theme.csv', true]
                 ]
             );
 
@@ -269,7 +304,7 @@ class TranslateTest extends TestCase
             'module db' => 'db translated overwrite',
             'theme original' => 'theme translated',
             'pack original' => 'pack translated',
-            'db original' => 'db translated',
+            'db original' => 'db translated'
         ];
         $this->assertEquals($expected, $this->translate->getData());
     }
@@ -277,7 +312,7 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestLoadData(): array
+    public static function dataProviderForTestLoadData(): array
     {
         return [
             ['adminhtml', true],
@@ -292,8 +327,10 @@ class TranslateTest extends TestCase
     /**
      * @param $data
      * @param $result
-     * @dataProvider dataProviderForTestGetData
+     *
+     * @return void
      */
+    #[DataProvider('dataProviderForTestGetData')]
     public function testGetData($data, $result): void
     {
         $this->cache->expects($this->once())
@@ -307,7 +344,7 @@ class TranslateTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetData(): array
+    public static function dataProviderForTestGetData(): array
     {
         $data = ['original 1' => 'translated 1', 'original 2' => 'translated 2'];
         return [
@@ -316,6 +353,9 @@ class TranslateTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testGetLocale(): void
     {
         $this->locale->expects($this->once())->method('getLocale')->willReturn('en_US');
@@ -329,6 +369,9 @@ class TranslateTest extends TestCase
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
 
+    /**
+     * @return void
+     */
     public function testSetLocale(): void
     {
         $this->translate->setLocale('en_GB');
@@ -336,18 +379,35 @@ class TranslateTest extends TestCase
         $this->assertEquals('en_GB', $this->translate->getLocale());
     }
 
+    /**
+     * @return void
+     */
     public function testGetTheme(): void
     {
-        $this->request->expects($this->at(0))->method('getParam')->with('theme')->willReturn('');
 
         $requestTheme = ['theme_title' => 'Theme Title'];
-        $this->request->expects($this->at(1))->method('getParam')->with('theme')
-            ->willReturn($requestTheme);
+        $this->request
+            ->method('getParam')
+            ->willReturnCallback(
+                function ($arg1) use ($requestTheme) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == 'theme') {
+                        $callCount++;
+                        return '';
+                    } elseif ($callCount == 1 && $arg1 == 'theme') {
+                        $callCount++;
+                        return $requestTheme;
+                    }
+                }
+            );
 
         $this->assertEquals('theme', $this->translate->getTheme());
         $this->assertEquals('themeTheme Title', $this->translate->getTheme());
     }
 
+    /**
+     * @return void
+     */
     public function testLoadDataNoTheme(): void
     {
         $forceReload = true;
@@ -360,7 +420,9 @@ class TranslateTest extends TestCase
     }
 
     /**
-     * Declare calls expectation for setConfig() method
+     * Declare calls expectation for setConfig() method.
+     *
+     * @return void
      */
     protected function expectsSetConfig($themeId, $localeCode = 'en_US'): void
     {
@@ -372,7 +434,7 @@ class TranslateTest extends TestCase
             ->willReturnMap(
                 [
                     [null, $scope],
-                    ['admin', $scopeAdmin],
+                    ['admin', $scopeAdmin]
                 ]
             );
         $designTheme = $this->getMockBuilder(Theme::class)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Catalog\Model\Category\Link\ReadHandler;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReadHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ReadHandler
      */
@@ -44,16 +46,12 @@ class ReadHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->categoryLinkFactory = $this->getMockBuilder(CategoryLinkInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryLinkFactory = $this->createPartialMock(
+            CategoryLinkInterfaceFactory::class,
+            ['create']
+        );
+        $this->productCategoryLink = $this->createMock(CategoryLink::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
 
         $this->readHandler = new ReadHandler(
             $this->categoryLinkFactory,
@@ -62,7 +60,10 @@ class ReadHandlerTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $categoryLinks = [
             ['category_id' => 3, 'position' => 10],
@@ -70,26 +71,31 @@ class ReadHandlerTest extends TestCase
         ];
 
         $dtoCategoryLinks = [];
+        $dataObjHelperWithArgs = $categoryLinkFactoryWillReturnArgs = [];
+
         foreach ($categoryLinks as $key => $categoryLink) {
-            $dtoCategoryLinks[$key] = $this->getMockBuilder(CategoryLinkInterface::class)
-                ->getMockForAbstractClass();
-            $this->dataObjectHelper->expects(static::at($key))
-                ->method('populateWithArray')
-                ->with($dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class);
-            $this->categoryLinkFactory->expects(static::at($key))
-                ->method('create')
-                ->willReturn($dtoCategoryLinks[$key]);
+            $dtoCategoryLinks[$key] = $this->createMock(CategoryLinkInterface::class);
+            $dataObjHelperWithArgs[] = [$dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class];
+            $categoryLinkFactoryWillReturnArgs[] = $dtoCategoryLinks[$key];
         }
+        $this->dataObjectHelper
+            ->method('populateWithArray')
+            ->willReturnCallback(function (...$dataObjHelperWithArgs) {
+                return null;
+            });
+        
+        $this->categoryLinkFactory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$categoryLinkFactoryWillReturnArgs);
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getExtensionAttributes', 'setExtensionAttributes']);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks'])
-            ->getMockForAbstractClass();
+        /** @var ProductExtensionInterface $extensionAttributes */
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            $this->getProductExtensionMethods()
+        );
+        $extensionAttributes->method('getCategoryLinks')->willReturn($dtoCategoryLinks);
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with($dtoCategoryLinks);
 
         $product->expects(static::once())
@@ -109,17 +115,19 @@ class ReadHandlerTest extends TestCase
         static::assertSame($product, $entity);
     }
 
-    public function testExecuteNullExtensionAttributes()
+    /**
+     * @return void
+     */
+    public function testExecuteNullExtensionAttributes(): void
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getExtensionAttributes', 'setExtensionAttributes']);
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks'])
-            ->getMockForAbstractClass();
+        /** @var ProductExtensionInterface $extensionAttributes */
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            $this->getProductExtensionMethods()
+        );
+        $extensionAttributes->method('getCategoryLinks')->willReturn(null);
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with(null);
 
         $product->expects(static::once())
@@ -137,5 +145,31 @@ class ReadHandlerTest extends TestCase
 
         $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);
+    }
+
+    private function getProductExtensionMethods(): array
+    {
+        return [
+            'getWebsiteIds',
+            'setWebsiteIds',
+            'getCategoryLinks',
+            'setCategoryLinks',
+            'getBundleProductOptions',
+            'setBundleProductOptions',
+            'getStockItem',
+            'setStockItem',
+            'getDiscounts',
+            'setDiscounts',
+            'getConfigurableProductOptions',
+            'setConfigurableProductOptions',
+            'getConfigurableProductLinks',
+            'setConfigurableProductLinks',
+            'getDownloadableProductLinks',
+            'setDownloadableProductLinks',
+            'getDownloadableProductSamples',
+            'setDownloadableProductSamples',
+            'getGiftcardAmounts',
+            'setGiftcardAmounts',
+        ];
     }
 }

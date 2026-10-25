@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -17,7 +17,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Store\Model\ResourceModel\Group\Collection as StoreGroupCollection;
 use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Generates Category Url Rewrites after save and Products Url Rewrites assigned to the category that's being saved
@@ -78,7 +77,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
             DataCategoryUrlRewriteDatabaseMap::class,
             DataProductUrlRewriteDatabaseMap::class
         ],
-        CollectionFactory $storeGroupFactory = null
+        ?CollectionFactory $storeGroupFactory = null
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlRewriteHandler = $urlRewriteHandler;
@@ -183,7 +182,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
 
         foreach ($storeGroupCollection as $storeGroup) {
             /** @var \Magento\Store\Model\Group $storeGroup */
-            if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath()))) {
+            if (in_array($storeGroup->getRootCategoryId(), explode('/', $category->getPath() ?? ''))) {
                 $category->setStoreId($storeGroup->getDefaultStoreId());
             }
         }

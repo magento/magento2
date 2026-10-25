@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,7 @@ class WithOptional
      * @param DiParent|null $parent
      * @param Child|null $child
      */
-    public function __construct(DiParent $parent = null, Child $child = null)
+    public function __construct(?DiParent $parent = null, ?Child $child = null)
     {
         $this->parent = $parent;
         $this->child = $child;

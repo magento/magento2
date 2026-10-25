@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Captcha\Observer\CheckUserCreateObserver;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
@@ -83,11 +84,11 @@ class CheckUserCreateObserverTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
         $this->_helper = $this->createMock(Data::class);
         $this->_actionFlag = $this->createMock(ActionFlag::class);
-        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_messageManager = $this->createMock(ManagerInterface::class);
         $this->_session = $this->createMock(SessionManager::class);
         $this->_urlManager = $this->createMock(Url::class);
         $this->captchaStringResolver = $this->createMock(CaptchaStringResolver::class);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->checkUserCreateObserver = $this->_objectManager->getObject(
             CheckUserCreateObserver::class,
             [
@@ -123,7 +124,7 @@ class CheckUserCreateObserverTest extends TestCase
             $redirectUrl
         );
 
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $response = $this->createMock(ResponseHttp::class);
         $response->expects($this->once())->method('setRedirect')->with($redirectUrl);
 
         $this->_urlManager->expects(

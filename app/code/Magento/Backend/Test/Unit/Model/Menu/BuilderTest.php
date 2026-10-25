@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,14 @@ use Magento\Backend\Model\Menu\Builder\Command\Remove;
 use Magento\Backend\Model\Menu\Builder\Command\Update;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Builder
      */
@@ -35,16 +37,24 @@ class BuilderTest extends TestCase
      */
     private $factoryMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $this->factoryMock = $this->createMock(Factory::class);
-        $this->menuMock = $this->getMockBuilder(Menu::class)
-            ->addMethods(['addChild'])
-            ->onlyMethods(['add'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['addChild', 'add']
+        );
 
-        $this->model = (new ObjectManager($this))->getObject(
+        $this->model = $this->objectManager->getObject(
             Builder::class,
             [
                 'menuItemFactory' => $this->factoryMock
@@ -52,7 +62,10 @@ class BuilderTest extends TestCase
         );
     }
 
-    public function testProcessCommand()
+    /**
+     * @return void
+     */
+    public function testProcessCommand(): void
     {
         $command = $this->createMock(Add::class);
         $command->expects($this->any())->method('getId')->willReturn(1);
@@ -63,34 +76,33 @@ class BuilderTest extends TestCase
         $this->model->processCommand($command2);
     }
 
-    public function testGetResultBuildsTreeStructure()
+    /**
+     * @return void
+     */
+    public function testGetResultBuildsTreeStructure(): void
     {
         $item1 = $this->createMock(Item::class);
         $item1->expects($this->once())->method('getChildren')->willReturn($this->menuMock);
         $this->factoryMock->expects($this->any())->method('create')->willReturn($item1);
 
         $item2 = $this->createMock(Item::class);
-        $this->factoryMock->expects($this->at(1))->method('create')->willReturn($item2);
+        $this->factoryMock
+            ->method('create')
+            ->willReturn($item2);
 
-        $this->menuMock->expects(
-            $this->at(0)
-        )->method(
-            'add'
-        )->with(
-            $this->isInstanceOf(Item::class),
-            null,
-            2
-        );
-
-        $this->menuMock->expects(
-            $this->at(1)
-        )->method(
-            'add'
-        )->with(
-            $this->isInstanceOf(Item::class),
-            null,
-            4
-        );
+        $this->menuMock
+            ->method('add')
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$this->isInstanceOf(Item::class), null, 2],
+                    [$this->isInstanceOf(Item::class), null, 4]
+                ];
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
+                    return null;
+                }
+            });
 
         $this->model->processCommand(
             new Add(
@@ -99,7 +111,7 @@ class BuilderTest extends TestCase
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
                     'sortOrder' => 2,
-                    'resource' => 'Magento_Backend::item1',
+                    'resource' => 'Magento_Backend::item1'
                 ]
             )
         );
@@ -111,7 +123,7 @@ class BuilderTest extends TestCase
                     'title' => 'two',
                     'module' => 'Magento_Backend',
                     'sortOrder' => 4,
-                    'resource' => 'Magento_Backend::item2',
+                    'resource' => 'Magento_Backend::item2'
                 ]
             )
         );
@@ -119,7 +131,10 @@ class BuilderTest extends TestCase
         $this->model->getResult($this->menuMock);
     }
 
-    public function testGetResultSkipsRemovedItems()
+    /**
+     * @return void
+     */
+    public function testGetResultSkipsRemovedItems(): void
     {
         $this->model->processCommand(
             new Add(
@@ -127,7 +142,7 @@ class BuilderTest extends TestCase
                     'id' => 1,
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
-                    'resource' => 'Magento_Backend::i1',
+                    'resource' => 'Magento_Backend::i1'
                 ]
             )
         );
@@ -138,7 +153,10 @@ class BuilderTest extends TestCase
         $this->model->getResult($this->menuMock);
     }
 
-    public function testGetResultSkipItemsWithInvalidParent()
+    /**
+     * @return void
+     */
+    public function testGetResultSkipItemsWithInvalidParent(): void
     {
         $this->expectException('OutOfRangeException');
         $item1 = $this->createMock(Item::class);
@@ -151,7 +169,7 @@ class BuilderTest extends TestCase
                     'parent' => 'not_exists',
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
-                    'resource' => 'Magento_Backend::item1',
+                    'resource' => 'Magento_Backend::item1'
                 ]
             )
         );

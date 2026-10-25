@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -50,6 +50,11 @@ class Order extends \Magento\Framework\DataObject
      * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Shipment\ItemFactory
+     */
+    private $_shipmentItemFactory;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager

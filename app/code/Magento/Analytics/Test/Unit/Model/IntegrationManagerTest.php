@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,15 @@ use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\Integration;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class IntegrationManagerTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var IntegrationServiceInterface|MockObject
      */
@@ -43,19 +48,19 @@ class IntegrationManagerTest extends TestCase
      */
     private $integrationManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->integrationServiceMock = $this->getMockForAbstractClass(IntegrationServiceInterface::class);
+        $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);
         $this->configMock = $this->createMock(Config::class);
-        $this->oauthServiceMock = $this->getMockForAbstractClass(OauthServiceInterface::class);
-        $this->integrationMock = $this->getMockBuilder(Integration::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getId',
-                'getConsumerId'
-            ])
-            ->getMock();
+        $this->oauthServiceMock = $this->createMock(OauthServiceInterface::class);
+        $this->integrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            ['getId', 'getConsumerId']
+        );
         $this->integrationManager = $objectManagerHelper->getObject(
             IntegrationManager::class,
             [
@@ -67,11 +72,11 @@ class IntegrationManagerTest extends TestCase
     }
 
     /**
-     * @param string $status
+     * @param int $status
      *
      * @return array
      */
-    private function getIntegrationUserData($status)
+    private function getIntegrationUserData(int $status): array
     {
         return [
             'name' => 'ma-integration-user',
@@ -80,14 +85,14 @@ class IntegrationManagerTest extends TestCase
             'resource' => [
                 'Magento_Analytics::analytics',
                 'Magento_Analytics::analytics_api'
-            ],
+            ]
         ];
     }
 
     /**
      * @return void
      */
-    public function testActivateIntegrationSuccess()
+    public function testActivateIntegrationSuccess(): void
     {
         $this->integrationServiceMock->expects($this->once())
             ->method('findByName')
@@ -108,7 +113,10 @@ class IntegrationManagerTest extends TestCase
         $this->assertTrue($this->integrationManager->activateIntegration());
     }
 
-    public function testActivateIntegrationFailureNoSuchEntity()
+    /**
+     * @return void
+     */
+    public function testActivateIntegrationFailureNoSuchEntity(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->integrationServiceMock->expects($this->once())
@@ -128,12 +136,12 @@ class IntegrationManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider integrationIdDataProvider
-     *
      * @param int|null $integrationId If null integration is absent.
+     *
      * @return void
      */
-    public function testGetTokenNewIntegration($integrationId)
+    #[DataProvider('integrationIdDataProvider')]
+    public function testGetTokenNewIntegration(?int $integrationId): void
     {
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConfigDataValue')
@@ -156,14 +164,17 @@ class IntegrationManagerTest extends TestCase
                 ->with($this->getIntegrationUserData(Integration::STATUS_INACTIVE))
                 ->willReturn($this->integrationMock);
         }
-        $this->oauthServiceMock->expects($this->at(0))
+        $this->oauthServiceMock
             ->method('getAccessToken')
-            ->with(100500)
-            ->willReturn(false);
-        $this->oauthServiceMock->expects($this->at(2))
-            ->method('getAccessToken')
-            ->with(100500)
-            ->willReturn('IntegrationToken');
+            ->willReturnCallback(function ($arg1) use (&$callCount) {
+                if ($callCount == 0 && $arg1 == 100500) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == 100500) {
+                    $callCount++;
+                    return 'IntegrationToken';
+                }
+            });
         $this->oauthServiceMock->expects($this->once())
             ->method('createAccessToken')
             ->with(100500, true)
@@ -172,12 +183,12 @@ class IntegrationManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider integrationIdDataProvider
-     *
      * @param int|null $integrationId If null integration is absent.
+     *
      * @return void
      */
-    public function testGetTokenExistingIntegration($integrationId)
+    #[DataProvider('integrationIdDataProvider')]
+    public function testGetTokenExistingIntegration(?int $integrationId): void
     {
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConfigDataValue')
@@ -212,11 +223,11 @@ class IntegrationManagerTest extends TestCase
     /**
      * @return array
      */
-    public function integrationIdDataProvider()
+    public static function integrationIdDataProvider(): array
     {
         return [
             [1],
-            [null],
+            [null]
         ];
     }
 }

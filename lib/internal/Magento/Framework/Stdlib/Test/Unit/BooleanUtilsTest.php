@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit;
 
 use Magento\Framework\Stdlib\BooleanUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BooleanUtilsTest extends TestCase
 {
@@ -32,9 +33,8 @@ class BooleanUtilsTest extends TestCase
     /**
      * @param mixed $input
      * @param bool $expected
-     *
-     * @dataProvider toBooleanDataProvider
-     */
+     *     */
+    #[DataProvider('toBooleanDataProvider')]
     public function testToBoolean($input, $expected)
     {
         $actual = $this->object->toBoolean($input);
@@ -44,7 +44,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanDataProvider()
+    public static function toBooleanDataProvider()
     {
         return [
             'boolean "true"' => [true, true],
@@ -60,9 +60,8 @@ class BooleanUtilsTest extends TestCase
 
     /**
      * @param mixed $input
-     *
-     * @dataProvider toBooleanExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('toBooleanExceptionDataProvider')]
     public function testToBooleanException($input)
     {
         $this->expectException('InvalidArgumentException');
@@ -73,7 +72,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanExceptionDataProvider()
+    public static function toBooleanExceptionDataProvider()
     {
         return [
             'boolean string "on"' => ['on'],

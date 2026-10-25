@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -772,6 +772,9 @@
                 <aspect name="to_quote_address" />
             </field>
             <field name="fax">
+                <aspect name="to_quote_address" />
+            </field>
+            <field name="vat_id">
                 <aspect name="to_quote_address" />
             </field>
         </fieldset>

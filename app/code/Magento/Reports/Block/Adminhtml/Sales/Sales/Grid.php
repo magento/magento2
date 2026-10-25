@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
@@ -45,7 +45,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
         \Magento\Reports\Helper\Data $reportsData,
         array $data = [],
-        ConfigFactory $configFactory = null
+        ?ConfigFactory $configFactory = null
     ) {
         parent::__construct(
             $context,

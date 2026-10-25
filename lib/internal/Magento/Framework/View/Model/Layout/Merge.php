@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Model\Layout;
 
@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\EntitySpecificHandlesList;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
@@ -25,27 +26,27 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     /**
      * Layout abstraction based on designer prerogative.
      */
-    const DESIGN_ABSTRACTION_CUSTOM = 'custom';
+    public const DESIGN_ABSTRACTION_CUSTOM = 'custom';
 
     /**
      * Layout generalization guaranteed to load into View
      */
-    const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
+    public const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
 
     /**
      * XPath of handles originally declared in layout updates
      */
-    const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
+    public const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
 
     /**
      * Name of an attribute that stands for data type of node values
      */
-    const TYPE_ATTRIBUTE = 'xsi:type';
+    public const TYPE_ATTRIBUTE = 'xsi:type';
 
     /**
      * Cache id suffix for page layout
      */
-    const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
+    public const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
 
     /**
      * Default cache life time
@@ -180,6 +181,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $cacheLifetime;
 
     /**
+     * @var EntitySpecificHandlesList
+     */
+    private EntitySpecificHandlesList $entitySpecificHandlesList;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -196,6 +202,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param LayoutCacheKeyInterface|null $layoutCacheKey
      * @param SerializerInterface|null $serializer
      * @param int|null $cacheLifetime
+     * @param EntitySpecificHandlesList|null $entitySpecificHandlesList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -208,11 +215,12 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
         ReadFactory $readFactory,
-        \Magento\Framework\View\Design\ThemeInterface $theme = null,
+        ?\Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = '',
-        LayoutCacheKeyInterface $layoutCacheKey = null,
-        SerializerInterface $serializer = null,
-        ?int $cacheLifetime = null
+        ?LayoutCacheKeyInterface $layoutCacheKey = null,
+        ?SerializerInterface $serializer = null,
+        ?int $cacheLifetime = null,
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
@@ -228,6 +236,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->cacheLifetime = $cacheLifetime ?? self::DEFAULT_CACHE_LIFETIME;
+        $this->entitySpecificHandlesList = $entitySpecificHandlesList
+            ?: ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
     }
 
     /**
@@ -562,6 +572,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _loadXmlString($xmlString)
     {
         return simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
+    }
+
+    /**
+     * Return object representation of XML string, or false, if XML was invalid
+     *
+     * @param string $xmlString
+     * @return \SimpleXMLElement|false
+     */
+    protected function _safeLoadXmlString(string $xmlString): \SimpleXMLElement|false
+    {
+        return simplexml_load_string(
+            $xmlString,
+            \Magento\Framework\View\Layout\Element::class,
+            LIBXML_NOWARNING | LIBXML_NOERROR
+        );
     }
 
     /**
@@ -978,8 +1003,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     public function getCacheId()
     {
         $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
+        $handles = $this->getHandles();
+        $entitySpecificHandles = $this->entitySpecificHandlesList->getHandles();
+        if (!empty($entitySpecificHandles)) {
+            $entitySpecificHandles = array_flip($entitySpecificHandles);
+            $handles = array_values(
+                array_filter(
+                    $handles,
+                    function (string $handle) use ($entitySpecificHandles): bool {
+                        return !isset($entitySpecificHandles[$handle]) || (bool)$this->getDbUpdateString($handle);
+                    }
+                )
+            );
+        }
         // phpcs:ignore Magento2.Security.InsecureFunction
-        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
+        return $this->generateCacheId(md5(implode('|', array_merge($handles, $layoutCacheKeys))));
     }
 
     /**
@@ -988,15 +1026,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private function extractHandlers(): void
     {
         foreach ($this->updates as $update) {
-            $updateXml = null;
-
-            try {
-                $updateXml = $this->_loadXmlString($update);
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-            } catch (\Exception $exception) {
-                // ignore invalid
-            }
-
+            $updateXml = is_string($update) ? $this->_safeLoadXmlString($update) : false;
             if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
                 $this->addHandle((string)$updateXml['handle']);
             }

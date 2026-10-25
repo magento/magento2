@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <tr class="data-grid-bulk-edit-panel data-grid-editable-row" each="data: fields, as: '$col'" visible="active">
@@ -9,14 +9,14 @@
         <if args="$parent.isActionsColumn($col)">
             <with args="$parent">
                 <button class="action-default" type="button" click="apply" disable="!hasData">
-                    <span translate="'Apply'"/>
+                    <span translate="'Apply'"></span>
                 </button>
             </with>
         </if>
 
         <if args="$data.isEditor">
-            <label class="admin__field-label admin__field-label-vertical" attr="for: uid" translate="'All in Column'"/>
-            <render/>
+            <label class="admin__field-label admin__field-label-vertical" attr="for: uid" translate="'All in Column'"></label>
+            <render></render>
         </if>
     </td>
 </tr>

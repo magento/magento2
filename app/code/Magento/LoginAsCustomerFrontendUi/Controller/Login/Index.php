@@ -1,24 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerFrontendUi\Controller\Login;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 /**
  * Login as Customer storefront login action
@@ -36,16 +36,6 @@ class Index implements HttpGetActionInterface
     private $request;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var GetAuthenticationDataBySecretInterface
-     */
-    private $getAuthenticationDataBySecret;
-
-    /**
      * @var AuthenticateCustomerBySecretInterface
      */
     private $authenticateCustomerBySecret;
@@ -61,30 +51,41 @@ class Index implements HttpGetActionInterface
     private $logger;
 
     /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
+     * @var CheckoutSession
+     */
+    private $checkoutSession;
+
+    /**
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param AuthenticateCustomerBySecretInterface $authenticateCustomerBySecret
      * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
+     * @param Session|null $customerSession
+     * @param CheckoutSession|null $checkoutSession
      */
     public function __construct(
         ResultFactory $resultFactory,
         RequestInterface $request,
-        CustomerRepositoryInterface $customerRepository,
-        GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
         AuthenticateCustomerBySecretInterface $authenticateCustomerBySecret,
         ManagerInterface $messageManager,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?Session $customerSession = null,
+        ?CheckoutSession $checkoutSession = null
     ) {
         $this->resultFactory = $resultFactory;
         $this->request = $request;
-        $this->customerRepository = $customerRepository;
-        $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->authenticateCustomerBySecret = $authenticateCustomerBySecret;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
+        $this->customerSession = $customerSession ?? ObjectManager::getInstance()->get(Session::class);
+        $this->checkoutSession = $checkoutSession
+            ?? ObjectManager::getInstance()->get(CheckoutSession::class);
     }
 
     /**
@@ -97,22 +98,14 @@ class Index implements HttpGetActionInterface
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
+        $secret = $this->request->getParam('secret');
+        if ($this->checkoutSession->getQuoteId()) {
+            $this->checkoutSession->clearQuote();
+            $this->checkoutSession->clearStorage();
+        }
         try {
-            $secret = $this->request->getParam('secret');
-            if (empty($secret) || !is_string($secret)) {
-                throw new LocalizedException(__('Cannot login to account. No secret key provided.'));
-            }
-
-            $authenticationData = $this->getAuthenticationDataBySecret->execute($secret);
-
-            try {
-                $customer = $this->customerRepository->getById($authenticationData->getCustomerId());
-            } catch (NoSuchEntityException $e) {
-                throw new LocalizedException(__('Customer are no longer exist.'));
-            }
-
             $this->authenticateCustomerBySecret->execute($secret);
-
+            $customer = $this->customerSession->getCustomer();
             $this->messageManager->addSuccessMessage(
                 __('You are logged in as customer: %1', $customer->getFirstname() . ' ' . $customer->getLastname())
             );

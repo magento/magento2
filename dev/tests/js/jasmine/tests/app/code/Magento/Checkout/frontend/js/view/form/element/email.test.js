@@ -1,11 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint max-nested-callbacks: 0 */
 
-define(['squire', 'ko'], function (Squire, ko) {
+define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
     'use strict';
 
     describe('Magento_Checkout/js/view/form/element/email', function () {
@@ -32,11 +32,12 @@ define(['squire', 'ko'], function (Squire, ko) {
                     ]
                 ),
                 'Magento_Checkout/js/model/full-screen-loader': jasmine.createSpy(),
-                'mage/validation': jasmine.createSpy()
+                'Magento_Checkout/js/view/shipping': jasmine.createSpy()
             },
             Component;
 
         beforeEach(function (done) {
+            window.checkoutConfig = {};
             injector.mock(mocks);
             injector.require(['Magento_Checkout/js/view/form/element/email'], function (Constr) {
                 Component = new Constr({
@@ -60,6 +61,24 @@ define(['squire', 'ko'], function (Squire, ko) {
         describe('"resolveInitialPasswordVisibility" method', function () {
             it('Check return type of method.', function () {
                 expect(typeof Component.resolveInitialPasswordVisibility()).toEqual('boolean');
+            });
+        });
+
+        describe('"validateEmail" method', function () {
+            beforeEach(function () {
+                $('body').append('<form data-role="email-with-possible-login">' +
+                    '<input type="text" name="username" />' +
+                    '</form>');
+                spyOn($.fn, 'validate').and.returnValue(true);
+            });
+            it('Check if login form will be validated in case it is not visible', function () {
+                var loginFormSelector = 'form[data-role=email-with-possible-login]',
+                    loginForm = $(loginFormSelector);
+
+                loginForm.hide();
+                Component.validateEmail();
+                expect(loginForm.is(':visible')).toBeFalsy();
+                expect(loginForm.validate).not.toHaveBeenCalled();
             });
         });
     });

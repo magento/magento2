@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
 
 /**
  * Bundle selection product grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Bundle data
-     *
      * @var \Magento\Bundle\Helper\Data
      */
     protected $_bundleData = null;
@@ -44,7 +40,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialization
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _construct()
     {
@@ -190,18 +189,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected products
+     *
      * @return mixed
      */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost(
             'selected_products',
-            explode(',', $this->getRequest()->getParam('productss'))
+            explode(',', $this->getRequest()->getParam('productss', ''))
         );
         return $products;
     }
 
     /**
+     * Get products
+     *
      * @return array
      */
     protected function _getProducts()

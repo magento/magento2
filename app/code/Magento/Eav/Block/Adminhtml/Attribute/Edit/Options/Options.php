@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
@@ -145,7 +145,9 @@ class Options extends \Magento\Backend\Block\Template
     ) {
         $type = $attribute->getFrontendInput();
         if ($type === 'select' || $type === 'multiselect') {
-            $defaultValues = explode(',', $attribute->getDefaultValue());
+            $defaultValues = is_string($attribute->getDefaultValue())
+                ? explode(',', $attribute->getDefaultValue())
+                : [];
             $inputType = $type === 'select' ? 'radio' : 'checkbox';
         } else {
             $defaultValues = [];

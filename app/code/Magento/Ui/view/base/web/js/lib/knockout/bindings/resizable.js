@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 define([
     'ko',
@@ -8,8 +8,7 @@ define([
     'Magento_Ui/js/lib/view/utils/async',
     'uiRegistry',
     'underscore',
-    '../template/renderer',
-    'jquery-ui-modules/resizable'
+    '../template/renderer'
 ], function (ko, $, async, registry, _, renderer) {
     'use strict';
 
@@ -139,7 +138,11 @@ define([
         init: function (element, valueAccessor, allBindings, viewModel) {
             var config = processConfig(valueAccessor(), viewModel, element);
 
-            $(element).resizable(config);
+            require(['jquery-ui-modules/resizable'], function () {
+                if ($.fn.resizable) {
+                    $(element).resizable(config);
+                }
+            });
         }
     };
 

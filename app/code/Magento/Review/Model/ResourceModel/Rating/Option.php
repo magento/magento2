@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Model\ResourceModel\Rating;
 
@@ -78,6 +78,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Review\Model\Rating\Option\VoteFactory
      */
     protected $_ratingOptionVoteF;
+
+    /**
+     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     */
+    private $_remoteAddress;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context

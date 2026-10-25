@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
@@ -17,6 +17,7 @@ use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for @see Timezone
@@ -92,9 +93,8 @@ class TimezoneTest extends TestCase
      * @param string $locale
      * @param bool $includeTime
      * @param int|string $expectedTime
-     * @param string|null $timeZone
-     * @dataProvider dateIncludeTimeDataProvider
-     */
+     * @param string|null $timeZone     */
+    #[DataProvider('dateIncludeTimeDataProvider')]
     public function testDateIncludeTime($date, $locale, $includeTime, $expectedTime, $timeZone = 'America/Chicago')
     {
         if ($timeZone !== null) {
@@ -116,7 +116,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function dateIncludeTimeDataProvider(): array
+    public static function dateIncludeTimeDataProvider(): array
     {
         /**
          * Greek locale needs to be installed on the system, to pass.
@@ -203,9 +203,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $locale
      * @param int $style
-     * @param string $expectedFormat
-     * @dataProvider getDatetimeFormatDataProvider
-     */
+     * @param string $expectedFormat     */
+    #[DataProvider('getDatetimeFormatDataProvider')]
     public function testGetDatetimeFormat(string $locale, int $style, string $expectedFormat): void
     {
         /** @var Timezone $timezone */
@@ -216,7 +215,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function getDatetimeFormatDataProvider(): array
+    public static function getDatetimeFormatDataProvider(): array
     {
         return [
             ['en_US', \IntlDateFormatter::SHORT, 'M/d/yy h:mm a'],
@@ -227,9 +226,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $locale
      * @param int $style
-     * @param string $expectedFormat
-     * @dataProvider getDateFormatWithLongYearDataProvider
-     */
+     * @param string $expectedFormat     */
+    #[DataProvider('getDateFormatWithLongYearDataProvider')]
     public function testGetDateFormatWithLongYear(string $locale, string $expectedFormat): void
     {
         /** @var Timezone $timezone */
@@ -240,7 +238,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function getDateFormatWithLongYearDataProvider(): array
+    public static function getDateFormatWithLongYearDataProvider(): array
     {
         return [
             ['en_US', 'M/d/y'],
@@ -250,9 +248,8 @@ class TimezoneTest extends TestCase
     /**
      * @param string $date
      * @param string $configuredTimezone
-     * @param string $expectedResult
-     * @dataProvider getConvertConfigTimeToUtcFixtures
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('getConvertConfigTimeToUtcFixtures')]
     public function testConvertConfigTimeToUtc($date, $configuredTimezone, $expectedResult)
     {
         $this->scopeConfigWillReturnConfiguredTimezone($configuredTimezone);
@@ -265,7 +262,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getConvertConfigTimeToUtcFixtures(): array
+    public static function getConvertConfigTimeToUtcFixtures(): array
     {
         return [
             'string' => [
@@ -287,9 +284,8 @@ class TimezoneTest extends TestCase
     }
 
     /**
-     * Test configuration of the different timezones.
-     * @dataProvider getDateFixtures
-     */
+     * Test configuration of the different timezones.     */
+    #[DataProvider('getDateFixtures')]
     public function testDate($expectedResult, $timezone, $date)
     {
         $this->localeResolver->method('getLocale')->willReturn('en_GB');
@@ -306,7 +302,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getConvertConfigTimeToUTCDataFixtures()
+    public static function getConvertConfigTimeToUTCDataFixtures()
     {
         return [
             'datetime' => [
@@ -315,9 +311,8 @@ class TimezoneTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getConvertConfigTimeToUTCDataFixtures
-     */
+    /**     */
+    #[DataProvider('getConvertConfigTimeToUTCDataFixtures')]
     public function testConvertConfigTimeToUtcException($date)
     {
         $this->expectException(LocalizedException::class);
@@ -330,7 +325,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getDateFixtures(): array
+    public static function getDateFixtures(): array
     {
         return [
             'now_datetime_utc' => [
@@ -398,7 +393,7 @@ class TimezoneTest extends TestCase
      * @param string $configuredTimezone
      * @param string|null $scope
      */
-    private function scopeConfigWillReturnConfiguredTimezone(string $configuredTimezone, string $scope = null)
+    private function scopeConfigWillReturnConfiguredTimezone(string $configuredTimezone, ?string $scope = null)
     {
         $this->scopeConfig->expects($this->atLeastOnce())
             ->method('getValue')
@@ -406,13 +401,12 @@ class TimezoneTest extends TestCase
             ->willReturn($configuredTimezone);
     }
 
-    /**
-     * @dataProvider scopeDateDataProvider
-     * @param \DateTimeInterface|string|int $date
+    /**     * @param \DateTimeInterface|string|int $date
      * @param string $timezone
      * @param string $locale
      * @param string $expectedDate
      */
+    #[DataProvider('scopeDateDataProvider')]
     public function testScopeDate($date, string $timezone, string $locale, string $expectedDate)
     {
         $scopeCode = 'test';
@@ -429,7 +423,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function scopeDateDataProvider(): array
+    public static function scopeDateDataProvider(): array
     {
         $utcTz = new \DateTimeZone('UTC');
 

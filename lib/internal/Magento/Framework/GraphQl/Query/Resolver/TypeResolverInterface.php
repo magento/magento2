@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Determines a concrete GraphQL type for data returned that implements an interface type.
+ *
+ * @api
  */
 interface TypeResolverInterface
 {

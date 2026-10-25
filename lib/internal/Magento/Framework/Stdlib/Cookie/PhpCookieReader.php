@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib\Cookie;
@@ -20,6 +20,6 @@ class PhpCookieReader implements CookieReaderInterface
      */
     public function getCookie($name, $default = null)
     {
-        return (isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
+        return ($name !== null && isset($_COOKIE[$name])) ? $_COOKIE[$name] : $default;
     }
 }

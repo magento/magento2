@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
@@ -31,7 +30,7 @@ class MassDelete extends Subscriber implements HttpPostActionInterface
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        SubscriberFactory $subscriberFactory = null
+        ?SubscriberFactory $subscriberFactory = null
     ) {
         $this->subscriberFactory = $subscriberFactory ?: ObjectManager::getInstance()->get(SubscriberFactory::class);
         parent::__construct($context, $fileFactory);

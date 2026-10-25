@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page\Edit;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit\FormTest
@@ -39,8 +41,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @covers \Magento\UrlRewrite\Block\Cms\Page\Edit\Form::_formPostInit
      *
-     * @dataProvider formPostInitDataProvider
-     *
      * @param array $cmsPageData
      * @param string $action
      * @param string $requestPath
@@ -48,6 +48,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('formPostInitDataProvider')]
     public function testFormPostInit($cmsPageData, $action, $requestPath, $targetPath)
     {
         $args = [];
@@ -113,7 +114,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @return array
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function formPostInitDataProvider()
+    public static function formPostInitDataProvider(): array
     {
         return [
             [
@@ -135,14 +136,14 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $resourceMock = $this->getMockBuilder(
             \Magento\Cms\Model\ResourceModel\Page::class
-        )->setMethods(
+        )->onlyMethods(
             ['lookupStoreIds']
         )->disableOriginalConstructor()->getMock();
         $resourceMock->expects($this->any())->method('lookupStoreIds')->willReturn($stores);
 
         $cmsPageMock = $this->getMockBuilder(
             \Magento\Cms\Model\Page::class
-        )->setMethods(
+        )->onlyMethods(
             ['getResource', 'getId']
         )->disableOriginalConstructor()->getMock();
         $cmsPageMock->expects($this->any())->method('getId')->willReturn(1);

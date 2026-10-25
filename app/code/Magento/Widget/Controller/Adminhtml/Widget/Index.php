@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
@@ -13,11 +12,9 @@ class Index extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+    public const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -50,11 +47,11 @@ class Index extends \Magento\Backend\App\Action implements HttpPostActionInterfa
     public function execute()
     {
         // save extra params for widgets insertion form
-        $skipped = $this->getRequest()->getParam('skip_widgets');
+        $skipped = $this->getRequest()->getParam('skip_widgets', '');
         $skipped = $this->_widgetConfig->decodeWidgetsFromQuery($skipped);
-
         $this->_coreRegistry->register('skip_widgets', $skipped);
 
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout('empty')->renderLayout();
     }
 }

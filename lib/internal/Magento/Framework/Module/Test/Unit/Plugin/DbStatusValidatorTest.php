@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\Plugin;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Cache\FrontendInterface;
@@ -17,9 +18,13 @@ use Magento\Framework\Module\Plugin\DbStatusValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DbStatusValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DbStatusValidator
      */
@@ -50,26 +55,35 @@ class DbStatusValidatorTest extends TestCase
      */
     private $dbVersionInfoMock;
 
+    /**
+     * @var DeploymentConfig|mixed|MockObject
+     */
+    private $deploymentConfig;
+
     protected function setUp(): void
     {
-        $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->setMethods(['db_is_up_to_date'])
-            ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_cacheMock = $this->createMock(FrontendInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
-        $moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $moduleList = $this->createMock(ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
             ->willReturn(['Module_One', 'Module_Two']);
 
-        $this->moduleManager = $this->getMockBuilder(Manager::class)
-            ->addMethods(['isDbSchemaUpToDate', 'isDbDataUpToDate'])
+        $this->moduleManager = $this->createPartialMockWithReflection(
+            Manager::class,
+            ['isDbSchemaUpToDate', 'isDbDataUpToDate']
+        );
+        $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
+
+        $this->deploymentConfig =$this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
+
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
-            $this->dbVersionInfoMock
+            $this->dbVersionInfoMock,
+            $this->deploymentConfig
         );
     }
 
@@ -112,9 +126,8 @@ class DbStatusValidatorTest extends TestCase
 
     /**
      * @param array $dbVersionErrors
-     *
-     * @dataProvider aroundDispatchExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('aroundDispatchExceptionDataProvider')]
     public function testAroundDispatchException(array $dbVersionErrors)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -135,7 +148,7 @@ class DbStatusValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function aroundDispatchExceptionDataProvider()
+    public static function aroundDispatchExceptionDataProvider()
     {
         return [
             'schema is outdated' => [
@@ -187,5 +200,21 @@ class DbStatusValidatorTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function testAroundDispatchBlueGreen()
+    {
+        $this->deploymentConfig->expects($this->atLeastOnce())
+            ->method('get')
+            ->with('deployment/blue_green/enabled')
+            ->willReturn(1);
+
+        $this->_cacheMock->expects($this->never())
+            ->method('load');
+
+        $this->dbVersionInfoMock->expects($this->never())
+            ->method('getDbVersionErrors');
+
+        $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductLinkAttributeInterface;
 use Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
@@ -85,7 +86,7 @@ class LinkTypeProviderTest extends TestCase
         $linkTypeMocks = [];
         foreach ($this->linkTypes as $type => $typeCode) {
             $value = ['name' => $type, 'code' => $typeCode];
-            $linkTypeMock = $this->getMockForAbstractClass(ProductLinkTypeInterface::class);
+            $linkTypeMock = $this->createMock(ProductLinkTypeInterface::class);
             $linkTypeMock->expects($this->once())
                 ->method('setName')
                 ->with($type)
@@ -99,19 +100,17 @@ class LinkTypeProviderTest extends TestCase
         }
         $this->linkTypeFactoryMock->expects($this->exactly(3))
             ->method('create')
-            ->will($this->onConsecutiveCalls($linkTypeMocks[0], $linkTypeMocks[1], $linkTypeMocks[2]));
+            ->willReturnOnConsecutiveCalls($linkTypeMocks[0], $linkTypeMocks[1], $linkTypeMocks[2]);
         $this->assertEquals($expectedResult, $this->model->getItems());
     }
 
-    /**
-     * @dataProvider getItemAttributesDataProvider
-     */
+    #[DataProvider('getItemAttributesDataProvider')]
     public function testGetItemAttributes($type, $typeId)
     {
         $attributes = [
             ['code' => 'test_code_1', 'type' => 'test_type_1'],
         ];
-        $linkAttributeMock = $this->getMockForAbstractClass(ProductLinkAttributeInterface::class);
+        $linkAttributeMock = $this->createMock(ProductLinkAttributeInterface::class);
         $linkAttributeMock->expects($this->once())
             ->method('setCode')
             ->with($attributes[0]['code'])
@@ -133,7 +132,7 @@ class LinkTypeProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getItemAttributesDataProvider()
+    public static function getItemAttributesDataProvider()
     {
         return [
             ['test_product_link_2', ['data' => ['link_type_id' => 'test_code_2']]],

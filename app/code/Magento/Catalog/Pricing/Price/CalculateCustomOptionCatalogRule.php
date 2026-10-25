@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Calculates prices of custom options of the product with catalog rules applied.
+ *
+ * @deprecated
+ * @see Catalog rule should not apply to custom option
  */
 class CalculateCustomOptionCatalogRule
 {
@@ -65,8 +68,7 @@ class CalculateCustomOptionCatalogRule
                 $regularPrice + $optionPrice,
                 $product
             );
-            $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
-            return $this->priceCurrency->convertAndRound($finalOptionPrice);
+            return $totalCatalogRulePrice - $catalogRulePrice;
         }
 
         return null;

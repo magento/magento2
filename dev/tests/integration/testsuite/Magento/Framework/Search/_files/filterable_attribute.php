@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* Create attribute */
@@ -54,7 +54,7 @@ $multiselectAttribute->setData(
             'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
             'order' => ['option_0' => 1, 'option_1' => 2],
         ],
-        'backend_type' => 'varchar',
+        'backend_type' => 'text',
     ]
 );
 $multiselectAttribute->save();

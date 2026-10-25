@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ChainTest extends TestCase
 {
@@ -26,7 +27,7 @@ class ChainTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->asset = $this->getMockForAbstractClass(LocalInterface::class);
+        $this->asset = $this->createMock(LocalInterface::class);
         $this->asset->expects($this->once())->method('getContentType')->willReturn('assetType');
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }
@@ -65,9 +66,8 @@ class ChainTest extends TestCase
     /**
      * @param string $content
      * @param string $type
-     * @param bool $expected
-     * @dataProvider isChangedDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('isChangedDataProvider')]
     public function testIsChanged($content, $type, $expected)
     {
         $this->object->setContent($content);
@@ -78,7 +78,7 @@ class ChainTest extends TestCase
     /**
      * @return array
      */
-    public function isChangedDataProvider()
+    public static function isChangedDataProvider()
     {
         return [
             ['origContent', 'origType', false],

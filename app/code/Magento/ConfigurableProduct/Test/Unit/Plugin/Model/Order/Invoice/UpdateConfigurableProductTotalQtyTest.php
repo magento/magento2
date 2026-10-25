@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\Order\Invoice;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Type as Bundle;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Plugin\Model\Order\Invoice\UpdateConfigurableProductTotalQty;
@@ -52,9 +53,7 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
     {
         $this->invoiceMock = $this->createMock(Invoice::class);
         $this->orderMock = $this->createMock(Order::class);
-        $this->orderItemsMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderItemsMock = $this->createMock(Item::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             UpdateConfigurableProductTotalQty::class,
@@ -65,22 +64,19 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
     /**
      * Test Set total quantity for configurable product invoice
      *
-     * @param array $orderItems
+     * @param \Closure $orderItems
      * @param float $totalQty
      * @param float $productTotalQty
-     * @dataProvider getOrdersForConfigurableProducts
      */
+    #[DataProvider('getOrdersForConfigurableProducts')]
     public function testBeforeSetTotalQty(
-        array $orderItems,
+        \Closure $orderItems,
         float $totalQty,
         float $productTotalQty
     ): void {
-        $this->invoiceMock->expects($this->any())
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->any())
-            ->method('getAllItems')
-            ->willReturn($orderItems);
+        $orderItems = $orderItems($this);
+        $this->invoiceMock->method('getOrder')->willReturn($this->orderMock);
+        $this->orderMock->method('getAllItems')->willReturn($orderItems);
         $expectedQty= $this->model->beforeSetTotalQty($this->invoiceMock, $totalQty);
         $this->assertEquals($expectedQty, $productTotalQty);
     }
@@ -91,12 +87,12 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getOrdersForConfigurableProducts(): array
+    public static function getOrdersForConfigurableProducts(): array
     {
 
         return [
             'verify productQty for simple products' => [
-                'orderItems' => $this->getOrderItems(
+                'orderItems' => static fn (self $testCase) => $testCase->getOrderItems(
                     [
                         [
                             'parent_item_id' => null,
@@ -109,7 +105,7 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
                 'productTotalQty' => 10.00
             ],
             'verify productQty for configurable products' => [
-                'orderItems' => $this->getOrderItems(
+                'orderItems' => static fn (self $testCase) => $testCase->getOrderItems(
                     [
                         [
                             'parent_item_id' => '2',
@@ -122,7 +118,7 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
                 'productTotalQty' => 10.00
             ],
             'verify productQty for simple configurable products' => [
-                'orderItems' => $this->getOrderItems(
+                'orderItems' => static fn (self $testCase) => $testCase->getOrderItems(
                     [
                         [
                             'parent_item_id' => null,
@@ -153,22 +149,14 @@ class UpdateConfigurableProductTotalQtyTest extends TestCase
      * @param array $orderItems
      * @return array
      */
-    public function getOrderItems(array $orderItems): array
+    protected function getOrderItems(array $orderItems): array
     {
         $orderItemsMock = [];
         foreach ($orderItems as $key => $orderItem) {
-            $orderItemsMock[$key] = $this->getMockBuilder(Item::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getParentItemId')
-                ->willReturn($orderItem['parent_item_id']);
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getProductType')
-                ->willReturn($orderItem['product_type']);
-            $orderItemsMock[$key]->expects($this->any())
-                ->method('getQtyOrdered')
-                ->willReturn($orderItem['qty_ordered']);
+            $orderItemsMock[$key] = $this->createMock(Item::class);
+            $orderItemsMock[$key]->method('getParentItemId')->willReturn($orderItem['parent_item_id']);
+            $orderItemsMock[$key]->method('getProductType')->willReturn($orderItem['product_type']);
+            $orderItemsMock[$key]->method('getQtyOrdered')->willReturn($orderItem['qty_ordered']);
         }
         return $orderItemsMock;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
@@ -22,7 +22,6 @@ interface RendererInterface
      * @param Column $column
      * @return void
      * @abstract
-     * @api
      */
     public function setColumn($column);
 
@@ -31,7 +30,6 @@ interface RendererInterface
      *
      * @abstract
      * @return void
-     * @api
      */
     public function getColumn();
 
@@ -40,7 +38,6 @@ interface RendererInterface
      *
      * @param \Magento\Framework\DataObject $row
      * @return string
-     * @api
      */
     public function render(\Magento\Framework\DataObject $row);
 }

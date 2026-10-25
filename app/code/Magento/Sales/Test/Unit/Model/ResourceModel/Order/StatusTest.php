@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order\Status;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class StatusTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Status
      */
@@ -43,6 +46,9 @@ class StatusTest extends TestCase
      */
     protected $selectMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
@@ -57,20 +63,24 @@ class StatusTest extends TestCase
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $tableName = 'sales_order_status_state';
-        $this->resourceMock->expects($this->at(1))
+        $this->resourceMock
             ->method('getTableName')
-            ->with($tableName)
-            ->willReturn($tableName);
+            ->willReturnCallback(
+                function ($arg) use ($tableName) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg === $tableName) {
+                        return $tableName;
+                    }
+                }
+            );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn(
                 $this->connectionMock
             );
 
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->addMethods(['getConnectionName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createPartialMockWithReflection(Config::class, ['getConnectionName']);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Status::class,
@@ -78,7 +88,10 @@ class StatusTest extends TestCase
         );
     }
 
-    public function testAssignState()
+    /**
+     * @return void
+     */
+    public function testAssignState(): void
     {
         $state = 'processing';
         $status = 'processing';
@@ -100,7 +113,7 @@ class StatusTest extends TestCase
                     'status' => $status,
                     'state' => $state,
                     'is_default' => $isDefault,
-                    'visible_on_front' => $visibleOnFront,
+                    'visible_on_front' => $visibleOnFront
                 ]
             );
         $this->model->assignState($status, $state, $isDefault, $visibleOnFront);

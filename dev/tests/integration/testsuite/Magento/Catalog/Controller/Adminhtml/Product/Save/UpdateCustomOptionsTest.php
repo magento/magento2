@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Base test cases for update product custom options with type "field".
- * Option updating via dispatch product controller action save with updated options data in POST data.
+ * Option updating via product controller save with updated options data in POST.
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
@@ -32,50 +34,25 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     protected $productSku = 'simple';
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var ProductCustomOptionRepositoryInterface
-     */
-    private $optionRepository;
-
-    /**
-     * @var ProductCustomOptionInterfaceFactory
-     */
-    private $optionRepositoryFactory;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
-        $this->optionRepository = $this->_objectManager->get(ProductCustomOptionRepositoryInterface::class);
-        $this->optionRepositoryFactory = $this->_objectManager->get(ProductCustomOptionInterfaceFactory::class);
-    }
-
-    /**
      * Test add to product custom option with type "field".
-     *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForUpdateOptions
      *
      * @param array $optionData
      * @param array $updateData
      * @return void
      */
+    #[DataProviderExternal(Field::class, 'getDataForUpdateOptions')]
     public function testUpdateCustomOptionWithTypeField(array $optionData, array $updateData): void
     {
-        $product = $this->productRepository->get($this->productSku);
+        $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $optionRepository = $this->_objectManager->get(ProductCustomOptionRepositoryInterface::class);
+        $product = $productRepository->get($this->productSku);
         /** @var ProductCustomOptionInterface|Option $option */
-        $option = $this->optionRepositoryFactory->create(['data' => $optionData]);
+        $option = $this->_objectManager->get(ProductCustomOptionInterfaceFactory::class)
+            ->create(['data' => $optionData]);
         $option->setProductSku($product->getSku());
         $product->setOptions([$option]);
-        $this->productRepository->save($product);
-        $currentProductOptions = $this->optionRepository->getProductOptions($product);
+        $productRepository->save($product);
+        $currentProductOptions = $optionRepository->getProductOptions($product);
         $this->assertCount(1, $currentProductOptions);
         /** @var ProductCustomOptionInterface $currentOption */
         $currentOption = reset($currentProductOptions);
@@ -119,7 +96,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
                 $this->containsEqual('You saved the product.'),
                 MessageInterface::TYPE_SUCCESS
             );
-            $updatedOptions = $this->optionRepository->getProductOptions($product);
+            $updatedOptions = $optionRepository->getProductOptions($product);
             $this->assertCount(1, $updatedOptions);
             /** @var ProductCustomOptionInterface|Option $updatedOption */
             $updatedOption = reset($updatedOptions);
@@ -129,6 +106,20 @@ class UpdateCustomOptionsTest extends AbstractBackendController
                 $option->getDataUsingMethod($methodKey),
                 $updatedOption->getDataUsingMethod($methodKey)
             );
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
         }
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,6 +13,8 @@
             <description>Requires the navigation to the Product page. Opens 'Image and Videos' section.</description>
         </annotations>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="scrollToProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForLoadingMediaContent"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageUploadButton}}" stepKey="waitForImageUploadButton"/>
     </actionGroup>
 </actionGroups>

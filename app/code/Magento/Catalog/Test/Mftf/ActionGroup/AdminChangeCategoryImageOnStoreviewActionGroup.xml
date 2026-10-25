@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeCategoryImageOnStoreviewActionGroup">
+        <annotations>
+            <description>Requires navigation to the Category creation/edit page. Adds the provided image to a Category. Validates that the Image exists.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+        </arguments>
+        <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="openContentSection"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad"/>
+        <uncheckOption selector="{{AdminCategoryContentSection.categoryImageUseDefault}}" stepKey="uncheckUseDefaultValueStoreView"/>
+        <waitForElementVisible selector="{{AdminCategoryContentSection.uploadButton}}" stepKey="seeImageSectionIsReady"/>
+        <attachFile selector="{{AdminCategoryContentSection.uploadImageFile}}" userInput="{{image.file}}" stepKey="uploadFile"/>
+        <waitForPageLoad stepKey="waitForFileUpload1"/>
+    </actionGroup>
+</actionGroups>

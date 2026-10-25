@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
  */
 class CollectionTest extends TestCase
 {
+
     /**
      * @var Collection
      */
@@ -75,26 +76,18 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->historyItemMock = $this->createPartialMock(
             History::class,
             ['addData']
         );
-        $this->resourceMock = $this->getMockForAbstractClass(
-            EntityAbstract::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getConnection', 'getMainTable', 'getTable']
-        );
+        $this->resourceMock = $this->createMock(EntityAbstract::class);
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
         );
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(
+        $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class
         );
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
@@ -123,7 +116,7 @@ class CollectionTest extends TestCase
             ->method('create')
             ->willReturn($this->historyItemMock);
 
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $logger,
@@ -152,13 +145,11 @@ class CollectionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('prepareSqlCondition')
             ->willReturnMap(
-                
-                    [
+                [
                         ['entity_name', $entityType, 'sql-string'],
                         ['is_customer_notified', 0, 'sql-string'],
                         ['parent_id', $orderId, 'sql-string'],
                     ]
-                
             );
         $result = $this->collection->getUnnotifiedForInstance($order);
         $this->assertEquals($this->historyItemMock, $result);

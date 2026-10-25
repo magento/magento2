@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,14 +47,10 @@ class SearchIndexNameResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getIndexPrefix',
-                'getEntityType',
-                'getIndexSettings',
-            ])
-            ->getMock();
+        $this->clientConfig = $this->createPartialMock(Config::class, [
+            'getIndexPrefix',
+            'getEntityType'
+        ]);
 
         $this->clientConfig->expects($this->any())
             ->method('getIndexPrefix')

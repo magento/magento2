@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Plugin\Model\Indexer\Category\Product;
@@ -15,6 +15,11 @@ use Psr\Log\LoggerInterface;
  */
 class MaxHeapTableSizeProcessorOnFullReindex
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var MaxHeapTableSizeProcessor
      */

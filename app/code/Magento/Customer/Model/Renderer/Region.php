@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Renderer;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Region field renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
@@ -37,6 +35,11 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
      * @var \Magento\Directory\Model\CountryFactory
      */
     protected $_countryFactory;
+
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    private $_directoryHelper;
 
     /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory

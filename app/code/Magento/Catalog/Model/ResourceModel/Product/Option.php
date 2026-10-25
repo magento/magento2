@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -14,7 +14,6 @@ use Magento\Store\Model\Store;
 /**
  * Catalog product custom option resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -25,15 +24,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
@@ -141,7 +136,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param float|null $newPrice
      */
-    private function savePriceByStore(AbstractModel $object, int $storeId, float $newPrice = null): void
+    private function savePriceByStore(AbstractModel $object, int $storeId, ?float $newPrice = null): void
     {
         $priceTable = $this->getTable('catalog_product_option_price');
         $connection = $this->getConnection();
@@ -259,12 +254,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     }
                 } else {
                     // we should insert record into not default store only of if it does not exist in default store
-                    if (($storeId == Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
+                    if (((int)$storeId === Store::DEFAULT_STORE_ID && !$existInDefaultStore) ||
                         (
-                            $storeId != Store::DEFAULT_STORE_ID &&
-                            !$existInCurrentStore &&
-                            !$isDeleteStoreTitle
-                        )
+                            (int)$storeId !== Store::DEFAULT_STORE_ID &&
+                            !$isDeleteStoreTitle &&
+                            ($object->getDefaultTitle() !== null && $object->getTitle() !== $object->getDefaultTitle())
+                        ) ||
+                        ($object->getIsUseDefault() !== null && !(int)$object->getIsUseDefault())
                     ) {
                         $data = $this->_prepareDataForTable(
                             new \Magento\Framework\DataObject(

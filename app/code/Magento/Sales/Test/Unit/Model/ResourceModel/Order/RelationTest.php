@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,8 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
+use Magento\Sales\Model\Order\Status\History as StatusHistory;
 use Magento\Sales\Model\ResourceModel\Order\Handler\Address;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Relation;
@@ -20,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class RelationTest extends TestCase
 {
+
     /**
      * @var Relation
      */
@@ -72,58 +75,27 @@ class RelationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->addressHandlerMock = $this->getMockBuilder(
-            Address::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['removeEmptyAddresses', 'process'])
-            ->getMock();
-        $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save'])
-            ->getMockForAbstractClass();
-        $this->orderPaymentResourceMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save'])
-            ->getMock();
-        $this->statusHistoryResource = $this->getMockBuilder(
-            History::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['save'])
-            ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getId',
-                    'getItems',
-                    'getPayment',
-                    'getStatusHistories',
-                    'getRelatedObjects'
-                ]
-            )
-            ->getMock();
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setOrderId', 'setOrder'])
-            ->getMock();
-        $this->orderPaymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
-            ->getMock();
-        $this->orderStatusHistoryMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
-            ->getMock();
-        $this->orderStatusHistoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Status\History::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
-            ->getMock();
-        $this->orderInvoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'save'])
-            ->getMock();
+        $this->addressHandlerMock = $this->createPartialMock(
+            Address::class,
+            ['removeEmptyAddresses', 'process']
+        );
+        $this->orderItemRepositoryMock = $this->createMock(OrderItemRepositoryInterface::class);
+        $this->orderPaymentResourceMock = $this->createPartialMock(Payment::class, ['save']);
+        $this->statusHistoryResource = $this->createPartialMock(History::class, ['save']);
+        $this->orderMock = $this->createPartialMock(
+            Order::class,
+            ['getId', 'getItems', 'getPayment', 'getStatusHistories', 'getRelatedObjects']
+        );
+        $this->orderItemMock = $this->createPartialMock(Item::class, ['setOrderId', 'setOrder']);
+        $this->orderPaymentMock = $this->createPartialMock(
+            OrderPayment::class,
+            ['setParentId', 'setOrder']
+        );
+        $this->orderStatusHistoryMock = $this->createPartialMock(
+            StatusHistory::class,
+            ['setParentId', 'setOrder']
+        );
+        $this->orderInvoiceMock = $this->createPartialMock(Invoice::class, ['setOrder', 'save']);
         $this->relationProcessor = new Relation(
             $this->addressHandlerMock,
             $this->orderItemRepositoryMock,

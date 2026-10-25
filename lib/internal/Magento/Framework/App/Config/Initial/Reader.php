@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config\Initial;
 
@@ -96,7 +96,7 @@ class Reader
         }
 
         if (!count($fileList)) {
-            return [];
+            return ['data' => [], 'metadata' => []];
         }
 
         /** @var \Magento\Framework\Config\Dom $domDocument */
@@ -118,10 +118,9 @@ class Reader
             }
         }
 
-        $output = [];
         if ($domDocument) {
-            $output = $this->_converter->convert($domDocument->getDom());
+            return $this->_converter->convert($domDocument->getDom());
         }
-        return $output;
+        return ['data' => [], 'metadata' => []];
     }
 }

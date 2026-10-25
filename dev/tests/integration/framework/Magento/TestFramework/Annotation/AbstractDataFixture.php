@@ -1,24 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\Dataset;
+use Magento\TestFramework\Fixture\ParserInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class consist of dataFixtures base logic
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDataFixture
 {
     /**
-     * Fixtures that have been applied
-     *
      * @var array
      */
     protected $_appliedFixtures = [];
@@ -45,12 +48,32 @@ abstract class AbstractDataFixture
 
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
-        $annotations = $scope === null ? $this->getAnnotations($test) : $test->getAnnotations()[$scope];
-        $existingFixtures = $annotations[$annotationKey] ?? [];
+        $parsers = Bootstrap::getObjectManager()
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => $this->getParsers()
+                ]
+            );
+
+        $fixtures = [];
+        try {
+            $fixtures = $parsers->parse($test, $scope ?: ParserInterface::SCOPE_METHOD);
+            if (!$fixtures && !$scope) {
+                $fixtures = $parsers->parse($test, ParserInterface::SCOPE_CLASS);
+            }
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                $exception,
+                $test
+            );
+        }
+
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $this->fixtures[$annotationKey][$this->getTestKey($test)] = $resolver->applyDataFixtures(
             $test,
-            $existingFixtures,
+            $fixtures,
             $annotationKey
         );
 
@@ -67,37 +90,9 @@ abstract class AbstractDataFixture
      */
     protected function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
-        return array_replace((array)$annotations['class'], (array)$annotations['method']);
-    }
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
 
-    /**
-     * Execute single fixture script
-     *
-     * @param string|array $fixture
-     * @return void
-     * @throws \Exception
-     */
-    protected function _applyOneFixture($fixture)
-    {
-        try {
-            if (is_callable($fixture)) {
-                call_user_func($fixture);
-            } else {
-                require $fixture;
-            }
-        } catch (\Exception $e) {
-            throw new Exception(
-                sprintf(
-                    "Error in fixture: %s.\n %s\n %s",
-                    json_encode($fixture),
-                    $e->getMessage(),
-                    $e->getTraceAsString()
-                ),
-                500,
-                $e
-            );
-        }
+        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 
     /**
@@ -109,17 +104,60 @@ abstract class AbstractDataFixture
      */
     protected function _applyFixtures(array $fixtures, TestCase $test)
     {
-        /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-        $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\TestFramework\Annotation\TestsIsolation::class
-        );
+        $objectManager = Bootstrap::getObjectManager();
+        $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
-
+        if ($test->usesDataProvider()) {
+            /**
+             * The TestCase instance passed here is a dummy instance; it is not the one used for the
+             * actual test execution.
+             *
+             * Currently, $test->providedData() always returns [''] and not the actual dataset from the data provider.
+             *
+             * @see ConfigFixture::startTest
+             *
+             * We intentionally keep this behavior for now. Resolving the real dataset at this stage is
+             * non-trivial. Currently, the only reliable way is to use the event metadata:
+             * $event->test()->metadata()->isDataProvider() and $event->test()->metadata()->isTestWith().
+             *
+             * @see \Magento\TestFramework\Event\TestPreprationStartedSubscriber::notify
+             *
+             * However, accessing that metadata can trigger execution of the data provider callback, which
+             * may be expensive. Since fixtures only need the dataset when it is explicitly referenced, we
+             * defer resolving the actual dataset until that point.
+             */
+            DataFixtureStorageManager::getStorage()
+                ->persist(
+                    'dataset',
+                    new Dataset(
+                        get_class($test),
+                        $test->name(),
+                        $test->dataName()
+                    )
+                );
+        }
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         /* Execute fixture scripts */
-        foreach ($fixtures as $oneFixture) {
-            $this->_applyOneFixture($oneFixture);
-            $this->_appliedFixtures[] = $oneFixture;
+        foreach ($fixtures as $fixture) {
+            if (is_callable([get_class($test), $fixture['factory']])) {
+                $fixture['factory'] = get_class($test) . '::' . $fixture['factory'];
+            }
+            $fixture['test'] = [
+                'class' => get_class($test),
+                'method' => $test->name(),
+                'dataSet' => $test->dataName(),
+            ];
+            try {
+                $fixture['result'] = $dataFixtureSetup->apply($fixture);
+            } catch (\Throwable $exception) {
+                ExceptionHandler::handle(
+                    'Unable to apply fixture: ' . $this->getFixtureReference($fixture),
+                    $exception,
+                    $test
+                );
+            }
+            $this->_appliedFixtures[] = $fixture;
         }
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType(null);
@@ -133,38 +171,61 @@ abstract class AbstractDataFixture
      */
     protected function _revertFixtures(?TestCase $test = null)
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($this->getAnnotation());
         $appliedFixtures = array_reverse($this->_appliedFixtures);
         foreach ($appliedFixtures as $fixture) {
-            if (is_callable($fixture)) {
-                $fixture[1] .= 'Rollback';
-                if (is_callable($fixture)) {
-                    $this->_applyOneFixture($fixture);
-                }
-            } else {
-                $fileInfo = pathinfo($fixture);
-                $extension = '';
-                if (isset($fileInfo['extension'])) {
-                    $extension = '.' . $fileInfo['extension'];
-                }
-                $rollbackScript = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '_rollback' . $extension;
-                if (file_exists($rollbackScript)) {
-                    $this->_applyOneFixture($rollbackScript);
-                }
+            try {
+                $dataFixtureSetup->revert($fixture);
+            } catch (\Throwable $exception) {
+                ExceptionHandler::handle(
+                    'Unable to revert fixture: ' . $this->getFixtureReference($fixture),
+                    $exception,
+                    $test
+                );
             }
         }
         $this->_appliedFixtures = [];
         $resolver->setCurrentFixtureType(null);
 
         if (null !== $test) {
-            /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-            $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\TestFramework\Annotation\TestsIsolation::class
-            );
+            /** @var TestsIsolation $testsIsolation */
+            $testsIsolation = $objectManager->get(TestsIsolation::class);
             $dbIsolationState = $this->getDbIsolationState($test);
             $testsIsolation->checkTestIsolation($test, $dbIsolationState);
         }
+    }
+
+    /**
+     * Get reference to the fixture definition
+     *
+     * @param array $fixture
+     * @return string
+     */
+    private function getFixtureReference(array $fixture): string
+    {
+        return sprintf(
+            '%s%s',
+            $fixture['factory'],
+            $fixture['name'] ? ' (' . $fixture['name'] . ')' : '',
+        );
+    }
+
+    /**
+     * Return fixtures parser
+     *
+     * @return ParserInterface[]
+     */
+    protected function getParsers(): array
+    {
+        $parsers = [];
+        $parsers[] = Bootstrap::getObjectManager()->create(
+            \Magento\TestFramework\Annotation\Parser\DataFixture::class,
+            ['annotation' => $this->getAnnotation()]
+        );
+        return $parsers;
     }
 
     /**
@@ -175,10 +236,8 @@ abstract class AbstractDataFixture
      */
     protected function getDbIsolationState(TestCase $test)
     {
-        $annotations = $this->getAnnotations($test);
-        return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])
-            ? $annotations[DbIsolation::MAGENTO_DB_ISOLATION]
-            : null;
+        $isEnabled = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+        return $isEnabled === null ? null : [$isEnabled ? 'enabled' : 'disabled'];
     }
 
     /**
@@ -189,7 +248,7 @@ abstract class AbstractDataFixture
      */
     private function getTestKey(TestCase $test): string
     {
-        return sprintf('%s::%s', get_class($test), $test->getName());
+        return sprintf('%s::%s', get_class($test), $test->nameWithDataSet());
     }
 
     /**

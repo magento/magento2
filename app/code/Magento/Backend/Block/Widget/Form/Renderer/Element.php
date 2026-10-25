@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Form\Renderer;
@@ -29,6 +29,8 @@ class Element extends \Magento\Backend\Block\Template implements RendererInterfa
     protected $_template = 'Magento_Backend::widget/form/renderer/element.phtml';
 
     /**
+     * Get abstract element
+     *
      * @return AbstractElement
      */
     public function getElement()
@@ -37,6 +39,8 @@ class Element extends \Magento\Backend\Block\Template implements RendererInterfa
     }
 
     /**
+     * Render the element
+     *
      * @param AbstractElement $element
      * @return string
      */

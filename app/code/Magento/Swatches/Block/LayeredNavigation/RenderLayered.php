@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Swatches\Block\LayeredNavigation;
 
@@ -123,10 +123,11 @@ class RenderLayered extends Template
 
         $attributeOptions = [];
         foreach ($this->eavAttribute->getOptions() as $option) {
+            $optionValue = $option->getValue() ?? '';
             if ($currentOption = $this->getFilterOption($this->filter->getItems(), $option)) {
-                $attributeOptions[$option->getValue()] = $currentOption;
+                $attributeOptions[$optionValue] = $currentOption;
             } elseif ($this->isShowEmptyResults()) {
-                $attributeOptions[$option->getValue()] = $this->getUnusedOption($option);
+                $attributeOptions[$optionValue] = $this->getUnusedOption($option);
             }
         }
 
@@ -152,11 +153,16 @@ class RenderLayered extends Template
      */
     public function buildUrl($attributeCode, $optionId)
     {
-        $query = [
-            $attributeCode => $optionId,
-            // exclude current page from urls
-            $this->htmlPagerBlock->getPageVarName() => null
-        ];
+        $query = [];
+        $attr = (string)($attributeCode ?? '');
+        if ($attr !== '') {
+            $query[$attr] = $optionId;
+        }
+        // exclude current page from urls; guard against null page var name (PHP 8.1+ deprecates null array offsets)
+        $pageVar = (string)($this->htmlPagerBlock->getPageVarName() ?? '');
+        if ($pageVar !== '') {
+            $query[$pageVar] = null;
+        }
 
         return $this->_urlBuilder->getUrl(
             '*/*/*',

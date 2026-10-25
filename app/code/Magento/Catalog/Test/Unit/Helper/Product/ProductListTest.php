@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -15,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProductListTest extends TestCase
 {
-    const STUB_VIEW_MODE = 'grid';
+    private const STUB_VIEW_MODE = 'grid';
     /**
      * @var ScopeConfigInterface|MockObject
      */
@@ -30,15 +31,13 @@ class ProductListTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->productListHelper = $objectManager->getObject(ProductList::class, [
             'scopeConfig' => $this->scopeConfigMock
         ]);
     }
 
-    /**
-     * @dataProvider defaultAvailableLimitsDataProvider
-     */
+    #[DataProvider('defaultAvailableLimitsDataProvider')]
     public function testGetDefaultLimitPerPageValueReturnsOneOfAvailableLimits(
         string $availableValues,
         int $defaultValue,
@@ -55,18 +54,18 @@ class ProductListTest extends TestCase
         $this->assertSame($expectedReturn, $returnedValue);
     }
 
-    public function defaultAvailableLimitsDataProvider(): array
+    public static function defaultAvailableLimitsDataProvider(): array
     {
         return [
             'limit-available' => [
-                'values' => '10,20,30',
-                'default' => 10,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 10,
+                'expectedReturn' => 10
             ],
             'limit-not-available' => [
-                'values' => '10,20,30',
-                'default' => 1,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 1,
+                'expectedReturn' => 10
             ]
         ];
     }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,13 +36,8 @@ class AttributeSetFinderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollection = $this->createMock(Collection::class);
+        $this->productCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->productCollectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
 
         $this->attributeSetFinder = (new ObjectManager($this))->getObject(
@@ -59,15 +53,13 @@ class AttributeSetFinderTest extends TestCase
         $productIds = [1, 2, 3];
         $attributeSetIds = [3, 4, 6];
 
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('reset')->with(Select::COLUMNS)->willReturnSelf();
         $select->expects($this->once())->method('columns')->with(ProductInterface::ATTRIBUTE_SET_ID)->willReturnSelf();
         $select->expects($this->once())->method('where')->with('entity_id IN (?)', $productIds)->willReturnSelf();
         $select->expects($this->once())->method('group')->with(ProductInterface::ATTRIBUTE_SET_ID)->willReturnSelf();
 
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($attributeSetIds);
 
         $this->productCollection->expects($this->once())->method('getSelect')->willReturn($select);

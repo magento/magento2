@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,9 +24,12 @@ use Magento\Framework\DB\Transaction;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeTypeNormalizer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +38,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Config
      */
@@ -105,13 +110,22 @@ class ConfigTest extends TestCase
      */
     private $scopeTypeNormalizer;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->structureReaderMock = $this->getMockBuilder(Reader::class)
-            ->addMethods(['getConfiguration'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->structureReaderMock = $this->createPartialMockWithReflection(
+            Reader::class,
+            ['getConfiguration']
+        );
         $this->configStructure = $this->createMock(Structure::class);
 
         $this->structureReaderMock->expects(
@@ -122,34 +136,33 @@ class ConfigTest extends TestCase
             $this->configStructure
         );
 
-        $this->transFactoryMock = $this->getMockBuilder(TransactionFactory::class)
-            ->addMethods(['addObject'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->appConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->transFactoryMock = $this->createPartialMockWithReflection(
+            TransactionFactory::class,
+            ['addObject', 'create']
+        );
+        $this->appConfigMock = $this->createMock(ReinitableConfigInterface::class);
         $this->configLoaderMock = $this->createPartialMock(
             Loader::class,
             ['getConfigByPath']
         );
         $this->dataFactoryMock = $this->createMock(ValueFactory::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->settingsChecker = $this
             ->createMock(SettingChecker::class);
 
         $this->scopeResolverPool = $this->createMock(ScopeResolverPool::class);
-        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $this->scopeResolverPool->method('get')
             ->willReturn($this->scopeResolver);
-        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
         $this->scopeResolver->method('getScope')
             ->willReturn($this->scope);
 
         $this->scopeTypeNormalizer = $this->createMock(ScopeTypeNormalizer::class);
 
-        $stubPillPut = $this->getMockForAbstractClass(PoisonPillPutInterface::class);
+        $stubPillPut = $this->createMock(PoisonPillPutInterface::class);
 
         $this->model = new Config(
             $this->appConfigMock,
@@ -167,14 +180,24 @@ class ConfigTest extends TestCase
         );
     }
 
-    public function testSaveDoesNotDoAnythingIfGroupsAreNotPassed()
+    /**
+     * @return void
+     */
+    public function testSaveDoesNotDoAnythingIfGroupsAreNotPassed(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->configLoaderMock->expects($this->never())->method('getConfigByPath');
         $this->model->save();
     }
 
-    public function testSaveEmptiesNonSetArguments()
+    /**
+     * @return void
+     */
+    public function testSaveEmptiesNonSetArguments(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->structureReaderMock->expects($this->never())->method('getConfiguration');
         $this->assertNull($this->model->getSection());
         $this->assertNull($this->model->getWebsite());
@@ -185,38 +208,39 @@ class ConfigTest extends TestCase
         $this->assertSame('', $this->model->getStore());
     }
 
-    public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
+    /**
+     * @return void
+     */
+    public function testSaveToCheckAdminSystemConfigChangedSectionEvent(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
 
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
         $this->configLoaderMock->expects($this->any())->method('getConfigByPath')->willReturn([]);
 
-        $this->eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            'admin_system_config_changed_section_',
-            $this->arrayHasKey('website')
-        );
-
-        $this->eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            'admin_system_config_changed_section_',
-            $this->arrayHasKey('store')
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'admin_system_config_changed_section_' &&
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
+                    return null;
+                }
+            });
 
         $this->model->setGroups(['1' => ['data']]);
         $this->model->save();
     }
 
-    public function testDoNotSaveReadOnlyFields()
+    /**
+     * @return void
+     */
+    public function testDoNotSaveReadOnlyFields(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
@@ -233,18 +257,12 @@ class ConfigTest extends TestCase
         $field->method('getGroupPath')->willReturn('section/1');
         $field->method('getId')->willReturn('key');
 
-        $this->configStructure->expects($this->at(0))
+        $this->configStructure
             ->method('getElement')
-            ->with('section/1')
-            ->willReturn($group);
-        $this->configStructure->expects($this->at(1))
-            ->method('getElement')
-            ->with('section/1')
-            ->willReturn($group);
-        $this->configStructure->expects($this->at(2))
-            ->method('getElement')
-            ->with('section/1/key')
-            ->willReturn($field);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/1'] => $group,
+                ['section/1/key'] => $field
+            });
 
         $backendModel = $this->createPartialMock(
             Value::class,
@@ -258,25 +276,26 @@ class ConfigTest extends TestCase
         $this->model->save();
     }
 
-    public function testSaveToCheckScopeDataSet()
+    /**
+     * @return void
+     */
+    public function testSaveToCheckScopeDataSet(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
         $this->configLoaderMock->expects($this->any())->method('getConfigByPath')->willReturn([]);
 
-        $this->eventManagerMock->expects($this->at(0))
+        $this->eventManagerMock
             ->method('dispatch')
-            ->with(
-                'admin_system_config_changed_section_section',
-                $this->arrayHasKey('website')
-            );
-        $this->eventManagerMock->expects($this->at(0))
-            ->method('dispatch')
-            ->with(
-                'admin_system_config_changed_section_section',
-                $this->arrayHasKey('store')
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'admin_system_config_changed_section_' &&
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
+                    return null;
+                }
+            });
 
         $group = $this->createMock(Group::class);
         $group->method('getPath')->willReturn('section/1');
@@ -285,26 +304,12 @@ class ConfigTest extends TestCase
         $field->method('getGroupPath')->willReturn('section/1');
         $field->method('getId')->willReturn('key');
 
-        $this->configStructure->expects($this->at(0))
+        $this->configStructure
             ->method('getElement')
-            ->with('section/1')
-            ->willReturn($group);
-        $this->configStructure->expects($this->at(1))
-            ->method('getElement')
-            ->with('section/1')
-            ->willReturn($group);
-        $this->configStructure->expects($this->at(2))
-            ->method('getElement')
-            ->with('section/1/key')
-            ->willReturn($field);
-        $this->configStructure->expects($this->at(3))
-            ->method('getElement')
-            ->with('section/1')
-            ->willReturn($group);
-        $this->configStructure->expects($this->at(4))
-            ->method('getElement')
-            ->with('section/1/key')
-            ->willReturn($field);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/1'] => $group,
+                ['section/1/key'] => $field
+            });
 
         $this->scopeResolver->expects($this->atLeastOnce())
             ->method('getScope')
@@ -331,11 +336,10 @@ class ConfigTest extends TestCase
         $this->model->setSection('section');
         $this->model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
-        $backendModel = $this->getMockBuilder(Value::class)
-            ->addMethods(['setPath'])
-            ->onlyMethods(['addData', '__sleep', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['setPath', 'addData', '__sleep', '__wakeup']
+        );
         $backendModel->expects($this->once())
             ->method('addData')
             ->with([
@@ -346,7 +350,7 @@ class ConfigTest extends TestCase
                 'scope_id' => 1,
                 'scope_code' => 'website_code',
                 'field_config' => null,
-                'fieldset_data' => ['key' => null],
+                'fieldset_data' => ['key' => null]
             ]);
         $backendModel->expects($this->once())
             ->method('setPath')
@@ -363,9 +367,11 @@ class ConfigTest extends TestCase
      * @param string $value
      * @param string $section
      * @param array $groups
-     * @dataProvider setDataByPathDataProvider
+     *
+     * @return void
      */
-    public function testSetDataByPath(string $path, string $value, string $section, array $groups)
+    #[DataProvider('setDataByPathDataProvider')]
+    public function testSetDataByPath(string $path, string $value, string $section, array $groups): void
     {
         $this->model->setDataByPath($path, $value);
         $this->assertEquals($section, $this->model->getData('section'));
@@ -375,7 +381,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function setDataByPathDataProvider(): array
+    public static function setDataByPathDataProvider(): array
     {
         return [
             'depth 3' => [
@@ -385,7 +391,7 @@ class ConfigTest extends TestCase
                 [
                     'b' => [
                         'fields' => [
-                            'c' => ['value' => 'value1'],
+                            'c' => ['value' => 'value1']
                         ],
                     ],
                 ],
@@ -401,7 +407,7 @@ class ConfigTest extends TestCase
                                 'groups' => [
                                     'd' => [
                                         'fields' => [
-                                            'e' => ['value' => 'value1'],
+                                            'e' => ['value' => 'value1']
                                         ],
                                     ],
                                 ],
@@ -413,7 +419,10 @@ class ConfigTest extends TestCase
         ];
     }
 
-    public function testSetDataByPathEmpty()
+    /**
+     * @return void
+     */
+    public function testSetDataByPathEmpty(): void
     {
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Path must not be empty');
@@ -422,9 +431,11 @@ class ConfigTest extends TestCase
 
     /**
      * @param string $path
-     * @dataProvider setDataByPathWrongDepthDataProvider
+     *
+     * @return void
      */
-    public function testSetDataByPathWrongDepth(string $path)
+    #[DataProvider('setDataByPathWrongDepthDataProvider')]
+    public function testSetDataByPathWrongDepth(string $path): void
     {
         $currentDepth = count(explode('/', $path));
         $expectedException = 'Minimal depth of configuration is 3. Your configuration depth is ' . $currentDepth;
@@ -437,11 +448,11 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function setDataByPathWrongDepthDataProvider(): array
+    public static function setDataByPathWrongDepthDataProvider(): array
     {
         return [
             'depth 2' => ['section/group'],
-            'depth 1' => ['section'],
+            'depth 1' => ['section']
         ];
     }
 }

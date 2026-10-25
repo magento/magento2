@@ -1,22 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Observer;
 
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Modifies the bundle config for the front end to resemble the tax included price when tax included prices.
  */
-class GetPriceConfigurationObserver implements ObserverInterface
+class GetPriceConfigurationObserver implements ObserverInterface, ResetAfterRequestInterface
 {
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxData;
@@ -115,7 +114,8 @@ class GetPriceConfigurationObserver implements ObserverInterface
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->registry->registry('current_product');
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                if (!isset($this->selectionCache[$product->getId()])) {
+                $productId = $product->getId() ?? '';
+                if (!isset($this->selectionCache[$productId])) {
                     $typeInstance = $product->getTypeInstance();
                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
@@ -123,9 +123,9 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         $typeInstance->getOptionsIds($product),
                         $product
                     );
-                    $this->selectionCache[$product->getId()] = $selectionCollection->getItems();
+                    $this->selectionCache[$productId] = $selectionCollection->getItems();
                 }
-                $arrSelections = $this->selectionCache[$product->getId()];
+                $arrSelections = $this->selectionCache[$productId];
 
                 foreach ($arrSelections as $selectionItem) {
                     if ($holder['optionId'] == $selectionItem->getId()) {
@@ -145,5 +145,13 @@ class GetPriceConfigurationObserver implements ObserverInterface
             }
         }
         return $holder;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->selectionCache = [];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -59,6 +59,7 @@ class Website implements OptionSourceInterface
     private function getWebsiteOptions(): array
     {
         $options = $this->systemStore->getWebsiteValuesForForm();
+        $defaultStoreViewIds = $this->getWebsiteDefaultStoreViewIds();
         foreach ($options as $key => $option) {
             $websiteId = $option['value'];
             $groupId = $this->scopeConfig->getValue(
@@ -67,8 +68,25 @@ class Website implements OptionSourceInterface
                 $websiteId
             );
             $options[$key]['group_id'] = $groupId;
+            $options[$key]['default_store_view_id'] = $defaultStoreViewIds[$websiteId] ?? null;
         }
 
         return $options;
+    }
+
+    /**
+     * Build a map of website id => default store view id in a single pass
+     *
+     * @return array
+     */
+    private function getWebsiteDefaultStoreViewIds(): array
+    {
+        $defaultStoreViewIds = [];
+        foreach ($this->systemStore->getWebsiteCollection() as $website) {
+            $defaultStore = $website->getDefaultStore();
+            $defaultStoreViewIds[$website->getId()] = $defaultStore ? $defaultStore->getId() : null;
+        }
+
+        return $defaultStoreViewIds;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,15 +27,18 @@ $parentCategoryData = [
     'is_anchor' => true,
 ];
 $parentCategory->setData($parentCategoryData);
-$parentCategoryId = $categoryRepository->save($parentCategory)->getId();
+$parentCategory = $categoryRepository->save($parentCategory);
 
 $category = $categoryFactory->create();
 $category->isObjectNew(true);
 $categoryData = [
     'name' => 'Child category',
     'attribute_set_id' => $attributeSetId,
-    'parent_id' => $parentCategoryId,
+    'parent_id' => $parentCategory->getId(),
     'is_active' => true,
 ];
 $category->setData($categoryData);
 $categoryRepository->save($category);
+
+//save parent category to set "children" attribute
+$categoryRepository->save($parentCategory);

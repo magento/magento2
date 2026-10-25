@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,6 +36,22 @@ $storeGroup->setCode('second_group')
 $objectManager->get(GroupResource::class)->save($storeGroup);
 /* Refresh stores memory cache */
 $storeManager->reinitStores();
+
+$store = $objectManager->create(Store::class);
+if (!$store->load('fixture_second_store', 'code')->getId()) {
+    $store->setGroupId(
+        $storeGroup->getId()
+    );
+    $store->save();
+}
+
+$store = $objectManager->create(Store::class);
+if (!$store->load('fixture_third_store', 'code')->getId()) {
+    $store->setGroupId(
+        $storeGroup->getId()
+    );
+    $store->save();
+}
 
 $store = $objectManager->create(Store::class);
 if (!$store->load('fixture_fourth_store', 'code')->getId()) {

@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* @api */
@@ -190,6 +190,14 @@ define([
                 '" alt="' + $t('Card Verification Number Visual Reference') +
                 '" title="' + $t('Card Verification Number Visual Reference') +
                 '" />';
+        },
+
+        /**
+         * Get unsanitized html for image for CVV
+         * @returns {String}
+         */
+        getCvvImageUnsanitizedHtml: function () {
+            return this.getCvvImageHtml();
         },
 
         /**

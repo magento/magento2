@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,11 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Result\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddAttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ResultFactory|MockObject */
     private $resultFactory;
 
@@ -60,33 +64,17 @@ class AddAttributeTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setBody'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->productBuilder = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['build'])
-            ->getMock();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->response = $this->createMock(ResponseHttp::class);
+        $this->productBuilder = $this->createPartialMock(Builder::class, ['build']);
+        $this->view = $this->createMock(ViewInterface::class);
 
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context->expects($this->any())
-            ->method('getResultFactory')
-            ->willReturn($this->resultFactory);
-        $this->context->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($this->response);
+        $this->context->method('getResultFactory')->willReturn($this->resultFactory);
+        $this->context->method('getView')->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             AddAttribute::class,
@@ -99,10 +87,7 @@ class AddAttributeTest extends TestCase
 
     public function testExecute()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getId'])
-            ->getMock();
+        $product = $this->createPartialMock(Product::class, ['getId']);
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);
         $resultLayout = $this->createMock(Layout::class);

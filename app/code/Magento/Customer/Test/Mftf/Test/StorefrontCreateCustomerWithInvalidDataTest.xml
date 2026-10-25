@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+* Copyright 2024 Adobe
+* All Rights Reserved.
+*/
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,19 @@
             <testCaseId value="MC-38532"/>
             <useCaseId value="MC-38509"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
+
+        <after>
+            <!--Log in as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <!--Delete customer created during test execution-->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromGrid">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <!--Log out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
 
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <!--Try to submit register form with wrong password.-->

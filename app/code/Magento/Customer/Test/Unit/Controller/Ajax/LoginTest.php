@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,12 +30,15 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Login
      */
@@ -109,15 +112,22 @@ class LoginTest extends TestCase
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect', 'representJson', 'setHttpResponseCode'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getLastCustomerId', 'getBeforeAuthUrl'])
-            ->onlyMethods(['isLoggedIn', 'setBeforeAuthUrl', 'setCustomerDataAsLoggedIn', 'regenerateId', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setRedirect', 'representJson', 'setHttpResponseCode']
+        );
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'isLoggedIn',
+                'setBeforeAuthUrl',
+                'setCustomerDataAsLoggedIn',
+                'regenerateId',
+                'getData',
+                'getLastCustomerId',
+                'getBeforeAuthUrl'
+            ]
+        );
         $this->objectManager = $this->createPartialMock(FakeObjectManager::class, ['get']);
         $this->accountManagement = $this->createPartialMock(AccountManagement::class, ['authenticate']);
 
@@ -128,12 +138,10 @@ class LoginTest extends TestCase
             ->getMock();
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->cookieManager = $this->getMockBuilder(CookieManagerInterface::class)
-            ->setMethods(['getCookie', 'deleteCookie'])
-            ->getMockForAbstractClass();
+        $this->cookieManager = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,14 +151,14 @@ class LoginTest extends TestCase
             ->getMock();
         $resultRawFactory = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRawFactory->method('create')
             ->willReturn($this->resultRaw);
 
         /** @var Context|MockObject $context */
         $context = $this->createMock(Context::class);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $context->method('getRedirect')
             ->willReturn($this->redirect);
         $context->method('getRequest')
@@ -191,7 +199,7 @@ class LoginTest extends TestCase
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
 
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $this->accountManagement->method('authenticate')
             ->with('customer@example.com', 'password')
             ->willReturn($customer);
@@ -244,7 +252,7 @@ class LoginTest extends TestCase
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
 
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $this->accountManagement->method('authenticate')
             ->with('invalid@example.com', 'invalid')
             ->willThrowException(new InvalidEmailOrPasswordException(__('Invalid login or password.')));
@@ -310,7 +318,7 @@ class LoginTest extends TestCase
     private function withScopeConfig(): void
     {
         /** @var ScopeConfigInterface|MockObject $scopeConfig */
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->controller->setScopeConfig($scopeConfig);
         $scopeConfig->method('getValue')
             ->with('customer/startup/redirect_dashboard')

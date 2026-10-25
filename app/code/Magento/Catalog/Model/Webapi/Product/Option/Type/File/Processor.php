@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Webapi\Product\Option\Type\File;
 
@@ -28,6 +28,11 @@ class Processor
     protected $destinationFolder = 'custom_options/quote';
 
     /**
+     * Order path constant
+     */
+    private const ORDER_PATH = 'custom_options/order';
+
+    /**
      * @param Filesystem $filesystem
      * @param ImageProcessor $imageProcessor
      */
@@ -40,8 +45,11 @@ class Processor
     }
 
     /**
+     * Saves file
+     *
      * @param ImageContentInterface $imageContent
      * @return string
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function saveFile(ImageContentInterface $imageContent)
     {
@@ -50,6 +58,8 @@ class Processor
     }
 
     /**
+     * Save file content and return file details
+     *
      * @param ImageContentInterface $imageContent
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -58,16 +68,23 @@ class Processor
     {
         $filePath = $this->saveFile($imageContent);
 
-        $fileAbsolutePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($filePath);
-        $fileHash = md5($this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->readFile($filePath));
-        $imageSize = getimagesize($fileAbsolutePath);
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $fileAbsolutePath = $mediaDirectory->getAbsolutePath($filePath);
+        $fileContent = $mediaDirectory->readFile($filePath);
+        $fileHash = hash('sha256', $fileContent);
+        $imageSize = getimagesizefromstring($fileContent);
+        $stat = $mediaDirectory->stat($fileAbsolutePath);
+
+        $relativeFilePath = str_replace($this->destinationFolder, '', $filePath);
+        $orderPath = self::ORDER_PATH . $relativeFilePath;
+
         $result = [
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),
             'fullpath' => $fileAbsolutePath,
             'quote_path' => $filePath,
-            'order_path' => $filePath,
-            'size' => filesize($fileAbsolutePath),
+            'order_path' => $orderPath,
+            'size' => $stat['size'],
             'width' => $imageSize ? $imageSize[0] : 0,
             'height' => $imageSize ? $imageSize[1] : 0,
             'secret_key' => substr($fileHash, 0, 20),

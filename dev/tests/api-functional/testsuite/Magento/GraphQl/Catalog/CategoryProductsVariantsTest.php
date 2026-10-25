@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryProductsVariantsTest extends GraphQlAbstract
 {
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/reindex_catalog_inventory_stock.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */

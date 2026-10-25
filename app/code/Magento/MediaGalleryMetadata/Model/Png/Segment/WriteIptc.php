@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -177,7 +177,7 @@ class WriteIptc implements WriteMetadataInterface
                 $binData,
                 pack("C", strlen($description)) . $description,
                 $descriptionStartPosition
-            ) . substr($binData, $descriptionStartPosition + 1 + ord(substr($binData, $descriptionStartPosition)));
+            ) . substr($binData, $descriptionStartPosition + 1 + ord($binData[$descriptionStartPosition]));
         }
 
         if ($metadata->getTitle() !== null) {
@@ -188,7 +188,7 @@ class WriteIptc implements WriteMetadataInterface
                 $binData,
                 pack("C", strlen($title)) . $title,
                 $titleStartPosition
-            ) . substr($binData, $titleStartPosition + 1 + ord(substr($binData, $titleStartPosition)));
+            ) . substr($binData, $titleStartPosition + 1 + ord($binData[$titleStartPosition]));
         }
 
         if ($metadata->getKeywords() !== null) {
@@ -199,7 +199,7 @@ class WriteIptc implements WriteMetadataInterface
                 $binData,
                 pack("C", strlen($keywords)) . $keywords,
                 $keywordsStartPosition
-            ) . substr($binData, $keywordsStartPosition + 1 + ord(substr($binData, $keywordsStartPosition)));
+            ) . substr($binData, $keywordsStartPosition + 1 + ord($binData[$keywordsStartPosition]));
         }
         $hexString = bin2hex($binData);
         $iptcSegmentStart = substr($segment->getData(), 0, $iptSegmentStartPosition + 2);

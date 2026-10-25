@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -132,7 +132,7 @@ class FactoryOptions
      *
      * @return void
      */
-    public function setVirtualHost(string $virtualHost = null)
+    public function setVirtualHost(?string $virtualHost = null)
     {
         $this->virtualHost = $virtualHost;
     }
@@ -168,7 +168,7 @@ class FactoryOptions
      *
      * @return void
      */
-    public function setSslOptions(array $sslOptions = null)
+    public function setSslOptions(?array $sslOptions = null)
     {
         $this->sslOptions = $sslOptions;
     }

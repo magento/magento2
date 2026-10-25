@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\Config\Importer\Processor;
 
@@ -9,6 +9,8 @@ use Magento\Framework\Exception\RuntimeException;
 
 /**
  * The processor for store manipulations.
+ *
+ * @api
  */
 interface ProcessorInterface
 {

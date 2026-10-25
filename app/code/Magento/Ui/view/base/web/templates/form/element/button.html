@@ -1,15 +1,15 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <button type="button"
         css="buttonClasses"
         click="action"
         disable="disabled"
-        attr="'data-index': index">
-    <span text="title"/>
+        attr="'data-index': index, 'aria-labelledby': ariLabelledby">
+    <span attr="'id': buttonTextId" text="title"></span>
 </button>
 
 <if args="childError">

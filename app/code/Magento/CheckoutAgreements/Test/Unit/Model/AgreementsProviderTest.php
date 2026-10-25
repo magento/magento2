@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,6 +41,9 @@ class AgreementsProviderTest extends TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -49,8 +52,8 @@ class AgreementsProviderTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = $objectManager->getObject(
             AgreementsProvider::class,
@@ -62,7 +65,10 @@ class AgreementsProviderTest extends TestCase
         );
     }
 
-    public function testGetRequiredAgreementIdsIfAgreementsEnabled()
+    /**
+     * @return void
+     */
+    public function testGetRequiredAgreementIdsIfAgreementsEnabled(): void
     {
         $storeId = 100;
         $expectedResult = [1, 2, 3, 4, 5];
@@ -81,20 +87,25 @@ class AgreementsProviderTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $agreementCollection->expects($this->once())->method('addStoreFilter')->with($storeId)->willReturnSelf();
-        $agreementCollection->expects($this->at(1))
+        $agreementCollection
             ->method('addFieldToFilter')
-            ->with('is_active', 1)
-            ->willReturnSelf();
-        $agreementCollection->expects($this->at(2))
-            ->method('addFieldToFilter')
-            ->with('mode', AgreementModeOptions::MODE_MANUAL)
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($agreementCollection) {
+                if ($arg1 == 'is_active' && $arg2 == 1) {
+                    return $agreementCollection;
+                } elseif ($arg1 == 'mode' && $arg2 == AgreementModeOptions::MODE_MANUAL) {
+                    return $agreementCollection;
+                }
+            });
+
         $agreementCollection->expects($this->once())->method('getAllIds')->willReturn($expectedResult);
 
         $this->assertEquals($expectedResult, $this->model->getRequiredAgreementIds());
     }
 
-    public function testGetRequiredAgreementIdsIfAgreementsDisabled()
+    /**
+     * @return void
+     */
+    public function testGetRequiredAgreementIdsIfAgreementsDisabled(): void
     {
         $expectedResult = [];
         $this->scopeConfigMock->expects($this->once())

@@ -1,9 +1,7 @@
 <?php
 /**
- * Backend Session configuration object
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model\Session;
 
@@ -85,6 +83,7 @@ class AdminConfig extends Config
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
         $this->setCookieSecure($this->_httpRequest->isSecure());
+        $this->setCookieSameSite('Lax');
     }
 
     /**
@@ -96,6 +95,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
+        //phpcs:ignore
         $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Pricing\Price;
@@ -25,7 +25,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     /**
      * Price type configured
      */
-    const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
+    public const PRICE_CODE = self::CONFIGURED_PRICE_CODE;
 
     /**
      * @var BundleCalculatorInterface
@@ -50,22 +50,29 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     private $configuredPriceSelection;
 
     /**
+     * @var DiscountCalculator
+     */
+    private $discountCalculator;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param PriceCurrencyInterface $priceCurrency
-     * @param ItemInterface $item
+     * @param ItemInterface|null $item
      * @param JsonSerializer|null $serializer
      * @param ConfiguredPriceSelection|null $configuredPriceSelection
+     * @param DiscountCalculator|null $discountCalculator
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
-        ItemInterface $item = null,
-        JsonSerializer $serializer = null,
-        ConfiguredPriceSelection $configuredPriceSelection = null
+        ?ItemInterface $item = null,
+        ?JsonSerializer $serializer = null,
+        ?ConfiguredPriceSelection $configuredPriceSelection = null,
+        ?DiscountCalculator $discountCalculator = null
     ) {
         $this->item = $item;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -73,10 +80,14 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $this->configuredPriceSelection = $configuredPriceSelection
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ConfiguredPriceSelection::class);
+        $this->discountCalculator = $discountCalculator
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(DiscountCalculator::class);
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
     /**
+     * Set item to the model
+     *
      * @param ItemInterface $item
      * @return $this
      */
@@ -144,12 +155,12 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     public function getValue()
     {
-        if ($this->item) {
+        if ($this->item && $this->item->getProduct()->getId()) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            return parent::getValue() +
-                $this->priceInfo
-                    ->getPrice(BundleDiscountPrice::PRICE_CODE)
-                    ->calculateDiscount($configuredOptionsAmount);
+            return parent::getValue() + $this->discountCalculator->calculateDiscount(
+                $this->item->getProduct(),
+                $configuredOptionsAmount
+            );
         }
         return parent::getValue();
     }

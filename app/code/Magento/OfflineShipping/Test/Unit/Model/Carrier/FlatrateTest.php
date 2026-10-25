@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,8 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +33,8 @@ use Psr\Log\LoggerInterface;
  */
 class FlatrateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Flatrate
      */
@@ -73,35 +77,33 @@ class FlatrateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create', 'isSetFlag', 'getValue'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMockWithReflection(
+            ScopeConfigInterface::class,
+            ['create', 'isSetFlag', 'getValue']
+        );
 
         $this->errorFactoryMock = $this
             ->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->methodFactoryMock = $this
             ->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->priceCalculatorMock = $this
             ->getMockBuilder(ItemPriceCalculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingPricePerOrder'])
+            ->onlyMethods(['getShippingPricePerOrder'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -120,9 +122,9 @@ class FlatrateTest extends TestCase
 
     /**
      * @param bool $freeshipping
-     * @dataProvider collectRatesWithGlobalFreeShippingDataProvider
      * @return void
      */
+    #[DataProvider('collectRatesWithGlobalFreeShippingDataProvider')]
     public function testCollectRatesWithGlobalFreeShipping($freeshipping)
     {
         $this->markTestSkipped('Test needs refactoring.');
@@ -130,12 +132,12 @@ class FlatrateTest extends TestCase
 
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
+            ->onlyMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getProduct',
                     'getParentItem',
@@ -150,7 +152,7 @@ class FlatrateTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVirtual'])
+            ->onlyMethods(['isVirtual'])
             ->getMock();
 
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(true);
@@ -180,13 +182,13 @@ class FlatrateTest extends TestCase
 
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
             ->getMock();
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 
         $result = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(['append'])
+            ->onlyMethods(['append'])
             ->getMock();
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($result);
 
@@ -236,7 +238,7 @@ class FlatrateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
             ['freeshipping' => true],

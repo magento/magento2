@@ -1,10 +1,11 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
-define([
+ define([
     'jquery',
+    'underscore',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'mage/template',
@@ -14,7 +15,7 @@ define([
     'prototype',
     'Magento_Catalog/catalog/product/composite/configure',
     'Magento_Ui/js/lib/view/utils/async'
-], function (jQuery, confirm, alert, template, shippingTemplate, paymentTemplate) {
+], function (jQuery, _, confirm, alert, template, shippingTemplate, paymentTemplate) {
 
     window.AdminOrder = new Class.create();
 
@@ -157,7 +158,14 @@ define([
             this.sidebarShow();
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-            this.loadArea(['header', 'data'], true);
+            this.loadArea(
+                ['header', 'data'],
+                true,
+                null,
+                function () {
+                    location.reload();
+                }
+            );
         },
 
         setCurrencyId: function (id) {
@@ -184,7 +192,7 @@ define([
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();
@@ -274,6 +282,14 @@ define([
                 data['reset_shipping'] = true;
             }
 
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                if (this.shippingAsBilling) {
+                    $('order-shipping_address_customer_address_id').value = '';
+                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
+            }
+
             data['order[' + type + '_address][customer_address_id]'] = null;
             data['shipping_as_billing'] = +this.shippingAsBilling;
 
@@ -311,12 +327,26 @@ define([
 
             if (this.isBillingField(fieldName)) {
                 syncName = fieldName.replace('billing', 'shipping');
+
+                if (fieldName.indexOf('country')) {
+                    jQuery('#order-shipping_address_region').css(
+                        'display',
+                        jQuery('#order-billing_address_region').css('display')
+                    );
+                    jQuery('#order-shipping_address_region_id').css(
+                        'display',
+                        jQuery('#order-billing_address_region_id').css('display')
+                    );
+                }
             }
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
+                    } else if (element.type === "select" || element.type === "select-one") {
+                        element.innerHTML = fieldValue.innerHTML;
+                        element.value = fieldValue.value;
                     } else {
                         element.value = fieldValue.value;
                     }
@@ -411,13 +441,16 @@ define([
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['items', 'billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
@@ -475,7 +508,7 @@ define([
         loadPaymentMethods: function () {
             var data = this.serializeData(this.billingAddressContainer).toObject();
 
-            this.loadArea(['billing_method', 'totals'], true, data);
+            this.loadArea(['items', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -492,7 +525,7 @@ define([
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data);
         },
 
         setPaymentMethod: function (method) {
@@ -574,7 +607,20 @@ define([
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
-                reset_shipping: 0
+                'order[coupon][append]': code,
+                reset_shipping: true
+            });
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
+        },
+
+        removeCoupon: function (code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
+                'order[coupon][code]': '',
+                'order[coupon][remove]': code,
+                reset_shipping: true
             });
             this.orderItemChanged = false;
             jQuery('html, body').animate({
@@ -738,11 +784,27 @@ define([
                 var getPrice = function (elm) {
                     var optQty = 1;
                     if (elm.hasAttribute('qtyId')) {
-                        if (!$(elm.getAttribute('qtyId')).value) {
-                            return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
+                        var qtyId = elm.getAttribute('qtyId'),
+                            confirmedBlock = $(productConfigure.confirmedCurrentId),
+                            qtyEl = null,
+                            qtyInputs, j;
+
+                        if (confirmedBlock) {
+                            qtyInputs = confirmedBlock.getElementsByTagName('input');
+
+                            for (j = 0; j < qtyInputs.length; j++) {
+                                if (qtyInputs[j].id === qtyId) {
+                                    qtyEl = qtyInputs[j];
+                                    break;
+                                }
+                            }
                         }
+
+                        if (!qtyEl || !qtyEl.value) {
+                            return 0;
+                        }
+
+                        optQty = parseFloat(qtyEl.value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;
@@ -1152,7 +1214,7 @@ define([
             }
         },
 
-        loadArea: function (area, indicator, params) {
+        loadArea: function (area, indicator, params, callback) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
             if (area) {
@@ -1171,6 +1233,9 @@ define([
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
                         this.loadAreaResponseHandler(response);
+                        if (callback instanceof Function) {
+                            callback();
+                        }
                         deferred.resolve();
                     }.bind(this)
                 });
@@ -1328,15 +1393,26 @@ define([
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 
@@ -1437,6 +1513,7 @@ define([
                 country: $(parameters.countryElementId).value,
                 vat: $(parameters.vatElementId).value
             };
+            var escapedVat = _.escape(params.vat);
 
             if (this.storeId !== false) {
                 params.store_id = this.storeId;
@@ -1457,7 +1534,7 @@ define([
                             if (true === response.valid) {
                                 message = parameters.vatValidMessage;
                             } else if (true === response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                             } else {
                                 message = parameters.vatValidationFailedMessage;
                             }
@@ -1472,7 +1549,7 @@ define([
                                     groupActionRequired = 'change';
                                 }
                             } else if (response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                                 groupActionRequired = 'inform';
                             } else {
                                 message = parameters.vatValidationFailedMessage;

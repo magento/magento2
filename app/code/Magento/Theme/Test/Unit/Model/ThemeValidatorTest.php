@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class ThemeValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ThemeValidator
      */
@@ -43,15 +46,17 @@ class ThemeValidatorTest extends TestCase
      */
     protected $configData;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
-        $this->configData = $this->getMockBuilder(Value::class)
-            ->addMethods(['addFieldToFilter'])
-            ->onlyMethods(['getCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->configData = $this->createPartialMockWithReflection(
+            Value::class,
+            ['addFieldToFilter', 'getCollection']
+        );
         $this->themeValidator = new ThemeValidator(
             $this->storeManager,
             $this->themeProvider,
@@ -59,7 +64,10 @@ class ThemeValidatorTest extends TestCase
         );
     }
 
-    public function testValidateIsThemeInUse()
+    /**
+     * @return void
+     */
+    public function testValidateIsThemeInUse(): void
     {
         $theme = $this->createMock(Theme::class);
         $theme->expects($this->once())->method('getId')->willReturn(6);
@@ -69,13 +77,11 @@ class ThemeValidatorTest extends TestCase
         $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->willReturn($theme);
         $this->configData->expects($this->once())->method('getCollection')->willReturn($this->configData);
         $this->configData
-            ->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->willReturn($this->configData);
-        $this->configData
-            ->expects($this->at(2))
-            ->method('addFieldToFilter')
-            ->willReturn([$defaultEntity, $websitesEntity, $storesEntity]);
+            ->willReturnOnConsecutiveCalls(
+                $this->configData,
+                [$defaultEntity, $websitesEntity, $storesEntity]
+            );
         $website = $this->createPartialMock(Website::class, ['getName']);
         $website->expects($this->once())->method('getName')->willReturn('websiteA');
         $store = $this->createPartialMock(Store::class, ['getName']);

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\Model\Session\Quote;
@@ -142,7 +143,32 @@ class SaveTest extends AbstractBackendController
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $assert);
+        $this->assertThat(quoted_printable_decode($message->getBody()->bodyToString()), $assert);
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     *
+     * @return void
+     */
+    public function testNotSendEmailOnOrderSave(): void
+    {
+        $this->prepareRequest();
+        $this->dispatch('backend/sales/order_create/save');
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the order.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        $this->assertRedirect($this->stringContains('sales/order/view/'));
+
+        $orderId = $this->getOrderId();
+        if ($orderId === false) {
+            $this->fail('Order is not created.');
+        }
+
+        $this->assertNull($this->transportBuilder->getSentMessage());
     }
 
     /**

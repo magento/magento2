@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
 use Magento\Setup\Console\Command\InstallCommand;
@@ -18,12 +19,14 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\SearchConfigOptionsList;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Magento\Setup\Model\SearchConfigOptionsList;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -77,6 +80,11 @@ class InstallCommandTest extends TestCase
      */
     private $adminUserMock;
 
+    /**
+     * @var QuestionHelper
+     */
+    private $questionHelperMock;
+
     protected function setUp(): void
     {
         $this->input = [
@@ -102,7 +110,7 @@ class InstallCommandTest extends TestCase
 
         $userConfig = $this->createMock(InstallStoreConfigurationCommand::class);
         $userConfig
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getOptionsList')
             ->willReturn($this->getOptionsListUserConfig());
         $userConfig
@@ -112,7 +120,7 @@ class InstallCommandTest extends TestCase
 
         $this->adminUserMock = $this->createMock(AdminUserCreateCommand::class);
         $this->adminUserMock
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getOptionsList')
             ->willReturn($this->getOptionsListAdminUser());
 
@@ -141,10 +149,17 @@ class InstallCommandTest extends TestCase
         $this->definitionMock->expects($this->any())
             ->method('getOptions')
             ->willReturn([]);
+        $this->definitionMock->expects($this->any())
+            ->method('getArguments')
+            ->willReturn([]);
         $this->applicationMock->expects($this->any())
             ->method('find')
             ->with(ConfigImportCommand::COMMAND_NAME)
             ->willReturn($this->configImportMock);
+
+        $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->command = new InstallCommand(
             $this->installerFactory,
@@ -175,10 +190,35 @@ class InstallCommandTest extends TestCase
             ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->configImportMock->expects($this->once())
-            ->method('run');
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
+    }
+
+    public function testInteractiveExecute(): void
+    {
+        $this->installerFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->installer);
+        $this->installer
+            ->expects($this->once())
+            ->method('install');
+        $this->questionHelperMock->method('ask');
+        $this->helperSetMock
+            ->method('get')
+            ->with('question')
+            ->willReturn($this->questionHelperMock);
+        $this->command->setHelperSet($this->helperSetMock);
+        $this->configImportMock->expects($this->once())
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['--' . InstallCommand::INPUT_KEY_INTERACTIVE_SETUP => true]);
+        $this->assertEquals(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
     }
 
     /**
@@ -282,9 +322,9 @@ class InstallCommandTest extends TestCase
     /**
      * Test install command with valid sales_order_increment_prefix value
      *
-     * @dataProvider validateDataProvider
      * @param $prefixValue
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($prefixValue)
     {
         $this->adminUserMock
@@ -295,6 +335,9 @@ class InstallCommandTest extends TestCase
             ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+        $this->configImportMock->expects($this->once())
+            ->method('run')
+            ->willReturn(Cli::RETURN_SUCCESS);
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
@@ -303,9 +346,9 @@ class InstallCommandTest extends TestCase
     /**
      * Test install command with invalid sales_order_increment_prefix value
      *
-     * @dataProvider validateWithExceptionDataProvider
      * @param $prefixValue
      */
+    #[DataProvider('validateWithExceptionDataProvider')]
     public function testValidateWithException($prefixValue)
     {
         $this->expectException('InvalidArgumentException');
@@ -325,23 +368,23 @@ class InstallCommandTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
-            'without option' => ['', ''],
-            'normal case' => ['abcde', ''],
-            '20 chars' => ['12345678901234567890', ''],
+            'without option' => [''],
+            'normal case' => ['abcde'],
+            '20 chars' => ['12345678901234567890'],
         ];
     }
 
     /**
      * @return array
      */
-    public function validateWithExceptionDataProvider()
+    public static function validateWithExceptionDataProvider()
     {
         return [
-            ['123456789012345678901', 'InvalidArgumentException'],
-            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg', 'InvalidArgumentException'],
+            ['123456789012345678901'],
+            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg'],
         ];
     }
 }

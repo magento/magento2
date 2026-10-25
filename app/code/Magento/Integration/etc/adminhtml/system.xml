@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -53,6 +53,10 @@
                     <label>OAuth consumer credentials HTTP Post timeout</label>
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                     <validate>required-entry validate-zero-or-greater validate-number</validate>
+                </field>
+                <field id="enable_integration_as_bearer" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Allow OAuth Access Tokens to be used as standalone Bearer tokens</label>
                 </field>
             </group>
             <group id="authentication_lock" translate="label" type="text" sortOrder="400" showInDefault="1">

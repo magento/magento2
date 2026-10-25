@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyOriginalPriceForProductWithCustomizableOptionInMultishippingOrderTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Verify original price for products with customizable options in multishipping orders"/>
+            <title value="Admin should display correct original price for products with customizable options in multishipping orders"/>
+            <description value="Verify original price displays correctly in admin for multishipping orders with products having special price and customizable options"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-15747"/>
+            <group value="multishipping"/>
+        </annotations>
+        <before>
+            <!-- Create customer with two addresses -->
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
+            <!-- Create product with special price -->
+            <createData entity="SimpleProductWithSpecialPrice" stepKey="createProductWithSpecialPrice"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$createProductWithSpecialPrice.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
+                <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <!-- Create product with customizable option -->
+            <createData entity="ApiSimpleProduct" stepKey="createProductWithCustomOption">
+                <field key="price">50.00</field>
+            </createData>
+            <!-- add customizable option to product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductWithCustomOptionEditPage">
+                <argument name="productId" value="$createProductWithCustomOption.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddProductCustomOptionFieldActionGroup" stepKey="addCustomOption">
+                <argument name="option" value="ProductOptionField"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithCustomOption"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createProductWithSpecialPrice" stepKey="deleteProductWithSpecialPrice"/>
+            <deleteData createDataKey="createProductWithCustomOption" stepKey="deleteProductWithCustomOption"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Login as customer on storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!-- Add product with special price to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductWithSpecialPriceToCart">
+            <argument name="product" value="$createProductWithSpecialPrice$"/>
+        </actionGroup>
+        <!-- Add product with customizable option to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductWithCustomOption">
+            <argument name="product" value="$createProductWithCustomOption$"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontProductInfoMainSection.productOptionFieldInput(ProductOptionField.title)}}" userInput="Test Value" stepKey="fillCustomOptionField"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addProductWithCustomOptionToCart">
+            <argument name="productName" value="$createProductWithCustomOption.name$"/>
+        </actionGroup>
+        <!-- Open cart and start multishipping checkout -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <click selector="{{ShippingMethodSection.goToBillingInfo}}" stepKey="clickContinue"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment"/>
+        <actionGroup ref="StorefrontPlaceOrderForMultipleAddressesActionGroup" stepKey="placeOrder">
+            <argument name="firstOrderPosition" value="1"/>
+            <argument name="secondOrderPosition" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSuccessPage"/>
+        <!-- Grab order IDs -->
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <!-- Verify first order in admin -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderInAdmin">
+            <argument name="orderId" value="{$grabFirstOrderId}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" stepKey="scrollToOrderItemsForFirstOrder"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemProductName('1')}}" stepKey="waitForFirstOrderProductName"/>
+        <!-- Verify original price for product in first order -->
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemOriginalPrice('1')}}" stepKey="grabOriginalPriceForSpecialPriceProduct"/>
+        <assertStringContainsString stepKey="verifyOriginalPriceForSpecialPriceProduct">
+            <expectedResult type="string">$100.00</expectedResult>
+            <actualResult type="variable">grabOriginalPriceForSpecialPriceProduct</actualResult>
+        </assertStringContainsString>
+        <!-- Verify second order in admin -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openSecondOrderInAdmin">
+            <argument name="orderId" value="{$grabSecondOrderId}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" stepKey="scrollToOrderItemsForSecondOrder"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.itemProductName('1')}}" stepKey="waitForSecondOrderProductName"/>
+        <!-- Verify original price and price for product with customizable option in second order -->
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemOriginalPrice('1')}}" stepKey="grabOriginalPriceForCustomOptionProduct"/>
+        <!-- Critical assertion: Original price should NOT be $0.00 for product with customizable option -->
+        <assertStringContainsString stepKey="verifyOriginalPriceIsNotZero">
+            <expectedResult type="string">$50.00</expectedResult>
+            <actualResult type="variable">grabOriginalPriceForCustomOptionProduct</actualResult>
+        </assertStringContainsString>
+        <assertStringNotContainsString stepKey="verifyOriginalPriceIsNotDisplayingAsZero">
+            <expectedResult type="string">$0.00</expectedResult>
+            <actualResult type="variable">grabOriginalPriceForCustomOptionProduct</actualResult>
+        </assertStringNotContainsString>
+        <!-- Verify customizable option is displayed in order items -->
+        <waitForText selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="verifyCustomOptionTitle"/>
+        <waitForText selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Test Value" stepKey="verifyCustomOptionValue"/>
+    </test>
+</tests>

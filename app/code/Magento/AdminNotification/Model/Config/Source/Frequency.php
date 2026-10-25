@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Model\Config\Source;
 
@@ -15,6 +15,8 @@ namespace Magento\AdminNotification\Model\Config\Source;
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()

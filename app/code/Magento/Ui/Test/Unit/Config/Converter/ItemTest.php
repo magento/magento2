@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Ui\Test\Unit\Config\Converter;
 use Magento\Ui\Config\Converter\Item;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,17 +36,16 @@ class ItemTest extends TestCase
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->load(dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files/test.xml');
         $this->domXpath = new \DOMXPath($dom);
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlConverter = $this->createMock(ConverterInterface::class);
         $this->converter = new Item($this->urlConverter, new ConverterUtils());
     }
 
     /**
      * @param array $expectedResult
      * @param string $xpath
-     * @dataProvider convertDataProvider
      */
-    public function testConvert(array $expectedResult, $xpath)
+    #[DataProvider('convertDataProvider')]
+    public function testConvert(array $expectedResult, string $xpath)
     {
         $node = $this->domXpath->query($xpath)->item(0);
         if ($xpath == '//listing/columns/settings/editorConfig') {
@@ -81,17 +81,17 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
-            $this->getSetOne() + $this->getSetTwo() + $this->getSetThree()
+            self::getSetOne() + self::getSetTwo() + self::getSetThree()
         ];
     }
 
     /**
      * @return array
      */
-    private function getSetOne()
+    private static function getSetOne()
     {
         return [
             [
@@ -129,10 +129,10 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    private function getSetTwo()
+    private static function getSetTwo()
     {
         return [
-            'editorConfig' => [
+            [
                 'name' => 'editorConfig',
                 'xsi:type' => 'array',
                 'item' => [
@@ -171,10 +171,10 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    private function getSetThree()
+    private static function getSetThree()
     {
         return [
-            'templates' => [
+            [
                 'name' => 'templates',
                 'xsi:type' => 'array',
                 'item' => [

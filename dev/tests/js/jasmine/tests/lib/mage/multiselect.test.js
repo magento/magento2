@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable max-nested-callbacks */
 
@@ -145,7 +145,7 @@ define([
 
             spyOn(instance.data('mage-multiselect2'), '_createSelectedOption').and.returnValue(true);
 
-            checkbox.click();
+            checkbox.trigger('click');
 
             expect(instance.data('mage-multiselect2')._createSelectedOption).toHaveBeenCalledWith({
                 value: '1',

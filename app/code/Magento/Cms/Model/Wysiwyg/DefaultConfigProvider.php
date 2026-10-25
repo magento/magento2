@@ -1,40 +1,43 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Asset\Repository;
+
 /**
- * Class DefaultConfigProvider returns data required to render tinymce4 editor
+ * Class DefaultConfigProvider returns data required to render tinymce editor
  */
 class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
-    private $assetRepo;
+    private Repository $assetRepo;
 
     /**
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param Repository $assetRepo
      */
-    public function __construct(\Magento\Framework\View\Asset\Repository $assetRepo)
+    public function __construct(Repository $assetRepo)
     {
         $this->assetRepo = $assetRepo;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    public function getConfig(DataObject $config) : DataObject
     {
         $config->addData([
-            'tinymce4' => [
-                'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
-                    . 'bullist numlist | link table charmap',
+            'tinymce' => [
+                'toolbar' => ' blocks fontfamily fontsizeinput| formatselect | bold italic underline ' .
+                    '| alignleft aligncenter alignright | bullist numlist | link table charmap',
                 'plugins' => implode(
                     ' ',
                     [
@@ -44,10 +47,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
                         'link',
                         'charmap',
                         'media',
-                        'noneditable',
                         'table',
-                        'contextmenu',
-                        'paste',
                         'code',
                         'help',
                         'table'

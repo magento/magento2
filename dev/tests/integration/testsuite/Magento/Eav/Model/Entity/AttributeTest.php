@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -50,6 +52,13 @@ class AttributeTest extends TestCase
         $this->attribute = null;
         $this->objectManager = null;
         $this->localeResolver = null;
+
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
+        }
     }
 
     /**
@@ -57,9 +66,9 @@ class AttributeTest extends TestCase
      * @param string $backendType
      * @param string $locale
      * @param string $expected
-     * @dataProvider beforeSaveDataProvider
      * @throws
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave(
         string $defaultValue,
         string $backendType,
@@ -81,7 +90,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['21/07/18', 'datetime', 'date', 'en_AU', '2018-07-21 00:00:00'],
@@ -101,8 +110,8 @@ class AttributeTest extends TestCase
      * @param string $backendType
      * @param string $locale
      * @param string $expected
-     * @dataProvider beforeSaveErrorDataDataProvider
      */
+    #[DataProvider('beforeSaveErrorDataDataProvider')]
     public function testBeforeSaveErrorData($defaultValue, $backendType, $locale, $expected)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -120,7 +129,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveErrorDataDataProvider()
+    public static function beforeSaveErrorDataDataProvider()
     {
         return [
             'wrong date for Australia' => ['32/38', 'datetime', 'en_AU', 'Invalid default date'],

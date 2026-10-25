@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Indexer;
 
@@ -82,6 +82,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->customerCollection->getSize();
@@ -92,6 +93,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
      *
      * @return Traversable
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $this->customerCollection->setPageSize($this->batchSize);

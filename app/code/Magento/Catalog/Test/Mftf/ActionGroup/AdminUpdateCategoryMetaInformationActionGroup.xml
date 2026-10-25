@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCategoryMetaInformationActionGroup">
+        <annotations>
+            <description>Update meta information</description>
+        </annotations>
+        <arguments>
+            <argument name="metaTitle" type="string"/>
+        </arguments>
+        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
+        <conditionalClick selector="{{AdminCategorySEOSection.MetaTitleDefaultValueCheckbox}}" dependentSelector="{{AdminCategorySEOSection.MetaTitleDefaultValueCheckbox}}" visible="true" stepKey="uncheckUseDefaultValueStoreView"/>
+        <waitForElementVisible selector="{{AdminCategorySEOSection.MetaTitleInput}}" stepKey="waitForElementVisible"/>
+        <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{metaTitle}}" stepKey="fillUpdatedMetaTitle"/>
+    </actionGroup>
+</actionGroups>
+

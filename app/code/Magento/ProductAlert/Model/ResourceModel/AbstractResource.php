@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ProductAlert\Model\ResourceModel;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Product alert for back in abstract resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

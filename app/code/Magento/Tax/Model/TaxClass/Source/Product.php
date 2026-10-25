@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\TaxClass\Source;
@@ -36,8 +36,11 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_optionFactory;
 
     /**
-     * Initialize dependencies.
-     *
+     * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
+     */
+    private $_classesFactory;
+
+    /**
      * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $classesFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $optionFactory
      * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepository

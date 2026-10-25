@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class Save
+ * Category save controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -81,8 +81,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig = null,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Magento\Eav\Model\Config $eavConfig = null,
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         parent::__construct($context, $dateFilter);
         $this->resultRawFactory = $resultRawFactory;
@@ -99,6 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
      * Filter category data
      *
      * @deprecated 101.0.8
+     * @see MAGETWO-71174
      * @param array $rawData
      * @return array
      */
@@ -144,10 +145,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
         $categoryPostData = $this->imagePreprocessing($categoryPostData);
         $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
-        $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
+        $storeId = $categoryPostData['store_id'] ?? null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
-        $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
+        $parentId = $categoryPostData['parent'] ?? null;
         if ($categoryPostData) {
             $category->addData($categoryPostData);
             if ($parentId) {
@@ -220,7 +221,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                                 __('The "%1" attribute is required. Enter and try again.', $attribute)
                             );
                         } else {
-                            $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
+                            $this->messageManager->addErrorMessage(
+                                __(
+                                    'Something went wrong while saving the category.'
+                                )
+                            );
                             $this->logger->critical('Something went wrong while saving the category.');
                             $this->_getSession()->setCategoryData($categoryPostData);
                         }

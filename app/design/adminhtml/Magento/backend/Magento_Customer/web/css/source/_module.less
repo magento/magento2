@@ -1,7 +1,7 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
+ */
 
 .customer_form_areas_address_address_customer_address_update_modal_update_customer_address_form_loader {
     .admin__field {
@@ -35,21 +35,8 @@
         width: 50%;
 
         .action-additional {
-            margin: 2px 0 0 2px;
+            margin: 2px 0 0 8px;
         }
-    }
-
-    .edit-default-billing-address-button,
-    .edit-default-shipping-address-button {
-        position: absolute;
-    }
-
-    .edit-default-billing-address-button {
-        left: 210px;
-    }
-
-    .edit-default-shipping-address-button {
-        left: 230px;
     }
 
     .customer_form_areas_address_address_customer_address_listing {
@@ -97,6 +84,29 @@
                     select.admin__control-select {
                         width: 100%;
                     }
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'all') {
+
+    @media all and (min-width: @screen__l) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    @media all and (min-width: @screen__xl) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1.6rem;
                 }
             }
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Bulk;
 
@@ -83,7 +83,7 @@ class Publisher implements PublisherInterface
                 [
                     'body' => $message,
                     'properties' => [
-                        'delivery_mode' => 2,
+                        'topic_name' => $topicName,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]
                 ]

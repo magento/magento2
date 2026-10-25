@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Attribute\Backend;
 
 /**
  *
- * Speical Start Date attribute backend
+ * Special Start Date attribute backend
  *
  * @api
  *
@@ -83,7 +83,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
         $attr = $this->getAttribute();
         $maxDate = $attr->getMaxValue();
         $startDate = $this->_getValueForSave($object);
-        if ($startDate === false) {
+        if ($startDate === false || $startDate === null) {
             return true;
         }
 

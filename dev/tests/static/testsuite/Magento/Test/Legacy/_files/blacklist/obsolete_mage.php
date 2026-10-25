@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 return [
     'dev/tests/static/testsuite/Magento/Test/Legacy/ObsoleteCodeTest.php',
@@ -13,4 +13,5 @@ return [
     'lib/internal/Magento/Framework/Encryption/Test/Unit/EncryptorTest.php',
     'lib/internal/Magento/Framework/Encryption/Test/Unit/CryptTest.php',
     'setup/src/Zend/Mvc/Controller/LazyControllerAbstractFactory.php',
+    'app/code/Magento/CatalogInventory/Block/Adminhtml/Form/Field/Stock.php',
 ];
