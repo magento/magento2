@@ -546,6 +546,91 @@ class SetLinkStatusObserverTest extends TestCase
         $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
     }
 
+    public function testSetLinkStatusRefundedSkipsCollectionQueryForNullItemIds()
+    {
+        $this->mockProcessingOrderWithItems(
+            [
+                $this->createOrderItem(
+                    null,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+            ]
+        );
+
+        $this->itemsFactory->expects($this->never())
+            ->method('create');
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    public function testSetLinkStatusRefundedExpiresRealItemIdsOnly()
+    {
+        $this->mockProcessingOrderWithItems(
+            [
+                $this->createOrderItem(
+                    null,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+                $this->createOrderItem(
+                    2,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+            ]
+        );
+
+        $this->itemsFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createLinkItemCollection([2], []));
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    /**
+     * @param array $items
+     * @return void
+     */
+    private function mockProcessingOrderWithItems(array $items): void
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(Item::STATUS_PENDING);
+
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn(Order::STATE_PROCESSING);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn($items);
+    }
+
     public function testSetLinkStatusEmptyOrder()
     {
         $this->observerMock->expects($this->once())
@@ -682,23 +767,26 @@ class SetLinkStatusObserverTest extends TestCase
      * @param int $statusId
      * @param string $productType
      * @param string $realProductType
+     * @param float|int $qtyRefunded
      * @return Item|MockObject
      */
     private function createOrderItem(
         $id,
         $statusId = Item::STATUS_PENDING,
         $productType = DownloadableProductType::TYPE_DOWNLOADABLE,
-        $realProductType = DownloadableProductType::TYPE_DOWNLOADABLE
+        $realProductType = DownloadableProductType::TYPE_DOWNLOADABLE,
+        $qtyRefunded = 0
     ) {
         $item = $this->createPartialMock(
             Item::class,
-            ['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered']
+            ['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered', 'getQtyRefunded']
         );
         $item->method('getId')->willReturn($id);
         $item->method('getProductType')->willReturn($productType);
         $item->method('getRealProductType')->willReturn($realProductType);
         $item->method('getStatusId')->willReturn($statusId);
         $item->method('getQtyOrdered')->willReturn(1);
+        $item->method('getQtyRefunded')->willReturn($qtyRefunded);
 
         return $item;
     }
