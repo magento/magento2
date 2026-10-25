@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -18,8 +19,8 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
  */
 class MessageEncoder
 {
-    const DIRECTION_ENCODE = 'encode';
-    const DIRECTION_DECODE = 'decode';
+    public const DIRECTION_ENCODE = 'encode';
+    public const DIRECTION_DECODE = 'decode';
 
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
@@ -176,12 +177,9 @@ class MessageEncoder
                             ->convertValue($message[$paramPosition], $paramType);
                     }
                 } else {
-                    $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
                     /** Encode parameters according to their names in method signature */
-                    if (isset($message[$paramName]) || isset($message[$snakeCaseParamName])) {
-                        $paramValue = isset($message[$paramName])
-                            ? $message[$paramName]
-                            : $message[$snakeCaseParamName];
+                    $paramValue = $this->getNamedParameterValue($message, $paramName);
+                    if ($paramValue !== null) {
                         $convertedMessage[$paramName] = $this->getConverter($direction)
                             ->convertValue($paramValue, $paramType);
                     }
@@ -208,6 +206,24 @@ class MessageEncoder
     }
 
     /**
+     * Resolve a named parameter, preferring its service signature name over the REST alias.
+     *
+     * @param array $message
+     * @param string $paramName
+     * @return mixed
+     */
+    private function getNamedParameterValue(array $message, string $paramName)
+    {
+        if (isset($message[$paramName])) {
+            return $message[$paramName];
+        }
+
+        $snakeCaseParamName = SimpleDataObjectConverter::camelCaseToSnakeCase($paramName);
+
+        return $message[$snakeCaseParamName] ?? null;
+    }
+
+    /**
      * Get value converter based on conversion direction.
      *
      * @param string $direction
@@ -223,7 +239,8 @@ class MessageEncoder
      *
      * @return CommunicationConfig
      *
-     * @deprecated 103.0.0
+     * @deprecated 103.0.0 Dependencies should be provided through constructor injection instead.
+     * @see \Magento\Framework\Communication\ConfigInterface
      */
     private function getCommunicationConfig()
     {
