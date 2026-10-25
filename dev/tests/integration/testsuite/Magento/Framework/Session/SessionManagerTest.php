@@ -6,12 +6,16 @@
 // @codingStandardsIgnoreStart
 namespace {
     $mockPHPFunctions = false;
+    $emulateSessionEngine = false;
 }
 
 namespace Magento\Framework\Session {
 
     use Magento\Framework\App\DeploymentConfig;
     use Magento\Framework\App\State;
+    use Magento\Framework\Session\Config\ConfigInterface;
+    use Magento\Framework\Stdlib\CookieManagerInterface;
+    use PHPUnit\Framework\MockObject\MockObject;
 
     // @codingStandardsIgnoreEnd
 
@@ -22,7 +26,10 @@ namespace Magento\Framework\Session {
      */
     function session_status()
     {
-        global $mockPHPFunctions;
+        global $mockPHPFunctions, $emulateSessionEngine;
+        if ($emulateSessionEngine) {
+            return SessionManagerTest::$emulatedSessionActive ? PHP_SESSION_ACTIVE : PHP_SESSION_NONE;
+        }
         if ($mockPHPFunctions) {
             return PHP_SESSION_NONE;
         }
@@ -31,8 +38,8 @@ namespace Magento\Framework\Session {
 
     function headers_sent()
     {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
+        global $mockPHPFunctions, $emulateSessionEngine;
+        if ($mockPHPFunctions || $emulateSessionEngine) {
             return false;
         }
         return call_user_func_array('\headers_sent', func_get_args());
@@ -47,8 +54,8 @@ namespace Magento\Framework\Session {
      */
     function ini_set($varName, $newValue)
     {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
+        global $mockPHPFunctions, $emulateSessionEngine;
+        if ($mockPHPFunctions || $emulateSessionEngine) {
             SessionManagerTest::$isIniSetInvoked[$varName] = $newValue;
             return true;
         }
@@ -62,12 +69,119 @@ namespace Magento\Framework\Session {
      */
     function session_set_save_handler()
     {
-        global $mockPHPFunctions;
-        if ($mockPHPFunctions) {
+        global $mockPHPFunctions, $emulateSessionEngine;
+        if ($mockPHPFunctions || $emulateSessionEngine) {
             SessionManagerTest::$isSessionSetSaveHandlerInvoked = true;
             return true;
         }
         return call_user_func_array('\session_set_save_handler', func_get_args());
+    }
+
+    /**
+     * Emulate session_id() against the in-memory session store when the session engine is emulated
+     *
+     * @param string|null $id
+     * @return string|false
+     */
+    function session_id(?string $id = null)
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_id', func_get_args());
+        }
+        $currentId = SessionManagerTest::$emulatedSessionId;
+        if ($id !== null) {
+            SessionManagerTest::$emulatedSessionId = $id;
+        }
+        return $currentId;
+    }
+
+    /**
+     * Emulate session_start() by reading the current session id from the in-memory session store
+     *
+     * @return bool
+     */
+    function session_start()
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_start', func_get_args());
+        }
+        if (SessionManagerTest::$emulatedSessionId === '') {
+            SessionManagerTest::$emulatedSessionId = bin2hex(random_bytes(13));
+        }
+        $data = SessionManagerTest::$emulatedSessionStore[SessionManagerTest::$emulatedSessionId] ?? null;
+        $_SESSION = $data === null ? [] : json_decode($data, true);
+        SessionManagerTest::$emulatedSessionActive = true;
+        return true;
+    }
+
+    /**
+     * Emulate session_write_close() by writing the session data to the in-memory session store
+     *
+     * @return bool
+     */
+    function session_write_close()
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_write_close', func_get_args());
+        }
+        SessionManagerTest::$emulatedSessionStore[SessionManagerTest::$emulatedSessionId] = json_encode($_SESSION);
+        SessionManagerTest::$emulatedSessionActive = false;
+        return true;
+    }
+
+    /**
+     * Emulate session_commit(), an alias of session_write_close()
+     *
+     * @return bool
+     */
+    function session_commit()
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_commit', func_get_args());
+        }
+        return session_write_close();
+    }
+
+    /**
+     * Emulate session_regenerate_id(): the old id keeps the current data unless it is deleted
+     *
+     * @param bool $deleteOldSession
+     * @return bool
+     */
+    function session_regenerate_id(bool $deleteOldSession = false)
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_regenerate_id', func_get_args());
+        }
+        $oldId = SessionManagerTest::$emulatedSessionId;
+        if ($deleteOldSession) {
+            unset(SessionManagerTest::$emulatedSessionStore[$oldId]);
+        } else {
+            SessionManagerTest::$emulatedSessionStore[$oldId] = json_encode($_SESSION);
+        }
+        SessionManagerTest::$emulatedSessionId = bin2hex(random_bytes(13));
+        return true;
+    }
+
+    /**
+     * Emulate session_destroy() by removing the current session from the in-memory session store
+     *
+     * @return bool
+     */
+    function session_destroy()
+    {
+        global $emulateSessionEngine;
+        if (!$emulateSessionEngine) {
+            return call_user_func_array('\session_destroy', func_get_args());
+        }
+        unset(SessionManagerTest::$emulatedSessionStore[SessionManagerTest::$emulatedSessionId]);
+        SessionManagerTest::$emulatedSessionActive = false;
+        return true;
     }
 
     use PHPUnit\Framework\Attributes\DataProvider;
@@ -86,6 +200,21 @@ namespace Magento\Framework\Session {
          * @var bool
          */
         public static $isSessionSetSaveHandlerInvoked;
+
+        /**
+         * @var string[]
+         */
+        public static $emulatedSessionStore = [];
+
+        /**
+         * @var string
+         */
+        public static $emulatedSessionId = '';
+
+        /**
+         * @var bool
+         */
+        public static $emulatedSessionActive = false;
 
         /**
          * @var \Magento\Framework\Session\SessionManagerInterface
@@ -147,8 +276,12 @@ namespace Magento\Framework\Session {
 
         protected function tearDown(): void
         {
-            global $mockPHPFunctions;
+            global $mockPHPFunctions, $emulateSessionEngine;
             $mockPHPFunctions = false;
+            $emulateSessionEngine = false;
+            self::$emulatedSessionStore = [];
+            self::$emulatedSessionId = '';
+            self::$emulatedSessionActive = false;
             self::$isIniSetInvoked = [];
             self::$isSessionSetSaveHandlerInvoked = false;
             if ($this->model !== null) {
@@ -353,6 +486,128 @@ namespace Magento\Framework\Session {
                 ['saveMethod' =>'memcached'],
                 ['saveMethod' =>'user'],
             ];
+        }
+
+        public function testStartDoesNotRenewCookieOfSupersededSession(): void
+        {
+            $this->emulateRequestWithSession('old-session-id', ['destroyed' => time(), 'quote_id' => 5]);
+            $cookieManager = $this->createSessionCookieManager('old-session-id');
+            $cookieManager->expects($this->never())->method('setPublicCookie');
+
+            $this->model = $this->createEmulatedModel($cookieManager);
+
+            $this->assertSame('old-session-id', $this->model->getSessionId());
+            $this->assertSame(5, $_SESSION['quote_id']);
+        }
+
+        public function testStartRenewsCookieOfCurrentSession(): void
+        {
+            $this->emulateRequestWithSession('current-session-id', ['quote_id' => 5]);
+            $cookieManager = $this->createSessionCookieManager('current-session-id');
+            $cookieManager->expects($this->once())
+                ->method('setPublicCookie')
+                ->with($this->anything(), 'current-session-id', $this->anything());
+
+            $this->model = $this->createEmulatedModel($cookieManager);
+        }
+
+        public function testStartClearsExpiredSupersededSessionWithoutTouchingCookie(): void
+        {
+            $supersededAt = time() - 7200;
+            $this->emulateRequestWithSession('old-session-id', ['destroyed' => $supersededAt, 'quote_id' => 5]);
+            $cookieManager = $this->createSessionCookieManager('old-session-id');
+            $cookieManager->expects($this->never())->method('setPublicCookie');
+            $cookieManager->expects($this->never())->method('deleteCookie');
+
+            $this->model = $this->createEmulatedModel($cookieManager);
+
+            $this->assertSame('old-session-id', $this->model->getSessionId());
+            $this->assertArrayNotHasKey('quote_id', $_SESSION);
+            $this->assertSame($supersededAt, $_SESSION['destroyed']);
+        }
+
+        public function testConcurrentRequestDoesNotRestoreRegeneratedSessionId(): void
+        {
+            $this->emulateRequestWithSession('pre-login-id', ['quote_id' => 5]);
+            $cookieManager = $this->createSessionCookieManager('pre-login-id');
+            $cookieManager->expects($this->once())
+                ->method('setPublicCookie')
+                ->with($this->anything(), 'pre-login-id', $this->anything());
+            $this->model = $this->createEmulatedModel($cookieManager);
+
+            $this->model->regenerateId();
+            $newSessionId = $this->model->getSessionId();
+
+            $this->assertNotSame('pre-login-id', $newSessionId);
+            $this->assertArrayNotHasKey('destroyed', $_SESSION);
+            $this->assertSame(5, $_SESSION['quote_id']);
+            $oldSession = json_decode(self::$emulatedSessionStore['pre-login-id'], true);
+            $this->assertArrayHasKey('destroyed', $oldSession);
+            $this->assertIsInt($oldSession['destroyed']);
+            $this->assertArrayNotHasKey('new_session_id', $oldSession);
+
+            $this->emulateRequestWithSession('pre-login-id');
+            $concurrentCookieManager = $this->createSessionCookieManager('pre-login-id');
+            $concurrentCookieManager->expects($this->never())->method('setPublicCookie');
+
+            $concurrentModel = $this->createEmulatedModel($concurrentCookieManager);
+
+            $this->assertSame('pre-login-id', $concurrentModel->getSessionId());
+        }
+
+        /**
+         * Prepare the emulated session engine for a request that sends the given session id
+         *
+         * @param string $sessionId
+         * @param array|null $storedData
+         * @return void
+         */
+        private function emulateRequestWithSession(string $sessionId, ?array $storedData = null): void
+        {
+            global $emulateSessionEngine;
+            $emulateSessionEngine = true;
+            if ($storedData !== null) {
+                self::$emulatedSessionStore[$sessionId] = json_encode($storedData);
+            }
+            self::$emulatedSessionId = $sessionId;
+            self::$emulatedSessionActive = false;
+            $_SESSION = [];
+            $this->appState->method('getAreaCode')->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
+        }
+
+        /**
+         * @param string $requestCookieValue
+         * @return CookieManagerInterface|MockObject
+         */
+        private function createSessionCookieManager(string $requestCookieValue): MockObject
+        {
+            $cookieManager = $this->createMock(CookieManagerInterface::class);
+            $cookieManager->method('getCookie')->willReturn($requestCookieValue);
+            return $cookieManager;
+        }
+
+        /**
+         * @param CookieManagerInterface $cookieManager
+         * @return SessionManager
+         */
+        private function createEmulatedModel(CookieManagerInterface $cookieManager): SessionManager
+        {
+            $sessionConfig = $this->createStub(ConfigInterface::class);
+            $sessionConfig->method('getOptions')->willReturn([]);
+            $sessionConfig->method('getCookieLifetime')->willReturn(3600);
+            $sessionConfig->method('getCookiePath')->willReturn('/');
+            $sessionConfig->method('getCookieSameSite')->willReturn('Lax');
+            $sessionConfig->method('getUseCookies')->willReturn(false);
+
+            return $this->objectManager->create(
+                SessionManager::class,
+                [
+                    'sidResolver' => $this->sidResolver,
+                    'sessionConfig' => $sessionConfig,
+                    'cookieManager' => $cookieManager,
+                    'appState' => $this->appState,
+                ]
+            );
         }
 
         private function initializeModel(): void
