@@ -115,7 +115,6 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         } else {
             $subSelect = null;
         }
-        $this->_clearTableByDateRange($mainTable, $from, $to, $subSelect);
         // convert dates to current admin timezone
         $periodExpr = $connection->getDatePartSql(
             $this->getStoreTZOffsetQuery(
@@ -222,7 +221,8 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         $select->having(implode(' AND ', $havingPart));
 
         $select->useStraightJoin();
-        $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
+        $insertQuery = $select->insertFromSelect($mainTable, array_keys($columns), false)
+            . $this->getKeepHigherViewsOnDuplicateSql($mainTable);
         $connection->query($insertQuery);
 
         $this->_resourceHelper->updateReportRatingPos(
@@ -248,5 +248,31 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         );
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE);
         return $this;
+    }
+
+    /**
+     * Build ON DUPLICATE KEY UPDATE clause that never lowers an already aggregated views number
+     *
+     * The visitor log cleanup deletes guest rows from report_event, so recounting a past period
+     * yields fewer views than were aggregated while the events still existed.
+     *
+     * @param string $table
+     * @return string
+     */
+    private function getKeepHigherViewsOnDuplicateSql(string $table): string
+    {
+        $connection = $this->getConnection();
+        $updates = [];
+        foreach (['product_name', 'product_price'] as $column) {
+            $column = $connection->quoteIdentifier($column);
+            $updates[] = sprintf('%s = VALUES(%s)', $column, $column);
+        }
+        $updates[] = sprintf(
+            '%1$s = GREATEST(%1$s, VALUES(%2$s))',
+            $connection->quoteIdentifier($table . '.views_num'),
+            $connection->quoteIdentifier('views_num')
+        );
+
+        return ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updates);
     }
 }
