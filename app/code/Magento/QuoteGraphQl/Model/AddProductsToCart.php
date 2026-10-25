@@ -20,20 +20,23 @@ use Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface;
 
 class AddProductsToCart
 {
+    private CartItemFactory $cartItemFactory;
+
     /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCartService $addProductsToCartService
      * @param ScopeConfigInterface $scopeConfig
      * @param PrecursorInterface $cartItemPrecursor
-     * @param CartItemFactory $cartItemFactory
+    * @param CartItemFactory|null $cartItemFactory
      */
     public function __construct(
         private readonly GetCartForUser $getCartForUser,
         private readonly AddProductsToCartService $addProductsToCartService,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly PrecursorInterface $cartItemPrecursor,
-        private readonly CartItemFactory $cartItemFactory
+        ?CartItemFactory $cartItemFactory = null
     ) {
+        $this->cartItemFactory = $cartItemFactory ?? ObjectManager::getInstance()->get(CartItemFactory::class);
     }
 
     /**

@@ -7,6 +7,7 @@ declare (strict_types = 1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver\Wishlist;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -91,7 +92,7 @@ class AddToCart implements ResolverInterface
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
      * @param AddProductsToCartService $addProductsToCart
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
-     * @param CartItemFactory $cartItemFactory
+    * @param CartItemFactory|null $cartItemFactory
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
@@ -103,7 +104,7 @@ class AddToCart implements ResolverInterface
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
         AddProductsToCartService $addProductsToCart,
         CartItemsRequestBuilder $cartItemsRequestBuilder,
-        CartItemFactory $cartItemFactory
+        ?CartItemFactory $cartItemFactory = null
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
@@ -114,7 +115,7 @@ class AddToCart implements ResolverInterface
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->addProductsToCartService = $addProductsToCart;
         $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
-        $this->cartItemFactory = $cartItemFactory;
+        $this->cartItemFactory = $cartItemFactory ?? ObjectManager::getInstance()->get(CartItemFactory::class);
     }
 
     /**
