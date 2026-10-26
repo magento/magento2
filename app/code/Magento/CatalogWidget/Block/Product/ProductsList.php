@@ -401,8 +401,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         $idsSelect = clone $select;
-        $idsSelect->reset(Select::COLUMNS)->columns(self::ID_FIELD);
-        $this->selectSortExpressions($idsSelect);
+        $this->selectIdAndSortColumns($idsSelect);
         $ids = $collection->getConnection()->fetchCol($idsSelect);
 
         $select->reset(Select::WHERE)
@@ -414,27 +413,39 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     }
 
     /**
-     * Add the sort expressions of a DISTINCT select to its select list
+     * Reduce the select list to the product id and the columns its ORDER BY depends on
      *
      * MySQL rejects a DISTINCT query whose ORDER BY expression is neither equal to one in the select list nor
      * built from selected columns, so an id-only select cannot carry the sort orders the widget produces - the
-     * SKU condition, for one, orders by FIELD() over `sku`. Only the first column is read back.
+     * SKU condition, for one, orders by FIELD() over `sku`. A sort that names a column alias, as the EAV
+     * attribute sorts and the stock sort do, keeps that aliased column; any other expression is selected under
+     * its own alias. Only the first column is read back.
      *
      * @param Select $select
      * @return void
      */
-    private function selectSortExpressions(Select $select): void
+    private function selectIdAndSortColumns(Select $select): void
     {
-        $columns = [];
-        foreach ($select->getPart(Select::ORDER) as $index => $order) {
-            $expression = is_array($order) ? $order[0] : $order;
-            if ((string)$expression !== self::ID_FIELD) {
-                $columns['sort_' . $index] = $expression;
+        $aliasedColumns = [];
+        foreach ($select->getPart(Select::COLUMNS) as [$correlation, $column, $alias]) {
+            if ($alias !== null) {
+                $aliasedColumns[$alias] = [$correlation ?: null, $column];
             }
         }
 
-        if ($columns) {
-            $select->columns($columns);
+        $select->reset(Select::COLUMNS)->columns(self::ID_FIELD);
+        foreach ($select->getPart(Select::ORDER) as $index => $order) {
+            $expression = is_array($order) ? $order[0] : $order;
+            $alias = (string)$expression;
+            if ($alias === self::ID_FIELD) {
+                continue;
+            }
+            if (isset($aliasedColumns[$alias])) {
+                [$correlation, $column] = $aliasedColumns[$alias];
+                $select->columns([$alias => $column], $correlation);
+            } else {
+                $select->columns(['sort_' . $index => $expression]);
+            }
         }
     }
 

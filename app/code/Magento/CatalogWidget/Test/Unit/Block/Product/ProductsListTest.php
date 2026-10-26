@@ -568,6 +568,39 @@ class ProductsListTest extends TestCase
     }
 
     /**
+     * A sort that names a column alias, as the EAV attribute sorts do, needs that aliased column selected
+     * under the same alias; the bare name would resolve against the product table
+     */
+    public function testIdSelectKeepsAliasedSortColumn()
+    {
+        $idsSelectColumns = null;
+        $adapter = $this->createAdapter();
+        $adapter->method('fetchCol')
+            ->willReturnCallback(function (Select $idsSelect) use (&$idsSelectColumns) {
+                $idsSelectColumns = $idsSelect->getPart(Select::COLUMNS);
+                return [15, 9, 3];
+            });
+
+        $nameExpression = new \Zend_Db_Expr('IF(at_name.value_id > 0, at_name.value, at_name_default.value)');
+        $select = $this->createSelect($adapter);
+        $select->columns(['name' => $nameExpression])
+            ->reset(Select::ORDER)
+            ->order('name ASC')
+            ->order('e.entity_id ASC');
+
+        $this->configureCollection($select, $adapter);
+        $this->productsList->setData('show_pager', false);
+        $this->productsList->setData('products_count', 3);
+
+        $this->renderProductCollection();
+
+        $this->assertSame(
+            [['e', 'entity_id', null], ['e', $nameExpression, 'name']],
+            $idsSelectColumns
+        );
+    }
+
+    /**
      * The pager total must be read while the collection still matches the whole condition set
      */
     public function testPagerTotalIsResolvedBeforeCollectionIsNarrowed()

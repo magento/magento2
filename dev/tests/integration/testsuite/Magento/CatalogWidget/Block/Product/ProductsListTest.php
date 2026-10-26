@@ -15,6 +15,7 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -182,6 +183,65 @@ class ProductsListTest extends TestCase
         (new \ReflectionMethod($this->block, '_beforeToHtml'))->invoke($this->block);
 
         $this->assertSame($skus, $this->block->getProductCollection()->getColumnValues('sku'));
+    }
+
+    /**
+     * An attribute sort orders by the alias of a selected column - the joined EAV value for `name`, the
+     * aggregated stock quantity for `quantity_and_stock_status` - which the page id query has to keep
+     * selected under that alias
+     */
+    #[
+        DataProvider('aliasSortDataProvider'),
+        DataFixture(
+            ProductFixture::class,
+            ['name' => 'Widget sort C', 'extension_attributes' => ['stock_item' => ['qty' => 30]]],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['name' => 'Widget sort A', 'extension_attributes' => ['stock_item' => ['qty' => 10]]],
+            'product2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['name' => 'Widget sort B', 'extension_attributes' => ['stock_item' => ['qty' => 20]]],
+            'product3'
+        ),
+    ]
+    public function testRenderedCollectionKeepsAliasSortOrder(string $attribute): void
+    {
+        $skus = [
+            $this->fixtures->get('product2')->getSku(),
+            $this->fixtures->get('product3')->getSku(),
+            $this->fixtures->get('product1')->getSku(),
+        ];
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+            . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:'
+            . '^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+            . '`attribute`:`sku`,`operator`:`()`,`value`:`' . implode(',', $skus) . '`^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->block->setData('products_count', 3);
+        $this->block->setData('page_var_name', 'np');
+
+        $collection = $this->block->createCollection();
+        $collection->getSelect()->reset(Select::ORDER);
+        $collection->addAttributeToSort($attribute, Select::SQL_ASC);
+        $collection->addAttributeToSort('entity_id', Select::SQL_ASC);
+        (new \ReflectionMethod($this->block, 'resolveCollectionPage'))->invoke($this->block, $collection);
+
+        $this->assertSame($skus, $collection->getColumnValues('sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function aliasSortDataProvider(): array
+    {
+        return [
+            'name' => ['name'],
+            'quantity_and_stock_status' => ['quantity_and_stock_status'],
+        ];
     }
 
     /**
