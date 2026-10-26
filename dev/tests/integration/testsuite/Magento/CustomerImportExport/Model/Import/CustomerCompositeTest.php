@@ -6,11 +6,15 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Profiler;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for CustomerComposite import class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
 {
@@ -186,7 +190,41 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
         $this->_assertCustomerData($dataBefore);
 
         // import data
-        $this->_entityAdapter->importData();
+        $resource = $this->_objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $originalProfiler = $connection->getProfiler();
+        $profiler = $this->_objectManager->create(Profiler::class, ['enabled' => true]);
+        $connection->setProfiler($profiler);
+        try {
+            $this->_entityAdapter->importData();
+            if ($behavior === \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
+                $queries = $profiler->getQueryProfiles(Profiler::SELECT);
+                $this->assertNotFalse($queries);
+                $customerTable = $resource->getTableName('customer_entity');
+                $quotedTable = $connection->quoteIdentifier($customerTable);
+                $customerLockQueries = array_filter(
+                    $queries,
+                    static fn (\Zend_Db_Profiler_Query $query): bool =>
+                        str_contains($query->getQuery(), $quotedTable)
+                        && str_contains($query->getQuery(), 'FOR UPDATE')
+                );
+                $this->assertCount(3, $customerLockQueries, 'Only address-bearing customers must be locked.');
+                $customerOnlyId = $connection->fetchOne(
+                    $connection->select()->from($customerTable, ['entity_id'])
+                        ->where('email = ?', 'kellynilson@magento.com')
+                );
+                $this->assertNotFalse($customerOnlyId);
+                foreach ($customerLockQueries as $query) {
+                    $this->assertStringNotContainsString(
+                        '(entity_id = ' . (int) $customerOnlyId . ')',
+                        $query->getQuery(),
+                        'The customer-only composite row must not acquire an address-phase customer lock.'
+                    );
+                }
+            }
+        } finally {
+            $connection->setProfiler($originalProfiler);
+        }
         $this->assertSame($updatedItemsCount, $this->_entityAdapter->getUpdatedItemsCount());
         $this->assertSame($createdItemsCount, $this->_entityAdapter->getCreatedItemsCount());
         $this->assertSame($deletedItemsCount, $this->_entityAdapter->getDeletedItemsCount());

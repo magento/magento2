@@ -9,6 +9,7 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\Import\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\Store\Model\Store;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Address\Storage as AddressStorage;
@@ -179,11 +180,6 @@ class Address extends AbstractCustomer
     protected $_importedRowPks = [];
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\Helper
-     */
-    protected $_resourceHelper;
-
-    /**
      * @var \Magento\Customer\Model\CustomerFactory
      */
     protected $_customerFactory;
@@ -302,7 +298,6 @@ class Address extends AbstractCustomer
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
         $this->_eavConfig = $eavConfig;
-        $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->postcodeValidator = $postcodeValidator;
         $this->countryWithWebsites = $countryWithWebsites ?:
@@ -424,19 +419,6 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * Get next address entity ID
-     *
-     * @return int
-     */
-    protected function _getNextEntityId()
-    {
-        if (!$this->_nextEntityId) {
-            $this->_nextEntityId = $this->_resourceHelper->getNextAutoincrement($this->_entityTable);
-        }
-        return $this->_nextEntityId++;
-    }
-
-    /**
      * Initialize country regions hash for clever recognition
      *
      * @return $this
@@ -456,7 +438,7 @@ class Address extends AbstractCustomer
     }
 
     /**
-     * Pre-loading customers for existing customers checks in order
+     * Preloading customers for existing customers checks in order
      * to perform mass validation/import efficiently.
      * Also loading existing addresses for requested customers.
      *
@@ -524,49 +506,128 @@ class Address extends AbstractCustomer
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 
-        //Importing
         while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
-            $newRows = [];
-            $updateRows = [];
-            $attributes = [];
-            $defaults = [];
-            // customer default addresses (billing/shipping) data
-            $deleteRowIds = [];
-
-            foreach ($bunch as $rowNumber => $rowData) {
-                // check row data
-                if ($this->_isOptionalAddressEmpty($rowData) || !$this->validateRow($rowData, $rowNumber)) {
-                    continue;
-                }
-                if ($this->getErrorAggregator()->hasToBeTerminated()) {
-                    $this->getErrorAggregator()->addRowToSkip($rowNumber);
-                    continue;
-                }
-
-                if ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
-                    $addUpdateResult = $this->_prepareDataForUpdate($rowData);
-                    if ($addUpdateResult['entity_row_new']) {
-                        $newRows[] = $addUpdateResult['entity_row_new'];
-                    }
-                    if ($addUpdateResult['entity_row_update']) {
-                        $updateRows[] = $addUpdateResult['entity_row_update'];
-                    }
-                    $attributes = $this->_mergeEntityAttributes($addUpdateResult['attributes'], $attributes);
-                    $defaults = $this->_mergeEntityAttributes($addUpdateResult['defaults'], $defaults);
-                } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-                    $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
-                }
+            $this->_connection->beginTransaction();
+            try {
+                $this->lockCustomers($bunch);
+                $this->importBunch($bunch);
+                $this->_connection->commit();
+            } catch (\Throwable $exception) {
+                $this->_connection->rollBack();
+                throw $exception;
             }
-            $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
-
-            $this->_saveAddressEntities($newRows, $updateRows)
-                ->_saveAddressAttributes($attributes)
-                ->_saveCustomerDefaults($defaults);
-
-            $this->_deleteAddressEntities($deleteRowIds);
         }
         $this->indexerProcessor->markIndexerAsInvalid();
         return true;
+    }
+
+    /**
+     * Lock add/update parents before child inserts can acquire shared foreign-key locks.
+     *
+     * @param array $bunch
+     * @return void
+     */
+    private function lockCustomers(array $bunch): void
+    {
+        $customerIds = [];
+        foreach ($bunch as $rowData) {
+            if ($this->getBehavior($rowData) == Import::BEHAVIOR_ADD_UPDATE
+                && !$this->_isOptionalAddressEmpty($rowData)
+                && isset($rowData[self::COLUMN_EMAIL], $rowData[self::COLUMN_WEBSITE])
+            ) {
+                $customerId = $this->_getCustomerId(
+                    $rowData[self::COLUMN_EMAIL],
+                    $rowData[self::COLUMN_WEBSITE]
+                );
+                if ($customerId) {
+                    $customerIds[(int) $customerId] = (int) $customerId;
+                }
+            }
+        }
+        ksort($customerIds, SORT_NUMERIC);
+
+        foreach ($customerIds as $customerId) {
+            $select = $this->_connection->select()
+                ->from($this->_getCustomerEntity()->getResource()->getTable('customer_entity'), ['entity_id'])
+                ->where('entity_id = ?', $customerId)
+                ->forUpdate(true);
+            $this->_connection->fetchOne($select);
+        }
+    }
+
+    /**
+     * Import a bunch using database-generated IDs for new addresses.
+     *
+     * @param array $bunch
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function importBunch(array $bunch): void
+    {
+        $newRows = [];
+        $updateRows = [];
+        $attributes = [];
+        $defaults = [];
+        $deleteRowIds = [];
+
+        foreach ($bunch as $rowNumber => $rowData) {
+            if ($this->_isOptionalAddressEmpty($rowData) || !$this->validateRow($rowData, $rowNumber)) {
+                continue;
+            }
+            if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                $this->getErrorAggregator()->addRowToSkip($rowNumber);
+                continue;
+            }
+
+            if ($this->getBehavior($rowData) == Import::BEHAVIOR_ADD_UPDATE) {
+                $addUpdateResult = $this->_prepareDataForUpdate($rowData);
+                if ($addUpdateResult['entity_row_new']) {
+                    $addUpdateResult = $this->saveNewAddress($addUpdateResult);
+                    $newRows[] = $addUpdateResult['entity_row_new'];
+                }
+                if ($addUpdateResult['entity_row_update']) {
+                    $updateRows[] = $addUpdateResult['entity_row_update'];
+                }
+                $attributes = $this->_mergeEntityAttributes($addUpdateResult['attributes'], $attributes);
+                $defaults = $this->_mergeEntityAttributes($addUpdateResult['defaults'], $defaults);
+            } elseif ($this->getBehavior($rowData) == Import::BEHAVIOR_DELETE) {
+                $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
+            }
+        }
+
+        $this->_saveAddressEntities([], $updateRows)
+            ->_saveAddressAttributes($attributes)
+            ->_saveCustomerDefaults($defaults);
+        $this->_deleteAddressEntities($deleteRowIds);
+        $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
+    }
+
+    /**
+     * Insert a new address and associate its dependent data with the allocated ID.
+     *
+     * @param array $addressData
+     * @return array
+     */
+    private function saveNewAddress(array $addressData): array
+    {
+        $entityRow = $addressData['entity_row_new'];
+        $temporaryId = $entityRow['entity_id'];
+        unset($entityRow['entity_id']);
+        $this->_connection->insert($this->_entityTable, $entityRow);
+        $addressId = (int) $this->_connection->lastInsertId($this->_entityTable);
+
+        $result = $addressData;
+        $result['entity_row_new']['entity_id'] = $addressId;
+        foreach ($addressData['attributes'] as $table => $attributes) {
+            $result['attributes'][$table] = [$addressId => $attributes[$temporaryId]];
+        }
+        foreach ($addressData['defaults'] as $table => $customers) {
+            foreach ($customers as $customerId => $defaults) {
+                $result['defaults'][$table][$customerId] = array_fill_keys(array_keys($defaults), $addressId);
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -619,7 +680,8 @@ class Address extends AbstractCustomer
             $newAddress = false;
             $addressId = $rowData[self::COLUMN_ADDRESS_ID];
         } else {
-            $addressId = $this->_getNextEntityId();
+            // New addresses receive their database ID before their attributes and defaults are merged.
+            $addressId = 0;
         }
         $entityRow = [
             'entity_id' => $addressId,
