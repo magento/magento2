@@ -146,8 +146,9 @@ class MessagePlugin
      * sets 'mage-messages' public cookie:
      *
      *   Cookie Name: 'mage-messages';
-     *   Cookie Duration: 1 year;
-     *   Cookie Path: /;
+     *   Cookie Duration: configured cookie lifetime (session cookie when the lifetime is 0);
+     *   Cookie Path: configured cookie path;
+     *   Cookie Domain: configured cookie domain, when set;
      *   Cookie HTTP Only flag: FALSE. Cookie can be accessed by client-side APIs.
      *
      * The 'messages' list has format:
@@ -171,10 +172,23 @@ class MessagePlugin
             }
 
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
-            $publicCookieMetadata->setDurationOneYear();
+
+            $lifetime = (int)$this->sessionConfig->getCookieLifetime();
+            if ($lifetime > 0) {
+                $publicCookieMetadata->setDuration($lifetime);
+            }
+
             $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
             $publicCookieMetadata->setHttpOnly(false);
             $publicCookieMetadata->setSameSite('Strict');
+
+            $domain = (string)$this->sessionConfig->getCookieDomain();
+            if ($domain !== '' && $domain[0] !== '.') {
+                $domain = '.' . $domain;
+            }
+            if ($domain !== '') {
+                $publicCookieMetadata->setDomain($domain);
+            }
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
