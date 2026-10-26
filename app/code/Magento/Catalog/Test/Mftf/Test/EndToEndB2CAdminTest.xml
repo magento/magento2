@@ -270,5 +270,17 @@
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+        <!--Invoices tab guard (merged with the Sales part of this test by stepKey)-->
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="waitForInvoicesTabClickable" after="seePageNameMatchesOrderIdAfterInvoice"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="waitForInvoicesTabClickable"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" after="clickOrderInvoicesTab"/>
+        <waitForElementNotVisible selector="{{AdminOrderInvoicesTabSection.spinner}}" time="60" stepKey="waitForInvoiceTabSpinnerGone" after="waitForInvoiceGridLoadingMask"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearExistingInvoiceTabFilters" after="waitForInvoiceTabSpinnerGone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridReloadAfterClearFilters" after="clearExistingInvoiceTabFilters"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" time="60" stepKey="waitForInvoiceRowInTabGrid" after="waitForInvoiceGridReloadAfterClearFilters"/>
+        <waitForText selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" time="30" stepKey="seeOrderInvoiceInTabGrid" after="waitForInvoiceRowInTabGrid"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="waitForViewInvoiceRowClickable" after="seeOrderInvoiceInTabGrid"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="waitForViewInvoiceRowClickable"/>
     </test>
 </tests>
