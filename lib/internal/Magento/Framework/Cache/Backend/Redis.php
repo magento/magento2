@@ -315,6 +315,130 @@ class Redis extends \Cm_Cache_Backend_Redis implements AtomicPairBackendInterfac
     }
 
     /**
+     * Remove cache entries by id, also removing them from each of their tags' id index.
+     *
+     * Upstream only unlinks the data keys here and leaves the ids behind in every zc:ti:<tag>
+     * set, unlike its own single-id remove() which cleans both
+     *
+     * @param array $ids
+     * @return void
+     */
+    protected function _removeByIds($ids): void
+    {
+        if (!$ids) {
+            return;
+        }
+
+        foreach (array_chunk($ids, $this->_removeChunkSize) as $idsChunk) {
+            $idsPerTag = $this->_groupIdsByTag($idsChunk, $this->_fetchTagsPerId($idsChunk));
+
+            $this->_redis->pipeline()->multi();
+
+            // Remove data.
+            $this->_redis->unlink($this->_preprocessIds($idsChunk));
+
+            // Remove IDs from the list of all IDs.
+            if ($this->_notMatchingTags) {
+                $this->_redis->sRem(self::SET_IDS, $idsChunk);
+            }
+
+            // Remove all IDs belonging to each tag in one command.
+            foreach ($idsPerTag as $tag => $tagIds) {
+                $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $tagIds);
+            }
+
+            $this->_redis->exec();
+        }
+    }
+
+    /**
+     * Remove cache entries matching any of the given tags, also cleaning up their full tag index.
+     *
+     * Upstream's non-Lua fallback only unlinks the id-lists of the tags passed in, leaving a
+     * removed id behind in the index of any *other* tag it also carries. Delegating
+     * id removal to {@see _removeByIds()} fixes that, since it looks up and clears every tag
+     * an id actually belongs to rather than only the ones supplied here.
+     *
+     * @param array $tags
+     * @return void
+     */
+    protected function _removeByMatchingAnyTags($tags): void
+    {
+        if ($this->_useLua) {
+            parent::_removeByMatchingAnyTags($tags);
+            return;
+        }
+
+        $ids = $this->getIdsMatchingAnyTags($tags);
+
+        $this->_removeByIds($ids);
+
+        $this->_redis->pipeline()->multi();
+
+        // Remove tag id lists.
+        $this->_redis->unlink($this->_preprocessTagIds($tags));
+
+        // Remove tags from list of tags.
+        $this->_redis->sRem(self::SET_TAGS, $tags);
+
+        $this->_redis->exec();
+    }
+
+    /**
+     * Fetch each id's stored tag list (raw, encoded) in a single pipelined round trip.
+     *
+     * @param array $idsChunk
+     * @return array
+     */
+    private function _fetchTagsPerId(array $idsChunk): array
+    {
+        $this->_redis->pipeline();
+
+        foreach ($idsChunk as $id) {
+            $this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
+        }
+
+        $result = $this->_redis->exec();
+
+        if (!is_array($result) || count($result) !== count($idsChunk)) {
+            // Surface a failed/partial pipeline instead of silently skipping tag-index cleanup
+            // for the whole chunk (AC-18197).
+            trigger_error(
+                'Magento\Framework\Cache\Backend\Redis::_fetchTagsPerId(): tag lookup pipeline '
+                . 'failed or returned a partial result; tag index cleanup will be skipped for '
+                . 'this chunk of ' . count($idsChunk) . ' id(s).',
+                E_USER_WARNING
+            );
+
+            return [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Invert id→tags to tag→ids, allowing a single SREM per tag instead of one SREM per (id, tag) pair.
+     *
+     * @param array $idsChunk
+     * @param array $tagsPerId Raw hGet results, keyed by the same index as $idsChunk.
+     * @return array
+     */
+    private function _groupIdsByTag(array $idsChunk, array $tagsPerId): array
+    {
+        $idsPerTag = [];
+
+        foreach ($idsChunk as $index => $id) {
+            foreach (explode(',', $this->_decodeData($tagsPerId[$index] ?? false)) as $tag) {
+                if ($tag !== '') {
+                    $idsPerTag[$tag][] = $id;
+                }
+            }
+        }
+
+        return $idsPerTag;
+    }
+
+    /**
      * @inheritDoc
      */
     protected function _collectGarbage()
