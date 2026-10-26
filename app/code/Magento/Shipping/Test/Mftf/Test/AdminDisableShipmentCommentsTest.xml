@@ -45,6 +45,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <magentoCLI command="config:set sales_email/shipment_comment/enabled 1" stepKey="disableShipmentComments"/>
+            <actionGroup ref="ClearShipmentsGridFiltersActionGroup" stepKey="clearShipmentsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>

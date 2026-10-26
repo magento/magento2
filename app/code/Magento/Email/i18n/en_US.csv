@@ -100,3 +100,4 @@ Action,Action
 "Footer Template","Footer Template"
 "Unable to send mail. Please try again later.","Unable to send mail. Please try again later."
 "Email template is not defined.","Email template is not defined."
+"Template directives are not allowed in external URLs.","Template directives are not allowed in external URLs."

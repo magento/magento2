@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\City;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Address;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,11 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 class CityTest extends TestCase
 {
     use MockCreationTrait;
+
+    /**
+     * Maximum allowed city length.
+     */
+    private const MAX_CITY_LENGTH = 255;
 
     /**
      * @var City
@@ -115,10 +121,6 @@ class CityTest extends TestCase
                 'message' => 'Commas must be allowed in city names'
             ],
             [
-                'city' => 'LHR/London',
-                'message' => 'Forward slash must be allowed in city names'
-            ],
-            [
                 'city' => 'Zürich',
                 'message' => 'Diacritic ö must be allowed in city names'
             ],
@@ -180,6 +182,58 @@ class CityTest extends TestCase
                 'rejectedChar' => '?',
                 'message' => 'Question mark must be rejected'
             ],
+            [
+                'rejectedChar' => '/',
+                'message' => 'Forward slash must be rejected'
+            ],
         ];
+    }
+
+    public function testCityUpTo255CharactersIsValid(): void
+    {
+        $addressMock = $this->createPartialMockWithReflection(Address::class, ['getCity']);
+        $addressMock->expects($this->once())
+            ->method('getCity')
+            ->willReturn(str_repeat('A', self::MAX_CITY_LENGTH));
+
+        $this->assertTrue($this->nameValidator->isValid($addressMock));
+    }
+
+    public function testCityExceeding255CharactersIsRejected(): void
+    {
+        $addressMock = $this->createPartialMockWithReflection(Address::class, ['getCity']);
+        $addressMock->expects($this->once())
+            ->method('getCity')
+            ->willReturn(str_repeat('A', self::MAX_CITY_LENGTH + 1));
+
+        $isValid = $this->nameValidator->isValid($addressMock);
+
+        $this->assertFalse($isValid);
+        $messages = $this->nameValidator->getMessages();
+        $this->assertStringContainsString(
+            'city name is too long',
+            (string)($messages[0]['city'] ?? '')
+        );
+    }
+
+    public function testCityInvalidCharsProduceCharsetErrorMessage(): void
+    {
+        $addressMock = $this->createPartialMockWithReflection(Address::class, ['getCity']);
+        $addressMock->expects($this->once())
+            ->method('getCity')
+            ->willReturn('City!Name');
+
+        $isValid = $this->nameValidator->isValid($addressMock);
+
+        $this->assertFalse($isValid);
+        $messages = $this->nameValidator->getMessages();
+        $this->assertStringContainsString(
+            'Invalid City',
+            (string)($messages[0]['city'] ?? '')
+        );
+        $this->assertStringNotContainsString(
+            'too long',
+            (string)($messages[0]['city'] ?? '')
+        );
     }
 }

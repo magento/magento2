@@ -13,6 +13,11 @@ require_once __DIR__ . '/autoload.php';
 require __DIR__ . '/../../error_handler.php';
 
 error_reporting(E_ALL);
+
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.max_nesting_level', '200');
+}
+
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';

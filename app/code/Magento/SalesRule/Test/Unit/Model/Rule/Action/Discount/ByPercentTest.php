@@ -103,6 +103,7 @@ class ByPercentTest extends TestCase
                 'getQuote',
                 'getAddress',
                 'getOptionByCode',
+                'getQty',
             ]
         );
 
@@ -172,6 +173,9 @@ class ByPercentTest extends TestCase
         )->willReturn(
             $itemData['baseDiscountAmount']
         );
+        if (isset($itemData['qty'])) {
+            $item->expects($this->atLeastOnce())->method('getQty')->willReturn($itemData['qty']);
+        }
         if (!$ruleData['discountQty'] || $ruleData['discountQty'] >= $qty) {
             $item->expects(
                 $this->atLeastOnce()
@@ -244,7 +248,61 @@ class ByPercentTest extends TestCase
                     'originalAmount' => 87,
                     'baseOriginalAmount' => 67.5,
                 ],
-            ]
+            ],
+            [
+                'qty' => 3,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 50, 'baseDiscountAmount' => 50, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 67.8,
+                    'baseAmount' => 67.8,
+                    'originalAmount' => 67.8,
+                    'baseOriginalAmount' => 67.8,
+                ],
+            ],
+            [
+                'qty' => 5,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 50, 'baseDiscountAmount' => 50, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 113.0,
+                    'baseAmount' => 113.0,
+                    'originalAmount' => 113.0,
+                    'baseOriginalAmount' => 113.0,
+                ],
+            ],
+            [
+                'qty' => 5,
+                'ruleData' => ['discountAmount' => 20, 'discountQty' => 0],
+                'itemData' => ['discountAmount' => 0, 'baseDiscountAmount' => 0, 'discountPercent' => 0, 'qty' => 5],
+                'validItemData' => [
+                    'price' => 123,
+                    'basePrice' => 123,
+                    'originalPrice' => 123,
+                    'baseOriginalPrice' => 123,
+                ],
+                'expectedRuleDiscountQty' => 20,
+                'expectedDiscountData' => [
+                    'amount' => 123.0,
+                    'baseAmount' => 123.0,
+                    'originalAmount' => 123.0,
+                    'baseOriginalAmount' => 123.0,
+                ],
+            ],
         ];
     }
 

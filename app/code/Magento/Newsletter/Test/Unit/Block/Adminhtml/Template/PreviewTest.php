@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
@@ -115,10 +116,15 @@ class PreviewTest extends TestCase
                 [$this->templateMock, 'getProcessedTemplate']
             )
             ->willReturn($this->templateMock->getProcessedTemplate());
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $context = $this->createPartialMock(
             Context::class,
             ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage',
-                'getStoreManager', 'getAppState', 'getBackendSession', 'getEscaper']
+                'getStoreManager', 'getAppState', 'getBackendSession', 'getEscaper', 'getAuthorization']
         );
         $context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
@@ -128,6 +134,7 @@ class PreviewTest extends TestCase
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
         $context->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
         $context->expects($this->once())->method('getBackendSession')->willReturn($this->backendSessionMock);
+        $context->expects($this->any())->method('getAuthorization')->willReturn($authorization);
 
         $this->maliciousCode = $this->createPartialMock(MaliciousCode::class, ['filter']);
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
@@ -152,7 +159,7 @@ class PreviewTest extends TestCase
     public function testToHtml()
     {
         $this->templateMock->expects($this->once())->method('revertDesign');
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn(self::PROCESSED_TEMPLATE_TEXT);
 
@@ -178,7 +185,7 @@ class PreviewTest extends TestCase
             ->willReturnSelf();
         $this->templateMock->expects($this->once())->method('isPlain')->willReturn(true);
         $this->backendSessionMock->expects($this->any())->method('hasPreviewData')->willReturn(false);
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn(self::PROCESSED_TEMPLATE_TEXT);
         $this->assertEquals('<pre>Processed Template</pre>', $this->preview->toHtml());
