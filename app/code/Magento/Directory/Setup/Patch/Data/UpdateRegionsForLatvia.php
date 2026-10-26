@@ -7,21 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Setup\Patch\Data;
 
-use Magento\Directory\Setup\DataInstaller;
-use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Update Latvian regions to match the current administrative-territorial
- * structure: 7 state cities + 35 municipalities established by the
- * 2021 reform and subsequent 2025 Varakļāni merger.
+ * Migrate Latvian regions disbanded by the 2021 administrative-territorial reform
+ * and the 2025 merger of Varakļāni municipality into Madona municipality.
  *
- * Surviving regions have their codes updated to current ISO 3166-2:LV,
- * disbanded municipalities are removed, and new entities are inserted.
+ * Runs after AddDataForLatviaV1 (adds LV-111, LV-112) and UpdateRegionCodesForLatviaV1
+ * (remaps surviving regions to ISO 3166-2:LV codes), so it only handles what those leave behind:
+ * each obsolete region shipped by InitializeDirectoryData has its address references moved to
+ * the successor municipality before it is deleted. Regions not listed here (e.g. custom regions)
+ * are never touched, and obsolete regions still used by tax rates or table rates are kept.
  *
- * @see https://lv.wikipedia.org/wiki/Latvijas_administrat%C4%ABvais_iedal%C4%ABjums
+ * @see https://likumi.lv/ta/id/315654
  * @see https://en.wikipedia.org/wiki/ISO_3166-2:LV
  */
 class UpdateRegionsForLatvia implements DataPatchInterface
@@ -29,149 +29,276 @@ class UpdateRegionsForLatvia implements DataPatchInterface
     private const string COUNTRY_CODE = 'LV';
 
     /**
-     * Old region code → new ISO 3166-2:LV code for regions that survived the reform.
-     * State cities (LV-DGV, LV-JEL, LV-JUR, LV-LPX, LV-REZ, LV-RIX, LV-VEN)
-     * already have correct codes and need no update.
+     * Obsolete region code => successor region code (null when there is no single successor).
      *
-     * @var array<string, string>
+     * @var array<string, string|null>
      */
-    private const array CODE_UPDATES = [
-        // Old district codes → new municipality codes
-        'LV-AI' => 'LV-002',
-        'LV-AL' => 'LV-007',
-        'LV-BL' => 'LV-015',
-        'LV-BU' => 'LV-016',
-        'LV-CE' => 'LV-022',
-        'LV-DO' => 'LV-026',
-        'LV-GU' => 'LV-033',
-        'LV-JK' => 'LV-042',
-        'LV-JL' => 'LV-041',
-        'LV-KR' => 'LV-047',
-        'LV-KU' => 'LV-050',
-        'LV-LM' => 'LV-054',
-        'LV-LU' => 'LV-058',
-        'LV-MA' => 'LV-059',
-        'LV-OG' => 'LV-067',
-        'LV-PR' => 'LV-073',
-        'LV-RE' => 'LV-077',
-        'LV-SA' => 'LV-088',
-        'LV-TA' => 'LV-097',
-        'LV-TU' => 'LV-099',
-        'LV-VK' => 'LV-101',
-        'LV-VM' => 'LV-113',
-        'LV-VE' => 'LV-106',
-        // Name-as-code entries → proper ISO codes
-        'Līvānu novads'    => 'LV-056',
-        'Mārupes novads'   => 'LV-062',
-        'Olaines novads'   => 'LV-068',
-        'Ropažu novads'    => 'LV-080',
-        'Salaspils novads' => 'LV-087',
-        'Saulkrastu novads' => 'LV-089',
-        'Siguldas novads'  => 'LV-091',
-        'Smiltenes novads' => 'LV-094',
-        'Ādažu novads'     => 'LV-011',
-        'Ķekavas novads'   => 'LV-052',
+    private const array OBSOLETE_REGIONS = [
+        // Former republic cities merged into their municipalities
+        'Jēkabpils' => 'LV-042',
+        'Valmiera' => 'LV-113',
+        // Former districts
+        'LV-DA' => 'LV-111',
+        'LV-LE' => 'LV-112',
+        'LV-RI' => null,
+        // Merged into Madonas novads in 2025
+        'LV-102' => 'LV-059',
+        // Municipalities merged in 2021
+        'Aglonas novads' => 'LV-073',
+        'Aizputes novads' => 'LV-112',
+        'Aknīstes novads' => 'LV-042',
+        'Alojas novads' => 'LV-054',
+        'Alsungas novads' => 'LV-050',
+        'Amatas novads' => 'LV-022',
+        'Apes novads' => 'LV-094',
+        'Auces novads' => 'LV-026',
+        'Babītes novads' => 'LV-062',
+        'Baldones novads' => 'LV-052',
+        'Baltinavas novads' => 'LV-015',
+        'Beverīnas novads' => 'LV-113',
+        'Brocēnu novads' => 'LV-088',
+        'Burtnieku novads' => 'LV-113',
+        'Carnikavas novads' => 'LV-011',
+        'Cesvaines novads' => 'LV-059',
+        'Ciblas novads' => 'LV-058',
+        'Dagdas novads' => 'LV-047',
+        'Dundagas novads' => 'LV-097',
+        'Durbes novads' => 'LV-112',
+        'Engures novads' => 'LV-099',
+        'Garkalnes novads' => 'LV-080',
+        'Grobiņas novads' => 'LV-112',
+        'Iecavas novads' => 'LV-016',
+        'Ikšķiles novads' => 'LV-067',
+        'Ilūkstes novads' => 'LV-111',
+        'Inčukalna novads' => 'LV-091',
+        'Jaunjelgavas novads' => 'LV-002',
+        'Jaunpiebalgas novads' => 'LV-022',
+        'Jaunpils novads' => 'LV-099',
+        'Kandavas novads' => 'LV-099',
+        'Kokneses novads' => 'LV-002',
+        'Krimuldas novads' => 'LV-091',
+        'Krustpils novads' => 'LV-042',
+        'Kārsavas novads' => 'LV-058',
+        'Lielvārdes novads' => 'LV-067',
+        'Lubānas novads' => 'LV-059',
+        'Līgatnes novads' => 'LV-022',
+        'Mazsalacas novads' => 'LV-113',
+        'Mālpils novads' => 'LV-091',
+        'Naukšēnu novads' => 'LV-113',
+        'Neretas novads' => 'LV-002',
+        'Nīcas novads' => 'LV-112',
+        'Ozolnieku novads' => 'LV-041',
+        'Priekules novads' => 'LV-112',
+        'Priekuļu novads' => 'LV-022',
+        'Pārgaujas novads' => 'LV-022',
+        'Pāvilostas novads' => 'LV-112',
+        'Pļaviņu novads' => 'LV-002',
+        'Raunas novads' => 'LV-094',
+        'Riebiņu novads' => 'LV-073',
+        'Rojas novads' => 'LV-097',
+        'Rucavas novads' => 'LV-112',
+        'Rugāju novads' => 'LV-015',
+        'Rundāles novads' => 'LV-016',
+        'Rūjienas novads' => 'LV-113',
+        'Salacgrīvas novads' => 'LV-054',
+        'Salas novads' => 'LV-042',
+        'Skrundas novads' => 'LV-050',
+        'Skrīveru novads' => 'LV-002',
+        'Stopiņu novads' => 'LV-080',
+        'Strenču novads' => 'LV-113',
+        'Sējas novads' => 'LV-089',
+        'Tērvetes novads' => 'LV-026',
+        'Vaiņodes novads' => 'LV-112',
+        'Vecpiebalgas novads' => 'LV-022',
+        'Vecumnieku novads' => 'LV-016',
+        'Viesītes novads' => 'LV-042',
+        'Viļakas novads' => 'LV-015',
+        'Viļānu novads' => 'LV-077',
+        'Vārkavas novads' => 'LV-073',
+        'Zilupes novads' => 'LV-058',
+        'Ērgļu novads' => 'LV-059',
+        'Ķeguma novads' => 'LV-067',
     ];
 
     /**
-     * Complete set of valid codes after the reform.
-     * Used to identify and remove disbanded regions after code updates.
+     * Region code => [name shipped by AddDataForLatviaV1, corrected name].
      *
-     * @var array<string>
+     * @var array<string, array{string, string}>
      */
-    private const array VALID_CODES = [
-        // State cities
-        'LV-DGV', 'LV-JEL', 'LV-JUR', 'LV-LPX', 'LV-REZ', 'LV-RIX', 'LV-VEN',
-        // Municipalities
-        'LV-002', 'LV-007', 'LV-011', 'LV-015', 'LV-016', 'LV-022', 'LV-026',
-        'LV-033', 'LV-041', 'LV-042', 'LV-047', 'LV-050', 'LV-052', 'LV-054',
-        'LV-056', 'LV-058', 'LV-059', 'LV-062', 'LV-067', 'LV-068', 'LV-073',
-        'LV-077', 'LV-080', 'LV-087', 'LV-088', 'LV-089', 'LV-091', 'LV-094',
-        'LV-097', 'LV-099', 'LV-101', 'LV-106', 'LV-111', 'LV-112', 'LV-113',
+    private const array NAME_CORRECTIONS = [
+        'LV-112' => ['Dienvidkurzemes Novads', 'Dienvidkurzemes novads'],
+    ];
+
+    /**
+     * Address tables whose region references are remapped. The flag tells whether the
+     * region name stored on the address is replaced too; order addresses keep the historical name.
+     *
+     * @var array<string, bool>
+     */
+    private const array ADDRESS_TABLES = [
+        'customer_address_entity' => true,
+        'quote_address' => true,
+        'sales_order_address' => false,
+    ];
+
+    /**
+     * Configuration tables referencing regions; obsolete regions used there are kept.
+     *
+     * @var array<string, string>
+     */
+    private const array CONFIGURATION_TABLES = [
+        'tax_calculation_rate' => 'tax_region_id',
+        'shipping_tablerate' => 'dest_region_id',
     ];
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
-        private readonly ModuleDataSetupInterface $moduleDataSetup,
-        private readonly DataInstallerFactory $dataInstallerFactory
+        private readonly ModuleDataSetupInterface $moduleDataSetup
     ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function apply(): UpdateRegionsForLatvia
+    public function apply(): DataPatchInterface
     {
         $connection = $this->moduleDataSetup->getConnection();
-        $regionTable = $this->moduleDataSetup->getTable('directory_country_region');
-
-        $this->updateRegionCodes($connection, $regionTable);
-        $this->deleteDefunctRegions($connection, $regionTable);
-        $this->addNewRegions($connection);
+        $this->correctRegionNames($connection);
+        $this->migrateObsoleteRegions($connection);
 
         return $this;
     }
 
     /**
-     * Update ISO codes for regions that survived the reform but had outdated codes.
-     *
-     * Preserves region_id so existing customer addresses remain valid.
+     * Fix region names shipped with wrong casing, unless they were changed by the merchant.
      *
      * @param AdapterInterface $connection
-     * @param string $regionTable
      * @return void
      */
-    private function updateRegionCodes(AdapterInterface $connection, string $regionTable): void
+    private function correctRegionNames(AdapterInterface $connection): void
     {
-        foreach (self::CODE_UPDATES as $oldCode => $newCode) {
+        $regionTable = $this->moduleDataSetup->getTable('directory_country_region');
+        $regionNameTable = $this->moduleDataSetup->getTable('directory_country_region_name');
+
+        foreach (self::NAME_CORRECTIONS as $code => [$oldName, $newName]) {
+            $regionId = $connection->fetchOne(
+                $connection->select()
+                    ->from($regionTable, ['region_id'])
+                    ->where('country_id = ?', self::COUNTRY_CODE)
+                    ->where('code = ?', $code)
+            );
+            if (!$regionId) {
+                continue;
+            }
+
             $connection->update(
                 $regionTable,
-                ['code' => $newCode],
-                [
-                    'country_id = ?' => self::COUNTRY_CODE,
-                    'code = ?' => $oldCode,
-                ]
+                ['default_name' => $newName],
+                ['region_id = ?' => (int)$regionId, 'default_name = ?' => $oldName]
+            );
+            $connection->update(
+                $regionNameTable,
+                ['name' => $newName],
+                ['region_id = ?' => (int)$regionId, 'name = ?' => $oldName]
             );
         }
     }
 
     /**
-     * Remove regions that no longer exist after the 2021 reform.
-     *
-     * CASCADE FK on directory_country_region_name handles locale entries.
+     * Move address references from obsolete regions to their successors and delete the obsolete regions.
      *
      * @param AdapterInterface $connection
-     * @param string $regionTable
      * @return void
      */
-    private function deleteDefunctRegions(AdapterInterface $connection, string $regionTable): void
+    private function migrateObsoleteRegions(AdapterInterface $connection): void
     {
-        $connection->delete(
-            $regionTable,
-            [
-                'country_id = ?' => self::COUNTRY_CODE,
-                'code NOT IN (?)' => self::VALID_CODES,
-            ]
+        $regionTable = $this->moduleDataSetup->getTable('directory_country_region');
+        $regions = $connection->fetchAssoc(
+            $connection->select()
+                ->from($regionTable, ['code', 'region_id', 'default_name'])
+                ->where('country_id = ?', self::COUNTRY_CODE)
         );
+        $referencedRegionIds = $this->getRegionIdsUsedInConfiguration($connection);
+
+        foreach (self::OBSOLETE_REGIONS as $obsoleteCode => $successorCode) {
+            if (!isset($regions[$obsoleteCode])) {
+                continue;
+            }
+            $obsoleteRegionId = (int)$regions[$obsoleteCode]['region_id'];
+            if (in_array($obsoleteRegionId, $referencedRegionIds, true)) {
+                continue;
+            }
+
+            $successor = null;
+            if ($successorCode !== null) {
+                $successor = $regions[$successorCode] ?? null;
+                if ($successor === null) {
+                    // Successor is missing (e.g. removed by the merchant); keep the obsolete region.
+                    continue;
+                }
+            }
+
+            $this->remapAddresses($connection, $obsoleteRegionId, $successor);
+            // directory_country_region_name rows are removed by the ON DELETE CASCADE foreign key.
+            $connection->delete($regionTable, ['region_id = ?' => $obsoleteRegionId]);
+        }
     }
 
     /**
-     * Insert municipalities created by the 2021 reform with no predecessor.
+     * Point addresses at the successor region, or detach them when there is none.
+     *
+     * The region name stored on the address is left in place when detaching, so no address data is lost.
      *
      * @param AdapterInterface $connection
+     * @param int $obsoleteRegionId
+     * @param array|null $successor
      * @return void
      */
-    private function addNewRegions(AdapterInterface $connection): void
+    private function remapAddresses(AdapterInterface $connection, int $obsoleteRegionId, ?array $successor): void
     {
-        /** @var DataInstaller $dataInstaller */
-        $dataInstaller = $this->dataInstallerFactory->create();
-        $dataInstaller->addCountryRegions($connection, [
-            [self::COUNTRY_CODE, 'LV-111', 'Augšdaugavas novads'],
-            [self::COUNTRY_CODE, 'LV-112', 'Dienvidkurzemes novads'],
-        ]);
+        foreach (self::ADDRESS_TABLES as $table => $updateRegionName) {
+            $tableName = $this->moduleDataSetup->getTable($table);
+            if (!$connection->isTableExists($tableName)) {
+                continue;
+            }
+
+            $bind = ['region_id' => $successor !== null ? (int)$successor['region_id'] : null];
+            if ($successor !== null && $updateRegionName) {
+                $bind['region'] = $successor['default_name'];
+            }
+            $connection->update(
+                $tableName,
+                $bind,
+                ['country_id = ?' => self::COUNTRY_CODE, 'region_id = ?' => $obsoleteRegionId]
+            );
+        }
+    }
+
+    /**
+     * Get Latvian region IDs used by tax rates or shipping table rates.
+     *
+     * @param AdapterInterface $connection
+     * @return int[]
+     */
+    private function getRegionIdsUsedInConfiguration(AdapterInterface $connection): array
+    {
+        $regionIds = [];
+        foreach (self::CONFIGURATION_TABLES as $table => $column) {
+            $tableName = $this->moduleDataSetup->getTable($table);
+            if (!$connection->isTableExists($tableName)) {
+                continue;
+            }
+            $regionIds[] = $connection->fetchCol(
+                $connection->select()
+                    ->distinct()
+                    ->from($tableName, [$column])
+                    ->where($column . ' > 0')
+            );
+        }
+
+        return array_map('intval', array_merge([], ...$regionIds));
     }
 
     /**
@@ -181,6 +308,8 @@ class UpdateRegionsForLatvia implements DataPatchInterface
     {
         return [
             InitializeDirectoryData::class,
+            AddDataForLatviaV1::class,
+            UpdateRegionCodesForLatviaV1::class,
         ];
     }
 
