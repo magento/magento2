@@ -34,6 +34,9 @@
             <magentoCLI command="config:set {{CategoriesUrlSuffix.path}} {{CategoriesUrlSuffix.value}}" stepKey="resetCategoryUrlSuffixAsDefault"/>
             <!-- Reset configuration: Restore default product URL suffix -->
             <magentoCLI command="config:set {{ProductsUrlSuffix.path}} {{ProductsUrlSuffix.value}}" stepKey="resetProductUrlSuffixAsDefault"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCacheAfterRestoringUrlSettings" after="resetProductUrlSuffixAsDefault">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
             <!--Clear filter product listing grid-->
             <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
             <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
