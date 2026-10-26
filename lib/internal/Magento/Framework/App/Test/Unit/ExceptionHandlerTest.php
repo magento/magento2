@@ -20,6 +20,7 @@ use Magento\Framework\Exception\State\InitException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringStartsWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -146,6 +147,95 @@ class ExceptionHandlerTest extends TestCase
                 $this->requestMock
             )
         );
+    }
+
+    /**
+     * @param string $message
+     * @return void
+     */
+    #[DataProvider('exceptionMessageDataProvider')]
+    public function testHandleDeveloperModeIncludesThrowLocation(string $message): void
+    {
+        $throwLine = __LINE__ + 1;
+        $exception = new \Exception($message);
+        $this->assertDeveloperModeResponse($exception, [
+            sprintf(
+                'Exception #0 (Exception): "%s" thrown at [%s:%d]',
+                $message,
+                'lib/internal/Magento/Framework/App/Test/Unit/ExceptionHandlerTest.php',
+                $throwLine
+            )
+        ]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function exceptionMessageDataProvider(): array
+    {
+        return [
+            'plain message' => ['Test Message'],
+            'empty message' => [''],
+            'quoted message' => ['Failed for "customer\'s order" with 100% <data>']
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testHandleDeveloperModeIncludesChainedErrorLocations(): void
+    {
+        $errorLine = __LINE__ + 1;
+        $error = new \Error('Engine "failure"');
+        $exceptionLine = __LINE__ + 1;
+        $exception = new \RuntimeException('Outer failure', 0, $error);
+        $file = 'lib/internal/Magento/Framework/App/Test/Unit/ExceptionHandlerTest.php';
+        $this->assertDeveloperModeResponse($exception, [
+            sprintf('Exception #0 (RuntimeException): "Outer failure" thrown at [%s:%d]', $file, $exceptionLine),
+            sprintf('Exception #1 (Error): "Engine "failure"" thrown at [%s:%d]', $file, $errorLine)
+        ]);
+    }
+
+    /**
+     * Assert the developer response contains each header in both the summary and trace sections.
+     *
+     * @param \Exception $exception
+     * @param string[] $headers
+     * @return void
+     */
+    private function assertDeveloperModeResponse(\Exception $exception, array $headers): void
+    {
+        $this->encryptorInterfaceMock->expects($this->never())->method('getHash');
+        $this->filesystemMock->expects($this->never())->method('getDirectoryRead');
+        $this->loggerMock->expects($this->never())->method('critical');
+        $this->requestMock->expects($this->never())->method('getDistroBaseUrl');
+        $bootstrap = $this->createMock(Bootstrap::class);
+        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
+        $bootstrap->expects($this->once())->method('getErrorCode')->willReturn(0);
+        $this->responseMock->expects($this->once())->method('clearHeader')->with('Location');
+        $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(500);
+        $this->responseMock->expects($this->once())->method('setHeader')->with('Content-Type', 'text/plain');
+        $this->responseMock->expects($this->once())->method('sendResponse');
+        $this->responseMock->expects($this->once())->method('setBody')->with($this->callback(
+            function (string $body) use ($headers): bool {
+                $this->assertStringStartsWith(
+                    count($headers) . " exception(s):\n" . implode("\n", $headers) . "\n\n",
+                    $body
+                );
+                foreach ($headers as $header) {
+                    $this->assertSame(2, substr_count($body, $header . "\n"));
+                    $this->assertStringContainsString("\n" . $header . "\n<pre>", $body);
+                }
+                return true;
+            }
+        ));
+
+        $this->assertTrue($this->exceptionHandler->handle(
+            $bootstrap,
+            $exception,
+            $this->responseMock,
+            $this->requestMock
+        ));
     }
 
     public function testCatchExceptionSessionException()

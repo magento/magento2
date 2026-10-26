@@ -118,10 +118,10 @@ class ExceptionHandler implements ExceptionHandlerInterface
      * Example Output:
      * "app/code/Vendor/Module/SomeClass.php:123"
      *
-     * @param \Exception $exception The exception object from which to extract the file and line information.
+     * @param \Throwable $exception The throwable from which to extract the file and line information.
      * @return string A formatted string representing the exception's file path and line number.
      */
-    private function getExceptionLocation(\Exception $exception): string
+    private function getExceptionLocation(\Throwable $exception): string
     {
         return Debug::normalizeCodeLocation([
             'file' => $exception->getFile(),
@@ -137,7 +137,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     private function buildContentFromException(\Exception $exception): string
     {
-        /** @var \Exception[] $exceptions */
+        /** @var \Throwable[] $exceptions */
         $exceptions = [];
 
         do {

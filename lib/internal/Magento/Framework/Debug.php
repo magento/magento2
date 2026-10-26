@@ -64,26 +64,17 @@ class Debug
      */
     public static function normalizeCodeLocation(?array $data): string
     {
-        $fileName = '';
-
-        // Check if 'file' exists in the data array
-        if (isset($data['file'])) {
-            // Determine the position of the root path in the file path
-            $pos = \strpos($data['file'], self::getRootPath());
-
-            // If Magento root path is part of the file path, trim it to create a relative path
-            if (false !== $pos) {
-                $data['file'] = \substr(
-                    $data['file'],
-                    \strlen(self::getRootPath()) + 1
-                );
-            }
-
-            // Format the file path and line number into the desired string format
-            $fileName = \sprintf('%s:%d', $data['file'], $data['line'] ?? 0);
+        if (!isset($data['file'])) {
+            return '';
         }
 
-        return $fileName;
+        $file = $data['file'];
+        $rootPath = rtrim(self::getRootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        if (str_starts_with($file, $rootPath)) {
+            $file = substr($file, strlen($rootPath));
+        }
+
+        return sprintf('%s:%d', $file, $data['line'] ?? 0);
     }
 
     /**
@@ -132,9 +123,8 @@ class Debug
                 }
             }
 
-            // Fix static test: 'Variable $methodName might not be defined.'
             $methodName = '';
-            
+
             // prepare method's name
             if (isset($data['class']) && isset($data['function'])) {
                 if (isset($data['object']) && get_class($data['object']) != $data['class']) {
@@ -175,7 +165,6 @@ class Debug
         if ($return) {
             return $out;
         } else {
-            // Fix static test: 'Use of echo language construct is discouraged.'
             // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $out;
             return true;
