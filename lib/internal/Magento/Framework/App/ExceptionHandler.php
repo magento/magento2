@@ -20,6 +20,8 @@ use Magento\Framework\Exception\State\InitException;
 
 /**
  * Handler of HTTP web application exception
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExceptionHandler implements ExceptionHandlerInterface
 {
