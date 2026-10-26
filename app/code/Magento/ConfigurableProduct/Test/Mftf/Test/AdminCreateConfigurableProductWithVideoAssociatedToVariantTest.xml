@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
+            <createData entity="ProductYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
 
