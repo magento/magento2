@@ -115,6 +115,14 @@ class Tax extends AbstractTotal
                     * $taxFactor;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
+                if (!$invoice->getShippingDiscountTaxCompensationAmount()) {
+                    $shippingTaxAmount = $this->getShippingTaxMatchingInclTax($creditmemo, $shippingTaxAmount, false);
+                    $baseShippingTaxAmount = $this->getShippingTaxMatchingInclTax(
+                        $creditmemo,
+                        $baseShippingTaxAmount,
+                        true
+                    );
+                }
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
                 if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0 ||
@@ -152,6 +160,14 @@ class Tax extends AbstractTotal
                     $baseShippingDiscountTaxCompensationAmount,
                     'base'
                 );
+                if (!$shippingDiscountTaxCompensationAmount && !$baseShippingDiscountTaxCompensationAmount) {
+                    $shippingTaxAmount = $this->getShippingTaxMatchingInclTax($creditmemo, $shippingTaxAmount, false);
+                    $baseShippingTaxAmount = $this->getShippingTaxMatchingInclTax(
+                        $creditmemo,
+                        $baseShippingTaxAmount,
+                        true
+                    );
+                }
                 if ($part < 1 && ($order->getShippingTaxAmount() > 0 ||
                         ($order->getShippingDiscountAmount() >= $order->getShippingAmount()))
                 ) {
@@ -205,6 +221,34 @@ class Tax extends AbstractTotal
             $creditmemo->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation
         );
         return $this;
+    }
+
+    /**
+     * Get the shipping tax that makes the refunded shipping add up to the amount entered including tax
+     *
+     * When shipping is shown including tax, the refund is entered including tax: the shipping collector rounds
+     * the amounts with and without tax from it separately, and the proportional shipping tax is rounded again
+     * here, so the parts can differ from the entered amount by a cent. In that case the tax is taken as the
+     * difference of the two shipping amounts instead. Larger differences are left alone.
+     *
+     * @param Creditmemo $creditmemo
+     * @param float $shippingTax shipping tax rounded from the order or invoice proportion
+     * @param bool $base whether the amounts are in the base currency
+     * @return float
+     */
+    private function getShippingTaxMatchingInclTax(Creditmemo $creditmemo, float $shippingTax, bool $base): float
+    {
+        if (!$this->taxConfig->displaySalesShippingInclTax($creditmemo->getOrder()->getStoreId())) {
+            return $shippingTax;
+        }
+        $shippingInclTax = (float)($base ? $creditmemo->getBaseShippingInclTax() : $creditmemo->getShippingInclTax());
+        if ($shippingInclTax <= 0) {
+            return $shippingTax;
+        }
+        $shippingAmount = (float)($base ? $creditmemo->getBaseShippingAmount() : $creditmemo->getShippingAmount());
+        $taxFromInclTax = $creditmemo->roundPrice($shippingInclTax - $shippingAmount, $base ? 'base' : 'regular');
+
+        return abs($taxFromInclTax - $shippingTax) < 0.0101 ? $taxFromInclTax : $shippingTax;
     }
 
     /**
