@@ -9,7 +9,7 @@ namespace Magento\Framework\Cache\Backend;
 /**
  * Redis wrapper to extend current implementation behaviour.
  */
-class Redis extends \Cm_Cache_Backend_Redis
+class Redis extends \Cm_Cache_Backend_Redis implements AtomicPairBackendInterface
 {
     /**
      * Local state of preloaded keys.
@@ -105,6 +105,213 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         return $result;
+    }
+
+    /**
+     * Save both cache entries in one Redis transaction, preventing reads from seeing only one entry.
+     *
+     * Mirrors the non-Lua branch of the parent's own save() for each entry, but queues both
+     * inside one MULTI/EXEC block instead of issuing two independent save() calls.
+     *
+     * @param string $data
+     * @param string $id
+     * @param array $tags
+     * @param bool|int|null $specificLifetime
+     * @param string $pairedData
+     * @param string $pairedId
+     * @param array $pairedTags
+     * @param bool|int|null $pairedSpecificLifetime
+     * @return bool
+     */
+    public function saveAtomicPair(
+        string $data,
+        string $id,
+        array $tags,
+        $specificLifetime,
+        string $pairedData,
+        string $pairedId,
+        array $pairedTags,
+        $pairedSpecificLifetime
+    ): bool {
+        $tags = array_values(array_flip(array_flip($tags)));
+        $pairedTags = array_values(array_flip(array_flip($pairedTags)));
+
+        $lifetime = $this->_getAutoExpiringLifetime($this->getLifetime($specificLifetime), $id);
+        $lifetime = $lifetime === null ? $lifetime : (int) $lifetime;
+        $pairedLifetime = $this->_getAutoExpiringLifetime($this->getLifetime($pairedSpecificLifetime), $pairedId);
+        $pairedLifetime = $pairedLifetime === null ? $pairedLifetime : (int) $pairedLifetime;
+
+        [$oldTags, $oldPairedTags] = $this->_fetchOwnTagsPair($id, $pairedId);
+
+        $this->_redis->pipeline()->multi();
+        $this->_queueSave($id, $data, $tags, $lifetime, $oldTags);
+        $this->_queueSave($pairedId, $pairedData, $pairedTags, $pairedLifetime, $oldPairedTags);
+        $result = $this->_redis->exec();
+
+        return isset($result[0]) && (bool) $result[0];
+    }
+
+    /**
+     * Remove two paired cache entries as a single Redis transaction.
+     *
+     * The pair (e.g. a value and its paired version marker) is removed atomically so a
+     * concurrent read can never observe one removed and not the other. The pair is considered
+     * removed if either key's own unlink actually deleted something, since one of the two (e.g.
+     * an already TTL-expired data key) may legitimately be gone before this call runs while the
+     * other still needs to be cleared.
+     *
+     * @param string $id
+     * @param string $pairedId
+     * @return bool
+     */
+    public function removeAtomicPair(string $id, string $pairedId): bool
+    {
+        [$tags, $pairedTags] = $this->_fetchOwnTagsPair($id, $pairedId);
+
+        $this->_redis->pipeline()->multi();
+        $this->_redis->unlink(self::PREFIX_KEY . $id);
+        $this->_redis->unlink(self::PREFIX_KEY . $pairedId);
+        $this->_queueRemoveTagCleanup($id, $tags);
+        $this->_queueRemoveTagCleanup($pairedId, $pairedTags);
+        $result = $this->_redis->exec();
+
+        return (isset($result[0]) && (bool) $result[0]) || (isset($result[1]) && (bool) $result[1]);
+    }
+
+    /**
+     * Read the tags currently stored against both ids' own hashes.
+     *
+     * Same as the parent's remove(), but pipelined together as a single round-trip instead of
+     * two sequential ones.
+     *
+     * @param string $id
+     * @param string $pairedId
+     * @return array{0: array, 1: array}
+     */
+    private function _fetchOwnTagsPair(string $id, string $pairedId): array
+    {
+        $pipe = $this->_redis->pipeline();
+        $pipe->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
+        $pipe->hGet(self::PREFIX_KEY . $pairedId, self::FIELD_TAGS);
+        [$rawTags, $rawPairedTags] = $pipe->exec();
+
+        return [
+            explode(',', (string) $this->_decodeData($rawTags)),
+            explode(',', (string) $this->_decodeData($rawPairedTags)),
+        ];
+    }
+
+    /**
+     * Queue the commands for one save().
+     *
+     * Identical to the parent's non-Lua save() body.
+     *
+     * @param string $id
+     * @param string $data
+     * @param array $tags
+     * @param int|null $lifetime
+     * @param array $oldTags
+     * @return void
+     */
+    private function _queueSave(string $id, string $data, array $tags, $lifetime, array $oldTags): void
+    {
+        $this->_redis->hMSet(self::PREFIX_KEY . $id, [
+            self::FIELD_DATA => $this->_encodeData($data, $this->_compressData),
+            self::FIELD_TAGS => $this->_encodeData(implode(',', $tags), $this->_compressTags),
+            self::FIELD_MTIME => time(),
+            self::FIELD_INF => $lifetime === null ? 1 : 0,
+        ]);
+
+        $this->_queueExpiration($id, $lifetime);
+        $this->_queueAddedTags($id, $tags);
+        $this->_queueRemovedTags($id, $tags, $oldTags);
+        $this->_queueIdTracking($id);
+    }
+
+    /**
+     * Queue the cache entry expiration when one is configured.
+     *
+     * @param string $id
+     * @param int|false|null $lifetime
+     * @return void
+     */
+    private function _queueExpiration(string $id, $lifetime): void
+    {
+        if ($lifetime !== false && $lifetime !== null) {
+            $this->_redis->expire(self::PREFIX_KEY . $id, min($lifetime, self::MAX_LIFETIME));
+        }
+    }
+
+    /**
+     * Queue tag index updates for tags assigned to the cache entry.
+     *
+     * @param string $id
+     * @param array $tags
+     * @return void
+     */
+    private function _queueAddedTags(string $id, array $tags): void
+    {
+        if ($tags) {
+            $this->_redis->sAdd(self::SET_TAGS, $tags);
+            foreach ($tags as $tag) {
+                $this->_redis->sAdd(self::PREFIX_TAG_IDS . $tag, $id);
+            }
+        }
+    }
+
+    /**
+     * Queue removal of tag index entries no longer assigned to the cache entry.
+     *
+     * @param string $id
+     * @param array $tags
+     * @param array $oldTags
+     * @return void
+     */
+    private function _queueRemovedTags(string $id, array $tags, array $oldTags): void
+    {
+        if ($remTags = ($oldTags ? array_diff($oldTags, $tags) : false)) {
+            foreach ($remTags as $tag) {
+                if ($tag !== '') {
+                    $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $id);
+                }
+            }
+        }
+    }
+
+    /**
+     * Queue the cache id in the global index when not-matching tag operations are enabled.
+     *
+     * @param string $id
+     * @return void
+     */
+    private function _queueIdTracking(string $id): void
+    {
+        if ($this->_notMatchingTags) {
+            $this->_redis->sAdd(self::SET_IDS, $id);
+        }
+    }
+
+    /**
+     * Queue the tag-index cleanup for one remove().
+     *
+     * Identical to the parent's own remove() body, minus the key unlink itself (queued
+     * separately so its result stays at a predictable, per-id index within the transaction).
+     *
+     * @param string $id
+     * @param array $tags
+     * @return void
+     */
+    private function _queueRemoveTagCleanup(string $id, array $tags): void
+    {
+        if ($this->_notMatchingTags) {
+            $this->_redis->sRem(self::SET_IDS, $id);
+        }
+
+        foreach ($tags as $tag) {
+            if ($tag !== '') {
+                $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $id);
+            }
+        }
     }
 
     /**
