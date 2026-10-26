@@ -318,6 +318,7 @@ class Link extends AbstractDb
     {
         $connection =  $this->getConnection();
         $attributes = $this->getAttributesByType($typeId);
+        $storedValues = $this->getStoredAttributeValues(array_intersect_key($links, $data), $attributes);
 
         $insertData = [];
         $updateData = [];
@@ -342,12 +343,21 @@ class Link extends AbstractDb
                 if (!$attributeTable) {
                     continue;
                 }
+                $storedKey = $linkId . '-' . $attributeInfo['id'];
+                $isStored = array_key_exists($storedKey, $storedValues);
                 if (isset($linkInfo[$attributeInfo['code']])) {
                     $value = $this->_prepareAttributeValue(
                         $attributeInfo['type'],
                         $linkInfo[$attributeInfo['code']]
                     );
                     if (isset($links[$linkedProductId])) {
+                        // An upsert of an unchanged value still consumes an auto increment id, so skip it
+                        $storedValue = $isStored
+                            ? $this->_prepareAttributeValue($attributeInfo['type'], $storedValues[$storedKey])
+                            : null;
+                        if ($isStored && $storedValue === $value) {
+                            continue;
+                        }
                         $updateData[$attributeTable][] = [
                             'product_link_attribute_id' => $attributeInfo['id'],
                             'link_id' => $linkId,
@@ -360,7 +370,7 @@ class Link extends AbstractDb
                             'value' => $value,
                         ];
                     }
-                } else {
+                } elseif ($isStored) {
                     $deleteConditions[$attributeTable]['link_id'][] = $linkId;
                     $deleteConditions[$attributeTable]['product_link_attribute_id'][] = $attributeInfo['id'];
                 }
@@ -368,5 +378,37 @@ class Link extends AbstractDb
         }
 
         return [$insertData, $updateData, $deleteConditions];
+    }
+
+    /**
+     * Get the stored attribute values of existing links, keyed by "<link id>-<attribute id>"
+     *
+     * @param array $linkIds
+     * @param array $attributes
+     * @return array
+     */
+    private function getStoredAttributeValues(array $linkIds, array $attributes): array
+    {
+        $attributeIdsByType = [];
+        foreach ($attributes as $attributeInfo) {
+            $attributeIdsByType[$attributeInfo['type']][] = $attributeInfo['id'];
+        }
+        if (!$linkIds || !$attributeIdsByType) {
+            return [];
+        }
+
+        $connection = $this->getConnection();
+        $values = [];
+        foreach ($attributeIdsByType as $type => $attributeIds) {
+            $select = $connection->select()
+                ->from($this->getAttributeTypeTable($type), ['link_id', 'product_link_attribute_id', 'value'])
+                ->where('link_id IN (?)', array_values($linkIds))
+                ->where('product_link_attribute_id IN (?)', $attributeIds);
+            foreach ($connection->fetchAll($select) as $row) {
+                $values[$row['link_id'] . '-' . $row['product_link_attribute_id']] = $row['value'];
+            }
+        }
+
+        return $values;
     }
 }
