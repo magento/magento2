@@ -158,7 +158,6 @@ class Kernel
             && preg_match('/public.*s-maxage=(\d+)/', $cacheControlHeader->getFieldValue(), $matches)
         ) {
             $maxAge = (int) $matches[1];
-            $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
                 && !$response instanceof NotCacheableInterface
                 && ($this->request->isGet() || $this->request->isHead())
@@ -179,6 +178,8 @@ class Kernel
                     $maxAge
                 );
             }
+            // Only after the cacheable headers have been saved, so a cache hit replays them.
+            $response->setNoCacheHeaders();
         }
     }
 
