@@ -559,7 +559,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function loadByIncrementId($incrementId)
     {
-        return $this->loadByAttribute('increment_id', (string) $incrementId);
+        return $this->loadByAttribute('increment_id', $this->normalizeIncrementId($incrementId));
     }
 
     /**
@@ -573,11 +573,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $orderCollection = $this->getSalesOrderCollection(
             [
-                'increment_id' => (string) $incrementId,
+                'increment_id' => $this->normalizeIncrementId($incrementId),
                 'store_id' => $storeId
             ]
         );
         return $orderCollection->getFirstItem();
+    }
+
+    /**
+     * Cast an increment id to string so MySQL can use the increment_id index for the lookup.
+     *
+     * @param mixed $incrementId
+     * @return string|null
+     */
+    private function normalizeIncrementId($incrementId): ?string
+    {
+        return $incrementId === null ? null : (string)$incrementId;
     }
 
     /**
