@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit\View\Deployment\Version\Storage;
 use Magento\Framework\App\View\Deployment\Version\Storage\File;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,8 +56,8 @@ class FileTest extends TestCase
      *
      * @param string $rawFromFile
      * @param string $expectedVersion
-     * @dataProvider loadTrimsWhitespaceDataProvider
      */
+    #[DataProvider('loadTrimsWhitespaceDataProvider')]
     public function testLoadTrimsWhitespaceFromFileContents($rawFromFile, $expectedVersion)
     {
         $this->directory->expects($this->once())
@@ -90,6 +91,17 @@ class FileTest extends TestCase
             'vertical tabs' => ["\x0B" . $v . "\x0B", $v],
             'null bytes on edges' => ["\0" . $v . "\0", $v],
         ];
+    }
+
+    public function testLoadReturnsFalseWhenFileNotReadable()
+    {
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(false);
+        $this->directory->expects($this->never())
+            ->method('readFile');
+        $this->assertFalse($this->object->load());
     }
 
     public function testSave()

@@ -36,7 +36,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load()
     {
@@ -47,7 +47,7 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save($data)
     {
