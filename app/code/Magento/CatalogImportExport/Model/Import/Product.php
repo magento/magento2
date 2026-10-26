@@ -2875,7 +2875,8 @@ class Product extends AbstractEntity
             }
         }
 
-        if (!empty($rowData['new_from_date']) && !empty($rowData['new_to_date'])
+        if (!empty(trim($rowData['new_from_date'] ?? ''))
+            && !empty(trim($rowData['new_to_date'] ?? ''))
         ) {
             $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData['new_from_date'], false));
             $newToTimestamp = strtotime($this->dateTime->formatDate($rowData['new_to_date'], false));
