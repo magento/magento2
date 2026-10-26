@@ -174,6 +174,82 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->assertEquals($lastName . "Updated", $customerData->getLastname());
     }
 
+    /**
+     * A customer cannot switch off the automatic group assignment on their own account.
+     */
+    public function testUpdateCustomerCannotChangeDisableAutoGroupChange()
+    {
+        $customerId = $this->customerData[CustomerInterface::ID];
+        $this->assertEquals(0, (int)$this->_getCustomerData($customerId)->getDisableAutoGroupChange());
+
+        $requestData = $this->getSelfUpdateRequestData($customerId);
+        $requestData['customer'][CustomerInterface::DISABLE_AUTO_GROUP_CHANGE] = 1;
+        $this->_webApiCall($this->getSaveSelfServiceInfo(), $requestData);
+
+        $customerData = $this->_getCustomerData($customerId);
+        $this->assertEquals('Updated', $customerData->getFirstname());
+        $this->assertEquals(0, (int)$customerData->getDisableAutoGroupChange());
+    }
+
+    /**
+     * A self-service update that leaves the field out keeps the value the merchant set.
+     */
+    public function testUpdateCustomerKeepsDisableAutoGroupChangeSetByMerchant()
+    {
+        $customerId = $this->customerData[CustomerInterface::ID];
+        $customer = $this->customerRepository->getById($customerId);
+        $customer->setDisableAutoGroupChange(1);
+        $this->customerRepository->save($customer);
+        $this->customerRegistry->remove($customerId);
+
+        $requestData = $this->getSelfUpdateRequestData($customerId);
+        unset($requestData['customer'][CustomerInterface::DISABLE_AUTO_GROUP_CHANGE]);
+        $this->_webApiCall($this->getSaveSelfServiceInfo(), $requestData);
+
+        $customerData = $this->_getCustomerData($customerId);
+        $this->assertEquals('Updated', $customerData->getFirstname());
+        $this->assertEquals(1, (int)$customerData->getDisableAutoGroupChange());
+    }
+
+    /**
+     * Request data for a PUT /V1/customers/me that changes the first name.
+     *
+     * @param int $customerId
+     * @return array
+     */
+    private function getSelfUpdateRequestData($customerId): array
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->_getCustomerData($customerId),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $customerData[CustomerInterface::FIRSTNAME] = 'Updated';
+
+        return ['customer' => $customerData];
+    }
+
+    /**
+     * Service info for the customer's own save operation.
+     *
+     * @return array
+     */
+    private function getSaveSelfServiceInfo(): array
+    {
+        return [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $this->token,
+            ],
+            'soap' => [
+                'service' => self::REPO_SERVICE,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::REPO_SERVICE . 'SaveSelf',
+                'token' => $this->token
+            ]
+        ];
+    }
+
     public function testGetCustomerData()
     {
         //Get expected details from the Service directly

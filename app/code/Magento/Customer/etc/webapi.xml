@@ -144,6 +144,7 @@
             <parameter name="customer.group_id" force="true">%customer_group_id%</parameter>
             <parameter name="customer.website_id" force="true">%customer_website_id%</parameter>
             <parameter name="customer.store_id" force="true">%customer_store_id%</parameter>
+            <parameter name="customer.disable_auto_group_change" force="true">%customer_disable_auto_group_change%</parameter>
         </data>
     </route>
     <route url="/V1/customers/me" method="GET" soapOperation="getSelf">
