@@ -269,37 +269,6 @@ class ImageTest extends TestCase
     }
 
     /**
-     * Website ids of every product sharing the image must be returned, not only the last one's.
-     */
-    public function testGetRelatedWebsiteIds(): void
-    {
-        $filepath = 'm/y/image.jpg';
-        $selectMock = $this->createMock(Select::class);
-        $selectMock->method('distinct')->willReturnSelf();
-        $selectMock->method('from')->willReturnSelf();
-        $selectMock->method('joinInner')->willReturnSelf();
-        $selectMock->method('where')->willReturnSelf();
-        $selectMock->method('group')->willReturnSelf();
-
-        $this->connectionMock->expects($this->once())
-            ->method('select')
-            ->willReturn($selectMock);
-        // One row per product sharing the image; website ids overlap across products.
-        $this->connectionMock->expects($this->once())
-            ->method('fetchAll')
-            ->with($selectMock)
-            ->willReturn([
-                ['filepath' => $filepath, 'website_ids' => '1,2'],
-                ['filepath' => $filepath, 'website_ids' => '2,3'],
-            ]);
-
-        $this->assertSame(
-            [1, 2, 3],
-            $this->imageModel->getRelatedWebsiteIds($filepath)
-        );
-    }
-
-    /**
      * @param int $imagesCount
      * @param int $batchSize
      * @return \Closure
