@@ -16,6 +16,7 @@ $filePath = $block->getData('file_path');
 
 <style type="text/css" data-type="criticalCss">
     <?= /* @noEscape */ is_string($filePath) && $filePath !== ''
+        && $criticalCssViewModel instanceof \Magento\Theme\Block\Html\Header\CriticalCss
         ? $criticalCssViewModel->getCriticalCssDataByPath($filePath)
         : $criticalCssViewModel->getCriticalCssData() ?>
 </style>

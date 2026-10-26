@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Theme\Block\Html\Header;
 
 use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
@@ -63,6 +64,23 @@ class CriticalCssTest extends TestCase
 
         $this->assertStringContainsString('.ui-datepicker', $html);
         $this->assertStringNotContainsString(self::LUMA_CRITICAL_CSS, $html);
+    }
+
+    #[Config('dev/css/use_css_critical_path', 1, 'store', 'default')]
+    public function testCustomViewModelIgnoresLayoutFilePath(): void
+    {
+        $block = $this->createCriticalCssBlock('mage/calendar.css');
+        $block->setData('criticalCssViewModel', new class implements ArgumentInterface {
+            public function getCriticalCssData(): string
+            {
+                return '.custom-view-model{}';
+            }
+        });
+
+        $html = $block->toHtml();
+
+        $this->assertStringContainsString('.custom-view-model{}', $html);
+        $this->assertStringNotContainsString('.ui-datepicker', $html);
     }
 
     #[Config('dev/css/use_css_critical_path', 1, 'store', 'default')]
