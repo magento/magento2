@@ -16,11 +16,13 @@ use Magento\Review\Model\ResourceModel\Review\Collection;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory as ReviewCollectionFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\Review\SummaryFactory;
+use Magento\Review\Test\Fixture\Rating as RatingFixture;
 use Magento\Review\Test\Fixture\Review as ReviewFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -150,6 +152,55 @@ QUERY;
         self::assertArrayHasKey('items', $response['productReviewRatingsMetadata']);
         self::assertNotEmpty($response['productReviewRatingsMetadata']['items']);
         self::assertEquals($expectedRatingItems, $response['productReviewRatingsMetadata']['items']);
+    }
+
+    #[
+        DataFixture(StoreFixture::class, ['code' => 'store2'], 'store2'),
+        DataFixture(StoreFixture::class, ['code' => 'store3'], 'store3'),
+        DataFixture(
+            RatingFixture::class,
+            [
+                'rating_code' => 'Delivery',
+                'stores' => [1, '$store2.id$', '$store3.id$'],
+                'titles' => [
+                    ['store_id' => '$store2.id$', 'value' => 'Delivery store2'],
+                    ['store_id' => '$store3.id$', 'value' => 'Delivery store3'],
+                ],
+            ],
+            'rating'
+        ),
+    ]
+    #[DataProvider('ratingTitlePerStoreDataProvider')]
+    public function testProductReviewRatingsMetadataUsesStoreTitle(string $storeCode, string $expectedName): void
+    {
+        $query = <<<QUERY
+{
+  productReviewRatingsMetadata {
+    items {
+      id
+      name
+    }
+  }
+}
+QUERY;
+        $ratingId = base64_encode((string)DataFixtureStorageManager::getStorage()->get('rating')->getId());
+        $response = $this->graphQlQuery($query, [], '', ['Store' => $storeCode]);
+        $names = array_column($response['productReviewRatingsMetadata']['items'], 'name', 'id');
+
+        self::assertArrayHasKey($ratingId, $names);
+        self::assertSame($expectedName, $names[$ratingId]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function ratingTitlePerStoreDataProvider(): array
+    {
+        return [
+            'title missing for the store falls back to the rating code' => ['default', 'Delivery'],
+            'store2 title' => ['store2', 'Delivery store2'],
+            'store3 title' => ['store3', 'Delivery store3'],
+        ];
     }
 
     /**
