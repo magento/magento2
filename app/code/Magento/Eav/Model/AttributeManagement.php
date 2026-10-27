@@ -183,7 +183,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         }
         $attributeCollection = $this->attributeCollectionFactory->create();
         $attributeCollection->setAttributeSetFilter($attributeSet->getAttributeSetId())
-            ->addFieldToFilter('entity_attribute.entity_type_id', $requiredEntityTypeId)
+            ->addFieldToFilter('main_table.entity_type_id', $requiredEntityTypeId)
             ->load();
 
         return $attributeCollection->getItems();
