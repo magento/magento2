@@ -7,9 +7,14 @@
 namespace Magento\Deploy\Model\Plugin;
 
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -34,13 +39,39 @@ class ConfigChangeDetector
     private $deploymentConfig;
 
     /**
+     * @var CacheInterface
+     */
+    private CacheInterface $cache;
+
+    /**
+     * @var DataCollector
+     */
+    private DataCollector $dataCollector;
+
+    /**
+     * @var HashGenerator
+     */
+    private HashGenerator $hashGenerator;
+
+    /**
      * @param ChangeDetector $changeDetector
      * @param DeploymentConfig $deploymentConfig
+     * @param CacheInterface|null $cache
+     * @param DataCollector|null $dataCollector
+     * @param HashGenerator|null $hashGenerator
      */
-    public function __construct(ChangeDetector $changeDetector, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        ChangeDetector $changeDetector,
+        DeploymentConfig $deploymentConfig,
+        ?CacheInterface $cache = null,
+        ?DataCollector $dataCollector = null,
+        ?HashGenerator $hashGenerator = null
+    ) {
         $this->changeDetector = $changeDetector;
         $this->deploymentConfig = $deploymentConfig;
+        $this->cache = $cache ?? ObjectManager::getInstance()->get(CacheInterface::class);
+        $this->dataCollector = $dataCollector ?? ObjectManager::getInstance()->get(DataCollector::class);
+        $this->hashGenerator = $hashGenerator ?? ObjectManager::getInstance()->get(HashGenerator::class);
     }
 
     /**
@@ -54,9 +85,16 @@ class ConfigChangeDetector
      */
     public function beforeDispatch(FrontControllerInterface $subject, RequestInterface $request)
     {
-        if (!$this->deploymentConfig->get(self::DEPLOYMENT_BLUE_GREEN_ENABLED)
-            && $this->changeDetector->hasChanges()
-        ) {
+        if ($this->deploymentConfig->get(self::DEPLOYMENT_BLUE_GREEN_ENABLED)) {
+            return;
+        }
+
+        $cacheKey = $this->getCacheKey();
+        if ($this->cache->load($cacheKey)) {
+            return;
+        }
+
+        if ($this->changeDetector->hasChanges()) {
             throw new LocalizedException(
                 __(
                     'The configuration file has changed.'
@@ -64,5 +102,22 @@ class ConfigChangeDetector
                 )
             );
         }
+
+        $this->cache->save('true', $cacheKey, [Hash::CACHE_TAG]);
+    }
+
+    /**
+     * Build a cache key from the current configuration section hashes.
+     *
+     * @return string
+     */
+    private function getCacheKey(): string
+    {
+        $hashes = [];
+        foreach ($this->dataCollector->getConfig() as $section => $config) {
+            $hashes[$section] = $config === null ? null : $this->hashGenerator->generate($config);
+        }
+
+        return 'deployment_config_hash_in_sync_' . $this->hashGenerator->generate($hashes);
     }
 }
