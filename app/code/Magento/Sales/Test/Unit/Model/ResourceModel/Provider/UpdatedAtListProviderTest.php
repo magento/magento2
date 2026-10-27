@@ -48,10 +48,8 @@ class UpdatedAtListProviderTest extends TestCase
         $resourceConnection->method('getConnection')->willReturn($connection);
         $resourceConnection->method('getTableName')
             ->willReturnCallback(static fn(string $table): string => 'prefix_' . $table);
-        $lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
-        $lastUpdateTimeCache->expects($this->never())->method('get');
 
-        $provider = new UpdatedAtListProvider($resourceConnection, $lastUpdateTimeCache);
+        $provider = new UpdatedAtListProvider($resourceConnection);
 
         self::assertSame(['42'], $provider->getIdsWithCutoff('sales_order', 'sales_order_grid', $cutoff));
     }
