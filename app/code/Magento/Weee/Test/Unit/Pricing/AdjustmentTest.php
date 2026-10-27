@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\Adjustment;
 use PHPUnit\Framework\MockObject\MockObject;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AdjustmentTest extends TestCase
@@ -41,7 +42,7 @@ class AdjustmentTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeHelper = $this->createMock(Data::class);
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->willReturnCallback(
@@ -54,6 +55,13 @@ class AdjustmentTest extends TestCase
             ->willReturnCallback(
                 function ($arg) {
                     return $arg * 0.5;
+                }
+            );
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('round')
+            ->willReturnCallback(
+                function ($arg) {
+                    return round($arg, 2);
                 }
             );
 
@@ -70,9 +78,7 @@ class AdjustmentTest extends TestCase
         $this->assertFalse($this->adjustment->isIncludedInBasePrice());
     }
 
-    /**
-     * @dataProvider isIncludedInDisplayPriceDataProvider
-     */
+    #[DataProvider('isIncludedInDisplayPriceDataProvider')]
     public function testIsIncludedInDisplayPrice($expectedResult)
     {
         $displayTypes = [
@@ -100,11 +106,11 @@ class AdjustmentTest extends TestCase
      * @param float $amount
      * @param float $amountOld
      * @param float $expectedResult
-     * @dataProvider applyAdjustmentDataProvider
      */
+    #[DataProvider('applyAdjustmentDataProvider')]
     public function testApplyAdjustment($amount, $amountOld, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass(SaleableInterface::class);
+        $object = $this->createMock(SaleableInterface::class);
 
         $this->weeeHelper->expects($this->any())
             ->method('getAmountExclTax')
@@ -126,7 +132,9 @@ class AdjustmentTest extends TestCase
     }
 
     /**
-     * @dataProvider isExcludedWithDataProvider
+     */
+    #[DataProvider('isExcludedWithDataProvider')]
+    /*
      * @param string $adjustmentCode
      * @param bool $expectedResult
      */
@@ -148,9 +156,11 @@ class AdjustmentTest extends TestCase
     }
 
     /**
-     * @dataProvider getSortOrderProvider
+     */
+    #[DataProvider('getSortOrderProvider')]
+    /**
      * @param bool $isTaxable
-     * @param int $expectedResult
+     * @param int  $expectedResult
      */
     public function testGetSortOrder($isTaxable, $expectedResult)
     {

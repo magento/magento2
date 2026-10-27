@@ -40,7 +40,7 @@ class CustomerGroupsOptionsProviderTest extends TestCase
 
     protected function setup(): void
     {
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->objectConverterMock = $this->createMock(DataObject::class);
         $this->model = new CustomerGroupsOptionsProvider(
@@ -59,7 +59,7 @@ class CustomerGroupsOptionsProviderTest extends TestCase
         ];
 
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $searchResultMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(GroupSearchResultsInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
 
         $this->groupRepositoryMock->expects($this->once())

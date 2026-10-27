@@ -15,6 +15,7 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class EmailMessageTest
@@ -48,9 +49,9 @@ class TransportBuilderTest extends TestCase
      * @magentoDbIsolation enabled
      *
      * @param string|array $email
-     * @dataProvider emailDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('emailDataProvider')]
     public function testAddToEmail($email)
     {
         $template = $this->template->load('email_exception_fixture', 'template_code');
@@ -124,9 +125,9 @@ class TransportBuilderTest extends TestCase
      * @magentoDbIsolation enabled
      *
      * @param string|array $emails
-     * @dataProvider invalidEmailDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('invalidEmailDataProvider')]
     public function testAddToInvalidEmailInTheQueue($emails)
     {
         $template = $this->template->load('email_exception_fixture', 'template_code');

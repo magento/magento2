@@ -52,6 +52,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -123,8 +124,8 @@ class CartFixedTest extends TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
-     * @dataProvider applyFixedDiscountDataProvider
      */
+    #[DataProvider('applyFixedDiscountDataProvider')]
     public function testApplyFixedDiscount(array $productPrices): void
     {
         $expectedDiscount = '-15.0000';
@@ -338,7 +339,6 @@ class CartFixedTest extends TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
-     * @dataProvider multishippingDataProvider
      * @param float $discount
      * @param array $firstOrderTotals
      * @param array $secondOrderTotals
@@ -346,6 +346,7 @@ class CartFixedTest extends TestCase
      * @return void
      * @throws LocalizedException
      */
+    #[DataProvider('multishippingDataProvider')]
     public function testMultishipping(
         float $discount,
         array $firstOrderTotals,
@@ -493,9 +494,9 @@ class CartFixedTest extends TestCase
      * @magentoDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
      * @magentoDataFixture Magento/SalesRule/_files/cart_fixed_10_discount.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_products.php
-     * @dataProvider discountByPercentDataProvider
      * @return void
      */
+    #[DataProvider('discountByPercentDataProvider')]
     public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(
         $percentDiscount,
         $expectedDiscounts

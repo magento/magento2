@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class TranslateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_translator = $this->getMockForAbstractClass(TranslateInterface::class);
+        $this->_translator = $this->createMock(TranslateInterface::class);
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         $this->messageFormatter = $this->getMockBuilder(MessageFormatter::class)

@@ -1,17 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
 
 /**
  * Adminhtml Currency Symbols Controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\CurrencySymbol\Controller\Adminhtml\System;
-
-/**
+ * @phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -22,5 +20,5 @@ abstract class Currencysymbol extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_CurrencySymbol::symbols';
+    public const ADMIN_RESOURCE = 'Magento_CurrencySymbol::symbols';
 }

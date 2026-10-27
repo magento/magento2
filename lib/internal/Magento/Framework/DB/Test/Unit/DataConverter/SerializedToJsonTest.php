@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SerializedToJsonTest extends TestCase
 {
@@ -31,9 +32,8 @@ class SerializedToJsonTest extends TestCase
      * Tests converting from serialized to JSON format with different precision settings.
      *
      * @param $serializedData
-     * @param $expectedJson
-     * @dataProvider convertDataProvider
-     */
+     * @param $expectedJson     */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($serializedData, $expectedJson)
     {
         $this->assertEquals($expectedJson, $this->serializedToJson->convert($serializedData));

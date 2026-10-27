@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset\LocalInterface;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SymlinkTest extends TestCase
@@ -46,13 +47,12 @@ class SymlinkTest extends TestCase
         $this->assertTrue($this->symlinkPublisher->publishFile($rootDir, $targetDir, $sourcePath, $destinationPath));
     }
 
-    /**
-     * @dataProvider sourceFileDataProvider
-     */
+    /**     */
+    #[DataProvider('sourceFileDataProvider')]
     public function testIsSupported($path, $expectation)
     {
         $asset = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $asset->expects($this->once())
             ->method('getSourceFile')
             ->willReturn($path);

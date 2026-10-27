@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Setup\Fixtures\Quote\QuoteGenerator;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QuoteGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var StoreManagerInterface|MockObject
      */
@@ -93,15 +96,15 @@ class QuoteGeneratorTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->optionRepository = $this->getMockBuilder(
             OptionRepositoryInterface::class
-        )
+        ) 
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productCollectionFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
         )
@@ -110,26 +113,18 @@ class QuoteGeneratorTest extends TestCase
             ->getMock();
         $this->linkManagement = $this->getMockBuilder(LinkManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(QuoteConfiguration::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getSimpleCountTo',
-                    'getSimpleCountFrom',
-                    'getConfigurableCountTo',
-                    'getConfigurableCountFrom',
-                    'getBigConfigurableCountTo',
-                    'getBigConfigurableCountFrom',
-                    'getRequiredQuoteQuantity',
-                    'getFixtureDataFilename',
-                    'getExistsQuoteQuantity',
-                ]
-            )
             ->getMock();
+        $this->config = $this->createPartialMockWithReflection(
+            QuoteConfiguration::class,
+            [
+                'getSimpleCountTo', 'getSimpleCountFrom', 'getConfigurableCountTo', 'getConfigurableCountFrom',
+                'getBigConfigurableCountTo', 'getBigConfigurableCountFrom', 'getRequiredQuoteQuantity',
+                'getFixtureDataFilename', 'getExistsQuoteQuantity'
+            ]
+        );
         $objectManager = new ObjectManager($this);
 
         $this->fixture = $objectManager->getObject(
@@ -163,13 +158,13 @@ class QuoteGeneratorTest extends TestCase
         $dir = str_replace('Test/Unit/', '', dirname(__DIR__));
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $storeGroup = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -251,19 +246,19 @@ class QuoteGeneratorTest extends TestCase
     {
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $configurableChild = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $childProduct = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $option = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $optionValue = $this->getMockBuilder(OptionValueInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productRepository->expects($this->atLeastOnce())
             ->method('getById')
             ->willReturnCallback(function ($arg) use ($product) {
@@ -321,13 +316,13 @@ class QuoteGeneratorTest extends TestCase
     {
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $statement = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();

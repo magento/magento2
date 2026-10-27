@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Magento\Widget;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -15,8 +17,8 @@ class TemplateFilesTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $class
      * @param string $template
-     * @dataProvider widgetTemplatesDataProvider
      */
+    #[DataProvider('widgetTemplatesDataProvider')]
     public function testWidgetTemplates($class, $template)
     {
         /** @var $blockFactory \Magento\Framework\View\Element\BlockFactory */

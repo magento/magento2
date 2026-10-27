@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,8 +17,8 @@ class BindingInstallerTest extends TestCase
 {
     public function testInstall()
     {
-        $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
-        $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
+        $installerOne = $this->createMock(BindingInstallerInterface::class);
+        $installerTwo = $this->createMock(BindingInstallerInterface::class);
         $model = new BindingInstaller(
             [
                 'queue' => $installerOne,
@@ -26,7 +26,7 @@ class BindingInstallerTest extends TestCase
             ]
         );
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->getMockForAbstractClass(BindingInterface::class);
+        $binding = $this->createMock(BindingInterface::class);
         $binding->expects($this->once())->method('getDestinationType')->willReturn('queue');
         $installerOne->expects($this->once())->method('install')->with($channel, $binding, 'magento');
         $installerTwo->expects($this->never())->method('install');
@@ -37,8 +37,8 @@ class BindingInstallerTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Installer type [test] is not configured');
-        $installerOne = $this->getMockForAbstractClass(BindingInstallerInterface::class);
-        $installerTwo = $this->getMockForAbstractClass(BindingInstallerInterface::class);
+        $installerOne = $this->createMock(BindingInstallerInterface::class);
+        $installerTwo = $this->createMock(BindingInstallerInterface::class);
         $model = new BindingInstaller(
             [
                 'queue' => $installerOne,
@@ -46,7 +46,7 @@ class BindingInstallerTest extends TestCase
             ]
         );
         $channel = $this->createMock(AMQPChannel::class);
-        $binding = $this->getMockForAbstractClass(BindingInterface::class);
+        $binding = $this->createMock(BindingInterface::class);
         $binding->expects($this->once())->method('getDestinationType')->willReturn('test');
         $installerOne->expects($this->never())->method('install');
         $installerTwo->expects($this->never())->method('install');

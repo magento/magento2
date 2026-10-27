@@ -27,16 +27,20 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         }
 
         $oldAttrValue = $model->getData($attrCode);
-        if ($oldAttrValue === null) {
-            if ($this->getOperator() === '<=>') {
-                return true;
-            }
-            return false;
-        }
 
         $this->_setAttributeValue($model);
 
-        $result = $this->validateAttribute($model->getData($attrCode));
+        $attrValue = $model->getData($attrCode);
+        if ($attrValue === null) {
+            if ($this->getOperator() === '<=>') {
+                $this->_restoreOldAttrValue($model, $oldAttrValue);
+                return true;
+            }
+            $this->_restoreOldAttrValue($model, $oldAttrValue);
+            return false;
+        }
+
+        $result = $this->validateAttribute($attrValue);
         $this->_restoreOldAttrValue($model, $oldAttrValue);
 
         return (bool)$result;

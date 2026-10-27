@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,10 +13,14 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo\Item\Validation\CreationQuantityValidator;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CreateQuantityValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderItemRepositoryInterface|MockObject
      */
@@ -44,24 +48,17 @@ class CreateQuantityValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->orderItemRepositoryMock = $this->createMock(OrderItemRepositoryInterface::class);
 
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderItemMock = $this->createMock(Item::class);
 
-        $this->entity = $this->getMockBuilder(\stdClass::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOrderItemId', 'getQty'])
-            ->getMock();
+        $this->entity = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getOrderItemId', 'getQty']
+        );
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testValidateCreditMemoProductItems($orderItemId, $expectedResult, $withContext = false)
     {
         if ($orderItemId) {
@@ -81,9 +78,7 @@ class CreateQuantityValidatorTest extends TestCase
 
         $this->contexMock = null;
         if ($withContext) {
-            $this->contexMock = $this->getMockBuilder(OrderInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+            $this->contexMock = $this->createMock(OrderInterface::class);
 
             $this->entity->expects($this->once())
                 ->method('getQty')

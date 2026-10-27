@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,14 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Status as OrderStatus;
 use Magento\Sales\Model\ResourceModel\Order\Status;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class StatusTest extends TestCase
 {
+
     /**
      * @var Status|MockObject
      */
@@ -51,7 +53,7 @@ class StatusTest extends TestCase
             ->willReturn($this->eventManagerMock);
 
         $this->model = $objectManager->getObject(
-            \Magento\Sales\Model\Order\Status::class,
+            OrderStatus::class,
             [
                 'context' => $this->contextMock,
                 'resource' => $this->resourceMock,
@@ -144,11 +146,11 @@ class StatusTest extends TestCase
             $resource = $this->createMock(Status::class);
         }
         if (!$eventDispatcher) {
-            $eventDispatcher = $this->getMockForAbstractClass(ManagerInterface::class);
+            $eventDispatcher = $this->createMock(ManagerInterface::class);
         }
         $helper = new ObjectManager($this);
         $model = $helper->getObject(
-            \Magento\Sales\Model\Order\Status::class,
+            OrderStatus::class,
             ['resource' => $resource, 'eventDispatcher' => $eventDispatcher]
         );
         return $model;
@@ -174,12 +176,12 @@ class StatusTest extends TestCase
             );
         $resource->expects($this->once())->method('commit');
 
-        $eventDispatcher = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventDispatcher = $this->createMock(ManagerInterface::class);
 
         $model = $this->_getPreparedModel($resource, $eventDispatcher);
         $model->setStatus($status);
         $this->assertInstanceOf(
-            \Magento\Sales\Model\Order\Status::class,
+            OrderStatus::class,
             $model->assignState($state, $visibleOnFront)
         );
     }

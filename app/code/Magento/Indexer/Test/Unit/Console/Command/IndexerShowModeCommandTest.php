@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Indexer\Console\Command\IndexerShowModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -57,8 +58,8 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array $inputIndexers
      * @param array $indexers
      * @param array $isScheduled
-     * @dataProvider executeWithIndexDataProvider
      */
+    #[DataProvider('executeWithIndexDataProvider')]
     public function testExecuteWithIndex(array $inputIndexers, array $indexers, array $isScheduled)
     {
         $this->configureAdminArea();

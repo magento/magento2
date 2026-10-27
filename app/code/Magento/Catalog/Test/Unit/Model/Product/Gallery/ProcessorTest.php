@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Gallery;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Catalog\Model\Product\Gallery\Processor;
@@ -17,6 +18,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Processor
      */
@@ -82,16 +85,27 @@ class ProcessorTest extends TestCase
             Gallery::class,
             ['getMainTable']
         );
-        $resourceModel->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn(
-                Gallery::GALLERY_TABLE
-            );
+        $resourceModel->method('getMainTable')->willReturn(
+            Gallery::GALLERY_TABLE
+        );
 
-        $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObject = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getData', 'setData', 'setMainTable']
+        );
+        $dataStore = [];
+        $this->dataObject->method('getData')->willReturnCallback(function ($key = null) use (&$dataStore) {
+            return $key === null ? $dataStore : ($dataStore[$key] ?? null);
+        });
+        $this->dataObject->method('setData')->willReturnCallback(function ($key, $value = null) use (&$dataStore) {
+            if (is_array($key)) {
+                $dataStore = $key;
+            } else {
+                $dataStore[$key] = $value;
+            }
+            return $this->dataObject;
+        });
+        $this->dataObject->method('setMainTable')->willReturnSelf();
 
         $this->model = $this->objectHelper->getObject(
             Processor::class,
@@ -114,10 +128,10 @@ class ProcessorTest extends TestCase
             Attribute::class,
             ['getBackendTable', 'isStatic', 'getAttributeId', 'getName']
         );
-        $attribute->expects($this->any())->method('getName')->willReturn('image');
-        $attribute->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
-        $attribute->expects($this->any())->method('isStatic')->willReturn(false);
-        $attribute->expects($this->any())->method('getBackendTable')->willReturn('table');
+        $attribute->method('getName')->willReturn('image');
+        $attribute->method('getAttributeId')->willReturn($attributeId);
+        $attribute->method('isStatic')->willReturn(false);
+        $attribute->method('getBackendTable')->willReturn('table');
 
         $this->attributeRepository->expects($this->once())
             ->method('get')
@@ -139,9 +153,9 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider validateDataProvider
      * @param bool $value
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($value)
     {
         $attributeCode = 'attr_code';
@@ -149,16 +163,30 @@ class ProcessorTest extends TestCase
             Attribute::class,
             ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity']
         );
-        $attributeEntity = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['checkAttributeUniqueValue'])
-            ->getMockForAbstractClass();
+        $attributeEntity = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['setCheckAttributeUniqueValueResult', 'checkAttributeUniqueValue', '_construct', 'getConnection']
+        );
+        $checkResult = true;
+        $attributeEntity->method('setCheckAttributeUniqueValueResult')->willReturnCallback(
+            function ($value) use (&$checkResult) {
+                $checkResult = $value;
+            }
+        );
+        $attributeEntity->method('checkAttributeUniqueValue')->willReturnCallback(
+            function () use (&$checkResult) {
+                return $checkResult;
+            }
+        );
+        $attributeEntity->method('_construct')->willReturn(null);
+        $attributeEntity->method('getConnection')->willReturn(null);
 
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
-        $attribute->expects($this->any())->method('isValueEmpty')->willReturn($value);
-        $attribute->expects($this->any())->method('getIsUnique')->willReturn(true);
-        $attribute->expects($this->any())->method('getEntity')->willReturn($attributeEntity);
-        $attributeEntity->expects($this->any())->method('checkAttributeUniqueValue')->willReturn(true);
+        $attribute->method('getAttributeCode')->willReturn($attributeCode);
+        $attribute->method('getIsRequired')->willReturn(true);
+        $attribute->method('isValueEmpty')->willReturn($value);
+        $attribute->method('getIsUnique')->willReturn(true);
+        $attribute->method('getEntity')->willReturn($attributeEntity);
+        $attributeEntity->setCheckAttributeUniqueValueResult(true);
 
         $this->attributeRepository->expects($this->once())
             ->method('get')
@@ -184,13 +212,11 @@ class ProcessorTest extends TestCase
      * @param int $setDataExpectsCalls
      * @param string|null $setDataArgument
      * @param array|string $mediaAttribute
-     * @dataProvider clearMediaAttributeDataProvider
      */
+    #[DataProvider('clearMediaAttributeDataProvider')]
     public function testClearMediaAttribute($setDataExpectsCalls, $setDataArgument, $mediaAttribute)
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $productMock->expects($this->exactly($setDataExpectsCalls))
             ->method('setData')

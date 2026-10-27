@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 
     public function testCreateEmptyStrategies()
@@ -99,6 +99,6 @@ class FactoryTest extends TestCase
     private function getAsset()
     {
         return $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 }

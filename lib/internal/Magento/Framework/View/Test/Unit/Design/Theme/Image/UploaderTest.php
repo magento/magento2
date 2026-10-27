@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\View\Design\Theme\Image\Uploader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UploaderTest extends TestCase
 {
@@ -127,10 +128,9 @@ class UploaderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider uploadDataProvider
-     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
+    /**     * @covers \Magento\Framework\View\Design\Theme\Image\Uploader::uploadPreviewImage
      */
+    #[DataProvider('uploadDataProvider')]
     public function testUploadPreviewImage($isUploaded, $isValid, $checkExtension, $save, $result, $exception)
     {
         if ($exception) {

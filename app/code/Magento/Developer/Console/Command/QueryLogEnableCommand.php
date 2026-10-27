@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Console\Command;
@@ -36,6 +36,8 @@ class QueryLogEnableCommand extends Command
     public const COMMAND_NAME = 'dev:query-log:enable';
 
     public const SUCCESS_MESSAGE = "DB query logging enabled.";
+
+    public const INPUT_ARG_LOG_INDEX_CHECK = 'include-index-check';
 
     /**
      * @var Writer
@@ -85,6 +87,13 @@ class QueryLogEnableCommand extends Command
                         'Include call stack. [true|false]',
                         "true"
                     ),
+                    new InputOption(
+                        self::INPUT_ARG_LOG_INDEX_CHECK,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        'Include index check. Warning: may cause performance degradation. [true|false]',
+                        "false"
+                    )
                 ]
             );
 
@@ -94,19 +103,21 @@ class QueryLogEnableCommand extends Command
     /**
      * @inheritdoc
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|\Magento\Framework\Exception\FileSystemException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_FILE];
 
         $logAllQueries = $input->getOption(self::INPUT_ARG_LOG_ALL_QUERIES);
         $logQueryTime = $input->getOption(self::INPUT_ARG_LOG_QUERY_TIME);
         $logCallStack = $input->getOption(self::INPUT_ARG_LOG_CALL_STACK);
+        $logIndexCheck = $input->getOption(self::INPUT_ARG_LOG_INDEX_CHECK);
 
         $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
         $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
         $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
+        $data[LoggerProxy::PARAM_INDEX_CHECK] = (int)($logIndexCheck != 'false');
 
         $configGroup[LoggerProxy::CONF_GROUP_NAME] = $data;
 

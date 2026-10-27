@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Customer;
 
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Setup\Model\Address\AddressDataGenerator;
 use Magento\Setup\Model\Customer\CustomerDataGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 class CustomerDataGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var array
      */
@@ -47,13 +49,10 @@ class CustomerDataGeneratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                ['getAllIds']
-            )
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->groupCollectionFactoryMock = $this->createPartialMockWithReflection(
+            CollectionFactory::class,
+            ['create', 'getAllIds']
+        );
 
         $this->groupCollectionFactoryMock
             ->expects($this->once())

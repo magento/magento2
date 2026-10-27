@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -74,9 +74,7 @@ class AssignCouponDataAfterOrderCustomerAssignObserverTest extends TestCase
             ->onlyMethods(['getData'])
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderInterface::class);
 
         $this->updateCouponUsagesMock = $this->getMockBuilder(UpdateCouponUsages::class)
             ->disableOriginalConstructor()

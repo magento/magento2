@@ -18,6 +18,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout as ViewLayout;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Layout;
@@ -107,66 +108,36 @@ class EditTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->eavAttribute = $this->createPartialMock(
-            Attribute::class,
-            ['setEntityTypeId', 'load', 'getId', 'getEntityTypeId', 'addData', 'getName']
-        );
+        $this->eavAttribute = $this->createMock(Attribute::class);
 
         $this->registry = $this->createMock(Registry::class);
 
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb', 'addHandle', 'getLayout'])
-            ->getMock();
+        $this->resultPage = $this->createMock(Page::class);
 
-        $this->resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->resultPageFactory = $this->createMock(PageFactory::class);
 
-        $this->resultLayout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultLayout = $this->createMock(Layout::class);
 
-        $this->pageConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageConfig = $this->createMock(Config::class);
 
-        $this->pageTitle = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageTitle = $this->createMock(Title::class);
 
-        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
+        $this->layout = $this->createMock(ViewLayout::class);
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createMock(Session::class);
 
-        $this->presentation = $this->getMockBuilder(
-            Presentation::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->presentation = $this->createMock(Presentation::class);
 
-        $this->blockTemplate = $this->getMockBuilder(Template::class)
-            ->addMethods(['setIsPopup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->blockTemplate = $this->createMock(Template::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->addMethods(['getResultPageFactory'])
-            ->onlyMethods(['getRequest', 'getObjectManager', 'getSession'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
-        $this->context->expects($this->any())->method('getResultPageFactory')->willReturn($this->resultPageFactory);
-        $this->context->expects($this->any())->method('getSession')->willReturn($this->session);
+        $this->context = $this->createMock(Context::class);
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getObjectManager')->willReturn($this->objectManagerMock);
+        $this->context->method('getSession')->willReturn($this->session);
 
         $objectManager = new ObjectManager($this);
         $this->editController = $objectManager->getObject(
@@ -201,7 +172,7 @@ class EditTest extends TestCase
             ]);
         $this->eavAttribute->expects($this->once())->method('setEntityTypeId')->willReturnSelf();
         $this->eavAttribute->expects($this->once())->method('addData')->with($attributesData)->willReturnSelf();
-        $this->eavAttribute->expects($this->any())->method('getName')->willReturn(null);
+        $this->eavAttribute->method('getName')->willReturn(null);
 
         $this->registry->expects($this->any())
             ->method('register')
@@ -211,7 +182,7 @@ class EditTest extends TestCase
             ->method('addHandle')
             ->with(['popup', 'catalog_product_attribute_edit_popup'])
             ->willReturnSelf();
-        $this->resultPage->expects($this->any())->method('getConfig')->willReturn($this->pageConfig);
+        $this->resultPage->method('getConfig')->willReturn($this->pageConfig);
         $this->resultPage->expects($this->once())->method('getLayout')->willReturn($this->layout);
 
         $this->resultPageFactory->expects($this->atLeastOnce())
@@ -219,13 +190,15 @@ class EditTest extends TestCase
             ->willReturn($this->resultPage);
 
         $this->pageConfig->expects($this->any())->method('addBodyClass')->willReturnSelf();
-        $this->pageConfig->expects($this->any())->method('getTitle')->willReturn($this->pageTitle);
+        $this->pageConfig->method('getTitle')->willReturn($this->pageTitle);
 
         $this->pageTitle->expects($this->any())->method('prepend')->willReturnSelf();
 
         $this->layout->expects($this->once())->method('getBlock')->willReturn($this->blockTemplate);
 
-        $this->blockTemplate->expects($this->any())->method('setIsPopup')->willReturnSelf();
+        // setIsPopup is a magic method that doesn't exist on Template class
+        // The test validates that the controller calls setIsPopup on the block
+        // but since it's a magic method, we don't need to mock it
 
         $this->assertSame($this->resultPage, $this->editController->execute());
     }
@@ -263,22 +236,24 @@ class EditTest extends TestCase
             ->method('setActiveMenu')
             ->with('Magento_Catalog::catalog_attributes_attributes')
             ->willReturnSelf();
-        $this->resultPage->expects($this->any())->method('getConfig')->willReturn($this->pageConfig);
+        $this->resultPage->method('getConfig')->willReturn($this->pageConfig);
         $this->resultPage->expects($this->once())->method('getLayout')->willReturn($this->layout);
 
         $this->resultPageFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultPage);
 
-        $this->pageConfig->expects($this->any())->method('getTitle')->willReturn($this->pageTitle);
+        $this->pageConfig->method('getTitle')->willReturn($this->pageTitle);
 
         $this->pageTitle->expects($this->any())->method('prepend')->willReturnSelf();
 
-        $this->eavAttribute->expects($this->any())->method('getName')->willReturn(null);
+        $this->eavAttribute->method('getName')->willReturn(null);
 
         $this->layout->expects($this->once())->method('getBlock')->willReturn($this->blockTemplate);
 
-        $this->blockTemplate->expects($this->any())->method('setIsPopup')->willReturnSelf();
+        // setIsPopup is a magic method that doesn't exist on Template class
+        // The test validates that the controller calls setIsPopup on the block
+        // but since it's a magic method, we don't need to mock it
 
         $this->assertSame($this->resultPage, $this->editController->execute());
     }

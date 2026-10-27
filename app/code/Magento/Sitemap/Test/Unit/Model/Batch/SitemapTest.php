@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
@@ -20,6 +21,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sitemap\Helper\Data;
 use Magento\Sitemap\Model\Batch\Sitemap;
 use Magento\Sitemap\Model\ItemProvider\Category;
@@ -48,6 +50,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SitemapTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Sitemap|MockObject
      */
@@ -184,20 +188,16 @@ class SitemapTest extends TestCase
         $this->productConfigReader = $this->createMock(ProductConfigReader::class);
         $this->directory = $this->createMock(Write::class);
 
-        $this->sitemapData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBaseUrl'])
-            ->onlyMethods(['getEnableSubmissionRobots', 'getMaximumLinesNumber', 'getMaximumFileSize'])
-            ->getMock();
+        $this->sitemapData = $this->createPartialMockWithReflection(
+            Data::class,
+            ['getBaseUrl', 'getEnableSubmissionRobots', 'getMaximumLinesNumber', 'getMaximumFileSize']
+        );
 
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->method('getValue')
             ->willReturn('http://example.com/');
 
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])  // Only mock methods we know can be mocked
-            ->getMock();
+        $this->store = $this->createPartialMock(Store::class, ['getId']);
 
         $this->store->method('getId')
             ->willReturn(1);
@@ -220,9 +220,7 @@ class SitemapTest extends TestCase
         $this->filesystem->method('getDirectoryWrite')
             ->willReturn($this->directory);
 
-        $this->resource = $this->getMockBuilder(SitemapResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(SitemapResource::class);
 
         $this->resource->method('getIdFieldName')
             ->willReturn('sitemap_id');
@@ -241,8 +239,7 @@ class SitemapTest extends TestCase
         $itemProvider = $this->createMock(ItemProviderInterface::class);
         $configReader = $this->createMock(SitemapConfigReaderInterface::class);
 
-        $writeInterface = $this->getMockBuilder(WriteInterface::class)
-            ->getMock();
+        $writeInterface = $this->createMock(WriteInterface::class);
         $writeInterface->method('write')
             ->willReturn(1);
 
@@ -336,11 +333,9 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($this->sitemap);
         $method = $reflection->getMethod('_initSitemapItems');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
 
         $sitemapItemsProperty = $reflection->getProperty('_sitemapItems');
-        $sitemapItemsProperty->setAccessible(true);
         $sitemapItems = $sitemapItemsProperty->getValue($this->sitemap);
 
         $this->assertCount(3, $sitemapItems);
@@ -382,9 +377,10 @@ class SitemapTest extends TestCase
 
         $batchProductResource = $this->createMock(Product::class);
 
-        $product = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product->expects($this->any())
             ->method('getUrl')
@@ -436,7 +432,6 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $tagsProperty = $reflection->getProperty('_tags');
-        $tagsProperty->setAccessible(true);
         $tagsProperty->setValue($this->sitemap, [
             'url' => [
                 'open' => '<?xml version="1.0" encoding="UTF-8"?><urlset>',
@@ -449,20 +444,16 @@ class SitemapTest extends TestCase
         ]);
 
         $sitemapItemsProperty = $reflection->getProperty('_sitemapItems');
-        $sitemapItemsProperty->setAccessible(true);
         $sitemapItemsProperty->setValue($this->sitemap, [$categoryItem]);
 
         // Initialize necessary properties for XML generation
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 0);
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($this->sitemap, 0);
 
         $incrementProperty = $reflection->getProperty('_sitemapIncrement');
-        $incrementProperty->setAccessible(true);
         $incrementProperty->setValue($this->sitemap, 0);
 
         $result = $this->sitemap->generateXml();
@@ -476,9 +467,10 @@ class SitemapTest extends TestCase
 
         $batchProductResource = $this->createMock(Product::class);
 
-        $product1 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product1 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product1->expects($this->any())
             ->method('getUrl')
@@ -492,9 +484,10 @@ class SitemapTest extends TestCase
             ->method('getImages')
             ->willReturn([]);
 
-        $product2 = $this->getMockBuilder(\Magento\Framework\DataObject::class)
-            ->addMethods(['getUrl', 'getUpdatedAt', 'getImages'])
-            ->getMock();
+        $product2 = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl', 'getUpdatedAt', 'getImages']
+        );
 
         $product2->expects($this->any())
             ->method('getUrl')
@@ -538,8 +531,7 @@ class SitemapTest extends TestCase
             ->method('create')
             ->willReturn($sitemapItem);
 
-        $writeInterface = $this->getMockBuilder(WriteInterface::class)
-            ->getMock();
+        $writeInterface = $this->createMock(WriteInterface::class);
         $writeInterface->expects($this->any())
             ->method('write')
             ->willReturn(1);
@@ -551,7 +543,6 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $tagsProperty = $reflection->getProperty('_tags');
-        $tagsProperty->setAccessible(true);
         $tagsProperty->setValue($this->sitemap, [
             'url' => [
                 'open' => '<?xml version="1.0" encoding="UTF-8"?><urlset>',
@@ -560,11 +551,9 @@ class SitemapTest extends TestCase
         ]);
 
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 100);
 
         $method = $reflection->getMethod('streamProducts');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
     }
 
@@ -589,7 +578,6 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($this->sitemap);
         $method = $reflection->getMethod('streamProducts');
-        $method->setAccessible(true);
         $method->invoke($this->sitemap);
     }
 
@@ -605,15 +593,12 @@ class SitemapTest extends TestCase
         $reflection = new \ReflectionClass($this->sitemap);
 
         $fileProperty = $reflection->getProperty('_fileSize');
-        $fileProperty->setAccessible(true);
         $fileProperty->setValue($this->sitemap, 100);
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($this->sitemap, 0);
 
         $method = $reflection->getMethod('processSitemapItem');
-        $method->setAccessible(true);
 
         $this->expectNotToPerformAssertions();
         $method->invoke($this->sitemap, $sitemapItem);
@@ -680,19 +665,15 @@ class SitemapTest extends TestCase
 
         $reflection = new \ReflectionClass($sitemap);
         $sitemapIncrementProperty = $reflection->getProperty('_sitemapIncrement');
-        $sitemapIncrementProperty->setAccessible(true);
         $sitemapIncrementProperty->setValue($sitemap, 1);
 
         $fileSizeProperty = $reflection->getProperty('_fileSize');
-        $fileSizeProperty->setAccessible(true);
         $fileSizeProperty->setValue($sitemap, 10000000); // Large file size to trigger split
 
         $lineCountProperty = $reflection->getProperty('_lineCount');
-        $lineCountProperty->setAccessible(true);
         $lineCountProperty->setValue($sitemap, 1);
 
         $method = $reflection->getMethod('processSitemapItem');
-        $method->setAccessible(true);
 
         $this->expectNotToPerformAssertions();
         $method->invoke($sitemap, $sitemapItem);

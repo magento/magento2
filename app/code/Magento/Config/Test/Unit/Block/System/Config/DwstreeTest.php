@@ -1,20 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Block\System\Config;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Breadcrumbs;
 use Magento\Config\Block\System\Config\Dwstree;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DwstreeTest extends TestCase
@@ -51,29 +54,27 @@ class DwstreeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->websiteMock = $this->getMockBuilder(Website::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->websiteMock = $this->createMock(Website::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
 
         $objectManager = new ObjectManager($this);
+
+        // Create layout and breadcrumbs mocks
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $breadcrumbsMock = $this->createMock(Breadcrumbs::class);
+        $layoutMock->method('getBlock')->with('breadcrumbs')->willReturn($breadcrumbsMock);
 
         $this->context = $objectManager->getObject(
             Context::class,
             [
                 'request'      => $this->requestMock,
                 'storeManager' => $this->storeManagerMock,
+                'layout'       => $layoutMock,
             ]
         );
         $objects = [
@@ -93,8 +94,8 @@ class DwstreeTest extends TestCase
      * @param $section
      * @param $website
      * @param $store
-     * @dataProvider initTabsDataProvider
      */
+    #[DataProvider('initTabsDataProvider')]
     public function testInitTabs($section, $website, $store)
     {
         $this->requestMock->expects($this->any())

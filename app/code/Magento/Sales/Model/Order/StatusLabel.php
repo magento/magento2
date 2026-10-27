@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,6 +75,7 @@ class StatusLabel
      */
     public function maskStatusForArea(string $area, ?string $code): ?string
     {
+        $code = $code ?? '';
         if (isset($this->maskStatusesMapping[$area][$code])) {
             return $this->maskStatusesMapping[$area][$code];
         }

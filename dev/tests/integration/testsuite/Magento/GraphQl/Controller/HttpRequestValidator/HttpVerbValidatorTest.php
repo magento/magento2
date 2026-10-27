@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller\HttpRequestValidator;
 
-use Magento\Framework\App\HttpRequestInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +23,7 @@ class HttpVerbValidatorTest extends TestCase
     private $httpVerbValidator;
 
     /**
-     * @var HttpRequestInterface|MockObject
+     * @var HttpRequest|MockObject
      */
     private $requestMock;
 
@@ -32,18 +33,10 @@ class HttpVerbValidatorTest extends TestCase
     protected function setup(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'isPost',
-                ]
-            )->addMethods(
-                [
-                    'getParam',
-                ]
-            )
-            ->getMockForAbstractClass();
+            ->onlyMethods(['isPost', 'getParam'])
+            ->getMock();
 
         $this->httpVerbValidator = $objectManager->get(HttpVerbValidator::class);
     }
@@ -53,8 +46,8 @@ class HttpVerbValidatorTest extends TestCase
      *
      * @param string $query
      * @param bool $needException
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(string $query, bool $needException): void
     {
         $this->requestMock

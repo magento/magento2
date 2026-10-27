@@ -12,6 +12,8 @@ use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Model\LinkManagement;
 use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\Product\Type as BundleProductType;
+use Magento\Bundle\Model\Link;
 use Magento\Bundle\Model\ResourceModel\Bundle;
 use Magento\Bundle\Model\ResourceModel\BundleFactory;
 use Magento\Bundle\Model\ResourceModel\Option\Collection as OptionCollection;
@@ -24,6 +26,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -43,6 +46,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LinkManagement
      */
@@ -145,38 +150,23 @@ class LinkManagementTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->productRepository = $this->getMockBuilder(ProductRepository::class)
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productType = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
-            ->onlyMethods(['getOptionsCollection', 'setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->option = $this->getMockBuilder(Option::class)
-            ->onlyMethods(['getOptionId', '__wakeup'])
-            ->addMethods(['getSelections'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->optionCollection = $this->getMockBuilder(OptionCollection::class)
-            ->onlyMethods(['appendSelections'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectionCollection = $this->getMockBuilder(
-            SelectionCollection::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->product = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['getTypeInstance', 'getStoreId', 'getTypeId', '__wakeup', 'getId', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->link = $this->getMockBuilder(LinkInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->linkFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRepository = $this->createPartialMock(ProductRepository::class, ['get']);
+        $this->productType = $this->createPartialMock(BundleProductType::class, ['getOptionsCollection',
+                'setStoreFilter',
+                'getSelectionsCollection',
+                'getOptionsIds']);
+        $this->option = $this->createPartialMock(Option::class, []);
+        $this->optionCollection = $this->createPartialMock(OptionCollection::class, ['appendSelections']);
+        $this->selectionCollection = $this->createMock(SelectionCollection::class);
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getTypeId', 'getSku', 'getStoreId', 'getData', 'setData',
+                'setTypeInstance', 'getTypeInstance', 'setStoreId'
+            ]
+        );
+        $this->link = $this->createMock(LinkInterface::class);
+        $this->linkFactory = $this->createPartialMock(LinkInterfaceFactory::class, ['create']);
         $this->bundleSelectionMock = $this->createPartialMock(
             SelectionFactory::class,
             ['create']
@@ -189,20 +179,14 @@ class LinkManagementTest extends TestCase
             OptionCollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataMock = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
+        $this->metadataMock = $this->createMock(EntityMetadata::class);
         $this->metadataPoolMock->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->metadataMock);
 
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
         $this->model = $helper->getObject(
             LinkManagement::class,
@@ -232,9 +216,7 @@ class LinkManagementTest extends TestCase
             ->with($productSku)
             ->willReturn($this->product);
 
-        $this->product->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('bundle');
+        $this->product->method('getTypeId')->willReturn('bundle');
 
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
@@ -259,10 +241,8 @@ class LinkManagementTest extends TestCase
             ->with($this->selectionCollection)
             ->willReturn([$this->option]);
 
-        $this->option->method('getSelections')
-            ->willReturn([$this->product]);
-        $this->product->method('getData')
-            ->willReturn([]);
+        $this->option->setSelections([$this->product]);
+        $this->product->method('getData')->willReturn([]);
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
@@ -292,9 +272,7 @@ class LinkManagementTest extends TestCase
             ->with($productSku)
             ->willReturn($this->product);
 
-        $this->product->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('bundle');
+        $this->product->method('getTypeId')->willReturn('bundle');
 
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
@@ -319,11 +297,8 @@ class LinkManagementTest extends TestCase
             ->with($this->selectionCollection)
             ->willReturn([$this->option]);
 
-        $this->option->method('getOptionId')
-            ->willReturn(10);
-        $this->option->expects($this->once())
-            ->method('getSelections')
-            ->willReturn([1, 2]);
+        $this->option->setId(10);
+        $this->option->setSelections([1, 2]);
 
         $this->dataObjectHelperMock->expects($this->never())->method('populateWithArray');
 
@@ -344,9 +319,7 @@ class LinkManagementTest extends TestCase
             ->with($productSku)
             ->willReturn($this->product);
 
-        $this->product->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('simple');
+        $this->product->method('getTypeId')->willReturn('simple');
 
         $this->assertEquals([$this->link], $this->model->getChildren($productSku));
     }
@@ -358,7 +331,7 @@ class LinkManagementTest extends TestCase
     {
         $this->expectException(InputException::class);
 
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getOptionId')
             ->willReturn(1);
 
@@ -376,7 +349,7 @@ class LinkManagementTest extends TestCase
     {
         $this->expectException(InputException::class);
 
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getOptionId')->willReturn(1);
 
         $productMock = $this->createMock(Product::class);
@@ -386,10 +359,7 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $emptyOption = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $emptyOption = $this->createPartialMock(Option::class, ['getId', '__wakeup']);
         $emptyOption->expects($this->once())
             ->method('getId')
             ->willReturn(null);
@@ -417,7 +387,7 @@ class LinkManagementTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('The bundle product can\'t contain another composite product.');
 
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getSku')->willReturn('linked_product_sku');
         $productLink->method('getOptionId')->willReturn(1);
 
@@ -447,10 +417,7 @@ class LinkManagementTest extends TestCase
         $store->method('getId')
             ->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $option = $this->createPartialMock(Option::class, ['getId', '__wakeup']);
         $option->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
@@ -477,30 +444,20 @@ class LinkManagementTest extends TestCase
     {
         $this->expectException(CouldNotSaveException::class);
 
-        $productLink = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getSku', 'getOptionId'])
-            ->addMethods(['getSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productLink->method('getSku')->willReturn('linked_product_sku');
-        $productLink->method('getOptionId')->willReturn(1);
-        $productLink->method('getSelectionId')->willReturn(1);
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->setSku('linked_product_sku');
+        $productLink->setOptionId(1);
+        $productLink->setSelectionId(1);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
-        $productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getCopyFromView'])
-            ->onlyMethods(['getTypeId', 'getData', 'getTypeInstance', 'getSku'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productMock->expects($this->once())->method('getTypeId')->willReturn(
-            Type::TYPE_BUNDLE
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getTypeId', 'getData', 'getCopyFromView', 'getSku']
         );
-
-        $productMock->method('getData')
-            ->with($this->linkField)
-            ->willReturn($this->linkField);
-        $productMock->method('getCopyFromView')
-            ->willReturn(false);
+        $productMock->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
+        $productMock->method('getData')->willReturn($this->linkField);
+        $productMock->method('getCopyFromView')->willReturn(false);
+        $productMock->method('getSku')->willReturn('bundle_product_sku');
 
         $linkedProductMock = $this->createMock(Product::class);
         $linkedProductMock->method('getEntityId')
@@ -517,10 +474,7 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $option = $this->createPartialMock(Option::class, ['getId', '__wakeup']);
         $option->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -537,7 +491,9 @@ class LinkManagementTest extends TestCase
             ->willReturn($optionsCollectionMock);
 
         $selections = [
-            ['option_id' => 1, 'product_id' => 12, 'parent_product_id' => 'product_id'],
+            ['option_id' => 1,
+                'product_id' => 12,
+                'parent_product_id' => 'product_id'],
             ['option_id' => 1, 'product_id' => 13, 'parent_product_id' => 'product_id']
         ];
         $bundle = $this->createMock(Bundle::class);
@@ -558,14 +514,10 @@ class LinkManagementTest extends TestCase
     {
         $this->expectException(CouldNotSaveException::class);
 
-        $productLink = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getSku', 'getOptionId'])
-            ->addMethods(['getSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productLink->method('getSku')->willReturn('linked_product_sku');
-        $productLink->method('getOptionId')->willReturn(1);
-        $productLink->method('getSelectionId')->willReturn(1);
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->setSku('linked_product_sku');
+        $productLink->setOptionId(1);
+        $productLink->setSelectionId(1);
 
         $this->metadataMock->expects($this->exactly(2))->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -592,10 +544,7 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $option = $this->createPartialMock(Option::class, ['getId', '__wakeup']);
         $option->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
@@ -639,14 +588,10 @@ class LinkManagementTest extends TestCase
      */
     public function testAddChild(): void
     {
-        $productLink = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getSku', 'getOptionId'])
-            ->addMethods(['getSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productLink->method('getSku')->willReturn('linked_product_sku');
-        $productLink->method('getOptionId')->willReturn(1);
-        $productLink->method('getSelectionId')->willReturn(1);
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->setSku('linked_product_sku');
+        $productLink->setOptionId(1);
+        $productLink->setSelectionId(1);
 
         $this->metadataMock->expects($this->exactly(2))->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -669,10 +614,7 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $option = $this->createPartialMock(Option::class, ['getId', '__wakeup']);
         $option->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
@@ -698,7 +640,7 @@ class LinkManagementTest extends TestCase
 
         $selection = $this->createPartialMock(Selection::class, ['save', 'getId', 'load']);
         $selection->expects($this->once())->method('save');
-        $selection->expects($this->once())->method('getId')->willReturn(42);
+        $selection->method('getId')->willReturn(42);
         $this->bundleSelectionMock->expects($this->once())->method('create')->willReturn($selection);
         $result = $this->model->addChild($productMock, 1, $productLink);
         $this->assertEquals(42, $result);
@@ -721,22 +663,17 @@ class LinkManagementTest extends TestCase
         $parentProductId = 32;
         $bundleProductSku = 'bundleProductSku';
 
-        $productLink = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getSku', 'getOptionId'])
-            ->addMethods(['getSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productLink->method('getSku')->willReturn('linked_product_sku');
-        $productLink->method('getId')->willReturn($id);
-        $productLink->method('getOptionId')->willReturn($optionId);
-        $productLink->method('getPosition')->willReturn($position);
-        $productLink->method('getQty')->willReturn($qty);
-        $productLink->method('getPriceType')->willReturn($priceType);
-        $productLink->method('getPrice')->willReturn($price);
-        $productLink->method('getCanChangeQuantity')
-            ->willReturn($canChangeQuantity);
-        $productLink->method('getIsDefault')->willReturn($isDefault);
-        $productLink->method('getSelectionId')->willReturn($optionId);
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->setSku('linked_product_sku');
+        $productLink->setId($id);
+        $productLink->setOptionId($optionId);
+        $productLink->setPosition($position);
+        $productLink->setQty($qty);
+        $productLink->setPriceType($priceType);
+        $productLink->setPrice($price);
+        $productLink->setCanChangeQuantity($canChangeQuantity);
+        $productLink->setIsDefault($isDefault);
+        $productLink->setSelectionId($optionId);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -760,35 +697,10 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $selection = $this->getMockBuilder(Selection::class)
-            ->addMethods(
-                [
-                    'setProductId',
-                    'setParentProductId',
-                    'setOptionId',
-                    'setPosition',
-                    'setSelectionQty',
-                    'setSelectionPriceType',
-                    'setSelectionPriceValue',
-                    'setSelectionCanChangeQty',
-                    'setIsDefault'
-                ]
-            )
-            ->onlyMethods(['save', 'getId', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selection = $this->createPartialMock(Selection::class, ['save', 'getId', 'load']);
         $selection->expects($this->once())->method('save');
         $selection->expects($this->once())->method('load')->with($id)->willReturnSelf();
         $selection->method('getId')->willReturn($id);
-        $selection->expects($this->once())->method('setProductId')->with($linkProductId);
-        $selection->expects($this->once())->method('setParentProductId')->with($parentProductId);
-        $selection->expects($this->once())->method('setOptionId')->with($optionId);
-        $selection->expects($this->once())->method('setPosition')->with($position);
-        $selection->expects($this->once())->method('setSelectionQty')->with($qty);
-        $selection->expects($this->once())->method('setSelectionPriceType')->with($priceType);
-        $selection->expects($this->once())->method('setSelectionPriceValue')->with($price);
-        $selection->expects($this->once())->method('setSelectionCanChangeQty')->with($canChangeQuantity);
-        $selection->expects($this->once())->method('setIsDefault')->with($isDefault);
 
         $this->bundleSelectionMock->expects($this->once())->method('create')->willReturn($selection);
         $this->assertTrue($this->model->saveChild($bundleProductSku, $productLink));
@@ -805,14 +717,10 @@ class LinkManagementTest extends TestCase
         $linkProductId = 45;
         $parentProductId = 32;
 
-        $productLink = $this->getMockBuilder(LinkInterface::class)
-            ->onlyMethods(['getSku', 'getOptionId'])
-            ->addMethods(['getSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $productLink->method('getSku')->willReturn('linked_product_sku');
-        $productLink->method('getId')->willReturn($id);
-        $productLink->method('getSelectionId')->willReturn(1);
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->setSku('linked_product_sku');
+        $productLink->setId($id);
+        $productLink->setSelectionId(1);
 
         $bundleProductSku = 'bundleProductSku';
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
@@ -845,24 +753,7 @@ class LinkManagementTest extends TestCase
         $store->method('getId')
             ->willReturn(0);
 
-        $selection = $this->getMockBuilder(Selection::class)
-            ->addMethods(
-                [
-                    'setProductId',
-                    'setParentProductId',
-                    'setSelectionId',
-                    'setOptionId',
-                    'setPosition',
-                    'setSelectionQty',
-                    'setSelectionPriceType',
-                    'setSelectionPriceValue',
-                    'setSelectionCanChangeQty',
-                    'setIsDefault'
-                ]
-            )
-            ->onlyMethods(['save', 'getId', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selection = $this->createPartialMock(Selection::class, ['save', 'getId', 'load']);
         $mockException = $this->createMock(Exception::class);
         $selection->expects($this->once())
             ->method('save')
@@ -873,9 +764,6 @@ class LinkManagementTest extends TestCase
             ->willReturnSelf();
         $selection->method('getId')
             ->willReturn($id);
-        $selection->expects($this->once())
-            ->method('setProductId')
-            ->with($linkProductId);
 
         $this->bundleSelectionMock->expects($this->once())
             ->method('create')
@@ -892,7 +780,7 @@ class LinkManagementTest extends TestCase
 
         $bundleProductSku = 'bundleSku';
         $linkedProductSku = 'simple';
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getId')->willReturn(null);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -928,7 +816,7 @@ class LinkManagementTest extends TestCase
         $id = 12345;
         $linkedProductSku = 'simple';
         $bundleProductSku = 'bundleProductSku';
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -978,7 +866,7 @@ class LinkManagementTest extends TestCase
         $bundleProductSku = 'bundleProductSku';
         $id = 12;
         $linkedProductSku = 'simple';
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -1008,7 +896,7 @@ class LinkManagementTest extends TestCase
         $linkedProductSku = 'simple';
         $bundleProductSku = 'bundleProductSku';
 
-        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
+        $productLink = $this->createMock(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -1038,26 +926,19 @@ class LinkManagementTest extends TestCase
         $productId = 1;
         $childSku = 'childSku';
 
-        $this->product->method('getTypeId')
-            ->willReturn(Type::TYPE_BUNDLE);
+        $this->product->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
 
         $this->getRemoveOptions();
 
-        $selection = $this->getMockBuilder(Selection::class)
-            ->onlyMethods(['__wakeup'])
-            ->addMethods(['getSku', 'getOptionId', 'getSelectionId', 'getProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selection->method('getSku')->willReturn($childSku);
-        $selection->method('getOptionId')->willReturn($optionId);
-        $selection->method('getSelectionId')->willReturn(55);
-        $selection->method('getProductId')->willReturn($productId);
+        $selection = $this->createPartialMock(Selection::class, []);
+        $selection->setSku($childSku);
+        $selection->setOptionId($optionId);
+        $selection->setSelectionId(55);
+        $selection->setProductId($productId);
 
-        $this->option->method('getSelections')->willReturn([$selection]);
+        $this->option->setSelections([$selection]);
         $this->metadataMock->method('getLinkField')->willReturn($this->linkField);
-        $this->product->method('getData')
-            ->with($this->linkField)
-            ->willReturn(3);
+        $this->product->method('getData')->with($this->linkField)->willReturn(3);
 
         $bundle->expects($this->once())->method('dropAllUnneededSelections')->with(3, []);
         $bundle->expects($this->once())->method('removeProductRelations')->with(3, [$productId]);
@@ -1076,8 +957,7 @@ class LinkManagementTest extends TestCase
         $productSku = 'productSku';
         $optionId = 1;
         $childSku = 'childSku';
-        $this->product->method('getTypeId')
-            ->willReturn(Type::TYPE_SIMPLE);
+        $this->product->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
         $this->model->removeChild($productSku, $optionId, $childSku);
     }
 
@@ -1093,22 +973,17 @@ class LinkManagementTest extends TestCase
         $optionId = 1;
         $childSku = 'childSku';
 
-        $this->product->method('getTypeId')
-            ->willReturn(Type::TYPE_BUNDLE);
+        $this->product->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
 
         $this->getRemoveOptions();
 
-        $selection = $this->getMockBuilder(Selection::class)
-            ->onlyMethods(['__wakeup'])
-            ->addMethods(['getSku', 'getOptionId', 'getSelectionId', 'getProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selection->method('getSku')->willReturn($childSku);
-        $selection->method('getOptionId')->willReturn($optionId + 1);
-        $selection->method('getSelectionId')->willReturn(55);
-        $selection->method('getProductId')->willReturn(1);
+        $selection = $this->createPartialMock(Selection::class, []);
+        $selection->setSku($childSku);
+        $selection->setOptionId($optionId + 1);
+        $selection->setSelectionId(55);
+        $selection->setProductId(1);
 
-        $this->option->method('getSelections')->willReturn([$selection]);
+        $this->option->setSelections([$selection]);
         $this->model->removeChild($productSku, $optionId, $childSku);
     }
 
@@ -1124,23 +999,17 @@ class LinkManagementTest extends TestCase
         $optionId = 1;
         $childSku = 'childSku';
 
-        $this->product->method('getTypeId')
-            ->willReturn(Type::TYPE_BUNDLE);
+        $this->product->method('getTypeId')->willReturn(Type::TYPE_BUNDLE);
 
         $this->getRemoveOptions();
 
-        $selection = $this->getMockBuilder(Selection::class)
-            ->onlyMethods(['__wakeup'])
-            ->addMethods(['getSku', 'getOptionId', 'getSelectionId', 'getProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $selection->method('getSku')->willReturn($childSku . '_invalid');
-        $selection->method('getOptionId')->willReturn($optionId);
-        $selection->method('getSelectionId')->willReturn(55);
-        $selection->method('getProductId')->willReturn(1);
+        $selection = $this->createPartialMock(Selection::class, []);
+        $selection->setSku($childSku . '_invalid');
+        $selection->setOptionId($optionId);
+        $selection->setSelectionId(55);
+        $selection->setProductId(1);
 
-        $this->option->method('getSelections')
-            ->willReturn([$selection]);
+        $this->option->setSelections([$selection]);
         $this->model->removeChild($productSku, $optionId, $childSku);
     }
 
@@ -1149,11 +1018,8 @@ class LinkManagementTest extends TestCase
      */
     private function getOptions(): void
     {
-        $this->product->method('getTypeInstance')
-            ->willReturn($this->productType);
-        $this->product->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($this->storeId);
+        $this->product->method('getTypeInstance')->willReturn($this->productType);
+        $this->product->method('getStoreId')->willReturn($this->storeId);
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
             ->with($this->storeId, $this->product);
@@ -1169,11 +1035,8 @@ class LinkManagementTest extends TestCase
      */
     public function getRemoveOptions(): void
     {
-        $this->product->method('getTypeInstance')
-            ->willReturn($this->productType);
-        $this->product->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn(1);
+        $this->product->method('getTypeInstance')->willReturn($this->productType);
+        $this->product->method('getStoreId')->willReturn(1);
 
         $this->productType->expects($this->once())->method('setStoreFilter');
         $this->productType->expects($this->once())->method('getOptionsCollection')

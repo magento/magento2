@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Indexer\Test\Unit;
 
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BatchTest extends TestCase
 {
@@ -26,9 +27,8 @@ class BatchTest extends TestCase
      * @param array $itemsData
      * @param int $size
      * @param array $expected
-     *
-     * @dataProvider getItemsDataProvider
-     */
+     *     */
+    #[DataProvider('getItemsDataProvider')]
     public function testGetItems(array $itemsData, $size, array $expected)
     {
         $items = new \ArrayObject($itemsData);

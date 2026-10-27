@@ -1,9 +1,7 @@
 <?php
 /**
- * ID column renderer, also contains image URL in hidden field
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Renderer;
 

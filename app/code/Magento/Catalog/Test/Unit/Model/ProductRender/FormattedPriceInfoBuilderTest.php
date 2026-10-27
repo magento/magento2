@@ -10,7 +10,9 @@ namespace Magento\Catalog\Test\Unit\Model\ProductRender;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
+use Magento\Catalog\Model\ProductRender\FormattedPriceInfo;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
+use Magento\Catalog\Model\ProductRender\PriceInfo;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -34,11 +36,8 @@ class FormattedPriceInfoBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
-        $this->formattedPriceInfoFactoryMock = $this->getMockBuilder(FormattedPriceInfoInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->formattedPriceInfoFactoryMock = $this->createMock(FormattedPriceInfoInterfaceFactory::class);
 
         $this->formattedPriceInfoBuilderMock = new FormattedPriceInfoBuilder(
             $this->priceCurrencyMock,
@@ -51,19 +50,11 @@ class FormattedPriceInfoBuilderTest extends TestCase
         $storeId = 1;
         $storeCurrencyCode = 'USD';
 
-        $formattedPriceInfoInterfaceMock = $this->getMockBuilder(FormattedPriceInfoInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setData'])
-            ->getMockForAbstractClass();
-        $priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getData'])
-            ->getMockForAbstractClass();
-        $priceInfoMock->expects($this->any())
-            ->method('getData')
-            ->willReturn([
-                'key'=>'1233123'
-            ]);
+        $formattedPriceInfoInterfaceMock = $this->createMock(
+            FormattedPriceInfo::class
+        );
+        $priceInfoMock = $this->createPartialMock(PriceInfo::class, []);
+        $priceInfoMock->setData('key', '1233123');
         $this->priceCurrencyMock->expects($this->atLeastOnce())
             ->method('format')
             ->with(

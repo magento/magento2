@@ -84,9 +84,9 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->cart->save();
-            $this->messageManager->addErrorMessage(
-                $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
-            );
+            // We do not add an error message to messageManager here to prevent duplicate error messages
+            // on the cart page. The frontend AJAX validation already displays this error, and the backend message
+            // would cause duplication after page reload.
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t update the shopping cart.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

@@ -20,9 +20,12 @@
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
         <waitForPageLoad stepKey="waitForImages"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
-        <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
+        <click selector="{{AdminProductImagesSection.imageContainer(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForPageLoad stepKey="waitForImageDetails"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <conditionalClick selector="{{AdminProductImagesSection.altTextUseDefault}}" dependentSelector="{{AdminProductImagesSection.isAltTextUseDefaultSelected}}" visible="true" stepKey="uncheckUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isAltTextDisabled}}" stepKey="waitForAltTextEnabled"/>
         <fillField selector="{{AdminProductImagesSection.altText}}" userInput="{{altText}}" stepKey="fillAltTextSection"/>
         <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
         <waitForPageLoad stepKey="waitForClose"/>

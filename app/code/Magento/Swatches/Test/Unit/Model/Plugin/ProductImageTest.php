@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\Plugin\ProductImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProductImageTest extends TestCase
 {
@@ -76,9 +77,7 @@ class ProductImageTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataForTest
-     */
+    #[DataProvider('dataForTest')]
     public function testBeforeGetImage($expected)
     {
         $expected['product'] = $expected['product']($this);
@@ -160,7 +159,8 @@ class ProductImageTest extends TestCase
         }
     }
 
-    protected function getMockForProductClass() {
+    protected function getMockForProductClass()
+    {
         $productMock = $this->createMock(Product::class);
         $productMock->expects($this->any())->method('getImage')->willReturn(false);
         return $productMock;

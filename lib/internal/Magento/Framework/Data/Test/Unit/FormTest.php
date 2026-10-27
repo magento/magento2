@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -147,5 +147,13 @@ class FormTest extends TestCase
 
         $this->_form->removeField($buttonElement->getId());
         $this->assertSame($this->_form->checkElementId($buttonElement->getId()), true);
+    }
+
+    public function testAddElementWithNoId()
+    {
+        $buttonElement = $this->createStub(Button::class);
+
+        $this->_form->addElementToCollection($buttonElement);
+        $this->_form->setValues(['1', '2', '3']);
     }
 }

@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * EAV Entity Attribute Select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -32,6 +31,9 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return bool|array
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -43,16 +45,25 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $value = $this->getEntity()->getData($attribute->getAttributeCode());
         }
 
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
+        }
+
         if ($attribute->getIsRequired() && empty($value) && $value != '0') {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
-        if (!empty($value)
-            && $attribute->getSourceModel()
-            && !$attribute->getSource()->getOptionText($value)
-        ) {
-            $errors[] = __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $value);
+        if (!empty($value) && $attribute->getSourceModel()) {
+            $optionText = $attribute->getSource()->getOptionText($value);
+            // Sources report a missing option either with false or with null, while a valid label may be "0"
+            if ($optionText === false || $optionText === null) {
+                $errors[] = __(
+                    'Attribute %1 does not contain option with Id %2',
+                    $attribute->getAttributeCode(),
+                    $value
+                );
+            }
         }
 
         if (count($errors) == 0) {

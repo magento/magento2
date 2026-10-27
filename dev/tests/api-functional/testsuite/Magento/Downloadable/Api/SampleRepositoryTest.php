@@ -6,9 +6,12 @@
 
 namespace Magento\Downloadable\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -16,6 +19,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class SampleRepositoryTest extends WebapiAbstract
 {
+    /**
+     * Name of the lock guarding concurrent read-modify-write access to the downloadable domains
+     * whitelist in env.php (see Magento\Downloadable\Model\DomainManager).
+     */
+    private const DOMAIN_LOCK_NAME = 'downloadable_domains';
+
     /**
      * @var array
      */
@@ -41,11 +50,22 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     private $domainManager;
 
+    /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->domainManager = $objectManager->get(DomainManagerInterface::class);
-        $this->domainManager->addDomains(['example.com']);
+        $this->lockManager = $objectManager->get(LockManagerInterface::class);
+        $this->lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::addDomains($this->domainManager, ['example.com']);
+        } finally {
+            $this->lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
 
         $this->createServiceInfo = [
             'rest' => [
@@ -90,7 +110,12 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->domainManager->removeDomains(['example.com']);
+        $this->lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::removeDomains($this->domainManager, ['example.com']);
+        } finally {
+            $this->lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     /**
@@ -294,8 +319,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testCreateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -412,8 +437,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -453,8 +478,8 @@ class SampleRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getListForAbsentProductProvider
      */
+    #[DataProvider('getListForAbsentProductProvider')]
     public function testGetList($urlTail, $method, $expectations)
     {
         $sku = 'downloadable-product';

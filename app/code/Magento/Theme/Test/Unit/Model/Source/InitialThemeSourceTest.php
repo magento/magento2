@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class InitialThemeSourceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InitialThemeSource
      */
@@ -65,30 +68,22 @@ class InitialThemeSourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->themeFactoryMock = $this->getMockBuilder(ThemeFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['sort'])
-            ->onlyMethods(['from'])
-            ->getMock();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->themeMock = $this->createMock(Theme::class);
+        $this->selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['sort', 'from']
+        );
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectMock = $this->createMock(DataObject::class);
 
         $this->themeMock->expects($this->any())
             ->method('getConnection')

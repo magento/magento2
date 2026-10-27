@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Store\Model\PathConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,15 +34,9 @@ class PathConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->urlSecurityInfoMock = $this->getMockBuilder(SecurityInfoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->urlSecurityInfoMock = $this->createMock(SecurityInfoInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -88,10 +83,10 @@ class PathConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider urlSchemeProvider
      * @param string $base Base Url
      * @param bool $secure Expected return value
      */
+    #[DataProvider('urlSchemeProvider')]
     public function testShouldBeSecureUnsecureBaseUrl($base, $secure)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -102,10 +97,10 @@ class PathConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider urlSchemeProvider
      * @param string $base Base Url
      * @param bool $secure Expected return value
      */
+    #[DataProvider('urlSchemeProvider')]
     public function testShouldBeSecureSecureBaseUrl($base, $secure)
     {
         $path = 'path/to/action';

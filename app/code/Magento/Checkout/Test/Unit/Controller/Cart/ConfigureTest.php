@@ -84,10 +84,10 @@ class ConfigureTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->cartMock = $this->getMockBuilder(Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -155,7 +155,7 @@ class ConfigureTest extends TestCase
                 ['id'] => $quoteId,
                 ['product_id'] => $actualProductId,
             });
-        $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
 
         $quoteItemMock->expects($this->exactly(1))->method('getBuyRequest')->willReturn($buyRequestMock);
 
@@ -213,7 +213,7 @@ class ConfigureTest extends TestCase
                 ['id', null, $quotaId],
                 ['product_id', null, $productIdInRequest]
             ]);
-        $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $this->cartMock->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemById')->willReturn($quoteItemMock);
         $quoteItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getId')->willReturn($productIdInQuota);

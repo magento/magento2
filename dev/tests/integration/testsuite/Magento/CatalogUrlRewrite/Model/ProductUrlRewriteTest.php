@@ -23,6 +23,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class for product url rewrites tests
@@ -62,10 +63,10 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
 
     /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @dataProvider productDataProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testUrlRewriteOnProductSave(array $data): void
     {
         $product = $this->saveProduct($data['data']);
@@ -143,10 +144,10 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
-     * @dataProvider productEditProvider
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('productEditProvider')]
     public function testUrlRewriteOnProductEdit(array $expectedData): void
     {
         $product = $this->productRepository->get('simple');
@@ -188,15 +189,25 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/category_with_products.php
-     * @dataProvider existingUrlKeyProvider
-     * @param array $data
+     * @param array $data1
+     * @param array $data2
+     * @param array $data3
+     * @param array $data4
      * @return void
      */
-    public function testUrlRewriteOnProductSaveWithExistingUrlKey(array $data): void
-    {
+    #[DataProvider('existingUrlKeyProvider')]
+    public function testUrlRewriteOnProductSaveWithExistingUrlKey(
+        array $data1,
+        array $data2,
+        array $data3,
+        array $data4
+    ): void {
         $this->expectException(UrlAlreadyExistsException::class);
         $this->expectExceptionMessage((string)__('URL key for specified store already exists.'));
-        $this->saveProduct($data);
+        $this->saveProduct($data1);
+        $this->saveProduct($data2);
+        $this->saveProduct($data3);
+        $this->saveProduct($data4);
     }
 
     /**
@@ -305,9 +316,7 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             ['sku' => 'simple3', 'request_path' => 'simple-product3', 'target_path' => 'product-3-updated'],
         ];
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
         $productImport = $this->objectManager->create(
             Product::class,
             ['logger' => $logger]

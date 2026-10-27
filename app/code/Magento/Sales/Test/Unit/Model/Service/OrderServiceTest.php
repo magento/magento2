@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface;
@@ -38,6 +39,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class OrderServiceTest extends TestCase
 {
+
     /**
      * @var OrderService
      */
@@ -120,84 +122,54 @@ class OrderServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderRepositoryMock = $this->getMockBuilder(
+        $this->orderRepositoryMock = $this->createMock(
             OrderRepositoryInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderStatusHistoryRepositoryMock = $this->getMockBuilder(
+        );
+        $this->orderStatusHistoryRepositoryMock = $this->createMock(
             OrderStatusHistoryRepositoryInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(
+        );
+        $this->searchCriteriaBuilderMock = $this->createMock(
             SearchCriteriaBuilder::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaMock = $this->getMockBuilder(
+        );
+        $this->searchCriteriaMock = $this->createMock(
             SearchCriteria::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterBuilderMock = $this->getMockBuilder(
+        );
+        $this->filterBuilderMock = $this->createMock(
             FilterBuilder::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterMock = $this->getMockBuilder(
+        );
+        $this->filterMock = $this->createMock(
             Filter::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderNotifierMock = $this->getMockBuilder(
+        );
+        $this->orderNotifierMock = $this->createMock(
             OrderNotifier::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderMock = $this->getMockBuilder(
+        );
+        $this->orderMock = $this->createMock(
             Order::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderStatusHistoryMock = $this->getMockBuilder(
+        );
+        $this->orderStatusHistoryMock = $this->createMock(
             History::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderSearchResultMock = $this->getMockBuilder(
+        );
+        $this->orderSearchResultMock = $this->createMock(
             OrderStatusHistorySearchResultInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(
+        );
+        $this->eventManagerMock = $this->createMock(
             ManagerInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderCommentSender = $this->getMockBuilder(
+        );
+        $this->orderCommentSender = $this->createMock(
             OrderCommentSender::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         /** @var PaymentFailuresInterface|MockObject  $paymentFailures */
-        $paymentFailures = $this->getMockForAbstractClass(PaymentFailuresInterface::class);
+        $paymentFailures = $this->createMock(PaymentFailuresInterface::class);
 
         /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
 
-        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapterInterfaceMock = $this->createMock(AdapterInterface::class);
 
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->orderConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderConfigMock = $this->createMock(Config::class);
 
         $this->orderService = new OrderService(
             $this->orderRepositoryMock,
@@ -209,7 +181,7 @@ class OrderServiceTest extends TestCase
             $this->orderCommentSender,
             $paymentFailures,
             $logger,
-            new OrderMutex($this->resourceConnectionMock),
+            new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0)),
             $this->orderConfigMock
         );
     }

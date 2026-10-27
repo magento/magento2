@@ -49,7 +49,7 @@ class SpecialTest extends TestCase
     {
         $this->product = $this->createMock(Product::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
+        $this->productFactory->method('create')->willReturn($this->product);
         $this->storeManager = $this->createMock(StoreManager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -80,9 +80,8 @@ class SpecialTest extends TestCase
         );
         $customerGroupId = 1;
         $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->willReturnSelf();
-        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->willReturnSelf(
-            
-        );
+        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)
+            ->willReturnSelf();
         $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
         $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
 

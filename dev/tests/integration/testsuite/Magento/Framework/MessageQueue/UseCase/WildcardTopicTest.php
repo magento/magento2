@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue\UseCase;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WildcardTopicTest extends QueueTestCaseAbstract
 {
@@ -45,9 +46,8 @@ class WildcardTopicTest extends QueueTestCaseAbstract
      * @param string $topic
      * @param string[] $matchingQueues
      * @param string[] $nonMatchingQueues
-     *
-     * @dataProvider wildCardTopicsDataProvider
      */
+    #[DataProvider('wildCardTopicsDataProvider')]
     public function testWildCardMatchingTopic($topic, $matchingQueues, $nonMatchingQueues)
     {
         if ($this->connectionType === 'stomp') {

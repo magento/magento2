@@ -32,10 +32,7 @@ class OptionsTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->options = $helper->getObject(
             Options::class,

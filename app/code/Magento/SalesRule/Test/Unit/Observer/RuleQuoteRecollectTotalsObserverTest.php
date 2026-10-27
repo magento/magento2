@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Spi\RuleQuoteRecollectTotalsInterface;
 use Magento\SalesRule\Observer\RuleQuoteRecollectTotalsObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,7 +34,7 @@ class RuleQuoteRecollectTotalsObserverTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->ruleQuoteRecollectTotals = $this->getMockForAbstractClass(RuleQuoteRecollectTotalsInterface::class);
+        $this->ruleQuoteRecollectTotals = $this->createMock(RuleQuoteRecollectTotalsInterface::class);
         $this->model = new RuleQuoteRecollectTotalsObserver($this->ruleQuoteRecollectTotals);
     }
 
@@ -42,8 +44,8 @@ class RuleQuoteRecollectTotalsObserverTest extends TestCase
      * @param bool $isDeleted
      * @param bool $recollect
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         array $origData,
         array $data,
@@ -52,9 +54,8 @@ class RuleQuoteRecollectTotalsObserverTest extends TestCase
     ): void {
         $this->ruleQuoteRecollectTotals->expects($recollect ? $this->once() : $this->never())
             ->method('execute');
-        $rule = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $objectManager = new ObjectManager($this);
+        $rule = $objectManager->getObject(Rule::class);
         $id = $data['id'] ?? 1;
         unset($data['id']);
         $rule->isDeleted($isDeleted);

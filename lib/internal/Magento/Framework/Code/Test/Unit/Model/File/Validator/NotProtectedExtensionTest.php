@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Model\File\Validator;
 
@@ -31,7 +31,7 @@ class NotProtectedExtensionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->_scopeConfig->expects(
             $this->atLeastOnce()
         )->method(
@@ -57,7 +57,6 @@ class NotProtectedExtensionTest extends TestCase
             NotProtectedExtension::class,
             'messageTemplates'
         );
-        $property->setAccessible(true);
         $defaultMess = [
             'protectedExtension' => new Phrase('File with an extension "%value%" is protected and cannot be uploaded'),
         ];
@@ -67,7 +66,6 @@ class NotProtectedExtensionTest extends TestCase
             NotProtectedExtension::class,
             '_protectedFileExtensions'
         );
-        $property->setAccessible(true);
         $protectedList = ['exe', 'php', 'jar'];
         $this->assertEquals($protectedList, $property->getValue($this->_model));
     }

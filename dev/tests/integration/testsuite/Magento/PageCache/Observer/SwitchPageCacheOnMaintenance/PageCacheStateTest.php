@@ -1,14 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\PageCache\Observer\SwitchPageCacheOnMaintenance;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -36,8 +36,8 @@ class PageCacheStateTest extends TestCase
      *
      * @param bool $state
      * @return void
-     * @dataProvider saveStateProvider
      */
+    #[DataProvider('saveStateProvider')]
     public function testSave(bool $state): void
     {
         $this->pageCacheStateStorage->save($state);

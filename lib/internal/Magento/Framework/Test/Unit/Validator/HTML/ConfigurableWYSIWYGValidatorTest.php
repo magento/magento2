@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe.
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -11,6 +11,8 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator;
 use Magento\Framework\Validator\HTML\AttributeValidatorInterface;
 use Magento\Framework\Validator\HTML\TagValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableWYSIWYGValidatorTest extends TestCase
@@ -208,6 +210,15 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 [],
                 ['div' => ['src' => false]]
             ],
+            'valid-allowed-tag-with-script-in-class-name' => [
+                ['div'],
+                ['class', 'src'],
+                [],
+                '<div class="product-description">this is a product description</div>',
+                true,
+                [],
+                ['div' => ['src' => false]]
+            ],
             'invalid-allowed-tag-attributes' => [
                 ['a'],
                 ['href'],
@@ -223,6 +234,114 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 [],
                 '',
                 false,
+                [],
+                []
+            ],
+            'anchor-with-absolute-url-and-trailing-attributes' => [
+                ['a'],
+                ['href', 'target', 'rel'],
+                [],
+                '<a href="https://new.abb.com/drives" target="_blank" rel="noopener">Drives</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-domain-only-url-and-trailing-attribute' => [
+                ['a'],
+                ['href', 'target'],
+                [],
+                '<a href="https://example.com" target="_blank">Example</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-multi-segment-relative-url-and-trailing-attribute' => [
+                ['a'],
+                ['href', 'target'],
+                [],
+                '<a href="/category1/category2" target="_blank">Example</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-multi-segment-url-as-last-attribute' => [
+                ['a'],
+                ['href'],
+                [],
+                '<a href="https://example.com/category1/category2">Example</a>',
+                true,
+                [],
+                []
+            ],
+            'body-tag-within-single-quoted-attribute-value' => [
+                ['p'],
+                ['title'],
+                ['p' => ['title']],
+                "<body>ok</body><p title='<body>'>x</p>",
+                false,
+                [],
+                []
+            ],
+            'body-tag-within-double-quoted-attribute-value' => [
+                ['p'],
+                ['title'],
+                ['p' => ['title']],
+                '<body>ok</body><p title="<body>">x</p>',
+                false,
+                [],
+                []
+            ],
+            'malformed-tag-with-apostrophes-in-surrounding-text' => [
+                ['p', 'img'],
+                ['title'],
+                ['p' => ['title'], 'img' => ['title']],
+                "<p>It's</p><img/onerror=foo(1) title='x'>",
+                false,
+                [],
+                []
+            ],
+            'malformed-tag-after-unbalanced-double-quote-in-text' => [
+                ['p', 'img'],
+                ['title'],
+                ['p' => ['title'], 'img' => ['title']],
+                '<p>x="</p><img/onerror=foo(1) title="y">',
+                false,
+                [],
+                []
+            ],
+            'malformed-tag-after-unbalanced-apostrophe-in-text' => [
+                ['p', 'img'],
+                ['title'],
+                ['p' => ['title'], 'img' => ['title']],
+                "<p>x='</p><img/onerror=foo(1) title='y'>",
+                false,
+                [],
+                []
+            ],
+            'multiple-body-tags-with-unbalanced-quote-in-text' => [
+                ['p'],
+                ['title'],
+                ['p' => ['title']],
+                '<body>a</body><p>x="</p><body>b</body>',
+                false,
+                [],
+                []
+            ],
+            'text-with-attribute-like-double-quoted-syntax-is-valid' => [
+                ['p'],
+                [],
+                [],
+                '<p>Use attr="value" in your HTML</p>',
+                true,
+                [],
+                []
+            ],
+            'text-with-attribute-like-single-quoted-syntax-is-valid' => [
+                ['p'],
+                [],
+                [],
+                "<p>Write style='color:red' like this</p>",
+                true,
                 [],
                 []
             ]
@@ -241,9 +360,9 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      * @param bool[][] $tagValidators
      * @return void
      *
-     * @dataProvider getConfigurations
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('getConfigurations')]
     public function testConfigurations(
         array $allowedTags,
         array $allowedAttr,
@@ -253,7 +372,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         array $attributeValidityMap,
         array $tagValidators
     ): void {
-        $attributeValidator = $this->getMockForAbstractClass(AttributeValidatorInterface::class);
+        $attributeValidator = $this->createMock(AttributeValidatorInterface::class);
         $attributeValidator->method('validate')
             ->willReturnCallback(
                 function (string $tag, string $attribute) use ($attributeValidityMap): void {
@@ -268,7 +387,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         }
         $tagValidatorsMocks = [];
         foreach ($tagValidators as $tag => $allowedAttributes) {
-            $mock = $this->getMockForAbstractClass(TagValidatorInterface::class);
+            $mock = $this->createMock(TagValidatorInterface::class);
             $mock->method('validate')
                 ->willReturnCallback(
                     function (string $givenTag, array $attrs) use ($tag, $allowedAttributes): void {

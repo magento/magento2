@@ -51,7 +51,7 @@ class ListReEncryptorsCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->reEncryptorList->getReEncryptors() as $name => $reEncryptor) {
             $output->writeln(

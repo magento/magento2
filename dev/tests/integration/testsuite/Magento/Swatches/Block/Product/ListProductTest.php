@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\Store;
 use Magento\Swatches\Model\Plugin\ProductImage;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -82,12 +83,12 @@ class ListProductTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_text_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
-     * @dataProvider getImageDataProvider
      * @param array $images
      * @param string $area
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getImageDataProvider')]
     public function testGetImageForTextSwatchConfigurable(array $images, string $area, array $expectation): void
     {
         $this->updateAttributePreviewImageFlag('text_swatch_attribute');
@@ -98,12 +99,12 @@ class ListProductTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
-     * @dataProvider getImageDataProvider
      * @param array $images
      * @param string $area
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getImageDataProvider')]
     public function testGetImageForVisualSwatchConfigurable(array $images, string $area, array $expectation): void
     {
         $this->updateAttributePreviewImageFlag('visual_swatch_attribute');

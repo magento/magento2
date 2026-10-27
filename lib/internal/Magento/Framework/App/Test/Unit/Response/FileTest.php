@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class FileTest extends TestCase
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -87,7 +87,7 @@ class FileTest extends TestCase
 
         $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,7 +111,7 @@ class FileTest extends TestCase
         $options = [
             'filePath' => 'path/to/file.pdf'
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
@@ -136,7 +136,7 @@ class FileTest extends TestCase
         $options = [
             'filePath' => $filePath
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -149,11 +149,11 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->never())
             ->method('delete')
             ->with($filePath);
-        $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
+        $stream = $this->createMock(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $directory->expects($this->once())
             ->method('openFile')
             ->with($filePath)
@@ -226,7 +226,7 @@ class FileTest extends TestCase
             'filePath' => $filePath,
             'remove' => true
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -239,11 +239,11 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->once())
             ->method('delete')
             ->with($filePath);
-        $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
+        $stream = $this->createMock(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $directory->expects($this->once())
             ->method('openFile')
             ->with($filePath)

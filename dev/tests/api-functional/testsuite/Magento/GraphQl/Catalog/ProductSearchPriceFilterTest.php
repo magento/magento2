@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Product filtering by condition "FROM..TO" for "Price" attribute
@@ -69,9 +70,9 @@ class ProductSearchPriceFilterTest extends GraphQlAbstract
      * @param string $sort
      * @param array $items
      * @return void
-     * @dataProvider productSearchPriceDataProvider
      * @throws \Exception
      */
+    #[DataProvider('productSearchPriceDataProvider')]
     public function testProductSearchPriceFilter($priceFilter, string $sort, array $items): void
     {
         // expected stuff

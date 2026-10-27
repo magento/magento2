@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -14,11 +16,11 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_special_price.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');

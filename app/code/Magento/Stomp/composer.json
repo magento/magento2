@@ -5,11 +5,12 @@
         "sort-packages": true
     },
     "require": {
+        "magento/module-message-queue": "*",
         "magento/framework": "*",
         "magento/framework-stomp": "*",
         "magento/framework-message-queue": "*",
         "magento/module-asynchronous-operations": "*",
-        "php": "~8.2.0||~8.3.0||~8.4.0"
+        "php": "~8.3.0||~8.4.0||~8.5.0"
     },
     "type": "magento2-module",
     "license": [

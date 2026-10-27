@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,16 +11,21 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Observer\AddSwatchAttributeTypeObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Observer test
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class AddSwatchAttributeTypeObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var Manager|MockObject */
     protected $moduleManagerMock;
 
@@ -34,11 +39,7 @@ class AddSwatchAttributeTypeObserverTest extends TestCase
     {
         $this->moduleManagerMock = $this->createMock(Manager::class);
 
-        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getForm', 'getAttribute'])
-            ->onlyMethods(['getEvent'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventObserverMock = $this->createPartialMockWithReflection(Observer::class, ['getEvent']);
         $objectManager = new ObjectManager($this);
         $this->observerMock = $objectManager->getObject(
             AddSwatchAttributeTypeObserver::class,
@@ -48,9 +49,7 @@ class AddSwatchAttributeTypeObserverTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataAddSwatch
-     */
+    #[DataProvider('dataAddSwatch')]
     public function testAddSwatchAttributeType($exp)
     {
         $this->moduleManagerMock
@@ -58,28 +57,15 @@ class AddSwatchAttributeTypeObserverTest extends TestCase
             ->method('isOutputEnabled')
             ->willReturn($exp['isOutputEnabled']);
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getResponse'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventObserverMock
-            ->expects($this->exactly($exp['methods_count']))
-            ->method('getEvent')
-            ->willReturn($eventMock);
+        $response = $this->createPartialMockWithReflection(DataObject::class, ['getTypes', 'setTypes']);
+        $response->method('getTypes')->willReturn($exp['outputArray']);
 
-        $response = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getTypes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventMock
-            ->expects($this->exactly($exp['methods_count']))
+        $eventMock = $this->createPartialMockWithReflection(Event::class, ['getResponse']);
+        $eventMock->expects($this->exactly($exp['methods_count']))
             ->method('getResponse')
             ->willReturn($response);
 
-        $response
-            ->expects($this->exactly($exp['methods_count']))
-            ->method('getTypes')
-            ->willReturn($exp['outputArray']);
+        $this->eventObserverMock->method('getEvent')->willReturn($eventMock);
 
         $this->observerMock->execute($this->eventObserverMock);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,7 +106,7 @@ class SmartButtonConfig
     private function getButtonStyles(string $page): array
     {
         $styles = $this->defaultStyles[$page];
-        if ((boolean)$this->config->getValue("{$page}_page_button_customize")) {
+        if ((bool)$this->config->getValue("{$page}_page_button_customize")) {
             $styles['layout'] = $this->config->getValue("{$page}_page_button_layout");
             $styles['size'] = $this->config->getValue("{$page}_page_button_size");
             $styles['color'] = $this->config->getValue("{$page}_page_button_color");

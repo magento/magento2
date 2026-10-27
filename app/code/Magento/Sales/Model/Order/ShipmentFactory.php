@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -111,8 +111,8 @@ class ShipmentFactory
 
             if ($orderItem->isDummy(true)) {
                 $qty = 0;
-
-                if (isset($items[$orderItem->getParentItemId()])) {
+                $parentItemId = $orderItem->getParentItemId();
+                if ($parentItemId !== null && isset($items[$parentItemId])) {
                     $productOptions = $orderItem->getProductOptions();
 
                     if (isset($productOptions['bundle_selection_attributes'])) {
@@ -296,7 +296,7 @@ class ShipmentFactory
     private function castQty(\Magento\Sales\Model\Order\Item $item, $qty)
     {
         if ($item->getIsQtyDecimal()) {
-            $qty = (double)$qty;
+            $qty = (float)$qty;
         } else {
             $qty = (int)$qty;
         }

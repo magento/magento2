@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -44,14 +45,8 @@ class DefaultResolverTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFieldType'])
-            ->getMockForAbstractClass();
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeResolver = $this->createPartialMock(FieldTypeResolver::class, ['getFieldType']);
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
 
         $this->resolver = $objectManager->getObject(
             DefaultResolver::class,
@@ -63,7 +58,6 @@ class DefaultResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $fieldType
      * @param $attributeCode
      * @param $frontendInput
@@ -72,6 +66,7 @@ class DefaultResolverTest extends TestCase
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName(
         $fieldType,
         $attributeCode,

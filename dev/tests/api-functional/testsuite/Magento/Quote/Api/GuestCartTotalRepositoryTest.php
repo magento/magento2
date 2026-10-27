@@ -1,18 +1,27 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
-use Magento\Quote\Model\Cart\Totals;
-use Magento\Quote\Model\Cart\Totals\Item as ItemTotals;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Model\Cart\Totals;
+use Magento\Quote\Model\Cart\Totals\Item as ItemTotals;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GuestCartTotalRepositoryTest extends WebapiAbstract
 {
     /**
@@ -50,13 +59,27 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     * Test get totals for guest cart with shipping method
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple-collect-rates-%uniqid%', 'price' => 10], 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'guest_quote_totals'], 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            SetDeliveryMethodFixture::class,
+            ['cart_id' => '$cart.id$', 'carrier_code' => 'flatrate', 'method_code' => 'flatrate']
+        ),
+    ]
     public function testGetTotals()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_1', 'reserved_order_id');
+        $quote->load('guest_quote_totals', 'reserved_order_id');
         $cartId = $this->getQuoteMaskedId($quote->getId());
 
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */

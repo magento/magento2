@@ -970,7 +970,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function saveInNewDataArray(array $rowData, $rowNumber, $storeId): void
     {
         // save in new data array
-        $productSku = $this->_rowProductSku;
+        $productSku = $this->_rowProductSku ?? '';
         if (!isset($this->_newOptionsNewData[$productSku])) {
             $this->_newOptionsNewData[$productSku] = [];
         }
@@ -1013,7 +1013,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productId = $this->skuStorage->get($this->_rowProductSku)[$this->getProductEntityLinkField()];
                 $this->_newOptionsOldData[$productId][$this->_newCustomOptionId]['rows'][] = $rowNumber;
             } else {
-                $productSku = $this->_rowProductSku;
+                $productSku = $this->_rowProductSku ?? '';
                 $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId]['rows'][] = $rowNumber;
             }
             return true;
@@ -1806,7 +1806,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ('%' == substr($data, -1)) {
                 $priceData['price_type'] = 'percent';
             }
-            $priceData['price'] = (double)rtrim($data, '%');
+            $priceData['price'] = (float)rtrim($data, '%');
 
             return $priceData;
         }
@@ -1829,7 +1829,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $priceData = [];
         $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
         if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
-            $priceData['price'] = (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
+            $priceData['price'] = (float)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
             $priceData['price_type'] = ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) ? 'percent' : 'fixed';
         }
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {

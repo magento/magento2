@@ -17,6 +17,9 @@ class AddTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @var array
+     */
     protected $_params = [
         'id' => 'item',
         'title' => 'item',

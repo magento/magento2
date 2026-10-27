@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,10 +13,12 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Invoice\Total\Tax;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Total\Creditmemo\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class WeeeTest extends TestCase
@@ -37,7 +39,7 @@ class WeeeTest extends TestCase
     protected $order;
 
     /**
-     * @var  ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -58,25 +60,24 @@ class WeeeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->weeeData = $this->getMockBuilder(Data::class)
-            ->onlyMethods(
-                [
-                    'getRowWeeeTaxInclTax',
-                    'getBaseRowWeeeTaxInclTax',
-                    'getWeeeAmountInvoiced',
-                    'getBaseWeeeAmountInvoiced',
-                    'getWeeeAmountRefunded',
-                    'getBaseWeeeAmountRefunded',
-                    'getWeeeTaxAmountInvoiced',
-                    'getBaseWeeeTaxAmountInvoiced',
-                    'getWeeeTaxAmountRefunded',
-                    'getBaseWeeeTaxAmountRefunded',
-                    'getApplied',
-                    'setApplied',
-                    'includeInSubtotal',
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeData = $this->createPartialMock(
+            Data::class,
+            [
+                'getRowWeeeTaxInclTax',
+                'getBaseRowWeeeTaxInclTax',
+                'getWeeeAmountInvoiced',
+                'getBaseWeeeAmountInvoiced',
+                'getWeeeAmountRefunded',
+                'getBaseWeeeAmountRefunded',
+                'getWeeeTaxAmountInvoiced',
+                'getBaseWeeeTaxAmountInvoiced',
+                'getWeeeTaxAmountRefunded',
+                'getBaseWeeeTaxAmountRefunded',
+                'getApplied',
+                'setApplied',
+                'includeInSubtotal',
+            ]
+        );
 
         $this->objectManager = new ObjectManager($this);
         $serializer = $this->objectManager->getObject(Json::class);
@@ -91,19 +92,24 @@ class WeeeTest extends TestCase
 
         $this->order = $this->createMock(Order::class);
 
-        $this->creditmemo = $this->createPartialMock(Creditmemo::class, [
+        $this->creditmemo = $this->createPartialMock(
+            Creditmemo::class,
+            [
             'getAllItems',
             'getInvoice',
             'roundPrice',
             'getStore',
-        ]);
+            ]
+        );
     }
 
     /**
      * @param array $creditmemoData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($creditmemoData, $expectedResults)
     {
         $roundingDelta = [];
@@ -117,7 +123,11 @@ class WeeeTest extends TestCase
         /** @var Item[] $creditmemoItems */
         $creditmemoItems = [];
         foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
-            $creditmemoItems[$itemKey] = $this->getInvoiceItem($creditmemoItemData);
+            if (!empty($creditmemoItemData['skip_setup'])) {
+                $creditmemoItems[$itemKey] = $this->getSkippedInvoiceItem($creditmemoItemData);
+            } else {
+                $creditmemoItems[$itemKey] = $this->getInvoiceItem($creditmemoItemData);
+            }
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
@@ -127,15 +137,17 @@ class WeeeTest extends TestCase
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->willReturnCallback(function ($price, $type) use (&$roundingDelta) {
-                if (!isset($roundingDelta[$type])) {
-                    $roundingDelta[$type] = 0;
-                }
-                $roundedPrice = round($price + $roundingDelta[$type], 2);
-                $roundingDelta[$type] = $price - $roundedPrice;
+            ->willReturnCallback(
+                function ($price, $type) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
+                    }
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
 
-                return $roundedPrice;
-            });
+                    return $roundedPrice;
+                }
+            );
 
         $this->model->collect($this->creditmemo);
 
@@ -170,11 +182,33 @@ class WeeeTest extends TestCase
                 }
             }
         }
+
+        // verify order item applied weee increments when provided
+        if (!empty($expectedResults['order_item_applied_weee'])) {
+            foreach ($expectedResults['order_item_applied_weee'] as $itemKey => $appliedExpectations) {
+                $creditmemoItem = $creditmemoItems[$itemKey];
+                /** @var OrderItem $orderItem */
+                $orderItem = $creditmemoItem->getOrderItem();
+                $appliedWeee = $orderItem->getAppliedWeee();
+                $this->assertIsArray($appliedWeee, 'Order item applied WEEE is not an array');
+                foreach ($appliedExpectations as $idx => $expectedAppliedRow) {
+                    foreach ($expectedAppliedRow as $expectedKey => $expectedValue) {
+                        $this->assertArrayHasKey($expectedKey, $appliedWeee[$idx], "Missing expected key $expectedKey");
+                        $this->assertEqualsWithDelta(
+                            $expectedValue,
+                            $appliedWeee[$idx][$expectedKey],
+                            self::EPSILON,
+                            "Order item applied weee key $expectedKey mismatch"
+                        );
+                    }
+                }
+            }
+        }
     }
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return array
+     * @return                                        array
      */
     public static function collectDataProvider()
     {
@@ -246,7 +280,7 @@ class WeeeTest extends TestCase
                         ],
                         'tax_ratio' => ["weee" => 1.0],
                         'weee_tax_applied_row_amount' => 30,
-                        'base_weee_tax_applied_row_amount' => 30,
+                        'base_weee_tax_applied_row_amnt' => 30,
                     ],
                 ],
                 'creditmemo_data' => [
@@ -320,15 +354,100 @@ class WeeeTest extends TestCase
                         'applied_weee' => [
                             [
                                 'title' => 'recycling_fee',
-                                'base_row_amount' => 20,
-                                'row_amount' => 20,
+                                'base_row_amount' => 20.0,
+                                'row_amount' => 20.0,
                                 'base_row_amount_incl_tax' => 21.65,
                                 'row_amount_incl_tax' => 21.65,
                             ],
                         ],
                         'tax_ratio' => ['weee' => 1.65 / 2.47],
                         'weee_tax_applied_row_amount' => 20,
-                        'base_weee_tax_applied_row_amount' => 20,
+                        'base_weee_tax_applied_row_amnt' => 20,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 221.65,
+                    'base_grand_total' => 221.65,
+                    'tax_amount' => 1.65,
+                    'base_tax_amount' => 1.65,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 238.15,
+                    'base_subtotal_incl_tax' => 238.15,
+                ],
+            ],
+        ];
+
+        // Scenario 2b: same as partial_creditmemo but item has pre-existing tax_ratio to trigger unserialize/merge
+        $result['partial_creditmemo_with_existing_tax_ratio'] = [
+            'creditmemoData' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'weee_tax_applied_row_amount' => 30,
+                            'base_weee_tax_applied_row_amnt' => 30,
+                            'row_weee_tax_incl_tax' => 32.47,
+                            'base_row_weee_tax_incl_tax' => 32.47,
+                            'weee_amount_invoiced' => 30,
+                            'base_weee_amount_invoiced' => 30,
+                            'weee_amount_refunded' => 0,
+                            'base_weee_amount_refunded' => 0,
+                            'weee_tax_amount_invoiced' => 2.47,
+                            'base_weee_tax_amount_invoiced' => 2.47,
+                            'weee_tax_amount_refunded' => 0,
+                            'base_weee_tax_amount_refunded' => 0,
+                            'applied_weee' => [
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47,
+                                ],
+                            ],
+                            'qty_invoiced' => 3,
+                        ],
+                        'is_last' => false,
+                        'data_fields' => [
+                            'qty' => 2,
+                            // pre-existing tax ratio that should be unserialized and merged with 'weee'
+                            'tax_ratio' => '{"initial":0.5}',
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'include_in_subtotal' => false,
+                'data_fields' => [
+                    'grand_total' => 200,
+                    'base_grand_total' => 200,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 216.5,
+                    'base_subtotal_incl_tax' => 216.5,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                ],
+            ],
+            'expectedResults' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'applied_weee' => [
+                            [
+                                'title' => 'recycling_fee',
+                                'base_row_amount' => 20,
+                                'row_amount' => 20,
+                                'base_row_amount_incl_tax' => 21.65,
+                                'row_amount_incl_tax' => 21.65,
+                            ],
+                        ],
+                        // expected weee ratio remains the same; we only aim to execute the unserialize branch
+                        'tax_ratio' => ['weee' => 1.65 / 2.47],
+                        'weee_tax_applied_row_amount' => 20,
+                        'base_weee_tax_applied_row_amnt' => 20,
                     ],
                 ],
                 'creditmemo_data' => [
@@ -410,7 +529,7 @@ class WeeeTest extends TestCase
                         ],
                         'tax_ratio' => ['weee' => 0.83 / 2.47],
                         'weee_tax_applied_row_amount' => 10,
-                        'base_weee_tax_applied_row_amount' => 10,
+                        'base_weee_tax_applied_row_amnt' => 10,
                     ],
                 ],
                 'creditmemo_data' => [
@@ -499,19 +618,253 @@ class WeeeTest extends TestCase
             ],
         ];
 
+        // scenario 5: same as partial_creditmemo but subtotal includes WEEE amounts
+        $result['partial_creditmemo_include_in_subtotal'] = [
+            'creditmemoData' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'weee_tax_applied_row_amount' => 30,
+                            'base_weee_tax_applied_row_amnt' => 30,
+                            'row_weee_tax_incl_tax' => 32.47,
+                            'base_row_weee_tax_incl_tax' => 32.47,
+                            'weee_amount_invoiced' => 30,
+                            'base_weee_amount_invoiced' => 30,
+                            'weee_amount_refunded' => 0,
+                            'base_weee_amount_refunded' => 0,
+                            'weee_tax_amount_invoiced' => 2.47,
+                            'base_weee_tax_amount_invoiced' => 2.47,
+                            'weee_tax_amount_refunded' => 0,
+                            'base_weee_tax_amount_refunded' => 0,
+                            'applied_weee' => [
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47,
+                                ],
+                            ],
+                            'qty_invoiced' => 3,
+                        ],
+                        'is_last' => false,
+                        'data_fields' => [
+                            'qty' => 2,
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'include_in_subtotal' => true,
+                'data_fields' => [
+                    'grand_total' => 200,
+                    'base_grand_total' => 200,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 216.5,
+                    'base_subtotal_incl_tax' => 216.5,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                ],
+            ],
+            'expectedResults' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'applied_weee' => [
+                            [
+                                'title' => 'recycling_fee',
+                                'base_row_amount' => 20.0,
+                                'row_amount' => 20.0,
+                                'base_row_amount_incl_tax' => 21.65,
+                                'row_amount_incl_tax' => 21.65,
+                            ],
+                        ],
+                        'tax_ratio' => ['weee' => 1.65 / 2.47],
+                        'weee_tax_applied_row_amount' => 20,
+                        'base_weee_tax_applied_row_amnt' => 20,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 221.65,
+                    'base_grand_total' => 221.65,
+                    'tax_amount' => 1.65,
+                    'base_tax_amount' => 1.65,
+                    'subtotal' => 220.0,
+                    'base_subtotal' => 220.0,
+                    'subtotal_incl_tax' => 238.15,
+                    'base_subtotal_incl_tax' => 238.15,
+                ],
+            ],
+        ];
+
+        // scenario 6: item skipped because order item qty_ordered is 0
+        $result['skipped_item_zero_qty_ordered'] = [
+            'creditmemoData' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 0,
+                        ],
+                        'is_last' => false,
+                        'skip_setup' => true,
+                        'data_fields' => [
+                            'qty' => 1,
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'include_in_subtotal' => false,
+                'data_fields' => [
+                    'grand_total' => 200,
+                    'base_grand_total' => 200,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 216.5,
+                    'base_subtotal_incl_tax' => 216.5,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                ],
+            ],
+            'expectedResults' => [
+                'creditmemo_items' => [
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 200,
+                    'base_grand_total' => 200,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 216.5,
+                    'base_subtotal_incl_tax' => 216.5,
+                ],
+            ],
+        ];
+
+        // scenario 7: verify refund-related keys on order item applied weee are incremented when pre-set
+        $result['order_item_refund_keys_increment'] = [
+            'creditmemoData' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'weee_tax_applied_row_amount' => 30,
+                            'base_weee_tax_applied_row_amnt' => 30,
+                            'row_weee_tax_incl_tax' => 32.47,
+                            'base_row_weee_tax_incl_tax' => 32.47,
+                            'weee_amount_invoiced' => 30,
+                            'base_weee_amount_invoiced' => 30,
+                            'weee_amount_refunded' => 0,
+                            'base_weee_amount_refunded' => 0,
+                            'weee_tax_amount_invoiced' => 2.47,
+                            'base_weee_tax_amount_invoiced' => 2.47,
+                            'weee_tax_amount_refunded' => 0,
+                            'base_weee_tax_amount_refunded' => 0,
+                            'applied_weee' => [
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47,
+                                    // pre-existing refund keys
+                                    'base_weee_amount_refunded' => 5.0,
+                                    'weee_amount_refunded' => 4.0,
+                                    'base_weee_tax_amount_refunded' => 0.3,
+                                    'weee_tax_amount_refunded' => 0.2,
+                                ],
+                            ],
+                            'qty_invoiced' => 3,
+                        ],
+                        'is_last' => false,
+                        'data_fields' => [
+                            'qty' => 2,
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'include_in_subtotal' => false,
+                'data_fields' => [
+                    'grand_total' => 200,
+                    'base_grand_total' => 200,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 216.5,
+                    'base_subtotal_incl_tax' => 216.5,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                ],
+            ],
+            'expectedResults' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'applied_weee' => [
+                            [
+                                'title' => 'recycling_fee',
+                                'base_row_amount' => 20.0,
+                                'row_amount' => 20.0,
+                                'base_row_amount_incl_tax' => 21.65,
+                                'row_amount_incl_tax' => 21.65,
+                                // refund keys preserved on creditmemo item applied array
+                                'base_weee_amount_refunded' => 5.0,
+                                'weee_amount_refunded' => 4.0,
+                                'base_weee_tax_amount_refunded' => 0.3,
+                                'weee_tax_amount_refunded' => 0.2,
+                            ],
+                        ],
+                        'tax_ratio' => ['weee' => 1.65 / 2.47],
+                        'weee_tax_applied_row_amount' => 20,
+                        'base_weee_tax_applied_row_amnt' => 20,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 221.65,
+                    'base_grand_total' => 221.65,
+                    'tax_amount' => 1.65,
+                    'base_tax_amount' => 1.65,
+                    'subtotal' => 200,
+                    'base_subtotal' => 200,
+                    'subtotal_incl_tax' => 238.15,
+                    'base_subtotal_incl_tax' => 238.15,
+                ],
+                'order_item_applied_weee' => [
+                    'item_1' => [
+                        0 => [
+                            'base_weee_amount_refunded' => 25.0,
+                            'weee_amount_refunded' => 24.0,
+                            'base_weee_tax_amount_refunded' => 1.95,
+                            'weee_tax_amount_refunded' => 1.85,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return $result;
     }
 
     /**
-     * @param $creditmemoItemData array
+     * @param  $creditmemoItemData array
      * @return \Magento\Sales\Model\Order\Creditmemo\Item|MockObject
      */
     protected function getInvoiceItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            [
             'isDummy'
-        ]);
+            ]
+        );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -558,10 +911,13 @@ class WeeeTest extends TestCase
             ->willReturn($orderItem->getBaseWeeeTaxAmountRefunded());
 
         /** @var Item|MockObject $invoiceItem */
-        $invoiceItem = $this->createPartialMock(Item::class, [
+        $invoiceItem = $this->createPartialMock(
+            Item::class,
+            [
             'getOrderItem',
             'isLast'
-        ]);
+            ]
+        );
         $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
@@ -572,15 +928,76 @@ class WeeeTest extends TestCase
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->willReturnCallback(function ($item) {
-                return $item->getAppliedWeee();
-            });
+            ->willReturnCallback(
+                function ($item) {
+                    return $item->getAppliedWeee();
+                }
+            );
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->willReturnCallback(function ($item, $weee) {
-                return $item->setAppliedWeee($weee);
-            });
+            ->willReturnCallback(
+                function ($item, $weee) {
+                    return $item->setAppliedWeee($weee);
+                }
+            );
+
+        return $invoiceItem;
+    }
+
+    /**
+     * Build a creditmemo item that will be skipped by the collector
+     *
+     * @param array $creditmemoItemData
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item|MockObject
+     */
+    protected function getSkippedInvoiceItem($creditmemoItemData)
+    {
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            [
+            'isDummy'
+            ]
+        );
+        foreach ($creditmemoItemData['order_item'] as $key => $value) {
+            $orderItem->setData($key, $value);
+        }
+        // Ensure isDummy returns false; skip happens due to qty_ordered = 0
+        $orderItem->method('isDummy')->willReturn(false);
+
+        /** @var Item|MockObject $invoiceItem */
+        $invoiceItem = $this->createPartialMock(
+            Item::class,
+            [
+            'getOrderItem',
+            'isLast'
+            ]
+        );
+        $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
+        $invoiceItem->expects($this->any())
+            ->method('isLast')
+            ->willReturn($creditmemoItemData['is_last']);
+        foreach ($creditmemoItemData['data_fields'] as $key => $value) {
+            $invoiceItem->setData($key, $value);
+        }
+
+        // Note: we intentionally do NOT set any expectations on weeeData in this helper,
+        // because the item should be skipped before any Weee calculations occur.
+        $this->weeeData->expects($this->any())
+            ->method('getApplied')
+            ->willReturnCallback(
+                function ($item) {
+                    return $item->getAppliedWeee();
+                }
+            );
+        $this->weeeData->expects($this->any())
+            ->method('setApplied')
+            ->willReturnCallback(
+                function ($item, $weee) {
+                    return $item->setAppliedWeee($weee);
+                }
+            );
 
         return $invoiceItem;
     }

@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class ShippingAssignmentBuilderTest extends TestCase
 {
+
     /**
      * @var ShippingAssignmentBuilder
      */
@@ -43,15 +44,9 @@ class ShippingAssignmentBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderFactory = $this->getMockBuilder(OrderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shippingAssignmentFactory = $this->getMockBuilder(ShippingAssignmentInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shippingBuilderFactory = $this->getMockBuilder(ShippingBuilderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderFactory = $this->createMock(OrderFactory::class);
+        $this->shippingAssignmentFactory = $this->createMock(ShippingAssignmentInterfaceFactory::class);
+        $this->shippingBuilderFactory = $this->createMock(ShippingBuilderFactory::class);
         $this->shippingAssignmentBuilder = new ShippingAssignmentBuilder(
             $this->orderFactory,
             $this->shippingAssignmentFactory,
@@ -67,7 +62,7 @@ class ShippingAssignmentBuilderTest extends TestCase
     public function testCreateWithOrder() : void
     {
         $order = $this->getMockBuilder(OrderInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->shippingAssignmentBuilder->setOrder($order);
         $order->expects($this->any())
             ->method('getEntityId')

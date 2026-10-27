@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Observer;
 
@@ -84,10 +84,13 @@ class SetLinkStatusObserver implements ObserverInterface
                 if ($item->getProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                 ) {
-                    if ($order->isCanceled() || in_array($item->getStatusId(), $expiredStatuses)) {
-                        $downloadableItemsStatuses[$item->getId()] = $linkStatuses['expired'];
-                    } else {
-                        $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
+                    $itemId = $item->getId();
+                    if ($itemId !== null) {
+                        if ($order->isCanceled() || in_array($item->getStatusId(), $expiredStatuses)) {
+                            $downloadableItemsStatuses[$itemId] = $linkStatuses['expired'];
+                        } else {
+                            $downloadableItemsStatuses[$itemId] = $linkStatuses['avail'];
+                        }
                     }
                 }
             }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -14,9 +15,9 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider ajaxSaveActionDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('ajaxSaveActionDataProvider')]
     public function testAjaxSaveAction($postData, $expectedData)
     {
         $this->getRequest()->setPostValue($postData)->setMethod('POST');
@@ -82,9 +83,9 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * Test wrong data conditions
      *
-     * @dataProvider ajaxSaveActionDataInvalidDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('ajaxSaveActionDataInvalidDataProvider')]
     public function testAjaxSaveActionInvalidData($postData, $expectedData)
     {
         $this->getRequest()->setPostValue($postData)->setMethod('POST');
@@ -189,13 +190,15 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider ajaxSaveActionDataProvider
      * @magentoDbIsolation enabled
      *
      * @param array $rateClassData
+     * @param array $expectedData
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testAjaxLoadAction($rateClassData)
+    #[DataProvider('ajaxSaveActionDataProvider')]
+    public function testAjaxLoadAction($rateClassData, $expectedData)
     {
         /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $rateClassFactory */
         $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

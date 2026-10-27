@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class EnvironmentConfigSourceTest extends TestCase
@@ -33,16 +34,11 @@ class EnvironmentConfigSourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
-            ->getMockForAbstractClass();
+        $this->arrayManagerMock = $this->createMock(ArrayManager::class);
+        $this->placeholderMock = $this->createMock(PlaceholderInterface::class);
 
         /** @var PlaceholderFactory|MockObject $placeholderFactoryMock */
-        $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $placeholderFactoryMock = $this->createMock(PlaceholderFactory::class);
         $placeholderFactoryMock->expects($this->once())
             ->method('create')
             ->with(PlaceholderFactory::TYPE_ENVIRONMENT)
@@ -54,8 +50,8 @@ class EnvironmentConfigSourceTest extends TestCase
     /**
      * @param string $path
      * @param array|string $expectedResult
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($path, $expectedResult)
     {
         $placeholder = 'CONFIG__UNIT__TEST__VALUE';

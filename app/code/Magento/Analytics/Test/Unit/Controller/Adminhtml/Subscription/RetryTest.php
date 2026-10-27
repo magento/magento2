@@ -16,6 +16,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RetryTest extends TestCase
@@ -61,7 +62,7 @@ class RetryTest extends TestCase
 
         $this->subscriptionHandlerMock = $this->createMock(SubscriptionHandler::class);
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -102,11 +103,10 @@ class RetryTest extends TestCase
     }
 
     /**
-     * @dataProvider executeExceptionsDataProvider
-     *
      * @param \Exception $exception
      * @param Phrase $message
      */
+    #[DataProvider('executeExceptionsDataProvider')]
     public function testExecuteWithException(\Exception $exception, Phrase $message)
     {
         $this->resultFactoryMock

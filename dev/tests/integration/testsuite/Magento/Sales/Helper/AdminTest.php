@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Helper;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests \Magento\Sales\Helper\Admin
@@ -32,9 +33,8 @@ class AdminTest extends \PHPUnit\Framework\TestCase
      * @param string $expected
      * @param null|array $allowedTags
      * @return void
-     *
-     * @dataProvider escapeHtmlWithLinksDataProvider
      */
+    #[DataProvider('escapeHtmlWithLinksDataProvider')]
     public function testEscapeHtmlWithLinks(string $data, string $expected, $allowedTags = null): void
     {
         $actual = $this->helper->escapeHtmlWithLinks($data, $allowedTags);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,5 +11,6 @@
     <section name="AdminOrderNotesSection">
         <element name="customerNotifiedStatusOfOrderNoteByText" type="text" selector="//div[@class='note-list-comment' and contains(text(),'{{text}}')]//preceding-sibling::span[@class='note-list-customer']/span" parameterized="true"/>
         <element name="voidAuthorizationNotes" type="text" selector=".//*[@class='note-list-comment'and contains(text(),'{{transactionID}}')]" parameterized="true"/>
+        <element name="voidAuthorizationId" type="text" selector=".//*[@class='note-list-comment']//a[text()='{{transactionID}}']" parameterized="true"/>
     </section>
 </sections>

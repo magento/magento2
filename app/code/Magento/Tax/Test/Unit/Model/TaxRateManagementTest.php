@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,8 +50,8 @@ class TaxRateManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
-        $this->taxRuleRepositoryMock = $this->getMockForAbstractClass(TaxRuleRepositoryInterface::class);
-        $this->taxRateRepositoryMock = $this->getMockForAbstractClass(TaxRateRepositoryInterface::class);
+        $this->taxRuleRepositoryMock = $this->createMock(TaxRuleRepositoryInterface::class);
+        $this->taxRateRepositoryMock = $this->createMock(TaxRateRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->model = new TaxRateManagement(
             $this->taxRuleRepositoryMock,
@@ -69,9 +69,9 @@ class TaxRateManagementTest extends TestCase
         $productFilterMock = $this->createMock(Filter::class);
         $customerFilterMock = $this->createMock(Filter::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $searchResultsMock = $this->getMockForAbstractClass(TaxRuleSearchResultsInterface::class);
-        $taxRuleMock = $this->getMockForAbstractClass(TaxRuleInterface::class);
-        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
+        $searchResultsMock = $this->createMock(TaxRuleSearchResultsInterface::class);
+        $taxRuleMock = $this->createMock(TaxRuleInterface::class);
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
 
         $this->filterBuilderMock->expects($this->exactly(2))->method('setField')
             ->willReturnCallback(function ($arg1) {

@@ -45,10 +45,10 @@ class OptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryCollectionFactoryMock = $this->createPartialMock(
+            CategoryCollectionFactory::class,
+            ['create']
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->categoriesOptions = $this->objectManagerHelper->getObject(
@@ -149,9 +149,7 @@ class OptionsTest extends TestCase
      */
     protected function getCategoryCollectionMock($categories)
     {
-        $categoryCollectionMock = $this->getMockBuilder(CategoryCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryCollectionMock = $this->createMock(CategoryCollection::class);
 
         $categoryCollectionMock->expects($this->any())
             ->method('addAttributeToSelect')
@@ -163,9 +161,7 @@ class OptionsTest extends TestCase
             ->method('setStoreId')
             ->willReturnSelf();
 
-        $categoryCollectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($categories));
+        $categoryCollectionMock->method('getIterator')->willReturn(new \ArrayIterator($categories));
 
         return $categoryCollectionMock;
     }
@@ -176,9 +172,7 @@ class OptionsTest extends TestCase
      */
     protected function getCategoryMock($data)
     {
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
 
         foreach ($this->categoryValueMap as $index => $method) {
             if (array_key_exists($index, $data)) {

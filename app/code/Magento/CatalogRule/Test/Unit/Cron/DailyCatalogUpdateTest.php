@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Cron;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogRule\Cron\DailyCatalogUpdate;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
@@ -40,10 +41,10 @@ class DailyCatalogUpdateTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param int $activeRulesCount
      * @param bool $isInvalidationNeeded
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(int $activeRulesCount, bool $isInvalidationNeeded)
     {
         $ruleCollection = $this->createMock(RuleCollection::class);

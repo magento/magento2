@@ -79,46 +79,26 @@ class CategoriesJsonTest extends TestCase
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->viewMock = $this->createPartialMock(View::class, ['getLayout']);
         $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
-        $helper = new ObjectManager($this);
 
-        $context = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
-            ->setConstructorArgs(
-                $helper->getConstructArguments(
-                    Context::class,
-                    [
-                        'response' => $this->responseMock,
-                        'request' => $this->requestMock,
-                        'view' => $this->viewMock,
-                        'objectManager' => $this->objectManagerMock
-                    ]
-                )
-            )
-            ->getMock();
+        $context = $this->createPartialMock(
+            Context::class,
+            ['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getObjectManager']
+        );
 
-        $this->resultJson = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->resultJson = $this->createMock(Json::class);
+        $resultJsonFactory = $this->createPartialMock(JsonFactory::class, ['create']);
         $resultJsonFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultJson);
 
         $this->layoutMock = $this->createPartialMock(Layout::class, ['createBlock']);
 
-        $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $layoutFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->layoutMock);
+        $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
+        $layoutFactory->method('create')->willReturn($this->layoutMock);
 
         $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $context->expects($this->once())->method('getResponse')->willReturn($this->responseMock);
+        $context->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->controller = new CategoriesJson(
             $context,
@@ -141,7 +121,7 @@ class CategoriesJsonTest extends TestCase
         $this->_getTreeBlock();
         $testCategoryId = 1;
 
-        $this->requestMock->expects($this->any())->method('getPost')->willReturn($testCategoryId);
+        $this->requestMock->method('getPost')->willReturn($testCategoryId);
         $categoryMock = $this->createMock(Category::class);
         $categoryMock->expects($this->once())->method('load')->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getId')->willReturn($testCategoryId);

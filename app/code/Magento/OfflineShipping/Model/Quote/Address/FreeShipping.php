@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,6 +43,8 @@ class FreeShipping implements FreeShippingInterface
         $this->calculator->initFromQuote($quote);
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setFreeShipping(0);
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->setFreeShipping(0);
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {

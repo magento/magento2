@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\ModeSwitcherInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -58,7 +59,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     {
         parent::setUp();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexers = ['indexer_1' => 'indexer_1', 'indexer_2' => 'indexer_2'];
         $this->command = $this->objectManagerHelper->getObject(
             IndexerShowDimensionsModeCommand::class,
@@ -89,8 +90,8 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
      *
      * @param array $command
      * @param string $consoleOutput
-     * @dataProvider dimensionModesDataProvider
      */
+    #[DataProvider('dimensionModesDataProvider')]
     public function testExecuteWithAttributes($command, $consoleOutput)
     {
         $indexers = [['indexer_1'], ['indexer_2']];

@@ -70,15 +70,15 @@ class RowsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_connection = $this->createMock(AdapterInterface::class);
         $this->_resource = $this->createMock(ResourceConnection::class);
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->willReturn($this->_connection);
-        $this->_storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
         $this->_store = $this->createMock(Store::class);
-        $this->_store->expects($this->any())->method('getId')->willReturn('store_id_1');
-        $this->_storeManager->expects($this->any())->method('getStores')->willReturn(
+        $this->_store->method('getId')->willReturn('store_id_1');
+        $this->_storeManager->method('getStores')->willReturn(
             [$this->_store]
         );
         $this->_productIndexerHelper = $this->createMock(Indexer::class);
@@ -110,8 +110,7 @@ class RowsTest extends TestCase
 
     public function testExecuteWithNonExistingFlatTablesCreatesTables()
     {
-        $this->_productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->willReturn('store_flat_table');
+        $this->_productIndexerHelper->method('getFlatTableName')->willReturn('store_flat_table');
         $this->_connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(false);
         $this->_flatItemEraser->expects($this->never())->method('removeDeletedProducts');
@@ -121,8 +120,7 @@ class RowsTest extends TestCase
 
     public function testExecuteWithExistingFlatTablesCreatesTables()
     {
-        $this->_productIndexerHelper->expects($this->any())->method('getFlatTableName')
-            ->willReturn('store_flat_table');
+        $this->_productIndexerHelper->method('getFlatTableName')->willReturn('store_flat_table');
         $this->_connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->willReturn(true);
         $this->_flatItemEraser->expects($this->once())->method('removeDeletedProducts');

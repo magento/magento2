@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,13 +34,8 @@ class RolesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $objects = [

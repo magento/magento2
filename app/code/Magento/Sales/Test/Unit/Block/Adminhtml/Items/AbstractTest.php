@@ -27,6 +27,7 @@ class AbstractTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
+        $this->_objectManager->prepareObjectManager();
     }
 
     /**

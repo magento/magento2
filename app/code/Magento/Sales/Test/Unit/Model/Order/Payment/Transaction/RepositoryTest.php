@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Sales\Model\EntityStorageFactory;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction as TransactionResource;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -116,7 +117,7 @@ class RepositoryTest extends TestCase
         $entityStorageFactory = $this->createPartialMock(EntityStorageFactory::class, ['create']);
         $this->entityStorage = $this->createMock(EntityStorage::class);
         $this->transactionResource = $this->createMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class
+            TransactionResource::class
         );
         $this->searchCriteria = $this->createMock(SearchCriteria::class);
         $this->filterGroup = $this->createMock(FilterGroup::class);

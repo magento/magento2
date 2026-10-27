@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Serialize\JsonValidator;
@@ -54,11 +55,8 @@ class PaymentTest extends TestCase
             SpecificationFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['unserialize'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
@@ -85,8 +83,8 @@ class PaymentTest extends TestCase
     /**
      * @param int|string|null $databaseValue
      * @param int|string|null $expectedValue
-     * @dataProvider yearValueDataProvider
      */
+    #[DataProvider('yearValueDataProvider')]
     public function testGetCcExpYearReturnsValidValue($databaseValue, $expectedValue)
     {
         $this->model->setData('cc_exp_year', $databaseValue);
@@ -111,8 +109,8 @@ class PaymentTest extends TestCase
      * @param array $convertedData
      * @param array $dataToAssign
      * @param array $checks
-     * @dataProvider importDataPositiveCheckDataProvider
      */
+    #[DataProvider('importDataPositiveCheckDataProvider')]
     public function testImportDataPositiveCheck(
         array $data,
         array $convertedData,
@@ -122,7 +120,7 @@ class PaymentTest extends TestCase
         $quoteId = 1;
         $storeId = 1;
 
-        $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
+        $paymentMethod = $this->createMock(MethodInterface::class);
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -180,8 +178,8 @@ class PaymentTest extends TestCase
      * @param mixed $additionalData
      * @param int $isValidCalledNum
      * @param int|null $isValid
-     * @dataProvider getAdditionalDataDataProvider
      */
+    #[DataProvider('getAdditionalDataDataProvider')]
     public function testGetAdditionalData($expected, $additionalData, $isValidCalledNum, $isValid = null)
     {
         $this->jsonValidatorMock->expects($this->exactly($isValidCalledNum))

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -127,32 +127,22 @@ class ViewTest extends TestCase
     protected function setUp(): void
     {
         $this->orderManagementMock = $this->getMockBuilder(OrderManagementInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->coreRegistryMock = $this->createMock(Registry::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -163,12 +153,8 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(

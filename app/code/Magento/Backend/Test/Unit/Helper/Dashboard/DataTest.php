@@ -49,7 +49,7 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfigMock->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,18 +10,20 @@ namespace Magento\Shipping\Test\Unit\Model\Carrier;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Store\Model\Store;
-
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AbstractCarrierOnlineTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test identification number of product
      *
@@ -83,11 +85,10 @@ class AbstractCarrierOnlineTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn($this->productId);
 
-        $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getWeight'])
-            ->onlyMethods(['getProduct', 'getQty', '__wakeup', 'getStore'])
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeight', 'getProduct', 'getQty', '__wakeup', 'getStore']
+        );
         $item->expects($this->any())->method('getProduct')->willReturn($product);
 
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);

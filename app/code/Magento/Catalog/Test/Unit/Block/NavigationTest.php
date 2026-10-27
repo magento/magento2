@@ -56,8 +56,8 @@ class NavigationTest extends TestCase
         $objectManager = new ObjectManager($this);
         $categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
         $this->httpContext = $this->createMock(Context::class);
         $this->block = $objectManager->getObject(
             Navigation::class,
@@ -83,7 +83,7 @@ class NavigationTest extends TestCase
     {
         $categoryKey = 101;
         $category = $this->createMock(Category::class);
-        $category->expects($this->any())->method('getPath')->willReturn($categoryKey);
+        $category->method('getPath')->willReturn($categoryKey);
 
         $this->registry->expects($this->any())->method('registry')->with('current_category')->willReturn($category);
 
@@ -94,9 +94,9 @@ class NavigationTest extends TestCase
     {
         $categoryKey = 102;
         $store = $this->createMock(Store::class);
-        $store->expects($this->any())->method('getRootCategoryId')->willReturn($categoryKey);
+        $store->method('getRootCategoryId')->willReturn($categoryKey);
 
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager->method('getStore')->willReturn($store);
 
         $this->assertEquals($categoryKey, $this->block->getCurrentCategoryKey());
     }
@@ -109,7 +109,7 @@ class NavigationTest extends TestCase
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->atLeastOnce())->method('getId')->willReturn(65);
 
         $this->design->expects($this->atLeastOnce())->method('getDesignTheme')->willReturn($theme);

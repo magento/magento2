@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -383,20 +383,20 @@ define([
                 relevant        = true;
 
             switch (actionId) {
-                case 'selectPage':
-                    relevant = multiplePages && !this.isPageSelected(true);
-                    break;
+            case 'selectPage':
+                relevant = multiplePages && !this.isPageSelected(true);
+                break;
 
-                case 'deselectPage':
-                    relevant =  multiplePages && this.isPageSelected();
-                    break;
+            case 'deselectPage':
+                relevant =  multiplePages && this.isPageSelected();
+                break;
 
-                case 'selectAll':
-                    relevant = !this.allSelected();
-                    break;
+            case 'selectAll':
+                relevant = !this.allSelected();
+                break;
 
-                case 'deselectAll':
-                    relevant = this.totalSelected() > 0;
+            case 'deselectAll':
+                relevant = this.totalSelected() > 0;
             }
 
             return relevant;
@@ -438,8 +438,7 @@ define([
          * @returns {Multiselect} Chainable.
          */
         updateState: function () {
-            var selected        = this.selected().length,
-                excluded        = this.excluded().length,
+            var excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 totalRecords    = this.totalRecords(),
                 allSelected     = totalRecords && totalSelected === totalRecords;
@@ -448,8 +447,6 @@ define([
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
                     this.deselectAll();
                 }
-            } else if (totalRecords && selected === totalRecords && !this.preserveSelectionsOnFilter) {
-                this.selectAll();
             }
 
             this.allSelected(allSelected);

@@ -352,13 +352,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             return __('Please specify the quantity of product(s).')->render();
         }
         foreach ($associatedProducts as $subProduct) {
-            if (isset($productsInfo[$subProduct->getId()])) {
+            $subProductId = $subProduct->getId() ?? '';
+            if (isset($productsInfo[$subProductId])) {
                 continue;
             }
             if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
                 return __('Please specify the quantity of product(s).')->render();
             }
-            $productsInfo[$subProduct->getId()] = $this->getSubProductQtyInfo($buyRequest, $subProduct);
+            $productsInfo[$subProductId] = $this->getSubProductQtyInfo($buyRequest, $subProduct);
         }
         return $productsInfo;
     }
@@ -406,7 +407,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             : [];
 
         foreach ($associatedProducts as $subProduct) {
-            $qty = $productsInfo[$subProduct->getId()];
+            $subProductId = $subProduct->getId() ?? '';
+            $qty = $productsInfo[$subProductId];
             if (!is_numeric($qty) || empty($qty)) {
                 continue;
             }

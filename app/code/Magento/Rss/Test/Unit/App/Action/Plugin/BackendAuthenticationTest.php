@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,7 +30,7 @@ class BackendAuthenticationTest extends TestCase
         $subject = $this->createMock(AbstractAction::class);
 
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
@@ -43,7 +43,7 @@ class BackendAuthenticationTest extends TestCase
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
         /** @var StorageInterface|MockObject $session */
-        $session = $this->getMockForAbstractClass(StorageInterface::class);
+        $session = $this->createMock(StorageInterface::class);
         $session
             ->method('isLoggedIn')
             ->willReturnOnConsecutiveCalls(false, true);
@@ -60,7 +60,7 @@ class BackendAuthenticationTest extends TestCase
             ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
-        $authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $authorization = $this->createMock(AuthorizationInterface::class);
         $authorization
             ->method('isAllowed')
             ->willReturnCallback(fn($param) => match ([$param]) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
 
@@ -111,8 +111,47 @@ class Date extends AbstractDataType
     }
 
     /**
+     * Convert given date to default (UTC) timezone, considering configured store timezone
+     *
+     * @param string $date
+     * @param int $hour
+     * @param int $minute
+     * @param int $second
+     * @param bool $setUtcTimeZone
+     * @param bool $useStoreTimeZone
+     * @return \DateTime|null
+     */
+    public function convertDateWithTimezone(
+        string $date,
+        int $hour = 0,
+        int $minute = 0,
+        int $second = 0,
+        bool $setUtcTimeZone = true,
+        bool $useStoreTimeZone = true
+    ): ?\DateTime {
+        if (!$useStoreTimeZone) {
+            return $this->convertDate($date, $hour, $minute, $second, $setUtcTimeZone);
+        }
+
+        try {
+            $date = $this->convertDateFormat($date);
+            $dateObj = $this->localeDate->date($date, $this->getLocale(), $useStoreTimeZone, false);
+            $dateObj->setTime($hour, $minute, $second);
+            //convert store date to default date in UTC timezone without DST
+            if ($setUtcTimeZone) {
+                $dateObj->setTimezone(new \DateTimeZone('UTC'));
+            }
+            return $dateObj;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Convert given date to default (UTC) timezone
      *
+     * @deprecated
+     * @see convertDateWithTimezone
      * @param int $date
      * @param int $hour
      * @param int $minute

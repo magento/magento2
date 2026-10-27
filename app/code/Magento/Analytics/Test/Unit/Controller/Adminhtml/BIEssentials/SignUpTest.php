@@ -47,7 +47,7 @@ class SignUpTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->redirectMock = $this->createMock(Redirect::class);
 

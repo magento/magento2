@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\File\Name
@@ -44,8 +45,8 @@ class NameTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\FileSystemException
      *
      * @magentoDataFixture Magento/Framework/File/_files/framework_file_name.php
-     * @dataProvider getNewFileNameDataProvider
      */
+    #[DataProvider('getNewFileNameDataProvider')]
     public function testGetNewFileName($directory, $destinationFile, $expectedFileName)
     {
         $directory = $this->fileSystem->getDirectoryWrite($directory);

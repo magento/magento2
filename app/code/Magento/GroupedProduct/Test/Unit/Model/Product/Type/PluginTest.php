@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +39,7 @@ class PluginTest extends TestCase
 
     public function testAfterGetOptionArray()
     {
-        $this->moduleManagerMock->expects($this->any())->method('isOutputEnabled')->willReturn(false);
+        $this->moduleManagerMock->method('isOutputEnabled')->willReturn(false);
         $this->assertEquals(
             [],
             $this->object->afterGetOptionArray($this->subjectMock, ['grouped' => 'test'])

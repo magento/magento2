@@ -10,6 +10,7 @@ namespace Magento\SalesGraphQl\Model\OrderItemPrices;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
+use Magento\Tax\Model\Config as TaxConfig;
 
 /**
  * Prices data provider for order item
@@ -21,10 +22,12 @@ class PricesProvider
      *
      * @param PriceCurrencyInterface $priceCurrency
      * @param GetOptionsRegularPrice $getOptionsRegularPrice
+     * @param TaxConfig $taxConfig
      */
     public function __construct(
         private readonly PriceCurrencyInterface $priceCurrency,
-        private readonly GetOptionsRegularPrice $getOptionsRegularPrice
+        private readonly GetOptionsRegularPrice $getOptionsRegularPrice,
+        private readonly TaxConfig $taxConfig
     ) {
     }
 
@@ -37,6 +40,9 @@ class PricesProvider
     public function execute(Item $orderItem): array
     {
         $currency = $orderItem->getOrder()->getOrderCurrencyCode();
+        $isCatalogPriceIncludingTax = $this->taxConfig->priceIncludesTax(
+            $orderItem->getOrder()->getStore()
+        );
         return [
             'model' => $orderItem,
             'price' => [
@@ -65,7 +71,7 @@ class PricesProvider
             ],
             'original_price_including_tax' => [
                 'currency' => $currency,
-                'value' => $this->getOriginalPriceInclTax($orderItem)
+                'value' => $this->getOriginalPriceInclTax($orderItem, $isCatalogPriceIncludingTax)
             ],
             'original_row_total' => [
                 'currency' => $currency,
@@ -73,7 +79,7 @@ class PricesProvider
             ],
             'original_row_total_including_tax' => [
                 'currency' => $currency,
-                'value' => $this->getOriginalRowTotalInclTax($orderItem)
+                'value' => $this->getOriginalRowTotalInclTax($orderItem, $isCatalogPriceIncludingTax)
             ]
         ];
     }
@@ -82,10 +88,14 @@ class PricesProvider
      * Calculate the original price including tax
      *
      * @param Item $orderItem
+     * @param bool $isCatalogPriceIncludingTax
      * @return float
      */
-    private function getOriginalPriceInclTax(Item $orderItem): float
+    private function getOriginalPriceInclTax(Item $orderItem, bool $isCatalogPriceIncludingTax): float
     {
+        if ($isCatalogPriceIncludingTax) {
+            return (float) $orderItem->getOriginalPrice();
+        }
         return $orderItem->getOriginalPrice() * (1 + ($orderItem->getTaxPercent() / 100));
     }
 
@@ -93,11 +103,16 @@ class PricesProvider
      * Calculate the original row total price including tax
      *
      * @param Item $orderItem
+     * @param bool $isCatalogPriceIncludingTax
      * @return float
      */
-    private function getOriginalRowTotalInclTax(Item $orderItem): float
+    private function getOriginalRowTotalInclTax(Item $orderItem, bool $isCatalogPriceIncludingTax): float
     {
-        return $this->getOriginalRowTotal($orderItem) * (1 + ($orderItem->getTaxPercent() / 100));
+        $originalRowTotal = $this->getOriginalRowTotal($orderItem);
+        if ($isCatalogPriceIncludingTax) {
+            return $originalRowTotal;
+        }
+        return $originalRowTotal * (1 + ($orderItem->getTaxPercent() / 100));
     }
 
     /**

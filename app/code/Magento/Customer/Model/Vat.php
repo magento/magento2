@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -139,14 +139,14 @@ class Vat
         ];
 
         if (isset($vatClassToGroupXmlPathMap[$vatClass])) {
-            $groupId = (int)$this->scopeConfig->getValue(
+            $groupId = $this->scopeConfig->getValue(
                 $vatClassToGroupXmlPathMap[$vatClass],
                 ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
 
-        return $groupId;
+        return $groupId ? (int)$groupId : null;
     }
 
     /**

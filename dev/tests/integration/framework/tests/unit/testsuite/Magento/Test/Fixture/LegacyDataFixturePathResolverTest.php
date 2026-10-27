@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Test\Fixture;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test fixture path resolver for file based data fixture
@@ -59,8 +60,8 @@ class LegacyDataFixturePathResolverTest extends TestCase
      *
      * @param string $fixture
      * @param string $path
-     * @dataProvider fixtureDataProvider
      */
+    #[DataProvider('fixtureDataProvider')]
     public function testResolve(string $fixture, string $path): void
     {
         $path = str_replace('{{basePath}}', static::$basePath, $path);

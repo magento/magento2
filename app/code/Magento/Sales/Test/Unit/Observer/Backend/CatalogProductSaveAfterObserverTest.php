@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,13 @@ use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Observer\Backend\CatalogProductSaveAfterObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CatalogProductSaveAfterObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogProductSaveAfterObserver
      */
@@ -41,10 +45,10 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     {
         $this->_quoteMock = $this->createMock(Quote::class);
         $this->_observerMock = $this->createMock(Observer::class);
-        $this->_eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct', 'getStatus', 'getProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct', 'getStatus', 'getProductId']
+        );
         $this->_observerMock->expects($this->any())->method('getEvent')->willReturn($this->_eventMock);
         $this->_model = new CatalogProductSaveAfterObserver($this->_quoteMock);
     }
@@ -52,8 +56,8 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     /**
      * @param int $productId
      * @param int $productStatus
-     * @dataProvider statusUpdateDataProvider
      */
+    #[DataProvider('statusUpdateDataProvider')]
     public function testSaveProduct($productId, $productStatus)
     {
         $productMock = $this->createPartialMock(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\ResourceModel\Design\Config\Scope;
 
@@ -98,7 +98,7 @@ class Collection extends \Magento\Framework\Data\Collection
     {
         $result = [];
         foreach ($this->metadataProvider->get() as $itemName => $itemData) {
-            if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
+            if (isset($itemData['use_in_grid']) && (bool)$itemData['use_in_grid']) {
                 $result[$itemName] = $this->valueProcessor->process(
                     $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
                     $scope,

@@ -170,12 +170,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $product = $this->productRepository->getById($model->getProductId());
         }
 
+        // For composite products (e.g., configurable), the parent item usually holds the price.
+        $priceContainerItem = $model->getParentItem() ?: $model;
         $product->setQuoteItemQty(
-            $model->getQty()
+            $priceContainerItem->getQty()
         )->setQuoteItemPrice(
-            $model->getPrice() // possible bug: need to use $model->getBasePrice()
+            $priceContainerItem->getPrice()
         )->setQuoteItemRowTotal(
-            $model->getBaseRowTotal()
+            $priceContainerItem->getBaseRowTotal()
         );
 
         $attrCode = $this->getAttribute();

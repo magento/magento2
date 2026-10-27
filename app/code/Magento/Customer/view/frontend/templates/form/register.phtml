@@ -10,7 +10,7 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
-$buttonLockManager = $block->getButtonLockManager();
+$buttonLockManager = $block->getData('button_lock_manager');
 
 /** @var Magento\Customer\Helper\Address $addressHelper */
 $addressHelper = $block->getData('addressHelper');
@@ -297,7 +297,7 @@ $formData = $block->getFormData();
                     class="action submit primary"
                     title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
                     id="send2"
-                <?php if ($buttonLockManager && $buttonLockManager->isDisabled('customer_create_form_submit')): ?>
+                <?php if ($buttonLockManager?->isDisabled('customer_create_form_submit')): ?>
                     disabled="disabled"
                 <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>

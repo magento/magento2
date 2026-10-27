@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -10,8 +10,6 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -30,23 +28,15 @@ class Variant
     private $stockStatusFactory;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @param Configurable $configurableType
      * @param StatusFactory $stockStatusFactory
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Configurable $configurableType,
-        StatusFactory $stockStatusFactory,
-        ScopeConfigInterface $scopeConfig
+        StatusFactory $stockStatusFactory
     ) {
         $this->configurableType = $configurableType;
         $this->stockStatusFactory = $stockStatusFactory;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -66,12 +56,8 @@ class Variant
         $stockFlag = 'has_stock_status_filter';
         if (!$collection->hasFlag($stockFlag)) {
             $stockStatusResource = $this->stockStatusFactory->create();
-            $showOutOfStock = $this->scopeConfig->isSetFlag(
-                'cataloginventory/options/show_out_of_stock',
-                ScopeInterface::SCOPE_STORE
-            );
-            $stockStatusResource->addStockDataToCollection($collection, !$showOutOfStock);
-            $collection->setFlag($stockFlag, !$showOutOfStock);
+            $stockStatusResource->addStockDataToCollection($collection, true);
+            $collection->setFlag($stockFlag, true);
         }
         $collection->addMediaGalleryData();
         $collection->addTierPriceData();

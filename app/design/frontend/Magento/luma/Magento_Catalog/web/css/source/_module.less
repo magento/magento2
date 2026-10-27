@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2015 Adobe
+//  * All Rights Reserved.
 //  */
 
 @import 'module/_listings.less';
@@ -1073,6 +1073,19 @@
                 &:extend(.abs-visually-hidden all);
             }
         }
+    }
+}
+
+//
+//  For swatch required attribute
+//  _____________________________________________
+.page-product-configurable #product_addtocart_form {
+    .swatch-attribute.required > .swatch-attribute-label:after,
+    .swatch-attribute.required > .label:after {
+        content: '*';
+        color: #e02b27;
+        margin-left: 5px;
+        font-weight: 600;
     }
 }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Payment\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\UpdateOrderStatusForPaymentMethodsObserver;
 use Magento\Sales\Model\Order;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var \Magento\Payment\Observer\updateOrderStatusForPaymentMethodsObserver */
     protected $updateOrderStatusForPaymentMethodsObserver;
 
@@ -60,17 +63,15 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
             ]
         );
 
-        $this->observerMock = $this->getMockBuilder(
-            Observer::class
-        )->disableOriginalConstructor()->getMock();
+        $this->observerMock = $this->createMock(Observer::class);
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNotNewState()
     {
-        $this->eventMock = $this->getMockBuilder(
-            Event::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getState'])->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getState']
+        );
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())->method('getState')->willReturn('NotNewState');
@@ -79,10 +80,10 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
 
     public function testUpdateOrderStatusForPaymentMethodsNewState()
     {
-        $this->eventMock = $this->getMockBuilder(
-            Event::class
-        )->disableOriginalConstructor()
-            ->addMethods(['getState', 'getStatus'])->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getState', 'getStatus']
+        );
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
 
         $this->eventMock->expects($this->once())->method('getState')->willReturn(
@@ -117,9 +118,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
      */
     private function _getPreparedActiveMethods()
     {
-        $method1 = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $method1 = $this->createMock(MethodInterface::class);
         $method1->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
             self::ORDER_STATUS
         );
@@ -127,9 +126,7 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
             self::METHOD_CODE
         );
 
-        $method2 = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $method2 = $this->createMock(MethodInterface::class);
         $method2->expects($this->once())->method('getConfigData')->with('order_status')->willReturn(
             'not_a_status'
         );

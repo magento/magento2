@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,42 +43,21 @@ class AgreementTest extends TestCase
     protected function setUp(): void
     {
         $this->_helper = new ObjectManager($this);
+        $this->_helper->prepareObjectManager();
 
-        $paypalConfigMock = $this->getMockBuilder(
-            Config::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                []
-            )->getMock();
-        $this->_apiNvpMock = $this->getMockBuilder(
-            Nvp::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['callDoReferenceTransaction', 'callGetTransactionDetails']
-            )->getMock();
-        $proMock = $this->getMockBuilder(
-            Pro::class
-        )->onlyMethods(
-            ['getApi', 'setMethod', 'getConfig', 'importPaymentInfo']
-        )->disableOriginalConstructor()
-            ->getMock();
+        $paypalConfigMock = $this->createMock(Config::class);
+        $this->_apiNvpMock = $this->createPartialMock(
+            Nvp::class,
+            ['callDoReferenceTransaction', 'callGetTransactionDetails']
+        );
+        $proMock = $this->createMock(Pro::class);
         $proMock->expects($this->any())->method('getApi')->willReturn($this->_apiNvpMock);
         $proMock->expects($this->any())->method('getConfig')->willReturn($paypalConfigMock);
 
-        $billingAgreementMock = $this->getMockBuilder(
-            \Magento\Paypal\Model\Billing\Agreement::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['load', '__wakeup']
-            )->getMock();
+        $billingAgreementMock = $this->createMock(\Magento\Paypal\Model\Billing\Agreement::class);
         $billingAgreementMock->expects($this->any())->method('load')->willReturn($billingAgreementMock);
 
-        $agreementFactoryMock = $this->getMockBuilder(
-            AgreementFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['create']
-            )->getMock();
+        $agreementFactoryMock = $this->createMock(AgreementFactory::class);
         $agreementFactoryMock->expects(
             $this->any()
         )->method(
@@ -87,15 +66,8 @@ class AgreementTest extends TestCase
             $billingAgreementMock
         );
 
-        $cartMock = $this->getMockBuilder(Cart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cartFactoryMock = $this->getMockBuilder(
-            CartFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['create']
-            )->getMock();
+        $cartMock = $this->createMock(Cart::class);
+        $cartFactoryMock = $this->createMock(CartFactory::class);
         $cartFactoryMock->expects($this->any())->method('create')->willReturn($cartMock);
 
         $arguments = [
@@ -109,22 +81,30 @@ class AgreementTest extends TestCase
 
     public function testAuthorizeWithBaseCurrency()
     {
-        $payment = $this->getMockBuilder(
-            Payment::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['__wakeup']
-            )->getMock();
-        $order = $this->getMockBuilder(
-            Order::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(
-                ['__wakeup']
-            )->getMock();
-        $order->setBaseCurrencyCode('USD');
-        $payment->setOrder($order);
+        $payment = $this->createMock(Payment::class);
+        $order = $this->createMock(Order::class);
+        
+        $order->expects($this->any())
+            ->method('getBaseCurrencyCode')
+            ->willReturn('USD');
+        
+        $payment->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($order);
+        
+        $payment->expects($this->any())
+            ->method('setTransactionId')
+            ->willReturnSelf();
+        
+        $payment->expects($this->any())
+            ->method('setIsTransactionClosed')
+            ->willReturnSelf();
+        
+        $payment->expects($this->any())
+            ->method('getAdditionalInformation')
+            ->willReturn('reference_id');
 
         $this->_model->authorize($payment, 10.00);
-        $this->assertEquals($order->getBaseCurrencyCode(), $this->_apiNvpMock->getCurrencyCode());
+        $this->assertEquals('USD', $this->_apiNvpMock->getCurrencyCode());
     }
 }

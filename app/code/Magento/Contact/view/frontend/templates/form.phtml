@@ -1,19 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Contact\Block\ContactForm $block */
-if (!$block->getButtonLockManager()) {
-    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    $block->setButtonLockManager(
-        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-    );
-}
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Contact\ViewModel\UserDataProvider $viewModel */
 
@@ -89,7 +85,7 @@ $viewModel = $block->getViewModel();
             <input type="hidden" name="hideit" id="hideit" value="" />
             <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Submit')) ?>" class="action submit primary"
                     id="send2"
-                <?php if ($block->getButtonLockManager()->isDisabled('contact_us_form_submit')): ?>
+                <?php if ($buttonLockManager?->isDisabled('contact_us_form_submit')): ?>
                     disabled="disabled"
                 <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Submit')) ?></span>

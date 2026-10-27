@@ -88,24 +88,16 @@ class CollectQuoteTest extends TestCase
     protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(CustomerSession::class);
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            CustomerRepositoryInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getById']
-        );
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
-        $this->estimateAddressMock = $this->getMockForAbstractClass(EstimateAddressInterface::class);
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->estimateAddressMock = $this->createMock(EstimateAddressInterface::class);
         $this->estimateAddressFactoryMock =
             $this->createPartialMock(EstimateAddressInterfaceFactory::class, ['create']);
-        $this->shippingMethodManagerMock = $this->getMockForAbstractClass(ShippingMethodManagementInterface::class);
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->shippingMethodManagerMock = $this->createMock(ShippingMethodManagementInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
 
         $this->model = new CollectQuote(
             $this->customerSessionMock,
@@ -126,7 +118,7 @@ class CollectQuoteTest extends TestCase
         $defaultAddressId = 999;
         $countryId = 'USA';
         $regionId = 'CA';
-        $regionMock = $this->getMockForAbstractClass(RegionInterface::class);
+        $regionMock = $this->createMock(RegionInterface::class);
 
         $this->customerSessionMock->expects(self::once())
             ->method('isLoggedIn')

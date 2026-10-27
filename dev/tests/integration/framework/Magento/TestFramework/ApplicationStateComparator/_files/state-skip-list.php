@@ -269,6 +269,8 @@ return [
         Magento\TestFramework\ObjectManager\Config::class => null,
         Magento\Framework\Escaper::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null, // FIXME
+        \Magento\Framework\DB\Adapter\SqlVersionProvider::class => null,
+        \Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table::class => null,
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
@@ -566,6 +568,8 @@ return [
         \Magento\Framework\Stomp\StompClient::class => null,
         \Magento\Framework\MessageQueue\QueueRepository::class => null,
         Stomp\StatefulStomp::class => null,
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
     ],
     'placeOrder-fromConstructed' => [
         // AMQP message queue objects
@@ -582,5 +586,15 @@ return [
         \Magento\Framework\Stomp\StompClient::class => null,
         \Magento\Framework\MessageQueue\QueueRepository::class => null,
         \Stomp\StatefulStomp::class => null,
+    ],
+    'applyCouponToCart' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
+    ],
+    'mergeCarts' => [
+        \Magento\ProductVideo\Model\ResourceModel\Video::class => null,
+        \Magento\ProductVideo\Model\Plugin\ExternalVideoResourceBackend::class => null,
+        \Magento\PageBuilder\Plugin\Catalog\Model\Product\Attribute\RepositoryPlugin::class => null,
     ],
 ];

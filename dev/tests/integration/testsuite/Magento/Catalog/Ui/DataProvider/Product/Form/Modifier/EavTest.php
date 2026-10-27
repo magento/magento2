@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Eav\Model\AttributeSetRepository;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeGroupByName;
 use Magento\TestFramework\Eav\Model\ResourceModel\GetEntityIdByAttributeId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for eav modifier used in products admin form data provider.
@@ -53,13 +54,13 @@ class EavTest extends AbstractEavTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider modifyMetaWithAttributeProvider
      * @param string $groupName
      * @param string $groupCode
      * @param string $attributeCode
      * @param array $attributeMeta
      * @return void
      */
+    #[DataProvider('modifyMetaWithAttributeProvider')]
     public function testModifyMetaWithAttributeInGroups(
         string $groupName,
         string $groupCode,
@@ -225,9 +226,9 @@ class EavTest extends AbstractEavTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/attribute_page_layout_default.php
-     * @dataProvider testModifyMetaNewProductPageLayoutDefaultProvider
      * @return void
      */
+    #[DataProvider('attrModifyMetaNewProductPageLayoutDefaultProvider')]
     public function testModifyMetaNewProductPageLayoutDefault($attributesMeta): void
     {
         $defaultLayout = $this->config->getValue('web/default_layouts/default_product_layout');
@@ -245,7 +246,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public static function testModifyMetaNewProductPageLayoutDefaultProvider(): array
+    public static function attrModifyMetaNewProductPageLayoutDefaultProvider(): array
     {
         return [
             'attributes_meta' => [

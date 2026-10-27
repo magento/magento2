@@ -1,24 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
 
 use Magento\Backend\Model\Url;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\Js;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 use Magento\Paypal\Model\Config\StructurePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class CountryTest extends TestCase
 {
@@ -58,13 +60,17 @@ class CountryTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->_element = $this->getMockForAbstractClass(
+
+        $jsonHelperMock = $this->createMock(JsonHelper::class);
+        $directoryHelperMock = $this->createMock(DirectoryHelper::class);
+        $objects = [
+            [JsonHelper::class, $jsonHelperMock],
+            [DirectoryHelper::class, $directoryHelperMock]
+        ];
+        $helper->prepareObjectManager($objects);
+
+        $this->_element = $this->createPartialMock(
             AbstractElement::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             ['getHtmlId', 'getElementHtml', 'getName']
         );
         $this->_element->expects($this->any())
@@ -76,7 +82,7 @@ class CountryTest extends TestCase
         $this->_element->expects($this->any())
             ->method('getName')
             ->willReturn('name');
-        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_request = $this->createMock(RequestInterface::class);
         $this->_jsHelper = $this->createMock(Js::class);
         $this->_url = $this->createMock(Url::class);
         $this->helper = $this->createMock(DirectoryHelper::class);
@@ -112,9 +118,9 @@ class CountryTest extends TestCase
      * @param bool $inherit
      *
      * @return void
-     * @dataProvider renderDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender(
         ?string $requestCountry,
         ?string $requestDefaultCountry,

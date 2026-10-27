@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\LocaleResolver as ExpressLocaleResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +37,7 @@ class LocaleResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->resolver = $this->createMock(ResolverInterface::class);
         /** @var Config $config */
         $this->config = $this->createMock(Config::class);
 
@@ -52,8 +53,8 @@ class LocaleResolverTest extends TestCase
      *
      * @param string $locale
      * @param string $expectedLocale
-     * @dataProvider getLocaleDataProvider
      */
+    #[DataProvider('getLocaleDataProvider')]
     public function testGetLocale(string $locale, string $expectedLocale)
     {
         $this->resolver->method('getLocale')

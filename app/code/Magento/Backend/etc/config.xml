@@ -19,6 +19,9 @@
             <template>
                 <minify_html>0</minify_html>
             </template>
+            <js>
+                <defer_non_critical>0</defer_non_critical>
+            </js>
         </dev>
         <system>
             <media_storage_configuration>

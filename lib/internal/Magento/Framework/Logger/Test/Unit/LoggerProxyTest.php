@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\Logger\LoggerProxy;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -35,23 +37,19 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
-     * @param $method
-     *
+     * @param string $method
      * @return void
-     * @dataProvider methodsList
      */
+    #[Test]
+    #[DataProvider('methodsList')]
     public function logMessage($method): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $objectManager
             ->method('get')
@@ -71,20 +69,17 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @return void
      */
+    #[Test]
     public function createWithArguments(): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $args = ['name' => 'test'];
         $deploymentConfig
@@ -120,23 +115,19 @@ class LoggerProxyTest extends TestCase
     }
 
     /**
-     * @test
-     *
-     * @param $method
-     *
+     * @param string $method
      * @return void
-     * @dataProvider methodsList
      */
+    #[Test]
+    #[DataProvider('methodsList')]
     public function logException($method): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $objectManager
             ->method('get')

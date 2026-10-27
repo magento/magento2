@@ -124,4 +124,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Config">
+        <plugin name="special_price_listing_plugin" type="Magento\Catalog\Plugin\Model\ConfigPlugin" sortOrder="10" />
+    </type>
 </config>

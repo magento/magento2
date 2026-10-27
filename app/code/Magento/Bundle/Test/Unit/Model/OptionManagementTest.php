@@ -47,11 +47,11 @@ class OptionManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->optionRepositoryMock =
-            $this->getMockForAbstractClass(ProductOptionRepositoryInterface::class);
+            $this->createMock(ProductOptionRepositoryInterface::class);
         $this->productRepositoryMock =
-            $this->getMockForAbstractClass(ProductRepositoryInterface::class);
-        $this->optionMock = $this->getMockForAbstractClass(OptionInterface::class);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+            $this->createMock(ProductRepositoryInterface::class);
+        $this->optionMock = $this->createMock(OptionInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
 
         $this->model = new OptionManagement($this->optionRepositoryMock, $this->productRepositoryMock);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset\Command\DeleteByDirectoryPath;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -49,7 +50,7 @@ class DeleteByDirectoryPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByDirectoryPath = (new ObjectManager($this))->getObject(
@@ -60,7 +61,7 @@ class DeleteByDirectoryPathTest extends TestCase
             ]
         );
 
-        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->adapter = $this->createMock(AdapterInterface::class);
     }
 
     /**
@@ -68,8 +69,8 @@ class DeleteByDirectoryPathTest extends TestCase
      *
      * @param string $directoryPath
      * @throws CouldNotDeleteException
-     * @dataProvider directoryPathDataProvider
      */
+    #[DataProvider('directoryPathDataProvider')]
     public function testDeleteByDirectoryPath(string $directoryPath): void
     {
         if (!empty($directoryPath)) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -243,7 +243,11 @@ class QuoteManagementTest extends TestCase
     {
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $this->expectExceptionObject(new LocalizedException(__('Some of the products are out of stock.')));
+        // Catalog inventory vs. MSI use different salability messages for the same failure.
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessageMatches(
+            '/Some of the products are out of stock\.|There are no source items with the in stock status/'
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 

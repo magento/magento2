@@ -26,7 +26,7 @@ class CartTotalsProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->model = new CartTotalsProcessor($this->scopeConfig);
     }
 

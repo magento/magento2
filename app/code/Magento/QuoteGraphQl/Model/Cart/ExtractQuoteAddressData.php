@@ -16,42 +16,22 @@ use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Item;
 
 /**
- * Extract address fields from an Quote Address model
+ * Extract address fields from Quote Address model
  */
 class ExtractQuoteAddressData
 {
     /**
-     * @var ExtensibleDataObjectConverter
-     */
-    private $dataObjectConverter;
-
-    /**
-     * @param ExtensibleDataObjectConverter $dataObjectConverter
-     */
-
-    /**
-     * @var Uid
-     */
-    private Uid $uidEncoder;
-
-    /**
-     * @var GetAttributeValueInterface
-     */
-    private GetAttributeValueInterface $getAttributeValue;
-
-    /**
+     * ExtractQuoteAddressData Constructor
+     *
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param Uid $uidEncoder
      * @param GetAttributeValueInterface $getAttributeValue
      */
     public function __construct(
-        ExtensibleDataObjectConverter $dataObjectConverter,
-        Uid $uidEncoder,
-        GetAttributeValueInterface $getAttributeValue
+        private readonly ExtensibleDataObjectConverter $dataObjectConverter,
+        private readonly Uid                           $uidEncoder,
+        private readonly GetAttributeValueInterface    $getAttributeValue
     ) {
-        $this->dataObjectConverter = $dataObjectConverter;
-        $this->uidEncoder = $uidEncoder;
-        $this->getAttributeValue = $getAttributeValue;
     }
 
     /**
@@ -64,6 +44,9 @@ class ExtractQuoteAddressData
     {
         $addressData = $this->dataObjectConverter->toFlatArray($address, [], AddressInterface::class);
         $addressData['model'] = $address;
+        $customerAddressId = $address->getCustomerAddressId() ?? null;
+        $customerAddressUID = $customerAddressId ?
+            $this->uidEncoder->encode((string)$address->getCustomerAddressId()) : null;
 
         $addressData = array_merge(
             $addressData,
@@ -78,7 +61,8 @@ class ExtractQuoteAddressData
                     'region_id'=> $address->getRegionId()
                 ],
                 'uid' => $this->uidEncoder->encode((string)$address->getAddressId()) ,
-                'id' => $address->getCustomerAddressId(),
+                'id' => $customerAddressId,
+                'customer_address_uid' => $customerAddressUID,
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),
                 'customer_notes' => $address->getCustomerNotes(),

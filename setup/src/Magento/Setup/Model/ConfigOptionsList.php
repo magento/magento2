@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -160,7 +160,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
-                'SET NAMES utf8;'
             ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,

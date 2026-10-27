@@ -9,6 +9,7 @@ namespace Magento\Sitemap\Test\Unit\Model\Batch;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sitemap\Model\Batch\Observer;
 use Magento\Sitemap\Model\Batch\Sitemap;
 use Magento\Sitemap\Model\Batch\SitemapFactory;
@@ -27,6 +28,8 @@ use Psr\Log\LoggerInterface;
  */
 class ObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -67,12 +70,12 @@ class ObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->batchSitemapFactoryMock = $this->createMock(SitemapFactory::class);
         $this->emailNotificationMock = $this->createMock(EmailNotification::class);
         $this->appEmulationMock = $this->createMock(Emulation::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->observer = new Observer(
             $this->scopeConfigMock,
@@ -121,9 +124,10 @@ class ObserverTest extends TestCase
             ->willReturn(true);
 
         $collectionMock = $this->createMock(Collection::class);
-        $sitemapMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getStoreId', 'getData'])
-            ->getMock();
+        $sitemapMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getStoreId', 'getData']
+        );
 
         $collectionMock->expects($this->once())
             ->method('getSize')
@@ -143,11 +147,10 @@ class ObserverTest extends TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $batchSitemapMock = $this->getMockBuilder(Sitemap::class)
-            ->onlyMethods(['setData', 'generateXml'])
-            ->addMethods(['getSitemapFilename'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $batchSitemapMock = $this->createPartialMockWithReflection(
+            Sitemap::class,
+            ['setData', 'generateXml', 'getSitemapFilename']
+        );
         $batchSitemapMock->expects($this->once())
             ->method('setData')
             ->with($sitemapData)
@@ -201,9 +204,10 @@ class ObserverTest extends TestCase
             ->willReturn(true);
 
         $collectionMock = $this->createMock(Collection::class);
-        $sitemapMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getStoreId', 'getData'])
-            ->getMock();
+        $sitemapMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getStoreId', 'getData']
+        );
 
         $collectionMock->expects($this->once())
             ->method('getSize')

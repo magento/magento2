@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\AdvancedSearch\Helper\Data;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -14,9 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Search\EngineResolverInterface;
 
-/**
- * @covers \Magento\AdvancedSearch\Helper\Data
- */
+#[CoversClass(Data::class)]
 class DataTest extends TestCase
 {
 
@@ -49,11 +48,9 @@ class DataTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->engineResolverMock = $this->getMockForAbstractClass(EngineResolverInterface::class);
+        $this->engineResolverMock = $this->createMock(EngineResolverInterface::class);
 
-        $this->engineResolverMock->expects($this->any())
-            ->method('getCurrentSearchEngine')
-            ->willReturn('');
+        $this->engineResolverMock->method('getCurrentSearchEngine')->willReturn('');
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->helper = $this->objectManager->getObject(

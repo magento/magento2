@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use Magento\Bundle\Model\Product\Price as BundlePrice;
+use Magento\Catalog\Helper\Data as CatalogData;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -144,6 +145,16 @@ class Bundle extends CatalogImportExportAbstractType implements
     private $storeCodeToId = [];
 
     /**
+     * @var array
+     */
+    private array $websiteCodeToId = [];
+
+    /**
+     * @var CatalogData
+     */
+    private $catalogData;
+
+    /**
      * @param AttributeSetCollectionFactory $attrSetColFac
      * @param AttributeCollectionFactory $prodAttrColFac
      * @param ResourceConnection $resource
@@ -151,6 +162,7 @@ class Bundle extends CatalogImportExportAbstractType implements
      * @param MetadataPool|null $metadataPool
      * @param Bundle\RelationsDataSaver|null $relationsDataSaver
      * @param StoreManagerInterface|null $storeManager
+     * @param CatalogData|null $catalogData
      */
     public function __construct(
         AttributeSetCollectionFactory $attrSetColFac,
@@ -159,7 +171,8 @@ class Bundle extends CatalogImportExportAbstractType implements
         array $params,
         ?MetadataPool $metadataPool = null,
         ?Bundle\RelationsDataSaver $relationsDataSaver = null,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?CatalogData $catalogData = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
 
@@ -167,6 +180,7 @@ class Bundle extends CatalogImportExportAbstractType implements
             ?: ObjectManager::getInstance()->get(Bundle\RelationsDataSaver::class);
         $this->storeManager = $storeManager
             ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()->get(CatalogData::class);
     }
 
     /**
@@ -661,6 +675,7 @@ class Bundle extends CatalogImportExportAbstractType implements
     protected function insertSelections()
     {
         $selections = [];
+        $optionIds = [];
 
         foreach ($this->_cachedOptions as $productId => $options) {
             foreach ($options as $option) {
@@ -669,6 +684,7 @@ class Bundle extends CatalogImportExportAbstractType implements
                     if (isset($selection['position'])) {
                         $index = $selection['position'];
                     }
+                    $optionIds[$option['option_id']] = $option['option_id'];
                     if ($tmpArray = $this->populateSelectionTemplate(
                         $selection,
                         $option['option_id'],
@@ -684,7 +700,116 @@ class Bundle extends CatalogImportExportAbstractType implements
 
         $this->relationsDataSaver->saveSelections($selections);
 
+        if (!empty($optionIds) && !$this->catalogData->isPriceGlobal()) {
+            $this->saveSelectionsPrices($optionIds);
+        }
+
         return $this;
+    }
+
+    /**
+     * Insert selections prices for websites.
+     *
+     * @param array $optionIds
+     * @return void
+     */
+    private function saveSelectionsPrices(array $optionIds): void
+    {
+        $selectionPrices = $this->getSelectionsPrices();
+        if (empty($selectionPrices)) {
+            return;
+        }
+        $select = $this->connection->select()
+            ->from($this->_resource->getTableName('catalog_product_bundle_selection'))
+            ->where('option_id IN (?)', array_keys($optionIds));
+        $existingSelections = $this->connection->fetchAll($select);
+        $selectionPricesToInsert = [];
+        foreach ($existingSelections as $selection) {
+            $prices = $selectionPrices[$selection['parent_product_id']][$selection['option_id']]
+            [$selection['product_id']] ?? [];
+            foreach ($prices as $websiteId => $data) {
+                $selectionPricesToInsert[] = [
+                    'selection_id' => $selection['selection_id'],
+                    'parent_product_id' => $selection['parent_product_id'],
+                    'website_id' => $websiteId,
+                    'selection_price_type' => $data['selection_price_type']
+                        ?? $selection['selection_price_type'],
+                    'selection_price_value' => $data['selection_price_value'],
+                ];
+            }
+        }
+        if (!empty($selectionPricesToInsert)) {
+            $this->relationsDataSaver->saveSelectionPrices($selectionPricesToInsert);
+        }
+    }
+
+    /**
+     * Returns selections prices by parentProductId, optionId, productId, and websiteId.
+     *
+     * @return array
+     */
+    private function getSelectionsPrices(): array
+    {
+        $selectionPrices = [];
+        foreach ($this->_cachedOptions as $parentProductId => $options) {
+            foreach ($options as $option) {
+                foreach ($option['selections'] as $selection) {
+                    $productId = $this->_cachedSkuToProducts[$selection['sku']] ?? null;
+                    if (!$productId) {
+                        continue;
+                    }
+                    $selectionPrices[$parentProductId][$option['option_id']][$productId] =
+                        $this->getSelectionPrices($selection);
+                }
+            }
+        }
+        
+        return $selectionPrices;
+    }
+
+    /**
+     * Returns selection prices by websiteId.
+     *
+     * @param array $selection
+     * @return array
+     */
+    private function getSelectionPrices(array $selection): array
+    {
+        $prices = [];
+        foreach ($selection as $key => $value) {
+            $value = trim($value);
+            if (is_numeric($value) && str_starts_with($key, 'price_website_')) {
+                $websiteCode = str_replace('price_website_', '', $key);
+                $websiteId = $this->getWebsiteIdByCode($websiteCode);
+                $priceType = $selection['price_type_website_' . $websiteCode] ?? $selection['price_type'] ?? null;
+                $prices[$websiteId] = [
+                    'selection_price_value' => (float) $value,
+                    'selection_price_type' => match ($priceType) {
+                        self::VALUE_FIXED => self::SELECTION_PRICE_TYPE_FIXED,
+                        default => self::SELECTION_PRICE_TYPE_PERCENT,
+                    }
+                ];
+            }
+        }
+        return $prices;
+    }
+
+    /**
+     * Get website id by website code.
+     *
+     * @param string $websiteCode
+     * @return int
+     */
+    private function getWebsiteIdByCode(string $websiteCode): int
+    {
+        if (!isset($this->websiteCodeToId[$websiteCode])) {
+            $this->websiteCodeToId = [];
+            foreach ($this->storeManager->getWebsites() as $website) {
+                $this->websiteCodeToId[$website->getCode()] = (int)$website->getId();
+            }
+        }
+
+        return $this->websiteCodeToId[$websiteCode] ?? Store::DEFAULT_STORE_ID;
     }
 
     /**

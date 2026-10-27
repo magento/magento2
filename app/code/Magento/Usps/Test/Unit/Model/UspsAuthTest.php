@@ -14,6 +14,7 @@ use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Usps\Model\UspsAuth;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -55,7 +56,6 @@ class UspsAuthTest extends TestCase
     }
 
     /**
-     * @dataProvider clientCredentialsDataProvider
      * @param string $clientId,
      * @param string $clientSecret,
      * @param string $clientUrl
@@ -63,6 +63,7 @@ class UspsAuthTest extends TestCase
      * @throws LocalizedException
      * @throws \Throwable
      */
+    #[DataProvider('clientCredentialsDataProvider')]
     public function testGetAccessTokenReturnsCachedToken(
         string $clientId,
         string $clientSecret,
@@ -80,11 +81,11 @@ class UspsAuthTest extends TestCase
     }
 
     /**
-     * @dataProvider clientCredentialsDataProvider
      * @return void
      * @throws LocalizedException
      * @throws \Throwable
      */
+    #[DataProvider('clientCredentialsDataProvider')]
     public function testGetAccessTokenReturnsNullOnException(
         string $clientId,
         string $clientSecret,
@@ -104,12 +105,12 @@ class UspsAuthTest extends TestCase
     }
 
     /**
-     * @dataProvider clientCredentialsDataProvider
      * @return void
      * @throws Exception
      * @throws LocalizedException
      * @throws \Throwable
      */
+    #[DataProvider('clientCredentialsDataProvider')]
     public function testGetAccessTokenReturnsFalseOnMissingAccessToken(
         string $clientId,
         string $clientSecret,
@@ -140,11 +141,11 @@ class UspsAuthTest extends TestCase
     }
 
     /**
-     * @dataProvider clientCredentialsDataProvider
      * @throws \Throwable
      * @throws LocalizedException
      * @throws Exception
      */
+    #[DataProvider('clientCredentialsDataProvider')]
     public function testGetAccessTokenFetchesNewToken(
         string $clientId,
         string $clientSecret,

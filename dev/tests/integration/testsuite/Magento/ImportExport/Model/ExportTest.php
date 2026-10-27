@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 
 class ExportTest extends \PHPUnit\Framework\TestCase
@@ -28,9 +29,9 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $entity
      * @param string $expectedEntityType
-     * @dataProvider getEntityDataProvider
      * @covers \Magento\ImportExport\Model\Export::_getEntityAdapter
      */
+    #[DataProvider('getEntityDataProvider')]
     public function testGetEntityAdapterWithValidEntity($entity, $expectedEntityType)
     {
         $this->_model->setData(['entity' => $entity]);
@@ -39,9 +40,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(property_exists($this->_model, '_entityAdapter'));
         $object = new ReflectionClass(get_class($this->_model));
         $attribute = $object->getProperty('_entityAdapter');
-        $attribute->setAccessible(true);
         $propertyObject = $attribute->getValue($this->_model);
-        $attribute->setAccessible(false);
         $this->assertInstanceOf($expectedEntityType, $propertyObject);
     }
 

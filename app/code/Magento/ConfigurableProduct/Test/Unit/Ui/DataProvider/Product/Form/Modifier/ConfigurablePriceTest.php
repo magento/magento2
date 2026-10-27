@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice as ConfigurablePriceModifier;
@@ -25,13 +26,12 @@ class ConfigurablePriceTest extends AbstractModifierTestCase
     /**
      * @param array $metaInput
      * @param array $metaOutput
-     * @dataProvider metaDataProvider
      */
+    #[DataProvider('metaDataProvider')]
     public function testModifyMeta($metaInput, $metaOutput)
     {
-        $this->productMock->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
+        $this->productMock->setTypeId(Configurable::TYPE_CODE);
+        $this->productMock->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
 
         $metaResult = $this->getModel()->modifyMeta($metaInput);
         $this->assertEquals($metaResult, $metaOutput);
@@ -116,9 +116,7 @@ class ConfigurablePriceTest extends AbstractModifierTestCase
     public function testModifyMetaRemovesScopeLabelAndServiceForConfigurable()
     {
         $locator = $this->createMock(LocatorInterface::class);
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         $locator->method('getProduct')->willReturn($product);
 

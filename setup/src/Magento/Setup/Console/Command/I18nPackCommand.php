@@ -77,7 +77,7 @@ class I18nPackCommand extends Command
      * @inheritdoc
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $generator = ServiceLocator::getPackGenerator();
         $mode = $input->getOption(self::INPUT_KEY_MODE);

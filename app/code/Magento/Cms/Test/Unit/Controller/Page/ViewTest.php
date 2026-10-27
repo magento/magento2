@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,7 +69,7 @@ class ViewTest extends TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->pageHelperMock = $this->createMock(PageHelper::class);
 
         $this->controller = $objectManager->getObject(

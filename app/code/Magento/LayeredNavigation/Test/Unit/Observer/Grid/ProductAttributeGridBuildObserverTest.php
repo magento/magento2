@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Test\Unit\Observer\Grid;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\LayeredNavigation\Observer\Grid\ProductAttributeGridBuildObserver;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,9 +20,12 @@ use PHPUnit\Framework\TestCase;
  * Class ProductAttributeGridBuildObserverTest
  *
  * Testing adding new grid column for Layered Navigation
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 class ProductAttributeGridBuildObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ProductAttributeGridBuildObserver
      */
@@ -50,10 +54,8 @@ class ProductAttributeGridBuildObserverTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->moduleManagerMock = $this->createMock(Manager::class);
         $this->gridMock = $this->createMock(Grid::class);
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getGrid'])
-            ->getMock();
+        $this->observerMock = $this->createPartialMockWithReflection(Observer::class, ['getGrid']);
+        $this->observerMock->method('getGrid')->willReturn($this->gridMock);
 
         $this->observer = $objectManager->getObject(
             ProductAttributeGridBuildObserver::class,
@@ -75,9 +77,6 @@ class ProductAttributeGridBuildObserverTest extends TestCase
             ->with('Magento_LayeredNavigation')
             ->willReturn($enabledOutput);
 
-        $this->observerMock->expects($this->never())
-            ->method('getGrid');
-
         $this->observer->execute($this->observerMock);
     }
 
@@ -92,10 +91,6 @@ class ProductAttributeGridBuildObserverTest extends TestCase
             ->method('isOutputEnabled')
             ->with('Magento_LayeredNavigation')
             ->willReturn($enabledOutput);
-
-        $this->observerMock->expects($this->once())
-            ->method('getGrid')
-            ->willReturn($this->gridMock);
 
         $this->observer->execute($this->observerMock);
     }

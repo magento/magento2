@@ -46,7 +46,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $publisherConfig \DOMElement */
         foreach ($source->getElementsByTagName('publisher') as $publisherConfig) {
             $topic = $this->getAttributeValue($publisherConfig, 'topic');
-            $queueName = $this->getAttributeValue($publisherConfig, 'queue');
 
             $connections = [];
             /** @var \DOMNode $connectionConfig */
@@ -58,7 +57,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $connectionConfig,
                     'name',
                     $this->defaultValueProvider->getConnection()
-                );
+                ) ?? '';
                 $exchangeName = $this->getAttributeValue(
                     $connectionConfig,
                     'exchange',
@@ -72,8 +71,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ];
             }
             if (count($connections) === 0) {
-                $connections[$this->defaultValueProvider->getConnection()] = [
-                    'name' => $this->defaultValueProvider->getConnection(),
+                $defaultConnection = $this->defaultValueProvider->getConnection() ?? '';
+                $connections[$defaultConnection] = [
+                    'name' => $defaultConnection,
                     'exchange' => $this->defaultValueProvider->getExchange(),
                     'disabled' => false
                 ];
@@ -81,7 +81,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);
             $result[$topic] = [
                 'topic' => $topic,
-                'queue' => $queueName,
                 'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 'connections' => $connections,
 

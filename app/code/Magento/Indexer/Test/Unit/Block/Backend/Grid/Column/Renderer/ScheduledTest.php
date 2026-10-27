@@ -11,6 +11,7 @@ use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Scheduled;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ScheduledTest extends TestCase
 {
@@ -19,8 +20,8 @@ class ScheduledTest extends TestCase
      * @param bool $rowValue
      * @param string $class
      * @param string $text
-     * @dataProvider typeProvider
      */
+    #[DataProvider('typeProvider')]
     public function testRender($indexer, $rowValue, $class, $text)
     {
         $html = '<span class="' . $class . '"><span>' . $text . '</span></span>';

@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Url\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressRedirectTest extends TestCase
 {
@@ -55,7 +56,7 @@ class ExpressRedirectTest extends TestCase
             ->onlyMethods(['set'])
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -79,8 +80,8 @@ class ExpressRedirectTest extends TestCase
      * @param string|null $customerBeforeAuthUrlDefault
      *
      * @return void
-     * @dataProvider redirectLoginDataProvider
      */
+    #[DataProvider('redirectLoginDataProvider')]
     public function testRedirectLogin(
         array $actionFlagList,
         ?string $customerBeforeAuthUrl,
@@ -97,11 +98,7 @@ class ExpressRedirectTest extends TestCase
                     'getRedirectActionName'
                 ]
             )->getMock();
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getActionFlagList'
-        )->willReturn(
+        $expressRedirectMock->method('getActionFlagList')->willReturn(
             $actionFlagList
         );
         $actionFlagList = array_merge(['no-dispatch' => true], $actionFlagList);
@@ -159,11 +156,7 @@ class ExpressRedirectTest extends TestCase
             ->onlyMethods(['setRedirect'])->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
         $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getCustomerBeforeAuthUrl'
-        )->willReturn(
+        $expressRedirectMock->method('getCustomerBeforeAuthUrl')->willReturn(
             $customerBeforeAuthUrl
         );
         $expectedCustomerBeforeAuthUrl = $customerBeforeAuthUrl !== null

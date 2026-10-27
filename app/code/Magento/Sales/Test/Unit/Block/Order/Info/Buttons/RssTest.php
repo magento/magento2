@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,9 +64,9 @@ class RssTest extends TestCase
     {
         $this->context = $this->createMock(Context::class);
         $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         $this->signature = $this->createMock(Signature::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

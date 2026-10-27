@@ -16,6 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LinkTest extends TestCase
 {
@@ -46,7 +47,7 @@ class LinkTest extends TestCase
         $path = 'checkout';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
@@ -58,8 +59,8 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider toHtmlDataProvider
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($canOnepageCheckout, $isOutputEnabled)
     {
         $helper = $this->getMockBuilder(
@@ -81,7 +82,7 @@ class LinkTest extends TestCase
             Link::class,
             ['moduleManager' => $moduleManager, 'checkoutHelper' => $helper]
         );
-        $helper->expects($this->any())->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
+        $helper->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
         $moduleManager->expects(
             $this->any()
         )->method(

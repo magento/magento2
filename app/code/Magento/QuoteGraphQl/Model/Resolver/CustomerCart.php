@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\QuoteGraphQl\Model\Cart\UpdateCartCurrency;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
 
 /**
@@ -25,14 +26,22 @@ class CustomerCart implements ResolverInterface
     private $customerCartResolver;
 
     /**
+     * @var UpdateCartCurrency
+     */
+    private UpdateCartCurrency $updateCartCurrency;
+
+    /**
      * CustomerCart constructor.
      *
      * @param CustomerCartResolver $customerCartResolver
+     * @param UpdateCartCurrency $updateCartCurrency
      */
     public function __construct(
-        CustomerCartResolver $customerCartResolver
+        CustomerCartResolver $customerCartResolver,
+        UpdateCartCurrency $updateCartCurrency
     ) {
         $this->customerCartResolver = $customerCartResolver;
+        $this->updateCartCurrency = $updateCartCurrency;
     }
 
     /**
@@ -50,7 +59,11 @@ class CustomerCart implements ResolverInterface
         }
 
         try {
-            $cart = $this->customerCartResolver->resolve($currentUserId);
+            $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+            $cart = $this->updateCartCurrency->execute(
+                $this->customerCartResolver->resolve($currentUserId),
+                $storeId
+            );
         } catch (\Exception $e) {
             $cart = null;
         }
