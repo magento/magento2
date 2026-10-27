@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Backend\Model\Session\Quote as QuoteSession;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress;
@@ -25,11 +26,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\AdminOrder\Create as OrderCreate;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -298,6 +301,161 @@ class ReorderTest extends AbstractBackendController
         $this->assertEquals($quoteShippingAddress->getCity(), $orderShippingAddress->getCity());
         $this->assertEquals($quoteShippingAddress->getTelephone(), $orderShippingAddress->getTelephone());
         $this->assertEquals($quoteShippingAddress->getEmail(), $orderShippingAddress->getEmail());
+    }
+
+    /**
+     * An edited reorder shipping address survives the next quote save (#41624)
+     *
+     * Getting shipping rates posts the edited address with an empty customer_address_id (the "Select from existing
+     * customer addresses" dropdown is cleared on edit). A later block reload that posts no address, such as loading
+     * the payment methods, must not import the saved address over it.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345'] ]], as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, [
+            'cart_id' => '$quote.id$',
+            'address' => [
+                'customer_id' => '$customer.id$',
+                'save_in_address_book' => 1
+            ]
+        ]),
+        DataFixture(SetShippingAddress::class, [
+            'cart_id' => '$quote.id$',
+            'address' => [
+                'customer_id' => '$customer.id$',
+                'save_in_address_book' => 1
+            ]
+        ]),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
+    ]
+    public function testReorderKeepsEditedShippingAddress(): void
+    {
+        $customer = $this->fixtures->get('customer');
+        $order = $this->fixtures->get('order');
+        $this->reorder($order, $customer->getEmail());
+
+        $this->saveOrderCreateData(['shipping_address' => $this->postedShippingAddress('55555', '')], true);
+        $this->saveOrderCreateData([], false);
+
+        $shippingAddress = $this->getReorderQuote()->getShippingAddress();
+        $this->assertEquals('55555', $shippingAddress->getPostcode());
+        $this->assertEmpty($shippingAddress->getCustomerAddressId());
+    }
+
+    /**
+     * An unchanged saved reorder shipping address still takes the latest address book data (ACP2E-1826)
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345'] ]], as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, [
+            'cart_id' => '$quote.id$',
+            'address' => [
+                'customer_id' => '$customer.id$',
+                'save_in_address_book' => 1
+            ]
+        ]),
+        DataFixture(SetShippingAddress::class, [
+            'cart_id' => '$quote.id$',
+            'address' => [
+                'customer_id' => '$customer.id$',
+                'save_in_address_book' => 1
+            ]
+        ]),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
+    ]
+    public function testReorderSavedShippingAddressFollowsAddressBook(): void
+    {
+        $customer = $this->fixtures->get('customer');
+        $order = $this->fixtures->get('order');
+        $this->reorder($order, $customer->getEmail());
+        $customerAddressId = (int)$order->getShippingAddress()->getCustomerAddressId();
+        $this->updateCustomerAddress($customerAddressId, ['postcode' => '01234']);
+
+        $this->saveOrderCreateData(
+            ['shipping_address' => $this->postedShippingAddress('55555', (string)$customerAddressId)],
+            true
+        );
+        $this->saveOrderCreateData([], false);
+
+        $shippingAddress = $this->getReorderQuote()->getShippingAddress();
+        $this->assertEquals('01234', $shippingAddress->getPostcode());
+        $this->assertEquals($customerAddressId, (int)$shippingAddress->getCustomerAddressId());
+    }
+
+    /**
+     * Load the order create session's quote from the database
+     *
+     * @return Quote
+     */
+    private function getReorderQuote(): Quote
+    {
+        $quoteId = (int)$this->_objectManager->get(QuoteSession::class)->getQuoteId();
+
+        return $this->_objectManager->create(Quote::class)->load($quoteId);
+    }
+
+    /**
+     * Shipping address fields as the order create form posts them
+     *
+     * @param string $postcode
+     * @param string $customerAddressId the "Select from existing customer addresses" value
+     * @return array
+     */
+    private function postedShippingAddress(string $postcode, string $customerAddressId): array
+    {
+        $address = $this->getReorderQuote()->getShippingAddress();
+
+        return [
+            'customer_address_id' => $customerAddressId,
+            'firstname' => $address->getFirstname(),
+            'lastname' => $address->getLastname(),
+            'street' => $address->getStreet(),
+            'city' => $address->getCity(),
+            'country_id' => $address->getCountryId(),
+            'region_id' => $address->getRegionId(),
+            'postcode' => $postcode,
+            'telephone' => $address->getTelephone(),
+        ];
+    }
+
+    /**
+     * Apply posted order data and save the quote, as an order create block reload does
+     *
+     * Getting shipping rates posts the address and collect_shipping_rates; loading the payment methods posts no
+     * address.
+     *
+     * @param array $orderData the posted "order" fields
+     * @param bool $collectShippingRates
+     * @return void
+     */
+    private function saveOrderCreateData(array $orderData, bool $collectShippingRates): void
+    {
+        $orderCreate = $this->_objectManager->get(OrderCreate::class);
+        if ($orderData) {
+            $orderCreate->importPostData($orderData);
+        }
+        if ($collectShippingRates) {
+            $orderCreate->collectShippingRates();
+        }
+        $orderCreate->saveQuote();
     }
 
     /**
