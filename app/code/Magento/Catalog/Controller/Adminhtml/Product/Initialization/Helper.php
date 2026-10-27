@@ -239,6 +239,10 @@ class Helper
             $productOptions = [];
         }
         $productData['tier_price'] = isset($productData['tier_price']) ? $productData['tier_price'] : [];
+        $productData['tier_price'] = array_merge(
+            (array)$productData['tier_price'],
+            $this->getTierPricesOfUnassignedWebsites($product)
+        );
 
         $useDefaults = (array) $this->request->getPost('use_default', []);
         $productData = $this->attributeFilter->prepareProductAttributes($product, $productData, $useDefaults);
@@ -257,6 +261,31 @@ class Helper
         );
 
         return $product;
+    }
+
+    /**
+     * Tier prices of websites the product is no longer assigned to
+     *
+     * The product form leaves them out, as it has no option for those websites. Rows the save would otherwise
+     * delete (those it compares against) are kept as they are.
+     *
+     * @param Product $product
+     * @return array
+     */
+    private function getTierPricesOfUnassignedWebsites(Product $product): array
+    {
+        $tierPrices = $product->getOrigData('tier_price');
+        if (!is_array($tierPrices) || !$product->getId()) {
+            return [];
+        }
+        $websiteIds = array_map('intval', (array)$product->getWebsiteIds());
+
+        return array_values(array_filter(
+            $tierPrices,
+            static fn ($row) => isset($row['website_id'])
+                && (int)$row['website_id'] !== 0
+                && !in_array((int)$row['website_id'], $websiteIds, true)
+        ));
     }
 
     /**
