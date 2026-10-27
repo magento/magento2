@@ -47,7 +47,6 @@
         <includePath>.</includePath>
         <ini name="memory_limit" value="-1"/>
         <ini name="date.timezone" value="America/Los_Angeles"/>
-        <ini name="zend.enable_gc" value="0"/>
     </php>
     <extensions>
         <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
