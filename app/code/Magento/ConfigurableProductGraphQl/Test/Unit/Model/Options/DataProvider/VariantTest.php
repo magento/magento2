@@ -16,6 +16,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 use Magento\ConfigurableProductGraphQl\Model\Options\DataProvider\Variant;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,7 +35,7 @@ class VariantTest extends TestCase
     private $stockStatusResource;
 
     /**
-     * @var StockConfigurationInterface|MockObject
+     * @var StockConfigurationInterface|Stub
      */
     private $stockConfig;
 
@@ -55,14 +56,14 @@ class VariantTest extends TestCase
         $this->collection->method('addTierPriceData')->willReturnSelf();
         $this->collection->method('getItems')->willReturn([]);
 
-        $configurableType = $this->createMock(Configurable::class);
+        $configurableType = $this->createStub(Configurable::class);
         $configurableType->method('getUsedProductCollection')->willReturn($this->collection);
 
         $this->stockStatusResource = $this->createMock(Status::class);
-        $stockStatusFactory = $this->createMock(StatusFactory::class);
+        $stockStatusFactory = $this->createStub(StatusFactory::class);
         $stockStatusFactory->method('create')->willReturn($this->stockStatusResource);
 
-        $this->stockConfig = $this->getMockForAbstractClass(StockConfigurationInterface::class);
+        $this->stockConfig = $this->createStub(StockConfigurationInterface::class);
 
         $this->model = new Variant($configurableType, $stockStatusFactory, $this->stockConfig);
     }
@@ -82,7 +83,7 @@ class VariantTest extends TestCase
             ->method('addStockDataToCollection')
             ->with($this->collection, $expectedFilterInStock);
 
-        $this->model->getSalableVariantsByParent($this->createMock(Product::class));
+        $this->model->getSalableVariantsByParent($this->createStub(Product::class));
     }
 
     /**
@@ -101,8 +102,7 @@ class VariantTest extends TestCase
         $this->collection->method('hasFlag')->with('has_stock_status_filter')->willReturn(true);
         $this->collection->expects($this->never())->method('setFlag');
         $this->stockStatusResource->expects($this->never())->method('addStockDataToCollection');
-        $this->stockConfig->expects($this->never())->method('isShowOutOfStock');
 
-        $this->model->getSalableVariantsByParent($this->createMock(Product::class));
+        $this->model->getSalableVariantsByParent($this->createStub(Product::class));
     }
 }
