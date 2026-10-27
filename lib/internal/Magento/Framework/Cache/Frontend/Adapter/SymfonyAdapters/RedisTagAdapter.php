@@ -882,30 +882,36 @@ LUA;
     /**
      * Non-atomic pipelined prune (fallback for Predis/cluster or when EVAL is disabled).
      *
-     * Two pipelines: read the reverse index for every id, then apply removals. There is a
-     * read/write gap here, so a concurrent save for the same id may still be clobbered; the
-     * atomic path above is preferred whenever the client supports it.
+     * Two pipelines: read whether each id still has data and its reverse index, then apply removals.
+     * Like the atomic path, an id whose data key still exists keeps its index (a failed delete, or a
+     * concurrent save after the delete). There is still a read/write gap here, so a save between the
+     * two pipelines may be clobbered; the atomic path above is preferred whenever the client supports it.
      *
      * @param array $ids
      * @return void
      */
     private function pruneTagIndexPipelined(array $ids): void
     {
-        // Read the reverse index (id -> tags) for every id in one pipeline
+        // Read, for every id in one pipeline, whether its data key exists and its reverse index (id -> tags)
+        $ids = array_values($ids);
         $readPipe = $this->createPipeline();
         foreach ($ids as $id) {
+            $readPipe->exists($this->dataKeyPrefix() . $id);
             $readPipe->smembers(self::REVERSE_INDEX_PREFIX . $this->namespace . $id);
         }
-        $tagsPerId = $this->executePipeline($readPipe);
-        if (!is_array($tagsPerId)) {
+        $results = $this->executePipeline($readPipe);
+        if (!is_array($results)) {
             return;
         }
 
-        // Removes each ID from `all_ids` and tag sets and deletes its reverse index in one pipeline.
+        // Removes each ID without data from `all_ids` and tag sets and deletes its reverse index in one pipeline.
         $writePipe = $this->createPipeline();
-        foreach (array_values($ids) as $i => $id) {
+        foreach ($ids as $i => $id) {
+            if ((int)($results[2 * $i] ?? 0) > 0) {
+                continue;
+            }
             $writePipe->srem(self::ALL_IDS_SET, $id);
-            $tags = $tagsPerId[$i] ?? [];
+            $tags = $results[2 * $i + 1] ?? [];
             if (is_array($tags) && !empty($tags)) {
                 foreach ($tags as $tag) {
                     $writePipe->srem($this->getTagKey($tag), $id);
