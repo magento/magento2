@@ -17,31 +17,46 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Verify runtime scopes reads and database availability reporting.
+ *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RuntimeConfigSourceTest extends TestCase
 {
     /**
+     * Deployment configuration mock.
+     *
      * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
     /**
+     * Runtime scopes source under test.
+     *
      * @var RuntimeConfigSource
      */
     private $configSource;
 
     /**
+     * Scope table connection mock.
+     *
      * @var MockObject
      */
     private $connection;
 
     /**
+     * Database resource mock.
+     *
      * @var MockObject
      */
     private $resourceConnection;
 
+    /**
+     * Create isolated deployment and database dependencies.
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->connection = $this->createMock(AdapterInterface::class);
@@ -56,6 +71,11 @@ class RuntimeConfigSourceTest extends TestCase
         );
     }
 
+    /**
+     * Return empty scope pools without declaring runtime data available.
+     *
+     * @return void
+     */
     public function testGet()
     {
         $this->deploymentConfig->expects($this->any())
@@ -77,8 +97,58 @@ class RuntimeConfigSourceTest extends TestCase
             ],
             $this->configSource->get()
         );
+        $this->assertFalse($this->configSource->hasRuntimeData());
     }
 
+    /**
+     * Clear runtime-data status when the database becomes unavailable.
+     *
+     * @return void
+     */
+    public function testRuntimeDataAvailabilityIsReset(): void
+    {
+        $this->deploymentConfig->method('isDbAvailable')->willReturnOnConsecutiveCalls(true, false);
+        $this->resourceConnection->method('getConnection')->willReturn($this->connection);
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $this->connection->method('select')->willReturn($select);
+        $this->connection->method('fetchAll')->willReturn([
+            ['code' => 'default', 'website_id' => 1, 'group_id' => 1, 'store_id' => 1],
+        ]);
+
+        $this->configSource->get();
+        $this->assertTrue($this->configSource->hasRuntimeData());
+        $this->configSource->get();
+        $this->assertFalse($this->configSource->hasRuntimeData());
+    }
+
+    /**
+     * Clear runtime-data status between requests.
+     *
+     * @return void
+     */
+    public function testRequestResetClearsRuntimeDataAvailability(): void
+    {
+        $this->deploymentConfig->method('isDbAvailable')->willReturn(true);
+        $this->resourceConnection->method('getConnection')->willReturn($this->connection);
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $this->connection->method('select')->willReturn($select);
+        $this->connection->method('fetchAll')->willReturn([
+            ['code' => 'default', 'website_id' => 1, 'group_id' => 1, 'store_id' => 1],
+        ]);
+
+        $this->configSource->get();
+        $this->assertTrue($this->configSource->hasRuntimeData());
+        $this->configSource->_resetState();
+        $this->assertFalse($this->configSource->hasRuntimeData());
+    }
+
+    /**
+     * Avoid opening a connection when no database is configured.
+     *
+     * @return void
+     */
     public function testGetWhenDbIsNotAvailable()
     {
         $this->deploymentConfig->expects($this->once())
@@ -88,8 +158,14 @@ class RuntimeConfigSourceTest extends TestCase
             ->method('getConnection');
 
         $this->assertEquals([], $this->configSource->get());
+        $this->assertFalse($this->configSource->hasRuntimeData());
     }
 
+    /**
+     * Treat missing scope tables as unavailable runtime data.
+     *
+     * @return void
+     */
     public function testGetWhenDbIsEmpty()
     {
         $this->deploymentConfig->expects($this->once())
@@ -107,5 +183,6 @@ class RuntimeConfigSourceTest extends TestCase
             ->willReturn($this->connection);
 
         $this->assertEquals([], $this->configSource->get());
+        $this->assertFalse($this->configSource->hasRuntimeData());
     }
 }
