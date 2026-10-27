@@ -139,7 +139,7 @@ class RowsTest extends TestCase
     }
 
     /**
-     * Creates a mock for the indexer registry to add given ids to changelog.
+     * Creates a mock for the indexer registry to queue given ids for the scheduled reindex.
      *
      * @param array $ids
      * @return void

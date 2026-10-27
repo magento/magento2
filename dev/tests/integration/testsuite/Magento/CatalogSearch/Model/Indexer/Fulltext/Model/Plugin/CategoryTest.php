@@ -223,10 +223,10 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Process the indexer changelogs the same way the indexer_update_all_views cron job does
+     * Process the scheduled index updates the same way the indexer_update_all_views cron job does
      *
      * The category products view queues products for the catalog search view, which may already be processed
-     * in the same run, so the changelogs are processed twice, as two consecutive cron runs would do.
+     * in the same run, so the updates are processed twice, as two consecutive cron runs would do.
      *
      * @return void
      */
