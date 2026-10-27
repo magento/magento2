@@ -28,6 +28,6 @@
         <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginBtn"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad time="30" stepKey="wait"/>
-        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="waitForPayPalReviewPage"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" time="120" stepKey="waitForPayPalReviewPage"/>
     </actionGroup>
 </actionGroups>

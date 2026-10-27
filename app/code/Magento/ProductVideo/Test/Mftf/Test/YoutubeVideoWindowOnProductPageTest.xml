@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Set product video Youtube api key configuration -->
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
+            <createData entity="ProductYoutubeApiKeyConfig" stepKey="setStoreConfig" after="loginAsAdmin"/>
         </before>
 
         <!--Open simple product-->
