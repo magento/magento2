@@ -26,12 +26,9 @@ class UpdatedAtListProvider implements NotSyncedDataProviderInterface, NotSynced
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param LastUpdateTimeCache $lastUpdateTimeCache Retained for constructor compatibility.
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        LastUpdateTimeCache $lastUpdateTimeCache
+        ResourceConnection $resourceConnection
     ) {
         $this->connection = $resourceConnection->getConnection('sales');
         $this->resourceConnection = $resourceConnection;
