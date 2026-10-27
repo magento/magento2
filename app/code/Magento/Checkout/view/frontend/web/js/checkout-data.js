@@ -244,6 +244,27 @@ define([
         },
 
         /**
+         * Setting the saved addresses rejected as the billing address to persistence storage
+         *
+         * @param {Object} data - {address key: address contents}
+         */
+        setRejectedBillingAddresses: function (data) {
+            var obj = getData();
+
+            obj.rejectedBillingAddresses = data;
+            saveData(obj);
+        },
+
+        /**
+         * Pulling the saved addresses rejected as the billing address from persistence storage
+         *
+         * @return {Object|undefined}
+         */
+        getRejectedBillingAddresses: function () {
+            return getData().rejectedBillingAddresses;
+        },
+
+        /**
          * Pulling the email address from persistence storage
          *
          * @return {*}
