@@ -172,6 +172,7 @@ class SetLinkStatusObserverTest extends TestCase
             ->method('getAllItems')
             ->willReturn(
                 [
+                    $this->createOrderItem(null),
                     $this->createOrderItem(1),
                     $this->createOrderItem(2),
                     $this->createOrderItem(3, Item::STATUS_PENDING, null),
@@ -315,6 +316,7 @@ class SetLinkStatusObserverTest extends TestCase
             ->method('getAllItems')
             ->willReturn(
                 [
+                    $this->createOrderItem(null),
                     $this->createOrderItem(1),
                     $this->createOrderItem(2),
                     $this->createOrderItem(3, Item::STATUS_INVOICED, null),
@@ -412,6 +414,7 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->orderMock->method('getAllItems')->willReturn(
             [
+                    $this->createRefundOrderItem(null, 2, 2),
                     $this->createRefundOrderItem(2, 2, 2),
                     $this->createRefundOrderItem(3, 2, 1),
                     $this->createRefundOrderItem(4, 3, 3),
