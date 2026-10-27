@@ -93,14 +93,11 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
         sleep(2);
         $order = $this->getOrder('100000001');
 
-        $expectedGridUpdatedAt = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-            ->sub(new \DateInterval('PT1S'))
-            ->format('Y-m-d H:i:s');
         $this->gridAsyncInsert->asyncInsert();
 
         $gridRow = $this->getGridRow($order->getEntityId());
         self::assertEquals($order->getStatus(), $gridRow['status']);
-        self::assertEquals($expectedGridUpdatedAt, $gridRow['updated_at']);
+        self::assertEquals($order->getUpdatedAt(), $gridRow['updated_at']);
     }
 
     /**
