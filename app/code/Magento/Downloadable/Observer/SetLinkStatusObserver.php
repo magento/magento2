@@ -104,11 +104,6 @@ class SetLinkStatusObserver implements ObserverInterface
                 if ($item->getProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                 ) {
-                    $itemId = $item->getId();
-                    if ($itemId === null) {
-                        continue;
-                    }
-
                     if ($item->getStatusId() == \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED
                         && $orderItemStatusToEnable == \Magento\Sales\Model\Order\Item::STATUS_PENDING
                         && !in_array(
@@ -120,11 +115,12 @@ class SetLinkStatusObserver implements ObserverInterface
                         $availableStatuses[] = \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED;
                     }
 
-                    if (in_array($item->getStatusId(), $availableStatuses)) {
+                    $itemId = $item->getId();
+                    if ($itemId !== null && in_array($item->getStatusId(), $availableStatuses)) {
                         $downloadableItemsStatuses[$itemId] = $linkStatuses['avail'];
                     }
 
-                    if ($item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
+                    if ($itemId !== null && $item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
                         $expiredOrderItemIds[] = $itemId;
                     }
                 }
@@ -136,11 +132,9 @@ class SetLinkStatusObserver implements ObserverInterface
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                 ) {
                     $itemId = $item->getId();
-                    if ($itemId === null) {
-                        continue;
+                    if ($itemId !== null) {
+                        $downloadableItemsStatuses[$itemId] = $status;
                     }
-
-                    $downloadableItemsStatuses[$itemId] = $status;
                 }
             }
         }

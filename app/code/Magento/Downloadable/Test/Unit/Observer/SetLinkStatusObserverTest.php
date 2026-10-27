@@ -172,7 +172,6 @@ class SetLinkStatusObserverTest extends TestCase
             ->method('getAllItems')
             ->willReturn(
                 [
-                    $this->createOrderItem(null),
                     $this->createOrderItem(1),
                     $this->createOrderItem(2),
                     $this->createOrderItem(3, Item::STATUS_PENDING, null),
@@ -316,7 +315,6 @@ class SetLinkStatusObserverTest extends TestCase
             ->method('getAllItems')
             ->willReturn(
                 [
-                    $this->createOrderItem(null),
                     $this->createOrderItem(1),
                     $this->createOrderItem(2),
                     $this->createOrderItem(3, Item::STATUS_INVOICED, null),
@@ -361,6 +359,276 @@ class SetLinkStatusObserverTest extends TestCase
 
         $result = $this->setLinkStatusObserver->execute($this->observerMock);
         $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public static function pendingOrderStatesDataProvider()
+    {
+        return [
+            'holded' => [Order::STATE_HOLDED],
+            'pending_payment' => [Order::STATE_PENDING_PAYMENT],
+            'payment_review' => [Order::STATE_PAYMENT_REVIEW],
+        ];
+    }
+
+    /**
+     * An order's downloadable items have no order item id yet when this observer
+     * runs on the order's own save, before sales_order_item_save_after creates them.
+     *
+     * @param string $orderState
+     */
+    #[DataProvider('pendingOrderStatesDataProvider')]
+    public function testSetLinkStatusPendingSkipsCollectionQueryForNullItemIds($orderState)
+    {
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn($orderState);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn(
+                [
+                    $this->createOrderItem(null),
+                    $this->createOrderItem(null, Item::STATUS_PENDING, null),
+                ]
+            );
+
+        $this->itemsFactory->expects($this->never())
+            ->method('create');
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    /**
+     * @param string $orderState
+     */
+    #[DataProvider('pendingOrderStatesDataProvider')]
+    public function testSetLinkStatusPendingQueriesCollectionForRealItemIdsOnly($orderState)
+    {
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn($orderState);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn(
+                [
+                    $this->createOrderItem(null),
+                    $this->createOrderItem(2),
+                ]
+            );
+
+        $this->itemsFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createLinkItemCollection([2], []));
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    public function testSetLinkStatusAvailableSkipsCollectionQueryForNullItemIds()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(Item::STATUS_PENDING);
+
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn(Order::STATE_PROCESSING);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn(
+                [
+                    $this->createOrderItem(null, Item::STATUS_PENDING),
+                    $this->createOrderItem(null, Item::STATUS_INVOICED),
+                ]
+            );
+
+        $this->itemsFactory->expects($this->never())
+            ->method('create');
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    public function testSetLinkStatusAvailableQueriesCollectionForRealItemIdsOnly()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(Item::STATUS_PENDING);
+
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn(Order::STATE_PROCESSING);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn(
+                [
+                    $this->createOrderItem(null, Item::STATUS_INVOICED),
+                    $this->createOrderItem(2, Item::STATUS_INVOICED),
+                ]
+            );
+
+        $this->itemsFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createLinkItemCollection([2], []));
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    public function testSetLinkStatusRefundedSkipsCollectionQueryForNullItemIds()
+    {
+        $this->mockProcessingOrderWithItems(
+            [
+                $this->createOrderItem(
+                    null,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+            ]
+        );
+
+        $this->itemsFactory->expects($this->never())
+            ->method('create');
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    public function testSetLinkStatusRefundedExpiresRealItemIdsOnly()
+    {
+        $this->mockProcessingOrderWithItems(
+            [
+                $this->createOrderItem(
+                    null,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+                $this->createOrderItem(
+                    2,
+                    Item::STATUS_REFUNDED,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    DownloadableProductType::TYPE_DOWNLOADABLE,
+                    1
+                ),
+            ]
+        );
+
+        $this->itemsFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->createLinkItemCollection([2], []));
+
+        $result = $this->setLinkStatusObserver->execute($this->observerMock);
+        $this->assertInstanceOf(SetLinkStatusObserver::class, $result);
+    }
+
+    /**
+     * @param array $items
+     * @return void
+     */
+    private function mockProcessingOrderWithItems(array $items): void
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(Item::STATUS_PENDING);
+
+        $this->observerMock->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($this->orderMock);
+
+        $this->orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->once())
+            ->method('getStoreId')
+            ->willReturn(1);
+
+        $this->orderMock->expects($this->atLeastOnce())
+            ->method('getState')
+            ->willReturn(Order::STATE_PROCESSING);
+
+        $this->orderMock->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn($items);
     }
 
     public function testSetLinkStatusEmptyOrder()
@@ -414,7 +682,6 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->orderMock->method('getAllItems')->willReturn(
             [
-                    $this->createRefundOrderItem(null, 2, 2),
                     $this->createRefundOrderItem(2, 2, 2),
                     $this->createRefundOrderItem(3, 2, 1),
                     $this->createRefundOrderItem(4, 3, 3),
@@ -500,23 +767,26 @@ class SetLinkStatusObserverTest extends TestCase
      * @param int $statusId
      * @param string $productType
      * @param string $realProductType
+     * @param float|int $qtyRefunded
      * @return Item|MockObject
      */
     private function createOrderItem(
         $id,
         $statusId = Item::STATUS_PENDING,
         $productType = DownloadableProductType::TYPE_DOWNLOADABLE,
-        $realProductType = DownloadableProductType::TYPE_DOWNLOADABLE
+        $realProductType = DownloadableProductType::TYPE_DOWNLOADABLE,
+        $qtyRefunded = 0
     ) {
         $item = $this->createPartialMock(
             Item::class,
-            ['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered']
+            ['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered', 'getQtyRefunded']
         );
         $item->method('getId')->willReturn($id);
         $item->method('getProductType')->willReturn($productType);
         $item->method('getRealProductType')->willReturn($realProductType);
         $item->method('getStatusId')->willReturn($statusId);
         $item->method('getQtyOrdered')->willReturn(1);
+        $item->method('getQtyRefunded')->willReturn($qtyRefunded);
 
         return $item;
     }
