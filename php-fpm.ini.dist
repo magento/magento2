@@ -1,6 +1,12 @@
 ; Copyright 2026 Adobe
 ; All Rights Reserved.
 
+; PRODUCTION SETTINGS. Do not use as-is on development environments:
+; opcache.validate_timestamps = 0 makes PHP-FPM ignore code changes until it is reloaded,
+; and display_errors, display_startup_errors and zend.assertions hide errors and assert() failures.
+; For development set opcache.validate_timestamps = 1, display_errors = On, display_startup_errors = On
+; and zend.assertions = 1.
+
 ; Recommended memory limit for Magento web requests.
 memory_limit = 756M
 ; Fallback limit for runaway requests; nginx.conf.sample and .user.ini raise it to 18000 for long admin imports.
