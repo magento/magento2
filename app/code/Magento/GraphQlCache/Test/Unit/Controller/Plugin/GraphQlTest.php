@@ -80,7 +80,7 @@ class GraphQlTest extends TestCase
         $requestMock = $this->createMock(Http::class);
         $this->requestProcessorMock->expects(self::once())
             ->method('validateRequest')
-            ->willThrowException(new GraphQlInputException(__('')));
+            ->willThrowException(new GraphQlInputException(__('Something went wrong')));
         $this->requestProcessorMock->expects(self::never())->method('processHeaders');
         $this->graphQl->beforeDispatch($subject, $requestMock);
     }
