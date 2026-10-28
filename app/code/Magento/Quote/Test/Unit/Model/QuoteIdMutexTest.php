@@ -32,12 +32,7 @@ class QuoteIdMutexTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $selectMock = $this->createStub(Select::class);
-        $selectMock->method('from')->willReturnSelf();
-        $selectMock->method('where')->willReturnSelf();
-        $selectMock->method('forUpdate')->willReturnSelf();
         $this->connectionMock = $this->createMock(AdapterInterface::class);
-        $this->connectionMock->method('select')->willReturn($selectMock);
         $resourceConnectionMock = $this->createStub(ResourceConnection::class);
         $resourceConnectionMock->method('getConnection')->willReturn($this->connectionMock);
         $resourceConnectionMock->method('getTableName')->willReturnArgument(0);
@@ -55,6 +50,7 @@ class QuoteIdMutexTest extends TestCase
 
     public function testExecuteReturnsCallableResultAndCommits(): void
     {
+        $this->mockLockingSelect([1, 2]);
         $this->connectionMock->expects($this->once())->method('beginTransaction');
         $this->connectionMock->expects($this->once())->method('query');
         $this->connectionMock->expects($this->once())->method('commit');
@@ -68,7 +64,9 @@ class QuoteIdMutexTest extends TestCase
     public function testExecuteRollsBackWhenCallableThrows(): void
     {
         $exception = new Exception('Callable exception');
+        $this->mockLockingSelect([1]);
         $this->connectionMock->expects($this->once())->method('beginTransaction');
+        $this->connectionMock->expects($this->once())->method('query');
         $this->connectionMock->expects($this->once())->method('rollBack');
         $this->connectionMock->expects($this->never())->method('commit');
 
@@ -84,6 +82,7 @@ class QuoteIdMutexTest extends TestCase
     {
         $exception = new LockWaitException('Lock wait timeout exceeded');
         $callableInvoked = false;
+        $this->mockLockingSelect([1]);
         $this->connectionMock->expects($this->once())->method('beginTransaction');
         $this->connectionMock->expects($this->once())->method('query')->willThrowException($exception);
         $this->connectionMock->expects($this->once())->method('rollBack');
@@ -98,5 +97,14 @@ class QuoteIdMutexTest extends TestCase
             $this->assertSame($exception, $caught);
         }
         $this->assertFalse($callableInvoked);
+    }
+
+    private function mockLockingSelect(array $ids): void
+    {
+        $selectMock = $this->createMock(Select::class);
+        $selectMock->method('from')->with('quote', 'entity_id')->willReturnSelf();
+        $selectMock->method('where')->with('entity_id IN (?)', $ids)->willReturnSelf();
+        $selectMock->method('forUpdate')->with(true)->willReturnSelf();
+        $this->connectionMock->method('select')->willReturn($selectMock);
     }
 }
