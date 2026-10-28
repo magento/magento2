@@ -39,13 +39,13 @@ class QuoteIdMutex implements QuoteMutexInterface
 
         $connection = $this->resourceConnection->getConnection();
         $connection->beginTransaction();
-        $query = $connection->select()
-            ->from($this->resourceConnection->getTableName('quote'), 'entity_id')
-            ->where('entity_id IN (?)', $maskedIds)
-            ->forUpdate(true);
-        $connection->query($query);
 
         try {
+            $query = $connection->select()
+                ->from($this->resourceConnection->getTableName('quote'), 'entity_id')
+                ->where('entity_id IN (?)', $maskedIds)
+                ->forUpdate(true);
+            $connection->query($query);
             $result = $callable(...$args);
             $this->resourceConnection->getConnection()->commit();
             return $result;
