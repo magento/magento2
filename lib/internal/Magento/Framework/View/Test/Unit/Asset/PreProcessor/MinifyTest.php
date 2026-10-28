@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 use Magento\Framework\View\Asset\PreProcessor\Minify;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Magento\Framework\View\Asset\PreProcessor\Minify
@@ -48,7 +49,7 @@ class MinifyTest extends TestCase
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->onlyMethods(['minify'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,9 +70,8 @@ class MinifyTest extends TestCase
      * @param int $minifyCalls
      * @param int $setContentCalls
      * @param bool $isEnabled
-     * @return void
-     * @dataProvider processDataProvider
-     */
+     * @return void     */
+    #[DataProvider('processDataProvider')]
     public function testProcess($targetPath, $originalPath, $minifyCalls, $setContentCalls, $isEnabled)
     {
         $chainMock = $this->getMockBuilder(Chain::class)

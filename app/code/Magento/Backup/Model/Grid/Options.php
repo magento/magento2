@@ -4,14 +4,11 @@
  * All Rights Reserved.
  */
 
-/**
- * Backup types option array
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Backup\Model\Grid;
 
 /**
+ * Backup types option array
+ *
  * @api
  * @since 100.0.2
  */
@@ -32,6 +29,7 @@ class Options implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * Return backup types array
+     *
      * @return array
      */
     public function toOptionArray()

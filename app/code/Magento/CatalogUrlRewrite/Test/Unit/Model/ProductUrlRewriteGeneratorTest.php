@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\CatalogUrlRewrite\Model\GetVisibleForStores;
@@ -22,6 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -77,11 +79,8 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->product->expects($this->any())->method('getCategoryCollection')
-            ->willReturn($this->categoriesCollection);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->product->method('getCategoryCollection')->willReturn($this->categoriesCollection);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()
@@ -123,9 +122,8 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ]
         );
 
-        $reflection = new \ReflectionClass(get_class($this->productUrlRewriteGenerator));
+        $reflection = new ReflectionClass(get_class($this->productUrlRewriteGenerator));
         $reflectionProperty = $reflection->getProperty('productScopeRewriteGenerator');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productUrlRewriteGenerator, $this->productScopeRewriteGenerator);
     }
 
@@ -171,7 +169,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
 
         $productMock->expects($this->once())
             ->method('getVisibility')
-            ->willReturn(Product\Visibility::VISIBILITY_NOT_VISIBLE);
+            ->willReturn(Visibility::VISIBILITY_NOT_VISIBLE);
         $productMock->expects($this->exactly(3))
             ->method('getStoreId')
             ->willReturn($storeId);

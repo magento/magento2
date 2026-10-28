@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,14 @@ namespace Magento\Tax\Test\Unit\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Config\TaxClass;
 use PHPUnit\Framework\TestCase;
 
 class TaxClassTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Tests the afterSave method indirectly
      */
@@ -33,11 +35,10 @@ class TaxClassTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        $attributeFactoryMock = $this->createPartialMock(
+            AttributeFactory::class,
+            ['create']
+        );
         $attributeFactoryMock
             ->expects($this->any())
             ->method('create')

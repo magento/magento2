@@ -19,7 +19,10 @@
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
         <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
-        <checkOption selector="{{AdminProductImagesSection.roleBase}}" stepKey="checkRoles"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBaseUseDefault}}" dependentSelector="{{AdminProductImagesSection.isBaseUseDefaultSelected}}" visible="true" stepKey="uncheckUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isBaseDisabled}}" stepKey="waitForCheckboxEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="false" stepKey="checkRoles"/>
         <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
     </actionGroup>
 </actionGroups>

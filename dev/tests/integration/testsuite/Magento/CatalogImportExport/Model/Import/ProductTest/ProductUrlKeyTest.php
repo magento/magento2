@@ -1,23 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\Store\Test\Fixture\Store;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -41,10 +50,10 @@ class ProductUrlKeyTest extends ProductTestBase
             'simple1' => 'url-key',
             'simple2' => 'url-key2',
         ];
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_without_url_keys_and_name.csv',
                 'directory' => $directory
@@ -52,7 +61,7 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )
             ->setSource($source)
             ->validateData();
@@ -60,7 +69,7 @@ class ProductUrlKeyTest extends ProductTestBase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
@@ -68,28 +77,28 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
      * @throws LocalizedException
      */
+    #[DataProvider('validateUrlKeysDataProvider')]
     public function testValidateUrlKeys($importFile, $expectedErrors)
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Filesystem::class
+        $filesystem = Bootstrap::getObjectManager()->create(
+            Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/' . $importFile,
                 'directory' => $directory
             ]
         );
-        /** @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errors */
+        /** @var ProcessingErrorAggregatorInterface $errors */
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
@@ -139,20 +148,20 @@ class ProductUrlKeyTest extends ProductTestBase
      */
     public function testValidateUrlKeysMultipleStores()
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Filesystem::class
+        $filesystem = Bootstrap::getObjectManager()->create(
+            Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_check_valid_url_keys_multiple_stores.csv',
                 'directory' => $directory
             ]
         );
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
@@ -173,11 +182,11 @@ class ProductUrlKeyTest extends ProductTestBase
         // added by _files/products_to_import_with_valid_url_keys.csv
         $this->importedProducts[] = 'simple3';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
+        $filesystem = Bootstrap::getObjectManager()
+            ->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_with_valid_url_keys.csv',
                 'directory' => $directory
@@ -185,7 +194,7 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
@@ -193,8 +202,8 @@ class ProductUrlKeyTest extends ProductTestBase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
@@ -214,11 +223,11 @@ class ProductUrlKeyTest extends ProductTestBase
         // added by _files/products_to_import_with_invalid_url_keys.csv
         $this->importedProducts[] = 'simple3';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\Filesystem::class);
+        $filesystem = Bootstrap::getObjectManager()
+            ->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_with_invalid_url_keys.csv',
                 'directory' => $directory
@@ -226,7 +235,7 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
@@ -234,8 +243,8 @@ class ProductUrlKeyTest extends ProductTestBase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        $productRepository = Bootstrap::getObjectManager()->create(
+            ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
@@ -282,10 +291,10 @@ class ProductUrlKeyTest extends ProductTestBase
         // added by _files/products_to_import_without_url_keys.csv
         $this->importedProducts[] = 'simple3';
 
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_without_url_keys.csv',
                 'directory' => $directory
@@ -293,7 +302,7 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )
             ->setSource($source)
             ->validateData();
@@ -301,7 +310,7 @@ class ProductUrlKeyTest extends ProductTestBase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
 
-        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
         }
@@ -325,10 +334,10 @@ class ProductUrlKeyTest extends ProductTestBase
         $productSkuMap = array_merge($productsCreatedByFixture, $productsImportedByCsv);
         $this->importedProducts = array_keys($productsImportedByCsv);
 
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_with_non_latin_url_keys.csv',
                 'directory' => $directory,
@@ -336,7 +345,7 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
         )
             ->setSource($source)
             ->validateData();
@@ -364,17 +373,17 @@ class ProductUrlKeyTest extends ProductTestBase
             'simple1' => 'url-with-spaces-1',
             'simple2' => 'url-with-spaces-2'
         ];
-        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_import_with_spaces_in_url_keys.csv',
                 'directory' => $directory,
             ]
         );
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_ADD_UPDATE, 'entity' => 'catalog_product']
         )
             ->setSource($source)
             ->validateData();
@@ -408,13 +417,13 @@ class ProductUrlKeyTest extends ProductTestBase
     ]
     public function testValidateMixedCharNumUrlKeysWithNullUrlSuffix()
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Filesystem::class
+        $filesystem = Bootstrap::getObjectManager()->create(
+            Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            Csv::class,
             [
                 'file' => __DIR__ . '/../_files/products_to_check_valid_url_keys_mixed_chars_nums.csv',
                 'directory' => $directory
@@ -422,11 +431,63 @@ class ProductUrlKeyTest extends ProductTestBase
         );
 
         $errors = $this->_model->setParameters(
-            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
         )->setSource(
             $source
         )->validateData();
 
         $this->assertEmpty($errors->getAllErrors(), 'Assert that import validation returns no errors');
+    }
+
+    #[
+        DataFixture(Store::class, as: 'store2'),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'attribute_set_code', 'product_type', 'price', 'name', 'url_key'],
+                    // simple1 has url_key specified in the main row
+                    ['simple1%uniqid%', '', 'Default', 'simple', '10.00', 'Simple Product 1%uniqid%', 's1%uniqid%'],
+                    ['simple1%uniqid%', '$store2.code$', 'Default', 'simple', '', '', ''],
+                    // simple2 has no url_key specified in the main row
+                    ['simple2%uniqid%', '', 'Default', 'simple', '10.00', 'Simple Product 1%uniqid%', ''],
+                    ['simple2%uniqid%', '$store2.code$', 'Default', 'simple', '', '', '']
+                ]
+            ],
+            'file'
+        ),
+    ]
+    public function testStoreViewShouldInheritUrlKeyIfNotSpecified(): void
+    {
+        // reset store resolver cache to ensure that new store view code is resolved correctly
+        $this->objectManager->removeSharedInstance(StoreResolver::class);
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $store = $fixtures->get('store2')->getCode();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $model = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $model->validateData());
+        $model->importData();
+        [$headers, $row1,, $row3,] = $fixtures->get('file')->getRows();
+        $row1 = array_combine($headers, $row1);
+        $row3 = array_combine($headers, $row3);
+        // generate url_key for simple2 based on name
+        $row3['url_key'] = strtolower(preg_replace('/\s+/', '-', $row3['name']));
+        foreach ([$row1, $row3] as $row) {
+            $product = $this->getProductBySku($row['sku'], $store);
+            $this->assertFalse(
+                $this->objectManager->create(ScopeOverriddenValue::class)->containsValue(
+                    ProductInterface::class,
+                    $product,
+                    'url_key',
+                    $store
+                ),
+                "Assert that url_key is not overridden in store '{$store}' for SKU '{$row['sku']}'"
+            );
+            $this->assertEquals(
+                $row['url_key'],
+                $product->getUrlKey(),
+                "Assert that url_key is set to '{$row['url_key']}' for SKU '{$row['sku']}' in store '{$store}'"
+            );
+        }
     }
 }

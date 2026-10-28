@@ -15,11 +15,14 @@ use Magento\Framework\DB\Helper;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\Currency\DefaultLocator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RequestInterface|MockObject
      */
@@ -56,30 +59,37 @@ class PriceTest extends TestCase
     private $blockPrice;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
 
         $this->helper = $this->createMock(Helper::class);
 
-        $this->currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAnyRate'])
-            ->getMock();
+        $this->currency = $this->createPartialMock(
+            Currency::class,
+            ['getAnyRate']
+        );
 
         $this->currencyLocator = $this->createMock(DefaultLocator::class);
 
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCurrencyCode'])
-            ->getMock();
+        $this->objectManagerHelper = new ObjectManager($this);
 
-        $helper = new ObjectManager($this);
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getCurrencyCode']
+        );
+
+        $helper = $this->objectManagerHelper;
 
         $this->blockPrice = $helper->getObject(Price::class, [
             'context'         => $this->context,

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableSingleOptionNoAsLowAsLabelTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Price label visibility"/>
+            <title value="Customer should not see As low as label for Configurable Product with single option"/>
+            <description value="Create configurable with a single associated simple at $500 and assert PDP and PLP show $500 without the As low as label"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15443"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <!-- Precondition 1: Create customer -->
+            <createData entity="Simple_US_Customer_NY" stepKey="customer"/>
+            <!-- Create category for configurable product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--  Step 1,2: Create configurable product with single option -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addProductToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create one child product for configurable product and set price 500 -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <field key="price">500</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductOneOption" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Logout from storefront, delete customer, delete category, product -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+        </after>
+        <!-- Login into storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <!-- Step 3: Open category page (plp) and assert price and absence of as low as label -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPlpPriceNoLabel">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+            <argument name="price" value="$$createConfigChildProduct.price$$"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <!-- Step 4: Open pdp and assert price 500.00 and absence of as low as label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openPDP">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelOnPDP"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct.price$$" stepKey="assertProductPrice"/>
+    </test>
+</tests>

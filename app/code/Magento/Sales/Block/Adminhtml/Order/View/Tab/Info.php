@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
@@ -9,7 +9,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * Order information tab
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
@@ -115,7 +114,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
      */
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -123,7 +122,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -131,7 +130,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -139,7 +138,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {

@@ -12,6 +12,7 @@ use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogUrlRewrite\Observer\ClearProductUrlsObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ClearProductUrlsObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ClearProductUrlsObserver
      */
@@ -78,23 +81,21 @@ class ClearProductUrlsObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->skuStorage = $this->createMock(SkuStorage::class);
-        $this->event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getBunch'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getBunch']
+        );
         $this->event->expects($this->once())
             ->method('getBunch')
             ->willReturn($this->products);
-        $this->observer = $this->getMockBuilder(Observer::class)
-            ->onlyMethods(['getEvent'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->observer = $this->createPartialMock(
+            Observer::class,
+            ['getEvent']
+        );
         $this->observer->expects($this->exactly(1))
             ->method('getEvent')
             ->willReturn($this->event);
-        $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
 
         $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist, $this->skuStorage);
     }
@@ -109,14 +110,12 @@ class ClearProductUrlsObserverTest extends TestCase
             'sku5' => ['entity_id' => 5],
         ];
 
-        $this->skuStorage->expects($this->any())
-            ->method('has')
+        $this->skuStorage->method('has')
             ->willReturnCallback(function ($sku) use ($oldSKus) {
                 return isset($oldSKus[strtolower($sku)]);
             });
 
-        $this->skuStorage->expects($this->any())
-            ->method('get')
+        $this->skuStorage->method('get')
             ->willReturnCallback(function ($sku) use ($oldSKus) {
                 return $oldSKus[strtolower($sku)] ?? null;
             });

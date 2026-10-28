@@ -887,8 +887,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function checkItemShipping(): bool
     {
         foreach ($this->getAllItems() as $item) {
-            $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
-                $item->getQtyToShip() : $item->getSimpleQtyToShip();
+            if (!$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE) {
+                $qtyToShip = $item->getQtyToShip();
+            } else {
+                if ($item->getParentItem()->getProductType() === Type::TYPE_BUNDLE &&
+                    $item->getParentItem()->getProduct()->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER) {
+                    $qtyToShip = $item->getParentItem()->getQtyToShip();
+                } else {
+                    $qtyToShip = $item->getSimpleQtyToShip();
+                }
+            }
 
             if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
@@ -1184,7 +1192,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Add status change information to history
      *
      * @param  string $status
-     * @param  string $comment
+     * @param  string|\Stringable $comment
      * @param  bool $isCustomerNotified
      * @return $this
      */
@@ -1199,7 +1207,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * Different or default status may be specified.
      *
-     * @param string $comment
+     * @param string|\Stringable $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
      * @deprecated 101.0.5
@@ -1215,7 +1223,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * Different or default status may be specified.
      *
-     * @param string $comment
+     * @param string|\Stringable $comment
      * @param bool|string $status
      * @param bool $isVisibleOnFront
      * @return OrderStatusHistoryInterface
@@ -1346,7 +1354,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Prepare order totals to cancellation
      *
-     * @param string $comment
+     * @param string|\Stringable $comment
      * @param bool $graceful
      * @return $this
      * @throws LocalizedException
@@ -1439,16 +1447,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
-                if (isset($this->regionItems[$address->getCountryId()][$address->getRegion()])) {
-                    if ($this->regionItems[$address->getCountryId()][$address->getRegion()]) {
-                        $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
-                    }
-                } else {
-                    $region = $this->regionFactory->create();
-                    $this->regionResource->loadByName($region, $address->getRegion(), $address->getCountryId());
-                    $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
-                    if ($region->getName()) {
-                        $address->setRegion($region->getName());
+                // PHP 8.5 Compatibility: Check for null before using as array offset
+                $countryId = $address->getCountryId();
+                $region = $address->getRegion();
+
+                if ($countryId !== null && $region !== null) {
+                    if (isset($this->regionItems[$countryId][$region])) {
+                        if ($this->regionItems[$countryId][$region]) {
+                            $address->setRegion($this->regionItems[$countryId][$region]);
+                        }
+                    } else {
+                        $regionModel = $this->regionFactory->create();
+                        $this->regionResource->loadByName($regionModel, $region, $countryId);
+                        $this->regionItems[$countryId][$region] = $regionModel->getName();
+                        if ($regionModel->getName()) {
+                            $address->setRegion($regionModel->getName());
+                        }
                     }
                 }
                 $address->setOrder($this);
@@ -1600,12 +1614,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Gets order item by given ID.
      *
-     * @param int $itemId
+     * @param int|null $itemId
      * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($itemId)
     {
         $items = $this->getItems();
+        $itemId = $itemId ?? '';
 
         if (isset($items[$itemId])) {
             return $items[$itemId];
@@ -4695,12 +4710,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerPrefix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/prefix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     /**
@@ -4710,12 +4725,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerSuffix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/suffix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     //@codeCoverageIgnoreEnd

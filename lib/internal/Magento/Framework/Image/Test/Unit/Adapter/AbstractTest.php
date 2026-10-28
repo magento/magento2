@@ -15,10 +15,14 @@ use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Image\Adapter\AbstractAdapter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractAdapter
      */
@@ -42,14 +46,12 @@ class AbstractTest extends TestCase
     protected function setUp(): void
     {
         $this->directoryWriteMock = $this->createMock(Write::class);
-        $this->filesystemMock =
-            $this->getMockBuilder(Filesystem::class)
-                ->addMethods(['createDirectory'])
-                ->onlyMethods(['getDirectoryWrite'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->filesystemMock = $this->createPartialMockWithReflection(
+            Filesystem::class,
+            ['createDirectory', 'getDirectoryWrite']
+        );
         $this->filesystemMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'getDirectoryWrite'
         )->willReturn(
@@ -58,10 +60,9 @@ class AbstractTest extends TestCase
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractAdapter::class,
-            [$this->filesystemMock, $this->loggerMock]
-        );
+        $this->_model = $this->getMockBuilder(AbstractAdapter::class)
+            ->setConstructorArgs([$this->filesystemMock, $this->loggerMock])
+            ->getMock();
     }
 
     protected function tearDown(): void
@@ -74,13 +75,11 @@ class AbstractTest extends TestCase
 
     /**
      * Test adaptResizeValues with null as a value one of parameters
-     *
-     * @dataProvider adaptResizeValuesDataProvider
-     */
+     *     */
+    #[DataProvider('adaptResizeValuesDataProvider')]
     public function testAdaptResizeValues($width, $height, $expectedResult)
     {
         $method = new \ReflectionMethod($this->_model, '_adaptResizeValues');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->_model, $width, $height);
 
@@ -101,21 +100,17 @@ class AbstractTest extends TestCase
         return [[134.5, null, $expected], [null, 134.5, $expected]];
     }
 
-    /**
-     * @dataProvider prepareDestinationDataProvider
-     */
+    /**     */
+    #[DataProvider('prepareDestinationDataProvider')]
     public function testPrepareDestination($destination, $newName, $expectedResult)
     {
         $property = new \ReflectionProperty(get_class($this->_model), '_fileSrcPath');
-        $property->setAccessible(true);
         $property->setValue($this->_model, '_fileSrcPath');
 
         $property = new \ReflectionProperty(get_class($this->_model), '_fileSrcName');
-        $property->setAccessible(true);
         $property->setValue($this->_model, '_fileSrcName');
 
         $method = new \ReflectionMethod($this->_model, '_prepareDestination');
-        $method->setAccessible(true);
 
         $result = $method->invoke($this->_model, $destination, $newName);
 

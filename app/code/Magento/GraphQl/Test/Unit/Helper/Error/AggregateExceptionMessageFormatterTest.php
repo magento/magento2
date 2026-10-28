@@ -118,7 +118,7 @@ class AggregateExceptionMessageFormatterTest extends TestCase
         );
         $this->assertInstanceOf(GraphQlInputException::class, $exception);
         $this->assertSame($exceptionCode, $exception->getCode());
-        $this->assertSame($exceptionMessage, $exception->getMessage());
+        $this->assertSame($messagePrefix . ": " . $exceptionMessage, $exception->getMessage());
     }
 
     /**
@@ -127,7 +127,7 @@ class AggregateExceptionMessageFormatterTest extends TestCase
     public function testGetFormattedDefaultMessage(): void
     {
         $exceptionMessage = 'exception message';
-        $messagePrefix = 'prefix';
+        $messagePrefix = '';
         $this->formatter->expects($this->once())
             ->method('getFormatted')
             ->willReturn(null);

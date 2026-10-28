@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,10 +68,8 @@ namespace Magento\Framework\Session\Test\Unit {
             require_once __DIR__ . '/_files/mock_session_regenerate_id.php';
 
             $mockPHPFunctions = true;
-            $this->mockSessionConfig = $this->getMockBuilder(ConfigInterface::class)
-                ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
-            $this->mockCookieManager = $this->getMockForAbstractClass(CookieManagerInterface::class);
+            $this->mockSessionConfig = $this->createMock(ConfigInterface::class);
+            $this->mockCookieManager = $this->createMock(CookieManagerInterface::class);
             $this->mockCookieMetadataFactory = $this->getMockBuilder(
                 CookieMetadataFactory::class
             )

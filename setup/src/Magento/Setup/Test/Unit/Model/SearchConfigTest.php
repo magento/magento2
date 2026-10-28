@@ -13,6 +13,7 @@ use Magento\Search\Setup\CompositeInstallConfig;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SearchConfigTest extends TestCase
@@ -61,8 +62,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfiguration(array $installInput, array $searchInput)
     {
         $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
@@ -77,8 +78,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfigurationInvalidSearchEngine(array $installInput, array $searchInput)
     {
         $this->expectException(\Magento\Setup\Exception::class);
@@ -94,8 +95,8 @@ class SearchConfigTest extends TestCase
     /**
      * @param array $installInput
      * @param array $searchInput
-     * @dataProvider installInputDataProvider
      */
+    #[DataProvider('installInputDataProvider')]
     public function testSaveConfigurationValidationFail(array $installInput, array $searchInput)
     {
         $this->expectException(\Magento\Framework\Validation\ValidationException::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogPriceRulesFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|FixtureModel
      */
@@ -66,14 +69,9 @@ class CatalogPriceRulesFixtureTest extends TestCase
             ->willReturn([$websiteMock]);
 
         $contextMock = $this->createMock(Context::class);
-        $abstractDbMock = $this->getMockForAbstractClass(
+        $abstractDbMock = $this->createPartialMockWithReflection(
             AbstractDb::class,
-            [$contextMock],
-            '',
-            true,
-            true,
-            true,
-            ['getAllChildren']
+            ['getAllChildren', '_construct']
         );
         $abstractDbMock->expects($this->once())
             ->method('getAllChildren')

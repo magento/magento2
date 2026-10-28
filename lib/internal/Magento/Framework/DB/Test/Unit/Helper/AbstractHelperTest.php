@@ -2,8 +2,8 @@
 /**
  * \Magento\Framework\DB\Helper\AbstractHelper test case
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Test\Unit\Helper;
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Helper\AbstractHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractHelperTest extends TestCase
 {
@@ -32,7 +33,7 @@ class AbstractHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_adapterMock = $this->createMock(AdapterInterface::class);
 
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_resourceMock->expects($this->any())
@@ -40,22 +41,17 @@ class AbstractHelperTest extends TestCase
             ->with('prefix')
             ->willReturn($this->_adapterMock);
 
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractHelper::class,
-            [$this->_resourceMock, 'prefix'],
-            '',
-            true,
-            true,
-            true,
-            ['addLikeEscape']
-        );
+        $this->_model = $this->getMockBuilder(AbstractHelper::class)
+            ->setConstructorArgs([$this->_resourceMock, 'prefix'])
+            ->onlyMethods(['addLikeEscape'])
+            ->getMock();
     }
 
     /**
      * @param string $expected
      * @param array $data
-     * @dataProvider escapeLikeValueDataProvider
      */
+    #[DataProvider('escapeLikeValueDataProvider')]
     public function testEscapeLikeValue($expected, array $data)
     {
         $this->assertEquals($expected, $this->_model->escapeLikeValue($data['value'], $data['options']));

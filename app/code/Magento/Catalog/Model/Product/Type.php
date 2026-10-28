@@ -123,7 +123,7 @@ class Type implements OptionSourceInterface, ResetAfterRequestInterface
     public function factory($product)
     {
         $types = $this->getTypes();
-        $typeId = $product->getTypeId();
+        $typeId = $product->getTypeId() ?? '';
 
         if (!empty($types[$typeId]['model'])) {
             $typeModelName = $types[$typeId]['model'];
@@ -147,12 +147,12 @@ class Type implements OptionSourceInterface, ResetAfterRequestInterface
      */
     public function priceFactory($productType)
     {
+        $productType = (string)$productType;
         if (isset($this->_priceModels[$productType])) {
             return $this->_priceModels[$productType];
         }
 
         $types = $this->getTypes();
-
         if (!empty($types[$productType]['price_model'])) {
             $priceModelName = $types[$productType]['price_model'];
         } else {

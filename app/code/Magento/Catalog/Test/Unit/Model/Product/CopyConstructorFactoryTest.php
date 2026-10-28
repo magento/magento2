@@ -28,7 +28,7 @@ class CopyConstructorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new CopyConstructorFactory($this->_objectManagerMock);
     }
 

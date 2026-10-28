@@ -87,18 +87,8 @@ class PhpReadinessCheckTest extends TestCase
     public function testCheckPhpVersionPrettyVersion(): void
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
-        $multipleConstraints = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
-        $currentPhpVersion = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
+        $multipleConstraints = $this->createMock(ConstraintInterface::class);
+        $currentPhpVersion = $this->createMock(ConstraintInterface::class);
         $this->versionParser
             ->method('parseConstraints')
             ->willReturnOnConsecutiveCalls($multipleConstraints, $currentPhpVersion);
@@ -122,18 +112,8 @@ class PhpReadinessCheckTest extends TestCase
     public function testCheckPhpVersionPrettyVersionFailed(): void
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
-        $multipleConstraints = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
-        $currentPhpVersion = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
+        $multipleConstraints = $this->createMock(ConstraintInterface::class);
+        $currentPhpVersion = $this->createMock(ConstraintInterface::class);
         $this->versionParser
             ->method('parseConstraints')
             ->willReturnOnConsecutiveCalls($multipleConstraints, $currentPhpVersion);
@@ -156,18 +136,8 @@ class PhpReadinessCheckTest extends TestCase
      */
     private function setUpNoPrettyVersionParser(): void
     {
-        $multipleConstraints = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
-        $currentPhpVersion = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
+        $multipleConstraints = $this->createMock(ConstraintInterface::class);
+        $currentPhpVersion = $this->createMock(ConstraintInterface::class);
         $this->versionParser
             ->method('parseConstraints')
             ->willReturnOnConsecutiveCalls($multipleConstraints, $currentPhpVersion);
@@ -201,18 +171,8 @@ class PhpReadinessCheckTest extends TestCase
     public function testCheckPhpVersionFailed(): void
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
-        $multipleConstraints = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
-        $currentPhpVersion = $this->getMockForAbstractClass(
-            ConstraintInterface::class,
-            [],
-            '',
-            false
-        );
+        $multipleConstraints = $this->createMock(ConstraintInterface::class);
+        $currentPhpVersion = $this->createMock(ConstraintInterface::class);
         $this->versionParser
             ->method('parseConstraints')
             ->willReturnOnConsecutiveCalls($multipleConstraints, $currentPhpVersion);

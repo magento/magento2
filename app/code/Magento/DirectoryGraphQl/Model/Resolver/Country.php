@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,6 +62,13 @@ class Country implements ResolverInterface
             $country = $this->countryInformationAcquirer->getCountryInfo($args['id']);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
+        }
+
+        // Add validation for obsolete countries without translations
+        if (empty($country->getFullNameLocale())) {
+            throw new GraphQlNoSuchEntityException(
+                __("The country isn't available.")
+            );
         }
 
         return $this->dataProcessor->buildOutputDataArray(

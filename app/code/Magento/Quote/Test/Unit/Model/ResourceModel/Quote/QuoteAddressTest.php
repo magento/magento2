@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddressModel;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class QuoteAddressTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Address
      */
@@ -61,11 +63,10 @@ class QuoteAddressTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressMock = $this->getMockBuilder(QuoteAddressModel::class)
-            ->addMethods(['getOrderId', 'getOrder'])
-            ->onlyMethods(['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['__wakeup', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrderId', 'getOrder']
+        );
         $this->quoteMock = $this->createPartialMock(Quote::class, ['__wakeup', 'getId']);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
@@ -75,13 +76,9 @@ class QuoteAddressTest extends TestCase
         $this->relationCompositeMock = $this->createMock(
             RelationComposite::class
         );
-        $this->appResourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->appResourceMock->method('getConnection')->willReturn($this->connectionMock);
         $objectManager = new ObjectManager($this);
-        $this->connectionMock->expects($this->any())
-            ->method('describeTable')
-            ->willReturn([]);
+        $this->connectionMock->method('describeTable')->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())

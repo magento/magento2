@@ -2,8 +2,8 @@
 /**
  * this fixture update customer_address `input_validation` to `alphanum-with-spaces` for `street` field.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 $attributeCode = 'street';
 $entityType = \Magento\Customer\Model\Metadata\AddressMetadata::ENTITY_TYPE_ADDRESS;

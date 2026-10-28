@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\QuoteGraphQl\Model\QuoteException;
 use PHPUnit\Framework\TestCase;
@@ -14,11 +15,11 @@ use PHPUnit\Framework\TestCase;
 class QuoteExceptionTest extends TestCase
 {
     /**
-     * @dataProvider quoteExceptionDataProvider
      * @param int $errorId
      * @param string $code
      * @return void
      */
+    #[DataProvider('quoteExceptionDataProvider')]
     public function testGetExtensions(int $errorId, string $code): void
     {
         $exception = new QuoteException(__('test'), null, $errorId);
@@ -28,7 +29,7 @@ class QuoteExceptionTest extends TestCase
     /**
      * @return array
      */
-    public function quoteExceptionDataProvider(): array
+    public static function quoteExceptionDataProvider(): array
     {
         $data = [];
         foreach (ErrorMapper::MESSAGE_CODE_IDS as $id => $code) {

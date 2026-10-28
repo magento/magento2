@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SwatchAttributeCodesTest extends TestCase
 {
@@ -71,10 +72,10 @@ class SwatchAttributeCodesTest extends TestCase
     }
 
     /**
-     * @dataProvider dataForGettingCodes
      * @param array|bool $swatchAttributeCodesCache
      * @param array $expected
      */
+    #[DataProvider('dataForGettingCodes')]
     public function testGetCodes($swatchAttributeCodesCache, $expected)
     {
         $this->cache

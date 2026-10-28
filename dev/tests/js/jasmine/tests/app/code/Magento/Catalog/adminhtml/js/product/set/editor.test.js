@@ -181,7 +181,7 @@ define([
         return Promise.all(promises);
     }
 
-    describe('Magento_Catalog/js/category-checkbox-tree', function () {
+    describe('Magento_Catalog/js/product/set/editor', function () {
         let $container, editor;
 
         beforeEach(function () {

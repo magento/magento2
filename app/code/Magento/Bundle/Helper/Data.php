@@ -7,8 +7,6 @@ namespace Magento\Bundle\Helper;
 
 /**
  * Bundle helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

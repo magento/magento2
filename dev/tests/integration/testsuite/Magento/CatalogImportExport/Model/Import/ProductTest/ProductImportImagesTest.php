@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -31,13 +32,13 @@ class ProductImportImagesTest extends ProductTestBase
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @dataProvider importImagesDataProvider
      * @param string $importFile
      * @param string $productSku
      * @param string $storeCode
      * @param array $expectedImages
      * @param array $select
      */
+    #[DataProvider('importImagesDataProvider')]
     public function testImportImages(
         string $importFile,
         string $productSku,

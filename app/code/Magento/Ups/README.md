@@ -1,1 +1,3 @@
-The Magento_Ups module implements integration with the United Parcel Service shipping carrier.
+# Magento_Ups module
+
+This module implements integration with the United Parcel Service shipping carrier.

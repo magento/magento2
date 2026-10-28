@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,6 +58,7 @@ class Orders implements ResolverInterface
                 'id' => $order->getId(),
                 'increment_id' => $order->getIncrementId(),
                 'order_number' => $order->getIncrementId(),
+                'number' => $order->getIncrementId(),
                 'created_at' => $order->getCreatedAt(),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),

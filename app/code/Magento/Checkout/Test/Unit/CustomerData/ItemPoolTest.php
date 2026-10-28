@@ -41,7 +41,7 @@ class ItemPoolTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->model = $objectManager->getObject(
             ItemPool::class,
             [
@@ -59,7 +59,7 @@ class ItemPoolTest extends TestCase
         $quoteItemMock = $this->createMock(Item::class);
         $quoteItemMock->expects($this->once())->method('getProductType')->willReturn($productType);
 
-        $itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $itemMock = $this->createMock(ItemInterface::class);
         $itemMock->expects($this->once())->method('getItemData')->with($quoteItemMock)->willReturn($itemData);
 
         $this->objectManagerMock->expects($this->once())
@@ -79,7 +79,7 @@ class ItemPoolTest extends TestCase
         $quoteItemMock = $this->createMock(Item::class);
         $quoteItemMock->expects($this->once())->method('getProductType')->willReturn($productType);
 
-        $itemMock = $this->getMockForAbstractClass(ItemInterface::class);
+        $itemMock = $this->createMock(ItemInterface::class);
         $itemMock->expects($this->once())->method('getItemData')->with($quoteItemMock)->willReturn($itemData);
 
         $this->objectManagerMock->expects($this->once())

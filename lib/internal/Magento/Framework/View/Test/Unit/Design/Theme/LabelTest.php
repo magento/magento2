@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,8 +27,7 @@ class LabelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->labelList = $this->getMockBuilder(ListInterface::class)
-            ->getMockForAbstractClass();
+        $this->labelList = $this->createMock(ListInterface::class);
 
         $this->model = new Label(
             $this->labelList

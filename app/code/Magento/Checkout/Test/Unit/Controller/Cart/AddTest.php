@@ -111,9 +111,7 @@ class AddTest extends TestCase
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getmock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);

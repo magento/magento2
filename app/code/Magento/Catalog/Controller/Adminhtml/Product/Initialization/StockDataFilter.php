@@ -3,20 +3,22 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class StockDataFilter
+ * Normalize admin product stock fields before saving.
  */
 class StockDataFilter
 {
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    const MAX_QTY_VALUE = 99999999;
+    public const MAX_QTY_VALUE = 99999999;
 
     /**
      * @var ScopeConfigInterface
@@ -56,7 +58,7 @@ class StockDataFilter
         if ($stockData['use_config_manage_stock'] == 1 && !isset($stockData['manage_stock'])) {
             $stockData['manage_stock'] = $this->stockConfiguration->getManageStock();
         }
-        if (isset($stockData['qty']) && (double)$stockData['qty'] > self::MAX_QTY_VALUE) {
+        if (isset($stockData['qty']) && (float)$stockData['qty'] > self::MAX_QTY_VALUE) {
             $stockData['qty'] = self::MAX_QTY_VALUE;
         }
 

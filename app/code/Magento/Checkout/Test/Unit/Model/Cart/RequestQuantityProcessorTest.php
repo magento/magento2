@@ -11,6 +11,7 @@ use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\Locale\ResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RequestQuantityProcessorTest extends TestCase
 {
@@ -26,8 +27,7 @@ class RequestQuantityProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
-            ->getMockForAbstractClass();
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
     }
 
     /**
@@ -36,8 +36,8 @@ class RequestQuantityProcessorTest extends TestCase
      * @param array $cartData
      * @param string $locale
      * @param array $expected
-     * @dataProvider cartDataProvider
      */
+    #[DataProvider('cartDataProvider')]
     public function testProcess(array $cartData, string $locale, array $expected): void
     {
         $this->localeResolver->method('getLocale')

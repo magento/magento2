@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -14,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Adapter
      */
@@ -43,11 +46,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $contentManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
-            ->addMethods(['query'])
-            ->onlyMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientMock = $this->createPartialMockWithReflection(
+            \Magento\AdvancedSearch\Model\Client\ClientInterface::class,
+            ['query', 'testConnection']
+        );
         $contentManager
             ->expects($this->any())
             ->method('getConnection')
@@ -67,7 +69,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Search\Request\Builder::class,
             ['config' => $config]
         );
-        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->adapter = $objectManager->create(
             \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Adapter::class,
@@ -87,12 +89,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $this->requestBuilder->bind('fulltext_search_query', 'socks');
         $this->requestBuilder->setRequestName('one_match');
         $queryRequest = $this->requestBuilder->create();
-        $exception = new \Exception('Test Message');
+        $exception = new \Exception('Test message.');
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->clientMock->expects($this->once())->method('query')->willThrowException($exception);
-        $actualResponse = $this->adapter->query($queryRequest);
-        $this->assertEmpty($actualResponse->getAggregations()->getBuckets());
-        $this->assertEquals(0, $actualResponse->count());
+        $this->expectException(ClientException::class);
+        $this->adapter->query($queryRequest);
     }
 
     /**

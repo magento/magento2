@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -59,6 +59,11 @@ class ConfigurableRegularPrice extends AbstractPrice implements
      * @var ConfigurableMaxPriceCalculator
      */
     private $configurableMaxPriceCalculator;
+
+    /**
+     * @var array<int, bool>
+     */
+    private $equalFinalPriceCache = [];
 
     /**
      * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
@@ -193,6 +198,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     public function _resetState(): void
     {
         $this->values = [];
+        $this->equalFinalPriceCache = [];
     }
 
     /**
@@ -200,22 +206,63 @@ class ConfigurableRegularPrice extends AbstractPrice implements
      *
      * @param SaleableInterface $product
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isChildProductsOfEqualPrices(SaleableInterface $product): bool
     {
-        $minPrice = $this->getMinRegularAmount()->getValue();
-        $final_price = $product->getFinalPrice();
-        $productId = $product->getId();
-        if ($final_price < $minPrice) {
+        $storeId = (int) ($product->getStoreId() ?: 0);
+        $cacheKey = (int) $product->getId() . ':' . $storeId;
+        if (isset($this->equalFinalPriceCache[$cacheKey])) {
+            return $this->equalFinalPriceCache[$cacheKey];
+        }
+
+        $memoKey = '_children_final_prices_equal_store_' . $storeId;
+        $memoized = $product->getData($memoKey);
+        if ($memoized !== null) {
+            return (bool) $memoized;
+        }
+
+        // Listing fast-path: if index fields are present, rely on them and avoid any child loading
+        $minIndexed = $product->getData('minimal_price');
+        $maxIndexed = $product->getData('max_price');
+        if (is_numeric($minIndexed) && is_numeric($maxIndexed)) {
+            $result = ((float)$minIndexed === (float)$maxIndexed);
+            $this->equalFinalPriceCache[$cacheKey] = $result;
+            $product->setData($memoKey, $result);
+            return $result;
+        }
+
+        $children = $product->getTypeInstance()->getUsedProducts($product);
+        $firstFinal = null;
+        $saleableChildrenCount = 0;
+        $allEqual = true;
+        foreach ($children as $child) {
+            if (!$child->isSalable()) {
+                continue;
+            }
+            $saleableChildrenCount++;
+            $value = $child->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+            if ($firstFinal === null) {
+                $firstFinal = $value;
+                continue;
+            }
+            if ($value != $firstFinal) {
+                $allEqual = false;
+                break;
+            }
+        }
+
+        if ($saleableChildrenCount < 1 || $firstFinal === null || !$allEqual) {
+            $product->setData($memoKey, false);
+            $this->equalFinalPriceCache[$cacheKey] = false;
             return false;
         }
-        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
-        $items = $attributes->getItems();
-        $options = reset($items);
-        $maxPrice = $this->configurableMaxPriceCalculator->getMaxPriceForConfigurableProduct($productId);
-        if ($maxPrice == 0) {
-            $maxPrice = $this->getMaxRegularAmount()->getValue();
-        }
-        return (count($options->getOptions()) > 1) && $minPrice == $maxPrice;
+
+        // Guard against parent-level extra discounts (compute only when children are equal)
+        $result = !($product->getFinalPrice() < $firstFinal);
+        $this->equalFinalPriceCache[$cacheKey] = $result;
+        $product->setData($memoKey, $result);
+        return $result;
     }
 }

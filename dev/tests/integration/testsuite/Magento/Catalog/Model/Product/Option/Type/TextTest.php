@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TextTest extends TestCase
 {
-    const STUB_OPTION_DATA = ['id' => 11, 'type' => 'area'];
+    public const STUB_OPTION_DATA = ['id' => 11, 'type' => 'area'];
 
     /**
      * @var Text
@@ -40,11 +41,11 @@ class TextTest extends TestCase
     /**
      * Check if newline symbols are normalized in option value
      *
-     * @dataProvider optionValueDataProvider
      * @param array $productOptionData
      * @param string $optionValue
      * @param string $expectedOptionValue
      */
+    #[DataProvider('optionValueDataProvider')]
     public function testNormalizeNewlineSymbols(
         array $productOptionData,
         string $optionValue,

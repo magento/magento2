@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\DesignExceptions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DesignExceptionsTest extends TestCase
 {
@@ -40,7 +41,7 @@ class DesignExceptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->serializerMock = $this->createMock(Json::class);
 
@@ -61,9 +62,8 @@ class DesignExceptionsTest extends TestCase
      * @param bool $configValue
      * @param int $callNum
      * @param bool|string $result
-     * @param array $expressions
-     * @dataProvider getThemeByRequestDataProvider
-     */
+     * @param array $expressions     */
+    #[DataProvider('getThemeByRequestDataProvider')]
     public function testGetThemeByRequest($userAgent, $configValue, $callNum, $result, $expressions = [])
     {
         $this->requestMock->expects($this->once())

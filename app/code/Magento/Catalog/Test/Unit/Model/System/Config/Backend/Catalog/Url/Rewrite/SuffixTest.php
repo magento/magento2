@@ -82,39 +82,21 @@ class SuffixTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventDispatcher = $this->createMock(ManagerInterface::class);
         $this->eventDispatcher->method('dispatch')->willReturnSelf();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEventDispatcher'])
-            ->getMock();
+        $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->createMock(Registry::class);
-        $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->cacheTypeList = $this->getMockBuilder(TypeList::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['invalidate'])
-            ->getMock();
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheTypeList = $this->createPartialMock(TypeList::class, ['invalidate']);
 
-        $this->urlRewriteHelper = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStores'])
-            ->getMock();
+        $this->urlRewriteHelper = $this->createMock(UrlRewrite::class);
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStores']);
         $this->storeManager->method('getStores')->willReturn([]);
 
-        $this->appResource =$this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlFinder =$this->getMockBuilder(UrlFinderInterface::class)
-            ->onlyMethods(['findAllByData', 'findOneByData'])
-            ->getMockForAbstractClass();
+        $this->appResource = $this->createMock(ResourceConnection::class);
+        $this->urlFinder =$this->createMock(UrlFinderInterface::class);
         $this->urlFinder->method('findAllByData')->willReturn([]);
 
         $this->suffixModel = new Suffix(

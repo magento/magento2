@@ -6,8 +6,6 @@
 
 /**
  * Backup grid item renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column\Renderer;
 

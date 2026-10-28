@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class AdminAccountTest extends TestCase
             });
 
         $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',

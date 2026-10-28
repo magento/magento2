@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,14 +15,18 @@ use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Magento\Customer\Model\Address\Validator\Country tests.
  */
 class CountryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Data|MockObject  */
     private $directoryDataMock;
 
@@ -66,22 +70,19 @@ class CountryTest extends TestCase
      * @param array $allowedRegions
      * @param array $expected
      * @return void
-     *
-     * @dataProvider validateDataProvider
-     */
+     * */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $data, array $countryIds, array $allowedRegions, array $expected)
     {
-        $addressMock = $this
-            ->getMockBuilder(AbstractAddress::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryId'])
-            ->onlyMethods(
-                [
-                    'getRegion',
-                    'getRegionId',
-                    'getCountryModel',
-                ]
-            )->getMock();
+        $addressMock = $this->createPartialMockWithReflection(
+            AbstractAddress::class,
+            [
+                'getCountryId',
+                'getRegion',
+                'getRegionId',
+                'getCountryModel'
+            ]
+        );
 
         $this->directoryDataMock->expects($this->any())
             ->method('isRegionRequired')

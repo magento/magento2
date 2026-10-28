@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Product\PriceModifier;
 use Magento\CatalogRule\Model\Rule;
@@ -47,8 +48,8 @@ class PriceModifierTest extends TestCase
     /**
      * @param int|null $resultPrice
      * @param int $expectedPrice
-     * @dataProvider modifyPriceDataProvider
      */
+    #[DataProvider('modifyPriceDataProvider')]
     public function testModifyPriceIfPriceExists($resultPrice, $expectedPrice)
     {
         $this->ruleFactoryMock->expects($this->once())->method('create')->willReturn($this->ruleMock);

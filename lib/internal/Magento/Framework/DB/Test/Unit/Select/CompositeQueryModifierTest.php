@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,8 +27,8 @@ class CompositeQueryModifierTest extends TestCase
 
     public function testModify()
     {
-        $queryModifierMockOne = $this->getMockForAbstractClass(QueryModifierInterface::class);
-        $queryModifierMockTwo = $this->getMockForAbstractClass(QueryModifierInterface::class);
+        $queryModifierMockOne = $this->createMock(QueryModifierInterface::class);
+        $queryModifierMockTwo = $this->createMock(QueryModifierInterface::class);
         $selectMock = $this->createMock(Select::class);
         $queryModifierMockOne->expects($this->once())
             ->method('modify')

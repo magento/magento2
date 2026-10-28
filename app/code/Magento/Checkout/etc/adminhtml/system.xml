@@ -57,6 +57,11 @@
                     <label>Enable Clear Shopping Cart</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="cart_merge_preference" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cart Merge Preference</label>
+                    <source_model>Magento\Checkout\Model\Config\Source\CartMergePreference</source_model>
+                    <comment>Select how cart item quantities should be merged</comment>
+                </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1">
                 <label>My Cart Link</label>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,13 +34,9 @@ class LinkedProductSelectBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->baseSelectProcessorMock = $this->getMockBuilder(BaseSelectProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->baseSelectProcessorMock = $this->createMock(BaseSelectProcessorInterface::class);
 
-        $this->linkedProductSelectBuilderMock = $this->getMockBuilder(LinkedProductSelectBuilderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->linkedProductSelectBuilderMock = $this->createMock(LinkedProductSelectBuilderInterface::class);
 
         $this->subject = (new ObjectManager($this))->getObject(
             LinkedProductSelectBuilder::class,
@@ -57,9 +53,7 @@ class LinkedProductSelectBuilderTest extends TestCase
         $storeId = 1;
 
         /** @var Select|MockObject $selectMock */
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
 
         $expectedResult = [$selectMock];
 

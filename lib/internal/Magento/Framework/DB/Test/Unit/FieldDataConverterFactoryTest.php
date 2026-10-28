@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,8 +35,8 @@ class FieldDataConverterFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
         $this->fieldDataConverterFactory = $objectManager->getObject(
             FieldDataConverterFactory::class,
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,15 @@ use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BooleanTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Boolean
      */
@@ -68,11 +71,11 @@ class BooleanTest extends TestCase
      * @param bool $isScopeGlobal
      * @param array $expectedJoinCondition
      * @param string $expectedOrder
-     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      * @covers \Magento\Eav\Model\Entity\Attribute\Source\Boolean::addValueSortToCollection
-     * @dataProvider addValueSortToCollectionDataProvider
      */
+    #[DataProvider('addValueSortToCollectionDataProvider')]
     public function testAddValueSortToCollection(
         $direction,
         $isScopeGlobal,
@@ -82,27 +85,37 @@ class BooleanTest extends TestCase
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->willReturn($isScopeGlobal);
 
-        $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLinkField'])
-            ->getMockForAbstractClass();
+        $entity = $this->createPartialMock(
+            AbstractEntity::class,
+            ['getLinkField']
+        );
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $attributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
 
         $selectMock = $this->createMock(Select::class);
+        
+        // Track joined tables to allow production code to build order expression
+        $joinedTables = [];
+        $selectMock
+            ->method('joinLeft')
+            ->willReturnCallback(function ($table, $condition, $cols) use ($selectMock, &$joinedTables) {
+                $joinedTables = array_merge($joinedTables, array_keys($table));
+                return $selectMock;
+            });
+        
+        $selectMock
+            ->method('getPart')
+            ->with(Select::FROM)
+            ->willReturnCallback(function () use (&$joinedTables) {
+                $from = [];
+                foreach ($joinedTables as $alias) {
+                    $from[$alias] = ['joinType' => Select::LEFT_JOIN];
+                }
+                return $from;
+            });
 
         $collectionMock = $this->getCollectionMock();
         $collectionMock->expects($this->any())->method('getSelect')->willReturn($selectMock);
-        $withArgs = [];
-
-        foreach ($expectedJoinCondition as $data) {
-            $withArgs[] = [$data['requisites'], $data['condition'], []];
-        }
-        $selectMock
-            ->method('joinLeft')
-            ->willReturnCallback(function (...$withArgs) use ($selectMock) {
-                return $selectMock;
-            });
 
         $selectMock->expects($this->once())->method('order')->with($expectedOrder);
 
@@ -182,16 +195,19 @@ class BooleanTest extends TestCase
      */
     protected function getCollectionMock(): MockObject
     {
-        $collectionMock = $this->getMockBuilder(AbstractCollection::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getSelect', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $collectionMock = $this->createPartialMockWithReflection(
+            AbstractCollection::class,
+            ['getStoreId', 'getSelect', 'getConnection']
+        );
 
-        $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['method'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connectionMock = $this->createMock(Mysql::class);
+        
+        // Configure getCheckSql to return the IF expression expected by production code
+        $connectionMock->expects($this->any())
+            ->method('getCheckSql')
+            ->willReturnCallback(function ($condition, $trueValue, $falseValue) {
+                return "IF($condition, $trueValue, $falseValue)";
+            });
 
         $collectionMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $collectionMock->expects($this->any())->method('getStoreId')->willReturn('12');
@@ -204,11 +220,10 @@ class BooleanTest extends TestCase
      */
     protected function getAttributeMock(): MockObject
     {
-        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods(['isScopeGlobal'])
-            ->onlyMethods(['getAttributeCode', 'getId', 'getBackend', '__wakeup', 'getEntity'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['isScopeGlobal', 'getAttributeCode', 'getId', 'getBackend', '__wakeup', 'getEntity']
+        );
         $backendMock = $this->createMock(AbstractBackend::class);
 
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');

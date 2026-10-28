@@ -74,7 +74,7 @@ class ChangeOutputArray
      */
     private function round(float $value): float
     {
-        return (float) max($value, 0);
+        return (float) max(round($value, 2), 0);
     }
 
     /**

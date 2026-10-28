@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,10 +63,7 @@ class BuilderTest extends TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->aggregationContainer = $this
-            ->getMockBuilder(BucketBuilderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->aggregationContainer = $this->createMock(BucketBuilderInterface::class);
 
         $this->dataProviderFactory = $this->getMockBuilder(
             DataProviderFactory::class
@@ -91,13 +88,9 @@ class BuilderTest extends TestCase
      */
     public function testBuild()
     {
-        $this->requestInterface = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestInterface = $this->createMock(RequestInterface::class);
 
-        $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBuckedInterface = $this->createMock(BucketInterface::class);
 
         $this->requestInterface->expects($this->once())
             ->method('getIndex')

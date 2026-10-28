@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,6 +122,7 @@ class StoreHelpers extends Helper
         string $successMessageContainer
     ): void {
         try {
+            $confirmModalAcceptButton = 'aside.confirm .modal-footer button.action-accept';
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
@@ -137,6 +138,9 @@ class StoreHelpers extends Helper
                 $magentoWebDriver->waitForElementVisible($createDbBackupButton, 10);
                 $magentoWebDriver->selectOption($createDbBackupButton, 'No');
                 $magentoWebDriver->click($deleteButton);
+                $magentoWebDriver->waitForPageLoad(30);
+                $magentoWebDriver->waitForElementVisible($confirmModalAcceptButton, 10);
+                $magentoWebDriver->click($confirmModalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
                 $magentoWebDriver->waitForText($successMessage, 10, $successMessageContainer);
                 $storeViews = $webDriver->findElements(WebDriverBy::xpath($storeViewsToDelete));

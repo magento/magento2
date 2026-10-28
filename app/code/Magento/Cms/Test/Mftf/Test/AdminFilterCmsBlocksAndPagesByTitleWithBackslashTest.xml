@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilterCmsBlocksAndPagesByTitleWithBackslashTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Filter cms block and pages by title"/>
+            <title value="Admin can filter cms blocks and pages grid by title containing backslash"/>
+            <description value="This test case verifies filtering cms blocks and pages by titles containing a backslash"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15053"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create a cms block with title magento\store -->
+            <createData entity="_emptyCmsBlock" stepKey="createTargetBlock">
+                <field key="title">Magento\Store</field>
+            </createData>
+            <!-- Step 4: Create cms page with title magento\store -->
+            <createData entity="_emptyCmsPage" stepKey="createTargetPage">
+                <field key="title">Magento\Store</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created block and page -->
+            <deleteData createDataKey="createTargetBlock" stepKey="deleteTargetBlock"/>
+            <deleteData createDataKey="createTargetPage" stepKey="deleteTargetPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Step 2: In cms blocks input magento\store in title filter to search and then check the search result -->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridByCmsBlockIdentifier">
+            <argument name="filterInputName" value="title" />
+            <argument name="filterValue" value="$createTargetBlock.title$" />
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyGridFilter"/>
+        <!-- Step 3: Assert result contain magento\store in cms block -->
+        <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="asserCmsBlockInGrid">
+            <argument name="cmsPage" value="$$createTargetBlock$$" />
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFiltersIfAny"/>
+        <!-- Step 5: In cms pages input magento\store in title filter to search and then check the search result -->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCmsPagesGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetPageGridFilters"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterGridByCmsPageIdentifier">
+            <argument name="filterInputName" value="title" />
+            <argument name="filterValue" value="$createTargetPage.title$" />
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyGridFilters"/>
+        <!-- Step 6: Assert result contain magento\store in cms page -->
+        <actionGroup ref="AssertCMSPageInGridActionGroup" stepKey="assertCmsPageInGrid">
+            <argument name="cmsPage" value="$$$createTargetPage$$" />
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+    </test>
+</tests>

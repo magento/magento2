@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema;
@@ -197,9 +197,9 @@ class OperationsExecutor
                 $statementAggregator = $this->statementAggregatorFactory->create();
 
                 foreach ($this->operations as $operation) {
-                    if (isset($tableHistory[$operation->getOperationName()])) {
+                    if (isset($tableHistory[$operation->getOperationName() ?? ''])) {
                         /** @var ElementHistory $elementHistory */
-                        foreach ($tableHistory[$operation->getOperationName()] as $elementHistory) {
+                        foreach ($tableHistory[$operation->getOperationName() ?? ''] as $elementHistory) {
                             $statementAggregator->addStatements($operation->doOperation($elementHistory));
 
                             if ($operation->isOperationDestructive()) {

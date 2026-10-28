@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DataTest extends TestCase
 {
@@ -27,7 +28,7 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->objectManager = new ObjectManager($this);
     }
 
@@ -35,9 +36,8 @@ class DataTest extends TestCase
      * @param string $amount
      * @param bool $format
      * @param bool $includeContainer
-     * @param string $result
-     * @dataProvider currencyDataProvider
-     */
+     * @param string $result     */
+    #[DataProvider('currencyDataProvider')]
     public function testCurrency($amount, $format, $includeContainer, $result)
     {
         if ($format) {
@@ -72,9 +72,8 @@ class DataTest extends TestCase
      * @param string $store
      * @param bool $format
      * @param bool $includeContainer
-     * @param string $result
-     * @dataProvider currencyByStoreDataProvider
-     */
+     * @param string $result     */
+    #[DataProvider('currencyByStoreDataProvider')]
     public function testCurrencyByStore($amount, $store, $format, $includeContainer, $result)
     {
         if ($format) {

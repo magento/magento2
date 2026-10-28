@@ -27,7 +27,7 @@ class ImportExportTest extends TestCase
     /**
      * Import model mock
      *
-     * @var \Magento\ImportExport\Model\Import|MockObject
+     * @var Import|MockObject
      */
     protected $subject;
 

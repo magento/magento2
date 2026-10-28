@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\ConcealInProductionConfigList;
 use Magento\Framework\App\State;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,9 +32,7 @@ class ConcealInProductionConfigListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stateMock = $this->createMock(State::class);
 
         $configs = [
             'first/path' => ConcealInProductionConfigList::DISABLED,
@@ -51,10 +50,10 @@ class ConcealInProductionConfigListTest extends TestCase
      * @param string $path
      * @param string $mageMode
      * @param bool $expectedResult
-     * @dataProvider disabledDataProvider
      *
      * @deprecated
      */
+    #[DataProvider('disabledDataProvider')]
     public function testIsDisabled($path, $mageMode, $expectedResult)
     {
         $this->stateMock->expects($this->once())
@@ -90,10 +89,10 @@ class ConcealInProductionConfigListTest extends TestCase
      * @param string $path
      * @param string $mageMode
      * @param bool $expectedResult
-     * @dataProvider hiddenDataProvider
      *
      * @deprecated
      */
+    #[DataProvider('hiddenDataProvider')]
     public function testIsHidden($path, $mageMode, $expectedResult)
     {
         $this->stateMock->expects($this->once())

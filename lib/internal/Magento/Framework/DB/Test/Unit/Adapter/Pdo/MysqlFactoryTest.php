@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MysqlFactoryTest extends TestCase
 {
@@ -31,7 +32,7 @@ class MysqlFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->mysqlFactory = $objectManager->getObject(
             MysqlFactory::class,
             [
@@ -44,16 +45,15 @@ class MysqlFactoryTest extends TestCase
      * @param array $objectManagerArguments
      * @param array $config
      * @param string|null $loggerMockPlaceholder
-     * @param string|null $selectFactoryMockPlaceholder
-     * @dataProvider createDataProvider
-     */
+     * @param string|null $selectFactoryMockPlaceholder     */
+    #[DataProvider('createDataProvider')]
     public function testCreate(
         array $objectManagerArguments,
         array $config,
         ?string $loggerMockPlaceholder = null,
         ?string $selectFactoryMockPlaceholder = null
     ) {
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $selectFactoryMock = $this->createMock(SelectFactory::class);
         if ($loggerMockPlaceholder === 'loggerMock') {
             $objectManagerArguments['logger'] = $loggerMock;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model;
@@ -92,7 +92,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder)
     {
@@ -134,7 +134,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function unassign($attributeSetId, $attributeCode)
     {
@@ -171,13 +171,13 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getAttributes($entityType, $attributeSetId)
+    public function getAttributes($entityTypeCode, $attributeSetId)
     {
         /** @var \Magento\Eav\Api\Data\AttributeSetInterface $attributeSet */
         $attributeSet = $this->setRepository->get($attributeSetId);
-        $requiredEntityTypeId = $this->eavConfig->getEntityType($entityType)->getId();
+        $requiredEntityTypeId = $this->eavConfig->getEntityType($entityTypeCode)->getId();
         if (!$attributeSet->getAttributeSetId() || $attributeSet->getEntityTypeId() != $requiredEntityTypeId) {
             throw NoSuchEntityException::singleField('attributeSetId', $attributeSetId);
         }

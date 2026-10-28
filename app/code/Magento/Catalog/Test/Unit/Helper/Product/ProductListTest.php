@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,15 +31,13 @@ class ProductListTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->productListHelper = $objectManager->getObject(ProductList::class, [
             'scopeConfig' => $this->scopeConfigMock
         ]);
     }
 
-    /**
-     * @dataProvider defaultAvailableLimitsDataProvider
-     */
+    #[DataProvider('defaultAvailableLimitsDataProvider')]
     public function testGetDefaultLimitPerPageValueReturnsOneOfAvailableLimits(
         string $availableValues,
         int $defaultValue,

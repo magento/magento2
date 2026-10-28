@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,12 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Validation\CanRefund;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CanRefundTest extends TestCase
 {
+
     /**
      * @var CanRefund|MockObject
      */
@@ -48,14 +50,12 @@ class CanRefundTest extends TestCase
             ]
         ];
         $this->objectManager->prepareObjectManager($objects);
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStatus', 'getItems'])
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createPartialMock(
+            Order::class,
+            ['getStatus', 'getItems', 'getState', 'getTotalPaid', 'getTotalRefunded']
+        );
 
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
@@ -67,9 +67,8 @@ class CanRefundTest extends TestCase
 
     /**
      * @param string $state
-     *
-     * @dataProvider canCreditmemoWrongStateDataProvider
      */
+    #[DataProvider('canCreditmemoWrongStateDataProvider')]
     public function testCanCreditmemoWrongState($state)
     {
         $this->orderMock->expects($this->any())

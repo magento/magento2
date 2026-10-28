@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class WriteTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $this->driver = $this->createMock(DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
@@ -65,7 +65,7 @@ class WriteTest extends TestCase
     public function testInstanceFileNotExists()
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
@@ -77,7 +77,7 @@ class WriteTest extends TestCase
     public function testInstanceFileAlreadyExists()
     {
         $this->expectException('Magento\Framework\Exception\FileSystemException');
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)

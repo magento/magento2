@@ -19,8 +19,8 @@ use Magento\Ui\Component\Listing\Columns\Column;
 class PageActions extends Column
 {
     /** Url path */
-    const CMS_URL_PATH_EDIT = 'cms/page/edit';
-    const CMS_URL_PATH_DELETE = 'cms/page/delete';
+    public const CMS_URL_PATH_EDIT = 'cms/page/edit';
+    public const CMS_URL_PATH_DELETE = 'cms/page/delete';
 
     /**
      * @var \Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder
@@ -56,6 +56,7 @@ class PageActions extends Column
      * @param array $data
      * @param string $editUrl
      * @param \Magento\Cms\ViewModel\Page\Grid\UrlBuilder|null $scopeUrlBuilder
+     * @param Escaper|null $escaper
      */
     public function __construct(
         ContextInterface $context,
@@ -65,7 +66,8 @@ class PageActions extends Column
         array $components = [],
         array $data = [],
         $editUrl = self::CMS_URL_PATH_EDIT,
-        ?\Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
+        ?\Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null,
+        ?Escaper $escaper = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
@@ -73,6 +75,7 @@ class PageActions extends Column
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->scopeUrlBuilder = $scopeUrlBuilder ?: ObjectManager::getInstance()
             ->get(\Magento\Cms\ViewModel\Page\Grid\UrlBuilder::class);
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
     }
 
     /**
@@ -88,7 +91,7 @@ class PageActions extends Column
                         'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
                         'label' => __('Edit'),
                     ];
-                    $title = $this->getEscaper()->escapeHtml($item['title']);
+                    $title = $this->escaper->escapeHtml($item['title']);
                     $item[$name]['delete'] = [
                         'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
                         'label' => __('Delete'),
@@ -114,19 +117,5 @@ class PageActions extends Column
         }
 
         return $dataSource;
-    }
-
-    /**
-     * Get instance of escaper
-     *
-     * @return Escaper
-     * @deprecated 101.0.7
-     */
-    private function getEscaper()
-    {
-        if (!$this->escaper) {
-            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
-        }
-        return $this->escaper;
     }
 }

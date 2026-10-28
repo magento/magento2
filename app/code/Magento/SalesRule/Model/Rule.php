@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model;
 
@@ -577,7 +577,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function hasIsValidForAddress($address)
     {
         $addressId = $this->_getAddressId($address);
-        return isset($this->_validatedAddresses[$addressId]) ? true : false;
+        return ($addressId !== null && isset($this->_validatedAddresses[$addressId])) ? true : false;
     }
 
     /**
@@ -590,7 +590,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function setIsValidForAddress($address, $validationResult)
     {
         $addressId = $this->_getAddressId($address);
-        $this->_validatedAddresses[$addressId] = $validationResult;
+        if ($addressId !== null) {
+            $this->_validatedAddresses[$addressId] = $validationResult;
+        }
         return $this;
     }
 

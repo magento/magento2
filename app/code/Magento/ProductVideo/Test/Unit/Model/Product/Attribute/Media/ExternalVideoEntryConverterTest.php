@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\VideoContentInterface;
 use Magento\Framework\Api\Data\VideoContentInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry;
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ExternalVideoEntryConverterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var MockObject|ProductAttributeMediaGalleryEntryInterfaceFactory */
     private $mediaGalleryEntryFactoryMock;
 
@@ -88,7 +91,7 @@ class ExternalVideoEntryConverterTest extends TestCase
                 ]
             );
 
-        $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
+        $this->mediaGalleryEntryFactoryMock->method('create')->willReturn(
             $this->mediaGalleryEntryMock
         );
 
@@ -97,9 +100,9 @@ class ExternalVideoEntryConverterTest extends TestCase
         $this->videoEntryFactoryMock =
             $this->createPartialMock(VideoContentInterfaceFactory::class, ['create']);
 
-        $this->videoEntryMock = $this->getMockForAbstractClass(VideoContentInterface::class);
+        $this->videoEntryMock = $this->createMock(VideoContentInterface::class);
 
-        $this->videoEntryFactoryMock->expects($this->any())->method('create')->willReturn($this->videoEntryMock);
+        $this->videoEntryFactoryMock->method('create')->willReturn($this->videoEntryMock);
 
         $this->mediaGalleryEntryExtensionFactoryMock =
             $this->createPartialMock(
@@ -109,8 +112,8 @@ class ExternalVideoEntryConverterTest extends TestCase
 
         $this->mediaGalleryEntryExtensionMock = $this->getProductAttributeMediaGalleryEntryExtensionMock();
 
-        $this->mediaGalleryEntryExtensionMock->expects($this->any())->method('setVideoContent')->willReturn(null);
-        $this->mediaGalleryEntryExtensionFactoryMock->expects($this->any())->method('create')->willReturn(
+        $this->mediaGalleryEntryExtensionMock->method('setVideoContent')->willReturn(null);
+        $this->mediaGalleryEntryExtensionFactoryMock->method('create')->willReturn(
             $this->mediaGalleryEntryExtensionMock
         );
 
@@ -234,10 +237,9 @@ class ExternalVideoEntryConverterTest extends TestCase
      */
     private function getProductAttributeMediaGalleryEntryExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(ProductAttributeMediaGalleryEntryExtension::class)
-            ->disableOriginalConstructor();
         try {
-            $mockBuilder->addMethods(
+            return $this->createPartialMockWithReflection(
+                ProductAttributeMediaGalleryEntryExtension::class,
                 [
                     'setVideoContent',
                     'getVideoContent',
@@ -246,8 +248,7 @@ class ExternalVideoEntryConverterTest extends TestCase
             );
         } catch (RuntimeException $e) {
             // ProductAttributeMediaGalleryEntryExtension already generated and has all necessary methods.
+            return $this->createMock(ProductAttributeMediaGalleryEntryExtension::class);
         }
-
-        return $mockBuilder->getMock();
     }
 }

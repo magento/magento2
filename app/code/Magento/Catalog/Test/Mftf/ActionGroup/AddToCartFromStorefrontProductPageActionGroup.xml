@@ -17,6 +17,16 @@
             <argument name="productName"/>
         </arguments>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <!-- Scroll to button to prevent overlapping elements from intercepting click -->
+        <scrollTo selector="{{StorefrontProductActionSection.addToCart}}" stepKey="scrollToAddToCartButton"/>
+        <wait time="1" stepKey="waitForScrollToComplete"/>
+        <!-- Additional scroll with JS to ensure element is in viewport and not intercepted -->
+        <executeJS function="
+            var element = document.querySelector('#product-addtocart-button');
+            if (element) {
+                element.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+        " stepKey="scrollToAddToCartButtonWithJS"/>
         <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>

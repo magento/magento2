@@ -15,9 +15,11 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ExportDataHandlerTest extends TestCase
@@ -86,13 +88,13 @@ class ExportDataHandlerTest extends TestCase
 
         $this->archiveMock = $this->createMock(Archive::class);
 
-        $this->reportWriterMock = $this->getMockForAbstractClass(ReportWriterInterface::class);
+        $this->reportWriterMock = $this->createMock(ReportWriterInterface::class);
 
         $this->cryptographerMock = $this->createMock(Cryptographer::class);
 
         $this->fileRecorderMock = $this->createMock(FileRecorder::class);
 
-        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryMock = $this->createMock(WriteInterface::class);
 
         $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
@@ -124,8 +126,8 @@ class ExportDataHandlerTest extends TestCase
 
     /**
      * @param bool $isArchiveSourceDirectory
-     * @dataProvider prepareExportDataDataProvider
      */
+    #[DataProvider('prepareExportDataDataProvider')]
     public function testPrepareExportData($isArchiveSourceDirectory)
     {
         $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/' . $this->getInstanceIdentifier() . '/';
@@ -182,23 +184,30 @@ class ExportDataHandlerTest extends TestCase
                 $isArchiveSourceDirectory
             );
 
-        $fileContent = 'Some text';
+        $archiveReadFileMock = $this->createMock(FileWriteInterface::class);
         $this->directoryMock
             ->expects($this->once())
-            ->method('readFile')
-            ->with($archiveRelativePath)
-            ->willReturn($fileContent);
+            ->method('openFile')
+            ->with($archiveRelativePath, 'r')
+            ->willReturn($archiveReadFileMock);
+        $archiveReadFileMock
+            ->expects($this->once())
+            ->method('close');
 
+        $destinationFileMock = $this->createMock(FileWriteInterface::class);
         $this->cryptographerMock
             ->expects($this->once())
-            ->method('encode')
-            ->with($fileContent)
+            ->method('encodeToFile')
+            ->with($archiveReadFileMock, $destinationFileMock)
             ->willReturn($this->encodedContextMock);
 
         $this->fileRecorderMock
             ->expects($this->once())
-            ->method('recordNewFile')
-            ->with($this->encodedContextMock);
+            ->method('recordNewFileStreamed')
+            ->willReturnCallback(function (callable $writer) use ($destinationFileMock) {
+                $this->assertSame($this->encodedContextMock, $writer($destinationFileMock));
+                return true;
+            });
 
         $this->assertTrue($this->exportDataHandler->prepareExportData());
     }

@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Profiler\Driver\Standard\Stat;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class OutputAbstractTest extends TestCase
 {
@@ -22,9 +23,9 @@ class OutputAbstractTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_output = $this->getMockForAbstractClass(
-            AbstractOutput::class
-        );
+        $this->_output = $this->getMockBuilder(AbstractOutput::class)
+            ->onlyMethods(['display'])
+            ->getMock();
     }
 
     /**
@@ -66,10 +67,10 @@ class OutputAbstractTest extends TestCase
     {
         $configuration = ['filterPattern' => '/filter pattern/', 'thresholds' => ['fetchKey' => 100]];
         /** @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput $output  */
-        $output = $this->getMockForAbstractClass(
-            AbstractOutput::class,
-            [$configuration]
-        );
+        $output = $this->getMockBuilder(AbstractOutput::class)
+            ->setConstructorArgs([$configuration])
+            ->onlyMethods(['display'])
+            ->getMock();
         $this->assertEquals('/filter pattern/', $output->getFilterPattern());
         $thresholds = $output->getThresholds();
         $this->assertArrayHasKey('fetchKey', $thresholds);
@@ -78,16 +79,14 @@ class OutputAbstractTest extends TestCase
 
     /**
      * Test _renderColumnValue method
-     *
-     * @dataProvider renderColumnValueDataProvider
-     * @param mixed $value
+     *     * @param mixed $value
      * @param string $columnKey
      * @param mixed $expectedValue
      */
+    #[DataProvider('renderColumnValueDataProvider')]
     public function testRenderColumnValue($value, $columnKey, $expectedValue)
     {
         $method = new \ReflectionMethod($this->_output, '_renderColumnValue');
-        $method->setAccessible(true);
         $this->assertEquals($expectedValue, $method->invoke($this->_output, $value, $columnKey));
     }
 
@@ -111,7 +110,6 @@ class OutputAbstractTest extends TestCase
     public function testRenderCaption()
     {
         $method = new \ReflectionMethod($this->_output, '_renderCaption');
-        $method->setAccessible(true);
         $this->assertMatchesRegularExpression(
             '/Code Profiler \(Memory usage: real - \d+, emalloc - \d+\)/',
             $method->invoke($this->_output)
@@ -139,7 +137,6 @@ class OutputAbstractTest extends TestCase
         );
 
         $method = new \ReflectionMethod($this->_output, '_getTimerIds');
-        $method->setAccessible(true);
         $this->assertEquals($expectedTimerIds, $method->invoke($this->_output, $mockStat));
     }
 
@@ -149,7 +146,6 @@ class OutputAbstractTest extends TestCase
     public function testRenderTimerId()
     {
         $method = new \ReflectionMethod($this->_output, '_renderTimerId');
-        $method->setAccessible(true);
         $this->assertEquals('someTimerId', $method->invoke($this->_output, 'someTimerId'));
     }
 }

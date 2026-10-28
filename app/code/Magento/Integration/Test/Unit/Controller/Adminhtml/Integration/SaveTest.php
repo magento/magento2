@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,10 @@ use Magento\Integration\Controller\Adminhtml\Integration\Save;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTestCase;
 use Magento\Security\Model\AdminSessionsManager;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 
 class SaveTest extends IntegrationTestCase
 {

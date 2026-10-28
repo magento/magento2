@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Block\Adminhtml\Session;
 
+use Magento\Backend\Helper\Data as DirectoryHelper;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Block\Adminhtml\Session\Activity;
-use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\ConfigInterface;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
-use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,11 +37,6 @@ class ActivityTest extends TestCase
     protected $sessionsManager;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $sessionsInfoCollection;
-
-    /**
      * @var ConfigInterface
      */
     protected $securityConfig;
@@ -49,11 +45,6 @@ class ActivityTest extends TestCase
      * @var Collection
      */
     protected $collectionMock;
-
-    /**
-     * @var AdminSessionInfo
-     */
-    protected $sessionMock;
 
     /**
      * @var TimezoneInterface
@@ -65,7 +56,7 @@ class ActivityTest extends TestCase
      */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;
@@ -78,39 +69,27 @@ class ActivityTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-
-        $this->sessionsInfoCollection = $this->createPartialMock(
-            CollectionFactory::class,
-            ['create']
-        );
+        
+        $jsonHelperMock = $this->createMock(JsonHelper::class);
+        $directoryHelperMock = $this->createMock(DirectoryHelper::class);
+        
+        $this->objectManager->prepareObjectManager([
+            [JsonHelper::class, $jsonHelperMock],
+            [DirectoryHelper::class, $directoryHelperMock]
+        ]);
+        
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
 
         $this->sessionsManager = $this->createPartialMock(
             AdminSessionsManager::class,
             ['getSessionsForCurrentUser']
         );
 
-        $this->securityConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->securityConfig = $this->createMock(ConfigInterface::class);
 
-        $this->sessionMock = $this->createMock(AdminSessionInfo::class);
+        $this->collectionMock = $this->createPartialMock(Collection::class, ['count']);
 
-        $this->localeDate = $this->getMockForAbstractClass(
-            TimezoneInterface::class,
-            ['formatDateTime'],
-            '',
-            false
-        );
-
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['is_null'])
-            ->onlyMethods(['count'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->remoteAddressMock = $this->createMock(RemoteAddress::class);
 
         $this->block = $this->objectManager->getObject(
             Activity::class,
@@ -140,8 +119,8 @@ class ActivityTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param int $sessionsNumber
-     * @dataProvider dataProviderAreMultipleSessionsActive
      */
+    #[DataProvider('dataProviderAreMultipleSessionsActive')]
     public function testAreMultipleSessionsActive($expectedResult, $sessionsNumber)
     {
         $this->sessionsManager->expects($this->once())
@@ -178,8 +157,8 @@ class ActivityTest extends TestCase
 
     /**
      * @param string $timeString
-     * @dataProvider dataProviderTime
      */
+    #[DataProvider('dataProviderTime')]
     public function testFormatDateTime($timeString)
     {
         $time = new \DateTime($timeString);

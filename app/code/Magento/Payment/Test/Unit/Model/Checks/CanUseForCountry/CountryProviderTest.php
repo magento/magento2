@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,15 +36,15 @@ class CountryProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->directory = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDefaultCountry'])
-            ->getMock();
+        $this->directory = $this->createPartialMock(
+            Data::class,
+            ['getDefaultCountry']
+        );
 
-        $this->quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getBillingAddress', 'getShippingAddress'])
-            ->getMock();
+        $this->quote = $this->createPartialMock(
+            Quote::class,
+            ['getBillingAddress', 'getShippingAddress']
+        );
 
         $this->countryProvider = new CountryProvider($this->directory);
     }
@@ -54,10 +54,10 @@ class CountryProviderTest extends TestCase
      */
     public function testGetCountry()
     {
-        $address = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCountry'])
-            ->getMock();
+        $address = $this->createPartialMock(
+            Address::class,
+            ['getCountry']
+        );
 
         $this->quote->expects(static::once())
             ->method('getBillingAddress')
@@ -80,10 +80,10 @@ class CountryProviderTest extends TestCase
      */
     public function testGetCountryForBillingAddressWithoutCountry()
     {
-        $address = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCountry'])
-            ->getMock();
+        $address = $this->createPartialMock(
+            Address::class,
+            ['getCountry']
+        );
 
         $this->quote->expects(static::never())
             ->method('getShippingAddress');
@@ -105,10 +105,10 @@ class CountryProviderTest extends TestCase
      */
     public function testGetCountryShippingAddress()
     {
-        $address = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getCountry'])
-            ->getMock();
+        $address = $this->createPartialMock(
+            Address::class,
+            ['getCountry']
+        );
 
         $this->quote->expects(static::once())
             ->method('getBillingAddress')

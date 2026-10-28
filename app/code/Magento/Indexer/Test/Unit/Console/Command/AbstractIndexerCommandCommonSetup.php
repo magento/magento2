@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,12 +19,15 @@ use Magento\Indexer\Model\Indexer\Collection;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class AbstractIndexerCommandCommonSetup extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject|ConfigLoader
      */
@@ -63,7 +66,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(ObjectManagerFactory::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
 
         $this->stateMock = $this->createMock(State::class);
@@ -136,9 +139,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
     protected function getIndexerMock(array $methods = [], array $data = [])
     {
         /** @var MockObject|IndexerInterface $indexer */
-        $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->onlyMethods(array_merge($methods, ['getId', 'getTitle']))
-            ->getMockForAbstractClass();
+        $indexer = $this->createMock(IndexerInterface::class);
         $indexer->method('getId')
             ->willReturn($data['indexer_id'] ?? '');
         $indexer->method('getTitle')

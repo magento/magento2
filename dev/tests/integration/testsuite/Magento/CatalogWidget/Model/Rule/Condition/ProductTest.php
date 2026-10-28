@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Model\Rule\Condition;
@@ -134,6 +134,46 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetMappedSqlFieldCategoryIdsAttribute()
     {
         $this->conditionProduct->setAttribute('category_ids');
+        $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddToCollectionCategoryIdsUsesJoinInsteadOfSubquery(): void
+    {
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->conditionProduct->setAttribute('category_ids');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->setValue('5,6,7');
+        $this->conditionProduct->addToCollection($collection);
+
+        $sql = (string)$collection->getSelect();
+        $this->assertStringContainsString('catalog_category_product_widget', $sql);
+        $this->assertStringNotContainsString('IN (SELECT', $sql);
+        $this->assertEquals(
+            'catalog_category_product_widget.category_id',
+            $this->conditionProduct->getMappedSqlField()
+        );
+        $this->assertEquals(['5', '6', '7'], $this->conditionProduct->getBindArgumentValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testResetStateClearsJoinedCategoryAttribute(): void
+    {
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->conditionProduct->setAttribute('category_ids');
+        $this->conditionProduct->setOperator('()');
+        $this->conditionProduct->addToCollection($collection);
+        $this->assertEquals(
+            'catalog_category_product_widget.category_id',
+            $this->conditionProduct->getMappedSqlField()
+        );
+
+        $this->conditionProduct->_resetState();
+
         $this->assertEquals('e.entity_id', $this->conditionProduct->getMappedSqlField());
     }
 

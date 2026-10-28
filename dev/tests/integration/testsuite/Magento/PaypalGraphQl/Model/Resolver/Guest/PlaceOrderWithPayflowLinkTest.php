@@ -170,10 +170,10 @@ QUERY;
                             'BUTTONSOURCE' => $button,
                             'tender' => 'C',
                         ],
-                        $this->returnSelf()
+                        $this->payflowRequest
                     ],
-                    ['USER1', 1, $this->returnSelf()],
-                    ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
+                    ['USER1', 1, $this->payflowRequest],
+                    ['USER2', 'USER2SilentPostHash', $this->payflowRequest]
                 ],
             );
 
@@ -248,7 +248,7 @@ QUERY;
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedErrorCode = 'UNDEFINED';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->payflowRequest->method('setData')
             ->with(

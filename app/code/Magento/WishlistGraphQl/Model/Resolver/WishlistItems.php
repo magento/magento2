@@ -61,7 +61,7 @@ class WishlistItems implements ResolverInterface
         $wishlist = $value['model'];
 
         if ($context->getExtensionAttributes()->getStore() instanceof StoreInterface) {
-            $args['store_id'] = $context->getExtensionAttributes()->getStore()->getId();
+            $args['website_id'] = $context->getExtensionAttributes()->getStore()->getWebsiteId();
         }
 
         /** @var WishlistItemCollection $wishlistItemCollection */
@@ -95,6 +95,7 @@ class WishlistItems implements ResolverInterface
      * @param Wishlist $wishlist
      * @param array $args
      * @return WishlistItemCollection
+     * @throws LocalizedException
      */
     private function getWishListItems(Wishlist $wishlist, array $args): WishlistItemCollection
     {
@@ -104,8 +105,15 @@ class WishlistItems implements ResolverInterface
         /** @var WishlistItemCollection $wishlistItemCollection */
         $wishlistItemCollection = $this->wishlistItemCollectionFactory->create();
         $wishlistItemCollection->addWishlistFilter($wishlist);
-        if (isset($args['store_id'])) {
-            $wishlistItemCollection->addStoreFilter($args['store_id']);
+        if (isset($args['website_id']) && $args['website_id']) {
+            $website = $this->storeManager->getWebsite($args['website_id']);
+            $stores = [];
+            foreach ($website->getStores() as $store) {
+                $stores[] = $store->getId();
+            }
+            if ($stores) {
+                $wishlistItemCollection->addStoreFilter($stores);
+            }
         } else {
             $wishlistItemCollection->addStoreFilter(array_map(function (StoreInterface $store) {
                 return $store->getId();

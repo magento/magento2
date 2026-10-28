@@ -42,7 +42,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(Data\RuleInterface $rule)
     {
@@ -64,10 +64,15 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($ruleId)
     {
+        if ($ruleId === null) {
+            throw new NoSuchEntityException(
+                __('The rule ID is required.')
+            );
+        }
         if (!isset($this->rules[$ruleId])) {
             /** @var \Magento\CatalogRule\Model\Rule $rule */
             $rule = $this->ruleFactory->create();
@@ -85,7 +90,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(Data\RuleInterface $rule)
     {
@@ -101,7 +106,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($ruleId)
     {

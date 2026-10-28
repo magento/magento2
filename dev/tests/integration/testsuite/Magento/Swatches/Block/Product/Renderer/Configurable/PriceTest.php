@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -69,7 +70,6 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @dataProvider childProductsDataProvider
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
      * @magentoCache config disabled
      *
@@ -77,6 +77,7 @@ class PriceTest extends TestCase
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('childProductsDataProvider')]
     public function testConfigurableOptionPrices(array $updateData, array $expectedData): void
     {
         $this->updateProducts($updateData);

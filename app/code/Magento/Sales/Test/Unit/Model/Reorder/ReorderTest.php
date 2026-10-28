@@ -31,7 +31,9 @@ use Magento\Sales\Model\Reorder\Reorder;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,6 +44,8 @@ use Psr\Log\LoggerInterface;
  */
 class ReorderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var OrderFactory|MockObject
      */
@@ -122,10 +126,7 @@ class ReorderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderFactory = $this->getMockBuilder(OrderFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
         $this->order = $this->createPartialMock(
             Order::class,
             [
@@ -136,9 +137,7 @@ class ReorderTest extends TestCase
                 'getStore'
             ]
         );
-        $this->cartRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->cartRepository = $this->createMock(CartRepositoryInterface::class);
         $this->cart = $this->createPartialMock(
             Quote::class,
             []
@@ -155,13 +154,11 @@ class ReorderTest extends TestCase
             GuestCartResolver::class,
             ['resolve']
         );
-        $this->productCollectionFactory = $this->getMockBuilder(ProductCollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->itemCollection = $this->getMockBuilder(ItemCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionFactory = $this->createPartialMock(
+            ProductCollectionFactory::class,
+            ['create']
+        );
+        $this->itemCollection = $this->createMock(ItemCollection::class);
         $this->orderInfoBuyRequestGetter = $this->createPartialMock(
             OrderInfoBuyRequestGetter::class,
             ['getInfoBuyRequest']
@@ -170,14 +167,9 @@ class ReorderTest extends TestCase
             CustomerSession::class,
             ['isLoggedIn']
         );
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->reorder = new Reorder(
             $this->orderFactory,
             $this->customerCartProvider,
@@ -208,9 +200,9 @@ class ReorderTest extends TestCase
      * @throws InputException
      * @throws LocalizedException
      * @throws NoSuchEntityException
-     * @dataProvider dataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('dataProvider')]
     public function testExecuteReorder(
         string $orderNumber,
         int $orderId,
@@ -270,10 +262,7 @@ class ReorderTest extends TestCase
             ->method('save')
             ->with($this->cart)
             ->willReturnSelf();
-        $savedCart = $this->getMockBuilder(CartInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setHasError'])
-            ->getMockForAbstractClass();
+        $savedCart = $this->createPartialMock(Quote::class, ['setHasError']);
         $this->cartRepository->expects($this->any())
             ->method('get')
             ->willReturn($savedCart);
@@ -340,9 +329,7 @@ class ReorderTest extends TestCase
      */
     private function getProductCollection(): MockObject|Collection
     {
-        $productCollection = $this->getMockBuilder(Collection::class)
-            ->onlyMethods(
-                [
+        $productCollection = $this->createPartialMockWithReflection(Collection::class, array_merge([
                     'getItems',
                     'addIdFilter',
                     'addStoreFilter',
@@ -351,11 +338,7 @@ class ReorderTest extends TestCase
                     'addOptionsToResult',
                     'getIterator',
                     'setStore'
-                ]
-            )
-            ->addMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMock();
+                ], ['getStore']));
         $productCollection->expects($this->any())->method('setStore')->willReturnSelf();
         $productCollection->expects($this->any())->method('addIdFilter')->willReturnSelf();
         $productCollection->expects($this->any())->method('addStoreFilter')->willReturnSelf();

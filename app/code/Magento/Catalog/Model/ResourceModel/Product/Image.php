@@ -184,4 +184,22 @@ class Image
 
         return $select;
     }
+
+    /**
+     * Get related website IDs for a given image file path.
+     *
+     * @param string $filepath
+     * @return array
+     */
+    public function getRelatedWebsiteIds(string $filepath): array
+    {
+        $select = $this->getUsedImagesSelect();
+        $select->where('images.value = ?', $filepath);
+        $result = array_map(
+            fn ($ids) => array_map('intval', explode(',', $ids)),
+            $this->connection->fetchPairs($select)
+        );
+
+        return $result[$filepath] ?? [];
+    }
 }

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ProductAlert\Model\ResourceModel\Stock\Customer;
 
 /**
  * ProductAlert Stock Customer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
-     * join productalert stock data to customer collection
+     * Join productalert stock data to customer collection
      *
      * @param int $productId
      * @param int $websiteId
@@ -24,7 +22,15 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         $this->getSelect()->join(
             ['alert' => $this->getTable('product_alert_stock')],
             'alert.customer_id=e.entity_id',
-            ['alert_stock_id', 'add_date', 'send_date', 'send_count', 'status']
+            [
+                'alert_stock_id',
+                'add_date',
+                'send_date',
+                'send_count',
+                'status',
+                'website_id' => 'alert.website_id',
+                'store_id' => 'alert.store_id'
+            ]
         );
 
         $this->getSelect()->where('alert.product_id=?', $productId);

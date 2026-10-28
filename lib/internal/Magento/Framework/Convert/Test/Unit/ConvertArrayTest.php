@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Convert\Test\Unit;
 
 use Magento\Framework\Convert\ConvertArray;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConvertArrayTest extends TestCase
 {
@@ -52,9 +53,8 @@ XML;
 
     /**
      * @param array $array
-     * @param string $rootName
-     * @dataProvider assocToXmlExceptionDataProvider
-     */
+     * @param string $rootName     */
+    #[DataProvider('assocToXmlExceptionDataProvider')]
     public function testAssocToXmlException($array, $rootName = '_')
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

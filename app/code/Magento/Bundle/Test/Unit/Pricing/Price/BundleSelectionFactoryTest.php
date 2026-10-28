@@ -39,7 +39,7 @@ class BundleSelectionFactoryTest extends TestCase
         $this->bundleMock = $this->createMock(Product::class);
         $this->selectionMock = $this->createMock(Product::class);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->bundleSelectionFactory = $this->objectManagerHelper->getObject(

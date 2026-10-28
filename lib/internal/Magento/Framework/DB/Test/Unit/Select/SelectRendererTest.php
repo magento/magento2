@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,7 @@ class SelectRendererTest extends TestCase
 {
     public function testRender()
     {
-        $rendererOne = $this->getMockBuilder(RendererInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $rendererOne = $this->createMock(RendererInterface::class);
         $renders = [
             ['renderer' => $rendererOne, 'sort' => 10, 'part' => 'from'],
             ['renderer' => $rendererOne, 'sort' => 20, 'part' => 'from'],

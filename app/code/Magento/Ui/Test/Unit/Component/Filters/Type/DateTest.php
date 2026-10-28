@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,21 +56,19 @@ class DateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactory = $this->createPartialMock(
+            UiComponentFactory::class,
+            ['create']
+        );
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
 
-        $this->filterModifierMock = $this->getMockBuilder(FilterModifier::class)
-            ->onlyMethods(['applyFilterModifier'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterModifierMock = $this->createPartialMock(
+            FilterModifier::class,
+            ['applyFilterModifier']
+        );
 
-        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
     }
 
     /**
@@ -99,18 +99,14 @@ class DateTest extends TestCase
      * @param array|null $expectedCondition
      *
      * @return void
-     * @dataProvider getPrepareDataProvider
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects(static::atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate|MockObject $uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uiComponent = $this->createMock(FormDate::class);
 
         $uiComponent->expects($this->any())
             ->method('getContext')
@@ -210,9 +206,10 @@ class DateTest extends TestCase
      * @param bool $showsTime
      * @param array $filterData
      * @param array $expectedCondition
-     * @param MockObject $uiComponent
+     * @param FormDate $uiComponent
      *
      * @return void
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters(
@@ -224,7 +221,7 @@ class DateTest extends TestCase
     ): void {
         if (is_string($filterData[$name])) {
             $uiComponent->expects(static::once())
-                ->method($showsTime ? 'convertDatetime' : 'convertDate')
+                ->method($showsTime ? 'convertDatetime' : 'convertDateWithTimezone')
                 ->with($filterData[$name])
                 ->willReturn(new \DateTime($filterData[$name]));
         } else {
@@ -241,11 +238,11 @@ class DateTest extends TestCase
             } else {
                 $from = new \DateTime($filterData[$name]['from'] ?? 'now');
                 $to = new \DateTime($filterData[$name]['to'] ? $filterData[$name]['to'] . ' 23:59:59' : 'now');
-                $uiComponent->method('convertDate')
+                $uiComponent->method('convertDateWithTimezone')
                     ->willReturnMap(
                         [
-                            [$filterData[$name]['from'], 0, 0, 0, true, $from],
-                            [$filterData[$name]['to'], 23, 59, 59, true, $to],
+                            [$filterData[$name]['from'], 0, 0, 0, true, true, $from],
+                            [$filterData[$name]['to'], 23, 59, 59, true, true, $to],
                         ]
                     );
             }

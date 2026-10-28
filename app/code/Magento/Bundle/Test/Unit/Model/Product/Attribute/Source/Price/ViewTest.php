@@ -7,15 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Product\Attribute\Source\Price;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Bundle\Model\Product\Attribute\Source\Price\View;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(View::class)]
 class ViewTest extends TestCase
 {
     /**
@@ -38,6 +41,10 @@ class ViewTest extends TestCase
      */
     protected $attribute;
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->option = $this->createMock(Option::class);
@@ -45,9 +52,7 @@ class ViewTest extends TestCase
             OptionFactory::class,
             ['create']
         );
-        $this->optionFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->option);
+        $this->optionFactory->method('create')->willReturn($this->option);
         $this->attribute = $this->createMock(AbstractAttribute::class);
 
         $this->model = (new ObjectManager($this))
@@ -60,6 +65,9 @@ class ViewTest extends TestCase
         $this->model->setAttribute($this->attribute);
     }
 
+    /**
+     * @return void
+     */
     public function testGetAllOptions()
     {
         $options = $this->model->getAllOptions();
@@ -74,7 +82,7 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * @return void
      */
     public function testGetOptionTextForExistLabel()
     {
@@ -84,7 +92,7 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Bundle\Model\Product\Attribute\Source\Price\View::getOptionText
+     * @return void
      */
     public function testGetOptionTextForNotExistLabel()
     {
@@ -93,12 +101,13 @@ class ViewTest extends TestCase
         $this->assertFalse($this->model->getOptionText($notExistValue));
     }
 
+    /**
+     * @return void
+     */
     public function testGetFlatColumns()
     {
         $code = 'attribute-code';
-        $this->attribute->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn($code);
+        $this->attribute->method('getAttributeCode')->willReturn($code);
 
         $columns = $this->model->getFlatColumns();
 
@@ -115,6 +124,9 @@ class ViewTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
     public function testGetFlatUpdateSelect()
     {
         $store = 1;

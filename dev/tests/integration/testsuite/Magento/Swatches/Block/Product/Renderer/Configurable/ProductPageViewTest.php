@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Model\Swatch;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,12 +76,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_text_swatch_attribute.php
      *
-     * @dataProvider expectedTextSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTextSwatchDataProvider')]
     public function testProductPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);
@@ -131,12 +131,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
      *
-     * @dataProvider expectedVisualSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedVisualSwatchDataProvider')]
     public function testProductPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);
@@ -186,12 +185,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      *
-     * @dataProvider expectedTwoAttributesProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTwoAttributesProvider')]
     public function testProductPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);

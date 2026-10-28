@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Render;
@@ -88,7 +88,6 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
             $this->templateEnginePool,
             'engines'
         );
-        $enginesReflection->setAccessible(true);
         $enginesReflection->setValue($this->templateEnginePool, ['phtml' => $this->phtml]);
 
         $this->rendererPool = $this->objectManager->create(

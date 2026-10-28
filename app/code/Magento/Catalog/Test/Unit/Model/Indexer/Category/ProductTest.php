@@ -67,15 +67,7 @@ class ProductTest extends TestCase
             ['create']
         );
 
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'load', 'isInvalid', 'isWorking']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
 
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
@@ -105,7 +97,6 @@ class ProductTest extends TestCase
             Product::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

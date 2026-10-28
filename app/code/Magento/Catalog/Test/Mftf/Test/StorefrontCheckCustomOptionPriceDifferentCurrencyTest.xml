@@ -61,7 +61,7 @@
             <argument name="currency" value="EUR"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
-            <argument name="price" value="8.7"/>
+            <argument name="price" value="8.69"/>
         </actionGroup>
     </test>
 </tests>

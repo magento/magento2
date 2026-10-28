@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,8 +49,7 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->onlyMethods(
@@ -58,8 +57,7 @@ class IndexTest extends TestCase
             )->disableOriginalConstructor(
             )->getMock();
 
-        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlMock = $this->createMock(UrlInterface::class);
 
         $contextMock->expects($this->any())
             ->method('getUrl')
@@ -67,17 +65,13 @@ class IndexTest extends TestCase
 
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->willReturn($this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass());
+            ->willReturn($this->createMock(RequestInterface::class));
 
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->getMockBuilder(ResponseInterface::class)
-            ->getMockForAbstractClass());
+            ->willReturn($this->createMock(ResponseInterface::class));
 
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
 
         $contextMock->expects($this->once())
             ->method('getResultFactory')
@@ -97,7 +91,7 @@ class IndexTest extends TestCase
      */
     public function testExecute(): void
     {
-        $resultStub = $this->getMockForAbstractClass(ResultInterface::class);
+        $resultStub = $this->createMock(ResultInterface::class);
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_PAGE)

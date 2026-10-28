@@ -91,7 +91,7 @@ class Composite extends AbstractModifier
         $model = $this->locator->getProduct();
         $productTypeId = $model->getTypeId();
         if ($this->allowedProductTypes->isAllowedProductType($this->locator->getProduct())) {
-            $productId = $model->getId();
+            $productId = $model->getId() ?? '';
             $data[$productId]['affect_configurable_product_attributes'] = '1';
 
             if ($productTypeId === ConfigurableType::TYPE_CODE) {

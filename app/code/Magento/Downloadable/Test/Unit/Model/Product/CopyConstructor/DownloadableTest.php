@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,13 @@ use Magento\Downloadable\Model\Product\CopyConstructor\Downloadable;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DownloadableTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Downloadable
      */
@@ -65,11 +67,10 @@ class DownloadableTest extends TestCase
 
         $this->_productMock = $this->createMock(Product::class);
 
-        $this->_duplicateMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setDownloadableData'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_duplicateMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setDownloadableData', '__wakeup']
+        );
 
         $this->_linkMock = $this->createMock(Link::class);
 

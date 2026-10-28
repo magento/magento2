@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -121,8 +121,12 @@ class Php implements TemplateEngineInterface
     /**
      * Get helper singleton
      *
-     * @param string $className
-     * @return \Magento\Framework\App\Helper\AbstractHelper
+     * @template T of \Magento\Framework\App\Helper\AbstractHelper
+     *
+     * @param class-string<T> $className
+     *
+     * @return T
+     *
      * @throws \LogicException
      */
     public function helper($className)

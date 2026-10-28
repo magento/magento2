@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Plugin;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Plugin\Log;
 use Magento\Catalog\Model\Product\Compare\Item;
 use Magento\Customer\Model\ResourceModel\Visitor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(Log::class)]
 class LogTest extends TestCase
 {
     /**
@@ -43,9 +45,6 @@ class LogTest extends TestCase
         $this->model = new Log($this->compareItemMock);
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Plugin\Log::afterClean
-     */
     public function testAfterClean()
     {
         $this->compareItemMock->expects($this->once())->method('clean');

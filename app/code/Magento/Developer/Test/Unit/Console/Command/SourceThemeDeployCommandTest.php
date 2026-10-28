@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Console\Command;
 
@@ -97,10 +97,8 @@ class SourceThemeDeployCommandTest extends TestCase
     public function testExecute(): void
     {
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
+        $assetMock = $this->createMock(LocalInterface::class);
 
         $this->validatorMock->expects($this->once())
             ->method('isValid')
@@ -158,8 +156,7 @@ class SourceThemeDeployCommandTest extends TestCase
             'Value "theme-value" of the option "theme" has invalid format. The format should be'
         );
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
         $this->validatorMock->expects($this->once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
@@ -186,10 +183,8 @@ class SourceThemeDeployCommandTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Verify entered values of the argument and options.');
         /** @var OutputInterface|MockObject $outputMock */
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
+        $assetMock = $this->createMock(LocalInterface::class);
 
         $this->validatorMock->expects($this->once())
             ->method('isValid')
@@ -230,8 +225,7 @@ class SourceThemeDeployCommandTest extends TestCase
      */
     private function getInputMock(array $valueMap = []): MockObject
     {
-        $inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $inputMock = $this->createMock(InputInterface::class);
 
         $defaultValueMap = [
             ['area', self::AREA_TEST_VALUE],

@@ -8,12 +8,14 @@ namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plug
 use Magento\Bundle\Api\Data\OptionInterfaceFactory as OptionFactory;
 use Magento\Bundle\Api\Data\LinkInterfaceFactory as LinkFactory;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Class Bundle
+ * Plugin class to initialize Bundle product
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle
@@ -106,12 +108,14 @@ class Bundle
                 $product->setBundleOptionsData($result['bundle_options']);
             }
 
+            if (!$result['bundle_selections']) {
+                $this->resetBundleProductOptions($product);
+            }
+
             $this->processBundleOptionsData($product);
             $this->processDynamicOptionsData($product);
         } elseif (!$compositeReadonly) {
-            $extension = $product->getExtensionAttributes();
-            $extension->setBundleProductOptions([]);
-            $product->setExtensionAttributes($extension);
+            $this->resetBundleProductOptions($product);
         }
 
         $affectProductSelections = (bool)$this->request->getPost('affect_bundle_product_selections');
@@ -120,6 +124,8 @@ class Bundle
     }
 
     /**
+     * Process Bundle Options Data
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -161,10 +167,11 @@ class Bundle
         $extension = $product->getExtensionAttributes();
         $extension->setBundleProductOptions($options);
         $product->setExtensionAttributes($extension);
-        return;
     }
 
     /**
+     * Process Dynamic Options Data
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -198,9 +205,10 @@ class Bundle
     }
 
     /**
+     * Build product link
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $linkData
-     *
      * @return \Magento\Bundle\Api\Data\LinkInterface
      */
     private function buildLink(
@@ -227,5 +235,19 @@ class Bundle
         }
 
         return $link;
+    }
+
+    /**
+     * Resets bundle product options inside product extension attributes
+     *
+     * @param ProductInterface $product
+     * @return void
+     */
+    private function resetBundleProductOptions(ProductInterface $product) : void
+    {
+        $extension = $product->getExtensionAttributes();
+        $extension->setBundleProductOptions([]);
+        $product->setExtensionAttributes($extension);
+        $product->setDropOptions(true);
     }
 }

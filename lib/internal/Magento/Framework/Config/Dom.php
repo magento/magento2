@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -315,7 +315,7 @@ class Dom
                 $constraints[] = "@{$attribute}='{$value}'";
             }
             $path .= '[' . implode(' and ', $constraints) . ']';
-        } elseif ($idAttribute && ($value = $node->getAttribute($idAttribute))) {
+        } elseif ($idAttribute && (($value = $node->getAttribute($idAttribute)) !== '')) {
             $path .= "[@{$idAttribute}='{$value}']";
         }
         return $path;

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\Locale\ResolverInterface;
@@ -54,10 +55,10 @@ class CountryofmanufactureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->createMock(Store::class);
         $this->cacheConfig = $this->createMock(Config::class);
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->countryOfManufacture = $this->objectManagerHelper->getObject(
             Countryofmanufacture::class,
@@ -68,7 +69,7 @@ class CountryofmanufactureTest extends TestCase
             ]
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',
@@ -81,9 +82,8 @@ class CountryofmanufactureTest extends TestCase
      *
      * @param $cachedDataSrl
      * @param $cachedDataUnsrl
-     *
-     * @dataProvider getAllOptionsDataProvider
      */
+    #[DataProvider('getAllOptionsDataProvider')]
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
     {
         $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');

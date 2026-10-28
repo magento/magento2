@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,10 +10,12 @@ namespace Magento\Weee\Test\Unit\Pricing;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Tax\Helper\Data as TaxHelperData;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\TaxAdjustment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TaxAdjustmentTest extends TestCase
@@ -29,7 +31,7 @@ class TaxAdjustmentTest extends TestCase
     protected $weeeHelperMock;
 
     /**
-     * @var \Magento\Tax\Helper\Data|MockObject
+     * @var TaxHelperData|MockObject
      */
     protected $taxHelperMock;
 
@@ -46,8 +48,8 @@ class TaxAdjustmentTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->taxHelperMock = $this->createMock(TaxHelperData::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->willReturnCallback(
@@ -86,8 +88,8 @@ class TaxAdjustmentTest extends TestCase
      * @param bool $isWeeeTaxable
      * @param bool $weeeDisplayConfig
      * @param bool $expectedResult
-     * @dataProvider isIncludedInDisplayPriceDataProvider
      */
+    #[DataProvider('isIncludedInDisplayPriceDataProvider')]
     public function testIsIncludedInDisplayPrice(
         $taxDisplayExclTax,
         $isWeeeTaxable,
@@ -149,14 +151,14 @@ class TaxAdjustmentTest extends TestCase
     }
 
     /**
-     * @param float $amount
+     * @param float        $amount
      * @param DataObject[] $weeeAttributes
-     * @param float $expectedResult
-     * @dataProvider applyAdjustmentDataProvider
+     * @param float        $expectedResult
      */
+    #[DataProvider('applyAdjustmentDataProvider')]
     public function testApplyAdjustment($amount, $weeeAttributes, $expectedResult)
     {
-        $object = $this->getMockForAbstractClass(SaleableInterface::class);
+        $object = $this->createMock(SaleableInterface::class);
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')

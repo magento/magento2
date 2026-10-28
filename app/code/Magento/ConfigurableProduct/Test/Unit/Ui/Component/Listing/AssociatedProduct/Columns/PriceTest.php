@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Framework\Currency;
 use Magento\Framework\Locale\CurrencyInterface as LocaleCurrency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
 use Magento\Store\Api\Data\StoreInterface;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PriceColumn
      */
@@ -72,24 +75,16 @@ class PriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->localeCurrencyMock = $this->getMockBuilder(LocaleCurrency::class)
-            ->getMockForAbstractClass();
-        $this->uiElementProcessorMock = $this->getMockBuilder(UiElementProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseCurrency', 'getBaseCurrencyCode'])
-            ->getMockForAbstractClass();
-        $this->currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->currencyModelMock = $this->getMockBuilder(CurrencyModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->localeCurrencyMock = $this->createMock(LocaleCurrency::class);
+        $this->uiElementProcessorMock = $this->createMock(UiElementProcessor::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getBaseCurrencyCode']
+        );
+        $this->currencyMock = $this->createMock(Currency::class);
+        $this->currencyModelMock = $this->createMock(CurrencyModel::class);
 
         $this->contextMock->expects(static::never())
             ->method('getProcessor')
@@ -158,9 +153,7 @@ class PriceTest extends TestCase
             ->method('getStore')
             ->with(Store::DEFAULT_STORE_ID)
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->any())
-            ->method('getBaseCurrencyCode')
-            ->willReturn($baseCurrencyCode);
+        $this->storeMock->method('getBaseCurrencyCode')->willReturn($baseCurrencyCode);
         $this->localeCurrencyMock->expects($this->any())
             ->method('getCurrency')
             ->with($baseCurrencyCode)
@@ -175,12 +168,8 @@ class PriceTest extends TestCase
                     ['4.550000', [], '4.55$']
                 ]
             );
-        $this->storeMock->expects($this->any())
-            ->method('getBaseCurrency')
-            ->willReturn($this->currencyModelMock);
-        $this->currencyModelMock->expects($this->any())
-            ->method('getCurrencySymbol')
-            ->willReturn($currencySymbol);
+        $this->storeMock->setBaseCurrency($this->currencyModelMock);
+        $this->currencyModelMock->method('getCurrencySymbol')->willReturn($currencySymbol);
 
         $this->priceColumn->setData('name', $fieldName);
 

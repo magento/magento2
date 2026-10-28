@@ -15,6 +15,7 @@ use Magento\Framework\View\Result\Layout;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import validate controller action.
@@ -51,6 +52,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
                 $ids = $import->getValidatedIds();
                 if (count($ids) > 0) {
@@ -171,7 +173,10 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private function addMessageToSkipErrors(Result $resultBlock)
     {
         $import = $this->getImport();
-        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
+        $validationStrategy = $import->getData(Import::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            && !$import->getErrorAggregator()->hasFatalExceptions()
+        ) {
             $resultBlock->addSuccess(
                 __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
                 true

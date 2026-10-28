@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -179,6 +179,26 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $updatedOrder->getStatus(),
             'Failed asserting that Order status was changed'
         );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/order_new.php
+     */
+    public function testShipOrderWithTypeError()
+    {
+        /** @var Order $existingOrder */
+        $existingOrder = $this->getOrder('100000001');
+
+        $requestData = [
+            'orderId' => $existingOrder->getId(),
+            'items' => "[]",
+        ];
+
+        try {
+            $this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\Exception $exception) {
+        }
     }
 
     /**

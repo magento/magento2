@@ -6,6 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="customerSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\CustomerGraphQl\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CustomerGraphQl\Model\Customer\UpdateCustomerData">
         <arguments>
             <argument name="restrictedKeys" xsi:type="array">
@@ -26,9 +36,30 @@
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\CustomerGraphQl\Model\Authorization\CustomerSessionUserContext">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\Calculation">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="customerAccountManagement" xsi:type="object">Magento\Customer\Model\AccountManagement\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Helper\Data">
+        <arguments>
+            <argument name="catalogHelper" xsi:type="object">Magento\Catalog\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\ResourceModel\Calculation">
+        <arguments>
+            <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest">
         <arguments>
-            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
@@ -38,7 +69,6 @@
                 <item name="minimum_password_length" xsi:type="string">customer/password/minimum_password_length</item>
                 <item name="autocomplete_on_storefront" xsi:type="string">customer/password/autocomplete_on_storefront</item>
                 <item name="create_account_confirmation" xsi:type="string">customer/create_account/confirm</item>
-                <item name="graphql_share_all_customer_groups" xsi:type="string">customer/account_information/graphql_share_all_customer_groups</item>
                 <item name="graphql_share_customer_group" xsi:type="string">customer/account_information/graphql_share_customer_group</item>
             </argument>
         </arguments>
@@ -206,6 +236,7 @@
             <argument name="factorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
                     <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId</item>
+                    <item name="current_website_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentWebsiteId</item>
                 </item>
             </argument>
         </arguments>

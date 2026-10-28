@@ -35,7 +35,7 @@ class ConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->dataMock = $this->getMockForAbstractClass(DataInterface::class);
+        $this->dataMock = $this->createMock(DataInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

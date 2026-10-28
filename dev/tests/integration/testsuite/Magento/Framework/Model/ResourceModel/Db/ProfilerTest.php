@@ -2,12 +2,13 @@
 /**
  * Test for \Magento\Framework\Model\ResourceModel\Db\Profiler
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test profiler on database queries
@@ -74,8 +75,8 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $selectQuery
      * @param int $queryType
-     * @dataProvider profileQueryDataProvider
      */
+    #[DataProvider('profileQueryDataProvider')]
     public function testProfilerInit($selectQuery, $queryType)
     {
         $connection = $this->_getConnection();

@@ -61,7 +61,10 @@ class TierPrice extends AbstractPrice
     public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
-            $this->customerGroups[$group->getCode()] = $group->getId();
+            $code = $group->getCode();
+            if ($code !== null) {
+                $this->customerGroups[$code] = $group->getId();
+            }
         }
         $this->context = $context;
     }

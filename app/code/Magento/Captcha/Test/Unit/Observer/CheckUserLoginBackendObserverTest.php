@@ -15,11 +15,15 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CheckUserLoginBackendObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CheckUserLoginBackendObserver
      */
@@ -53,9 +57,9 @@ class CheckUserLoginBackendObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->helperMock = $this->createMock(Data::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->observer = new CheckUserLoginBackendObserver(
             $this->helperMock,
@@ -67,10 +71,10 @@ class CheckUserLoginBackendObserverTest extends TestCase
     /**
      * Test check user login in backend with correct captcha
      *
-     * @dataProvider requiredCaptchaDataProvider
      * @param bool $isRequired
      * @return void
      */
+    #[DataProvider('requiredCaptchaDataProvider')]
     public function testCheckOnBackendLoginWithCorrectCaptcha(bool $isRequired): void
     {
         $formId = 'backend_login';
@@ -79,10 +83,10 @@ class CheckUserLoginBackendObserverTest extends TestCase
 
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getUsername'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getUsername']
+        );
         $captcha = $this->createMock(DefaultModel::class);
 
         $eventMock->method('getUsername')->willReturn('admin');
@@ -121,10 +125,10 @@ class CheckUserLoginBackendObserverTest extends TestCase
 
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getUsername'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getUsername']
+        );
         $captcha = $this->createMock(DefaultModel::class);
 
         $eventMock->method('getUsername')->willReturn($login);

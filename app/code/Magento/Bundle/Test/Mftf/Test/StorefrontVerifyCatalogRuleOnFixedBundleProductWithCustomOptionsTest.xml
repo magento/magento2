@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCatalogRuleOnFixedBundleProductWithCustomOptionsTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Catalog Price Rules on Bundle Products"/>
+            <title value="Apply Catalog Rule to Fixed Bundle Product with Custom Options"/>
+            <description value="Verify that a catalog price rule is correctly applied to a fixed-price bundle product that includes custom options and tier pricing"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4474"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step: Create Category and Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Bundle product via Admin  -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminToggleSwitchDynamicPriceOnProductEditPageActionGroup" stepKey="clickDynamicPriceSwitcher"/>
+            <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="110" stepKey="fillBundlePrice"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+            <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
+            <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
+                <argument name="x" value="0"/>
+                <argument name="n" value="1"/>
+                <argument name="prodOneSku" value="$simpleProduct.sku$"/>
+                <argument name="prodTwoSku" value=""/>
+                <argument name="optionTitle" value="Option1"/>
+                <argument name="inputType" value="radio"/>
+            </actionGroup>
+            <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="5" stepKey="fillBundleOption1Price"/>
+            <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Fixed" stepKey="selectPercentPrice"/>
+            <click selector="{{AdminProductFormBundleSection.isDefault('$$simpleProduct.name$$')}}" stepKey="clickIsDefault"/>
+            <!-- fill customizable options -->
+            <actionGroup ref="AdminCustomizableOptionWithFixedPriceActionGroup" stepKey="addCustomOption"/>
+            <!--Save the product-->
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+                <argument name="message" value="You saved the product."/>
+            </actionGroup>
+            <!-- Begin creating a new catalog price rule -->
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+                <argument name="groups" value="'NOT LOGGED IN'"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+                <argument name="conditionValue" value="$createCategory.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+                <argument name="apply" value="by_percent"/>
+                <argument name="discountAmount" value="10"/>
+            </actionGroup>
+            <!-- Save Catalog rule -->
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        </before>
+        <after>
+            <!-- Delete bundle product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <!-- Delete category, simple products -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Navigate to the category page and verify the bundle product price -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCategoryProductSection.priceToByProductSku(BundleProduct.sku)}}" userInput="$134.00" stepKey="seePriceOnCategoryPage"/>
+        <!-- Step 2: Navigate to the product page and verify the bundle product price -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$134.00" stepKey="seePriceOnProductPage"/>
+        <!-- Step 3: Click the "Customize and Add to Cart" button -->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <!-- Step 4: Enter the word "ok" in the option field, click the "Add to Cart" button, and verify the bundle product price -->
+        <fillField selector="{{StorefrontBundleProductActionSection.customOptionField}}" userInput="ok" stepKey="fillCustomOption"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickAddToCartButton"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$134.00" stepKey="verifyConfiguredPrice"/>
+    </test>
+</tests>

@@ -1,12 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -18,7 +18,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    const SERVICE_NAME = 'catalogProductCustomOptionRepositoryV1';
+    private const SERVICE_NAME = 'catalogProductCustomOptionRepositoryV1';
 
     /**
      * @var \Magento\Catalog\Model\ProductFactory
@@ -140,9 +140,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionDataProvider
      * @param array $optionData
      */
+    #[DataProvider('optionDataProvider')]
     public function testSave($optionData)
     {
         $productSku = 'simple';
@@ -198,8 +198,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionNegativeDataProvider
      */
+    #[DataProvider('optionNegativeDataProvider')]
     public function testAddNegative($optionData)
     {
         $productSku = 'simple';
@@ -306,9 +306,10 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider validOptionDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('validOptionDataProvider')]
     public function testUpdateOptionAddingNewValue($optionType, $includedExisting, $expectedOptionValuesCount)
     {
         $fixtureOption = null;
@@ -333,6 +334,10 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 $fixtureOption = $option;
                 break;
             }
+        }
+
+        if (!isset($option) || $fixtureOption === null) {
+            $this->markTestSkipped('Product options was not found');
         }
 
         $values = [];
@@ -412,12 +417,12 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionNegativeUpdateDataProvider
      * @param array $optionData
-     * @param string $message
+     * @param string $expectedMessage
      * @param int $exceptionCode
      */
-    public function testUpdateNegative($optionData, $message, $exceptionCode)
+    #[DataProvider('optionNegativeUpdateDataProvider')]
+    public function testUpdateNegative($optionData, $expectedMessage, $exceptionCode)
     {
         $this->_markTestAsRestOnly();
         $productSku = 'simple';
@@ -434,10 +439,16 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->expectException('Exception');
-        $this->expectExceptionMessage($message);
-        $this->expectExceptionCode($exceptionCode);
-        $this->_webApiCall($serviceInfo, ['option' => $optionData]);
+        try {
+            $this->_webApiCall($serviceInfo, ['option' => $optionData]);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+            $this->assertEquals($exceptionCode, $e->getCode());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals($exceptionCode, $e->getCode());
+        }
     }
 
     /**

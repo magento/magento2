@@ -37,7 +37,7 @@ class DataTest extends TestCase
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->willReturnCallback(function ($code) {
-                $dir = $this->getMockForAbstractClass(ReadInterface::class);
+                $dir = $this->createMock(ReadInterface::class);
                 $dir->expects($this->any())
                     ->method('getAbsolutePath')
                     ->willReturnCallback(function ($path) use ($code) {

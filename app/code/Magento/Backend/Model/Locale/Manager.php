@@ -8,8 +8,8 @@ namespace Magento\Backend\Model\Locale;
 /**
  * Locale manager model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Manager

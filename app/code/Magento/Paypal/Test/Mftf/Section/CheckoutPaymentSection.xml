@@ -74,7 +74,9 @@
         <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
         <element name="productChargedFor"  type="text" selector="tr.totals.charge span.price"/>
         <element name="productCharged"  type="text" selector="//tr[@class='grand totals']//span[@class='price' and contains(text(),'HK$')]"/>
-        <element name="reviewOrder" type="button" selector="//div//button[text()='Continue to Review Order']"/>
+        <element name="reviewOrder" type="button" selector="//button[.//span[normalize-space(text())='Review Order']]"/>
         <element name="checkoutWithPaypal" type="button" selector="(//div[@class='cart-container']//input[@data-action='checkout-form-submit'])[1]" timeout="30"/>
+        <element name="status" type="input" selector="//*[@class='admin__table-secondary creditmemo-information-table']//*[text()='{{action}}']" parameterized="true"/>
+        <element name="creditMemoView" type="text" selector="#sales_order_view_tabs_order_creditmemos_content > div > div.admin__data-grid-wrap > table > tbody > tr > td.data-grid-actions-cell > a"/>
     </section>
 </sections>

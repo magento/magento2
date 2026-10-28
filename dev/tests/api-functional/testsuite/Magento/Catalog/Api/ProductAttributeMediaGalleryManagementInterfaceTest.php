@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
@@ -23,6 +25,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ProductAttributeMediaGalleryManagementInterfaceTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
 {
@@ -498,11 +502,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media';
 
         $requestData = [
@@ -519,7 +518,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -555,11 +562,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media'
             . '/' . 'wrong-sku';
         $requestData = [
@@ -574,7 +576,15 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all');
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all');
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -611,18 +621,21 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
      */
     public function testDeleteThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->deleteServiceInfo['rest']['resourcePath'] = '/V1/products/wrong_product_sku/media/9999';
         $requestData = [
             'sku' => 'wrong_product_sku',
             'entryId' => 9999,
         ];
 
-        $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->deleteServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -778,7 +791,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $this->expectException('SoapFault');
             $this->expectExceptionMessage(
-                "The product that was requested doesn't exist. Verify the product and try again."
+                'The product with SKU "%1" does not exist.'
             );
         } else {
             $this->expectException('Exception');
@@ -930,5 +943,99 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $updatedImage = $this->assertMediaGalleryData($imageId, '/m/a/magento_image.jpg', 'Updated Image Text');
         $this->assertEquals(10, $updatedImage['position_default']);
         $this->assertEquals(1, $updatedImage['disabled_default']);
+    }
+
+    #[
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(
+            ProductFixture::class,
+            ['media_gallery_entries' => [['label' => 'test label', 'position' => 1, 'disabled' => false]]],
+            as: 'p1',
+            scope: 'global_scope'
+        ),
+    ]
+    public function testMediaGalleryInheritanceTest(): void
+    {
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $defaultValueProcessor = Bootstrap::getObjectManager()->get(DefaultValueProcessor::class);
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('p1')->getSku();
+        $store2 = $fixtures->get('store_view_2');
+        
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $productRepository->get($sku, false, (int) $store2->getId(), true);
+        $gallery = $defaultValueProcessor->process($product);
+        $existingImageId = key($gallery['images']);
+        $this->assertCount(1, $gallery['images']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['label_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['disabled_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['position_use_default']);
+        
+        // Add new image in store view 2
+        $requestData = [
+            'id' => null,
+            'media_type' => ImageEntryConverter::MEDIA_TYPE_CODE,
+            'label' => 'Image Text',
+            'position' => 2,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
+                ImageContentInterface::TYPE => 'image/jpeg',
+                ImageContentInterface::NAME => 'test_image.jpg'
+            ]
+        ];
+
+        $this->createServiceInfo['rest']['resourcePath'] =  "/V1/products/{$sku}/media";
+        $result = $this->_webApiCall(
+            $this->createServiceInfo,
+            ['sku' => $sku, 'entry' => $requestData],
+            null,
+            $store2->getCode()
+        );
+        $requestData['id'] = $result;
+        
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $productRepository->get($sku, false, (int) $store2->getId(), true);
+        $gallery = $defaultValueProcessor->process($product);
+        $this->assertCount(2, $gallery['images']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['label_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['disabled_use_default']);
+        $this->assertEquals(0, $gallery['images'][$existingImageId]['position_use_default']);
+        
+        // Update recently added image in store view 2
+        $requestData['label'] = 'Updated Image Text';
+        $this->updateServiceInfo['rest']['resourcePath'] =  "/V1/products/{$sku}/media/{$requestData['id']}";
+        $result = $this->_webApiCall(
+            $this->updateServiceInfo,
+            ['sku' => $sku, 'entry' => $requestData],
+            null,
+            $store2->getCode()
+        );
+        $this->assertTrue($result);
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $productRepository->get($sku, false, (int) $store2->getId(), true);
+        $gallery = $defaultValueProcessor->process($product);
+        $this->assertCount(2, $gallery['images']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['label_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['disabled_use_default']);
+        $this->assertEquals(0, $gallery['images'][$existingImageId]['position_use_default']);
+        
+        // Delete recently added image in store view 2
+        $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/{$sku}/media/{$requestData['id']}";
+        $requestData = [
+            'sku' => $sku,
+            'entryId' => $requestData['id'],
+        ];
+        $result = $this->_webApiCall($this->deleteServiceInfo, $requestData, null, $store2->getCode());
+        $this->assertTrue($result);
+        // Check image label, visibility and position inheritance in store view 2
+        $product = $productRepository->get($sku, false, (int) $store2->getId(), true);
+        $gallery = $defaultValueProcessor->process($product);
+        $this->assertCount(1, $gallery['images']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['label_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['disabled_use_default']);
+        $this->assertEquals(1, $gallery['images'][$existingImageId]['position_use_default']);
     }
 }

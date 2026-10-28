@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,7 @@ class CustomAttributeMetadata implements ResolverInterface
             'use_in_search_results_layered_navigation' => $attribute->getIsFilterableInSearch(),
             'use_in_product_listing'=> $attribute->getUsedInProductListing(),
             'use_in_layered_navigation'=>
-                $this->getLayeredNavigationPropertiesEnum()[$attribute->getisFilterable()] ?? null
+                $this->getLayeredNavigationPropertiesEnum()[$attribute->getisFilterable() ?? ''] ?? null
         ];
     }
 

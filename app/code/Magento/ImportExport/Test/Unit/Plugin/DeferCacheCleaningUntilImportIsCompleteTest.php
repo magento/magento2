@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,8 +43,8 @@ class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cacheCleaner = $this->getMockForAbstractClass(DeferredCacheCleanerInterface::class);
-        $this->cacheTypeList = $this->getMockForAbstractClass(TypeListInterface::class);
+        $this->cacheCleaner = $this->createMock(DeferredCacheCleanerInterface::class);
+        $this->cacheTypeList = $this->createMock(TypeListInterface::class);
         $this->request = $this->createMock(RequestInterface::class);
         $this->plugin = new DeferCacheCleaningUntilImportIsComplete(
             $this->cacheCleaner,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Resolver\ShippingAddress\SelectedShippingMethod;
@@ -22,9 +23,11 @@ use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * @see SelectedShippingMethod
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SelectedShippingMethodTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SelectedShippingMethod
      */
@@ -85,27 +88,19 @@ class SelectedShippingMethodTest extends TestCase
         $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getShippingMethod','getAllShippingRates','getQuote',])
-            ->AddMethods(['getShippingAmount','getMethod',])
-            ->getMock();
-        $this->rateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->AddMethods(['getCode','getCarrier','getMethod'])
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods([
-                'getQuoteCurrencyCode',
-                'getMethodTitle',
-                'getCarrierTitle',
-                'getPriceExclTax',
-                'getPriceInclTax'
-            ])
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->addressMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['getShippingMethod', 'getAllShippingRates', 'getQuote', 'getShippingAmount', 'getMethod']
+        );
+        $this->rateMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote\Address\Rate::class,
+            ['getCode', 'getCarrier', 'getMethod']
+        );
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            \Magento\Quote\Model\Quote::class,
+            ['getQuoteCurrencyCode', 'getMethodTitle', 'getCarrierTitle', 'getPriceExclTax', 'getPriceInclTax']
+        );
         $this->selectedShippingMethod = new SelectedShippingMethod(
             $this->shippingMethodConverterMock
         );

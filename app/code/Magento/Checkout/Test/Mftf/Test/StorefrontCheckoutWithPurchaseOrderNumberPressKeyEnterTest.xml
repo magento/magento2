@@ -48,7 +48,7 @@
 
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne"/>
-            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimpleWithSmallStreetAddress"/>
         </actionGroup>
 
         <!-- Checkout select Purchase Order payment -->

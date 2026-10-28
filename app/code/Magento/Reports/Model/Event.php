@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Model;
 
@@ -21,23 +21,22 @@ namespace Magento\Reports\Model;
  * @method int getStoreId()
  * @method \Magento\Reports\Model\Event setStoreId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
 class Event extends \Magento\Framework\Model\AbstractModel
 {
-    const EVENT_PRODUCT_VIEW = 1;
+    public const EVENT_PRODUCT_VIEW = 1;
 
-    const EVENT_PRODUCT_SEND = 2;
+    public const EVENT_PRODUCT_SEND = 2;
 
-    const EVENT_PRODUCT_COMPARE = 3;
+    public const EVENT_PRODUCT_COMPARE = 3;
 
-    const EVENT_PRODUCT_TO_CART = 4;
+    public const EVENT_PRODUCT_TO_CART = 4;
 
-    const EVENT_PRODUCT_TO_WISHLIST = 5;
+    public const EVENT_PRODUCT_TO_WISHLIST = 5;
 
-    const EVENT_WISHLIST_SHARE = 6;
+    public const EVENT_WISHLIST_SHARE = 6;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
