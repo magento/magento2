@@ -10,14 +10,12 @@ namespace Magento\GraphQlCache\Controller\Plugin;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\PageCache\Model\Config;
-use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for handling controller after controller tags and pre-controller validation.
@@ -51,11 +49,6 @@ class GraphQl
     private $cacheIdCalculator;
 
     /**
-     * @var LoggerInterface $logger
-     */
-    private $logger;
-
-    /**
      * @var RequestInterface
      */
     private $request;
@@ -64,7 +57,6 @@ class GraphQl
      * @param CacheableQuery $cacheableQuery
      * @param CacheIdCalculator $cacheIdCalculator
      * @param Config $config
-     * @param LoggerInterface $logger
      * @param HttpRequestProcessor $requestProcessor
      * @param Registry $registry
      */
@@ -72,14 +64,12 @@ class GraphQl
         CacheableQuery $cacheableQuery,
         CacheIdCalculator $cacheIdCalculator,
         Config $config,
-        LoggerInterface $logger,
         HttpRequestProcessor $requestProcessor,
         Registry $registry
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->config = $config;
-        $this->logger = $logger;
         $this->requestProcessor = $requestProcessor;
         $this->registry = $registry;
     }
@@ -101,8 +91,7 @@ class GraphQl
             /** @var \Magento\Framework\App\Request\Http $request */
             $this->requestProcessor->processHeaders($request);
             $this->request = $request;
-        } catch (\Exception $error) {
-            $this->logger->critical($error->getMessage());
+        } catch (\Exception) {
         }
     }
 
