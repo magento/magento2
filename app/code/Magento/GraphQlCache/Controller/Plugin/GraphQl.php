@@ -81,7 +81,6 @@ class GraphQl
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function beforeDispatch(
         FrontControllerInterface $subject,
