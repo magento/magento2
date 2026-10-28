@@ -280,13 +280,14 @@ class Utility
     ) {
         $itemPrice = $this->getItemPrice($item);
         $baseItemPrice = $this->getItemBasePrice($item);
+        $qty = $item->getTotalQty();
 
         $itemDiscountAmount = $item->getDiscountAmount();
         $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
 
-        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $item->getQty());
+        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $qty);
         $baseDiscountAmount =
-            min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $item->getQty());
+            min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $qty);
 
         $discountData->setAmount($discountAmount);
         $discountData->setBaseAmount($baseDiscountAmount);
