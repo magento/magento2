@@ -36,7 +36,7 @@ class Writer
     private $filesystem;
 
     /**
-     * Formatter
+     * Config formatter instance.
      *
      * @var Writer\FormatterInterface
      */
@@ -127,69 +127,125 @@ class Writer
      */
     public function saveConfig(array $data, $override = false, $pool = null, array $comments = [], bool $lock = false)
     {
+        $inputComments = $comments;
         foreach ($data as $fileKey => $config) {
             $paths = $this->configFilePool->getPaths();
 
-            if (isset($paths[$fileKey])) {
-                $currentData = $this->reader->load($fileKey);
-                $currentComments = $this->commentParser->execute($paths[$fileKey]);
+            if (!isset($paths[$fileKey])) {
+                continue;
+            }
 
-                if ($currentData) {
-                    if ($override) {
-                        $config = array_merge($currentData, $config);
-                    } else {
-                        $config = array_replace_recursive($currentData, $config);
-                    }
-                }
+            $path = $paths[$fileKey];
+            $config = $this->mergeConfigData($fileKey, $config, (bool)$override);
+            $commentsToWrite = $this->mergeComments($this->commentParser->execute($path), $inputComments);
+            $contents = $this->formatter->format($config, $commentsToWrite);
 
-                $comments = array_merge($currentComments, $comments);
+            try {
+                $this->writeConfigFile($path, $contents, $lock);
+            } catch (FileSystemException|ValidatorException $e) {
+                throw new FileSystemException(
+                    new Phrase('The "%1" deployment config file isn\'t writable.', [$path])
+                );
+            }
 
-                $contents = $this->formatter->format($config, $comments);
-                try {
-                    $writeFilePath = $paths[$fileKey];
-                    $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-                    if ($directoryWrite instanceof Write) {
-                        $targetPermissions = null;
-                        if ($directoryWrite->isExist($writeFilePath)) {
-                            $fileStats = $directoryWrite->stat($writeFilePath);
-                            if (isset($fileStats['mode'])) {
-                                $targetPermissions = $fileStats['mode'] & 0777;
-                            }
-                        }
-
-                        $tmpFilePath = $this->getTemporaryPath($writeFilePath);
-                        try {
-                            $directoryWrite->writeFile($tmpFilePath, $contents, 'w+', $lock);
-                            if ($targetPermissions !== null) {
-                                $directoryWrite->changePermissions($tmpFilePath, $targetPermissions);
-                            }
-                            $directoryWrite->renameFile($tmpFilePath, $writeFilePath);
-                        } catch (FileSystemException|ValidatorException $e) {
-                            if ($directoryWrite->isExist($tmpFilePath)) {
-                                try {
-                                    $directoryWrite->delete($tmpFilePath);
-                                } catch (\Exception $cleanupException) {
-                                    // Do nothing. Original exception should be thrown.
-                                }
-                            }
-                            throw $e;
-                        }
-                    } else {
-                        $directoryWrite->writeFile($writeFilePath, $contents);
-                    }
-                } catch (FileSystemException|ValidatorException $e) {
-                    throw new FileSystemException(
-                        new Phrase('The "%1" deployment config file isn\'t writable.', [$paths[$fileKey]])
-                    );
-                }
-                if (function_exists('opcache_invalidate')) {
-                    opcache_invalidate(
-                        $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])
-                    );
-                }
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate(
+                    $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($path)
+                );
             }
         }
         $this->deploymentConfig->resetData();
+    }
+
+    /**
+     * Merge existing file config with incoming config.
+     *
+     * @param string $fileKey
+     * @param array $config
+     * @param bool $override
+     * @return array
+     */
+    private function mergeConfigData(string $fileKey, array $config, bool $override): array
+    {
+        $currentData = $this->reader->load($fileKey);
+        if (!$currentData) {
+            return $config;
+        }
+
+        if ($override) {
+            foreach ($currentData as $key => $value) {
+                if (!array_key_exists($key, $config)) {
+                    $config[$key] = $value;
+                }
+            }
+
+            return $config;
+        }
+
+        return array_replace_recursive($currentData, $config);
+    }
+
+    /**
+     * Merge comments preserving incoming comment precedence.
+     *
+     * @param array $existingComments
+     * @param array $incomingComments
+     * @return array
+     */
+    private function mergeComments(array $existingComments, array $incomingComments): array
+    {
+        foreach ($incomingComments as $key => $value) {
+            $existingComments[$key] = $value;
+        }
+
+        return $existingComments;
+    }
+
+    /**
+     * Write config contents to target file.
+     *
+     * @param string $writeFilePath
+     * @param string $contents
+     * @param bool $lock
+     * @return void
+     * @throws FileSystemException
+     * @throws ValidatorException
+     */
+    private function writeConfigFile(string $writeFilePath, $contents, bool $lock): void
+    {
+        $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
+        if (!$directoryWrite instanceof Write) {
+            $directoryWrite->writeFile($writeFilePath, $contents);
+
+            return;
+        }
+
+        $targetPermissions = null;
+        if ($directoryWrite->isExist($writeFilePath)) {
+            $fileStats = $directoryWrite->stat($writeFilePath);
+            if (isset($fileStats['mode'])) {
+                $targetPermissions = $fileStats['mode'] & 0777;
+            }
+        }
+
+        $tmpFilePath = $this->getTemporaryPath($writeFilePath);
+        try {
+            $directoryWrite->writeFile($tmpFilePath, $contents, 'w+', $lock);
+            if ($targetPermissions !== null) {
+                $directoryWrite->changePermissions($tmpFilePath, $targetPermissions);
+            }
+            $directoryWrite->renameFile($tmpFilePath, $writeFilePath);
+        } catch (FileSystemException|ValidatorException $e) {
+            if ($directoryWrite->isExist($tmpFilePath)) {
+                try {
+                    $directoryWrite->delete($tmpFilePath);
+                } catch (\Exception $cleanupException) {
+                    unset($cleanupException);
+                }
+            }
+
+            throw $e;
+        }
     }
 
     /**
