@@ -176,15 +176,52 @@ class StoreTest extends TestCase
                 'dataSource' => ['data' => ['items' => [['store_id' => null]]]],
                 'expectedResult' => ['data' => ['items' => [['store_id' => null, self::$name => '']]]]
             ],
+            'missingStoreKey' => [
+                'dataSource' => ['data' => ['items' => [[]]]],
+                'expectedResult' => ['data' => ['items' => [[self::$name => '']]]]
+            ],
+            'falseStore' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => false]]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => false, self::$name => '']]]]
+            ],
+            'emptyStringStore' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => '']]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => '', self::$name => '']]]]
+            ],
+            'emptyArrayStore' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => []]]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => [], self::$name => '']]]]
+            ],
             'allStores' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => [0]]]]],
                 'expectedResult' => ['data' => ['items' => [['store_id' => [0], self::$name => __('All Store Views')]]]]
+            ],
+            'allStoresStringInArray' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => ['0']]]]],
+                'expectedResult' => [
+                    'data' => ['items' => [['store_id' => ['0'], self::$name => __('All Store Views')]]]
+                ]
+            ],
+            'allStoresScalarInt' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => 0]]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => 0, self::$name => __('All Store Views')]]]]
+            ],
+            'allStoresScalarString' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => '0']]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => '0', self::$name => __('All Store Views')]]]]
             ],
             'Stores' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => [1]]]]],
                 'expectedResult' => ['data' => ['items' => [['store_id' => [1], self::$name => $content]]]]
             ],
-
+            'storeScalarInt' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => 1]]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => 1, self::$name => $content]]]]
+            ],
+            'storeScalarString' => [
+                'dataSource' => ['data' => ['items' => [['store_id' => '1']]]],
+                'expectedResult' => ['data' => ['items' => [['store_id' => '1', self::$name => $content]]]]
+            ],
         ];
     }
 }

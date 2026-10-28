@@ -94,14 +94,12 @@ class Store extends Column
     {
         $content = '';
         $origStores = $item[$this->storeKey] ?? null;
-        
-        if ($origStores === null) {
+
+        if (in_array($origStores, [null, false, '', []], true)) {
             return '';
         }
-        if (!is_array($origStores)) {
-            $origStores = [$origStores];
-        }
-        if (in_array(0, $origStores) && count($origStores) == 1) {
+        $origStores = (array)$origStores;
+        if (in_array($origStores, [[0], ['0']], true)) {
             return __('All Store Views');
         }
 
