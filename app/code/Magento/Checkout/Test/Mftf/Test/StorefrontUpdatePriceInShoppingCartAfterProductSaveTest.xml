@@ -70,9 +70,13 @@
         <comment userInput="Preserve BIC" stepKey="waitForCartItemsActive1"/>
         <comment userInput="Preserve BIC" stepKey="waitForOrderSummaryLoad2"/>
 
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsNotActiveAfterReload"/>
+        <waitForPageLoad stepKey="waitForOrderSummaryLoadAfterReload"/>
         <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible1"/>
+        <scrollTo selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="scrollToCartItemsAreaAfterReload"/>
         <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="openItemProductBlock1"/>
         <waitForPageLoad stepKey="waitForCartItemLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActiveAfterReload"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="waitForSummarySubtotalVisible" />
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="checkSummarySubtotal1"/>
         <see userInput="$120.00" selector="{{CheckoutPaymentSection.productItemPriceByName($$createSimpleProduct.name$$)}}" stepKey="checkItemPrice1"/>
