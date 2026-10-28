@@ -12,22 +12,24 @@
         <arguments>
             <argument name="termCheckboxText" type="string"/>
         </arguments>
-        <!--Check if agreement is present on checkout and select it-->
-        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{termCheckboxText}}" stepKey="seeTermInCheckout"/>
-        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
-
-        <!--Checkout select Check/Money Order payment-->
+        <!--Checkout select Check/Money Order payment, if it's rendered as a visible radio
+             (auto-selected/hidden when only one payment method is available)-->
         <waitForPageLoad stepKey="waitForPaymentPageRendering"/>
         <waitForPageLoad stepKey="waitForPaymentRendering"/>
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
 
+        <!--Check if agreement is present on checkout and select it-->
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{termCheckboxText}}" stepKey="seeTermInCheckout"/>
+        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
+
         <!--Click Place Order button-->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForPageLoad stepKey="waitForOrderPlaced"/>
 
         <!--See success messages-->
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
-        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
     </actionGroup>
 </actionGroups>
