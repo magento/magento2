@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Phrase;
@@ -148,11 +149,35 @@ class Writer
                     $writeFilePath = $paths[$fileKey];
                     $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
                     if ($directoryWrite instanceof Write) {
-                        $directoryWrite->writeFile($writeFilePath, $contents, 'w+', $lock);
+                        $targetPermissions = null;
+                        if ($directoryWrite->isExist($writeFilePath)) {
+                            $fileStats = $directoryWrite->stat($writeFilePath);
+                            if (isset($fileStats['mode'])) {
+                                $targetPermissions = $fileStats['mode'] & 0777;
+                            }
+                        }
+
+                        $tmpFilePath = $this->getTemporaryPath($writeFilePath);
+                        try {
+                            $directoryWrite->writeFile($tmpFilePath, $contents, 'w+', $lock);
+                            if ($targetPermissions !== null) {
+                                $directoryWrite->changePermissions($tmpFilePath, $targetPermissions);
+                            }
+                            $directoryWrite->renameFile($tmpFilePath, $writeFilePath);
+                        } catch (FileSystemException|ValidatorException $e) {
+                            if ($directoryWrite->isExist($tmpFilePath)) {
+                                try {
+                                    $directoryWrite->delete($tmpFilePath);
+                                } catch (\Exception $cleanupException) {
+                                    // Do nothing. Original exception should be thrown.
+                                }
+                            }
+                            throw $e;
+                        }
                     } else {
                         $directoryWrite->writeFile($writeFilePath, $contents);
                     }
-                } catch (FileSystemException $e) {
+                } catch (FileSystemException|ValidatorException $e) {
                     throw new FileSystemException(
                         new Phrase('The "%1" deployment config file isn\'t writable.', [$paths[$fileKey]])
                     );
@@ -165,5 +190,25 @@ class Writer
             }
         }
         $this->deploymentConfig->resetData();
+    }
+
+    /**
+     * Build temporary file path in the same directory for atomic write+rename.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getTemporaryPath(string $path): string
+    {
+        $directory = dirname($path);
+        $fileName = basename($path);
+        $suffix = str_replace('.', '', uniqid('', true));
+        $temporaryFileName = sprintf('%s.%s.tmp', $fileName, $suffix);
+
+        if ($directory === '.' || $directory === '') {
+            return $temporaryFileName;
+        }
+
+        return $directory . '/' . $temporaryFileName;
     }
 }
