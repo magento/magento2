@@ -5,15 +5,26 @@
  */
 
 // @deprecated
+/** @var \Magento\Store\Block\Switcher $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if (count($block->getStores())>1) : ?>
+<?php if (count($block->getStores())>1): ?>
 <div class="form-language">
-    <label for="select-language"><?= $block->escapeHtml(__('Your Language:')) ?></label>
-    <select id="select-language" title="<?= $block->escapeHtmlAttr(__('Your Language')) ?>" onchange="window.location.href=this.value" class="flags">
-    <?php foreach ($block->getStores() as $_lang) : ?>
+    <label for="select-language"><?= $escaper->escapeHtml(__('Your Language:')) ?></label>
+    <select id="select-language" title="<?= $escaper->escapeHtmlAttr(__('Your Language')) ?>" class="flags">
+    <?php foreach ($block->getStores() as $_lang): ?>
         <?php $_selected = ($_lang->getId() == $block->getCurrentStoreId()) ? ' selected="selected"' : '' ?>
-        <option value="<?= $block->escapeUrl($_lang->getCurrentUrl()) ?>" style="background-image:url('<?= $block->escapeUrl($block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif')) ?>');"<?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($_lang->getName()) ?></option>
+        <?php $_flagUrl = $block->getViewFileUrl('images/flags/flag_' . $_lang->getCode() . '.gif') ?>
+        <option value="<?= $escaper->escapeUrl($_lang->getCurrentUrl()) ?>"
+                style="background-image:url('<?= $escaper->escapeUrl($_flagUrl) ?>');"
+                <?= /* @noEscape */ $_selected ?>><?= $escaper->escapeHtml($_lang->getName()) ?></option>
     <?php endforeach; ?>
     </select>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onchange',
+        'window.location.href=this.value',
+        '#select-language'
+    ) ?>
 </div>
 <?php endif; ?>
