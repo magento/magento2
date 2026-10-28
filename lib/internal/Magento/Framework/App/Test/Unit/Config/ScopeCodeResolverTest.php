@@ -69,4 +69,19 @@ class ScopeCodeResolverTest extends TestCase
             ->willReturn($scopeCode);
         $this->assertEquals($scopeCode, $this->scopeCodeResolver->resolve($scopeType, $scopeId));
     }
+
+    public function testResolveWithScopeCodeNullAndScopeTypeDefault()
+    {
+        $scopeType = 'default';
+        $scopeCode = null;
+
+        $this->scopeResolverPool->expects($this->never())
+            ->method('get');
+        $this->scopeResolver->expects($this->never())
+            ->method('getScope');
+        $this->scope->expects($this->never())
+            ->method('getCode');
+
+        $this->scopeCodeResolver->resolve($scopeType, $scopeCode);
+    }
 }

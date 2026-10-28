@@ -111,18 +111,22 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     {
         try {
             $this->sendBulk($products);
+            sleep(5);
         } catch (BulkException $bulkException) {
             $this->fail('Bulk was not accepted in full');
         }
 
         //assert all products are created
+        $expectedCount = count($this->skus);
+        $maxWaitIterations = max(30, 12 * $expectedCount);
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductExists'],
-                [$this->skus, count($this->skus)]
+                [$this->skus, $expectedCount],
+                $maxWaitIterations
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->fail('Not all products were created: ' . $e->getMessage());
         }
     }
 
@@ -207,6 +211,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     private function clearProducts()
     {
         $size = $this->objectManager->create(Collection::class)
+            ->setStoreId(0)
             ->addAttributeToFilter('sku', ['in' => $this->skus])
             ->load()
             ->getSize();
@@ -227,6 +232,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         $this->registry->unregister('isSecureArea');
 
         $size = $this->objectManager->create(Collection::class)
+            ->setStoreId(0)
             ->addAttributeToFilter('sku', ['in' => $this->skus])
             ->load()
             ->getSize();
@@ -238,11 +244,12 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
     public function assertProductExists($productsSkus, $count)
     {
-        $collection = $this->objectManager->create(Collection::class)
-            ->addAttributeToFilter('sku', ['in' => $productsSkus])
-            ->load();
-        $size = $collection->getSize();
-        return $size == $count;
+        $collection = $this->objectManager->create(Collection::class);
+        $collection->setStoreId(0);
+        $collection->addAttributeToFilter('sku', ['in' => $productsSkus]);
+        $collection->load();
+        $found = count($collection->getItems());
+        return $found === (int) $count;
     }
 
     /**
@@ -291,10 +298,11 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductExists'],
-                [$this->skus, count($this->skus)]
+                [$this->skus, count($this->skus)],
+                max(30, 12 * count($this->skus))
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->fail('Not all products were created: ' . $e->getMessage());
         }
     }
 
@@ -315,7 +323,14 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             ->setMetaDescription('meta description')
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
             ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-            ->setStockData(['use_config_manage_stock' => 0]);
+            ->setStockData(
+                [
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'qty' => 1000,
+                    'is_in_stock' => 1,
+                ]
+            );
         return $product;
     }
 

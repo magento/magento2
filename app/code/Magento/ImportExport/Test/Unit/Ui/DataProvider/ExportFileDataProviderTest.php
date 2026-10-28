@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\ImportExport\Model\Export\ConfigInterface;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -53,6 +55,13 @@ class ExportFileDataProviderTest extends TestCase
         $filesystemMock->method('getDirectoryWrite')
             ->willReturn($this->directoryMock);
         $this->fileIOMock = $this->createMock(File::class);
+        $fileInfoIoMock = $this->createMock(File::class);
+        $fileInfoIoMock->method('getPathInfo')
+            ->willReturnCallback(
+                fn ($path) => [
+                    'extension' => pathinfo($path, PATHINFO_EXTENSION),
+                ]
+            );
 
         $this->model = new ExportFileDataProvider(
             'export_grid_data_source',
@@ -64,7 +73,11 @@ class ExportFileDataProviderTest extends TestCase
             $filterBuilderMock,
             $fileMock,
             $filesystemMock,
-            $this->fileIOMock
+            $this->fileIOMock,
+            new FileInfo(
+                $this->createConfiguredMock(ConfigInterface::class, ['getFileFormats' => ['csv' => []]]),
+                $fileInfoIoMock
+            )
         );
     }
 
@@ -84,6 +97,9 @@ class ExportFileDataProviderTest extends TestCase
             '/var/export/file2.csv' => ['mtime' => 1000000002],
             '/var/export/file3.csv' => ['mtime' => 1000000002],
             '/var/export/file4.csv' => ['mtime' => 1000000003],
+            '/var/export/file5.csv.tmp' => ['mtime' => 1000000004],
+            '/var/export/.DS_Store' => ['mtime' => 1000000005],
+            '/var/export/preview.jpg' => ['mtime' => 1000000006],
         ];
         $driverMock->expects(self::once())
             ->method('readDirectoryRecursively')
@@ -99,9 +115,9 @@ class ExportFileDataProviderTest extends TestCase
             ->willReturnCallback(
                 fn ($path) => [
                     'dirname' => '/var/export',
-                    'extension' => 'csv',
                     'basename' => str_replace('/var/export/', '', $path),
-                    'filename' => preg_replace('/(.*)\/([a-z0-9]+)(\.csv)/', '$2', $path),
+                    'extension' => pathinfo($path, PATHINFO_EXTENSION),
+                    'filename' => pathinfo($path, PATHINFO_FILENAME),
                 ]
             );
         $this->requestMock->method('getParam')
@@ -109,10 +125,50 @@ class ExportFileDataProviderTest extends TestCase
             ->willReturn(['pageSize' => 10, 'current' => 1]);
 
         $data = $this->model->getData();
-        self::assertEquals(count($files), $data['totalRecords']);
+        self::assertEquals(4, $data['totalRecords']);
         self::assertEquals(
             ['file4.csv', 'file2.csv', 'file3.csv', 'file1.csv'],
             array_column($data['items'], 'file_name')
         );
+    }
+
+    public function testGetDataReturnsEmptyWhenAllFilesAreInProgress(): void
+    {
+        $this->directoryMock->method('getAbsolutePath')
+            ->willReturnCallback(fn ($path) => $path ?: '/var/');
+        $this->directoryMock->expects(self::once())
+            ->method('isExist')
+            ->with('/var/export/')
+            ->willReturn(true);
+        $driverMock = $this->createMock(DriverInterface::class);
+        $this->directoryMock->method('getDriver')
+            ->willReturn($driverMock);
+        $files = [
+            '/var/export/file1.csv.tmp' => ['mtime' => 1000000001],
+            '/var/export/file2.csv.tmp' => ['mtime' => 1000000002],
+        ];
+        $driverMock->expects(self::once())
+            ->method('readDirectoryRecursively')
+            ->with('/var/export/')
+            ->willReturn(array_keys($files));
+        $this->directoryMock->expects(self::exactly(count($files)))
+            ->method('isFile')
+            ->willReturn(true);
+        $this->directoryMock->method('stat')
+            ->willReturnCallback(fn ($path) => $files[$path]);
+        $this->fileIOMock->expects(self::exactly(count($files)))
+            ->method('getPathInfo')
+            ->willReturnCallback(
+                fn ($path) => [
+                    'dirname' => '/var/export',
+                    'basename' => str_replace('/var/export/', '', $path),
+                    'extension' => pathinfo($path, PATHINFO_EXTENSION),
+                    'filename' => pathinfo($path, PATHINFO_FILENAME),
+                ]
+            );
+
+        $data = $this->model->getData();
+        self::assertEquals(0, $data['totalRecords']);
+        self::assertEmpty($data['items']);
     }
 }
