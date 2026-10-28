@@ -140,7 +140,7 @@ class AddProductsToCart
 
         if ($cartItem->getQuantity() <= 0) {
             $errors[] = $this->error->create(
-                __('The product quantity should be greater than 0')->render(),
+                __('The product quantity should be greater than 0'),
                 $cartItemPosition,
                 $stockItemQuantity
             );
@@ -152,7 +152,7 @@ class AddProductsToCart
         if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
             return [
                 $this->error->create(
-                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                    __('Could not find a product with SKU "%sku"', ['sku' => $sku]),
                     $cartItemPosition,
                     $stockItemQuantity
                 )
@@ -163,7 +163,7 @@ class AddProductsToCart
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
         } catch (\Throwable $e) {
             $errors[] = $this->error->create(
-                __($e->getMessage())->render(),
+                __($e->getMessage()),
                 $cartItemPosition,
                 $stockItemQuantity
             );
@@ -171,7 +171,7 @@ class AddProductsToCart
 
         if (is_string($result)) {
             foreach (array_unique(explode("\n", $result)) as $error) {
-                $errors[] = $this->error->create(__($error)->render(), $cartItemPosition, $stockItemQuantity);
+                $errors[] = $this->error->create(__($error), $cartItemPosition, $stockItemQuantity);
             }
         }
 
