@@ -81,6 +81,7 @@ class GraphQl
      * @param RequestInterface $request
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function beforeDispatch(
         FrontControllerInterface $subject,
@@ -91,7 +92,7 @@ class GraphQl
             /** @var \Magento\Framework\App\Request\Http $request */
             $this->requestProcessor->processHeaders($request);
             $this->request = $request;
-        } catch (\Exception) {
+        } catch (\Exception) {// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         }
     }
 
