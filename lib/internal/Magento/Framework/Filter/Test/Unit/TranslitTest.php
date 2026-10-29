@@ -67,10 +67,12 @@ class TranslitTest extends TestCase
                 $isIconv
             ],
             ['™', 'tm', 'tm', $isIconv],
-            ['път към дома', 'pat kam doma', 'pat kam doma', $isIconv],
-            ['ПЪТ КЪМ ДОМА', 'pat kam doma', 'pat kam doma', $isIconv],
-            ['шофьор', 'shofyor', 'shofyor', $isIconv],
-            ['ШОФЬОР', 'shofyor', 'shofyor', $isIconv],
+            ['път към дома', 'pt km doma', 'pt km doma', $isIconv],
+            ['ПЪТ КЪМ ДОМА', 'pt km doma', 'pt km doma', $isIconv],
+            ['шофьор', 'shofor', 'shofor', $isIconv],
+            ['объект', 'obekt', 'obekt', $isIconv],
+            ['день', 'den', 'den', $isIconv],
+            ['Тверь', 'tver', 'tver', $isIconv],
             ['লক্ষ্য এনালগ ওয়াচ টি ২০', 'laksoa enaalaga oyaoaca tai 20', 'laksoa enaalaga oyaoaca tai 20', $isIconv]
         ];
     }
@@ -97,5 +99,40 @@ class TranslitTest extends TestCase
         $this->model = $objectManager->getObject(Translit::class, ['config' => $config]);
 
         $this->assertEquals('TM', $this->model->filter('™'));
+    }
+
+    /**
+     * Language-specific values for the hard and soft signs come from url/convert,
+     * e.g. the official Bulgarian transliteration (ъ => a, ь => y).
+     */
+    public function testFilterConfiguredCyrillicSigns()
+    {
+        $config = $this->createPartialMockWithReflection(
+            ScopeConfigInterface::class,
+            ['setValue', 'getValue', 'isSetFlag']
+        );
+
+        $config->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            'url/convert',
+            'default'
+        )->willReturn(
+            [
+                'hard_sign' => ['from' => 'ъ', 'to' => 'a'],
+                'hard_sign_uc' => ['from' => 'Ъ', 'to' => 'a'],
+                'soft_sign' => ['from' => 'ь', 'to' => 'y'],
+                'soft_sign_uc' => ['from' => 'Ь', 'to' => 'y'],
+            ]
+        );
+
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Translit::class, ['config' => $config]);
+
+        $this->assertEquals('pat kam doma', $this->model->filter('път към дома'));
+        $this->assertEquals('pat kam doma', $this->model->filter('ПЪТ КЪМ ДОМА'));
+        $this->assertEquals('shofyor', $this->model->filter('шофьор'));
     }
 }
