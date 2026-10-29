@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,13 +35,10 @@ class ExtendTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->formFactory = $this->getMockBuilder(
+        $this->registry = $this->createMock(Registry::class);
+        $this->formFactory = $this->createMock(
             FormFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->objectManagerHelper = new ObjectManager($this);
         $objects = [
             [
@@ -65,9 +62,7 @@ class ExtendTest extends TestCase
      */
     public function getProduct()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(Product::class);
         $this->registry->expects($this->once())
             ->method('registry')
             ->with('product')
@@ -80,9 +75,7 @@ class ExtendTest extends TestCase
     public function testGetExtendedElement()
     {
         $switchAttributeCode = 'test_code';
-        $form = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(Form::class);
         $hasKey = new ArrayHasKey('value');
         $form->expects($this->once())->method('addField')->with(
             $switchAttributeCode,

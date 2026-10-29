@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
@@ -32,8 +32,8 @@ class Compare
      * @param JsonValidator|null $jsonValidator
      */
     public function __construct(
-        Json $serializer = null,
-        JsonValidator $jsonValidator = null
+        ?Json $serializer = null,
+        ?JsonValidator $jsonValidator = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->jsonValidator = $jsonValidator ?: ObjectManager::getInstance()->get(JsonValidator::class);
@@ -68,14 +68,9 @@ class Compare
      */
     public function compare(Item $target, Item $compared)
     {
-        if ($target->getSku() !== null && $target->getSku() === $compared->getSku()) {
-            return true;
-        }
-
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }
-
         $targetOptionByCode = $target->getOptionsByCode();
         $comparedOptionsByCode = $compared->getOptionsByCode();
         if (!$target->compareOptions($targetOptionByCode, $comparedOptionsByCode)) {

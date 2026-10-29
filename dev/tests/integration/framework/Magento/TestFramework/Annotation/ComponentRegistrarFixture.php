@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\TestFramework\Annotation;
 
 use FilesystemIterator;
@@ -98,9 +97,8 @@ class ComponentRegistrarFixture
         } catch (Throwable $exception) {
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
-                get_class($test),
-                $test->getName(false),
-                $exception
+                $exception,
+                $test
             );
         }
         if (!$values) {
@@ -110,9 +108,7 @@ class ComponentRegistrarFixture
         $componentAnnotations = array_unique(array_column($values, 'path'));
         $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);
-        $paths->setAccessible(true);
         $this->origComponents = $paths->getValue();
-        $paths->setAccessible(false);
         foreach ($componentAnnotations as $fixturePath) {
             $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
             if (!file_exists($fixturesDir)) {
@@ -143,9 +139,7 @@ class ComponentRegistrarFixture
         if (null !== $this->origComponents) {
             $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
             $paths = $reflection->getProperty(self::PATHS_FIELD);
-            $paths->setAccessible(true);
             $paths->setValue(null, $this->origComponents);
-            $paths->setAccessible(false);
             $this->origComponents = null;
         }
     }

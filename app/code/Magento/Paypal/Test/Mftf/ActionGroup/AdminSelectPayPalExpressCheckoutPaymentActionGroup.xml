@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectPayPalExpressCheckoutPaymentActionGroup">
+        <annotations>
+            <description>Selects the 'PayPal Express' Payment Method on the Storefront Checkout page.</description>
+        </annotations>
+
+        <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="waitForPayPalExpressCheckoutIsPresent"/>
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="clickPayPalExpressCheckout"/>
+        <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoaded"/>
+    </actionGroup>
+</actionGroups>

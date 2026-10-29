@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -54,7 +54,7 @@ class IndexStructure implements IndexStructureInterface
     public function __construct(
         ResourceConnection $resource,
         IndexScopeResolverInterface $indexScopeResolver,
-        IndexStructureFactory $indexStructureFactory = null
+        ?IndexStructureFactory $indexStructureFactory = null
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;

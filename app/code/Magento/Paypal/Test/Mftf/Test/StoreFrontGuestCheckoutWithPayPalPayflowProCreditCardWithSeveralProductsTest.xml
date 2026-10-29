@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5272"/>
             <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
@@ -38,6 +40,7 @@
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
@@ -84,7 +87,14 @@
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDetails">
             <argument name="cardData" value="VisaDefaultCard"/>
         </actionGroup>
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <comment userInput="BIC workaround: ClickPlaceOrderActionGroup replaced by inline steps with one retry" stepKey="clickOnPlaceOrder"/>
+        <!-- Place Order with one retry after an occasional Payflow Pro sandbox inline Transaction has been declined response -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonClickable"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <waitForPageLoad stepKey="waitForPlaceOrderRequest"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPayflowProDeclineOrRedirect"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.placeOrder}}" dependentSelector="{{CheckoutPaymentSection.errormessage}}" visible="true" stepKey="retryPlaceOrderIfPayflowProDeclined"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>

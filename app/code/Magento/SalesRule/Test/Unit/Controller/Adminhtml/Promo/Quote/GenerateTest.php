@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\Layout;
@@ -38,6 +39,8 @@ use Magento\Framework\App\Response\Http as HttpResponse;
  */
 class GenerateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @const XML_COUPON_QUANTITY_LIMIT_PATH_TEST */
     private const XML_COUPON_QUANTITY_LIMIT_PATH_TEST = 'promo/auto_generated_coupon_codes/quantity_limit';
 
@@ -122,22 +125,12 @@ class GenerateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this
-            ->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this
-            ->getMockBuilder(HttpResponse::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->requestMock = $this->createMock(HttpRequest::class);
+        $this->responseMock = $this->createMock(HttpResponse::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManager::class);
+        $this->view = $this->createMock(ViewInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getView')
             ->willReturn($this->view);
@@ -153,30 +146,14 @@ class GenerateTest extends TestCase
         $this->contextMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dateMock = $this->getMockBuilder(Date::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->couponGenerator = $this->getMockBuilder(CouponGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->publisherMock = $this->getMockBuilder(PublisherInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->couponGenerationSpec = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->getCouponCodeLength = $this->getMockBuilder(
-            GetCouponCodeLengthInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMockForAbstractClass();
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->fileFactoryMock = $this->createMock(FileFactory::class);
+        $this->dateMock = $this->createMock(Date::class);
+        $this->couponGenerator = $this->createMock(CouponGenerator::class);
+        $this->publisherMock = $this->createMock(PublisherInterface::class);
+        $this->couponGenerationSpec = $this->createMock(CouponGenerationSpecInterfaceFactory::class);
+        $this->getCouponCodeLength = $this->createMock(GetCouponCodeLengthInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -200,9 +177,7 @@ class GenerateTest extends TestCase
      */
     public function testExecuteWithCouponTypeAuto()
     {
-        $helperData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperData = $this->createMock(Data::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
@@ -210,11 +185,10 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getCouponType'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getCouponType', 'getId']
+        );
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -245,15 +219,11 @@ class GenerateTest extends TestCase
             ->with([
                 'messages' => __('%1 coupon(s) have been generated.', 2)
             ]);
-        $layout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createMock(Layout::class);
         $this->view->expects($this->any())
             ->method('getLayout')
             ->willReturn($layout);
-        $messageBlock = $this->getMockBuilder(Messages::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $messageBlock = $this->createMock(Messages::class);
         $layout->expects($this->once())
             ->method('initMessages');
         $layout->expects($this->once())
@@ -270,9 +240,7 @@ class GenerateTest extends TestCase
      */
     public function testExecuteWithAutoGenerationEnabled()
     {
-        $helperData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperData = $this->createMock(Data::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
@@ -280,11 +248,10 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getUseAutoGeneration'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getUseAutoGeneration', 'getId']
+        );
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -315,15 +282,11 @@ class GenerateTest extends TestCase
             ->with([
                 'messages' => __('%1 coupon(s) have been generated.', 2)
             ]);
-        $layout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createMock(Layout::class);
         $this->view->expects($this->any())
             ->method('getLayout')
             ->willReturn($layout);
-        $messageBlock = $this->getMockBuilder(Messages::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $messageBlock = $this->createMock(Messages::class);
         $layout->expects($this->once())
             ->method('initMessages');
         $layout->expects($this->once())
@@ -340,9 +303,7 @@ class GenerateTest extends TestCase
      */
     public function testExecuteWithCouponTypeNotAutoAndAutoGenerationNotEnabled()
     {
-        $helperData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperData = $this->createMock(Data::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
@@ -350,11 +311,10 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getUseAutoGeneration', 'getCouponType'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getUseAutoGeneration', 'getCouponType', 'getId']
+        );
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -383,9 +343,7 @@ class GenerateTest extends TestCase
      */
     public function testExecuteWithInvalidCouponQuantity()
     {
-        $helperData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperData = $this->createMock(Data::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
@@ -393,11 +351,10 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getCouponType'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getCouponType', 'getId']
+        );
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -430,15 +387,11 @@ class GenerateTest extends TestCase
                     'Coupon qty should be less than or equal to the coupon qty in the store configuration.'
                 )
             ]);
-        $layout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createMock(Layout::class);
         $this->view->expects($this->any())
             ->method('getLayout')
             ->willReturn($layout);
-        $messageBlock = $this->getMockBuilder(Messages::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $messageBlock = $this->createMock(Messages::class);
         $layout->expects($this->once())
             ->method('initMessages');
         $layout->expects($this->once())
@@ -455,9 +408,7 @@ class GenerateTest extends TestCase
      */
     public function testExecuteWithDisableCouponQuantity()
     {
-        $helperData = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperData = $this->createMock(Data::class);
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
@@ -465,11 +416,10 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getCouponType'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getCouponType', 'getId']
+        );
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
@@ -505,15 +455,11 @@ class GenerateTest extends TestCase
             ->with([
                 'messages' => __('%1 coupon(s) have been generated.', 2)
             ]);
-        $layout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layout = $this->createMock(Layout::class);
         $this->view->expects($this->any())
             ->method('getLayout')
             ->willReturn($layout);
-        $messageBlock = $this->getMockBuilder(Messages::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $messageBlock = $this->createMock(Messages::class);
         $layout->expects($this->once())
             ->method('initMessages');
         $layout->expects($this->once())

@@ -1,14 +1,15 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Search\Dynamic;
 
 /**
  * Algorithm for layer value filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -17,30 +18,29 @@ class Algorithm
     /**
      * Minimal possible value
      */
-    const MIN_POSSIBLE_VALUE = .01;
+    public const MIN_POSSIBLE_VALUE = .01;
 
     /**
      * Rounding factor coefficient
      */
-    const TEN_POWER_ROUNDING_FACTOR = 4;
+    public const TEN_POWER_ROUNDING_FACTOR = 4;
 
     /**
      * Interval deflection coefficient
      */
-    const INTERVAL_DEFLECTION_LIMIT = .3;
+    public const INTERVAL_DEFLECTION_LIMIT = .3;
 
     /**
      * Standard normal distribution's  a/2 quantile
      * Depends on predefined a. In case of a=0.05
      */
-    const STANDARD_NORMAL_DISTRIBUTION = 1.96;
+    public const STANDARD_NORMAL_DISTRIBUTION = 1.96;
 
     /**
      * Min and Max number of intervals
      */
-    const MIN_INTERVALS_NUMBER = 2;
-
-    const MAX_INTERVALS_NUMBER = 10;
+    public const MIN_INTERVALS_NUMBER = 2;
+    public const MAX_INTERVALS_NUMBER = 10;
 
     /**
      * Upper values limit
@@ -92,15 +92,11 @@ class Algorithm
     protected $_values = [];
 
     /**
-     * Max value
-     *
      * @var float
      */
     protected $_maxValue = 0;
 
     /**
-     * Min value
-     *
      * @var float
      */
     protected $_minValue = 0;
@@ -117,12 +113,13 @@ class Algorithm
      *
      * @param null|float $lowerLimit
      * @param null|float $upperLimit
+     *
      * @return \Magento\Framework\Search\Dynamic\Algorithm
      */
     public function setLimits($lowerLimit = null, $upperLimit = null)
     {
-        $this->_lowerLimit = empty($lowerLimit) ? null : (double)$lowerLimit;
-        $this->_upperLimit = empty($upperLimit) ? null : (double)$upperLimit;
+        $this->_lowerLimit = empty($lowerLimit) ? null : (float)$lowerLimit;
+        $this->_upperLimit = empty($upperLimit) ? null : (float)$upperLimit;
 
         return $this;
     }
@@ -134,6 +131,7 @@ class Algorithm
      * @param float $max
      * @param float $standardDeviation
      * @param int $count
+     *
      * @return $this
      */
     public function setStatistics($min, $max, $standardDeviation, $count)
@@ -154,6 +152,7 @@ class Algorithm
         } else {
             $intervalsNumber = $valueRange * pow($count, 1 / 3) / (3.5 * $standardDeviation);
         }
+
         $this->_intervalsNumber = max(ceil($intervalsNumber), self::MIN_INTERVALS_NUMBER);
         $this->_intervalsNumber = (int)min($this->_intervalsNumber, self::MAX_INTERVALS_NUMBER);
 
@@ -164,6 +163,7 @@ class Algorithm
      * Calculate separators, each contains 'from', 'to' and 'count'
      *
      * @param IntervalInterface $interval
+     *
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -180,9 +180,11 @@ class Algorithm
             if (empty($separator)) {
                 continue;
             }
+
             if ($this->_quantileInterval[0] == 0) {
                 $intervalFirstValue = $this->_values[0];
             }
+
             $separatorCandidate = false;
             $newIntervalFirstValue = $intervalFirstValue;
             $newLastSeparator = $lastSeparator;
@@ -231,6 +233,7 @@ class Algorithm
                 }
             }
         }
+
         if ($this->_lastValueLimiter[0] < $this->_count) {
             $isEqualValue = $intervalFirstValue == $this->_maxValue ? $intervalFirstValue : false;
             $result[$this->getIntervalsNumber()] = [
@@ -260,8 +263,9 @@ class Algorithm
     /**
      * Find value separator for the quantile
      *
-     * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
+     * @param int $quantileNumber Should be from 1 to n-1 where n is number of intervals.
      * @param IntervalInterface $interval
+     *
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -280,6 +284,7 @@ class Algorithm
         if ($this->_lastValueLimiter[0] !== null) {
             $offset -= $this->_lastValueLimiter[0];
         }
+
         if ($offset < 0) {
             $intervalValuesCount += $offset;
             $values = array_slice(
@@ -289,17 +294,19 @@ class Algorithm
             );
             $offset = 0;
         }
+
         $lowerValue = $this->_lastValueLimiter[1];
         if ($this->_lowerLimit !== null) {
             $lowerValue = max($lowerValue, $this->_lowerLimit);
         }
+
         if ($intervalValuesCount >= 0) {
             $values = array_merge(
                 $values,
                 $interval->load($intervalValuesCount + 1, $offset, $lowerValue, $this->_upperLimit)
             );
         }
-        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+
         $lastValue = $this->offsetLimits($intervalValuesCount, $values);
         $bestRoundValue = [];
 
@@ -317,6 +324,7 @@ class Algorithm
                         );
                     }
                 }
+
                 if ($quantileNumber == $this->getIntervalsNumber() - 1) {
                     $valuesCount = count($values);
                     if ($values[$valuesCount - 1] > $lastValue) {
@@ -328,12 +336,14 @@ class Algorithm
                             $this->_upperLimit
                         );
                     }
+
                     if ($additionalValues) {
                         $quantileInterval[1] = $quantileInterval[0] + count($values) - 1;
                         if ($values[$valuesCount - 1] <= $lastValue) {
                             $quantileInterval[1] += count($additionalValues);
                             $values = array_merge($values, $additionalValues);
                         }
+
                         $upperBestRoundValue = $this->_findRoundValue(
                             $lastValue + self::MIN_POSSIBLE_VALUE / 10,
                             $values[count($values) - 1],
@@ -379,7 +389,8 @@ class Algorithm
     /**
      * Get quantile interval
      *
-     * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
+     * @param int $quantileNumber Should be from 1 to n-1 where n is number of intervals.
+     *
      * @return null|float[] [floatMin,floatMax]
      */
     protected function _getQuantileInterval($quantileNumber)
@@ -387,6 +398,7 @@ class Algorithm
         if ($quantileNumber < 1 || $quantileNumber >= $this->getIntervalsNumber()) {
             return null;
         }
+
         $quantile = $this->_getQuantile($quantileNumber);
         $deflectionLimit = floor($this->_count / 2 / $this->getIntervalsNumber());
         $limits = [
@@ -402,6 +414,7 @@ class Algorithm
         ) {
             $left = $this->_skippedQuantilesUpperLimits[$quantileNumber - 1];
         }
+
         $right = min(ceil($quantile + $deflection), $limits[1], $this->_count - 1);
 
         return [$left, $right];
@@ -410,7 +423,8 @@ class Algorithm
     /**
      * Get quantile
      *
-     * @param int $quantileNumber should be from 1 to n-1 where n is number of intervals
+     * @param int $quantileNumber Should be from 1 to n-1 where n is number of intervals.
+     *
      * @return float|null
      */
     protected function _getQuantile($quantileNumber)
@@ -425,10 +439,11 @@ class Algorithm
     /**
      * Find max rounding factor with given value range
      *
-     * @param float $lowerValue
-     * @param float $upperValue
-     * @param bool $returnEmpty whether empty result is acceptable
-     * @param null|float $roundingFactor if given, checks for range to contain the factor
+     * @param float      $lowerValue
+     * @param float      $upperValue
+     * @param bool       $returnEmpty    Whether empty result is acceptable.
+     * @param null|float $roundingFactor If given, checks for range to contain the factor.
+     *
      * @return false|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -445,6 +460,7 @@ class Algorithm
                     return false;
                 }
             }
+
             // round is used for such examples: (1194.32 / 0.02) or (5 / 100000)
             $lowerDivision = ceil(round($lowerValue / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
             $upperDivision = floor(round($upperValue / $roundingFactor, self::TEN_POWER_ROUNDING_FACTOR + 3));
@@ -468,6 +484,7 @@ class Algorithm
             if ($tenPower == self::MIN_POSSIBLE_VALUE) {
                 $roundingFactorCoefficients[] = 1;
             }
+
             foreach ($roundingFactorCoefficients as $roundingFactorCoefficient) {
                 $roundingFactorCoefficient *= $tenPower;
                 $roundValues = $this->_findRoundValue(
@@ -484,6 +501,7 @@ class Algorithm
                     $result[$index] = $roundValues;
                 }
             }
+
             $tenPower /= 10;
         }
 
@@ -493,8 +511,9 @@ class Algorithm
     /**
      * Merge new round values with old ones
      *
-     * @param array &$oldRoundValues
-     * @param array &$newRoundValues
+     * @param array $oldRoundValues
+     * @param array $newRoundValues
+     *
      * @return void
      */
     protected function _mergeRoundValues(&$oldRoundValues, &$newRoundValues)
@@ -526,6 +545,7 @@ class Algorithm
      *
      * @param int $quantileNumber
      * @param array $separators
+     *
      * @return array|false [deflection, separatorValue, $valueIndex]
      */
     protected function _findBestSeparator($quantileNumber, $separators)
@@ -561,7 +581,8 @@ class Algorithm
      * Returns -1 if index was not found
      *
      * @param float $value
-     * @param null|float[] $limits search [from, to]
+     * @param null|float[] $limits Search [from, to].
+     *
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -575,9 +596,11 @@ class Algorithm
         if (!is_array($limits)) {
             $limits = [];
         }
+
         if (!isset($limits[0])) {
             $limits[0] = 0;
         }
+
         if (!isset($limits[1])) {
             $limits[1] = count($this->_values) - 1;
         }

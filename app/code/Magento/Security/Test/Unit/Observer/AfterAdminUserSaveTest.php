@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\Security\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Security\Model\ResourceModel\UserExpiration;
 use Magento\Security\Model\UserExpirationFactory;
 use Magento\Security\Observer\AfterAdminUserSave;
@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AfterAdminUserSaveTest extends TestCase
 {
+    use MockCreationTrait;
 
     /**
      * @var MockObject|UserExpirationFactory
@@ -37,11 +38,6 @@ class AfterAdminUserSaveTest extends TestCase
      * @var AfterAdminUserSave
      */
     private $observer;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
 
     /**
      * @var MockObject|Observer
@@ -65,30 +61,24 @@ class AfterAdminUserSaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-
         $this->userExpirationFactoryMock = $this->createMock(UserExpirationFactory::class);
         $this->userExpirationResourceMock = $this->createPartialMock(
             UserExpiration::class,
             ['load', 'save', 'delete']
         );
-        $this->observer = $this->objectManager->getObject(
-            AfterAdminUserSave::class,
-            [
-                'userExpirationFactory' => $this->userExpirationFactoryMock,
-                'userExpirationResource' => $this->userExpirationResourceMock,
-            ]
+        $this->observer = new AfterAdminUserSave(
+            $this->userExpirationFactoryMock,
+            $this->userExpirationResourceMock
         );
         $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->userMock = $this->getMockBuilder(User::class)
-            ->addMethods(['getExpiresAt'])
-            ->onlyMethods(['getId', 'hasData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
+        $this->userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getExpiresAt', 'getId', 'hasData']
+        );
         $this->userExpirationMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpiration::class,
             ['getId', 'getExpiresAt', 'setId', 'setExpiresAt']

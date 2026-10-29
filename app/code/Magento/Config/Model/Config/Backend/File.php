@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,8 +71,8 @@ class File extends \Magento\Framework\App\Config\Value
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
         Filesystem $filesystem,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_uploaderFactory = $uploaderFactory;
@@ -278,8 +278,10 @@ class File extends \Magento\Framework\App\Config\Value
      */
     private function setValueAfterValidation(string $value): void
     {
-        // avoid intercepting value
-        if (preg_match('/[^a-z0-9_\/\\-\\.]+/i', $value)) {
+        if (preg_match('/[^a-z0-9_\/\\-\\.]+/i', $value)
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            || !$this->_mediaDirectory->isFile($this->_getUploadDir() . DIRECTORY_SEPARATOR . basename($value))
+        ) {
             throw new LocalizedException(__('Invalid file name'));
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler;
+use Magento\Cms\Model\Block as CmsModelBlock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -57,8 +58,7 @@ class SaveHandlerTest extends TestCase
         $newStore = 2;
         $linkField = 'link_id';
 
-        $adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $adapter = $this->createMock(AdapterInterface::class);
 
         $whereForDelete = [
             $linkField . ' = ?' => $linkId,
@@ -101,7 +101,7 @@ class SaveHandlerTest extends TestCase
             ->with('cms_block_store')
             ->willReturn('cms_block_store');
 
-        $block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
+        $block = $this->getMockBuilder(CmsModelBlock::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
                 'getStores',

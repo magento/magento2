@@ -1,25 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeValidationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AttributeValidation
      */
@@ -72,29 +79,41 @@ class AttributeValidationTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->attributeMock = $this->getMockBuilder(AbstractBackend::class)
-            ->addMethods(['getAttributeCode'])
-            ->getMockForAbstractClass();
-        $this->subjectMock = $this->getMockBuilder(AbstractBackend::class)
-            ->onlyMethods(['getAttribute'])
-            ->getMockForAbstractClass();
-        $this->subjectMock->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attributeMock);
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['setAttributeCode', 'getAttributeCode']
+        );
+        $attributeCode = '';
+        $this->attributeMock->method('setAttributeCode')->willReturnCallback(function ($value) use (&$attributeCode) {
+            $attributeCode = $value;
+        });
+        $this->attributeMock->method('getAttributeCode')->willReturnCallback(function () use (&$attributeCode) {
+            return $attributeCode;
+        });
+        
+        $this->subjectMock = $this->createPartialMockWithReflection(
+            AbstractBackend::class,
+            ['setAttribute', 'getAttribute']
+        );
+        $this->subjectMock->method('setAttribute')->willReturnSelf();
+        $this->subjectMock->method('getAttribute')->willReturn($this->attributeMock);
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['setId', 'getId']
+        );
+        $storeId = null;
+        $this->storeMock->method('setId')->willReturnCallback(function ($value) use (&$storeId) {
+            $storeId = $value;
+        });
+        $this->storeMock->method('getId')->willReturnCallback(function () use (&$storeId) {
+            return $storeId;
+        });
+        
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
 
-        $this->entityMock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->getMock();
+        $this->entityMock = $this->createMock(DataObject::class);
 
         $this->allowedEntityTypes = [$this->entityMock];
 
@@ -118,30 +137,25 @@ class AttributeValidationTest extends TestCase
      *
      * @return void
      * @throws NoSuchEntityException
-     * @dataProvider aroundValidateDataProvider
      */
+    #[DataProvider('aroundValidateDataProvider')]
     public function testAroundValidate(bool $shouldProceedRun, bool $defaultStoreUsed, $storeId): void
     {
         $this->isProceedMockCalled = false;
         $attributeCode = 'code';
 
-        $this->storeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
+        $this->storeMock->setId($storeId);
 
         if ($defaultStoreUsed) {
-            $this->attributeMock->expects($this->once())
-                ->method('getAttributeCode')
-                ->willReturn($attributeCode);
-            $this->entityMock
-                ->method('getData')
-                ->willReturnCallback(function ($arg1) use ($attributeCode) {
-                    if (empty($arg1)) {
-                        return [$attributeCode => null];
-                    } elseif ($arg1 == $attributeCode) {
-                        return null;
-                    }
-                });
+            $this->attributeMock->setAttributeCode($attributeCode);
+            $this->entityMock->method('getData')->willReturnCallback(function ($arg1) use ($attributeCode) {
+                if (empty($arg1)) {
+                    return [$attributeCode => null];
+                } elseif ($arg1 == $attributeCode) {
+                    return null;
+                }
+                return null;
+            });
         }
 
         $this->attributeValidation->aroundValidate($this->subjectMock, $this->proceedMock, $this->entityMock);

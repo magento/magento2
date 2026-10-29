@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class ZendTest extends TestCase
     protected function setUp(): void
     {
         $this->converterMock = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->clientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
             ->onlyMethods(['create'])
@@ -70,7 +70,7 @@ class ZendTest extends TestCase
             ->getMock();
 
         $this->transferObjectMock = $this->getMockBuilder(TransferInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new Zend(
             $this->clientFactoryMock,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,7 +137,7 @@ class SubstitutionTest extends TestCase
         )->disableOriginalConstructor()->getMock();
         $methodMock = $this->getMockBuilder(
             MethodInterface::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $this->block->setInfo($infoMock);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api\Data;
@@ -172,7 +172,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null);
+    public function setOptions(?array $options = null);
 
     /**
      * Get class which is used to display the attribute on frontend.

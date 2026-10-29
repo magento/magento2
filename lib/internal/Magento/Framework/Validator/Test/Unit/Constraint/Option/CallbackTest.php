@@ -1,38 +1,44 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit\Constraint\Option;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Validator\Constraint\Option\Callback;
 use Magento\Framework\Validator\Test\Unit\Test\Callback as TestCallback;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for \Magento\Framework\Validator\Constraint\Option\Callback
  */
 class CallbackTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Value for test
      */
     const TEST_VALUE = 'test';
 
     /**
-     * Test getValue method
-     *
-     * @dataProvider getConfigDataProvider
+     * Test getValue method using data provider
      *
      * @param callable $callback
      * @param mixed $expectedResult
      * @param null $arguments
      * @param bool $createInstance
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetValue($callback, $expectedResult, $arguments = null, $createInstance = false)
     {
+        if (is_array($callback) && is_callable($callback[0])) {
+            $callback[0] = $callback[0]($this);
+        }
         $option = new Callback($callback, $arguments, $createInstance);
         $this->assertEquals($expectedResult, $option->getValue());
     }
@@ -40,18 +46,11 @@ class CallbackTest extends TestCase
     /**
      * Data provider for testGetValue
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         $closure = function () {
             return 'Value from closure';
         };
-
-        $mock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getValue'])
-            ->getMock();
-        $mock->method('getValue')
-            ->with('arg1', 'arg2')
-            ->willReturn('Value from mock');
 
         return [
             [
@@ -59,7 +58,10 @@ class CallbackTest extends TestCase
                 'Value from closure'
             ],
             [
-                [$this, 'getTestValue'],
+                [
+                    static fn (self $testCase) => $testCase->getClassObjectMock()['classObject'],
+                    'getTestValue'
+                ],
                 self::TEST_VALUE
             ],
             [
@@ -67,15 +69,37 @@ class CallbackTest extends TestCase
                 self::TEST_VALUE
             ],
             [
-                [$mock, 'getValue'],
+                [
+                    static fn (self $testCase) => $testCase->getClassObjectMock()['mock'],
+                    'getValue'
+                ],
                 'Value from mock', ['arg1', 'arg2']
             ],
             [
-                [TestCallback::class, 'getId'],
+                [
+                    TestCallback::class,
+                    'getId'
+                ],
                 TestCallback::ID,
                 null,
                 true
             ]
+        ];
+    }
+
+    public function getClassObjectMock()
+    {
+        $classObject = $this;
+        $mock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getValue']
+        );
+        $mock->method('getValue')
+            ->with('arg1', 'arg2')
+            ->willReturn('Value from mock');
+        return [
+            'classObject' => $classObject,
+            'mock' => $mock
         ];
     }
 
@@ -98,11 +122,10 @@ class CallbackTest extends TestCase
     /**
      * Test setArguments method
      *
-     * @dataProvider setArgumentsDataProvider
-     *
      * @param string|array $value
      * @param string|array $expectedValue
      */
+    #[DataProvider('setArgumentsDataProvider')]
     public function testSetArguments($value, $expectedValue)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -115,7 +138,7 @@ class CallbackTest extends TestCase
     /**
      * Data provider for testGetValue
      */
-    public function setArgumentsDataProvider()
+    public static function setArgumentsDataProvider()
     {
         return [
             ['baz', ['baz']],
@@ -129,14 +152,24 @@ class CallbackTest extends TestCase
     /**
      * Test getValue method raises \InvalidArgumentException
      *
-     * @dataProvider getValueExceptionDataProvider
-     *
      * @param mixed $callback
      * @param string $expectedMessage
      * @param bool $createInstance
      */
+    #[DataProvider('getValueExceptionDataProvider')]
     public function testGetValueException($callback, $expectedMessage, $createInstance = false)
     {
+        if (is_array($callback)) {
+            foreach ($callback as $key => $value) {
+                if (is_callable($value)) {
+                    $callback[$key] = $value($this);
+                }
+            }
+        } else {
+            if (is_callable($callback)) {
+                $callback = $callback($this);
+            }
+        }
         $this->expectException('InvalidArgumentException');
         $option = new Callback($callback, null, $createInstance);
         $this->expectException('InvalidArgumentException');
@@ -149,19 +182,20 @@ class CallbackTest extends TestCase
      *
      * @return array
      */
-    public function getValueExceptionDataProvider()
+    public static function getValueExceptionDataProvider()
     {
+        $testObject = static fn (self $testCase) => $testCase->getCallBackTestObject();
         return [
             [
                 ['Not_Existing_Callback_Class', 'someMethod'],
                 'Class "Not_Existing_Callback_Class" was not found',
             ],
             [
-                [$this, 'notExistingMethod'],
+                [$testObject, 'notExistingMethod'],
                 'Callback does not callable'
             ],
             [
-                ['object' => $this, 'method' => 'getTestValue'],
+                ['object' => $testObject, 'method' => 'getTestValue'],
                 'Callback does not callable'
             ],
             [
@@ -173,10 +207,15 @@ class CallbackTest extends TestCase
                 'Callback does not callable'
             ],
             [
-                [$this, 'getTestValue'],
+                [$testObject, 'getTestValue'],
                 'Callable expected to be an array with class name as first element',
                 true
             ]
         ];
+    }
+
+    public function getCallBackTestObject()
+    {
+        return $this;
     }
 }

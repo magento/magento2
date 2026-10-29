@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib\DateTime;
@@ -350,7 +350,11 @@ class Timezone implements TimezoneInterface
             }
         }
 
-        $date->setTimezone(new \DateTimeZone('UTC'));
+        if ($date instanceof \DateTimeImmutable) {
+            $date = $date->setTimezone(new \DateTimeZone('UTC'));
+        } else {
+            $date->setTimezone(new \DateTimeZone('UTC'));
+        }
 
         return $date->format($format);
     }

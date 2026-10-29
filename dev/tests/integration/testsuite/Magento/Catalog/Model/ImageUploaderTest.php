@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +17,12 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for the \Magento\Catalog\Model\ImageUploader class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageUploaderTest extends TestCase
 {
@@ -75,11 +78,11 @@ class ImageUploaderTest extends TestCase
     }
 
     /**
-     * @dataProvider saveFileToTmpDirProvider
      * @param string $fileName
      * @param string $expectedName
      * @return void
      */
+    #[DataProvider('saveFileToTmpDirProvider')]
     public function testSaveFileToTmpDir(string $fileName, string $expectedName): void
     {
         $fixtureDir = realpath(__DIR__ . '/../_files');
@@ -102,16 +105,16 @@ class ImageUploaderTest extends TestCase
     /**
      * @return array
      */
-    public function saveFileToTmpDirProvider(): array
+    public static function saveFileToTmpDirProvider(): array
     {
         return [
             'image_default_name' => [
-                'file_name' => 'magento_small_image.jpg',
-                'expected_name' => 'magento_small_image.jpg',
+                'fileName' => 'magento_small_image.jpg',
+                'expectedName' => 'magento_small_image.jpg',
             ],
             'image_with_space_in_name' => [
-                'file_name' => 'magento_image with space in name.jpg',
-                'expected_name' => 'magento_image_with_space_in_name.jpg',
+                'fileName' => 'magento_image with space in name.jpg',
+                'expectedName' => 'magento_image_with_space_in_name.jpg',
             ],
         ];
     }

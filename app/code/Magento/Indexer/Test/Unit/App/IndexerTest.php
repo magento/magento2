@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,13 @@ use Magento\Indexer\App\Indexer;
 use Magento\Indexer\Model\Processor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class IndexerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Indexer
      */
@@ -42,11 +46,10 @@ class IndexerTest extends TestCase
     {
         $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->processor = $this->createMock(Processor::class);
-        $this->_response = $this->getMockBuilder(Response::class)
-            ->addMethods(['getCode'])
-            ->onlyMethods(['setCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_response = $this->createPartialMockWithReflection(
+            Response::class,
+            ['getCode', 'setCode']
+        );
 
         $this->entryPoint = new Indexer(
             'reportDir',
@@ -58,9 +61,9 @@ class IndexerTest extends TestCase
 
     /**
      * @param bool $isExist
-     * @param array $callCount
-     * @dataProvider executeProvider
+     * @param int $callCount
      */
+    #[DataProvider('executeProvider')]
     public function testExecute($isExist, $callCount)
     {
         $this->_response->expects($this->once())->method('setCode')->with(0);
@@ -80,8 +83,8 @@ class IndexerTest extends TestCase
     public static function executeProvider()
     {
         return [
-            'set1' => ['isExist' => true, 'expectsValue' => 1],
-            'set2' => ['delete' => false, 'expectsValue' => 0]
+            'set1' => ['isExist' => true, 'callCount' => 1],
+            'set2' => ['isExist' => false, 'callCount' => 0]
         ];
     }
 

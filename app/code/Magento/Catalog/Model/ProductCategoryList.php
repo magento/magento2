@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -51,8 +51,8 @@ class ProductCategoryList implements ResetAfterRequestInterface
     public function __construct(
         ResourceModel\Product $productResource,
         ResourceModel\Category $category,
-        StoreManagerInterface $storeManager = null,
-        TableMaintainer $tableMaintainer = null
+        ?StoreManagerInterface $storeManager = null,
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->productResource = $productResource;
         $this->category = $category;

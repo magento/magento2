@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class CssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->urlBuilder = $this->createMock(Url::class);
         $this->urlCoder = $this->createMock(UrlCoder::class);
 
@@ -99,7 +99,7 @@ class CssTest extends TestCase
         $method = self::getMethod('_getAdditionalElementTypes');
 
         /** @var ScopeConfigInterface $configModel */
-        $configModel = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $configModel = $this->createMock(ScopeConfigInterface::class);
 
         $this->_objectManager->expects(
             $this->any()
@@ -132,7 +132,6 @@ class CssTest extends TestCase
     {
         $class = new \ReflectionClass(Css::class);
         $method = $class->getMethod($name);
-        $method->setAccessible(true);
         return $method;
     }
 

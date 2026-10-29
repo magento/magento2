@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Helper;
@@ -126,7 +126,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
-        Mime $mime = null
+        ?Mime $mime = null
     ) {
         parent::__construct($context);
         $this->_downloadableFile = $downloadableFile;

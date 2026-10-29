@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\ImportResult class.
@@ -26,9 +27,9 @@ class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
      * @param string $delimiter
      * @backupGlobals enabled
      * @magentoDbIsolation enabled
-     * @dataProvider validationDataProvider
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[DataProvider('validationDataProvider')]
     public function testAddErrorMessages(string $fileName, string $mimeType, string $delimiter): void
     {
         $validationStrategy = ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR;
@@ -82,8 +83,8 @@ class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
     {
         return [
             [
-                'file_name' => 'invalid_catalog_products.csv',
-                'mime-type' => 'text/csv',
+                'fileName' => 'invalid_catalog_products.csv',
+                'mimeType' => 'text/csv',
                 'delimiter' => ',',
             ],
         ];

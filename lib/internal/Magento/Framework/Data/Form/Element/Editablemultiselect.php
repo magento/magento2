@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -51,7 +51,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         CollectionFactory $factoryCollection,
         Escaper $escaper,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?SecureHtmlRenderer $secureRenderer = null,
         ?Random $random = null
     ) {
@@ -156,6 +156,8 @@ script
         if ($this->getData('disabled')) {
             // if element is disabled then no data modification is allowed
             $html .= ' disabled="disabled" data-is-removable="no" data-is-editable="no"';
+        } elseif ($option['disabled'] ?? false) {
+            $html .= ' disabled="disabled"';
         }
 
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";

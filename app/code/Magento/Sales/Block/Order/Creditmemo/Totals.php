@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Block\Order\Creditmemo;
@@ -79,7 +79,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     {
         parent::_initTotals();
         $this->removeTotal('base_grandtotal');
-        if ((double)$this->getSource()->getAdjustmentPositive()) {
+        if ((float)$this->getSource()->getAdjustmentPositive()) {
             $total = new \Magento\Framework\DataObject(
                 [
                     'code' => 'adjustment_positive',
@@ -89,7 +89,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             );
             $this->addTotal($total);
         }
-        if ((double)$this->getSource()->getAdjustmentNegative()) {
+        if ((float)$this->getSource()->getAdjustmentNegative()) {
             $total = new \Magento\Framework\DataObject(
                 [
                     'code' => 'adjustment_negative',

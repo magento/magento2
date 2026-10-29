@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,10 +17,13 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class NotificationTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testRender()
     {
         $objectManager = new ObjectManager($this);
@@ -34,7 +37,6 @@ class NotificationTest extends TestCase
 
         $reflection = new \ReflectionClass(DateTimeFormatter::class);
         $reflectionProperty = $reflection->getProperty('localeResolver');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $localeResolver);
 
         $formattedDate = $dateTimeFormatter->formatObject($testDatetime);
@@ -42,21 +44,18 @@ class NotificationTest extends TestCase
         $htmlId = 'test_HTML_id';
         $label = 'test_label';
 
-        $localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $localeDateMock = $this->createMock(TimezoneInterface::class);
         $localeDateMock->expects($this->any())->method('date')->willReturn($testDatetime);
         $localeDateMock->expects($this->any())->method('getDateTimeFormat')->willReturn(null);
 
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLabel'])
-            ->onlyMethods(['getHtmlId'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getLabel', 'getHtmlId']
+        );
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
-        $dateTimeFormatter = $this->getMockForAbstractClass(DateTimeFormatterInterface::class);
+        $dateTimeFormatter = $this->createMock(DateTimeFormatterInterface::class);
         $dateTimeFormatter->expects($this->once())
             ->method('formatObject')
             ->with($testDatetime)

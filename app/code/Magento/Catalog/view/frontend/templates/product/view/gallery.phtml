@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -13,22 +13,9 @@
 ?>
 
 <?php
-$images = $block->getGalleryImages()->getItems();
-$mainImage = current(array_filter($images, function ($img) use ($block) {
-    return $block->isMainImage($img);
-}));
-
-if (!empty($images) && empty($mainImage)) {
-    $mainImage = $block->getGalleryImages()->getFirstItem();
-}
-
-$helper = $block->getData('imageHelper');
-$mainImageData = $mainImage ?
-    $mainImage->getData('medium_image_url') :
-    $helper->getDefaultPlaceholderUrl('image');
-    $imageWidth = $block->getImageAttribute('product_page_image_medium', 'width');
-    $imageHeight = $block->getImageAttribute('product_page_image_medium', 'height');
-
+$imageWidth = $block->getImageAttribute('product_page_image_medium', 'width');
+$imageHeight = $block->getImageAttribute('product_page_image_medium', 'height');
+$mainImageData = $block->getViewModel()->getMainProductImage();
 ?>
 
 <div class="gallery-placeholder _block-content-loading" data-gallery-role="gallery-placeholder">

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
         $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_options" => [
-                'post_data' => [
+                'postData' => [
                     'options_array' => [
                         'option_1' => [
                             'order' => '5',
@@ -122,7 +122,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
                 ],
             ],
             "{$frontendInput}_delete_options" => [
-                'post_data' => [
+                'postData' => [
                     'options_array' => [
                         'option_1' => [
                             'value' => [],

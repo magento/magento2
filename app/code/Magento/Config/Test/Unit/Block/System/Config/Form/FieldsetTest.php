@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,13 +15,16 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\AbstractForm;
 use Magento\Framework\Data\Form\Element\Collection;
+use Magento\Framework\Data\Form\Element\Fieldset as FieldsetElement;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Helper\Js;
 use Magento\Framework\View\Layout;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -31,6 +34,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  */
 class FieldsetTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Fieldset
      */
@@ -54,7 +59,7 @@ class FieldsetTest extends TestCase
     /**
      * @var array
      */
-    protected $testData = [
+    protected static $testData = [
         'htmlId' => 'test_field_id',
         'name' => 'test_name',
         'label' => 'test_label',
@@ -95,23 +100,22 @@ class FieldsetTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_testHelper = new ObjectManager($this);
+        $this->authSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser']
+        );
 
-        $this->userMock = $this->getMockBuilder(User::class)
-            ->addMethods(['getExtra'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getExtra']
+        );
 
         $this->authSessionMock->expects($this->any())
             ->method('getUser')
             ->willReturn($this->userMock);
 
-        $this->_requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         $this->_requestMock->expects($this->any())
             ->method('getParam')
             ->willReturn('Test Param');
@@ -138,38 +142,37 @@ class FieldsetTest extends TestCase
             'data' => ['group' => $groupMock],
             'secureRenderer' => $secureRendererMock
         ];
-        $this->_testHelper = new ObjectManager($this);
         $this->_object = $this->_testHelper->getObject(Fieldset::class, $data);
 
-        $this->_elementMock = $this->getMockBuilder(Text::class)
-            ->addMethods(['getLegend', 'getComment', 'getIsNested', 'getExpanded'])
-            ->onlyMethods(['getId', 'getHtmlId', 'getName', 'getElements', 'getForm'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_elementMock = $this->createPartialMockWithReflection(
+            Text::class,
+            ['getLegend', 'getComment', 'getIsNested', 'getExpanded',
+             'getId', 'getHtmlId', 'getName', 'getElements', 'getForm']
+        );
 
         $this->_elementMock->expects($this->any())
             ->method('getId')
-            ->willReturn($this->testData['htmlId']);
+            ->willReturn(self::$testData['htmlId']);
         $this->_elementMock->expects($this->any())
             ->method('getHtmlId')
-            ->willReturn($this->testData['htmlId']);
+            ->willReturn(self::$testData['htmlId']);
         $this->_elementMock->expects($this->any())
             ->method('getName')
-            ->willReturn($this->testData['name']);
+            ->willReturn(self::$testData['name']);
         $this->_elementMock->expects($this->any())
             ->method('getLegend')
-            ->willReturn($this->testData['legend']);
+            ->willReturn(self::$testData['legend']);
         $this->_elementMock->expects($this->any())
             ->method('getComment')
-            ->willReturn($this->testData['comment']);
+            ->willReturn(self::$testData['comment']);
     }
 
     /**
      * @param $expanded
      * @param $nested
      * @param extra
-     * @dataProvider renderWithoutStoredElementsDataProvider
      */
+    #[DataProvider('renderWithoutStoredElementsDataProvider')]
     public function testRenderWithoutStoredElements($expanded, $nested, $extra)
     {
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
@@ -181,9 +184,9 @@ class FieldsetTest extends TestCase
         $this->_elementMock->expects($this->any())->method('getIsNested')->willReturn($nested);
         $this->_elementMock->expects($this->any())->method('getExpanded')->willReturn($expanded);
         $actualHtml = $this->_object->render($this->_elementMock);
-        $this->assertStringContainsString($this->testData['htmlId'], $actualHtml);
-        $this->assertStringContainsString($this->testData['legend'], $actualHtml);
-        $this->assertStringContainsString($this->testData['comment'], $actualHtml);
+        $this->assertStringContainsString(self::$testData['htmlId'], $actualHtml);
+        $this->assertStringContainsString(self::$testData['legend'], $actualHtml);
+        $this->assertStringContainsString(self::$testData['comment'], $actualHtml);
         if ($nested) {
             $this->assertStringContainsString('nested', $actualHtml);
         }
@@ -193,27 +196,25 @@ class FieldsetTest extends TestCase
      * @param $expanded
      * @param $nested
      * @param $extra
-     * @dataProvider renderWithStoredElementsDataProvider
      */
+    #[DataProvider('renderWithStoredElementsDataProvider')]
     public function testRenderWithStoredElements($expanded, $nested, $extra)
     {
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $this->_helperMock->expects($this->any())->method('getScript')->willReturnArgument(0);
-        $fieldMock = $this->getMockBuilder(Text::class)
-            ->addMethods(['getTooltip', 'getIsNested', 'getExpanded'])
-            ->onlyMethods(['getId', 'toHtml', 'getHtmlId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fieldMock = $this->createPartialMockWithReflection(
+            Text::class,
+            ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
+        );
         $fieldMock->expects($this->any())->method('getId')->willReturn('test_field_id');
         $fieldMock->expects($this->any())->method('getTooltip')->willReturn('test_field_tootip');
         $fieldMock->expects($this->any())->method('toHtml')->willReturn('test_field_toHTML');
         $fieldMock->expects($this->any())->method('getHtmlId')->willReturn('test_field_HTML_id');
 
-        $fieldSetMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\Fieldset::class)
-            ->addMethods(['getTooltip', 'getIsNested', 'getExpanded'])
-            ->onlyMethods(['getId', 'toHtml', 'getHtmlId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fieldSetMock = $this->createPartialMockWithReflection(
+            FieldsetElement::class,
+            ['getTooltip', 'getIsNested', 'getExpanded', 'getId', 'toHtml', 'getHtmlId']
+        );
         $fieldSetMock->expects($this->any())->method('getId')->willReturn('test_fieldset_id');
         $fieldSetMock->expects($this->any())->method('getTooltip')->willReturn('test_fieldset_tootip');
         $fieldSetMock->expects($this->any())->method('toHtml')->willReturn('test_fieldset_toHTML');
@@ -255,23 +256,23 @@ class FieldsetTest extends TestCase
     /**
      * @return array
      */
-    public function renderWithoutStoredElementsDataProvider()
+    public static function renderWithoutStoredElementsDataProvider()
     {
-        return $this->dataProvider();
+        return self::dataProvider();
     }
 
     /**
      * @return array
      */
-    public function renderWithStoredElementsDataProvider()
+    public static function renderWithStoredElementsDataProvider()
     {
-        return $this->dataProvider();
+        return self::dataProvider();
     }
 
     /**
      * @return array
      */
-    protected function dataProvider()
+    protected static function dataProvider()
     {
         return [
             'expandedNestedExtra' => [
@@ -282,7 +283,7 @@ class FieldsetTest extends TestCase
             'collapsedNotNestedExtra' => [
                 'expanded' => false,
                 'nested'   => false,
-                'extra'    => ['configState' => [$this->testData['htmlId'] => true]],
+                'extra'    => ['configState' => [self::$testData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
                 'expanded' => true,

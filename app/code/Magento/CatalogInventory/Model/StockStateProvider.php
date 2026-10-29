@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Model;
 
@@ -159,7 +160,7 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$stockItem->getIsInStock()) {
             $result->setHasError(true)
                 ->setErrorCode('out_stock')
-                ->setMessage(__('This product is out of stock.'))
+                ->setMessage(__('Product %name is out of stock.', ['name' => $stockItem->getProductName()]))
                 ->setQuoteMessage(__('Some of the products are out of stock.'))
                 ->setQuoteMessageIndex('stock');
             $result->setItemUseOldQty(true);
@@ -167,14 +168,15 @@ class StockStateProvider implements StockStateProviderInterface
         }
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
-            $message = __('The requested qty is not available');
+            $message = __('The requested qty. is not available');
             if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
-                $itemMessage = (__(sprintf(
-                    'Only %s available for sale. Please adjust the quantity to continue',
-                    $stockItem->getQty() - $stockItem->getMinQty()
-                )));
+                $itemMessage = __(
+                    'Only %1 of %2 available',
+                    $stockItem->getQty() - $stockItem->getMinQty(),
+                    $this->localeFormat->getNumber($qty)
+                );
             } else {
-                $itemMessage = (__('Not enough items for sale. Please adjust the quantity to continue'));
+                $itemMessage = __('Not enough items for sale');
             }
             $result->setHasError(true)
                 ->setErrorCode('qty_available')
@@ -231,7 +233,7 @@ class StockStateProvider implements StockStateProviderInterface
                         }
                     } elseif ($stockItem->getShowDefaultNotificationMessage()) {
                         $result->setMessage(
-                            __('The requested qty is not available')
+                            __('The requested qty. is not available')
                         );
                     }
                 }

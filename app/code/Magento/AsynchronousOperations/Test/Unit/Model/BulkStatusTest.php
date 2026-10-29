@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -109,8 +110,8 @@ class BulkStatusTest extends TestCase
      * @param array $failureCodes
      *
      * @return void
-     * @dataProvider getFailedOperationsByBulkIdDataProvider
      */
+    #[DataProvider('getFailedOperationsByBulkIdDataProvider')]
     public function testGetFailedOperationsByBulkId(?int $failureType, array $failureCodes): void
     {
         $bulkUuid = 'bulk-1';

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,17 +98,17 @@ class FrontControllerTest extends TestCase
             ->onlyMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->getMockForAbstractClass(RouterInterface::class);
+        $this->router = $this->createMock(RouterInterface::class);
         $this->routerList = $this->createMock(RouterList::class);
         $this->response = $this->createMock(Http::class);
-        $this->requestValidator = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->requestValidator = $this->createMock(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->appStateMock  = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->areaMock = $this->getMockForAbstractClass(AreaInterface::class);
+        $this->areaMock = $this->createMock(AreaInterface::class);
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $eventManagerMock = $this->createMock(EventManager::class);
         $requestMock = $this->createMock(RequestInterface::class);

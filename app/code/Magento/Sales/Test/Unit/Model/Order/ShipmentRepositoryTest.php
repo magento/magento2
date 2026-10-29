@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for shipment repository class.
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ShipmentRepositoryTest extends TestCase
 {
+
     /**
      * Subject of testing.
      *
@@ -80,8 +82,8 @@ class ShipmentRepositoryTest extends TestCase
     /**
      * @param int|null $id
      * @param int|null $entityId
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($id, $entityId)
     {
         if (!$id) {
@@ -130,7 +132,7 @@ class ShipmentRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         return [
             [null, null],
@@ -148,7 +150,7 @@ class ShipmentRepositoryTest extends TestCase
             ->method('process')
             ->with($searchCriteria, $collection);
         $this->searchResultFactory->expects($this->once())
-            ->method('create')
+            ->method(constraint: 'create')
             ->willReturn($collection);
 
         $this->assertEquals($collection, $this->subject->getList($searchCriteria));
@@ -161,15 +163,7 @@ class ShipmentRepositoryTest extends TestCase
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['delete']
-        );
+        $mapper = $this->createMock(AbstractDb::class);
         $mapper->expects($this->once())
             ->method('delete')
             ->with($shipment);
@@ -189,15 +183,7 @@ class ShipmentRepositoryTest extends TestCase
         $shipment->expects($this->never())
             ->method('getEntityId');
 
-        $mapper = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['delete']
-        );
+        $mapper = $this->createMock(AbstractDb::class);
         $mapper->expects($this->once())
             ->method('delete')
             ->willThrowException(new \Exception('error'));
@@ -216,15 +202,7 @@ class ShipmentRepositoryTest extends TestCase
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['save']
-        );
+        $mapper = $this->createMock(AbstractDb::class);
         $mapper->expects($this->once())
             ->method('save')
             ->with($shipment);
@@ -244,15 +222,7 @@ class ShipmentRepositoryTest extends TestCase
         $shipment->expects($this->never())
             ->method('getEntityId');
 
-        $mapper = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['save']
-        );
+        $mapper = $this->createMock(AbstractDb::class);
         $mapper->expects($this->once())
             ->method('save')
             ->willThrowException(new \Exception('error'));
@@ -271,15 +241,7 @@ class ShipmentRepositoryTest extends TestCase
         $shipment->expects($this->never())
             ->method('getEntityId');
 
-        $mapper = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['save']
-        );
+        $mapper = $this->createMock(AbstractDb::class);
         $mapper->expects($this->once())
             ->method('save')
             ->willThrowException(new \Magento\Framework\Validator\Exception());

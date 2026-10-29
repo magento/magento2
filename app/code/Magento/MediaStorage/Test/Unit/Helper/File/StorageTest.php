@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,15 +10,19 @@ namespace Magento\MediaStorage\Test\Unit\Helper\File;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage;
 use Magento\MediaStorage\Helper\File\Storage\Database as DatabaseHelper;
 use Magento\MediaStorage\Model\File\Storage\File;
+use Magento\MediaStorage\Model\File\Storage\Database;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class StorageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -74,8 +78,8 @@ class StorageTest extends TestCase
      * @param int $storage
      * @param int $callNum
      * @param bool $expected
-     * @dataProvider isInternalStorageDataProvider
      */
+    #[DataProvider('isInternalStorageDataProvider')]
     public function testIsInternalStorage($storage, $callNum, $expected)
     {
         $currentStorage = '10';
@@ -90,7 +94,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function isInternalStorageDataProvider()
+    public static function isInternalStorageDataProvider()
     {
         return [
             'given external storage' => [5, 0, false],
@@ -101,9 +105,7 @@ class StorageTest extends TestCase
 
     public function testGetStorageModel()
     {
-        $storageModelMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storageModelMock = $this->createMock(AbstractModel::class);
         $this->storageMock->expects($this->once())
             ->method('getStorageModel')
             ->willReturn($storageModelMock);
@@ -116,8 +118,8 @@ class StorageTest extends TestCase
      * @param int $callNum
      * @param int $callSaveFileNum
      * @param int $fileId
-     * @dataProvider processStorageFileDataProvider
      */
+    #[DataProvider('processStorageFileDataProvider')]
     public function testProcessStorageFile($expected, $storage, $callNum, $callSaveFileNum, $fileId = null)
     {
         $this->configMock->expects($this->once())
@@ -132,25 +134,22 @@ class StorageTest extends TestCase
             ->with($filename)
             ->willReturn($relativePath);
 
-        $storageModelMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['loadByFileName'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
-        $this->storageMock->expects($this->exactly($callNum))
-            ->method('getStorageModel')
-            ->willReturn($storageModelMock);
-        $fileMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Storage\Database::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
-        $storageModelMock->expects($this->exactly($callNum))
-            ->method('loadByFilename')
-            ->with($relativePath)
-            ->willReturn($fileMock);
+        $fileMock = $this->createPartialMock(
+            Database::class,
+            ['getId', '__wakeup']
+        );
         $fileMock->expects($this->exactly($callNum))
             ->method('getId')
             ->willReturn($fileId);
+
+        $storageModelMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['loadByFilename']
+        );
+        $storageModelMock->method('loadByFilename')->willReturn($fileMock);
+        $this->storageMock->expects($this->exactly($callNum))
+            ->method('getStorageModel')
+            ->willReturn($storageModelMock);
 
         $this->filesystemStorageMock->expects($this->exactly($callSaveFileNum))
             ->method('saveFile')
@@ -163,7 +162,7 @@ class StorageTest extends TestCase
     /**
      * @return array
      */
-    public function processStorageFileDataProvider()
+    public static function processStorageFileDataProvider()
     {
         return [
             'internal storage' => [false, 0, 0, 0],

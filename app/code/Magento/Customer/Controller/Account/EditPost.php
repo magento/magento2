@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Phrase;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -125,6 +128,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
     private Url $customerUrl;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $accountManagement
@@ -138,6 +146,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param AccountConfirmation|null $accountConfirmation
      * @param Url|null $customerUrl
      * @param Mapper|null $customerMapper
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         Context $context,
@@ -152,7 +162,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         ?SessionCleanerInterface $sessionCleaner = null,
         ?AccountConfirmation $accountConfirmation = null,
         ?Url $customerUrl = null,
-        ?Mapper $customerMapper = null
+        ?Mapper $customerMapper = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -168,6 +179,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
         $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -237,17 +253,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = (string)$this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== "") {
-                $attributesToDelete = $this->prepareAttributesToDelete($attributeToDelete);
-                foreach ($attributesToDelete as $attribute) {
-                    $uploadedValue = $this->_request->getParam($attribute . File::UPLOADED_FILE_SUFFIX);
-                    if ((string)$uploadedValue === "") {
-                        $this->deleteCustomerFileAttribute($customerCandidate, $attribute);
-                    }
-                }
-            }
-
             try {
                 // whether a customer enabled change email option
                 $isEmailChanged = $this->processChangeEmailRequest($customer);
@@ -291,9 +296,13 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
 
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
-                $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
-                foreach ($e->getErrors() as $error) {
-                    $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
+                if ($this->validatorExceptionProcessor !== null) {
+                    $this->validatorExceptionProcessor->processInputException(
+                        $e,
+                        fn($message) => $this->escaper->escapeHtml($message)
+                    );
+                } else {
+                    $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
@@ -308,26 +317,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $resultRedirect->setPath('*/*/edit');
 
         return $resultRedirect;
-    }
-
-    /**
-     * Convert comma-separated list of attributes to delete into array
-     *
-     * @param string $attribute
-     * @return array
-     */
-    private function prepareAttributesToDelete(string $attribute) : array
-    {
-        $result = [];
-        if ($attribute !== "") {
-            if (str_contains($attribute, ',')) {
-                $result = explode(',', $attribute);
-            } else {
-                $result[] = $attribute;
-            }
-            $result = array_unique($result);
-        }
-        return $result;
     }
 
     /**
@@ -482,40 +471,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         foreach ($customer->getAddresses() as $address) {
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
-        }
-    }
-
-    /**
-     * Removes file attribute from customer entity and file from filesystem
-     *
-     * @param CustomerInterface $customerCandidateDataObject
-     * @param string $attributeToDelete
-     * @return void
-     * @throws FileSystemException
-     */
-    private function deleteCustomerFileAttribute(
-        CustomerInterface $customerCandidateDataObject,
-        string $attributeToDelete
-    ) : void {
-        if ($attributeToDelete !== '') {
-            $attributes = $this->prepareAttributesToDelete($attributeToDelete);
-            foreach ($attributes as $attr) {
-                $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
-                if ($attributeValue!== null) {
-                    if ($attributeValue->getValue() !== '') {
-                        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-                        $fileName = $attributeValue->getValue();
-                        $path = $mediaDirectory->getAbsolutePath('customer' . $fileName);
-                        if ($fileName && $mediaDirectory->isFile($path)) {
-                            $mediaDirectory->delete($path);
-                        }
-                        $customerCandidateDataObject->setCustomAttribute(
-                            $attr,
-                            ''
-                        );
-                    }
-                }
-            }
         }
     }
 }

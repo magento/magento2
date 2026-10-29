@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,8 @@ use Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory;
 use Magento\Tax\Model\Sales\Order\Details;
 use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Tax\Model\Sales\Order\TaxManagement;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -107,10 +107,10 @@ class TaxManagementTest extends TestCase
      * @param array $orderItemAppliedTaxes
      * @param array $expected
      * @return void
-     * @dataProvider getOrderTaxDetailsDataProvider
      * @throws NoSuchEntityException
      */
-    public function testGetOrderTaxDetails($orderItemAppliedTaxes, $expected): void
+    #[DataProvider('getOrderTaxDetailsDataProvider')]
+    public function testGetOrderTaxDetails(array $orderItemAppliedTaxes, array $expected): void
     {
         $orderId = 1;
         $this->taxItemResourceMock->expects($this->once())
@@ -139,7 +139,7 @@ class TaxManagementTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getOrderTaxDetailsDataProvider()
+    public static function getOrderTaxDetailsDataProvider()
     {
         $data = [
             'one_item' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,14 @@ namespace Magento\Catalog\Test\Unit\Model\Config\Source;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Catalog\Model\Config\Source\Category
      */
@@ -27,32 +29,24 @@ class CategoryTest extends TestCase
     private $categoryCollection;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category|MockObject
+     * @var Category|MockObject
      */
     private $category;
 
     protected function setUp(): void
     {
-        $this->categoryCollection = $this->getMockBuilder(
-            Collection::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryCollection = $this->createMock(Collection::class);
 
-        $this->category = $this->getMockBuilder(Category::class)
-            ->addMethods(['getName', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getName', 'getId']
+        );
 
-        /**
-         * @var CollectionFactory|MockObject $categoryCollectionFactory
-         */
-        $categoryCollectionFactory =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->onlyMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $categoryCollectionFactory->expects($this->any())->method('create')->willReturn(
+        $categoryCollectionFactory = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $categoryCollectionFactory->method('create')->willReturn(
             $this->categoryCollection
         );
 
@@ -77,7 +71,7 @@ class CategoryTest extends TestCase
             $this->categoryCollection
         );
         $this->categoryCollection->expects($this->once())->method('load');
-        $this->categoryCollection->expects($this->any())->method('getIterator')->willReturn(
+        $this->categoryCollection->method('getIterator')->willReturn(
             new \ArrayIterator([$this->category])
         );
 

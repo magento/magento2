@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * @see \Magento\AdminNotification\Block\Window
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <ul class="message-system-list"
@@ -15,13 +16,13 @@
             "autoOpen": true,
             "buttons": false,
             "modalClass": "modal-system-messages",
-            "title": "<?= $block->escapeHtmlAttr($block->getHeaderText()) ?>"
+            "title": "<?= $escaper->escapeHtmlAttr($block->getHeaderText()) ?>"
         }
     }'>
     <li class="message message-warning warning">
-        <?= $block->escapeHtml($block->getNoticeMessageText()) ?><br/>
-        <a href="<?= $block->escapeUrl($block->getNoticeMessageUrl()) ?>">
-            <?= $block->escapeHtml($block->getReadDetailsText()) ?>
+        <?= $escaper->escapeHtml($block->getNoticeMessageText()) ?><br/>
+        <a href="<?= $escaper->escapeUrl($block->getNoticeMessageUrl()) ?>">
+            <?= $escaper->escapeHtml($block->getReadDetailsText()) ?>
         </a>
     </li>
 </ul>

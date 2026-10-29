@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice.
@@ -89,9 +90,8 @@ class TierpriceTest extends TestCase
 
     /**
      * Test that duplicated tier price values issues exception during validation.
-     *
-     * @dataProvider validateDuplicateDataProvider
      */
+    #[DataProvider('validateDuplicateDataProvider')]
     public function testValidateDuplicate(array $tierPricesData)
     {
         $this->expectException(LocalizedException::class);
@@ -107,7 +107,7 @@ class TierpriceTest extends TestCase
      *
      * @return array
      */
-    public function validateDuplicateDataProvider(): array
+    public static function validateDuplicateDataProvider(): array
     {
         return [
             [
@@ -195,7 +195,6 @@ class TierpriceTest extends TestCase
     }
 
     /**
-     * @dataProvider saveExistingProductDataProvider
      * @param array $tierPricesData
      * @param int $tierPriceCount
      * @throws CouldNotSaveException
@@ -203,6 +202,7 @@ class TierpriceTest extends TestCase
      * @throws NoSuchEntityException
      * @throws StateException
      */
+    #[DataProvider('saveExistingProductDataProvider')]
     public function testSaveExistingProduct(array $tierPricesData, int $tierPriceCount): void
     {
         /** @var $product Product */
@@ -222,7 +222,7 @@ class TierpriceTest extends TestCase
     /**
      * @return array
      */
-    public function saveExistingProductDataProvider(): array
+    public static function saveExistingProductDataProvider(): array
     {
         return [
             'same' => [
@@ -295,7 +295,6 @@ class TierpriceTest extends TestCase
     }
 
     /**
-     * @dataProvider saveNewProductDataProvider
      * @param array $tierPricesData
      * @param int $tierPriceCount
      * @throws CouldNotSaveException
@@ -303,6 +302,7 @@ class TierpriceTest extends TestCase
      * @throws LocalizedException
      * @throws StateException
      */
+    #[DataProvider('saveNewProductDataProvider')]
     public function testSaveNewProduct(array $tierPricesData, int $tierPriceCount): void
     {
         /** @var $product Product */
@@ -329,7 +329,7 @@ class TierpriceTest extends TestCase
     /**
      * @return array
      */
-    public function saveNewProductDataProvider(): array
+    public static function saveNewProductDataProvider(): array
     {
         return [
             [

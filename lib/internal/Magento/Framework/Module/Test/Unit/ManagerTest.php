@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\Output\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ManagerTest extends TestCase
 {
@@ -40,7 +41,7 @@ class ManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
+        $this->_moduleList = $this->createMock(ModuleListInterface::class);
         $this->_moduleList->expects($this->any())
             ->method('getOne')
             ->willReturnMap(
@@ -50,7 +51,7 @@ class ManagerTest extends TestCase
                     ['Module_Three', ['name' => 'Two_Three']]
                 ]
             );
-        $this->_outputConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->_outputConfig = $this->createMock(ConfigInterface::class);
         $this->_model = new Manager(
             $this->_outputConfig,
             $this->_moduleList,
@@ -86,9 +87,8 @@ class ManagerTest extends TestCase
      * @param bool $configValue
      * @param bool $expectedResult
      *
-     * @return void
-     * @dataProvider isOutputEnabledGenericConfigPathDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isOutputEnabledGenericConfigPathDataProvider')]
     public function testIsOutputEnabledGenericConfigPath($configValue, $expectedResult): void
     {
         $this->_moduleList->expects($this->once())->method('has')->willReturn(true);
@@ -102,7 +102,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledGenericConfigPathDataProvider(): array
+    public static function isOutputEnabledGenericConfigPathDataProvider(): array
     {
         return ['output disabled' => [true, false], 'output enabled' => [false, true]];
     }
@@ -111,9 +111,8 @@ class ManagerTest extends TestCase
      * @param bool $configValue
      * @param bool $expectedResult
      *
-     * @return void
-     * @dataProvider isOutputEnabledCustomConfigPathDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isOutputEnabledCustomConfigPathDataProvider')]
     public function testIsOutputEnabledCustomConfigPath($configValue, $expectedResult): void
     {
         $this->_moduleList->expects($this->once())->method('has')->willReturn(true);
@@ -127,7 +126,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledCustomConfigPathDataProvider(): array
+    public static function isOutputEnabledCustomConfigPathDataProvider(): array
     {
         return [
             'path literal, output disabled' => [false, false],

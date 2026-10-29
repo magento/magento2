@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\PageCache;
 
@@ -36,7 +36,7 @@ class Identifier implements IdentifierInterface
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->request = $request;
         $this->context = $context;
@@ -50,13 +50,101 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
+        $pattern = $this->getMarketingParameterPatterns();
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
+        list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            $baseUrl,
+            $query,
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
-
         return sha1($this->serializer->serialize($data));
+    }
+
+    /**
+     * Pattern detect marketing parameters.
+     *
+     * Keep in sync with PageCache etc/varnish*.vcl vcl_recv strip logic.
+     *
+     * @return array
+     */
+    public function getMarketingParameterPatterns(): array
+    {
+        return [
+            '/&?_branch_match_id\=[^&]+/',
+            '/&?_bta_[a-z]+\=[^&]+/',
+            '/&?_ga\=[^&]+/',
+            '/&?_gl\=[^&]+/',
+            '/&?_ke\=[^&]+/',
+            '/&?_kx\=[^&]+/',
+            '/&?campid\=[^&]+/',
+            '/&?ceneo_cid\=[^&]+/',
+            '/&?clickId\=[^&]+/',
+            '/&?cof\=[^&]+/',
+            '/&?customid\=[^&]+/',
+            '/&?cx\=[^&]+/',
+            '/&?dclid\=[^&]+/',
+            '/&?dm_i\=[^&]+/',
+            '/&?ef_id\=[^&]+/',
+            '/&?epik\=[^&]+/',
+            '/&?fbclid\=[^&]+/',
+            '/&?gad_[a-z]+\=[^&]+/',
+            '/&?gbraid\=[^&]+/',
+            '/&?gclid\=[^&]+/',
+            '/&?gclsrc\=[^&]+/',
+            '/&?gdf[a-z]+\=[^&]+/',
+            '/&?hsa_[a-z]+\=[^&]+/',
+            '/&?igshid\=[^&]+/',
+            '/&?mc_[a-z]+\=[^&]+/',
+            '/&?mk[a-z]{3}\=[^&]+/',
+            '/&?msclkid\=[^&]+/',
+            '/&?(?:mtm|matomo)_[a-z]+\=[^&]+/',
+            '/&?pcrid\=[^&]+/',
+            '/&?p(?:iwi)?k_[a-z]+\=[^&]+/',
+            '/&?redirect(?:_log)?_mongo_id\=[^&]+/',
+            '/&?s_kwcid\=[^&]+/',
+            '/&?sb_referer_host\=[^&]+/',
+            '/&?ScCid\=[^&]+/',
+            '/&?siteurl\=[^&]+/',
+            '/&?snrai_[a-z]+\=[^&]+/',
+            '/&?srsltid\=[^&]+/',
+            '/&?tduid\=[^&]+/',
+            '/&?trk_[a-z]+\=[^&]+/',
+            '/&?utm_[a-z]+\=[^&]+/',
+            '/&?wbraid\=[^&]+/',
+            '/&?zanpid\=[^&]+/',
+        ];
+    }
+
+    /**
+     * Reconstruct url and sort query
+     *
+     * @param string $url
+     * @return array
+     */
+    public function reconstructUrl(string $url): array
+    {
+        if (empty($url)) {
+            return [$url, ''];
+        }
+
+        $baseUrl = strtok($url, '?');
+        $queryString = parse_url($url, PHP_URL_QUERY) ?: '';
+
+        $queryArray = [];
+        if ($queryString !== '') {
+            parse_str($queryString, $queryArray);
+        }
+
+        if (!empty($queryArray)) {
+            ksort($queryArray);
+            $query = http_build_query($queryArray);
+        } else {
+            $query = '';
+        }
+
+        return [$baseUrl, $query];
     }
 }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Weight;
 use Magento\ImportExport\Model\Import;
@@ -23,12 +24,8 @@ class WeightTest extends TestCase
     {
         $this->weight = new Weight();
 
-        $contextStub = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contextStub->expects($this->any())
-            ->method('getEmptyAttributeValueConstant')
-            ->willReturn(Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT);
+        $contextStub = $this->createMock(Product::class);
+        $contextStub->method('getEmptyAttributeValueConstant')->willReturn(Import::DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT);
 
         $contextStub->method('retrieveMessageTemplate')->willReturn('some template');
         $this->weight->init($contextStub);
@@ -37,8 +34,8 @@ class WeightTest extends TestCase
     /**
      * @param bool $expectedResult
      * @param array $value
-     * @dataProvider isValidDataProvider
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($expectedResult, $value)
     {
         $result = $this->weight->isValid($value);
@@ -48,7 +45,7 @@ class WeightTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [true, ['weight' => 0]],

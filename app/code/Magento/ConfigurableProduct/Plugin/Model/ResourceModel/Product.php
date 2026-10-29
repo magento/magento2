@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,7 +84,7 @@ class Product
     public function __construct(
         Configurable $configurable,
         ActionInterface $productIndexer,
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
         ?CacheContext $cacheContext = null,

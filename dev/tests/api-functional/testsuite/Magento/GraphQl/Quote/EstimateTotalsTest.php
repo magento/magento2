@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Tax\Test\Fixture\ProductTaxClass;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
@@ -14,6 +15,7 @@ use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Quote\Test\Fixture\QuoteIdMask;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
@@ -30,8 +32,8 @@ class EstimateTotalsTest extends GraphQlAbstract
      * @param array $prices
      * @return void
      * @throws LocalizedException
-     * @dataProvider estimationsProvider
      */
+    #[DataProvider('estimationsProvider')]
     #[
         DataFixture(
             ProductTaxClass::class,
@@ -228,7 +230,7 @@ QUERY;
         );
     }
 
-    public function estimationsProvider(): array
+    public static function estimationsProvider(): array
     {
         return [
             [
@@ -261,5 +263,38 @@ QUERY;
                 ]
             ]
         ];
+    }
+
+    /**
+     * Test invalid cart ID error handling
+     */
+    public function testEstimateTotalsWithInvalidCartId(): void
+    {
+        $invalidCartId = 'abcxyz';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "' . $invalidCartId . '"');
+
+        $query = <<<QUERY
+        mutation {
+            estimateTotals(input: {
+                cart_id: "{$invalidCartId}",
+                address: {
+                    country_code: US
+                }
+            }) {
+                cart {
+                    prices {
+                        grand_total {
+                            value
+                            currency
+                        }
+                    }
+                }
+            }
+        }
+    QUERY;
+
+        $this->graphQlMutation($query);
     }
 }

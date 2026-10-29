@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture\Applier;
 
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\ConfigFixture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Fixture\Applier\ConfigFixture
@@ -29,12 +30,11 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider annotationsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return  void
      */
+    #[DataProvider('annotationsProvider')]
     public function testIsFixtureMatch(string $fixture, array $attributes): void
     {
         $this->assertTrue($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -43,11 +43,11 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function annotationsProvider(): array
+    public static function annotationsProvider(): array
     {
         return [
             'default_scope_record' => [
-                'current_fixture' => 'default/section/group/field value',
+                'fixture' => 'default/section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -56,7 +56,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'default_scope_record_many_spaces' => [
-                'current_fixture' => '   default/section/group/field    value',
+                'fixture' => '   default/section/group/field    value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -65,7 +65,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_store_record' => [
-                'current_fixture' => 'current_store section/group/field value',
+                'fixture' => 'current_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -74,7 +74,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_store_reocord_many_spaces' => [
-                'current_fixture' => '   current_store    section/group/field value  ',
+                'fixture' => '   current_store    section/group/field value  ',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -83,7 +83,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_store_record' => [
-                'current_fixture' => 'specific_store section/group/field value',
+                'fixture' => 'specific_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -92,7 +92,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_store_reocord_many_spaces' => [
-                'current_fixture' => '   specific_store   section/group/field    value',
+                'fixture' => '   specific_store   section/group/field    value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -101,7 +101,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_website_record' => [
-                'current_fixture' => 'current_website section/group/field value',
+                'fixture' => 'current_website section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -110,7 +110,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_website_record_many_spaces' => [
-                'current_fixture' => '  current_website    section/group/field    value',
+                'fixture' => '  current_website    section/group/field    value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -119,7 +119,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_website_record' => [
-                'current_fixture' => 'base_website section/group/field value',
+                'fixture' => 'base_website section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -128,7 +128,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_website_record_many_spaces' => [
-                'current_fixture' => ' base_website   section/group/field   value ',
+                'fixture' => ' base_website   section/group/field   value ',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -140,12 +140,11 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider wrongRecordsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return void
      */
+    #[DataProvider('wrongRecordsProvider')]
     public function testFixtureDoesNotMatch(string $fixture, array $attributes): void
     {
         $this->assertFalse($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -154,11 +153,11 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function wrongRecordsProvider(): array
+    public static function wrongRecordsProvider(): array
     {
         return [
             'default_scope_record' => [
-                'current_fixture' => 'current_store section/group/field value',
+                'fixture' => 'current_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -167,7 +166,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_store_record' => [
-                'current_fixture' => 'default_store section/group/field value',
+                'fixture' => 'default_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -176,7 +175,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_store_record' => [
-                'current_fixture' => 'current_store section/group/field value',
+                'fixture' => 'current_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -185,7 +184,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'current_website_record' => [
-                'current_fixture' => 'current_store section/group/field value',
+                'fixture' => 'current_store section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -194,7 +193,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'specific_website_record' => [
-                'current_fixture' => 'base_website section/group/field value',
+                'fixture' => 'base_website section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -203,7 +202,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'another_path_record' => [
-                'current_fixture' => 'current_store section/group/another_field value',
+                'fixture' => 'current_store section/group/another_field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -212,7 +211,7 @@ class ConfigFixtureTest extends TestCase
                 ],
             ],
             'similar_path' => [
-                'current_fixture' => 'current_store section/group/field_2 value',
+                'fixture' => 'current_store section/group/field_2 value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -224,16 +223,14 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider initFixtureProvider
-     *
      * @param array $attributes
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('initFixtureProvider')]
     public function testInitConfigFixture(array $attributes, string $expectedValue): void
     {
         $reflectionMethod = new \ReflectionMethod(ConfigFixture::class, 'initConfigFixture');
-        $reflectionMethod->setAccessible(true);
         $value = $reflectionMethod->invoke($this->object, $attributes);
         $this->assertEquals($expectedValue, $value);
     }
@@ -241,7 +238,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function initFixtureProvider(): array
+    public static function initFixtureProvider(): array
     {
         return [
             'with_value' => [
@@ -251,7 +248,7 @@ class ConfigFixtureTest extends TestCase
                     'scopeType' => 'store',
                     'scopeCode' => 'current',
                 ],
-                'expected_value' => 'current_store section/group/field value',
+                'expectedValue' => 'current_store section/group/field value',
             ],
             'with_new_value' => [
                 'attributes' => [
@@ -260,7 +257,7 @@ class ConfigFixtureTest extends TestCase
                     'scopeType' => 'store',
                     'scopeCode' => 'current',
                 ],
-                'expected_value' => 'current_store section/group/field new_value',
+                'expectedValue' => 'current_store section/group/field new_value',
             ],
             'default_scope' => [
                 'attributes' => [
@@ -269,7 +266,7 @@ class ConfigFixtureTest extends TestCase
                     'scopeType' => 'default',
                     'scopeCode' => '',
                 ],
-                'expected_value' => 'default/section/group/field value',
+                'expectedValue' => 'default/section/group/field value',
             ],
             'website_scope' => [
                 'attributes' => [
@@ -278,7 +275,7 @@ class ConfigFixtureTest extends TestCase
                     'scopeType' => 'website',
                     'scopeCode' => 'base',
                 ],
-                'expected_value' => 'base_website section/group/field value',
+                'expectedValue' => 'base_website section/group/field value',
             ],
             'store_scope' => [
                 'attributes' => [
@@ -287,19 +284,18 @@ class ConfigFixtureTest extends TestCase
                     'scopeType' => 'store',
                     'scopeCode' => 'current',
                 ],
-                'expected_value' => 'current_store section/group/field value',
+                'expectedValue' => 'current_store section/group/field value',
             ],
         ];
     }
 
     /**
-     * @dataProvider replaceFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('replaceFixturesProvider')]
     public function testReplaceFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -309,11 +305,11 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function replaceFixturesProvider(): array
+    public static function replaceFixturesProvider(): array
     {
         return [
             'replace_one_fixture' => [
-                'existing_fixtures' => [
+                'existingFixtures' => [
                     'current_store section/group/field value',
                     'current_store section/group/field_2 another_value',
                 ],
@@ -325,7 +321,7 @@ class ConfigFixtureTest extends TestCase
                         'scopeCode' => 'current',
                     ]
                 ],
-                'expected_order' => [
+                'expectedOrder' => [
                     'current_store section/group/field new_value',
                     'current_store section/group/field_2 another_value',
                 ],
@@ -334,13 +330,12 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider addFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('addFixturesProvider')]
     public function testAddFixture(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -350,11 +345,11 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function addFixturesProvider(): array
+    public static function addFixturesProvider(): array
     {
         return [
             'add_one_fixture' => [
-                'existing_fixtures' => [
+                'existingFixtures' => [
                     'current_store section/group/field value',
                 ],
                 'config' => [
@@ -365,13 +360,13 @@ class ConfigFixtureTest extends TestCase
                         'scopeCode' => 'current',
                     ],
                 ],
-                'expected_order' => [
+                'expectedOrder' => [
                     'current_store section/group/field value',
                     'current_store section/group/field_2 another_value',
                 ],
             ],
             'add_two_fixtures' => [
-                'existing_fixtures' => [
+                'existingFixtures' => [
                     'current_store section/group/field value',
                 ],
                 'config' => [
@@ -388,7 +383,7 @@ class ConfigFixtureTest extends TestCase
                         'scopeCode' => 'current',
                     ],
                 ],
-                'expected_order' => [
+                'expectedOrder' => [
                     'current_store section/group/field value',
                     'current_store section/group/field_2 another_value',
                     'current_store section/group/field_3 one_more_value',
@@ -398,13 +393,12 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider removeFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('removeFixturesProvider')]
     public function testRemoveFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -414,11 +408,11 @@ class ConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function removeFixturesProvider(): array
+    public static function removeFixturesProvider(): array
     {
         return [
             'remove_one_fixture' => [
-                'existing_fixtures' => [
+                'existingFixtures' => [
                     'current_store section/group/field value',
                     'current_store section/group/field_2 another_value',
                 ],
@@ -430,12 +424,12 @@ class ConfigFixtureTest extends TestCase
                         'remove' => true
                     ]
                 ],
-                'expected_order' => [
+                'expectedOrder' => [
                     'current_store section/group/field_2 another_value',
                 ],
             ],
             'remove_two_fixtures' => [
-                'existing_fixtures' => [
+                'existingFixtures' => [
                     'current_store section/group/field value',
                     'current_store section/group/field_2 another_value',
                     'current_store section/group/field_3 one_more_value',
@@ -454,7 +448,7 @@ class ConfigFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => [
+                'expectedOrder' => [
                     'current_store section/group/field_3 one_more_value',
                 ],
             ],
@@ -500,7 +494,6 @@ class ConfigFixtureTest extends TestCase
     private function invokeIsFixtureMatchMethod(array $attributes, string $fixture): bool
     {
         $reflectionMethod = new \ReflectionMethod(ConfigFixture::class, 'isFixtureMatch');
-        $reflectionMethod->setAccessible(true);
         return $reflectionMethod->invoke($this->object, $attributes, $fixture);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,14 +58,12 @@ class StoreTest extends TestCase
     /**
      * @var string
      */
-    protected $name = 'anyname';
+    protected static $name = 'anyname';
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,9 +73,7 @@ class StoreTest extends TestCase
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->model = $objectManager->getObject(
             \Magento\Store\Ui\Component\Listing\Column\Store::class,
             [
@@ -85,7 +82,7 @@ class StoreTest extends TestCase
                 'systemStore' =>  $this->systemStoreMock,
                 'escaper' => $this->escaperMock,
                 'components' => [],
-                'data' => ['name' => $this->name]
+                'data' => ['name' => self::$name]
             ]
         );
 
@@ -105,7 +102,6 @@ class StoreTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->model, $mockObject);
     }
 
@@ -138,9 +134,9 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider prepareDataSourceDataProvider
      * @deprecated
      */
+    #[DataProvider('prepareDataSourceDataProvider')]
     public function testPrepareDataSource($dataSource, $expectedResult)
     {
         $website = 'website';
@@ -172,21 +168,21 @@ class StoreTest extends TestCase
     /**
      * @deprecated
      */
-    public function prepareDataSourceDataProvider()
+    public static function prepareDataSourceDataProvider()
     {
         $content = "website<br/>&nbsp;&nbsp;&nbsp;group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store<br/>";
         return [
             'withoutStore' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => null]]]],
-                'expectedResult' => ['data' => ['items' => [['store_id' => null, $this->name => '']]]]
+                'expectedResult' => ['data' => ['items' => [['store_id' => null, self::$name => '']]]]
             ],
             'allStores' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => [0]]]]],
-                'expectedResult' => ['data' => ['items' => [['store_id' => [0], $this->name => __('All Store Views')]]]]
+                'expectedResult' => ['data' => ['items' => [['store_id' => [0], self::$name => __('All Store Views')]]]]
             ],
             'Stores' => [
                 'dataSource' => ['data' => ['items' => [['store_id' => [1]]]]],
-                'expectedResult' => ['data' => ['items' => [['store_id' => [1], $this->name => $content]]]]
+                'expectedResult' => ['data' => ['items' => [['store_id' => [1], self::$name => $content]]]]
             ],
 
         ];

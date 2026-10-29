@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Shipping table rates
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
@@ -436,6 +434,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getConditionFullName($conditionName)
     {
+        $conditionName = $conditionName ?? '';
         if (!isset($this->_conditionFullNames[$conditionName])) {
             $name = $this->carrierTablerate->getCode('condition_name_short', $conditionName);
             $this->_conditionFullNames[$conditionName] = $name;

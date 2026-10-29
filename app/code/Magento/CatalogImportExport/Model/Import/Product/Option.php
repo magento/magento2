@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -147,7 +147,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'radio' => true,
         'checkbox' => true,
         'multiple' => true,
-        'file' => ['sku', 'file_extension', 'image_size_x', 'image_size_y'],
+        'file' => ['price', 'sku', 'file_extension', 'image_size_x', 'image_size_y'],
     ];
 
     /**
@@ -400,7 +400,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
-        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
+        ?ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
         ?TransactionManagerInterface $transactionManager = null,
         ?SkuStorage $skuStorage = null
     ) {
@@ -970,7 +970,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function saveInNewDataArray(array $rowData, $rowNumber, $storeId): void
     {
         // save in new data array
-        $productSku = $this->_rowProductSku;
+        $productSku = $this->_rowProductSku ?? '';
         if (!isset($this->_newOptionsNewData[$productSku])) {
             $this->_newOptionsNewData[$productSku] = [];
         }
@@ -1013,7 +1013,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productId = $this->skuStorage->get($this->_rowProductSku)[$this->getProductEntityLinkField()];
                 $this->_newOptionsOldData[$productId][$this->_newCustomOptionId]['rows'][] = $rowNumber;
             } else {
-                $productSku = $this->_rowProductSku;
+                $productSku = $this->_rowProductSku ?? '';
                 $this->_newOptionsNewData[$productSku][$this->_newCustomOptionId]['rows'][] = $rowNumber;
             }
             return true;
@@ -1806,7 +1806,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ('%' == substr($data, -1)) {
                 $priceData['price_type'] = 'percent';
             }
-            $priceData['price'] = (double)rtrim($data, '%');
+            $priceData['price'] = (float)rtrim($data, '%');
 
             return $priceData;
         }
@@ -1829,7 +1829,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $priceData = [];
         $customOptionRowPrice = $rowData[self::COLUMN_ROW_PRICE];
         if (!empty($customOptionRowPrice) || $customOptionRowPrice === '0') {
-            $priceData['price'] = (double)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
+            $priceData['price'] = (float)rtrim($rowData[self::COLUMN_ROW_PRICE], '%');
             $priceData['price_type'] = ('%' == substr($rowData[self::COLUMN_ROW_PRICE], -1)) ? 'percent' : 'fixed';
         }
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
@@ -2093,10 +2093,26 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $k = 0;
         $name = '';
         foreach ($optionValues as $optionValue) {
+            $separator = preg_quote($this->_productEntity->getMultipleValueSeparator(), '/');
+            $pattern = '/(?:^|' . $separator . ')file_extension=([a-zA-Z' . $separator . ']+)(?:' . $separator . '|$)/';
+
+            if (preg_match($pattern, $optionValue, $matches)) {
+                $fileExtNameAndValue = $matches[0];
+                $fileExtNameAndValue = ltrim($fileExtNameAndValue, $separator);
+                $optionValue = str_replace($fileExtNameAndValue, '', $optionValue);
+                $fileExtNameAndValue = rtrim($fileExtNameAndValue, $separator);
+                $optionValue = rtrim($optionValue, $separator);
+            }
+
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
+
+            if (isset($fileExtNameAndValue)) {
+                $optionValueParams[] = $fileExtNameAndValue;
+            }
+
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
-                $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                $value = $nameAndValue[1] ?? '';
                 $value = trim($value);
                 $fieldName = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
                 if ($value && ($fieldName === 'name')) {

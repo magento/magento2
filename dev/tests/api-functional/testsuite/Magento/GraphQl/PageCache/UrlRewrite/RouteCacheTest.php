@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResourceModel
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test caching works for url route.
@@ -324,10 +325,10 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      *
-     * @dataProvider urlRewriteEntitiesDataProvider
      * @param string $requestPath
      * @throws AlreadyExistsException
      */
+    #[DataProvider('urlRewriteEntitiesDataProvider')]
     public function testUrlRewriteCleansCacheOnChange(string $requestPath)
     {
 
@@ -376,7 +377,7 @@ QUERY;
         $urlRewriteResourceModel->save($urlRewrite);
     }
 
-    public function urlRewriteEntitiesDataProvider(): array
+    public static function urlRewriteEntitiesDataProvider(): array
     {
         return [
             [

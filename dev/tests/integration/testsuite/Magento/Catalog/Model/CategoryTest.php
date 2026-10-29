@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -28,6 +28,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Category.
@@ -416,9 +417,9 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @dataProvider categoryFieldsProvider
      * @param array $data
      */
+    #[DataProvider('categoryFieldsProvider')]
     public function testCategoryCreateWithDifferentFields(array $data): void
     {
         $requiredData = [
@@ -462,16 +463,18 @@ class CategoryTest extends TestCase
     public static function categoryFieldsProvider(): array
     {
         return [
-            [
-                'enable_fields' => [
+            'enable_fields' => [
+                'data' => [
                     'is_active' => '1',
                     'include_in_menu' => '1',
-                ],
-                'disable_fields' => [
+                ]
+            ],
+            'disable_fields' => [
+                'data' => [
                     'is_active' => '0',
                     'include_in_menu' => '0',
-                ],
-            ],
+                ]
+            ]
         ];
     }
 

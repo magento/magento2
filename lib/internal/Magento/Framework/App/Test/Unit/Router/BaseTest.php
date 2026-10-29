@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\App\Router\Base;
 use Magento\Framework\App\Router\PathConfigInterface;
 use Magento\Framework\Code\NameBuilder;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -94,22 +95,23 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider matchDataProvider
-     * @param MockObject|Http $requestMock
+     * @param MockObject|\Closure $requestMock
      * @param string $defaultPath
      * @param string $moduleFrontName
      * @param string|null $actionPath
      * @param string|null $actionName
      * @param string|null $moduleName
      */
+    #[DataProvider('matchDataProvider')]
     public function testMatch(
-        MockObject $requestMock,
+        MockObject|\Closure $requestMock,
         string $defaultPath,
         string $moduleFrontName,
         ?string $actionPath,
         ?string $actionName,
         ?string $moduleName
     ) {
+        $requestMock = $requestMock($this);
         $actionInstance = 'Magento_TestFramework_ActionInstance';
 
         $defaultReturnMap = [
@@ -126,10 +128,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             ->with($moduleFrontName)
             ->willReturn([$moduleName]);
 
-        $actionMock = $this->getMockBuilder(ActionInterface::class)
-            ->setMockClassName($actionInstance)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $actionMock =  $this->getMock(ActionInterface::class, $actionInstance);
         $this->actionListMock->expects($this->once())
             ->method('get')
             ->with($moduleName)
@@ -147,33 +146,62 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($actionMock, $this->model->match($requestMock));
     }
 
-    public function matchDataProvider(): array
+    protected function getMockForHttpClass($moduleFrontName, $actionPath, $actionName, $originalPathInfo)
+    {
+        $requestMock = $this->createMock(Http::class);
+        $requestMock->expects($this->atLeastOnce())->method('getModuleName')->willReturn($moduleFrontName);
+        $requestMock->expects($this->atLeastOnce())->method('getControllerName')->willReturn($actionPath);
+        $requestMock->expects($this->atLeastOnce())->method('getActionName')->willReturn($actionName);
+        if ($moduleFrontName!=null && $moduleFrontName!='') {
+            $requestMock->expects($this->atLeastOnce())
+                ->method('getPathInfo')
+                ->willReturn($moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/');
+        }
+        else {
+            $requestMock->expects($this->atLeastOnce())->method('getPathInfo')->willReturn('');
+        }
+
+        if ($originalPathInfo) {
+            $requestMock->expects($this->atLeastOnce())->method('getOriginalPathInfo')->willReturn('');
+        }
+        return $requestMock;
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        $mockBuilder->disableOriginalConstructor();
+        return $mockBuilder->getMock();
+    }
+
+    public static function matchDataProvider(): array
     {
         $moduleFrontName = 'module_front_name';
         $actionPath = 'action_path';
         $actionName = 'action_name';
         $moduleName = 'module_name';
 
-        $requestMock = $this->createMock(Http::class);
-        $requestMock->expects($this->atLeastOnce())->method('getModuleName')->willReturn($moduleFrontName);
-        $requestMock->expects($this->atLeastOnce())->method('getControllerName')->willReturn($actionPath);
-        $requestMock->expects($this->atLeastOnce())->method('getActionName')->willReturn($actionName);
-        $requestMock->expects($this->atLeastOnce())
-            ->method('getPathInfo')
-            ->willReturn($moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/');
+        $requestMock = static fn (self $testCase) => $testCase->getMockForHttpClass(
+            $moduleFrontName, $actionPath, $actionName, false
+        );
 
-        $emptyRequestMock = $this->createMock(Http::class);
-        $emptyRequestMock->expects($this->atLeastOnce())->method('getModuleName')->willReturn('');
-        $emptyRequestMock->expects($this->atLeastOnce())->method('getControllerName')->willReturn('');
-        $emptyRequestMock->expects($this->atLeastOnce())->method('getActionName')->willReturn('');
-        $emptyRequestMock->expects($this->atLeastOnce())->method('getPathInfo')->willReturn('');
+        $emptyRequestMock = static fn (self $testCase) => $testCase->getMockForHttpClass(
+            '', '', '', false
+        );
 
-        $emptyRequestMock2 = $this->createMock(Http::class);
-        $emptyRequestMock2->expects($this->atLeastOnce())->method('getModuleName')->willReturn('');
-        $emptyRequestMock2->expects($this->atLeastOnce())->method('getControllerName')->willReturn('');
-        $emptyRequestMock2->expects($this->atLeastOnce())->method('getActionName')->willReturn('');
-        $emptyRequestMock2->expects($this->atLeastOnce())->method('getPathInfo')->willReturn('');
-        $emptyRequestMock2->expects($this->atLeastOnce())->method('getOriginalPathInfo')->willReturn('');
+        $emptyRequestMock2 = static fn (self $testCase) => $testCase->getMockForHttpClass(
+            '', '', '', true
+        );
 
         return [
             [
@@ -204,22 +232,23 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider matchEmptyActionDataProvider
-     * @param MockObject|Http $requestMock
+     * @param MockObject|\Closure $requestMock
      * @param string $defaultPath
      * @param string $moduleFrontName
      * @param string|null $actionPath
      * @param string|null $actionName
      * @param string|null $moduleName
      */
+    #[DataProvider('matchEmptyActionDataProvider')]
     public function testMatchEmptyAction(
-        MockObject $requestMock,
+        MockObject|\Closure $requestMock,
         string $defaultPath,
         string $moduleFrontName,
         ?string $actionPath,
         ?string $actionName,
         ?string $moduleName
     ) {
+        $requestMock = $requestMock($this);
         $defaultReturnMap = [
             ['module', $moduleFrontName],
             ['controller', $actionPath],
@@ -240,29 +269,43 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->model->match($requestMock));
     }
 
-    public function matchEmptyActionDataProvider(): array
+    protected function getMockForHttpClassTwo($moduleFrontName, $actionPath, $actionName, $bool)
+    {
+        $requestMock = $this->createMock(Http::class);
+        $requestMock->expects($this->atLeastOnce())->method('getModuleName')->willReturn($moduleFrontName);
+        if ($bool) {
+            $requestMock->expects($this->atLeastOnce())->method('getControllerName')->willReturn($actionPath);
+            $requestMock->expects($this->atLeastOnce())->method('getActionName')->willReturn($actionName);
+        }
+        if ($moduleFrontName!='') {
+            $requestMock->expects($this->atLeastOnce())
+                ->method('getPathInfo')
+                ->willReturn($moduleFrontName . '/' . $actionPath . '/' . $actionName . '/');
+        }
+        else {
+            $requestMock->expects($this->atLeastOnce())->method('getPathInfo')->willReturn('0');
+        }
+
+        return $requestMock;
+    }
+
+    public static function matchEmptyActionDataProvider(): array
     {
         $moduleFrontName = 'module_front_name';
         $actionPath = 'action_path';
         $actionName = 'action_name';
 
-        $requestMock1 = $this->createMock(Http::class);
-        $requestMock1->expects($this->atLeastOnce())->method('getModuleName')->willReturn($moduleFrontName);
-        $requestMock1->expects($this->atLeastOnce())->method('getControllerName')->willReturn($actionPath);
-        $requestMock1->expects($this->atLeastOnce())->method('getActionName')->willReturn($actionName);
-        $requestMock1->expects($this->atLeastOnce())
-            ->method('getPathInfo')
-            ->willReturn($moduleFrontName . '/' . $actionPath . '/' . $actionName . '/');
+        $requestMock1 = static fn (self $testCase) => $testCase->getMockForHttpClassTwo(
+            $moduleFrontName, $actionPath, $actionName, true
+        );
 
-        $requestMock2 = $this->createMock(Http::class);
-        $requestMock2->expects($this->atLeastOnce())->method('getModuleName')->willReturn($moduleFrontName);
-        $requestMock2->expects($this->atLeastOnce())
-            ->method('getPathInfo')
-            ->willReturn($moduleFrontName . '/' . $actionPath . '/' . $actionName . '/');
+        $requestMock2 = static fn (self $testCase) => $testCase->getMockForHttpClassTwo(
+            $moduleFrontName, $actionPath, $actionName, false
+        );
 
-        $requestMock3 = $this->createMock(Http::class);
-        $requestMock3->expects($this->atLeastOnce())->method('getModuleName')->willReturn('');
-        $requestMock3->expects($this->atLeastOnce())->method('getPathInfo')->willReturn('0');
+        $requestMock3 = static fn (self $testCase) => $testCase->getMockForHttpClassTwo(
+            '', '', '', false
+        );
 
         return [
             [

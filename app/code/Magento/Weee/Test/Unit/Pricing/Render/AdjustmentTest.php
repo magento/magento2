@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,10 +16,12 @@ use Magento\Framework\Pricing\Amount\Base;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax;
 use Magento\Weee\Pricing\Adjustment as PricingAdjustment;
 use Magento\Weee\Pricing\Render\Adjustment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,20 +29,20 @@ use PHPUnit\Framework\TestCase;
  */
 class AdjustmentTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Adjustment
      */
     protected $model;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var Data
      */
     protected $weeeHelperMock;
 
     /**
-     * Context mock
-     *
-     * @var \Magento\Framework\View\Element\Template\Context
+     * @var Context
      */
     protected $contextMock;
 
@@ -56,26 +58,15 @@ class AdjustmentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->addMethods(['getStoreConfig'])
-            ->onlyMethods(['getEventManager', 'getScopeConfig'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(
-            PriceCurrencyInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            []
+        $this->contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            ['getStoreConfig', 'getEventManager', 'getScopeConfig']
         );
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->weeeHelperMock = $this->createMock(Data::class);
-        $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
@@ -113,19 +104,16 @@ class AdjustmentTest extends TestCase
         $expectedValue = "$10.00";
         $typeOfDisplay = 1; //Just to set it to not false
         /** @var Amount $amountRender */
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
-            ->getMock();
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
             ->willReturn($displayValue);
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->willReturn($typeOfDisplay);
         /** @var Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
         $amountRender->expects($this->any())
             ->method('getAmount')
             ->willReturn($baseAmount);
@@ -138,25 +126,19 @@ class AdjustmentTest extends TestCase
 
     /**
      * Test for method showInclDescr
-     *
-     * @dataProvider showInclDescrDataProvider
      */
+    #[DataProvider('showInclDescrDataProvider')]
     public function testShowInclDescr($typeOfDisplay, $amount, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
-            ->getMock();
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
         /** @var Product $saleable */
-        $saleable = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $saleable = $this->createMock(Product::class);
         /** @var Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
 
         $baseAmount->expects($this->any())
             ->method('getValue')
@@ -189,7 +171,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function showInclDescrDataProvider()
+    public static function showInclDescrDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, 1.23, false],
@@ -211,25 +193,19 @@ class AdjustmentTest extends TestCase
      * @param int $typeOfDisplay
      * @param float $amount
      * @param bool $expectedResult
-     * @dataProvider showExclDescrInclDataProvider
      */
+    #[DataProvider('showExclDescrInclDataProvider')]
     public function testShowExclDescrIncl($typeOfDisplay, $amount, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
-            ->getMock();
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
         /** @var Product $saleable */
-        $saleable = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $saleable = $this->createPartialMock(Product::class, ['__wakeup']);
         /** @var Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
         $baseAmount->expects($this->any())
             ->method('getValue')
             ->willReturn($amount);
@@ -260,7 +236,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function showExclDescrInclDataProvider()
+    public static function showExclDescrInclDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, 1.23, false],
@@ -282,24 +258,19 @@ class AdjustmentTest extends TestCase
      * @param int $typeOfDisplay
      * @param array $attributes
      * @param array $expectedResult
-     * @dataProvider getWeeeTaxAttributesDataProvider
      */
+    #[DataProvider('getWeeeTaxAttributesDataProvider')]
     public function testGetWeeeTaxAttributes($typeOfDisplay, $attributes, $expectedResult)
     {
         /** @var Amount $amountRender */
-        $amountRender = $this->getMockBuilder(Amount::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
-            ->getMock();
+        $amountRender = $this->createPartialMock(
+            Amount::class,
+            ['getSaleableItem', 'getDisplayValue', 'getAmount']
+        );
         /** @var Product $saleable */
-        $saleable = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $saleable = $this->createMock(Product::class);
         /** @var Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $baseAmount = $this->createPartialMock(Base::class, ['getValue']);
         $amountRender->expects($this->any())
             ->method('getAmount')
             ->willReturn($baseAmount);
@@ -327,7 +298,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function getWeeeTaxAttributesDataProvider()
+    public static function getWeeeTaxAttributesDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, [1, 2, 3], []],
@@ -343,8 +314,8 @@ class AdjustmentTest extends TestCase
      *
      * @param DataObject $attribute
      * @param string $expectedResult
-     * @dataProvider renderWeeeTaxAttributeAmountDataProvider
      */
+    #[DataProvider('renderWeeeTaxAttributeAmountDataProvider')]
     public function testRenderWeeeTaxAttributeAmount($attribute, $expectedResult)
     {
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
@@ -358,7 +329,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeAmountDataProvider()
+    public static function renderWeeeTaxAttributeAmountDataProvider()
     {
         return [
             [new DataObject(['amount' => 51]), 51],
@@ -371,8 +342,8 @@ class AdjustmentTest extends TestCase
      *
      * @param DataObject $attribute
      * @param string $expectedResult
-     * @dataProvider renderWeeeTaxAttributeNameDataProvider
      */
+    #[DataProvider('renderWeeeTaxAttributeNameDataProvider')]
     public function testRenderWeeeTaxAttributeName($attribute, $expectedResult)
     {
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
@@ -386,7 +357,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeNameDataProvider()
+    public static function renderWeeeTaxAttributeNameDataProvider()
     {
         return [
             [new DataObject(['name' => 51]), 51],
@@ -399,8 +370,8 @@ class AdjustmentTest extends TestCase
      *
      * @param DataObject $attribute
      * @param string $expectedResult
-     * @dataProvider renderWeeeTaxAttributeAmountWithTaxDataProvider
      */
+    #[DataProvider('renderWeeeTaxAttributeAmountWithTaxDataProvider')]
     public function testRenderWeeeTaxAttributeWithTax($attribute, $expectedResult)
     {
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->willReturnArgument(0);
@@ -414,7 +385,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeAmountWithTaxDataProvider()
+    public static function renderWeeeTaxAttributeAmountWithTaxDataProvider()
     {
         return [
             [new DataObject(['amount_excl_tax' => 50, 'tax_amount' => 5]), 55],

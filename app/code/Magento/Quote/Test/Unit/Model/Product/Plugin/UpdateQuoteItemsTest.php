@@ -1,21 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Product\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Model\Product\Plugin\UpdateQuoteItems;
 use Magento\Quote\Model\ResourceModel\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class UpdateQuoteItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UpdateQuoteItems
      */
@@ -35,25 +39,24 @@ class UpdateQuoteItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider aroundUpdateDataProvider
      * @param int $originalPrice
      * @param int $newPrice
      * @param bool $callMethod
      * @param bool $tierPriceChanged
      */
+    #[DataProvider('aroundUpdateDataProvider')]
     public function testAfterUpdate($originalPrice, $newPrice, $callMethod, $tierPriceChanged = false)
     {
         $productResourceMock = $this->createMock(Product::class);
-        $productMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->addMethods([ 'getPrice'])
-            ->onlyMethods(['getOrigData', 'getId', 'getData'])
-            ->getMockForAbstractClass();
+        $productMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getOrigData', 'getId', 'getData', 'getPrice']
+        );
         $productId = 1;
         $productMock->expects($this->any())->method('getOrigData')->with('price')->willReturn($originalPrice);
-        $productMock->expects($this->any())->method('getPrice')->willReturn($newPrice);
-        $productMock->expects($this->any())->method('getId')->willReturn($productId);
-        $productMock->expects($this->any())->method('getData')->willReturn($tierPriceChanged);
+        $productMock->method('getPrice')->willReturn($newPrice);
+        $productMock->method('getId')->willReturn($productId);
+        $productMock->method('getData')->willReturn($tierPriceChanged);
         $this->quoteResource->expects($this->$callMethod())->method('markQuotesRecollect')->with($productId);
         $result = $this->model->afterSave($productResourceMock, $productResourceMock, $productMock);
         $this->assertEquals($result, $productResourceMock);
@@ -62,7 +65,7 @@ class UpdateQuoteItemsTest extends TestCase
     /**
      * @return array
      */
-    public function aroundUpdateDataProvider()
+    public static function aroundUpdateDataProvider()
     {
         return [
             [10, 20, 'once'],

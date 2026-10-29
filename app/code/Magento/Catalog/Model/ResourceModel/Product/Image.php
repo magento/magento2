@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class for retrieval of all product images
@@ -40,11 +42,13 @@ class Image
     /**
      * @param Generator $generator
      * @param ResourceConnection $resourceConnection
+     * @param MetadataPool $metadataPool
      * @param int $batchSize
      */
     public function __construct(
         Generator $generator,
         ResourceConnection $resourceConnection,
+        private readonly MetadataPool $metadataPool,
         $batchSize = 100
     ) {
         $this->batchQueryGenerator = $generator;
@@ -152,7 +156,11 @@ class Image
      */
     private function getUsedImagesSelect(): Select
     {
-        return $this->connection->select()->distinct()
+        $productMetadata =  $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $productMetadata->getLinkField();
+        $identifierField = $productMetadata->getIdentifierField();
+
+        $select = $this->connection->select()->distinct()
             ->from(
                 ['images' => $this->resourceConnection->getTableName(Gallery::GALLERY_TABLE)],
                 'value as filepath'
@@ -160,8 +168,38 @@ class Image
                 ['image_value' => $this->resourceConnection->getTableName(Gallery::GALLERY_VALUE_TABLE)],
                 'images.value_id = image_value.value_id',
                 []
+            )->joinInner(
+                ['products' => $this->resourceConnection->getTableName('catalog_product_entity')],
+                "image_value.$linkField = products.$linkField",
+                []
+            )->joinInner(
+                ['websites' => $this->resourceConnection->getTableName('catalog_product_website')],
+                "products.$identifierField = websites.product_id",
+                ['GROUP_CONCAT(websites.website_id SEPARATOR \',\') AS website_ids']
             )->where(
                 'images.disabled = 0 AND image_value.disabled = 0'
+            )->group(
+                'websites.product_id'
             );
+
+        return $select;
+    }
+
+    /**
+     * Get related website IDs for a given image file path.
+     *
+     * @param string $filepath
+     * @return array
+     */
+    public function getRelatedWebsiteIds(string $filepath): array
+    {
+        $select = $this->getUsedImagesSelect();
+        $select->where('images.value = ?', $filepath);
+        $result = array_map(
+            fn ($ids) => array_map('intval', explode(',', $ids)),
+            $this->connection->fetchPairs($select)
+        );
+
+        return $result[$filepath] ?? [];
     }
 }

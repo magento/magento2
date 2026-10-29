@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,6 +92,8 @@ class TopmenuTest extends TestCase
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')
             ->willReturn($this->storeMock);
 
+        $this->categoryMock->expects($this->any())->method('getId')
+            ->willReturn(4);
         $this->categoryMock->expects($this->atLeastOnce())->method('getParentId')
             ->willReturn($categoryParentId);
         $this->categoryMock->expects($this->once())->method('getParentIds')

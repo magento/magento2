@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,8 @@ use Magento\Framework\Event;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QuantityValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var QuantityValidator
      */
@@ -94,13 +98,10 @@ class QuantityValidatorTest extends TestCase
             ]
         );
 
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->addMethods(['getItem'])
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getItem']
+        );
     }
 
     /**
@@ -147,13 +148,10 @@ class QuantityValidatorTest extends TestCase
         $product = $productRepository->get('bundle-product');
         /* @var $quoteItem Item */
         $quoteItem = $this->getQuoteItemIdByProductId($session->getQuote(), $product->getId());
-        $resultMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->addMethods(['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError'])
-            ->getMock();
+        $resultMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['checkQtyIncrements', 'getMessage', 'getQuoteMessage', 'getHasError']
+        );
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($this->eventMock);
         $this->eventMock->expects($this->once())->method('getItem')->willReturn($quoteItem);
         $this->stockState->expects($this->any())->method('checkQtyIncrements')->willReturn($resultMock);
@@ -194,11 +192,11 @@ class QuantityValidatorTest extends TestCase
      * @return void
      * @throws CouldNotSaveException
      * @throws LocalizedException
-     * @dataProvider quantityDataProvider
      * @magentoDataFixture Magento/CatalogInventory/_files/configurable_options_advanced_inventory.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('quantityDataProvider')]
     public function testConfigurableWithOptions(int $quantity, string $errorMessageRegexp): void
     {
         /** @var ProductRepositoryInterface $productRepository */
@@ -263,15 +261,15 @@ class QuantityValidatorTest extends TestCase
         return [
             [
                 'quantity' => 1,
-                'error_regexp' => '/The fewest you may purchase is 500/'
+                'errorMessageRegexp' => '/The fewest you may purchase is 500/'
             ],
             [
                 'quantity' => 501,
-                'error_regexp' => $qtyRegexp
+                'errorMessageRegexp' => $qtyRegexp
             ],
             [
                 'quantity' => 1000,
-                'error_regexp' => ''
+                'errorMessageRegexp' => ''
             ]
         ];
     }

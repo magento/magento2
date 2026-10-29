@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,18 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Name;
 use Magento\Customer\Model\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Customer name validator tests
  */
 class NameTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Name
      */
@@ -33,11 +37,10 @@ class NameTest extends TestCase
     protected function setUp(): void
     {
         $this->nameValidator = new Name;
-        $this->customerMock = $this
-            ->getMockBuilder(Customer::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFirstname', 'getLastname', 'getMiddlename'])
-            ->getMock();
+        $this->customerMock = $this->createPartialMockWithReflection(
+            Customer::class,
+            ['getFirstname', 'getLastname', 'getMiddlename']
+        );
     }
 
     /**
@@ -47,9 +50,8 @@ class NameTest extends TestCase
      * @param string $middleName
      * @param string $lastName
      * @param string $message
-     * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
-     */
+     * @return void */
+    #[DataProvider('expectedPunctuationInNamesDataProvider')]
     public function testValidateCorrectPunctuationInNames(
         string $firstName,
         string $middleName,
@@ -67,31 +69,31 @@ class NameTest extends TestCase
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public static function expectedPunctuationInNamesDataProvider(): array
     {
         return [
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O’Doe',
+                'lastName' => 'O’Doe',
                 'message' => 'Inclined apostrophe must be allowed in names (iOS Smart Punctuation compatibility)'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O\'Doe',
+                'lastName' => 'O\'Doe',
                 'message' => 'Legacy straight apostrophe must be allowed in names'
             ],
             [
                 'firstName' => 'John',
                 'middleName' => '',
-                'lastNameName' => 'O`Doe',
+                'lastName' => 'O`Doe',
                 'message' => 'Grave accent back quote character must be allowed in names'
             ],
             [
                 'firstName' => 'John & Smith',
                 'middleName' => '',
-                'lastNameName' => 'O`Doe',
+                'lastName' => 'O`Doe',
                 'message' => 'Special character ampersand(&) must be allowed in names'
             ]
         ];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -138,7 +138,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;

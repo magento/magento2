@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class PriceRange implements ResolverInterface
      * @param PriceRangeDataProvider|null $priceRangeDataProvider
      */
     public function __construct(
-        PriceRangeDataProvider $priceRangeDataProvider = null
+        ?PriceRangeDataProvider $priceRangeDataProvider = null
     ) {
         $this->priceRangeDataProvider = $priceRangeDataProvider
             ?? ObjectManager::getInstance()->get(PriceRangeDataProvider::class);
@@ -40,8 +40,8 @@ class PriceRange implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         return $this->priceRangeDataProvider->prepare($context, $info, $value);
     }

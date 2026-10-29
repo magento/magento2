@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\CustomerData;
 
@@ -84,7 +84,7 @@ class CompareProducts implements SectionSourceInterface
             'countCaption' => $count == 1 ? __('1 item') : __('%1 items', $count),
             'listUrl' => $this->urlBuilder->getUrl('catalog/product_compare/index'),
             'items' => $count ? $this->getItems() : [],
-            'websiteId' => $this->storeManager->getWebsite()->getId()
+            'storeId' => $this->storeManager->getStore()->getId()
         ];
     }
 

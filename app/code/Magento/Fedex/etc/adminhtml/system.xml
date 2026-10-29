@@ -31,6 +31,24 @@
                     <label>Secret Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="enabled_tracking_api" translate="label" type="select" sortOrder="61" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Enable Tracking API credentials</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tracking_api_key" translate="label" type="obscure" sortOrder="62" showInDefault="1" showInWebsite="1">
+                    <label>Tracking API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled_tracking_api">1</field>
+                    </depends>
+                </field>
+                <field id="tracking_api_secret_key" translate="label" type="obscure" sortOrder="63" showInDefault="1" showInWebsite="1">
+                    <label>Tracking API Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled_tracking_api">1</field>
+                    </depends>
+                </field>
                 <field id="sandbox_mode" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Sandbox Mode</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\OrderAddressRepositoryInterface;
 use Magento\Sales\Model\Order\Address as AddressType;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class check address save action
@@ -43,13 +44,12 @@ class AddressSaveTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider addressTypeProvider
-     *
      * @magentoDataFixture Magento/Sales/_files/order.php
      *
      * @param string $type
      * @return void
      */
+    #[DataProvider('addressTypeProvider')]
     public function testSave(string $type): void
     {
         $data = [
@@ -93,12 +93,11 @@ class AddressSaveTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider wrongRequestDataProvider
-     *
      * @param array $params
      * @param array $post
      * @return void
      */
+    #[DataProvider('wrongRequestDataProvider')]
     public function testInvalidRequest(array $params, array $post = []): void
     {
         $this->dispatchWithParams($params, $post);
@@ -108,7 +107,7 @@ class AddressSaveTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function wrongRequestDataProvider(): array
+    public static function wrongRequestDataProvider(): array
     {
         return [
             'empty_post' => [

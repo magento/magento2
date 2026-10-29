@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 
 /**
@@ -21,8 +18,6 @@ namespace Magento\Reports\Model\ResourceModel\Product\Index\Collection;
 abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Customer id
-     *
      * @var null|int
      */
     protected $_customerId = null;
@@ -79,7 +74,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,

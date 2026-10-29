@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -62,13 +63,13 @@ class DocumentTest extends TestCase
     {
         $this->initAttributeValueFactoryMock();
 
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
 
-        $this->customerMetadata = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
+        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->document = new Document(
             $this->attributeValueFactory,
@@ -80,12 +81,12 @@ class DocumentTest extends TestCase
     }
 
     /**
-     * @dataProvider getGenderAttributeDataProvider
      * @covers       \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
      * @param int $genderId
      * @param string $attributeValue
      * @param string $attributeLabel
      */
+    #[DataProvider('getGenderAttributeDataProvider')]
     public function testGetGenderAttribute(int $genderId, string $attributeValue, string $attributeLabel): void
     {
         $expectedResult = !empty($attributeValue) ? $attributeLabel : $genderId;
@@ -98,13 +99,13 @@ class DocumentTest extends TestCase
         $this->storeManager->expects(static::never())
             ->method('getWebsites');
 
-        $metadata = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $metadata = $this->createMock(AttributeMetadataInterface::class);
 
         $this->customerMetadata->expects(static::once())
             ->method('getAttributeMetadata')
             ->willReturn($metadata);
 
-        $option = $this->getMockForAbstractClass(OptionInterface::class);
+        $option = $this->createMock(OptionInterface::class);
 
         $metadata->expects(static::once())
             ->method('getOptions')
@@ -126,7 +127,7 @@ class DocumentTest extends TestCase
      * Data provider for testGetGenderAttribute
      * @return array
      */
-    public function getGenderAttributeDataProvider()
+    public static function getGenderAttributeDataProvider()
     {
         return [
             'with valid gender label and value' => [
@@ -157,8 +158,8 @@ class DocumentTest extends TestCase
         $this->storeManager->expects(static::never())
             ->method('getWebsites');
 
-        $group1 = $this->getMockForAbstractClass(GroupInterface::class);
-        $group2 = $this->getMockForAbstractClass(GroupInterface::class);
+        $group1 = $this->createMock(GroupInterface::class);
+        $group2 = $this->createMock(GroupInterface::class);
 
         $this->groupRepository->expects(static::exactly(2))
             ->method('getById')
@@ -200,7 +201,7 @@ class DocumentTest extends TestCase
         $this->customerMetadata->expects(static::never())
             ->method('getAttributeMetadata');
 
-        $website = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $website = $this->createMock(WebsiteInterface::class);
 
         $this->storeManager->expects(static::once())
             ->method('getWebsites')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\PageCache\Model\Cache\Server;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ServerTest extends TestCase
@@ -40,9 +41,7 @@ class ServerTest extends TestCase
         $this->configMock = $this->createMock(DeploymentConfig::class);
         $this->loggerMock = $this->createMock(InvalidateLogger::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -61,8 +60,8 @@ class ServerTest extends TestCase
      * @param int $getUrlCallCtr
      * @param string $url
      * @param string[] $hostConfig
-     * @dataProvider getUrisDataProvider
      */
+    #[DataProvider('getUrisDataProvider')]
     public function testGetUris(
         $getHttpHostCallCtr,
         $httpHost,
@@ -105,7 +104,7 @@ class ServerTest extends TestCase
     /**
      * @return array
      */
-    public function getUrisDataProvider()
+    public static function getUrisDataProvider()
     {
         return [
             'http host' => [2, '127.0.0.1', 0, ''],

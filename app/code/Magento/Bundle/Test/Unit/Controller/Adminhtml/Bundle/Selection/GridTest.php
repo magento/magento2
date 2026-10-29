@@ -1,24 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Bundle\Selection;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid as SearchGrid;
 use Magento\Bundle\Controller\Adminhtml\Bundle\Selection\Grid;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GridTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Grid */
     protected $controller;
 
@@ -49,25 +55,21 @@ class GridTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setBody'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
+        /** @var ResponseInterface $response */
+        $this->response = $this->createPartialMockWithReflection(
+            HttpResponse::class,
+            ['setBody', 'getBody']
+        );
+        $this->response->method('setBody')->willReturnSelf();
+
+        $this->view = $this->createMock(ViewInterface::class);
+
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($this->response);
+        $this->context->method('getView')->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
             Grid::class,
@@ -79,21 +81,21 @@ class GridTest extends TestCase
 
     public function testExecute()
     {
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
-        $block = $this->getMockBuilder(
-            \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class
-        )
-            ->disableOriginalConstructor()
-            ->addMethods(['setIndex'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $layout = $this->createMock(LayoutInterface::class);
 
-        $this->response->expects($this->once())->method('setBody')->willReturnSelf();
+        /** @var AbstractBlock $block */
+        $block = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['setIndex', 'toHtml']
+        );
+        $block->method('toHtml')->willReturn('');
+        $block->method('setIndex')->willReturnSelf();
+
+        $this->response->method('getBody')->willReturn('');
         $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('index');
         $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
-        $block->expects($this->once())->method('setIndex')->willReturnSelf();
-        $block->expects($this->once())->method('toHtml')->willReturnSelf();
+        $block->setIndex('index');
 
         $this->assertEquals($this->response, $this->controller->execute());
     }

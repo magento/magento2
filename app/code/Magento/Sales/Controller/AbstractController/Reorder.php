@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -56,9 +56,9 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
-        ReorderHelper $reorderHelper = null,
-        \Magento\Sales\Model\Reorder\Reorder $reorder = null,
-        CheckoutSession $checkoutSession = null
+        ?ReorderHelper $reorderHelper = null,
+        ?\Magento\Sales\Model\Reorder\Reorder $reorder = null,
+        ?CheckoutSession $checkoutSession = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;

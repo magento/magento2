@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -74,6 +74,7 @@ define([
             let bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName);
 
             bundleSelections.destroyChildren();
+            bundleSelections._elems.clear();
         },
 
         /**

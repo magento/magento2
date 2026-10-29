@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -32,16 +34,20 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory;
 use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * The test for Customer composite model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @phpstan-ignore-next-line
  */
 class CustomerCompositeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var array
      */
@@ -126,15 +132,15 @@ class CustomerCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $translateInline = $this->createMock(InlineInterface::class);
         $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
-        $context =
-            $this->getMockBuilder(Context::class)
-                ->addMethods(['getTranslateInline'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $context->expects($this->any())->method('getTranslateInline')->willReturn($translateInline);
+        // Create Context mock with translateInline support
+        $context = $this->createPartialMockWithReflection(
+            Context::class,
+            ['getInlineTranslation', 'getScopeConfig']
+        );
+        $context->method('getInlineTranslation')->willReturn($translateInline);
 
         $this->_string = new StringUtils();
 
@@ -167,7 +173,7 @@ class CustomerCompositeTest extends TestCase
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
 
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerProcessor = $this->createMock(Processor::class);
     }
 
@@ -177,6 +183,15 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _createModelMock($data)
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                Json::class,
+                $this->createMock(Json::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         return new CustomerComposite(
             $this->_string,
             $this->_scopeConfigMock,
@@ -210,10 +225,14 @@ class CustomerCompositeTest extends TestCase
      */
     protected function _getModelMockForPrepareRowForDb()
     {
-        $customerStorage = $this->getMockBuilder('stdClass')
-            ->addMethods(['getCustomerId', 'prepareCustomers', 'addCustomer'])
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(1);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(1);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $customerEntity = $this->_getCustomerEntityMock();
         $customerEntity->expects($this->any())->method('validateRow')->willReturn(true);
         $customerEntity->expects($this->any())
@@ -229,12 +248,13 @@ class CustomerCompositeTest extends TestCase
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
 
-        $dataSourceMock = $this->getMockBuilder(\stdClass::class)->addMethods(['cleanBunches', 'saveBunch'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dataSourceMock->expects($this->any())
-            ->method('saveBunch')
-            ->willReturnCallback([$this, 'verifyPrepareRowForDbData']);
+        // Create data source mock with saveBunch callback
+        $dataSourceMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['saveBunch', 'setSaveBunchCallback']
+        );
+        $dataSourceMock->method('saveBunch')->willReturnCallback([$this, 'verifyPrepareRowForDbData']);
+        $dataSourceMock->method('setSaveBunchCallback')->willReturnSelf();
 
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
@@ -353,16 +373,20 @@ class CustomerCompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider getRowDataProvider
-     *
      * @param array $rows
      * @param array $calls
      * @param bool $validationReturn
      * @param array $expectedErrors
      * @param int $behavior
      */
-    public function testValidateRow(array $rows, array $calls, $validationReturn, array $expectedErrors, $behavior)
-    {
+    #[DataProvider('getRowDataProvider')]
+    public function testValidateRow(
+        array $rows,
+        array $calls,
+        $validationReturn,
+        array $expectedErrors,
+        $behavior
+    ): void {
         $customerEntity = $this->_getCustomerEntityMock();
         $addressEntity = $this->_getAddressEntityMock();
 
@@ -375,10 +399,14 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturn($validationReturn);
 
-        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(true);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
@@ -413,10 +441,14 @@ class CustomerCompositeTest extends TestCase
             ->method('validateRow')
             ->willReturnCallback([$this, 'validateAddressRowParams']);
 
-        $customerStorage = $this->getMockBuilder(\stdClass::class)->addMethods(['getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerStorage->expects($this->any())->method('getCustomerId')->willReturn(true);
+        // Create customer storage mock
+        $customerStorage = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['getCustomerId', 'setCustomerId']
+        );
+        $customerStorage->method('getCustomerId')->willReturn(true);
+        $customerStorage->method('setCustomerId')->willReturnSelf();
+        
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
             ->willReturn($customerStorage);
@@ -467,11 +499,11 @@ class CustomerCompositeTest extends TestCase
     /**
      * @return array
      */
-    public function getRowDataProvider()
+    public static function getRowDataProvider()
     {
         return [
             'customer and address rows, append behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -483,13 +515,13 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 1
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 2],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_APPEND,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 2],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_APPEND,
             ],
             'customer and address rows, delete behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -501,13 +533,13 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 1
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_DELETE,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_DELETE,
             ],
             'customer and two addresses row, append behavior' => [
-                '$rows' => [
+                'rows' => [
                     [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
@@ -524,10 +556,10 @@ class CustomerCompositeTest extends TestCase
                         Address::COLUMN_ADDRESS_ID => 2
                     ],
                 ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 3],
-                '$validationReturn' => true,
-                '$expectedErrors' => [],
-                '$behavior' => Import::BEHAVIOR_APPEND,
+                'calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 3],
+                'validationReturn' => true,
+                'expectedErrors' => [],
+                'behavior' => Import::BEHAVIOR_APPEND,
             ],
         ];
     }
@@ -575,12 +607,7 @@ class CustomerCompositeTest extends TestCase
 
         $modelUnderTest = $this->_createModelMock($data);
 
-        $source = $this->getMockForAbstractClass(
-            AbstractSource::class,
-            [],
-            '',
-            false
-        );
+        $source = $this->createMock(AbstractSource::class);
         $modelUnderTest->setSource($source);
     }
 
@@ -629,57 +656,56 @@ class CustomerCompositeTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderTestImportData()
+    public static function dataProviderTestImportData()
     {
         return [
             'add_update_behavior_customer_true_address_true' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => true,
-                '$addressImport' => true,
-                '$result' => true,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => true,
+                'addressImport' => true,
+                'result' => true,
             ],
             'add_update_behavior_customer_true_address_false' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => true,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => true,
+                'addressImport' => false,
+                'result' => false,
             ],
             'add_update_behavior_customer_false_address_true' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => false,
-                '$addressImport' => true,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => false,
+                'addressImport' => true,
+                'result' => false,
             ],
             'add_update_behavior_customer_false_address_false' => [
-                '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
-                '$customerImport' => false,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_ADD_UPDATE,
+                'customerImport' => false,
+                'addressImport' => false,
+                'result' => false,
             ],
             'delete_behavior_customer_true' => [
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$customerImport' => true,
-                '$addressImport' => false,
-                '$result' => true,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'customerImport' => true,
+                'addressImport' => false,
+                'result' => true,
             ],
             'delete_behavior_customer_false' => [
-                '$behavior' => Import::BEHAVIOR_DELETE,
-                '$customerImport' => false,
-                '$addressImport' => false,
-                '$result' => false,
+                'behavior' => Import::BEHAVIOR_DELETE,
+                'customerImport' => false,
+                'addressImport' => false,
+                'result' => false,
             ]
         ];
     }
 
     /**
-     * @dataProvider dataProviderTestImportData
-     *
      * @param string $behavior
-     * @param boolean $customerImport
-     * @param boolean $addressImport
-     * @param boolean $result
+     * @param bool $customerImport
+     * @param bool $addressImport
+     * @param bool $result
      */
-    public function testImportData($behavior, $customerImport, $addressImport, $result)
+    #[DataProvider('dataProviderTestImportData')]
+    public function testImportData(string $behavior, bool $customerImport, bool $addressImport, bool $result): void
     {
         $isDeleteBehavior = $behavior == Import::BEHAVIOR_DELETE;
         $entityMock = $this->_getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport);

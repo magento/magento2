@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -14,11 +16,11 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_special_price.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -76,7 +78,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
     {
         return [
             '#1 Testing price for dynamic bundle with one required option and special price' => [
-                'strategy' => self::getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // 0.5 * 10
                     'minimalPrice' => 5,
@@ -86,7 +88,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for dynamic bundle with one non required option and special price' => [
-                'strategy' => self::getBundleConfiguration2(),
+                'strategyModifiers' => self::getBundleConfiguration2(),
                 'expectedResults' => [
                     // 0.5 * 2 * 10
                     'minimalPrice' => 10,
@@ -100,7 +102,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #3 Testing price for dynamic bundle
                 with one required checkbox type option, two simples and special price
             ' => [
-                'strategy' => self::getBundleConfiguration3(),
+                'strategyModifiers' => self::getBundleConfiguration3(),
                 'expectedResults' => [
                     // 0.5 * 1 * 10
                     'minimalPrice' => 5,
@@ -113,7 +115,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
                 #4 Testing price for dynamic bundle
                 with one required multi type option, two simples with special price
             ' => [
-                'strategy' => self::getBundleConfiguration4(),
+                'strategyModifiers' => self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 0.5 * (min (1 * 9.9, 2.5 * 4))
                     'minimalPrice' => 4.95,
@@ -123,7 +125,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#5 Testing price for dynamic bundle with one required option, one non required and special price' => [
-                'strategy' => self::getBundleConfiguration5(),
+                'strategyModifiers' => self::getBundleConfiguration5(),
                 'expectedResults' => [
                     // 0.5 * (3 * 2.5)
                     'minimalPrice' => 3.75,
@@ -137,7 +139,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#6 Testing price for dynamic bundle with one simple product with special price' => [
-                'strategy' => self::getBundleConfiguration6(),
+                'strategyModifiers' => self::getBundleConfiguration6(),
                 'expectedResults' => [
                     // 0.5 * min(4 * 2.5, 1 * 9.9)
                     'minimalPrice' => 4.95,

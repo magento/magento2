@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Helper\Coupon;
 use Magento\SalesRule\Model\Coupon\Massgenerator;
 use Magento\SalesRule\Model\CouponFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MassgeneratorTest extends TestCase
@@ -37,9 +38,8 @@ class MassgeneratorTest extends TestCase
      *
      * @param array $data
      * @param int $length
-     *
-     * @dataProvider generatorDataProvider
      */
+    #[DataProvider('generatorDataProvider')]
     public function testGenerateCode(array $data, $length)
     {
         $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset', 'getCodeSeparator']);
@@ -68,9 +68,8 @@ class MassgeneratorTest extends TestCase
      * Run test getDelimiter method
      *
      * @param array $data
-     *
-     * @dataProvider delimiterDataProvider
      */
+    #[DataProvider('delimiterDataProvider')]
     public function testGetDelimiter(array $data)
     {
         $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCodeSeparator']);
@@ -213,9 +212,8 @@ class MassgeneratorTest extends TestCase
      *
      * @param array $data
      * @param bool $result
-     *
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidateData(array $data, $result)
     {
         /** @var Massgenerator $massgenerator */
@@ -240,7 +238,7 @@ class MassgeneratorTest extends TestCase
      *
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             [
@@ -285,7 +283,7 @@ class MassgeneratorTest extends TestCase
      *
      * @return array
      */
-    public function delimiterDataProvider()
+    public static function delimiterDataProvider()
     {
         return [
             [
@@ -304,7 +302,7 @@ class MassgeneratorTest extends TestCase
      *
      * @return array
      */
-    public function generatorDataProvider()
+    public static function generatorDataProvider()
     {
         return [
             [

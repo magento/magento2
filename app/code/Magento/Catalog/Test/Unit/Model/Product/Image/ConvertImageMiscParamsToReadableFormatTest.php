@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +30,8 @@ class ConvertImageMiscParamsToReadableFormatTest extends TestCase
     /**
      * @param array $data
      * @return void
-     * @dataProvider createDataProvider
      */
+    #[DataProvider('createDataProvider')]
     public function testConvertImageMiscParamsToReadableFormat(array $data): void
     {
         $this->assertEquals(
@@ -50,17 +51,17 @@ class ConvertImageMiscParamsToReadableFormatTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
-            $this->getTestDataWithAttributes()
+            self::getTestDataWithAttributes()
         ];
     }
 
     /**
      * @return array
      */
-    private function getTestDataWithAttributes(): array
+    private static function getTestDataWithAttributes(): array
     {
         return [
             'data' => [

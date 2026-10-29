@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,7 +68,9 @@ class ResetPasswordTest extends TestCase
             1
         );
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);
-        $mailTemplate = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $mailTemplate = quoted_printable_decode(
+            $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString()
+        );
 
         $this->assertEquals(
             1,
@@ -113,7 +116,6 @@ class ResetPasswordTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @dataProvider passwordResetErrorsProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
      *
@@ -121,6 +123,7 @@ class ResetPasswordTest extends TestCase
      * @param int|null $websiteId
      * @return void
      */
+    #[DataProvider('passwordResetErrorsProvider')]
     public function testPasswordResetErrors(string $email, ?int $websiteId = null): void
     {
         $websiteId = $websiteId ?? (int)$this->storeManager->getWebsite('base')->getId();
@@ -140,12 +143,12 @@ class ResetPasswordTest extends TestCase
     public static function passwordResetErrorsProvider(): array
     {
         return [
-            'wrong_email' => [
+            'email' => [
                 'email' => 'foo@example.com',
             ],
-            'wrong_website_id' => [
+            'websiteId' => [
                 'email' => 'customer@example.com',
-                'website_id' => 0,
+                'websiteId' => 0,
             ],
         ];
     }

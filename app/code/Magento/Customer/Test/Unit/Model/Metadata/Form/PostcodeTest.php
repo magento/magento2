@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Postcode;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Stdlib\StringUtils;
 
@@ -28,9 +29,7 @@ class PostcodeTest extends AbstractFormTestCase
     {
         parent::setUp();
         $this->stringHelper = new StringUtils();
-        $this->directoryHelper = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryHelper = $this->createMock(\Magento\Directory\Helper\Data::class);
     }
 
     /**
@@ -59,9 +58,8 @@ class PostcodeTest extends AbstractFormTestCase
      * @param bool $expected text output
      * @param string $countryId
      * @param bool $isOptional
-     *
-     * @dataProvider validateValueDataProvider
-     */
+     * */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $expected, $countryId, $isOptional)
     {
         $storeLabel = 'Zip/Postal Code';
@@ -85,7 +83,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             ['', ['"Zip/Postal Code" is a required value.'], 'US', false],
@@ -97,15 +95,11 @@ class PostcodeTest extends AbstractFormTestCase
 
     /**
      * @param string|int|bool|null $value to assign to boolean
-     * @param string|bool $expected text output
-     * @dataProvider validateValueLengthDataProvider
-     */
+     * @param string|bool $expected text output */
+    #[DataProvider('validateValueLengthDataProvider')]
     public function testValidateValueLength($value, $expected)
     {
-        $minTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $minTextLengthRule = $this->createMock(ValidationRuleInterface::class);
         $minTextLengthRule->expects($this->any())
             ->method('getName')
             ->willReturn('min_text_length');
@@ -113,10 +107,7 @@ class PostcodeTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn(5);
 
-        $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $maxTextLengthRule = $this->createMock(ValidationRuleInterface::class);
         $maxTextLengthRule->expects($this->any())
             ->method('getName')
             ->willReturn('max_text_length');
@@ -124,10 +115,7 @@ class PostcodeTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn(6);
 
-        $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $inputValidationRule = $this->createMock(ValidationRuleInterface::class);
         $inputValidationRule->expects($this->any())
             ->method('getName')
             ->willReturn('input_validation');
@@ -174,7 +162,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider(): array
+    public static function validateValueLengthDataProvider(): array
     {
         return [
             'false' => [false, ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],

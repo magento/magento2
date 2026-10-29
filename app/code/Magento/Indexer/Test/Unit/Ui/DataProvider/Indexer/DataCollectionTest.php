@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Ui\DataProvider\Indexer\DataCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DataCollectionTest extends TestCase
 {
@@ -52,8 +53,7 @@ class DataCollectionTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
@@ -74,8 +74,8 @@ class DataCollectionTest extends TestCase
 
     /**
      * @param array $indexersData
-     * @dataProvider loadDataDataProvider
      */
+    #[DataProvider('loadDataDataProvider')]
     public function testLoadData(array $indexersData)
     {
         $calls = [];
@@ -125,7 +125,7 @@ class DataCollectionTest extends TestCase
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'getId' => 'indexer_2',
                         'getTitle' => 'Title_2',
@@ -162,8 +162,7 @@ class DataCollectionTest extends TestCase
     private function getIndexerMock(array $data = [])
     {
         /** @var MockObject|IndexerInterface $indexer */
-        $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexer = $this->createMock(IndexerInterface::class);
         foreach ($data as $methodName => $result) {
             $indexer
                 ->method($methodName)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,15 +10,18 @@ namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Rende
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name;
 use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NameTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Context|MockObject
      */
@@ -48,7 +51,7 @@ class NameTest extends TestCase
     {
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturn('http://magento.loc/linkurl');
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -68,14 +71,18 @@ class NameTest extends TestCase
 
     /**
      * Test the basic render action.
-     * @dataProvider endpointDataProvider
+     *
+     * @param string $endpoint
+     * @param string $name
+     * @param string $expectedResult
      */
-    public function testRender($endpoint, $name, $expectedResult)
+    #[DataProvider('endpointDataProvider')]
+    public function testRender(string $endpoint, string $name, string $expectedResult): void
     {
-        $column = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getIndex', 'getEditable', 'getGetter'])
-            ->getMock();
+        $column = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getIndex', 'getEditable', 'getGetter']
+        );
         $column->expects($this->any())
             ->method('getIndex')
             ->willReturn('name');
@@ -87,10 +94,10 @@ class NameTest extends TestCase
             ->willReturn('getName');
         $this->nameRenderer->setColumn($column);
 
-        $integrationMock = $this->getMockBuilder(Integration::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getName', 'getEndpoint', 'getIdentityLinkUrl'])
-            ->getMock();
+        $integrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            ['getName', 'getEndpoint', 'getIdentityLinkUrl']
+        );
         $integrationMock->expects($this->any())->method('getName')->willReturn($name);
         $integrationMock->expects($this->any())->method('getEndpoint')->willReturn($endpoint);
         $integrationMock->expects($this->any())->method('getIdentityLinkUrl')->willReturn($endpoint);
@@ -99,9 +106,9 @@ class NameTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, string>>
      */
-    public function endpointDataProvider()
+    public static function endpointDataProvider(): array
     {
         return [
             [

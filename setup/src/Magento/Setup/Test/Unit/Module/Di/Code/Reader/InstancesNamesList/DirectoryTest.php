@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Reader\Decorator\Directory;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -164,10 +165,10 @@ class DirectoryTest extends TestCase
     }
 
     /**
-     * @dataProvider getListExceptionDataProvider
      *
      * @param $exception
      */
+    #[DataProvider('getListExceptionDataProvider')]
     public function testGetListException(\Exception $exception)
     {
         $path = '/tmp/test';
@@ -201,7 +202,7 @@ class DirectoryTest extends TestCase
      *
      * @return array
      */
-    public function getListExceptionDataProvider()
+    public static function getListExceptionDataProvider()
     {
         return [
             [new ValidatorException(new Phrase('Not Valid!'))],

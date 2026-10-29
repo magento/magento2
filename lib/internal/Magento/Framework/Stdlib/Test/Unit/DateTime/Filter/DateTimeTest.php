@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,18 +12,18 @@ use IntlDateFormatter;
 use Magento\Framework\Stdlib\DateTime\Filter\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateTimeTest extends TestCase
 {
     /**
      * @param string $inputData
      * @param string $expectedDate
-     *
-     * @dataProvider dateTimeFilterDataProvider
-     */
+     *     */
+    #[DataProvider('dateTimeFilterDataProvider')]
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -43,7 +43,7 @@ class DateTimeTest extends TestCase
     /**
      * @return array
      */
-    public function dateTimeFilterDataProvider()
+    public static function dateTimeFilterDataProvider()
     {
         return [
             ['2000-01-01 02:30:00', '2000-01-01 02:30:00'],
@@ -53,14 +53,13 @@ class DateTimeTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dateTimeFilterWithExceptionDataProvider
-     */
+    /**     */
+    #[DataProvider('dateTimeFilterWithExceptionDataProvider')]
     public function testFilterWithException($inputData)
     {
         $this->expectException(Exception::class);
 
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -79,7 +78,7 @@ class DateTimeTest extends TestCase
     /**
      * @return array
      */
-    public function dateTimeFilterWithExceptionDataProvider()
+    public static function dateTimeFilterWithExceptionDataProvider()
     {
         return [
             ['12-31-2000 22:22:22'],

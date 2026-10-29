@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -58,7 +58,7 @@ class IdentityProvider implements IdentityProviderInterface
         }
 
         $userType = $this->userContext->getUserType();
-        if (isset(self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType])) {
+        if ($userType !== null && isset(self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType])) {
             return self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType];
         }
 

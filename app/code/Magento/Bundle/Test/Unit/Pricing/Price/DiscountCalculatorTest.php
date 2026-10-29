@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\DiscountCalculator;
 use Magento\Bundle\Pricing\Price\DiscountProviderInterface;
 use Magento\Catalog\Model\Product;
@@ -55,19 +56,16 @@ class DiscountCalculatorTest extends TestCase
     protected function setUp(): void
     {
         $this->productMock = $this->createMock(Product::class);
-        $this->priceInfoMock =  $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice', 'getPrices'])
-            ->addMethods(['getValue'])
-            ->getMock();
-        $this->finalPriceMock = $this->createMock(FinalPrice::class);
-        $this->priceMock = $this->getMockForAbstractClass(
-            DiscountProviderInterface::class
+        $this->priceInfoMock = $this->createPartialMock(
+            Base::class,
+            ['getPrice', 'getPrices']
         );
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['roundPrice'])
-            ->getMockForAbstractClass();
+        $this->finalPriceMock = $this->createMock(FinalPrice::class);
+        $this->priceMock = $this->createMock(DiscountProviderInterface::class);
+        $this->priceCurrencyMock = $this->createPartialMock(
+            \Magento\Directory\Model\PriceCurrency::class,
+            ['roundPrice']
+        );
         $this->calculator = new DiscountCalculator($this->priceCurrencyMock);
     }
 
@@ -118,38 +116,25 @@ class DiscountCalculatorTest extends TestCase
 
     /**
      * test method calculateDiscount with custom price amount
-     *
-     * @dataProvider providerForWithDifferentAmount
      */
+    #[DataProvider('providerForWithDifferentAmount')]
     public function testCalculateDiscountWithCustomAmount(mixed $discount, mixed $value, float $expectedResult)
     {
-        $this->productMock->expects($this->any())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
-        $this->priceInfoMock->expects($this->any())
-            ->method('getPrices')
-            ->willReturn([$this->getPriceMock($discount)]);
+        $this->productMock->method('getPriceInfo')->willReturn($this->priceInfoMock);
+        $this->priceInfoMock->method('getPrices')->willReturn([$this->getPriceMock($discount)]);
         if ($value === null) {
-            $abstractPriceMock = $this->getMockForAbstractClass(
-                PriceInterface::class
-            );
-            $this->priceInfoMock->expects($this->any())
-                ->method('getPrice')
-                ->willReturn($abstractPriceMock);
-            $abstractPriceMock->expects($this->any())
-                ->method('getValue')
-                ->willReturn($expectedResult);
+            $abstractPriceMock = $this->createMock(PriceInterface::class);
+            $this->priceInfoMock->method('getPrice')->willReturn($abstractPriceMock);
+            $abstractPriceMock->method('getValue')->willReturn($expectedResult);
         }
-        $this->priceCurrencyMock->expects($this->any())
-            ->method('roundPrice')
-            ->willReturn($expectedResult);
+        $this->priceCurrencyMock->method('roundPrice')->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->calculator->calculateDiscount($this->productMock, $value));
     }
 
     /**
      * @return array
      */
-    public function providerForWithDifferentAmount()
+    public static function providerForWithDifferentAmount()
     {
         return [
             'test case 1 with discount amount' => [20, 50, 10],

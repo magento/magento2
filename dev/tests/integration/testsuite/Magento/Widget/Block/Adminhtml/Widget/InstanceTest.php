@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResource;
 use Magento\Theme\Model\ThemeFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,14 +49,13 @@ class InstanceTest extends TestCase
     }
 
     /**
-     * @dataProvider gridFiltersDataProvider
-     *
      * @magentoDataFixture Magento/Widget/_files/widgets.php
      *
      * @param array $filter
      * @param array $expectedWidgets
      * @return void
      */
+    #[DataProvider('gridFiltersDataProvider')]
     public function testGridFiltering(array $filter, array $expectedWidgets): void
     {
         $this->request->setParams($filter);
@@ -75,7 +75,7 @@ class InstanceTest extends TestCase
                     'limit' => 2,
                     'page' => 1,
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                     'product link widget title',
                 ],
@@ -85,7 +85,7 @@ class InstanceTest extends TestCase
                     'limit' => 2,
                     'page' => 2,
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                 ],
             ],
@@ -93,7 +93,7 @@ class InstanceTest extends TestCase
                 'filter' => [
                     'filter' => base64_encode('title=product link widget title'),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'product link widget title',
                 ],
             ],
@@ -101,7 +101,7 @@ class InstanceTest extends TestCase
                 'filter' => [
                     'filter' => base64_encode('type=Magento%5CCms%5CBlock%5CWidget%5CPage%5CLink'),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                 ],
             ],
@@ -109,7 +109,7 @@ class InstanceTest extends TestCase
                 'filter' => [
                     'filter' => base64_encode('theme_id=' . self::loadThemeIdByCode('Magento/blank')),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                 ],
             ],
@@ -117,7 +117,7 @@ class InstanceTest extends TestCase
                 'filter' => [
                     'filter' => base64_encode('sort_order=1'),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                 ],
             ],
@@ -127,7 +127,7 @@ class InstanceTest extends TestCase
                         'title=cms page widget title&theme_id=' . self::loadThemeIdByCode('Magento/luma')
                     ),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                 ],
             ],
@@ -137,7 +137,7 @@ class InstanceTest extends TestCase
                         'title=recently compared products&theme_id=' . self::loadThemeIdByCode('Magento/blank')
                     ),
                 ],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                 ],
             ],
@@ -145,14 +145,13 @@ class InstanceTest extends TestCase
     }
 
     /**
-     * @dataProvider gridSortDataProvider
-     *
      * @magentoDataFixture Magento/Widget/_files/widgets.php
      *
      * @param array $filter
      * @param array $expectedWidgets
      * @return void
      */
+    #[DataProvider('gridSortDataProvider')]
     public function testGridSorting(array $filter, array $expectedWidgets): void
     {
         $this->request->setParams($filter);
@@ -168,7 +167,7 @@ class InstanceTest extends TestCase
         return [
             'sort_by_id_asc' => [
                 'filter' => ['sort' => 'instance_id', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                     'product link widget title',
                     'recently compared products',
@@ -176,7 +175,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_id_desc' => [
                 'filter' => ['sort' => 'instance_id', 'dir' => 'desc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                     'product link widget title',
                     'cms page widget title',
@@ -184,7 +183,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_title_asc' => [
                 'filter' => ['sort' => 'title', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                     'product link widget title',
                     'recently compared products',
@@ -192,7 +191,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_title_desc' => [
                 'filter' => ['sort' => 'title', 'dir' => 'desc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                     'product link widget title',
                     'cms page widget title',
@@ -200,7 +199,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_type_asc' => [
                 'filter' => ['sort' => 'type', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'product link widget title',
                     'recently compared products',
                     'cms page widget title',
@@ -208,7 +207,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_type_desc' => [
                 'filter' => ['sort' => 'type', 'dir' => 'desc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                     'recently compared products',
                     'product link widget title',
@@ -216,7 +215,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_sort_order_asc' => [
                 'filter' => ['sort' => 'sort_order', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                     'product link widget title',
                     'cms page widget title',
@@ -224,7 +223,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_sort_order_desc' => [
                 'filter' => ['sort' => 'sort_order', 'dir' => 'desc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'cms page widget title',
                     'product link widget title',
                     'recently compared products',
@@ -232,7 +231,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_theme_asc' => [
                 'filter' => ['sort' => 'theme_id', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                     'cms page widget title',
                     'product link widget title',
@@ -240,7 +239,7 @@ class InstanceTest extends TestCase
             ],
             'sort_by_theme_desc' => [
                 'filter' => ['sort' => 'theme_id', 'dir' => 'asc'],
-                'expected_widgets' => [
+                'expectedWidgets' => [
                     'recently compared products',
                     'cms page widget title',
                     'product link widget title',

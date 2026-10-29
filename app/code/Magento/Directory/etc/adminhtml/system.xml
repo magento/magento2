@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -157,6 +157,7 @@
                 <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Directory\Model\Config\Source\WeightUnit</source_model>
+                    <backend_model>Magento\Directory\Model\Config\Backend\WeightUnit</backend_model>
                 </field>
             </group>
         </section>

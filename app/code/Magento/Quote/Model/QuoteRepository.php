@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -122,10 +122,10 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
         QuoteCollection $quoteCollection,
         CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null,
-        QuoteCollectionFactory $quoteCollectionFactory = null,
-        CartInterfaceFactory $cartFactory = null,
-        RequestSafetyInterface $requestSafety = null
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?QuoteCollectionFactory $quoteCollectionFactory = null,
+        ?CartInterfaceFactory $cartFactory = null,
+        ?RequestSafetyInterface $requestSafety = null
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
@@ -154,7 +154,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
-        if (!isset($this->quotesById[$cartId])) {
+        if ($cartId === null || !isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
             $this->quotesById[$cartId] = $quote;
             $this->getLoadHandler()->load($quote);
@@ -167,7 +167,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
-        if (!isset($this->quotesByCustomerId[$customerId])) {
+        if ($customerId === null || !isset($this->quotesByCustomerId[$customerId])) {
             $customerQuote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
             $customerQuoteId = $customerQuote->getId();
             //prevent loading quote items for same quote

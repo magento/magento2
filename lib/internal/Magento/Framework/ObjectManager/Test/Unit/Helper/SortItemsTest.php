@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Helper;
 
 use Magento\Framework\ObjectManager\Helper\SortItems as SortItemsHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SortItemsTest extends TestCase
 {
@@ -25,9 +26,8 @@ class SortItemsTest extends TestCase
     /**
      * @param array $input
      * @param array $expected
-     *
-     * @dataProvider evaluateDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateDataProvider')]
     public function testSortItems(array $input, array $expected): void
     {
         $actual = $this->_model->sortItems($input);
@@ -37,7 +37,7 @@ class SortItemsTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateDataProvider(): array
+    public static function evaluateDataProvider(): array
     {
         return [
             'empty array items' => [

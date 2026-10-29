@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test value transformer
@@ -51,8 +52,8 @@ class TextTransformerTest extends TestCase
      * @param string $value
      * @param string $expected
      * @return void
-     * @dataProvider valuesDataProvider
      */
+    #[DataProvider('valuesDataProvider')]
     public function testTransform(string $value, string $expected): void
     {
         $this->processorMock->expects($this->once())
@@ -68,7 +69,7 @@ class TextTransformerTest extends TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             ['Laptop^camera{microphone}', 'laptop^camera{microphone}'],

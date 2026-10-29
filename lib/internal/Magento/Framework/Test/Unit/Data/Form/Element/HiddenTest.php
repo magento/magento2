@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,9 +53,8 @@ class HiddenTest extends TestCase
 
     /**
      * @param mixed $value
-     *
-     * @dataProvider getElementHtmlDataProvider
      */
+    #[DataProvider('getElementHtmlDataProvider')]
     public function testGetElementHtml($value)
     {
         $form = $this->createMock(Form::class);
@@ -78,7 +78,7 @@ class HiddenTest extends TestCase
     {
         return [
             ['some_value'],
-            ['store_ids[]' => ['1', '2']],
+            [['1', '2']],
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -59,12 +60,8 @@ class DataTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->orderTaxManagementMock = $this->getMockBuilder(OrderTaxManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderTaxManagementMock = $this->createMock(OrderTaxManagementInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -121,9 +118,7 @@ class DataTest extends TestCase
         $expectedAmount = $itemAmount + 1;
         $expectedBaseAmount = $itemBaseAmount + 1;
 
-        $orderDetailsItem = $this->getMockBuilder(OrderTaxDetailsAppliedTaxInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderDetailsItem = $this->createMock(OrderTaxDetailsAppliedTaxInterface::class);
         $orderDetailsItem->expects($this->once())
             ->method('getCode')
             ->willReturn($itemCode);
@@ -150,9 +145,7 @@ class DataTest extends TestCase
 
         $appliedTaxes = [$orderDetailsItem];
 
-        $orderDetails = $this->getMockBuilder(OrderTaxDetailsInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderDetails = $this->createMock(OrderTaxDetailsInterface::class);
         $orderDetails->expects($this->once())
             ->method('getAppliedTaxes')
             ->willReturn($appliedTaxes);
@@ -241,11 +234,16 @@ class DataTest extends TestCase
     }
 
     /**
-     * @return void
-     * @dataProvider getCalculatedTaxesForOrderItemsDataProvider
+     * @param array $orderData
+     * @param array|null $invoiceData
+     * @param array $expectedResults
      */
-    public function testGetCalculatedTaxesForOrderItems($orderData, $invoiceData, $expectedResults): void
-    {
+    #[DataProvider('getCalculatedTaxesForOrderItemsDataProvider')]
+    public function testGetCalculatedTaxesForOrderItems(
+        array $orderData,
+        ?array $invoiceData,
+        array $expectedResults
+    ): void {
         $orderId = $orderData['order_id'];
         $orderShippingTaxAmount = $orderData['shipping_tax_amount'] ?? 0;
         $orderTaxDetails = $orderData['order_tax_details'];
@@ -304,12 +302,12 @@ class DataTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getCalculatedTaxesForOrderItemsDataProvider(): array
+    public static function getCalculatedTaxesForOrderItemsDataProvider(): array
     {
         $data = [
             //Scenario 1: two items, one item with 0 tax
             'two_items_with_one_zero_tax' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
@@ -329,7 +327,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
                             [
@@ -355,7 +353,7 @@ class DataTest extends TestCase
                         )
                     ]
                 ],
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -366,7 +364,7 @@ class DataTest extends TestCase
             ],
             //Scenario 2: one item with associated weee tax
             'item_with_weee_tax_partial_invoice' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
@@ -399,7 +397,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
                             [
@@ -416,7 +414,7 @@ class DataTest extends TestCase
                         )
                     ]
                 ],
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -428,7 +426,7 @@ class DataTest extends TestCase
             //Scenario 3: one item, with both shipping and product taxes
             // note that 'shipping tax' is listed before 'product tax'
             'one_item_with_both_shipping_and_product_taxes' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 2,
                     'order_tax_details' => [
@@ -461,7 +459,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'shipping_tax_amount' => 2,
                     'invoice_items' => [
                         'item1' => new MagentoObject(
@@ -478,7 +476,7 @@ class DataTest extends TestCase
                     ]
                 ],
                 // note that 'shipping tax' is now listed after 'product tax'
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -504,16 +502,14 @@ class DataTest extends TestCase
      * @param bool $priceIncludesTax
      * @param bool $isCrossBorderTradeEnabled
      * @param bool $displayPriceIncludingTax
-     *
-     * @return void
-     * @dataProvider dataProviderIsCatalogPriceDisplayAffectedByTax
      */
+    #[DataProvider('dataProviderIsCatalogPriceDisplayAffectedByTax')]
     public function testIsCatalogPriceDisplayAffectedByTax(
-        $expected,
-        $displayBothPrices,
-        $priceIncludesTax,
-        $isCrossBorderTradeEnabled,
-        $displayPriceIncludingTax
+        bool $expected,
+        bool $displayBothPrices,
+        bool $priceIncludesTax,
+        bool $isCrossBorderTradeEnabled,
+        bool $displayPriceIncludingTax
     ): void {
         $willReturnArgs = [];
 
@@ -546,7 +542,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
+    public static function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
     {
         return [
             [true , true, false, false, false],

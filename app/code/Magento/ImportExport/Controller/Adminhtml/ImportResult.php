@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
@@ -66,7 +66,7 @@ abstract class ImportResult extends Import
         ReportProcessorInterface $reportProcessor,
         ModelHistory $historyModel,
         Report $reportHelper,
-        Escaper $escaper = null,
+        ?Escaper $escaper = null,
         ?RenderErrorMessages $renderErrorMessages = null
     ) {
         parent::__construct($context);

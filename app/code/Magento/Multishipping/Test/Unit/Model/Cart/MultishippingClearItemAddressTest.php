@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -58,9 +59,9 @@ class MultishippingClearItemAddressTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $disableMultishippingMock = $this->createMock(DisableMultishipping::class);
         $this->cartMock = $this->createMock(CartModel::class);
         $this->model = new MultishippingClearItemAddress(
@@ -73,28 +74,29 @@ class MultishippingClearItemAddressTest extends TestCase
     }
 
     /**
-     * Test cart and mini cart plugin
+     * Test clearing address items in multishipping flow
      *
      * @param string $actionName
      * @param int $addressId
      * @param int $customerAddressId
      * @param bool $isMultiShippingAddresses
-     * @throws LocalizedException
-     * @dataProvider getDataDataProvider
+     * @return void
      */
+    #[DataProvider('getDataDataProvider')]
     public function testClearAddressItem(
         string $actionName,
         int $addressId,
         int $customerAddressId,
         bool $isMultiShippingAddresses
     ): void {
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $quoteMock = $this->createPartialMock(Quote::class, [
             'isMultipleShippingAddresses',
             'getAllShippingAddresses',
             'removeAddress',
             'getShippingAddress',
-            'getCustomer'
+            'getCustomer',
+            'addShippingAddress'
         ]);
         $requestMock->method('getActionName')
             ->willReturn($actionName);
@@ -116,13 +118,16 @@ class MultishippingClearItemAddressTest extends TestCase
         $shippingAddressMock = $this->createMock(Address::class);
         $quoteMock->method('getShippingAddress')
             ->willReturn($shippingAddressMock);
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $quoteMock->method('getCustomer')
             ->willReturn($customerMock);
+        $quoteMock->method('addShippingAddress')
+            ->with($shippingAddressMock)
+            ->willReturnSelf();
         $customerMock->method('getDefaultShipping')
             ->willReturn($customerAddressId);
 
-        $customerAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $customerAddressMock = $this->createMock(AddressInterface::class);
         $this->addressRepositoryMock->method('getById')
             ->with($customerAddressId)
             ->willReturn($customerAddressMock);
@@ -147,9 +152,11 @@ class MultishippingClearItemAddressTest extends TestCase
     }
 
     /**
+     * Data provider for testClearAddressItem
+     *
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider(): array
     {
         return [
             'test with `add` action and multi shipping address enabled' => ['add', 100, 200, true],

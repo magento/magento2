@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Invoice\Total\Tax;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Total\Invoice\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class WeeeTest extends TestCase
@@ -36,7 +38,7 @@ class WeeeTest extends TestCase
     protected $order;
 
     /**
-     * @var  ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -52,21 +54,20 @@ class WeeeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->weeeData = $this->getMockBuilder(Data::class)
-            ->onlyMethods(
-                [
-                    'getRowWeeeTaxInclTax',
-                    'getBaseRowWeeeTaxInclTax',
-                    'getWeeeAmountInvoiced',
-                    'getBaseWeeeAmountInvoiced',
-                    'getWeeeTaxAmountInvoiced',
-                    'getBaseWeeeTaxAmountInvoiced',
-                    'getApplied',
-                    'setApplied',
-                    'includeInSubtotal',
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
+        $this->weeeData = $this->createPartialMock(
+            Data::class,
+            [
+                'getRowWeeeTaxInclTax',
+                'getBaseRowWeeeTaxInclTax',
+                'getWeeeAmountInvoiced',
+                'getBaseWeeeAmountInvoiced',
+                'getWeeeTaxAmountInvoiced',
+                'getBaseWeeeTaxAmountInvoiced',
+                'getApplied',
+                'setApplied',
+                'includeInSubtotal',
+            ]
+        );
 
         $this->objectManager = new ObjectManager($this);
         $serializer = $this->objectManager->getObject(Json::class);
@@ -81,13 +82,16 @@ class WeeeTest extends TestCase
 
         $this->order = $this->createPartialMock(Order::class, ['__wakeup']);
 
-        $this->invoice = $this->createPartialMock(Invoice::class, [
+        $this->invoice = $this->createPartialMock(
+            Invoice::class,
+            [
             'getAllItems',
             'getOrder',
             'roundPrice',
             'isLast',
             'getStore'
-        ]);
+            ]
+        );
         $this->invoice->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
@@ -106,8 +110,8 @@ class WeeeTest extends TestCase
      * @param array $orderData
      * @param array $invoiceData
      * @param array $expectedResults
-     * @dataProvider collectDataProvider
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect($orderData, $invoiceData, $expectedResults)
     {
         $roundingDelta = [];
@@ -136,15 +140,17 @@ class WeeeTest extends TestCase
         }
         $this->invoice->expects($this->any())
             ->method('roundPrice')
-            ->willReturnCallback(function ($price, $type) use (&$roundingDelta) {
-                if (!isset($roundingDelta[$type])) {
-                    $roundingDelta[$type] = 0;
-                }
-                $roundedPrice = round($price + $roundingDelta[$type], 2);
-                $roundingDelta[$type] = $price - $roundedPrice;
+            ->willReturnCallback(
+                function ($price, $type) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
+                    }
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
 
-                return $roundedPrice;
-            });
+                    return $roundedPrice;
+                }
+            );
 
         $this->model->collect($this->invoice);
 
@@ -185,13 +191,13 @@ class WeeeTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, full invoice
         $result['complete_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -207,7 +213,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -260,7 +266,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 16.09,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -292,7 +298,7 @@ class WeeeTest extends TestCase
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice, invoice qty=2
         $result['partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -308,7 +314,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -361,7 +367,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 9.49,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -394,7 +400,7 @@ class WeeeTest extends TestCase
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: one item invoiced
         // invoice another item
         $result['second_partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -410,7 +416,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -463,7 +469,7 @@ class WeeeTest extends TestCase
                     'base_subtotal_incl_tax' => 108.25,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -496,7 +502,7 @@ class WeeeTest extends TestCase
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: two item invoiced
         // invoice another item
         $result['last_partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -512,7 +518,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -565,7 +571,7 @@ class WeeeTest extends TestCase
                     'base_subtotal_incl_tax' => 104.95,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -598,7 +604,7 @@ class WeeeTest extends TestCase
 
         // 3 item_1, $100 with $weee, 8.25 tax rate. Invoicing qty 0.
         $result['zero_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -614,7 +620,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -667,7 +673,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 16.09,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -692,15 +698,18 @@ class WeeeTest extends TestCase
     }
 
     /**
-     * @param $invoiceItemData array
+     * @param  $invoiceItemData array
      * @return Item|MockObject
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
+        /** @var OrderItem|MockObject $orderItem */
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            [
             'isDummy'
-        ]);
+            ]
+        );
         foreach ($invoiceItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -732,10 +741,13 @@ class WeeeTest extends TestCase
                 ->willReturn($orderItem->getBaseWeeeTaxAmountInvoiced());
         }
         /** @var Item|MockObject $invoiceItem */
-        $invoiceItem = $this->createPartialMock(Item::class, [
+        $invoiceItem = $this->createPartialMock(
+            Item::class,
+            [
             'getOrderItem',
             'isLast'
-        ]);
+            ]
+        );
         $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
@@ -746,15 +758,19 @@ class WeeeTest extends TestCase
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->willReturnCallback(function ($item) {
-                return $item->getAppliedWeee();
-            });
+            ->willReturnCallback(
+                function ($item) {
+                    return $item->getAppliedWeee();
+                }
+            );
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->willReturnCallback(function ($item, $weee) {
-                return $item->setAppliedWeee($weee);
-            });
+            ->willReturnCallback(
+                function ($item, $weee) {
+                    return $item->setAppliedWeee($weee);
+                }
+            );
 
         return $invoiceItem;
     }

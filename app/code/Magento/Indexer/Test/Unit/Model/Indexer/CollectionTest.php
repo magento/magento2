@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,11 @@ use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection as StateCollect
 use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+ */
 class CollectionTest extends TestCase
 {
     /**
@@ -52,8 +56,7 @@ class CollectionTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(ConfigInterface::class);
 
         $this->statesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->onlyMethods(['create'])
@@ -76,10 +79,18 @@ class CollectionTest extends TestCase
     /**
      * @param array $indexersData
      * @param array $states
-     * @dataProvider loadDataDataProvider
      */
+    #[DataProvider('loadDataDataProvider')]
     public function testLoadData(array $indexersData, array $states)
     {
+        $finalStates = [];
+
+        foreach ($states as $key => $state) {
+            if (is_callable($state)) {
+                $finalStates[$key] = $state($this);
+            }
+        }
+
         $statesCollection = $this->getMockBuilder(StateCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -88,12 +99,12 @@ class CollectionTest extends TestCase
             ->method('create')
             ->willReturn($statesCollection);
         $statesCollection->method('getItems')
-            ->willReturn($states);
+            ->willReturn($finalStates);
 
         $calls = [];
         foreach ($indexersData as $indexerId => $indexerData) {
             $indexer = $this->getIndexerMock($indexerData);
-            $state = $states[$indexerId] ?? '';
+            $state = $finalStates[$indexerId] ?? '';
             $indexer
                 ->expects($this->once())
                 ->method('load')
@@ -124,11 +135,11 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataDataProvider()
+    public static function loadDataDataProvider()
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                     ],
@@ -140,8 +151,8 @@ class CollectionTest extends TestCase
                     ],
                 ],
                 'states' => [
-                    'indexer_2' => $this->getStateMock(['indexer_id' => 'indexer_2']),
-                    'indexer_3' => $this->getStateMock(['indexer_id' => 'indexer_3']),
+                    'indexer_2' => static fn (self $testCase) => $testCase->getStateMock(['indexer_id' => 'indexer_2']),
+                    'indexer_3' => static fn (self $testCase) => $testCase->getStateMock(['indexer_id' => 'indexer_3']),
                 ],
             ]
         ];
@@ -149,8 +160,8 @@ class CollectionTest extends TestCase
 
     /**
      * @param array $indexersData
-     * @dataProvider getAllIdsDataProvider
      */
+    #[DataProvider('getAllIdsDataProvider')]
     public function testGetAllIds(array $indexersData)
     {
         $statesCollection = $this->getMockBuilder(StateCollection::class)
@@ -184,7 +195,7 @@ class CollectionTest extends TestCase
     {
         return [
             [
-                'indexers' => [
+                'indexersData' => [
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
                     ],
@@ -202,8 +213,8 @@ class CollectionTest extends TestCase
     /**
      * @param string $methodName
      * @param array $arguments
-     * @dataProvider stubMethodsDataProvider
      */
+    #[DataProvider('stubMethodsDataProvider')]
     public function testStubMethods(string $methodName, array $arguments)
     {
         $this->statesFactoryMock
@@ -261,8 +272,8 @@ class CollectionTest extends TestCase
     /**
      * @param string $methodName
      * @param array $arguments
-     * @dataProvider stubMethodsWithReturnSelfDataProvider
      */
+    #[DataProvider('stubMethodsWithReturnSelfDataProvider')]
     public function testStubMethodsWithReturnSelf(string $methodName, array $arguments)
     {
         $this->statesFactoryMock
@@ -303,8 +314,7 @@ class CollectionTest extends TestCase
     private function getIndexerMock(array $data = [])
     {
         /** @var MockObject|IndexerInterface $indexer */
-        $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexer = $this->createMock(IndexerInterface::class);
         if (isset($data['indexer_id'])) {
             $indexer->method('getId')
                 ->willReturn($data['indexer_id']);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ImageContentValidatorTest extends TestCase
         $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn('');
@@ -55,7 +55,7 @@ class ImageContentValidatorTest extends TestCase
         $this->expectExceptionMessage('The image content must be valid base64 encoded data.');
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn('testImageData');
@@ -72,7 +72,7 @@ class ImageContentValidatorTest extends TestCase
 
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn($encodedData);
@@ -92,7 +92,7 @@ class ImageContentValidatorTest extends TestCase
 
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn($encodedData);
@@ -113,7 +113,7 @@ class ImageContentValidatorTest extends TestCase
 
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn($encodedData);

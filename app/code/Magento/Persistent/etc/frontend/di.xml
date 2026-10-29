@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -18,6 +18,7 @@
                 type="Magento\Persistent\Model\Layout\DepersonalizePlugin"
                 sortOrder="10"
         />
+        <plugin name="add_persistent_remember_me_init_plugin" type="Magento\Persistent\Plugin\AddPersistentRememberMeInitPlugin" />
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>

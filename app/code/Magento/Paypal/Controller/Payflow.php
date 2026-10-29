@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller;
 
@@ -62,7 +62,7 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
         \Magento\Paypal\Model\PayflowlinkFactory $payflowModelFactory,
         \Magento\Paypal\Helper\Checkout $checkoutHelper,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+        ?\Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct($context);
 

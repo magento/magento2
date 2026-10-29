@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,8 @@ class FilteredErrorFormatter implements ErrorFormatter
             $analysisResult->getProjectConfigFile(),
             $analysisResult->isResultCacheSaved(),
             $analysisResult->getPeakMemoryUsageBytes(),
-            $analysisResult->isResultCacheUsed()
+            $analysisResult->isResultCacheUsed(),
+            $analysisResult->getChangedProjectExtensionFilesOutsideOfAnalysedPaths()
         ];
 
         $reflectionClass = new \ReflectionClass(AnalysisResult::class);

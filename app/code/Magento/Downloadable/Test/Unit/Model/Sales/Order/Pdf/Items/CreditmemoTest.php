@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Pdf\AbstractPdf;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CreditmemoTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Creditmemo
      */
@@ -39,10 +42,7 @@ class CreditmemoTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->order = $this->createMock(Order::class);
         $this->order->expects($this->any())
             ->method('formatPriceTxt')
             ->willReturnCallback([$this, 'formatPrice']);
@@ -52,21 +52,21 @@ class CreditmemoTest extends TestCase
             ['drawLineBlocks', 'getPdf']
         );
 
-        $filterManager = $this->getMockBuilder(FilterManager::class)
-            ->addMethods(['stripTags'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterManager = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['stripTags']
+        );
         $filterManager->expects($this->any())->method('stripTags')->willReturnArgument(0);
 
-        $modelConstructorArgs = $objectManager->getConstructArguments(
-            Creditmemo::class,
-            ['string' => new StringUtils(), 'filterManager' => $filterManager]
-        );
+        $this->model = $this->createPartialMock(Creditmemo::class, ['getLinks', 'getLinksTitle']);
 
-        $this->model = $this->getMockBuilder(Creditmemo::class)
-            ->onlyMethods(['getLinks', 'getLinksTitle'])
-            ->setConstructorArgs($modelConstructorArgs)
-            ->getMock();
+        // Use reflection to inject dependencies
+        $reflection = new \ReflectionClass($this->model);
+        $stringProperty = $reflection->getProperty('string');
+        $stringProperty->setValue($this->model, new StringUtils());
+
+        $filterManagerProperty = $reflection->getProperty('filterManager');
+        $filterManagerProperty->setValue($this->model, $filterManager);
 
         $this->model->setOrder($this->order);
         $this->model->setPdf($this->pdf);
@@ -136,19 +136,13 @@ class CreditmemoTest extends TestCase
                 ]
             )
         );
-        $this->model->expects($this->any())->method('getLinksTitle')->willReturn('Download Links');
-        $this->model->expects(
-            $this->any()
-        )->method(
-            'getLinks'
-        )->willReturn(
-
-                new DataObject(
-                    ['purchased_items' => [
+        $this->model->method('getLinksTitle')->willReturn('Download Links');
+        $this->model->method('getLinks')->willReturn(
+            new DataObject(
+                ['purchased_items' => [
                         new DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
-                )
-
+            )
         );
         $this->pdf->expects(
             $this->once()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Api;
 
@@ -24,7 +24,7 @@ class GuestItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_item_message.php
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      */
@@ -32,9 +32,9 @@ class GuestItemRepositoryTest extends WebapiAbstract
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load('test_order_item_with_message', 'reserved_order_id');
+        $quote->load('test_guest_order_with_gift_message', 'reserved_order_id');
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->load($product->getIdBySku('simple_with_message'));
+        $product->load($product->getIdBySku('simple'));
         $itemId = $quote->getItemByProduct($product)->getId();
         /** @var  \Magento\Catalog\Model\Product $product */
         $cartId = $quote->getId();

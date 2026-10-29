@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\TestModuleEmail\Plugin;
 
-use Laminas\Mail\Transport\TransportInterface;
 use Magento\Email\Model\Transport;
 use Magento\TestModuleEmail\Model\Transport\File;
+use Symfony\Component\Mailer\Transport\TransportInterface;
 
 class MockMailTransporter
 {

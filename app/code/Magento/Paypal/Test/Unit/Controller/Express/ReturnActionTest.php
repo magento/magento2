@@ -1,14 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReturnActionTest extends ExpressTestCase
 {
@@ -46,7 +46,7 @@ class ReturnActionTest extends ExpressTestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -55,8 +55,8 @@ class ReturnActionTest extends ExpressTestCase
      * @param bool $canSkipOrderReviewStep
      *
      * @return void
-     * @dataProvider trueFalseDataProvider
      */
+    #[DataProvider('trueFalseDataProvider')]
     public function testExecute($canSkipOrderReviewStep): void
     {
         $this->checkoutSession->method('__call')

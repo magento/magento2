@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class Download extends ImportController implements HttpGetActionInterface
         RawFactory $resultRawFactory,
         ReadFactory $readFactory,
         ComponentRegistrar $componentRegistrar,
-        SampleFileProvider $sampleFileProvider = null
+        ?SampleFileProvider $sampleFileProvider = null
     ) {
         parent::__construct(
             $context

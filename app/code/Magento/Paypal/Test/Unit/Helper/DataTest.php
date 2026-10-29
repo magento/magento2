@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Method\Agreement;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,9 +57,7 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMethodList = $this->getMockBuilder(PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
 
         $this->paymentMethodInstanceFactory = $this->getMockBuilder(
             InstanceFactory::class
@@ -98,14 +97,27 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider getBillingAgreementMethodsDataProvider
      * @param $store
      * @param $quote
      * @param $paymentMethodsMap
      * @param $expectedResult
      */
+    #[DataProvider('getBillingAgreementMethodsDataProvider')]
     public function testGetBillingAgreementMethods($store, $quote, $paymentMethodsMap, $expectedResult)
     {
+        $quote = $quote($this);
+        if (!empty($expectedResult)) {
+            $expectedResult[0] = $expectedResult[0]($this);
+        }
+
+        $paymentMethodsMapFinal = [];
+        if (!empty($paymentMethodsMap[0])) {
+            foreach ($paymentMethodsMap[0] as $paymentMethodM) {
+                $paymentMethodsMapFinal[0][] = $paymentMethodM($this);
+            }
+        }
+        $paymentMethodsMap = $paymentMethodsMapFinal;
+
         $this->paymentMethodList->expects(static::once())
             ->method('getActiveList')
             ->with($store)
@@ -118,20 +130,25 @@ class DataTest extends TestCase
         $this->assertEquals($expectedResult, $this->_helper->getBillingAgreementMethods($store, $quote));
     }
 
-    /**
-     * @return array
-     */
-    public function getBillingAgreementMethodsDataProvider()
+    protected function getMockForQuote()
     {
         $quoteMock = $this->getMockBuilder(
             Quote::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $quoteMock;
+    }
 
+    protected function getMockForPaymentMethod()
+    {
         $methodMock = $this->getMockBuilder(
             PaymentMethodInterface::class
         )->getMock();
+        return $methodMock;
+    }
 
+    protected function getMockForAgreementClass()
+    {
         $agreementMethodInstanceMock = $this->getMockBuilder(
             Agreement::class
         )->disableOriginalConstructor()
@@ -139,16 +156,41 @@ class DataTest extends TestCase
         $agreementMethodInstanceMock->expects($this->any())
             ->method('isAvailable')
             ->willReturn(true);
+        return $agreementMethodInstanceMock;
+    }
 
+    protected function getMockForCcClass()
+    {
         $abstractMethodInstanceMock = $this->getMockBuilder(
             Cc::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $abstractMethodInstanceMock;
+    }
 
+    protected function getMockForAdapterClass()
+    {
         $adapterMethodInstanceMock = $this->getMockBuilder(
             Adapter::class
         )->disableOriginalConstructor()
             ->getMock();
+        return $adapterMethodInstanceMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBillingAgreementMethodsDataProvider()
+    {
+        $quoteMock = static fn (self $testCase) => $testCase->getMockForQuote();
+
+        $methodMock = static fn (self $testCase) => $testCase->getMockForPaymentMethod();
+
+        $agreementMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForAgreementClass();
+
+        $abstractMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForCcClass();
+
+        $adapterMethodInstanceMock = static fn (self $testCase) => $testCase->getMockForAdapterClass();
 
         return [
             [
@@ -183,8 +225,8 @@ class DataTest extends TestCase
      * Expected link <a target="_blank" href="https://www.sandbox.paypal.com/...</a>
      *
      * @param string $methodCode
-     * @dataProvider getHtmlTransactionIdProvider
      */
+    #[DataProvider('getHtmlTransactionIdProvider')]
     public function testGetHtmlTransactionSandboxLink($methodCode)
     {
         $expectedLink = sprintf(self::$htmlTransactionId, '.sandbox', self::$txnId);
@@ -205,8 +247,8 @@ class DataTest extends TestCase
      * Expected link <a target="_blank" href="https://www.paypal.com/...  </a>
      *
      * @param string $methodCode
-     * @dataProvider getHtmlTransactionIdProvider
      */
+    #[DataProvider('getHtmlTransactionIdProvider')]
     public function testGetHtmlTransactionRealLink($methodCode)
     {
         $expectedLink = sprintf(self::$htmlTransactionId, '', self::$txnId);
@@ -225,7 +267,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getHtmlTransactionIdProvider()
+    public static function getHtmlTransactionIdProvider()
     {
         return [
             ['paypal_express'],

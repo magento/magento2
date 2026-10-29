@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Session;
 use Magento\Checkout\Model\Type\Onepage;
@@ -36,7 +37,6 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
 use Psr\Log\LoggerInterface;
 
 /**
@@ -133,39 +133,25 @@ class OnepageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(
-            AddressRepositoryInterface::class,
-            ['get'],
-            '',
-            false
-        );
-        $this->accountManagementMock = $this->getMockForAbstractClass(
-            AccountManagementInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->accountManagementMock = $this->createMock(AccountManagementInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
         $this->customerUrlMock = $this->createMock(Url::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getLastOrderId'])
-            ->onlyMethods(['getQuote', 'setStepData', 'getStepData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->customerSessionMock = $this->createPartialMock(
             \Magento\Customer\Model\Session::class,
             ['getCustomerDataObject', 'isLoggedIn']
         );
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressFactoryMock = $this->createMock(AddressFactory::class);
         $this->formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
         $this->customerFactoryMock = $this->createMock(CustomerFactory::class);
-        $this->quoteManagementMock = $this->getMockForAbstractClass(CartManagementInterface::class);
+        $this->quoteManagementMock = $this->createMock(CartManagementInterface::class);
         $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
         $this->copyMock = $this->createMock(Copy::class);
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
@@ -178,18 +164,13 @@ class OnepageTest extends TestCase
         $this->customerDataFactoryMock = $this->createMock(CustomerInterfaceFactory::class);
 
         $this->randomMock = $this->createMock(Random::class);
-        $this->encryptorMock = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->encryptorMock = $this->createMock(EncryptorInterface::class);
 
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            CustomerRepositoryInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
 
         $orderSenderMock = $this->createMock(OrderSender::class);
 
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             ExtensibleDataObjectConverter::class
@@ -197,9 +178,7 @@ class OnepageTest extends TestCase
             ->getMock();
 
         $this->extensibleDataObjectConverterMock
-            ->expects($this->any())
-            ->method('toFlatArray')
-            ->willReturn([]);
+            ->method('toFlatArray')->willReturn([]);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->onepage = $this->objectManagerHelper->getObject(
@@ -250,36 +229,12 @@ class OnepageTest extends TestCase
         $this->assertEquals($quoteMock, $this->onepage->getQuote());
     }
 
-    /**
-     * @dataProvider initCheckoutDataProvider
-     */
+    #[DataProvider('initCheckoutDataProvider')]
     public function testInitCheckout($stepData, $isLoggedIn, $isSetStepDataCalled)
     {
-        $customer = $this->getMockForAbstractClass(
-            CustomerInterface::class,
-            [],
-            '',
-            false
-        );
+        $customer = $this->createMock(CustomerInterface::class);
         /** @var Quote|MockObject $quoteMock */
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getCustomerId', 'setPasswordHash', 'getCustomerData'])
-            ->onlyMethods(
-                [
-                    'isMultipleShippingAddresses',
-                    'removeAllAddresses',
-                    'save',
-                    'assignCustomer',
-                    'getData',
-                    'getBillingAddress',
-                    'getCheckoutMethod',
-                    'isVirtual',
-                    'getShippingAddress',
-                    'collectTotals'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->willReturn(true);
         $quoteMock->expects($this->once())->method('removeAllAddresses');
         $quoteMock->expects($this->once())->method('assignCustomer')->with($customer);
@@ -290,9 +245,9 @@ class OnepageTest extends TestCase
             ->expects($this->once())
             ->method('getCustomerDataObject')
             ->willReturn($customer);
-        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn($isLoggedIn);
+        $this->customerSessionMock->method('isLoggedIn')->willReturn($isLoggedIn);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
-        $this->checkoutSessionMock->expects($this->any())->method('getStepData')->willReturn($stepData);
+        $this->checkoutSessionMock->method('getStepData')->willReturn($stepData);
 
         if ($isSetStepDataCalled) {
             $this->checkoutSessionMock->expects($this->once())
@@ -308,7 +263,7 @@ class OnepageTest extends TestCase
     /**
      * @return array
      */
-    public function initCheckoutDataProvider()
+    public static function initCheckoutDataProvider()
     {
         return [
             [['login' => ''], false, false],
@@ -317,9 +272,7 @@ class OnepageTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getCheckoutMethodDataProvider
-     */
+    #[DataProvider('getCheckoutMethodDataProvider')]
     public function testGetCheckoutMethod($isLoggedIn, $quoteCheckoutMethod, $isAllowedGuestCheckout, $expected)
     {
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn($isLoggedIn);
@@ -327,14 +280,10 @@ class OnepageTest extends TestCase
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
-        $quoteMock->expects($this->any())
-            ->method('getCheckoutMethod')
-            ->willReturn($quoteCheckoutMethod);
+        $quoteMock->method('getCheckoutMethod')->willReturn($quoteCheckoutMethod);
 
         $this->checkoutHelperMock
-            ->expects($this->any())
-            ->method('isAllowedGuestCheckout')
-            ->willReturn($isAllowedGuestCheckout);
+            ->method('isAllowedGuestCheckout')->willReturn($isAllowedGuestCheckout);
 
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals($expected, $this->onepage->getCheckoutMethod());
@@ -343,7 +292,7 @@ class OnepageTest extends TestCase
     /**
      * @return array
      */
-    public function getCheckoutMethodDataProvider()
+    public static function getCheckoutMethodDataProvider()
     {
         return [
             // isLoggedIn(), getQuote()->getCheckoutMethod(), isAllowedGuestCheckout(), expected
@@ -370,8 +319,13 @@ class OnepageTest extends TestCase
     {
         $orderIncrementId = 100001;
         $orderId = 1;
-        $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
-            ->willReturn($orderId);
+        $sessionReflection = new \ReflectionClass(Session::class);
+        $sessionStub = $sessionReflection->newInstanceWithoutConstructor();
+        $storage = new \Magento\Framework\DataObject();
+        $storage->setData('last_order_id', $orderId);
+        $parentReflection = new \ReflectionClass(\Magento\Framework\Session\SessionManager::class);
+        $storageProperty = $parentReflection->getProperty('storage');
+        $storageProperty->setValue($sessionStub, $storage);
         $orderMock = $this->createPartialMock(
             Order::class,
             ['load', 'getIncrementId']
@@ -379,6 +333,40 @@ class OnepageTest extends TestCase
         $orderMock->expects($this->once())->method('load')->with($orderId)->willReturnSelf();
         $orderMock->expects($this->once())->method('getIncrementId')->willReturn($orderIncrementId);
         $this->orderFactoryMock->expects($this->once())->method('create')->willReturn($orderMock);
+
+        // Recreate Onepage with the session stub to ensure getLastOrderId() reads correct value
+        $this->onepage = $this->objectManagerHelper->getObject(
+            Onepage::class,
+            [
+                'eventManager' => $this->eventManagerMock,
+                'helper' => $this->checkoutHelperMock,
+                'customerUrl' => $this->customerUrlMock,
+                'logger' => $this->loggerMock,
+                'checkoutSession' => $sessionStub,
+                'customerSession' => $this->customerSessionMock,
+                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
+                'customrAddrFactory' => $this->addressFactoryMock,
+                'customerFormFactory' => $this->customerFormFactoryMock,
+                'customerFactory' => $this->customerFactoryMock,
+                'orderFactory' => $this->orderFactoryMock,
+                'objectCopyService' => $this->copyMock,
+                'messageManager' => $this->messageManagerMock,
+                'formFactory' => $this->formFactoryMock,
+                'customerDataFactory' => $this->customerDataFactoryMock,
+                'mathRandom' => $this->randomMock,
+                'encryptor' => $this->encryptorMock,
+                'addressRepository' => $this->addressRepositoryMock,
+                'accountManagement' => $this->accountManagementMock,
+                'orderSenderMock' => $this->createMock(OrderSender::class),
+                'customerRepository' => $this->customerRepositoryMock,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'quoteManagement' => $this->quoteManagementMock,
+                'totalsCollector' => $this->totalsCollectorMock
+            ]
+        );
+
         $this->assertEquals($orderIncrementId, $this->onepage->getLastOrderId());
     }
 }

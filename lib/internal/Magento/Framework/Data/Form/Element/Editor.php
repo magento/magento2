@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data\Form\Element;
@@ -47,7 +47,7 @@ class Editor extends Textarea
         CollectionFactory $factoryCollection,
         Escaper $escaper,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?Random $random = null,
         ?SecureHtmlRenderer $secureRenderer = null
     ) {

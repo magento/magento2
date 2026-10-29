@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Unit\Model\Menu\Item;
 
 use Magento\Backend\Model\Menu\Item\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
@@ -71,8 +72,8 @@ class ValidatorTest extends TestCase
     /**
      * @param string $requiredParam
      * @throws \BadMethodCallException
-     * @dataProvider requiredParamsProvider
      */
+    #[DataProvider('requiredParamsProvider')]
     public function testValidateWithMissingRequiredParamThrowsException($requiredParam)
     {
         $this->expectException('BadMethodCallException');
@@ -88,7 +89,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function requiredParamsProvider()
+    public static function requiredParamsProvider()
     {
         return [['id'], ['title'], ['resource']];
     }
@@ -97,8 +98,8 @@ class ValidatorTest extends TestCase
      * @param string $param
      * @param mixed $invalidValue
      * @throws \InvalidArgumentException
-     * @dataProvider invalidParamsProvider
      */
+    #[DataProvider('invalidParamsProvider')]
     public function testValidateWithNonValidPrimitivesThrowsException($param, $invalidValue)
     {
         $this->expectException('InvalidArgumentException');
@@ -114,7 +115,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidParamsProvider()
+    public static function invalidParamsProvider()
     {
         return [
             ['id', 'ab'],
@@ -139,8 +140,8 @@ class ValidatorTest extends TestCase
      *
      * @param $existedItems
      * @param $newItem
-     * @dataProvider duplicateIdsProvider
      */
+    #[DataProvider('duplicateIdsProvider')]
     public function testValidateWithDuplicateIdsThrowsException($existedItems, $newItem)
     {
         $this->expectException('InvalidArgumentException');
@@ -161,7 +162,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function duplicateIdsProvider()
+    public static function duplicateIdsProvider()
     {
         return [
             [

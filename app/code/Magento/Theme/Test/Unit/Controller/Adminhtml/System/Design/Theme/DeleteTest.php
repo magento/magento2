@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,9 +19,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\Delete;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -29,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class DeleteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Registry|MockObject
      */
@@ -129,10 +133,13 @@ class DeleteTest extends TestCase
     {
         $path = 'adminhtml/*/';
         $themeId = 1;
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->addMethods(['load', 'isVirtual', 'delete'])
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme', 'getCode', 'isPhysical',
+                'getInheritedThemes', 'getId', 'load', 'isVirtual', 'delete'
+            ]
+        );
         $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
@@ -179,7 +186,7 @@ class DeleteTest extends TestCase
     /**
      * @return array
      */
-    public function invalidArgumentDataProvider()
+    public static function invalidArgumentDataProvider()
     {
         return [
             'themeId'   => [null, true],
@@ -192,16 +199,19 @@ class DeleteTest extends TestCase
      * @param bool $isVirtual
      * @test
      * @return void
-     * @dataProvider invalidArgumentDataProvider
      */
+    #[DataProvider('invalidArgumentDataProvider')]
     public function testExecuteInvalidArgument($themeIdInModel, $isVirtual)
     {
         $path = 'adminhtml/*/';
         $themeId = 1;
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->addMethods(['load', 'isVirtual'])
-            ->onlyMethods([ 'getId'])
-            ->getMockForAbstractClass();
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme', 'getCode', 'isPhysical',
+                'getInheritedThemes', 'getId', 'load', 'isVirtual'
+            ]
+        );
         $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap(

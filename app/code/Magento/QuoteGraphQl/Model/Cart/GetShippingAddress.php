@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,17 +19,13 @@ use Magento\Quote\Model\Quote\Address;
 class GetShippingAddress
 {
     /**
-     * @var QuoteAddressFactory
-     */
-    private $quoteAddressFactory;
-
-    /**
+     * GetShippingAddress Constructor
+     *
      * @param QuoteAddressFactory $quoteAddressFactory
      */
     public function __construct(
-        QuoteAddressFactory $quoteAddressFactory
+        private readonly QuoteAddressFactory $quoteAddressFactory
     ) {
-        $this->quoteAddressFactory = $quoteAddressFactory;
     }
 
     /**
@@ -45,27 +41,28 @@ class GetShippingAddress
     public function execute(ContextInterface $context, array $shippingAddressInput): Address
     {
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
+        $customerAddressUID = $shippingAddressInput['customer_address_uid'] ?? null;
         $addressInput = $shippingAddressInput['address'] ?? null;
 
         if ($addressInput) {
             $addressInput['customer_notes'] = $shippingAddressInput['customer_notes'] ?? '';
         }
 
-        if (null === $customerAddressId && null === $addressInput) {
+        if (empty($customerAddressId) && empty($customerAddressUID) && empty($addressInput)) {
             throw new GraphQlInputException(
-                __('The shipping address must contain either "customer_address_id" or "address".')
+                __('The shipping address must contain either "customer_address_id" or '
+                    . '"customer_address_uid" or "address".')
             );
         }
 
-        if ($customerAddressId && $addressInput) {
+        if ((!empty($customerAddressId) || !empty($customerAddressUID)) && !empty($addressInput)) {
             throw new GraphQlInputException(
-                __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
+                __('The shipping address cannot contain "customer_address_id" or ' .
+                    '"customer_address_uid" together with "address".')
             );
         }
 
-        $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
-
-        return $shippingAddress;
+        return $this->createShippingAddress($context, $customerAddressId, $addressInput);
     }
 
     /**
@@ -74,17 +71,16 @@ class GetShippingAddress
      * @param ContextInterface $context
      * @param int|null $customerAddressId
      * @param array|null $addressInput
-     *
-     * @return \Magento\Quote\Model\Quote\Address
+     * @return Address
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
      */
     private function createShippingAddress(
         ContextInterface $context,
         ?int $customerAddressId,
         ?array $addressInput
-    ) {
-        $customerId = $context->getUserId();
-
+    ): Address {
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
@@ -93,9 +89,10 @@ class GetShippingAddress
             }
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
                 (int)$customerAddressId,
-                $customerId
+                $context->getUserId()
             );
         }
+
         return $shippingAddress;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,12 +44,8 @@ class CategoryLinkManagementTest extends TestCase
     {
         $this->categoryRepositoryMock = $this->createMock(CategoryRepository::class);
         $productResource = $this->createMock(Product::class);
-        $categoryLinkRepository = $this->getMockBuilder(CategoryLinkRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryLinkRepository = $this->createMock(CategoryLinkRepositoryInterface::class);
+        $indexerRegistry = $this->createMock(IndexerRegistry::class);
         $this->productLinkFactoryMock = $this->createPartialMock(
             CategoryProductLinkInterfaceFactory::class,
             ['create']
@@ -74,7 +70,7 @@ class CategoryLinkManagementTest extends TestCase
         $productId = 55;
         $position = 25;
         $productSku = 'testSku';
-        $categoryProductLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
+        $categoryProductLinkMock = $this->createMock(CategoryProductLinkInterface::class);
         $categoryMock = $this->createMock(Category::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);
@@ -117,7 +113,6 @@ class CategoryLinkManagementTest extends TestCase
         foreach ($properties as $key => $value) {
             if ($reflectionClass->hasProperty($key)) {
                 $reflectionProperty = $reflectionClass->getProperty($key);
-                $reflectionProperty->setAccessible(true);
                 $reflectionProperty->setValue($object, $value);
             }
         }

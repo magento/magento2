@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -11,7 +11,7 @@
     <entity name="SearchTerm" type="searchTerm">
         <data key="query_text" unique="suffix">Query text</data>
         <data key="store_id">1</data>
-        <data key="redirect" unique="suffix">http://example.com/</data>
+        <data key="redirect" unique="suffix">https://example.com/</data>
         <data key="display_in_terms">0</data>
     </entity>
     <entity name="UpdatedSearchTermData1" type="searchTerm">
@@ -19,7 +19,7 @@
         <data key="store_id">Default Store View</data>
         <data key="number_of_results">1</data>
         <data key="number_of_uses">20</data>
-        <data key="redirect_url">http://example.com</data>
+        <data key="redirect_url">https://example.com</data>
         <data key="display_in_suggested_term">No</data>
     </entity>
 </entities>

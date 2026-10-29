@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DB\Select\FromRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FromRendererTest extends TestCase
 {
@@ -61,9 +62,8 @@ class FromRendererTest extends TestCase
     /**
      * @param array $from
      * @param string $sql
-     * @param string $expectedResult
-     * @dataProvider renderDataProvider
-     */
+     * @param string $expectedResult     */
+    #[DataProvider('renderDataProvider')]
     public function testRender($from, $sql, $expectedResult)
     {
         $this->quoteMock->expects($this->any())
@@ -87,7 +87,7 @@ class FromRendererTest extends TestCase
      * Data provider for testRender
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,8 +98,9 @@ class MediaGalleryProcessor
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
-                if (isset($entriesById[$existingEntry['value_id']])) {
-                    $updatedEntry = $entriesById[$existingEntry['value_id']];
+                $valueId = $existingEntry['value_id'] ?? null;
+                if ($valueId !== null && isset($entriesById[$valueId])) {
+                    $updatedEntry = $entriesById[$valueId];
                     if ($updatedEntry['file'] === null) {
                         unset($updatedEntry['file']);
                     }

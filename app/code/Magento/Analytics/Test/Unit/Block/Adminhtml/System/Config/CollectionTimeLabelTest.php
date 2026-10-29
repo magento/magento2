@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,12 +18,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Test class for \Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel
  */
 class CollectionTimeLabelTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CollectionTimeLabel
      */
@@ -59,17 +61,15 @@ class CollectionTimeLabelTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getComment'])
-            ->onlyMethods(['getElementHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->abstractElementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getComment', 'getElementHtml']
+        );
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->abstractElementMock);
         $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -77,13 +77,10 @@ class CollectionTimeLabelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->formMock = $this->createMock(Form::class);
-        $this->timeZoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->timeZoneMock = $this->createMock(TimezoneInterface::class);
         $this->contextMock->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getLocale'])
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $objects = [
             [

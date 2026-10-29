@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Entity;
 
@@ -48,20 +48,16 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
-     * Event Prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_entity_attribute';
 
     /**
-     * Event Object
-     *
      * @var string
      */
     protected $_eventObject = 'attribute';
 
-    const MODULE_NAME = 'Magento_Catalog';
+    public const MODULE_NAME = 'Magento_Catalog';
 
     /**
      * @var LockValidatorInterface
@@ -109,8 +105,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->attrLockValidator = $lockValidator;

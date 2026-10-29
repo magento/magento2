@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Model\Swatch;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,12 +76,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_text_swatch_attribute.php
      *
-     * @dataProvider expectedTextSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTextSwatchDataProvider')]
     public function testProductPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);
@@ -93,7 +93,7 @@ class ProductPageViewTest extends TestCase
     {
         return [
             [
-                'json_config' => [
+                'expectedConfig' => [
                     'text_swatch_attribute' => [
                         'label' => 'Text swatch attribute',
                         'options' => [
@@ -103,7 +103,7 @@ class ProductPageViewTest extends TestCase
                         ],
                     ],
                 ],
-                'json_swatch_config' => [
+                'expectedSwatchConfig' => [
                     Swatch::SWATCH_INPUT_TYPE_TEXT => [
                         [
                             'type' => Swatch::SWATCH_TYPE_TEXTUAL,
@@ -131,12 +131,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
      *
-     * @dataProvider expectedVisualSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedVisualSwatchDataProvider')]
     public function testProductPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);
@@ -149,7 +148,7 @@ class ProductPageViewTest extends TestCase
     {
         return [
             [
-                'json_config' => [
+                'expectedConfig' => [
                     'visual_swatch_attribute' => [
                         'label' => 'Visual swatch attribute',
                         'options' => [
@@ -159,7 +158,7 @@ class ProductPageViewTest extends TestCase
                         ],
                     ],
                 ],
-                'json_swatch_config' => [
+                'expectedSwatchConfig' => [
                     Swatch::SWATCH_INPUT_TYPE_VISUAL => [
                         [
                             'type' => Swatch::SWATCH_TYPE_VISUAL_COLOR,
@@ -186,12 +185,11 @@ class ProductPageViewTest extends TestCase
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      *
-     * @dataProvider expectedTwoAttributesProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTwoAttributesProvider')]
     public function testProductPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductView($expectedConfig, $expectedSwatchConfig);
@@ -205,7 +203,7 @@ class ProductPageViewTest extends TestCase
     {
         return [
             [
-                'json_config' => [
+                'expectedConfig' => [
                     'visual_swatch_attribute' => [
                         'label' => 'Visual swatch attribute',
                         'options' => [
@@ -266,7 +264,7 @@ class ProductPageViewTest extends TestCase
                     ],
 
                 ],
-                'json_swatch_config' => [
+                'expectedSwatchConfig' => [
                     Swatch::SWATCH_INPUT_TYPE_VISUAL => [
                         [
                             'type' => Swatch::SWATCH_TYPE_VISUAL_COLOR,
@@ -319,8 +317,8 @@ class ProductPageViewTest extends TestCase
     {
         $actualConfig = $this->generateBlockJsonConfigData();
         $this->checkResultIsNotEmpty($actualConfig);
-        $this->assertConfig($actualConfig['json_config'], $expectedConfig);
-        $this->assertSwatchConfig($actualConfig['json_swatch_config'], $expectedSwatchConfig);
+        $this->assertConfig($actualConfig['expectedConfig'], $expectedConfig);
+        $this->assertSwatchConfig($actualConfig['expectedSwatchConfig'], $expectedSwatchConfig);
     }
 
     /**
@@ -337,7 +335,7 @@ class ProductPageViewTest extends TestCase
         $jsonConfig = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? [];
         $jsonSwatchConfig = $this->json->unserialize($this->block->getJsonSwatchConfig());
 
-        return ['json_config' => $jsonConfig, 'json_swatch_config' => $jsonSwatchConfig];
+        return ['expectedConfig' => $jsonConfig, 'expectedSwatchConfig' => $jsonSwatchConfig];
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,8 @@ use Magento\Shipping\Model\Shipping\LabelGenerator;
 use Magento\Shipping\Model\Shipping\Labels;
 use Magento\Shipping\Model\Shipping\LabelsFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,6 +36,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LabelGeneratorTest extends TestCase
 {
+    use MockCreationTrait;
     private const CARRIER_CODE = 'fedex';
 
     private const CARRIER_TITLE = 'Fedex carrier';
@@ -80,7 +83,7 @@ class LabelGeneratorTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->trackFactory = $this->getMockBuilder(TrackFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -103,8 +106,8 @@ class LabelGeneratorTest extends TestCase
      *
      * @return void
      * @covers \Magento\Shipping\Model\Shipping\LabelGenerator
-     * @dataProvider labelInfoDataProvider
      */
+    #[DataProvider('labelInfoDataProvider')]
     public function testAddTrackingNumbersToShipment(array $info): void
     {
         $order = $this->getMockBuilder(Order::class)
@@ -123,29 +126,19 @@ class LabelGeneratorTest extends TestCase
             ->getMock();
         $shipmentMock->expects(static::once())->method('getOrder')->willReturn($order);
 
-        $this->carrierFactory->expects(static::once())
-            ->method('create')
-            ->with(self::CARRIER_CODE)
+        $this->carrierFactory->expects(static::once())->method('create')->with(self::CARRIER_CODE)
             ->willReturn($this->getCarrierMock());
 
-        $labelsMock = $this->getMockBuilder(Labels::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $labelsMock->expects(static::once())
-            ->method('requestToShipment')
-            ->with($shipmentMock)
+        $labelsMock = $this->getMockBuilder(Labels::class)->disableOriginalConstructor()->getMock();
+        $labelsMock->expects(static::once())->method('requestToShipment')->with($shipmentMock)
             ->willReturn($this->getResponseMock($info));
 
-        $this->labelsFactory->expects(static::once())
-            ->method('create')
-            ->willReturn($labelsMock);
+        $this->labelsFactory->expects(static::once())->method('create')->willReturn($labelsMock);
 
-        $this->filesystem->expects(static::once())
-            ->method('getDirectoryWrite')
-            ->willReturn($this->getMockForAbstractClass(WriteInterface::class));
+        $this->filesystem->expects(static::once())->method('getDirectoryWrite')
+            ->willReturn($this->createMock(WriteInterface::class));
 
-        $this->scopeConfig->expects(static::once())
-            ->method('getValue')
+        $this->scopeConfig->expects(static::once())->method('getValue')
             ->with(
                 'carriers/' . self::CARRIER_CODE . '/title',
                 ScopeInterface::SCOPE_STORE,
@@ -204,14 +197,12 @@ class LabelGeneratorTest extends TestCase
                 }
             });
 
-        $this->trackFactory->expects(static::any())
-            ->method('create')
-            ->willReturn($trackMock);
+        $this->trackFactory->expects(static::any())->method('create')->willReturn($trackMock);
 
         /**
          * @var $requestMock \Magento\Framework\App\RequestInterface|MockObject
          */
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $this->labelGenerator->create($shipmentMock, $requestMock);
     }
 
@@ -220,10 +211,10 @@ class LabelGeneratorTest extends TestCase
      */
     private function getShippingMethodMock(): MockObject
     {
-        $shippingMethod = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCarrierCode'])
-            ->getMock();
+        $shippingMethod = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getCarrierCode']
+        );
         $shippingMethod->expects(static::once())
             ->method('getCarrierCode')
             ->willReturn(self::CARRIER_CODE);
@@ -236,10 +227,7 @@ class LabelGeneratorTest extends TestCase
      */
     private function getCarrierMock(): MockObject
     {
-        $carrierMock = $this->getMockBuilder(AbstractCarrier::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isShippingLabelsAvailable', 'getCarrierCode'])
-            ->getMockForAbstractClass();
+        $carrierMock = $this->createMock(AbstractCarrier::class);
         $carrierMock->expects(static::once())
             ->method('isShippingLabelsAvailable')
             ->willReturn(true);
@@ -257,10 +245,10 @@ class LabelGeneratorTest extends TestCase
      */
     private function getResponseMock(array $info): MockObject
     {
-        $responseMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['hasErrors', 'hasInfo', 'getInfo'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['hasErrors', 'hasInfo', 'getInfo']
+        );
         $responseMock->expects(static::once())
             ->method('hasErrors')
             ->willReturn(false);
@@ -283,5 +271,61 @@ class LabelGeneratorTest extends TestCase
             [['tracking_number' => ['111111', '222222', '333333'], 'label_content' => 'some']],
             [['tracking_number' => '111111', 'label_content' => 'some']]
         ];
+    }
+
+    public function testCreateResponseHasErrors()
+    {
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $order->expects(static::once())
+            ->method('getShippingMethod')
+            ->with(true)
+            ->willReturn($this->getShippingMethodMock());
+
+        /**
+         * @var $shipmentMock \Magento\Sales\Model\Order\Shipment|MockObject
+         */
+        $shipmentMock = $this->getMockBuilder(Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shipmentMock->expects(static::once())->method('getOrder')->willReturn($order);
+
+        $carrierMock = $this->createMock(AbstractCarrier::class);
+        $carrierMock->expects(static::once())
+            ->method('isShippingLabelsAvailable')
+            ->willReturn(true);
+        $this->carrierFactory->expects(static::once())
+            ->method('create')
+            ->with(self::CARRIER_CODE)
+            ->willReturn($carrierMock);
+
+        $responseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['hasErrors', 'getErrors']
+        );
+        $responseMock->expects(static::once())
+            ->method('hasErrors')
+            ->willReturn(true);
+        $responseMock->expects(static::once())->method('getErrors')->willReturn(['Error message']);
+
+        $labelsMock = $this->getMockBuilder(Labels::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $labelsMock->expects(static::once())
+            ->method('requestToShipment')
+            ->with($shipmentMock)
+            ->willReturn($responseMock);
+
+        $this->labelsFactory->expects(static::once())
+            ->method('create')
+            ->willReturn($labelsMock);
+
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        /**
+         * @var $requestMock \Magento\Framework\App\RequestInterface|MockObject
+         */
+        $requestMock = $this->createMock(RequestInterface::class);
+        $this->labelGenerator->create($shipmentMock, $requestMock);
     }
 }

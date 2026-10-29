@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
@@ -69,7 +69,7 @@ class Value extends AbstractDb
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $config,
         $connectionName = null,
-        Data $dataHelper = null
+        ?Data $dataHelper = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
@@ -119,7 +119,7 @@ class Value extends AbstractDb
         $priceTable = $this->getTable('catalog_product_option_type_price');
         $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
 
-        $price = (double)sprintf('%F', $formattedPrice);
+        $price = (float)sprintf('%F', $formattedPrice);
         $priceType = $object->getPriceType();
 
         if (isset($objectPrice) && $priceType) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -9,33 +9,34 @@ namespace Magento\ImportExport\Model;
  * Import history model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  * @since 100.0.2
  */
 class History extends \Magento\Framework\Model\AbstractModel
 {
-    const HISTORY_ID = 'history_id';
+    public const HISTORY_ID = 'history_id';
 
-    const STARTED_AT = 'started_at';
+    public const STARTED_AT = 'started_at';
 
-    const USER_ID = 'user_id';
+    public const USER_ID = 'user_id';
 
-    const IMPORTED_FILE = 'imported_file';
+    public const IMPORTED_FILE = 'imported_file';
 
-    const ERROR_FILE = 'error_file';
+    public const ERROR_FILE = 'error_file';
 
-    const EXECUTION_TIME = 'execution_time';
+    public const EXECUTION_TIME = 'execution_time';
 
-    const SUMMARY = 'summary';
+    public const SUMMARY = 'summary';
 
-    const IMPORT_IN_PROCESS = 'In Progress';
+    public const IMPORT_IN_PROCESS = 'In Progress';
 
-    const IMPORT_VALIDATION = 'Validation';
+    public const IMPORT_VALIDATION = 'Validation';
 
-    const IMPORT_FAILED = 'Failed';
+    public const IMPORT_FAILED = 'Failed';
 
-    const IMPORT_SCHEDULED_USER = 0;
+    public const IMPORT_SCHEDULED_USER = 0;
 
     /**
      * @var \Magento\ImportExport\Helper\Report
@@ -122,7 +123,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     public function updateReport(Import $import, $updateSummary = false)
     {
         if ($import->isReportEntityType()) {
-            $this->load($this->getLastItemId());
+            $this->load($import->getData('_import_history_id') ?? $this->getLastItemId());
             $executionResult = self::IMPORT_IN_PROCESS;
             if ($updateSummary) {
                 $executionResult = $this->reportHelper->getExecutionTime($this->getStartedAt());

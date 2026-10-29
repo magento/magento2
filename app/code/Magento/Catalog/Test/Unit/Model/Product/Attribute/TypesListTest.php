@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,9 +49,7 @@ class TypesListTest extends TestCase
                 'create',
             ]);
 
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->model = new TypesList(
             $this->inputTypeFactoryMock,
             $this->attributeTypeFactoryMock,
@@ -65,7 +62,7 @@ class TypesListTest extends TestCase
         $inputTypeMock = $this->createMock(Inputtype::class);
         $this->inputTypeFactoryMock->expects($this->once())->method('create')->willReturn($inputTypeMock);
         $inputTypeMock->expects($this->once())->method('toOptionArray')->willReturn(['option' => ['value']]);
-        $attributeTypeMock = $this->getMockForAbstractClass(ProductAttributeTypeInterface::class);
+        $attributeTypeMock = $this->createMock(ProductAttributeTypeInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($attributeTypeMock, ['value'], ProductAttributeTypeInterface::class)

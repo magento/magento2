@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Block\System;
 
@@ -27,6 +27,7 @@ class Messages extends Template
     /**
      * @var JsonDataHelper
      * @deprecated 100.3.0
+     * @see \Magento\Framework\Serialize\Serializer\Json
      */
     protected $jsonHelper;
 

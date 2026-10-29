@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,8 +56,8 @@ class RemoveAssetAfterRemoveImageTest extends TestCase
         $this->processorSubjectMock = $this->createMock(ProcessorSubject::class);
         $this->productMock = $this->createMock(Product::class);
 
-        $this->deleteMediaAssetByPathMock = $this->getMockForAbstractClass(DeleteAssetsByPathsInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->deleteMediaAssetByPathMock = $this->createMock(DeleteAssetsByPathsInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
             RemoveAssetAfterRemoveImage::class,

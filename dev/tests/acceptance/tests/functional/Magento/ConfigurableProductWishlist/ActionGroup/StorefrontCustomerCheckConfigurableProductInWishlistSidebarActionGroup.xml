@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -18,6 +18,7 @@
             <argument name="optionProductVar"/>
         </arguments>
         <wait time="10" stepKey="waitForMessageToPopulate"/>
+        <reloadPage stepKey="reloadPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <waitForElement selector="{{StorefrontCustomerWishlistSidebarSection.ProductTitleByName(productVar.name)}}" time="30" stepKey="assertWishlistSidebarProductName"/>
         <see userInput="${{optionProductVar.price}}.00" selector="{{StorefrontCustomerWishlistSidebarSection.ProductPriceByName(productVar.name)}}" stepKey="AssertWishlistSidebarProductPrice"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,27 +85,16 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
         $categoryIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
-        $this->connectionMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($connectionMock);
-        $connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($selectMock);
-        $connectionMock->expects($this->any())
-            ->method('fetchCol')
+        $this->connectionMock->method('getConnection')->willReturn($connectionMock);
+        $connectionMock->method('select')->willReturn($selectMock);
+        $connectionMock->method('fetchCol')
             ->willReturnOnConsecutiveCalls($categoryIds, $categoryIdsOther, $categoryIds);
-        $selectMock->expects($this->any())
-            ->method('from')
-            ->willReturnSelf();
-        $selectMock->expects($this->any())
-            ->method('joinInner')
-            ->willReturnSelf();
-        $selectMock->expects($this->any())
-            ->method('where')
-            ->willReturnSelf();
+        $selectMock->method('from')->willReturnSelf();
+        $selectMock->method('joinInner')->willReturnSelf();
+        $selectMock->method('where')->willReturnSelf();
         $this->hashMapPoolMock
             ->method('resetMap')
             ->willReturnCallback(function ($arg1, $arg2) {
@@ -115,11 +104,11 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
             });
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertEquals($categoryIds['2'], $this->model->getData(1, '2'));
         $this->assertEquals($categoryIdsOther, $this->model->getAllData(2));
-        $this->assertEquals($categoryIdsOther[2], $this->model->getData(2, 2));
+        $this->assertEquals($categoryIdsOther['2'], $this->model->getData(2, '2'));
         $this->model->resetData(1);
-        $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
+        $this->assertEquals($categoryIds['2'], $this->model->getData(1, '2'));
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
     }
 }

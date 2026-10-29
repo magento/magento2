@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -83,6 +83,15 @@
             <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
             <argument name="validator" xsi:type="object">SessionValidator</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Plugin\CustomerRepository\RestrictedFieldsPlugin">
+        <arguments>
+            <argument name="restrictedFields" xsi:type="array">
+                <item name="password_hash" xsi:type="string">password_hash</item>
+                <item name="rp_token" xsi:type="string">rp_token</item>
+                <item name="confirmation" xsi:type="string">confirmation</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">
@@ -592,5 +601,13 @@
         <plugin name="anonymousAsyncCustomerRequest"
                 type="Magento\Customer\Plugin\AsyncRequestCustomerGroupAuthorization"
         />
+    </type>
+    <virtualType name="Magento\Customer\Model\MviewAction" type="\Magento\Framework\Mview\View\BaseAction">
+        <arguments>
+            <argument name="indexerId" xsi:type="string">customer_grid</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Webapi\ErrorProcessor">
+        <plugin name="processValidatorException" type="Magento\Customer\Model\Plugin\Webapi\ErrorProcessorPlugin" sortOrder="10"/>
     </type>
 </config>

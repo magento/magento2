@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Model;
@@ -535,7 +535,7 @@ class Cart extends DataObject implements CartInterface
                 continue;
             }
 
-            $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
+            $qty = isset($itemInfo['qty']) ? (float)$itemInfo['qty'] : false;
             if ($qty > 0) {
                 $item->clearMessage();
                 $item->setHasError(false);

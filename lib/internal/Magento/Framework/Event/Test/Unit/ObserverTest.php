@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,9 +10,12 @@ namespace Magento\Framework\Event\Test\Unit;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -98,9 +101,10 @@ class ObserverTest extends TestCase
     {
         $eventName = 'eventName';
         $callbackName = 'testCallback';
-        $callbackMock = [$this->getMockBuilder(\stdClass::class)->addMethods([$callbackName])
-            ->disableOriginalConstructor()
-            ->getMock(), $callbackName];
+        $callbackMock = [
+            $this->createPartialMockWithReflection(\stdClass::class, [$callbackName]),
+            $callbackName
+        ];
         $callbackMock[0]->expects($this->once())
             ->method('testCallback')
             ->willReturn(true);

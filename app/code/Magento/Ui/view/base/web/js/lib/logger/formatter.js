@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -18,7 +18,7 @@ define([
          * @protected
          * @type {String}
          */
-        this.dateFormat_ = 'YYYY-MM-DD hh:mm:ss';
+        this.dateFormat_ = 'YYYY-MM-DD HH:mm:ssZ';
 
         /**
          * @protected

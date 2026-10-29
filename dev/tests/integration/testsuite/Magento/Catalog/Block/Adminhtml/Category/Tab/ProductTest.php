@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends TestCase
 {
@@ -72,13 +74,13 @@ class ProductTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_products.php
      * @magentoDataFixture Magento/Catalog/_files/product_associated.php
      * @magentoDataFixture Magento/Catalog/_files/simple_product_disabled.php
-     * @dataProvider optionsFilterProvider
      * @param string $filterColumn
      * @param int $categoryId
      * @param int $storeId
      * @param array $items
      * @return void
      */
+    #[DataProvider('optionsFilterProvider')]
     public function testFilterProductInCategory(string $filterColumn, int $categoryId, int $storeId, array $items): void
     {
         $collection = $this->filterProductInGrid($filterColumn, $categoryId, $storeId);
@@ -102,31 +104,31 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function optionsFilterProvider(): array
+    public static function optionsFilterProvider(): array
     {
         return [
             'filter_yes' => [
-                'filter_column' => 'in_category=1',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'in_category=1',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'simple333',
                     'simple2',
                 ],
             ],
             'filter_no' => [
-                'filter_column' => 'in_category=0',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'in_category=0',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'product_disabled',
                     'simple',
                 ],
             ],
             'filter_any' => [
-                'filter_column' => "",
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => "",
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'product_disabled',
                     'simple333',
@@ -135,9 +137,9 @@ class ProductTest extends TestCase
                 ],
             ],
             'flag_status' => [
-                'filter_column' => 'status=1',
-                'id_category' => 333,
-                'store_id' => 1,
+                'filterColumn' => 'status=1',
+                'categoryId' => 333,
+                'storeId' => 1,
                 'items' => [
                     'simple333',
                     'simple2',
@@ -148,7 +150,6 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @dataProvider sortingOptionsProvider
      * @param string $sortField
      * @param string $sortDirection
      * @param string $store
@@ -156,6 +157,7 @@ class ProductTest extends TestCase
      * @return void
      */
     #[
+        DataProvider('sortingOptionsProvider'),
         DataFixture(CategoryFixture::class, ['name' => 'CategoryA'], as: 'category'),
         DataFixture(
             ProductFixture::class,
@@ -201,21 +203,21 @@ class ProductTest extends TestCase
      *
      * @return array
      */
-    public function sortingOptionsProvider(): array
+    public static function sortingOptionsProvider(): array
     {
         return [
             'default_store_sort_name_asc' => [
-                'sort_field' => 'name',
-                'sort_direction' => 'asc',
+                'sortField' => 'name',
+                'sortDirection' => 'asc',
                 'store' => 'default',
-                'sortItems' => [
+                'items' => [
                     'ProductA',
                     'ProductB',
                 ],
             ],
             'default_store_sort_name_desc' => [
-                'sort_field' => 'name',
-                'sort_direction' => 'desc',
+                'sortField' => 'name',
+                'sortDirection' => 'desc',
                 'store' => 'default',
                 'items' => [
                     'ProductB',
@@ -223,19 +225,19 @@ class ProductTest extends TestCase
                 ],
             ],
             'second_store_sort_name_asc' => [
-                'sort_field' => 'name',
-                'sort_direction' => 'asc',
+                'sortField' => 'name',
+                'sortDirection' => 'asc',
                 'store' => 'store2',
-                'sortItems' => [
+                'items' => [
                     'SimpleProductA',
                     'SimpleProductB',
                 ],
             ],
             'second_store_sort_name_desc' => [
-                'sort_field' => 'name',
-                'sort_direction' => 'desc',
+                'sortField' => 'name',
+                'sortDirection' => 'desc',
                 'store' => 'store2',
-                'sortItems' => [
+                'items' => [
                     'SimpleProductB',
                     'SimpleProductA',
                 ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Email\Model;
@@ -15,6 +15,9 @@ use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Email\Model\Template\Validator as TemplateValidator;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Template model class.
@@ -168,6 +171,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     private $fileStorageDatabase;
 
     /**
+     * @var TemplateValidator
+     */
+    private $templateValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
@@ -182,6 +190,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param array $data
      * @param Database $fileStorageDatabase
+     * @param TemplateValidator|null $templateValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -199,7 +208,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = [],
-        Database $fileStorageDatabase = null
+        ?Database $fileStorageDatabase = null,
+        ?TemplateValidator $templateValidator = null
     ) {
         $this->design = $design;
         $this->area = isset($data['area']) ? $data['area'] : null;
@@ -215,6 +225,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->urlModel = $urlModel;
         $this->fileStorageDatabase = $fileStorageDatabase ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
+        $this->templateValidator = $templateValidator ?:
+            ObjectManager::getInstance()->get(TemplateValidator::class);
         parent::__construct($context, $registry, null, null, $data);
     }
 
@@ -758,5 +770,65 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $params['_scope_to_url'] = true;
         }
         return $url->getUrl($route, $params);
+    }
+
+    /**
+     * Set template text
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateText($value)
+    {
+        return $this->setData('template_text', is_string($value) ? $value : '');
+    }
+
+    /**
+     * Set template styles
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateStyles($value)
+    {
+        return $this->setData('template_styles', is_string($value) ? $value : '');
+    }
+
+    /**
+     * Validate template code
+     *
+     * @throws ValidationException
+     * @return $this
+     */
+    public function beforeSave()
+    {
+        $templateText = $this->getTemplateText();
+        if ($templateText) {
+            try {
+                $this->templateValidator->validate($templateText);
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+        $templateStyles = $this->getTemplateStyles();
+        if ($templateStyles) {
+            try {
+                $this->templateValidator->validate($templateStyles);
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Styles field validation failed. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+        parent::beforeSave();
+        return $this;
     }
 }

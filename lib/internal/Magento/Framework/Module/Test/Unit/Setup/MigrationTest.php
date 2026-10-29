@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MigrationTest extends TestCase
 {
@@ -151,7 +152,7 @@ class MigrationTest extends TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
-        $setupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
+        $setupMock = $this->createMock(ModuleDataSetupInterface::class);
         $filesystemMock = $this->createMock(Filesystem::class);
         $migrationData = $this->createMock(MigrationData::class);
 
@@ -198,9 +199,8 @@ class MigrationTest extends TestCase
         $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
     }
 
-    /**
-     * @dataProvider updateClassAliasesDataProvider
-     */
+    /**     */
+    #[DataProvider('updateClassAliasesDataProvider')]
     public function testDoUpdateClassAliases($replaceRules, $tableData, $expected, $aliasesMap = [])
     {
         $this->markTestSkipped('Requires refactoring of class that is tested, covers to many methods');
@@ -208,7 +208,7 @@ class MigrationTest extends TestCase
         $this->_actualUpdateResult = [];
         $tableRowsCount = count($tableData);
 
-        $setupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
+        $setupMock = $this->createMock(ModuleDataSetupInterface::class);
         $filesystemMock = $this->createMock(Filesystem::class);
         $migrationData = $this->createMock(MigrationData::class);
 
@@ -243,7 +243,7 @@ class MigrationTest extends TestCase
      *
      * @return array
      */
-    public function updateClassAliasesDataProvider()
+    public static function updateClassAliasesDataProvider()
     {
         return [
             'plain text replace model' => include __DIR__ . '/_files/data_content_plain_model.php',

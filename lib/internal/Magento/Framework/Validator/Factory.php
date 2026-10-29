@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Validator;
@@ -133,7 +133,7 @@ class Factory implements ResetAfterRequestInterface
      * @return Builder
      * @throws \Zend_Translate_Exception
      */
-    public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
+    public function createValidatorBuilder($entityName, $groupName, ?array $builderConfig = null)
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidatorBuilder($entityName, $groupName, $builderConfig);
@@ -148,7 +148,7 @@ class Factory implements ResetAfterRequestInterface
      * @return Validator
      * @throws \Zend_Translate_Exception
      */
-    public function createValidator($entityName, $groupName, array $builderConfig = null)
+    public function createValidator($entityName, $groupName, ?array $builderConfig = null)
     {
         $this->_initializeDefaultTranslator();
         return $this->getValidatorConfig()->createValidator($entityName, $groupName, $builderConfig);

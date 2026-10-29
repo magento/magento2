@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Model\Layout\Update;
 
@@ -78,7 +78,7 @@ class Validator extends AbstractValidator
     public function __construct(
         DomFactory $domConfigFactory,
         UrnResolver $urnResolver,
-        ValidationStateInterface $validationState = null
+        ?ValidationStateInterface $validationState = null
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();

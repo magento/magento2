@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ class ViewedTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->block = $objectManager->getObject(Viewed::class);
     }
 
@@ -38,7 +39,6 @@ class ViewedTest extends TestCase
         $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
 
         $collection = new \ReflectionProperty(Viewed::class, '_collection');
-        $collection->setAccessible(true);
         $collection->setValue($this->block, [$product]);
 
         $this->assertEquals($productTags, $this->block->getIdentities());

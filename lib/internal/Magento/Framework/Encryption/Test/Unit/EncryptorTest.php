@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,6 +17,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Throwable;
 
 /**
@@ -158,9 +159,8 @@ class EncryptorTest extends TestCase
      * @param string $hash
      * @param bool $expected
      *
-     * @return void
-     * @dataProvider validateHashDataProvider
-     */
+     * @return void     */
+    #[DataProvider('validateHashDataProvider')]
     public function testValidateHash($password, $hash, $expected, int $requiresVersion): void
     {
         if ($requiresVersion > $this->encryptor->getLatestHashVersion()) {
@@ -175,7 +175,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function validateHashDataProvider(): array
+    public static function validateHashDataProvider(): array
     {
         return [
             ['password', 'hash:salt:1', false, 1],
@@ -194,9 +194,8 @@ class EncryptorTest extends TestCase
      *
      * @param mixed $key
      *
-     * @return void
-     * @dataProvider emptyKeyDataProvider
-     */
+     * @return void     */
+    #[DataProvider('emptyKeyDataProvider')]
     public function testEncryptWithEmptyKey($key): void
     {
         $this->expectException('SodiumException');
@@ -215,9 +214,8 @@ class EncryptorTest extends TestCase
      *
      * @param mixed $key
      *
-     * @return void
-     * @dataProvider emptyKeyDataProvider
-     */
+     * @return void     */
+    #[DataProvider('emptyKeyDataProvider')]
     public function testDecryptWithEmptyKey($key): void
     {
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
@@ -235,7 +233,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function emptyKeyDataProvider(): array
+    public static function emptyKeyDataProvider(): array
     {
         return [[null], [0], [''], ['0']];
     }
@@ -356,7 +354,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function useSpecifiedHashingAlgoDataProvider(): array
+    public static function useSpecifiedHashingAlgoDataProvider(): array
     {
         return [
             [
@@ -394,9 +392,7 @@ class EncryptorTest extends TestCase
 
     /**
      * Check that specified algorithm is in fact being used.
-     *
-     * @dataProvider useSpecifiedHashingAlgoDataProvider
-     *
+     *     *
      * @param string $password
      * @param string|bool $salt
      * @param int $hashAlgo
@@ -404,6 +400,7 @@ class EncryptorTest extends TestCase
      *
      * @return void
      */
+    #[DataProvider('useSpecifiedHashingAlgoDataProvider')]
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $pattern): void
     {
         $this->randomGeneratorMock->method('getRandomString')

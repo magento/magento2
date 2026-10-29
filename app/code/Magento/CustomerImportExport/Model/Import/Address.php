@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\Config\Share;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
+use Magento\CustomerImportExport\Model\Import\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -274,7 +273,6 @@ class Address extends AbstractCustomer
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
      * @param Processor|null $indexerProcessor
-     * @param Share|null $configShare
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -299,8 +297,7 @@ class Address extends AbstractCustomer
         array $data = [],
         ?CountryWithWebsitesSource $countryWithWebsites = null,
         ?AddressStorage $addressStorage = null,
-        ?Processor $indexerProcessor = null,
-        ?Share $configShare = null
+        ?Processor $indexerProcessor = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -328,8 +325,7 @@ class Address extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $data,
-            $configShare
+            $data
         );
 
         $this->_entityTable = isset(
@@ -369,7 +365,7 @@ class Address extends AbstractCustomer
         if ($attribute->getAttributeCode() === 'country_id') {
             //If we want to get available options for country field then we have to use alternative source
             // to get actual data for each website.
-            $options = $this->countryWithWebsites->getAllOptions();
+            $options = $this->countryWithWebsites->getCountiesPerWebsite();
             //Available country options now will be sorted by websites.
             $code = $attribute->getAttributeCode();
             $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];

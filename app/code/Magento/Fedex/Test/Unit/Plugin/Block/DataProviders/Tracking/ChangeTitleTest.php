@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,8 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Block\DataProviders\Tracking\DeliveryDateTitle;
 use Magento\Shipping\Model\Tracking\Result\Status;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ChangeTitleTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ChangeTitle|MockObject
      */
@@ -42,8 +46,8 @@ class ChangeTitleTest extends TestCase
      * @param string $carrierCode
      * @param string $originalResult
      * @param Phrase|string $finalResult
-     * @dataProvider testAfterGetTitleDataProvider
      */
+    #[DataProvider('afterGetTitleDataProvider')]
     public function testAfterGetTitle(string $carrierCode, string $originalResult, $finalResult)
     {
         /** @var DeliveryDateTitle|MockObject $subjectMock */
@@ -52,10 +56,7 @@ class ChangeTitleTest extends TestCase
             ->getMock();
 
         /** @var Status|MockObject $trackingStatusMock */
-        $trackingStatusMock = $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCarrier'])
-            ->getMock();
+        $trackingStatusMock = $this->createPartialMockWithReflection(Status::class, ['getCarrier']);
         $trackingStatusMock->expects($this::once())
             ->method('getCarrier')
             ->willReturn($carrierCode);
@@ -70,7 +71,7 @@ class ChangeTitleTest extends TestCase
      *
      * @return array
      */
-    public function testAfterGetTitleDataProvider(): array
+    public static function afterGetTitleDataProvider(): array
     {
         return [
             [Carrier::CODE, 'Original Title', __('Expected Delivery:')],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Indexer\Test\Fixture\ScheduleMode;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
@@ -32,9 +33,7 @@ use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 ]
 class ProductCategoriesTest extends ProductTestBase
 {
-    /**
-     * @dataProvider categoryTestDataProvider
-     */
+    #[DataProvider('categoryTestDataProvider')]
     public function testProductCategories($fixture, $separator)
     {
         // import data from CSV file
@@ -130,7 +129,7 @@ class ProductCategoriesTest extends ProductTestBase
     /**
      * @return array
      */
-    public function categoryTestDataProvider()
+    public static function categoryTestDataProvider()
     {
         return [
             ['import_new_categories_default_separator.csv', ','],

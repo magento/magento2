@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class FilterProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Return model
      *
@@ -67,27 +70,19 @@ class FilterProcessorTest extends TestCase
         $model = $this->getModel($customFilters, $fieldMapping);
 
         /** @var FilterGroup|MockObject $filterGroupOneMock */
-        $filterGroupOneMock = $this->getMockBuilder(FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterGroupOneMock = $this->createMock(FilterGroup::class);
 
         /** @var FilterGroup|MockObject $filterGroupTwoMock */
-        $filterGroupTwoMock = $this->getMockBuilder(FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterGroupTwoMock = $this->createMock(FilterGroup::class);
 
         /** @var Filter|MockObject $filterOneMock */
-        $filterOneMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterOneMock = $this->createMock(Filter::class);
         $filterOneMock->expects($this->once())
             ->method('getField')
             ->willReturn($customFilterField);
 
         /** @var Filter|MockObject $filterTwoMock */
-        $filterTwoMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterTwoMock = $this->createMock(Filter::class);
         $filterTwoMock->expects($this->exactly(2))
             ->method('getField')
             ->willReturn($otherFilterField);
@@ -99,9 +94,7 @@ class FilterProcessorTest extends TestCase
             ->willReturn($otherFilterFieldCondition);
 
         /** @var Filter|MockObject $filterThreeMock */
-        $filterThreeMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterThreeMock = $this->createMock(Filter::class);
         $filterThreeMock->expects($this->exactly(2))
             ->method('getField')
             ->willReturn($thirdField);
@@ -129,9 +122,7 @@ class FilterProcessorTest extends TestCase
             ->willReturn([$filterGroupOneMock, $filterGroupTwoMock]);
 
         /** @var AbstractDb|MockObject $searchCriteriarMock */
-        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(AbstractDb::class);
 
         $customFilterMock->expects($this->once())
             ->method('apply')
@@ -153,9 +144,10 @@ class FilterProcessorTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         /** @var \stdClass|MockObject $customFilterMock */
-        $customFilterMock = $this->getMockBuilder(\stdClass::class)->addMethods(['apply'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customFilterMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['apply']
+        );
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];
@@ -163,14 +155,10 @@ class FilterProcessorTest extends TestCase
         $model = $this->getModel($customFilters, []);
 
         /** @var FilterGroup|MockObject $filterGroupOneMock */
-        $filterGroupOneMock = $this->getMockBuilder(FilterGroup::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterGroupOneMock = $this->createMock(FilterGroup::class);
 
         /** @var Filter|MockObject $filterOneMock */
-        $filterOneMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filterOneMock = $this->createMock(Filter::class);
         $filterOneMock->expects($this->once())
             ->method('getField')
             ->willReturn($customFilterField);
@@ -188,9 +176,7 @@ class FilterProcessorTest extends TestCase
             ->willReturn([$filterGroupOneMock]);
 
         /** @var AbstractDb|MockObject $searchCriteriarMock */
-        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createMock(AbstractDb::class);
 
         $customFilterMock->expects($this->never())
             ->method('apply');

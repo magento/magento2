@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,8 @@ use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Sales\Model\Order\Item;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class TablerateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Tablerate
      */
@@ -71,20 +75,17 @@ class TablerateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['create'])
-            ->onlyMethods(['isSetFlag', 'getValue'])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMockWithReflection(
+            ScopeConfigInterface::class,
+            ['create', 'isSetFlag', 'getValue']
+        );
 
         $this->errorFactoryMock = $this
             ->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -97,12 +98,10 @@ class TablerateTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->tablerateFactoryMock = $this
-            ->getMockBuilder(TablerateFactory::class)
-            ->disableOriginalConstructor()
-            ->addMethods([ 'getRate'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->tablerateFactoryMock = $this->createPartialMockWithReflection(
+            TablerateFactory::class,
+            ['getRate', 'create']
+        );
 
         $this->helper = new ObjectManager($this);
         $this->model = $this->helper->getObject(
@@ -121,9 +120,9 @@ class TablerateTest extends TestCase
     /**
      * @param bool $freeshipping
      * @param bool $isShipSeparately
-     * @dataProvider collectRatesWithGlobalFreeShippingDataProvider
      * @return void
      */
+    #[DataProvider('collectRatesWithGlobalFreeShippingDataProvider')]
     public function testCollectRatesWithGlobalFreeShipping($freeshipping, $isShipSeparately)
     {
         $rate = [
@@ -131,24 +130,24 @@ class TablerateTest extends TestCase
             'cost' => 2
         ];
 
-        $request = $this->getMockBuilder(RateRequest::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
-            ->getMock();
+        $request = $this->createPartialMockWithReflection(
+            RateRequest::class,
+            ['getAllItems', 'getPackageQty', 'getFreeShipping']
+        );
 
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHasChildren', 'getChildren',  'getQty'])
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getParentItem',
-                    'isShipSeparately',
-                    'getFreeShipping',
-                    'getBaseRowTotal'
-                ]
-            )
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getHasChildren',
+                'getChildren',
+                'getQty',
+                'getProduct',
+                'getParentItem',
+                'isShipSeparately',
+                'getFreeShipping',
+                'getBaseRowTotal'
+            ]
+        );
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -165,11 +164,10 @@ class TablerateTest extends TestCase
         $tablerate->expects($this->any())->method('getRate')->willReturn($rate);
         $this->tablerateFactoryMock->expects($this->once())->method('create')->willReturn($tablerate);
 
-        $method = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([ 'setPrice'])
-            ->addMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setCost'])
-            ->getMock();
+        $method = $this->createPartialMockWithReflection(
+            Method::class,
+            ['setPrice', 'setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setCost']
+        );
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 
         $result = $this->getMockBuilder(Result::class)
@@ -230,7 +228,7 @@ class TablerateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
             ['freeshipping' => true, 'isShipSeparately' => false],

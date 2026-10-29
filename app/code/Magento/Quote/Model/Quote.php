@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model;
 
@@ -452,11 +452,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
-        AllowedCountries $allowedCountriesReader = null
+        ?\Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
+        ?AllowedCountries $allowedCountriesReader = null
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
@@ -543,7 +543,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function setCurrency(\Magento\Quote\Api\Data\CurrencyInterface $currency = null)
+    public function setCurrency(?\Magento\Quote\Api\Data\CurrencyInterface $currency = null)
     {
         return $this->setData(self::KEY_CURRENCY, $currency);
     }
@@ -559,7 +559,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }
@@ -940,8 +940,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function assignCustomerWithAddressChange(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
-        Address $billingAddress = null,
-        Address $shippingAddress = null
+        ?Address $billingAddress = null,
+        ?Address $shippingAddress = null
     ) {
         if ($customer->getId()) {
             $this->setCustomer($customer);
@@ -991,7 +991,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
-    public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer = null)
+    public function setCustomer(?\Magento\Customer\Api\Data\CustomerInterface $customer = null)
     {
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
@@ -1357,7 +1357,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
+    public function setBillingAddress(?\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
@@ -1376,7 +1376,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
+    public function setShippingAddress(?\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
         if ($this->getIsMultiShipping()) {
             $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
@@ -1563,6 +1563,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $item = $this->getItemById($itemId);
 
         if ($item) {
+
+            // Remove gift message from cart
+            if ((int)$this->getItemsCount() === 1) {
+                $this->setGiftMessageId(0);
+            }
+
             $item->setQuote($this);
             $item->isDeleted(true);
             if ($item->getHasChildren()) {
@@ -1596,6 +1602,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 $item->isDeleted(true);
             }
         }
+
+        // Remove gift message from cart
+        $this->setGiftMessageId(0);
+
         return $this;
     }
 
@@ -2174,6 +2184,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $message = null,
         $additionalData = null
     ) {
+        $type = $type ?? '';
         if (!isset($this->_errorInfoGroups[$type])) {
             $this->_errorInfoGroups[$type] = $this->_statusListFactory->create();
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -50,9 +50,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testAllowsDataWhenBelowLimitWhenUsingRouteInputLimit()
+    public function testAllowsDataWhenBelowLimitWhenUsingRouteInputLimit(): void
     {
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
@@ -66,9 +69,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testFailsDataWhenAboveLimitUsingRouteInputLimit()
+    public function testFailsDataWhenAboveLimitUsingRouteInputLimit(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Maximum items of type "foo" is 4');
@@ -84,9 +90,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testAllowsDataWhenBelowLimit()
+    public function testAllowsDataWhenBelowLimit(): void
     {
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
@@ -101,9 +110,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testAllowsDataWhenBelowLimitUsingConfig()
+    public function testAllowsDataWhenBelowLimitUsingConfig(): void
     {
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
@@ -118,9 +130,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testFailsDataWhenAboveLimit()
+    public function testFailsDataWhenAboveLimit(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Maximum items of type "foo" is 3');
@@ -137,9 +152,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testFailsDataWhenAboveLimitUsingConfig()
+    public function testFailsDataWhenAboveLimitUsingConfig(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Maximum items of type "foo" is 6');
@@ -156,9 +174,12 @@ class EntityArrayValidatorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testAboveLimitWithDisabledLimiting()
+    public function testAboveLimitWithDisabledLimiting(): void
     {
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')

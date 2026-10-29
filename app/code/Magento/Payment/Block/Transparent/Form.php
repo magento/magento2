@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Payment\Block\Transparent;
 
@@ -47,7 +47,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
     }
 
     /**
-     * {inheritdoc}
+     * @inheritDoc
      */
     protected function _toHtml()
     {

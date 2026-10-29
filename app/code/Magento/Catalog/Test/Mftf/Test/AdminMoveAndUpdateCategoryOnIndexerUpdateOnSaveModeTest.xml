@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMoveAndUpdateCategoryOnIndexerUpdateOnSaveModeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Move and Update Category on Store View level"/>
+            <title value="Move and Update Category on Store View level when Category Flat Indexer is in Update on Save mode"/>
+            <description value="Move and Update Category on Store View level and ensure categories keep work as expected on Storefront when Category Flat indexer is turned on"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4613"/>
+            <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <!--set catalog flat category to yes-->
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
+            <createData entity="ApiCategory" stepKey="categoryA"/>
+            <createData entity="ApiSimpleProduct" stepKey="productAA">
+                <requiredEntity createDataKey="categoryA"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="categoryB">
+                <requiredEntity createDataKey="categoryA"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="productBB">
+                <requiredEntity createDataKey="categoryB"/>
+            </createData>
+            <createData entity="ApiCategoryNonAnchor" stepKey="categoryC"/>
+            <createData entity="ApiSimpleProduct" stepKey="productCC">
+                <requiredEntity createDataKey="categoryC"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--open category in BE-->
+            <!-- update category A details-->
+            <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPageA">
+                <argument name="id" value="$categoryA.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImageA"/>
+            <!--Select content Setting and fill the options-->
+            <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="addCategoryDescriptionA">
+                <argument name="description" value="Updated CategoryA Description"/>
+            </actionGroup>
+            <!--Select Display Setting and fill the options-->
+            <actionGroup ref="AdminUpdateCategoryDisplaySettingsActionGroup" stepKey="addCategoryDisplaySettingA">
+                <argument name="availableSortOptions" value="Product Name"/>
+                <argument name="defaultSortingOption" value="name"/>
+                <argument name="priceRange" value="5.5"/>
+            </actionGroup>
+            <!--Update meta title-->
+            <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="addCategoryMetaTitleA">
+                <argument name="metaTitle" value="MetaAtitle"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategoryA"/>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessageA">
+                <argument name="message" value="You saved the category."/>
+            </actionGroup>
+            <!--update category C details-->
+            <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPageC">
+                <argument name="id" value="$categoryC.id$"/>
+            </actionGroup>
+            <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImageC"/>
+            <!--Select content Setting and fill the options-->
+            <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="addCategoryDescriptionC">
+                <argument name="description" value="Updated CategoryC Description"/>
+            </actionGroup>
+            <!--Select Display Setting and fill the options-->
+            <actionGroup ref="AdminUpdateCategoryDisplaySettingsActionGroup" stepKey="addCategoryDisplaySettingC">
+                <argument name="availableSortOptions" value="Product Name"/>
+                <argument name="defaultSortingOption" value="name"/>
+                <argument name="priceRange" value="5.5"/>
+            </actionGroup>
+            <!--Update meta title-->
+            <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="addCategoryMetaTitleC">
+                <argument name="metaTitle" value="MetaCtitle"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategoryC"/>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessageC">
+                <argument name="message" value="You saved the category."/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <deleteData createDataKey="categoryB" stepKey="deleteSimpleCategoryB"/>
+            <deleteData createDataKey="categoryA" stepKey="deleteSimpleCategoryA"/>
+            <deleteData createDataKey="categoryC" stepKey="deleteSimpleCategoryC"/>
+            <deleteData createDataKey="productAA" stepKey="deleteProductAA"/>
+            <deleteData createDataKey="productBB" stepKey="deleteProductBB"/>
+            <deleteData createDataKey="productCC" stepKey="deleteProductCC"/>
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- assert category A in SF 1st time -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+            <argument name="category" value="$categoryA$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImageA"/>
+        <waitForText userInput="Updated CategoryA Description" selector="{{StorefrontCategoryMainSection.CatalogDescriptionWithoutPTag}}" stepKey="assertCatalogDescriptionA"/>
+        <!-- assert title-->
+        <waitForElement selector="{{StorefrontCategoryHeadSection.pageTitle('MetaAtitle')}}" stepKey="assertCatalogMetaTitleA"/>
+        <waitForText userInput="2" selector="{{StorefrontCategoryMainSection.productCount}}" stepKey="assertProductCount1stTimeA"/>
+        <!-- Move CategoryA under CategoryC and click ok button-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage1"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryAUnderCategoryC">
+            <argument name="childCategory" value="$categoryA.name$"/>
+            <argument name="parentCategory" value="$categoryC.name$"/>
+        </actionGroup>
+        <waitForText selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage1"/>
+        <!--Verify Category A is moved under Category C-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements">
+            <argument name="parentCategoryName" value="$categoryC.name$"/>
+            <argument name="childCategoryName" value="$categoryA.name$"/>
+        </actionGroup>
+        <!-- assert category A in SF 2nd time -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+            <argument name="category" value="$categoryA$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImageA1"/>
+        <waitForText userInput="Updated CategoryA Description" selector="{{StorefrontCategoryMainSection.CatalogDescriptionWithoutPTag}}" stepKey="assertCatalogDescriptionA1"/>
+        <waitForElement selector="{{StorefrontCategoryHeadSection.pageTitle('MetaAtitle')}}" stepKey="assertCatalogMetaTitleA1"/>
+        <waitForText userInput="2" selector="{{StorefrontCategoryMainSection.productCount}}" stepKey="assertProductCount2ndTimeA1"/>
+        <!-- Move CategoryB under CategoryC and click ok button-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage2"/>
+        <actionGroup ref="MoveCategoryActionGroup" stepKey="moveCategoryBUnderCategoryC">
+            <argument name="childCategory" value="$categoryB.name$"/>
+            <argument name="parentCategory" value="$categoryC.name$"/>
+        </actionGroup>
+        <waitForText selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage2"/>
+        <!--Verify Category B is moved under Category C-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree1"/>
+        <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements1">
+            <argument name="parentCategoryName" value="$categoryC.name$"/>
+            <argument name="childCategoryName" value="$categoryB.name$"/>
+        </actionGroup>
+        <!-- assert category C in SF 1st time -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage3">
+            <argument name="category" value="$categoryC$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.filename)}}" stepKey="seeImageC"/>
+        <waitForText userInput="Updated CategoryC Description" selector="{{StorefrontCategoryMainSection.CatalogDescriptionWithoutPTag}}" stepKey="assertCatalogDescriptionC"/>
+        <waitForElement selector="{{StorefrontCategoryHeadSection.pageTitle('MetaCtitle')}}" stepKey="assertCatalogMetaTitleC"/>
+        <waitForText userInput="1" selector="{{StorefrontCategoryMainSection.productCount}}" stepKey="assertProductCount3rdTimeC"/>
+        <!--Create a Store-->
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
+            <argument name="rootCategory" value="Default Category"/>
+        </actionGroup>
+        <!--Create a Store View-->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="StoreGroup" value="customStoreGroup"/>
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
+        <!--open category in BE-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage1">
+            <argument name="id" value="$categoryA.id$"/>
+        </actionGroup>
+        <!-- Switch to the New Website Store view -->
+        <waitForPageLoad stepKey="waitForEditCatalogPage1"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL1">
+            <argument name="storeView" value="customStore.name"/>
+        </actionGroup>
+        <!-- Change Name of category A -->
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategory1NameForEnStoreView">
+            <argument name="categoryName" value="Категория А"/>
+        </actionGroup>
+        <!--Update category A description-->
+        <actionGroup ref="AdminUpdateCategoryDescriptionActionGroup" stepKey="addCategoryDescriptionC1">
+            <argument name="description" value="Другое описание категории А"/>
+        </actionGroup>
+        <!--Update category A image -->
+        <actionGroup ref="AdminChangeCategoryImageOnStoreviewActionGroup" stepKey="addPlaceholderSmallImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+        <!--Update category A url key-->
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
+            <argument name="value" value="kategoriya-A"/>
+        </actionGroup>
+        <!--Update category A meta title-->
+        <actionGroup ref="AdminUpdateCategoryMetaInformationActionGroup" stepKey="addCategoryMetaTitleC">
+            <argument name="metaTitle" value="Категория А"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryA"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategoryASaved"/>
+        <!--Go to storefront page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <!-- open category A -->
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryA">
+            <argument name="categoryName" value="$$categoryC.name$$"/>
+            <argument name="subCategoryName" value="$$categoryA.name$$"/>
+        </actionGroup>
+        <!-- switch store view to custom store view-->
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <!-- Category A updated name -->
+        <waitForText selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="Категория А" stepKey="seeTitleOnCategoryAPage"/>
+        <waitForText userInput="Другое описание категории А" selector="{{StorefrontCategoryMainSection.CatalogDescriptionWithoutPTag}}" stepKey="assertCatalogDescriptionA2"/>
+        <waitForElement selector="{{StorefrontCategoryHeadSection.pageTitle('Категория А')}}" stepKey="assertCatalogMetaTitleA2"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload_1.fileName)}}" stepKey="assertCatalogImageA2"/>
+        <!-- Verify Updated URLKey is present-->
+        <actionGroup ref="StorefrontAssertProperUrlIsShownActionGroup" stepKey="seeUpdatedUrlkey">
+            <argument name="urlPath" value="kategoriya-a.html"/>
+        </actionGroup>
+    </test>
+</tests>
+

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -18,6 +18,7 @@ use Magento\Framework\Jwt\Header\Critical;
 use Magento\Framework\Jwt\Header\KeyId;
 use Magento\Framework\Jwt\Header\PrivateHeaderParameter;
 use Magento\Framework\Jwt\Header\PublicHeaderParameter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Jwt\Jwe\Jwe;
 use Magento\Framework\Jwt\Jwe\JweEncryptionJwks;
 use Magento\Framework\Jwt\Jwe\JweEncryptionSettingsInterface;
@@ -58,9 +59,8 @@ class JwtManagerTest extends TestCase
      * @param EncryptionSettingsInterface $encryption
      * @param EncryptionSettingsInterface[] $readEncryption
      * @return void
-     *
-     * @dataProvider getTokenVariants
      */
+    #[DataProvider('getTokenVariants')]
     public function testCreateRead(
         JwtInterface $jwt,
         EncryptionSettingsInterface $encryption,
@@ -150,7 +150,7 @@ class JwtManagerTest extends TestCase
 
     }
 
-    public function getTokenVariants(): array
+    public static function getTokenVariants(): array
     {
         /** @var JwkFactory $jwkFactory */
         $jwkFactory = Bootstrap::getObjectManager()->get(JwkFactory::class);
@@ -360,8 +360,8 @@ class JwtManagerTest extends TestCase
         );
 
         //Keys
-        [$rsaPrivate, $rsaPublic] = $this->createRsaKeys();
-        $ecKeys = $this->createEcKeys();
+        [$rsaPrivate, $rsaPublic] = self::createRsaKeys();
+        $ecKeys = self::createEcKeys();
         $sharedSecret = random_bytes(2048);
 
         return [
@@ -727,9 +727,8 @@ class JwtManagerTest extends TestCase
      * @param JwtInterface $tokenData
      * @param EncryptionSettingsInterface $settings
      * @return void
-     *
-     * @dataProvider getJwtsForHeaders
      */
+    #[DataProvider('getJwtsForHeaders')]
     public function testReadHeaders(JwtInterface $tokenData, EncryptionSettingsInterface $settings): void
     {
         $token = $this->manager->create($tokenData, $settings);
@@ -761,7 +760,7 @@ class JwtManagerTest extends TestCase
         }
     }
 
-    public function getJwtsForHeaders(): array
+    public static function getJwtsForHeaders(): array
     {
 
         /** @var JwkFactory $jwkFactory */
@@ -987,7 +986,7 @@ class JwtManagerTest extends TestCase
      *
      * @return string[] With 1st element as private key, second - public.
      */
-    private function createRsaKeys(): array
+    private static function createRsaKeys(): array
     {
         $rsaPrivateResource = openssl_pkey_new(['private_key_bites' => 512, 'private_key_type' => OPENSSL_KEYTYPE_RSA]);
         if ($rsaPrivateResource === false) {
@@ -997,7 +996,7 @@ class JwtManagerTest extends TestCase
         if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate, 'pass')) {
             throw new \RuntimeException('Failed to read RSA private key');
         }
-        $this->freeResource($rsaPrivateResource);
+        self::freeResource($rsaPrivateResource);
 
         return [$rsaPrivate, $rsaPublic];
     }
@@ -1007,7 +1006,7 @@ class JwtManagerTest extends TestCase
      *
      * @return array Keys - bits, values contain 2 elements: 0 => private, 1 => public.
      */
-    private function createEcKeys(): array
+    private static function createEcKeys(): array
     {
         $curveNameMap = [
             256 => 'prime256v1',
@@ -1024,7 +1023,7 @@ class JwtManagerTest extends TestCase
             if (!openssl_pkey_export($privateResource, $esPrivate, 'pass')) {
                 throw new \RuntimeException('Failed to read EC private key');
             }
-            $this->freeResource($privateResource);
+            self::freeResource($privateResource);
             $ecKeys[$bits] = [$esPrivate, $esPublic];
             unset($privateResource, $esPublic, $esPrivate);
         }
@@ -1037,7 +1036,7 @@ class JwtManagerTest extends TestCase
      *
      * @return void
      */
-    private function freeResource($resource): void
+    private static function freeResource($resource): void
     {
         if (\is_resource($resource) && (version_compare(PHP_VERSION, '8.0') < 0)) {
             openssl_free_key($resource);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -73,6 +73,8 @@
         <!--Proceed to Review and Payments section-->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickToSaveShippingInfo"/>
         <waitForPageLoad stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
+        <!-- Select Check Money Order Payment Method -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMO"/>
         <!--Place order and assert the message of success-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderProductSuccessful"/>
     </test>

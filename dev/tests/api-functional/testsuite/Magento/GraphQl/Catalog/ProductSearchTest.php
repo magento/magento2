@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,6 +32,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -112,6 +113,152 @@ class ProductSearchTest extends GraphQlAbstract
         $this->config = $this->objectManager->get(Config::class);
         $this->cache = $this->objectManager->get(Cache::class);
         $this->fixture = DataFixtureStorageManager::getStorage();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    #[DataProvider('sortByPriceAndNameDataProvider')]
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 1'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 2'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'search product 3'], 'prod3'),
+        DataFixture(ProductFixture::class, ['price' => 30, 'name' => 'search product 4'], 'prod4'),
+        DataFixture(ProductFixture::class, ['price' => 40, 'name' => 'search product 5'], 'prod5'),
+    ]
+    public function testSortMultipleFieldsSentInVariables($sort, $expectedOrder): void
+    {
+        $expectedOrderSku = [];
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $search: String,
+    $filter: ProductAttributeFilterInput,
+    $pageSize: Int,
+    $currentPage: Int,
+    $sort: ProductAttributeSortInput
+) {
+    products(
+        search: $search,
+        filter: $filter,
+        pageSize: $pageSize,
+        currentPage: $currentPage,
+        sort: $sort
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+            stock_status
+            price_range {
+                minimum_price {
+                    final_price {
+                        value
+                        currency
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'search' => null,
+            'filter' => [],
+            'pageSize' => 24,
+            'currentPage' => 1,
+            'sort' => $sort
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedOrderSku, array_column($response['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function sortByPriceAndNameDataProvider(): array
+    {
+        return [
+            [
+                ['price' => 'ASC', 'name' => 'ASC'],
+                ['prod1', 'prod2', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'ASC'],
+                ['prod5', 'prod4', 'prod3', 'prod1', 'prod2']
+            ],
+            [
+                ['price' => 'ASC', 'name' => 'DESC'],
+                ['prod2', 'prod1', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'DESC'],
+                ['prod5', 'prod4', 'prod3', 'prod2', 'prod1']
+            ],
+        ];
+    }
+
+    #[DataProvider('filterByNameWithMatchTypeSpecifiedDataProvider')]
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Cronus Yoga Pant'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Lucia Cross-Fit Bra'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'Crown Summit Backpack'], 'prod3'),
+    ]
+    public function testFilterByNameWithMatchTypeSpecified($matchType, $expectedReturns, $expectedTotalCount): void
+    {
+        $expectedNames = [];
+        foreach ($expectedReturns as $productName) {
+            $expectedNames[] = $this->fixture->get($productName)->getName();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $searchWord: String,
+    $matchType: FilterMatchTypeEnum
+) {
+    products(
+        filter: {name: {match: $searchWord, match_type: $matchType} },
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'searchWord' => 'Cros',
+            'matchType' => $matchType,
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedTotalCount, $response['products']['total_count']);
+        $this->assertEquals($expectedNames, array_column($response['products']['items'], 'name'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function filterByNameWithMatchTypeSpecifiedDataProvider(): array
+    {
+        return [
+            [
+                'PARTIAL',
+                ['prod2'],
+                1
+            ],
+        ];
     }
 
     /**
@@ -435,6 +582,9 @@ QUERY;
      */
     public function testLayeredNavigationForConfigurableProducts(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attributeCode = 'test_configurable';
         $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -443,7 +593,7 @@ QUERY;
         $firstOption = $options[0]->getValue();
         $secondOption = $options[1]->getValue();
         $query = $this->getQueryProductsWithArrayOfCustomAttributes($attributeCode, $firstOption, $secondOption);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
 
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
@@ -541,7 +691,7 @@ QUERY;
      */
     public function testFilterProductsByDropDownCustomAttribute(): void
     {
-        CacheCleaner::clean(['eav']);
+        CacheCleaner::clean(['eav', 'config']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
@@ -596,7 +746,7 @@ QUERY;
         $product3 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertEquals(
             3,
             $response['products']['total_count'],
@@ -653,6 +803,9 @@ QUERY;
      */
     public function testFilterProductsByMultiSelectCustomAttributes(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attributeCode = 'multiselect_attribute';
         $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -710,7 +863,7 @@ QUERY;
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertArrayNotHasKey('errors', $response, 'Response has errors.');
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
@@ -743,6 +896,9 @@ QUERY;
      */
     public function testSearchAndFilterByCustomAttribute(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
 
@@ -795,7 +951,7 @@ QUERY;
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         //Verify total count of the products returned
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertArrayHasKey('filters', $response['products']);
@@ -892,6 +1048,9 @@ QUERY;
      */
     public function testFilterByCategoryIdAndCustomAttribute(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $category = $this->getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
         $categoryUid = base64_encode($category->getId());
@@ -943,7 +1102,7 @@ QUERY;
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertEquals(2, $response['products']['total_count']);
         $product1 = $this->productRepository->get('simple');
         $product2 = $this->productRepository->get('simple-4');
@@ -1468,9 +1627,7 @@ QUERY;
         $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
     }
 
-    /**
-     * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
-     */
+    #[DataProvider('sortByPositionWithMultipleCategoriesDataProvider')]
     #[
         DataFixture(ProductFixture::class, as: 'prod1'),
         DataFixture(ProductFixture::class, as: 'prod2'),
@@ -1535,7 +1692,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    public static function sortByPositionWithMultipleCategoriesDataProvider(): array
     {
         return [
             [
@@ -1923,8 +2080,8 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
-     * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
+    #[DataProvider('filterProductsBySingleCategoryIdDataProvider')]
     public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId): void
     {
         CacheCleaner::clean(['config']);
@@ -2905,16 +3062,16 @@ QUERY;
      *
      * @return array[][]
      */
-    public function filterProductsBySingleCategoryIdDataProvider(): array
+    public static function filterProductsBySingleCategoryIdDataProvider(): array
     {
         return [
             [
                 'fieldName' => 'category_id',
-                'categoryId' => '333',
+                'queryCategoryId' => '333',
             ],
             [
                 'fieldName' => 'category_uid',
-                'categoryId' => base64_encode('333'),
+                'queryCategoryId' => base64_encode('333'),
             ],
         ];
     }

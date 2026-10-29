@@ -21,7 +21,12 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Shipping;
+use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,13 +37,15 @@ use PHPUnit\Framework\TestCase;
  */
 class MultishippingQuoteRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CartRepositoryInterface|MockObject
      */
     private $cartMock;
 
     /**
-     * @var CartInterface|MockObject
+     * @var Quote|MockObject
      */
     private $quoteMock;
 
@@ -68,29 +75,26 @@ class MultishippingQuoteRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->cartMock = $this->createMock(CartRepositoryInterface::class);
-        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
-            ->addMethods(
-                [
-                    'hasVirtualItems',
-                    'getAllShippingAddresses',
-                    'getPayment',
-                    'getIsMultiShipping',
-                    'reserveOrderId'
-                ]
-            )
-            ->onlyMethods(['setItems', 'getItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProductType', 'getProduct', 'getQuote', 'getQty', 'getPrice', 'setQuote'])
-            ->getMock();
-        $this->shippingAssignmentFactoryMock = $this->getMockBuilder(ShippingAssignmentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shippingProcessorMock = $this->getMockBuilder(ShippingProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'hasVirtualItems',
+                'getAllShippingAddresses',
+                'getAllAddresses',
+                'getBillingAddress',
+                'getPayment',
+                'getIsMultiShipping',
+                'reserveOrderId',
+                'setIsActive',
+                'setItems',
+                'getItems',
+                'getItemById',
+                'getExtensionAttributes'
+            ]
+        );
+        $this->quoteItemMock = $this->createMock(QuoteItem::class);
+        $this->shippingAssignmentFactoryMock = $this->createMock(ShippingAssignmentFactory::class);
+        $this->shippingProcessorMock = $this->createMock(ShippingProcessor::class);
         $this->multishippingQuoteRepository = new MultishippingQuoteRepository(
             $this->shippingAssignmentFactoryMock,
             $this->shippingProcessorMock
@@ -103,8 +107,8 @@ class MultishippingQuoteRepositoryTest extends TestCase
      * @param bool $isMultiShippingMode
      * @param array $productData
      * @return void
-     * @dataProvider pluginForAfterGetMultiShippingModeDataProvider
      */
+    #[DataProvider('pluginForAfterGetMultiShippingModeDataProvider')]
     public function testPluginAfterGetWithMultiShippingMode(bool $isMultiShippingMode, array $productData): void
     {
         $simpleProductTypeMock = $this->getMockBuilder(Simple::class)
@@ -122,10 +126,10 @@ class MultishippingQuoteRepositoryTest extends TestCase
         $this->setQuoteMockData($productData['paymentProviderCode'], $shippingAddressMock, $billingAddressMock);
         $this->quoteItemMock->method('setQuote')->with($this->quoteMock)->willReturnSelf();
         $this->quoteItemMock->method('getQuote')->willReturn($this->quoteMock);
-        $extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getShippingAssignments'])
-            ->getMockForAbstractClass();
+        $extensionAttributesMock = $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
+            ['getShippingAssignments', 'setShippingAssignments']
+        );
         $this->quoteMock->expects($this->any())
             ->method('getIsMultiShipping')
             ->willReturn($isMultiShippingMode);
@@ -135,6 +139,12 @@ class MultishippingQuoteRepositoryTest extends TestCase
         $extensionAttributesMock->expects($this->any())
             ->method('getShippingAssignments')
             ->willReturn($this->shippingAssignmentFactoryMock);
+        
+        $shippingAssignmentMock = $this->createMock(ShippingAssignment::class);
+        $this->shippingAssignmentFactoryMock->method('create')->willReturn($shippingAssignmentMock);
+        
+        $shippingMock = $this->createMock(Shipping::class);
+        $this->shippingProcessorMock->method('create')->willReturn($shippingMock);
 
         $quote = $this->multishippingQuoteRepository->afterGet($this->cartMock, $this->quoteMock);
         $this->assertNotEmpty($quote);
@@ -184,11 +194,10 @@ class MultishippingQuoteRepositoryTest extends TestCase
      */
     private function getQuoteAddressItemMock(string $productType, array $productOptions): MockObject
     {
-        $quoteAddressItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteItem','setProductType', 'setProductOptions'])
-            ->onlyMethods(['getParentItem'])
-            ->getMock();
+        $quoteAddressItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getQuoteItem', 'setProductType', 'setProductOptions', 'getParentItem']
+        );
         $quoteAddressItemMock->method('getQuoteItem')->willReturn($this->quoteItemMock);
         $quoteAddressItemMock->method('setProductType')->with($productType)->willReturnSelf();
         $quoteAddressItemMock->method('setProductOptions')->willReturn($productOptions);
@@ -204,33 +213,30 @@ class MultishippingQuoteRepositoryTest extends TestCase
      */
     private function getQuoteAddressesMock(Item|MockObject $quoteAddressItemMock): array
     {
-        $shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAddressType', 'getGrandTotal'])
-            ->onlyMethods(
-                [
-                    'validate',
-                    'getShippingMethod',
-                    'getShippingRateByCode',
-                    'getCountryId',
-                    'getAllItems',
-                ]
-            )->getMock();
+        $shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getAddressType',
+                'getGrandTotal',
+                'validate',
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getCountryId',
+                'getAllItems',
+                'getItemsCollection',
+            ]
+        );
         $shippingAddressMock->method('validate')->willReturn(true);
         $shippingAddressMock->method('getAllItems')->willReturn([$quoteAddressItemMock]);
+        $shippingAddressMock->method('getItemsCollection')->willReturn([$quoteAddressItemMock]);
         $shippingAddressMock->method('getAddressType')->willReturn('shipping');
 
-        $shippingRateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->addMethods([ 'getPrice' ])
-            ->getMock();
+        $shippingRateMock = $this->createPartialMockWithReflection(Rate::class, ['getPrice']);
         $shippingAddressMock->method('getShippingRateByCode')->willReturn($shippingRateMock);
 
-        $billingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['validate'])
-            ->getMock();
+        $billingAddressMock = $this->createMock(Address::class);
         $billingAddressMock->method('validate')->willReturn(true);
+        $billingAddressMock->method('getItemsCollection')->willReturn([]);
 
         return [$shippingAddressMock, $billingAddressMock];
     }
@@ -253,6 +259,8 @@ class MultishippingQuoteRepositoryTest extends TestCase
             ->willReturn($paymentMock);
         $this->quoteMock->method('getAllShippingAddresses')
             ->willReturn([$shippingAddressMock]);
+        $this->quoteMock->method('getAllAddresses')
+            ->willReturn([$shippingAddressMock, $billingAddressMock]);
         $this->quoteMock->method('getBillingAddress')
             ->willReturn($billingAddressMock);
         $this->quoteMock->method('hasVirtualItems')
@@ -261,6 +269,7 @@ class MultishippingQuoteRepositoryTest extends TestCase
         $this->quoteMock->method('setIsActive')->with(false)->willReturnSelf();
         $this->quoteMock->method('setItems')->with([$this->quoteItemMock])->willReturnSelf();
         $this->quoteMock->method('getItems')->willReturn([$this->quoteItemMock]);
+        $this->quoteMock->method('getItemById')->willReturn($this->quoteItemMock);
     }
 
     /**
@@ -274,7 +283,7 @@ class MultishippingQuoteRepositoryTest extends TestCase
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isAvailable'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $abstractMethod->method('isAvailable')->willReturn(true);
 
         $paymentMock = $this->getMockBuilder(Payment::class)
@@ -292,7 +301,7 @@ class MultishippingQuoteRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function pluginForAfterGetMultiShippingModeDataProvider(): array
+    public static function pluginForAfterGetMultiShippingModeDataProvider(): array
     {
         $productData = [
             'productType' => Type::TYPE_SIMPLE,

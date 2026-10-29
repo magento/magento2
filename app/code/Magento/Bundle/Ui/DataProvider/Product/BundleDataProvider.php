@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product;
 
@@ -49,7 +49,7 @@ class BundleDataProvider extends ProductDataProvider
         array $data = [],
         array $addFieldStrategies = [],
         array $addFilterStrategies = [],
-        PoolInterface $modifiersPool = null
+        ?PoolInterface $modifiersPool = null
     ) {
         parent::__construct(
             $name,

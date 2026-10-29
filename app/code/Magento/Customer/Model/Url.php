@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,8 +91,8 @@ class Url
         RequestInterface $request,
         UrlInterface $urlBuilder,
         EncoderInterface $urlEncoder,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder = null,
-        \Magento\Framework\Url\HostChecker $hostChecker = null
+        ?\Magento\Framework\Url\DecoderInterface $urlDecoder = null,
+        ?\Magento\Framework\Url\HostChecker $hostChecker = null
     ) {
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;

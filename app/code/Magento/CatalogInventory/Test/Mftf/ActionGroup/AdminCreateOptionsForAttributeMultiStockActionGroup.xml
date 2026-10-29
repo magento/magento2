@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateOptionsForAttributeMultiStockActionGroup" extends="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>Generates configurable variations based on attribute code and source.</description>
+        </annotations>
+        <arguments>
+            <argument name="sourceCode" type="string" defaultValue="{{_defaultSource.source_code}}"/>
+            <argument name="sourceQty" type="string" defaultValue="{{defaultProductQty.value}}"/>
+        </arguments>
+        <remove keyForRemoval="enterAttributeQuantity"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.assignSources}}" stepKey="clickOnAssignSources" after="clickOnApplySingleQuantityToEachSku"/>
+        <conditionalClick selector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" dependentSelector="(//div[@class='admin__data-grid-header']//*[@data-action='grid-filter-reset'])[1]" visible="true" stepKey="clickClearFilters" after="clickOnAssignSources"/>
+        <waitForPageLoad stepKey="waitForFilters" time="5" after="clickClearFilters"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters" after="waitForFilters"/>
+        <fillField userInput="{{sourceCode}}" selector="{{AdminManageSourcesGridFilterControls.code}}" stepKey="fillSourceCodeField" after="clickOnFilters"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters" after="fillSourceCodeField"/>
+        <click selector="{{AdminGridRow.checkboxByValue(sourceCode)}}" stepKey="selectSource" after="clickOnApplyFilters"/>
+        <click selector="{{AdminConfigurableProductAssignSourcesSlideOut.done}}" stepKey="done" after="selectSource"/>
+        <fillField selector="{{AdminConfigurableProductAssignSourcesSlideOut.quantityPerSourceForMultiMode}}" userInput="{{sourceQty}}" stepKey="fillQuantity" after="done"/>
+    </actionGroup>
+</actionGroups>

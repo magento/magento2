@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\Framework\App\Area;
@@ -24,6 +25,7 @@ use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 class ProductIndexersInvalidationTest extends ProductTestBase
 {
     #[
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1']),
         DataFixture('Magento/Catalog/_files/multiple_products.php'),
     ]
     public function testIndexersState() : void

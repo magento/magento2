@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -221,8 +221,7 @@ function getDefaultSuites(string $testType): array
                     'testsuite'
                 ],
                 'exclude' => [
-                    'testsuite/Magento/MemoryUsageTest.php',
-                    'testsuite/Magento/IntegrationTestCase.php'
+                    'testsuite/Magento/MemoryUsageTest.php'
                 ]
             ];
             break;

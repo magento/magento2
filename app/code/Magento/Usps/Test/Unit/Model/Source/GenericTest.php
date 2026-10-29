@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Usps\Test\Unit\Model\Source;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Usps\Model\Carrier;
 use Magento\Usps\Model\Source\Generic;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GenericTest extends TestCase
@@ -27,12 +28,7 @@ class GenericTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->_uspsModel = $this->getMockBuilder(
-            Carrier::class
-        )->onlyMethods(
-            ['getCode']
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->_uspsModel = $this->createPartialMock(Carrier::class, ['getCode']);
 
         $this->_generic = $helper->getObject(
             Generic::class,
@@ -41,10 +37,10 @@ class GenericTest extends TestCase
     }
 
     /**
-     * @dataProvider getCodeDataProvider
      * @param array$expected array
      * @param array $options
      */
+    #[DataProvider('getCodeDataProvider')]
     public function testToOptionArray($expected, $options)
     {
         $this->_uspsModel->expects($this->any())->method('getCode')->willReturn($options);
@@ -55,7 +51,7 @@ class GenericTest extends TestCase
     /**
      * @return array expected result and return of \Magento\Usps\Model\Carrier::getCode
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             [[['value' => 'Val', 'label' => 'Label']], ['Val' => 'Label']],

@@ -1,9 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
+// phpcs:ignoreFile
 
 namespace Magento\TestSetupDeclarationModule1\Setup;
 
@@ -37,7 +38,9 @@ class InstallSchema implements InstallSchemaInterface
                 ['primary' => true, 'identity' => true, 'nullable' => false],
                 'Smallint'
             )
-            ->setComment('Reference table');
+            ->setComment('Reference table')
+            ->setOption('charset', 'utf8mb4')
+            ->setOption('collate', 'utf8mb4_general_ci');
         $installer->getConnection()->createTable($table);
 
         $testTable = $installer->getConnection()->newTable($installer->getTable('test_table'))
@@ -118,7 +121,9 @@ class InstallSchema implements InstallSchemaInterface
                 'smallint_ref',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->setComment('Test Table');
+            ->setComment('Test Table')
+            ->setOption('charset', 'utf8mb4')
+            ->setOption('collate', 'utf8mb4_general_ci');
         $installer->getConnection()->createTable($testTable);
 
         $installer->endSetup();

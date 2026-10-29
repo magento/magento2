@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RedirectTest extends TestCase
 {
@@ -33,10 +34,10 @@ class RedirectTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->redirectInterface = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
+        $this->redirectInterface = $this->createMock(RedirectInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlInterface = $this->createMock(UrlInterface::class);
+        $this->response = $this->createMock(HttpResponseInterface::class);
         $this->redirect = new Redirect($this->redirectInterface, $this->urlInterface);
     }
 
@@ -80,7 +81,7 @@ class RedirectTest extends TestCase
     /**
      * @return array
      */
-    public function httpRedirectResponseStatusCodes()
+    public static function httpRedirectResponseStatusCodes()
     {
         return [
             [302, null],
@@ -91,9 +92,8 @@ class RedirectTest extends TestCase
 
     /**
      * @param int $expectedStatusCode
-     * @param int|null $actualStatusCode
-     * @dataProvider httpRedirectResponseStatusCodes
-     */
+     * @param int|null $actualStatusCode     */
+    #[DataProvider('httpRedirectResponseStatusCodes')]
     public function testRender($expectedStatusCode, $actualStatusCode)
     {
         $url = 'http://test.com';

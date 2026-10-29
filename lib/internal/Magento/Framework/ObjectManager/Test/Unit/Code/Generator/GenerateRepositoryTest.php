@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GenerateRepositoryTest extends TestCase
 {
@@ -42,9 +43,8 @@ class GenerateRepositoryTest extends TestCase
      *
      * @param string $className
      * @param string $sourceClassName
-     * @param string $fileName
-     * @dataProvider interfaceListDataProvider
-     */
+     * @param string $fileName     */
+    #[DataProvider('interfaceListDataProvider')]
     public function testGenerate($className, $sourceClassName, $fileName)
     {
         /** @var Repository|MockObject $repository */
@@ -79,7 +79,7 @@ class GenerateRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function interfaceListDataProvider()
+    public static function interfaceListDataProvider()
     {
         return [
             [

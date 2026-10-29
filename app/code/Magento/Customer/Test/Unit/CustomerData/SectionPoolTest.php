@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class SectionPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->identifierMock = $this->createMock(Identifier::class);
         $this->sectionSourceMap = ['section1' => 'b'];
         $this->model = new SectionPool(
@@ -61,7 +61,7 @@ class SectionPoolTest extends TestCase
         ];
         $identifierResult = [1, 2, 3];
 
-        $sectionSourceMock = $this->getMockForAbstractClass(SectionSourceInterface::class);
+        $sectionSourceMock = $this->createMock(SectionSourceInterface::class);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with('b')

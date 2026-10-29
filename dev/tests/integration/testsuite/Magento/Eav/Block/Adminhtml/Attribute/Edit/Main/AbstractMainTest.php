@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -32,9 +32,8 @@ class AbstractMainTest extends \PHPUnit\Framework\TestCase
         $model->setEntityTypeId($entityType->getId());
         $objectManager->get(\Magento\Framework\Registry::class)->register('entity_attribute', $model);
 
-        $block = $this->getMockForAbstractClass(
-            \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain::class,
-            [
+        $block = $this->getMockBuilder(AbstractMain::class)
+            ->setConstructorArgs([
                 $objectManager->get(\Magento\Backend\Block\Template\Context::class),
                 $objectManager->get(\Magento\Framework\Registry::class),
                 $objectManager->get(\Magento\Framework\Data\FormFactory::class),
@@ -42,8 +41,11 @@ class AbstractMainTest extends \PHPUnit\Framework\TestCase
                 $objectManager->get(\Magento\Config\Model\Config\Source\YesnoFactory::class),
                 $objectManager->get(\Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory::class),
                 $objectManager->get(\Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker::class)
-            ]
-        )->setLayout(
+            ])
+            ->onlyMethods(['_prepareForm'])     // list at least one abstract method
+            ->getMock();
+
+        $block->setLayout(
             $objectManager->create(\Magento\Framework\View\Layout::class)
         );
 
@@ -51,7 +53,6 @@ class AbstractMainTest extends \PHPUnit\Framework\TestCase
             \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain::class,
             '_prepareForm'
         );
-        $method->setAccessible(true);
         $method->invoke($block);
 
         $element = $block->getForm()->getElement('default_value_date');

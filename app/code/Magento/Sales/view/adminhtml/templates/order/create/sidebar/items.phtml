@@ -1,23 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
+use Magento\Framework\Escaper;
+use Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck;
 
 /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
 
 $blockDataId = $block->getDataId();
-$jsEscapedBlockDataId = $block->escapeJs($blockDataId);
+$jsEscapedBlockDataId = $escaper->escapeJs($blockDataId);
+/**
+ * @var SidebarPermissionCheck $sideBarPermissionCheck
+ */
+$sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
 ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($blockDataId) ?>">
+<?php  if ($sideBarPermissionCheck->isAllowed()): ?>
+<div class="create-order-sidebar-block" id="sidebar_data_<?= $escaper->escapeHtmlAttr($blockDataId) ?>">
     <div class="head sidebar-title-block">
-        <a href="#" class="action-refresh" title="<?= $block->escapeHtml(__('Refresh')) ?>">
-            <span><?= $block->escapeHtml(__('Refresh')) ?></span>
+        <a href="#" class="action-refresh" title="<?= $escaper->escapeHtml(__('Refresh')) ?>">
+            <span><?= $escaper->escapeHtml(__('Refresh')) ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
-            <?= $block->escapeHtml($block->getHeaderText()) ?>
-            <span class="normal">(<?= $block->escapeHtml($block->getItemCount()) ?>)</span>
+            <?= $escaper->escapeHtml($block->getHeaderText()) ?>
+            <span class="normal">(<?= $escaper->escapeHtml($block->getItemCount()) ?>)</span>
         </h5>
     </div>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
@@ -35,29 +44,29 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
         <table class="admin__table-primary">
             <thead>
                 <tr>
-                    <th class="col-item"><?= $block->escapeHtml(__('Item')) ?></th>
+                    <th class="col-item"><?= $escaper->escapeHtml(__('Item')) ?></th>
 
                     <?php if ($block->canDisplayItemQty()): ?>
-                        <th class="col-qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+                        <th class="col-qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canDisplayPrice()): ?>
-                        <th class="col-price"><?= $block->escapeHtml(__('Price')) ?></th>
+                        <th class="col-price"><?= $escaper->escapeHtml(__('Price')) ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canRemoveItems()): ?>
                         <th class="col-remove">
-                            <span title="<?= $block->escapeHtml(__('Remove')) ?>"
+                            <span title="<?= $escaper->escapeHtml(__('Remove')) ?>"
                                   class="icon icon-remove">
-                                <span><?= $block->escapeHtml(__('Remove')) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Remove')) ?></span>
                             </span>
                         </th>
                     <?php endif; ?>
 
                     <th class="col-add">
-                        <span title="<?= $block->escapeHtml(__('Add To Order')) ?>"
+                        <span title="<?= $escaper->escapeHtml(__('Add to the new order')) ?>"
                               class="icon icon-add">
-                            <span><?= $block->escapeHtml(__('Add To Order')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Add to the new order')) ?></span>
                         </span>
                     </th>
                 </tr>
@@ -66,7 +75,7 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
             <tbody>
                 <?php foreach ($block->getItems() as $_item): ?>
                     <tr id="product-id-<?= (int) $block->getProductId($_item) ?>">
-                        <td class="col-item"><?= $block->escapeHtml($_item->getName()) ?></td>
+                        <td class="col-item"><?= $escaper->escapeHtml($_item->getName()) ?></td>
 
                         <?php if ($block->canDisplayItemQty()): ?>
                             <td class="col-qty">
@@ -84,16 +93,16 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                             <td class="col-remove">
                                 <div class="admin__field-option">
                                     <input id="sidebar-remove-<?=
-                                    $block->escapeHtmlAttr($block->getSidebarStorageAction())
+                                    $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                     ?>-<?= (int) $block->getItemId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?= (int) $block->getItemId($_item) ?>]"
-                                           value="<?= $block->escapeHtmlAttr($blockDataId) ?>"
-                                           title="<?= $block->escapeHtml(__('Remove')) ?>" />
+                                           value="<?= $escaper->escapeHtmlAttr($blockDataId) ?>"
+                                           title="<?= $escaper->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
                                            for="sidebar-remove-<?=
-                                            $block->escapeHtmlAttr($block->getSidebarStorageAction())
+                                            $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                             ?>-<?= (int) $block->getItemId($_item) ?>">
                                     </label>
                                 </div>
@@ -106,8 +115,8 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                                     $blockDataId == 'wishlist'): ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>">
-                                        <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
+                                       title="<?= $escaper->escapeHtml(__('Configure and Add to Order')) ?>">
+                                        <span><?= $escaper->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
@@ -119,8 +128,8 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>">
-                                        <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
+                                       title="<?= $escaper->escapeHtml(__('Configure and Add to Order')) ?>">
+                                        <span><?= $escaper->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
@@ -129,16 +138,16 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                                         'tr#product-id-' . (int) $block->getProductId($_item) . ' a.icon.icon-configure'
                                     ) ?>
                                 <?php else: ?>
-                                    <input id="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction())
+                                    <input id="sidebar-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                     ?>-<?= (int) $block->getIdentifierId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[<?= $block->escapeHtmlAttr($block->getSidebarStorageAction())
+                                           name="sidebar[<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                             ?>][<?= (int) $block->getIdentifierId($_item) ?>]"
                                            value="<?= $block->canDisplayItemQty() ? (float) $_item->getQty() : 1 ?>"
-                                           title="<?= $block->escapeHtml(__('Add To Order')) ?>"/>
+                                           title="<?= $escaper->escapeHtml(__('Add to the new order')) ?>"/>
                                     <label class="admin__field-label"
-                                           for="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction())
+                                           for="sidebar-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                             ?>-<?= (int) $block->getIdentifierId($_item) ?>">
                                     </label>
                                 <?php endif; ?>
@@ -149,7 +158,7 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
             </tbody>
         </table>
         <?php else: ?>
-            <span class="no-items"><?= $block->escapeHtml(__('No items')) ?></span>
+            <span class="no-items"><?= $escaper->escapeHtml(__('No items')) ?></span>
         <?php endif ?>
         </div>
         <?php if ($block->getItemCount() && $block->canRemoveItems()): ?>
@@ -157,3 +166,4 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
         <?php endif; ?>
     </div>
 </div>
+<?php endif; ?>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\Driver;
@@ -334,7 +334,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null)
     {
         $result = false;
         $targetDriver = $targetDriver ?: $this;
@@ -371,7 +371,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null)
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null)
     {
         $targetDriver = $targetDriver ?: $this;
         if (get_class($targetDriver) === get_class($this)) {
@@ -407,7 +407,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null)
     {
         $result = false;
         if ($targetDriver === null || get_class($targetDriver) == get_class($this)) {

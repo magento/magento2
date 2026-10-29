@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,12 @@ return [
   `smallint` smallint(6) NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci',
     'test_table_two' => 'CREATE TABLE `test_table_two` (
   `smallint` smallint(6) NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci',
     'reference_table' => 'CREATE TABLE `reference_table` (
   `tinyint_ref` tinyint(4) NOT NULL AUTO_INCREMENT,
   `tinyint_without_padding` tinyint(4) NOT NULL DEFAULT 0,
@@ -29,10 +29,10 @@ return [
   `bigint_default_nullable` bigint(20) unsigned DEFAULT 1,
   `bigint_not_default_not_nullable` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`tinyint_ref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci',
     'auto_increment_test' => 'CREATE TABLE `auto_increment_test` (
   `int_auto_increment_with_nullable` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `int_disabled_auto_increment` smallint(5) unsigned DEFAULT 0,
   UNIQUE KEY `AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE` (`int_auto_increment_with_nullable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci'
 ];

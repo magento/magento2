@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -140,7 +140,7 @@ class Encryptor implements EncryptorInterface
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
-        KeyValidator $keyValidator = null
+        ?KeyValidator $keyValidator = null
     ) {
         $this->random = $random;
 
@@ -516,9 +516,9 @@ class Encryptor implements EncryptorInterface
      * @throws \Exception
      */
     private function getCrypt(
-        string $key = null,
-        int $cipherVersion = null,
-        string $initVector = null
+        ?string $key = null,
+        ?int $cipherVersion = null,
+        ?string $initVector = null
     ): ?EncryptionAdapterInterface {
         //phpcs:disable PHPCompatibility.Constants.RemovedConstants
         if (null === $key && null === $cipherVersion) {

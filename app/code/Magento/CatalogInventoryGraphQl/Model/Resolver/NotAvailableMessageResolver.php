@@ -34,7 +34,7 @@ class NotAvailableMessageResolver implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -47,12 +47,14 @@ class NotAvailableMessageResolver implements ResolverInterface
         }
 
         if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
+            $requiredItemQty = ($cartItem->getQtyToAdd() ?? $cartItem->getQty()) + ($cartItem->getPreviousQty() ?? 0);
             return sprintf(
-                'Only %s available for sale. Please adjust the quantity to continue',
-                (string) $this->productStock->getProductAvailableStock($cartItem)
+                'Only %s of %s available',
+                (string) $this->productStock->getProductSaleableQty($cartItem),
+                (string) $requiredItemQty
             );
         }
 
-        return 'Not enough items for sale. Please adjust the quantity to continue';
+        return 'Not enough items for sale';
     }
 }

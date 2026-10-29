@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,71 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
+/**
+ * Cart price rule fixture
+ *
+ * Example 1: Using array list: (base_subtotal > 1000) AND (sku in (simple1,simple3))
+ *
+ * ```php
+ *    #[
+ *        DataFixture(
+ *            RuleFixture::class,
+ *            [
+ *                'discount_amount' => 25,
+ *                'conditions' => [
+ *                    [
+ *                        'attribute' => 'base_subtotal',
+ *                        'operator' => '>',
+ *                        'value' => 1000
+ *                    ],
+ *                 ],
+ *                'actions' => [
+ *                    [
+ *                        'attribute' => 'sku',
+ *                        'operator' => '()',
+ *                        'value' => 'simple1,simple3'
+ *                    ]
+ *                ]
+ *            ],
+ *            'rule'
+ *        )
+ *    ]
+ * ```
+ *
+ * Example 2: Using associative conditions: (category_ids in (1, 2) AND attribute_set_id=default) OR (sku=simple3)
+ *
+ * ```php
+ *    #[
+ *        DataFixture(
+ *            RuleFixture::class,
+ *            [
+ *                'discount_amount' => 25,
+ *                'actions' => [
+ *                    'aggregator' => 'any',
+ *                    'conditions' => [
+ *                        [
+ *                            [
+ *                                'attribute' => 'category_ids',
+ *                                'operator' => '()',
+ *                                'value' => '1,2',
+ *                            ],
+ *                           [
+ *                                'attribute' => 'attribute_set_id',
+ *                                'value' => 'default',
+ *                           ],
+ *                        ],
+ *                        [
+ *                            'attribute' => 'sku',
+ *                            'value' => 'simple3'
+ *                        ]
+ *                    ],
+ *                ],
+ *            ],
+ *            'rule'
+ *        )
+ *    ]
+ * ```
+ */
 class Rule implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -145,38 +210,61 @@ class Rule implements RevertibleDataFixtureInterface
     private function prepareData(array $data): array
     {
         $data = array_merge($this->prepareDefaultData(), $data);
-        $data['conditions'] = $data['conditions'] ?? [];
-        $data['actions'] = $data['actions'] ?? [];
 
-        if ($data['conditions'] instanceof DataObject) {
-            $data['conditions'] = $data['conditions']->toArray();
-        } else {
-            $conditions = $data['conditions'];
-            $data['conditions'] = Conditions::DEFAULT_DATA;
-            foreach ($conditions as $condition) {
-                $data['conditions']['conditions'][] = $condition instanceof DataObject
-                    ? $condition->toArray()
-                    : $condition;
-            }
-        }
-
-        if ($data['actions'] instanceof DataObject) {
-            $data['actions'] = $data['actions']->toArray();
-        } else {
-            $conditions = $data['actions'];
-            $data['actions'] = ProductConditions::DEFAULT_DATA;
-            foreach ($conditions as $condition) {
-                $data['actions']['conditions'][] = $condition instanceof DataObject
-                    ? $condition->toArray()
-                    : $condition;
-            }
-        }
+        $data['conditions'] = $this->prepareConditionsData(
+            $data['conditions'] instanceof DataObject ? $data['conditions']->toArray() : $data['conditions'],
+            Conditions::DEFAULT_DATA,
+            AddressCondition::DEFAULT_DATA
+        );
+        $data['actions'] = $this->prepareConditionsData(
+            $data['actions'] instanceof DataObject ? $data['actions']->toArray() : $data['actions'],
+            ProductConditions::DEFAULT_DATA,
+            ProductCondition::DEFAULT_DATA
+        );
 
         if (!empty($data['coupon_code'])) {
             $data['coupon_type'] = \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC;
         }
 
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Prepare conditions data
+     *
+     * @param array $conditions
+     * @param array $defaultConditionsData
+     * @param array $defaultConditionData
+     * @return array
+     */
+    private function prepareConditionsData(
+        array $conditions,
+        array $defaultConditionsData,
+        array $defaultConditionData
+    ): array {
+        $conditionsArray = array_is_list($conditions)
+            ? ['conditions' => $conditions]
+            : $conditions;
+        $conditionsArray += $defaultConditionsData;
+        $subConditions = $conditionsArray['conditions'];
+        $conditionsArray['conditions'] = [];
+        foreach ($subConditions as $condition) {
+            $conditionArray = $condition instanceof DataObject
+                ? $condition->toArray()
+                : $condition;
+            // Condition is a combine
+            if (array_is_list($conditionArray) || isset($conditionArray['conditions'])) {
+                $conditionArray = $this->prepareConditionsData(
+                    $conditionArray,
+                    $defaultConditionsData,
+                    $defaultConditionData
+                );
+            } else {
+                $conditionArray += $defaultConditionData;
+            }
+            $conditionsArray['conditions'][] = $conditionArray;
+        }
+        return $conditionsArray;
     }
 
     /**

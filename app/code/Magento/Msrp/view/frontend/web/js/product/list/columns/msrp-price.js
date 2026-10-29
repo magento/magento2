@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -22,7 +22,9 @@ define([
                 dialogContentClass: 'active',
                 closeOnMouseLeave: false,
                 autoPosition: true,
-                dialogClass: 'popup map-popup-wrapper',
+                classes: {
+                    'ui-dialog': 'popup map-popup-wrapper'
+                },
                 position: {
                     my: 'left top',
                     collision: 'fit none',
@@ -51,7 +53,7 @@ define([
             this.popupOptions.triggerTarget = $trigger;
 
             $popup.dropdownDialog(this.popupOptions)
-                  .dropdownDialog('open');
+                .dropdownDialog('open');
         },
 
         /**

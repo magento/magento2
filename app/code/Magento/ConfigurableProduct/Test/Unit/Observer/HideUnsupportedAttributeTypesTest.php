@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class HideUnsupportedAttributeTypesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -45,7 +49,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     }
 
     /**
-     * @param RequestInterface|\PHPUnit\Framework\MockObject\MockObject $request
+     * @param RequestInterface|MockObject $request
      * @param array $supportedTypes
      * @return HideUnsupportedAttributeTypes
      */
@@ -67,9 +71,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
      */
     private function createRequestMock($popup, $productTab = 'variations')
     {
-        $request = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $request = $this->createMock(RequestInterface::class);
         $request->method('getParam')
             ->willReturnCallback(
                 function ($name) use ($popup, $productTab) {
@@ -87,25 +89,18 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject|null $form
-     * @return EventObserver|\PHPUnit\Framework\MockObject\MockObject
+     * @param MockObject|null $form
+     * @return EventObserver|MockObject
      * @internal param null|MockObject $block
      */
-    private function createEventMock(MockObject $form = null)
+    private function createEventMock(?MockObject $form = null)
     {
-        $event = $this->getMockBuilder(EventObserver::class)
-            ->addMethods(['getForm', 'getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->expects($this->any())
-            ->method('getForm')
-            ->willReturn($form);
+        $event = new EventObserver();
+        $event->setForm($form);
         return $event;
     }
 
-    /**
-     * @dataProvider executeDataProvider
-     */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithDefaultTypes(array $supportedTypes, array $originalValues, array $expectedValues)
     {
         $target = $this->createTarget($this->createRequestMock(true), $supportedTypes);
@@ -116,37 +111,37 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'testWithDefaultTypes' => [
                 'supportedTypes' => ['select'],
                 'originalValues' => [
-                    $this->createFrontendInputValue('text2', 'Text2'),
-                    $this->createFrontendInputValue('select', 'Select'),
-                    $this->createFrontendInputValue('text', 'Text'),
-                    $this->createFrontendInputValue('multiselect', 'Multiselect'),
-                    $this->createFrontendInputValue('text3', 'Text3'),
+                    self::createFrontendInputValue('text2', 'Text2'),
+                    self::createFrontendInputValue('select', 'Select'),
+                    self::createFrontendInputValue('text', 'Text'),
+                    self::createFrontendInputValue('multiselect', 'Multiselect'),
+                    self::createFrontendInputValue('text3', 'Text3'),
                 ],
                 'expectedValues' => [
-                    $this->createFrontendInputValue('select', 'Select'),
+                    self::createFrontendInputValue('select', 'Select'),
                 ],
             ],
             'testWithCustomTypes' => [
                 'supportedTypes' => ['select', 'custom_type', 'second_custom_type'],
                 'originalValues' => [
-                    $this->createFrontendInputValue('custom_type', 'CustomType'),
-                    $this->createFrontendInputValue('text2', 'Text2'),
-                    $this->createFrontendInputValue('select', 'Select'),
-                    $this->createFrontendInputValue('text', 'Text'),
-                    $this->createFrontendInputValue('second_custom_type', 'SecondCustomType'),
-                    $this->createFrontendInputValue('multiselect', 'Multiselect'),
-                    $this->createFrontendInputValue('text3', 'Text3'),
+                    self::createFrontendInputValue('custom_type', 'CustomType'),
+                    self::createFrontendInputValue('text2', 'Text2'),
+                    self::createFrontendInputValue('select', 'Select'),
+                    self::createFrontendInputValue('text', 'Text'),
+                    self::createFrontendInputValue('second_custom_type', 'SecondCustomType'),
+                    self::createFrontendInputValue('multiselect', 'Multiselect'),
+                    self::createFrontendInputValue('text3', 'Text3'),
                 ],
                 'expectedValues' => [
-                    $this->createFrontendInputValue('custom_type', 'CustomType'),
-                    $this->createFrontendInputValue('select', 'Select'),
-                    $this->createFrontendInputValue('second_custom_type', 'SecondCustomType'),
+                    self::createFrontendInputValue('custom_type', 'CustomType'),
+                    self::createFrontendInputValue('select', 'Select'),
+                    self::createFrontendInputValue('second_custom_type', 'SecondCustomType'),
                 ],
             ]
         ];
@@ -157,7 +152,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
      * @param $label
      * @return array
      */
-    private function createFrontendInputValue($value, $label)
+    private static function createFrontendInputValue($value, $label)
     {
         return ['value' => $value, 'label' => $label];
     }
@@ -169,21 +164,17 @@ class HideUnsupportedAttributeTypesTest extends TestCase
      */
     private function createForm(array $originalValues = [], array $expectedValues = [])
     {
-        $form = $this->getMockBuilder(Form::class)
-            ->onlyMethods(['getElement'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $frontendInput = $this->getMockBuilder(Select::class)
-            ->addMethods(['getValues', 'setValues'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createPartialMock(Form::class, ['getElement']);
+        $frontendInput = $this->createPartialMockWithReflection(
+            Select::class,
+            ['getValues', 'setValues']
+        );
         $frontendInput->expects($this->once())
             ->method('getValues')
             ->willReturn($originalValues);
         $frontendInput->expects($this->once())
             ->method('setValues')
-            ->with($expectedValues)
-            ->willReturnSelf();
+            ->with($expectedValues);
         $form->expects($this->once())
             ->method('getElement')
             ->with('frontend_input')

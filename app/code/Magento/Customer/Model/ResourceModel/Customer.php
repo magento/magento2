@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Eav\Model\Entity\Context;
 use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
+use Magento\Eav\Model\ResourceModel\OrphanedMultiselectCleaner;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -74,6 +75,11 @@ class Customer extends AbstractEntity
     private $encryptor;
 
     /**
+     * @var OrphanedMultiselectCleaner
+     */
+    private $orphanedMultiselectCleaner;
+
+    /**
      * Customer constructor.
      *
      * @param Context $context
@@ -86,6 +92,7 @@ class Customer extends AbstractEntity
      * @param array $data
      * @param AccountConfirmation|null $accountConfirmation
      * @param EncryptorInterface|null $encryptor
+     * @param OrphanedMultiselectCleaner|null $orphanedMultiselectCleaner
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -97,8 +104,9 @@ class Customer extends AbstractEntity
         DateTime $dateTime,
         StoreManagerInterface $storeManager,
         $data = [],
-        AccountConfirmation $accountConfirmation = null,
-        EncryptorInterface $encryptor = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?EncryptorInterface $encryptor = null,
+        ?OrphanedMultiselectCleaner $orphanedMultiselectCleaner = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -107,6 +115,8 @@ class Customer extends AbstractEntity
         $this->dateTime = $dateTime;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->orphanedMultiselectCleaner = $orphanedMultiselectCleaner
+            ?? ObjectManager::getInstance()->get(OrphanedMultiselectCleaner::class);
         $this->setType('customer');
         $this->setConnection('customer_read');
         $this->storeManager = $storeManager;
@@ -150,6 +160,10 @@ class Customer extends AbstractEntity
             $customer->setStoreId($this->storeManager->getStore()->getId());
         }
         $customer->getGroupId();
+
+        if ($customer->getId()) {
+            $this->cleanOrphanedMultiselectValues($customer);
+        }
 
         parent::_beforeSave($customer);
 
@@ -517,6 +531,17 @@ class Customer extends AbstractEntity
             ['session_cutoff' => $this->dateTime->formatDate($timestamp)],
             $this->getConnection()->quoteInto('entity_id = ?', $customerId)
         );
+    }
+
+    /**
+     * Clean up orphaned multiselect attribute values before validation
+     *
+     * @param DataObject $customer
+     * @return void
+     */
+    private function cleanOrphanedMultiselectValues(DataObject $customer): void
+    {
+        $this->orphanedMultiselectCleaner->cleanEntity($this, $customer);
     }
 
     /**

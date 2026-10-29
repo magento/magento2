@@ -31,8 +31,8 @@ class DisplayWrapping implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (isset($value['shopping_cart_display_tax_gift_wrapping'])) {
             return $this->enumLookup->getEnumValueFromField(

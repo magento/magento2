@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,7 @@ class CronRemoveCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->crontabManagerMock = $this->getMockBuilder(CrontabManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->crontabManagerMock = $this->createMock(CrontabManagerInterface::class);
 
         $this->commandTester = new CommandTester(
             new CronRemoveCommand($this->crontabManagerMock)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
@@ -12,6 +12,8 @@ use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 
 /**
  * Data mapper factory uses to create appropriate mapper class
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataMapperFactory
 {

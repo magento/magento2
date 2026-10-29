@@ -1,9 +1,7 @@
 <?php
 /**
- * Application configuration object. Used to access configuration when application is initialized and installed.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\App;
 
@@ -70,6 +68,7 @@ class Config extends \Magento\Framework\App\Config
     ) {
         $result = $this->get('system');
 
+        $originalScope = $scope;
         if ($scope === 'store') {
             $scope = 'stores';
         } elseif ($scope === 'website') {
@@ -77,7 +76,13 @@ class Config extends \Magento\Framework\App\Config
         }
 
         if (empty($scopeCode)) {
-            $scopeCode = $this->getScopeCodeResolver()->resolve($scope, $scopeCode);
+            // Use original scope type for resolver, as it expects 'store'/'website', not 'stores'/'websites'
+            try {
+                $scopeCode = $this->getScopeCodeResolver()->resolve($originalScope, $scopeCode);
+            } catch (\Exception $e) {
+                // If scope resolver fails (e.g., during app isolation), fallback to default scope code
+                $scopeCode = null;
+            }
         }
 
         $keys = explode('/', $path);
@@ -99,7 +104,7 @@ class Config extends \Magento\Framework\App\Config
      * @param mixed $value
      * @return void
      */
-    private function updateResult(array $keys, & $result, $value)
+    private function updateResult(array $keys, &$result, $value)
     {
         $key = array_shift($keys);
 

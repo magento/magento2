@@ -1,22 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Downloadable\Model\LinkFactory;
 use Magento\Downloadable\Model\Product\TypeHandler\Link;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Downloadable\Model\ResourceModel\Link as LinkResource;
 
 /**
  * Test for \Magento\Downloadable\Model\Product\TypeHandler\Link
@@ -24,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -45,27 +50,19 @@ class LinkTest extends TestCase
     private $linkFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Product\TypeHandler\Link
+     * @var Link
      */
     private $target;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->linkResource = $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Link::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['deleteItems'])
-            ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkFactory = $this->createPartialMock(LinkFactory::class, ['create']);
+        $this->linkResource = $this->createPartialMock(LinkResource::class, ['deleteItems']);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->metadataMock = $this->createMock(EntityMetadata::class);
-        $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
-        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
+        $this->metadataMock->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
             Link::class,
             [
@@ -75,18 +72,18 @@ class LinkTest extends TestCase
         );
         $refClass = new \ReflectionClass(Link::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 
     /**
-     * @dataProvider saveDataProvider
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param \Closure $product
      * @param array $data
      * @param array $modelData
      */
-    public function testSave($product, array $data, array $modelData)
+    #[DataProvider('saveDataProvider')]
+    public function testSave(\Closure $product, array $data, array $modelData)
     {
+        $product = $product($this);
         $link = $this->createLinkkModel($product, $modelData, true);
         $this->linkFactory->expects($this->once())
             ->method('create')
@@ -99,11 +96,12 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return [
             [
-                'product' => $this->createProductMock(100500, 1, 10, [10]),
+                'product' => static fn (self $testCase) => $testCase
+                    ->createProductMock(100500, 1, 10, [10]),
                 'data' => [
                     'link' => [
                         [
@@ -169,13 +167,14 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param \Closure $product
      * @param array $data
      * @param array $expectedItems
-     * @dataProvider deleteDataProvider
      */
-    public function testDelete($product, array $data, array $expectedItems)
+    #[DataProvider('deleteDataProvider')]
+    public function testDelete(\Closure $product, array $data, array $expectedItems)
     {
+        $product = $product($this);
         $this->linkResource->expects($this->once())
             ->method('deleteItems')
             ->with($expectedItems);
@@ -185,11 +184,12 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function deleteDataProvider()
+    public static function deleteDataProvider()
     {
         return [
             [
-                'product' => $this->createProductMock(1, 1, 1, [1]),
+                'product' => static fn (self $testCase) => $testCase
+                    ->createProductMock(1, 1, 1, [1]),
                 'data' => [
                     'link' => [
                         [
@@ -220,30 +220,32 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|MockObject $product
+     * @param Product|MockObject $product
      * @param array $modelData
      * @param bool $isUnlimited
      * @return \Magento\Downloadable\Model\Link|MockObject
      */
     private function createLinkkModel($product, array $modelData, $isUnlimited)
     {
-        $link = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setProductId','setStoreId','setWebsiteId','setProductWebsiteIds','getIsUnlimited'])
-            ->onlyMethods(
-                [
-                    'setData',
-                    'setLinkType',
-                    'setPrice',
-                    'setNumberOfDownloads',
-                    'setSampleUrl',
-                    'setSampleType',
-                    'setLinkFile',
-                    'setSampleFile',
-                    'save'
-                ]
-            )
-            ->getMock();
+        $link = $this->createPartialMockWithReflection(
+            LinkModel::class,
+            [
+                'setProductId',
+                'setStoreId',
+                'setWebsiteId',
+                'setProductWebsiteIds',
+                'getIsUnlimited',
+                'setData',
+                'setLinkType',
+                'setPrice',
+                'setNumberOfDownloads',
+                'setSampleUrl',
+                'setSampleType',
+                'setLinkFile',
+                'setSampleFile',
+                'save'
+            ]
+        );
         $link->expects($this->once())
             ->method('setData')
             ->with($modelData)->willReturnSelf();
@@ -276,51 +278,30 @@ class LinkTest extends TestCase
      * @param int $storeId
      * @param int $storeWebsiteId
      * @param array $websiteIds
-     * @return \Magento\Catalog\Model\Product|MockObject
+     * @return Product|MockObject
      * @internal param bool $isUnlimited
      */
-    private function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
+    protected function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getLinksPurchasedSeparately',
-                    'setIsCustomOptionChanged'
-                ]
-            )
-            ->onlyMethods(
-                [
-                    'getId',
-                    'getStoreId',
-                    'getStore',
-                    'getWebsiteIds',
-                    'getData'
-                ]
-            )
-            ->getMock();
-        $product->expects($this->any())
-            ->method('getId')
-            ->willReturn($id);
-        $product->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $product->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn($websiteIds);
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId'])
-            ->getMock();
-        $store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($storeWebsiteId);
-        $product->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
-        $product->expects($this->any())
-            ->method('getLinksPurchasedSeparately')
-            ->willReturn(true);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getLinksPurchasedSeparately',
+                'setIsCustomOptionChanged',
+                'getId',
+                'getStoreId',
+                'getStore',
+                'getWebsiteIds',
+                'getData'
+            ]
+        );
+        $product->method('getId')->willReturn($id);
+        $product->method('getStoreId')->willReturn($storeId);
+        $product->method('getWebsiteIds')->willReturn($websiteIds);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
+        $store->method('getWebsiteId')->willReturn($storeWebsiteId);
+        $product->method('getStore')->willReturn($store);
+        $product->method('getLinksPurchasedSeparately')->willReturn(true);
         $product->expects($this->any())
             ->method('getData')
             ->with('id')

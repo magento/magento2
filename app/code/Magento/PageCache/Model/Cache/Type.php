@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model\Cache;
+
+use Magento\Framework\Cache\CacheConstants;
 
 /**
  * System / Cache Management / Cache type "Full Page Cache"
@@ -15,12 +17,12 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     /**
      * Cache type code unique among all cache types
      */
-    const TYPE_IDENTIFIER = 'full_page';
+    public const TYPE_IDENTIFIER = 'full_page';
 
     /**
      * Cache tag used to distinguish the cache type from all other cache
      */
-    const CACHE_TAG = 'FPC';
+    public const CACHE_TAG = 'FPC';
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -40,13 +42,13 @@ class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @param string $mode
      * @param array $tags
      * @return bool
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
         $this->eventManager->dispatch('adminhtml_cache_refresh_type');
         return parent::clean($mode, $tags);

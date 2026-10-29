@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -114,6 +119,7 @@ QUERY;
         url
         position
         disabled
+        types
       }
     }
   }
@@ -131,6 +137,10 @@ QUERY;
         $this->assertEquals(2, $mediaGallery[1]['position']);
         $this->assertFalse($mediaGallery[1]['disabled']);
         $this->assertTrue($this->checkImageExists($mediaGallery[1]['url']));
+        $this->assertNotEmpty($mediaGallery[0]['types']);
+        $this->assertEquals('image', $mediaGallery[0]['types'][0]);
+        $this->assertNotEmpty($mediaGallery[1]['types']);
+        $this->assertEquals('thumbnail', $mediaGallery[1]['types'][0]);
     }
 
     /**
@@ -150,6 +160,7 @@ QUERY;
       	label
         url
         position
+        types
         disabled
         ... on ProductVideo {
               video_content {
@@ -174,6 +185,8 @@ QUERY;
         $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
         $this->assertFalse($mediaGallery[0]['disabled']);
         $this->assertEquals(2, $mediaGallery[0]['position']);
+        $this->assertNotEmpty($mediaGallery[0]['types']);
+        $this->assertEquals('image', $mediaGallery[0]['types'][0]);
         $this->assertNotEmpty($mediaGallery[0]['video_content']);
         $video_content = $mediaGallery[0]['video_content'];
         $this->assertEquals('external-video', $video_content['media_type']);
@@ -212,6 +225,79 @@ QUERY;
             'magento_image.jpg',
             $response['products']['items'][0]['media_gallery_entries'][0]['file']
         );
+    }
+
+    /**
+     *  Tests the sorting of media gallery entries by their position attribute for a given product.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DataFixture(CategoryFixture::class, ['name' => 'Category'], 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Product 1',
+                'sku' => 'product-1',
+                'category_ids' => ['$category.id$'],
+                'price' => 10,
+                'media_gallery_entries' => [
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 0,
+                        'disabled' => false,
+                        'types' => [
+                            'image',
+                            'small_image',
+                            'thumbnail'
+                        ],
+                        'file' => '/m/product1.jpg',
+                    ],
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 2,
+                        'disabled' => false,
+                        'file' => '/m/product3.jpg',
+                    ],
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 1,
+                        'disabled' => false,
+                        'file' => '/m/product2.jpg',
+                    ],
+                ],
+            ],
+            'product1'
+        ),
+    ]
+    public function testProductMediaGalleryEntriesPositionSort()
+    {
+        $product = DataFixtureStorageManager::getStorage()->get('product1');
+        $productSku = $product->getSku();
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+      name
+      sku
+      media_gallery_entries {
+        id
+        position
+        file
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertCount(3, $response['products']['items'][0]['media_gallery_entries']);
+        foreach ($response['products']['items'][0]['media_gallery_entries'] as $key => $mediaGalleryEntry) {
+            self::assertEquals($key, $mediaGalleryEntry['position']);
+        }
     }
 
     /**

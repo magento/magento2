@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,14 +18,17 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\ValidatorFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AdminConfigTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -62,18 +65,17 @@ class AdminConfigTest extends TestCase
             ->method('getHttpHost')
             ->willReturn('init.host');
         $this->objectManager =  new ObjectManager($this);
-        $this->validatorFactory = $this->getMockBuilder(ValidatorFactory::class)
-            ->addMethods(['setInstanceName'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->validatorFactory = $this->createPartialMockWithReflection(
+            ValidatorFactory::class,
+            ['setInstanceName', 'create']
+        );
         $backendUrl = $this->createMock(Url::class);
         $backendUrl->expects($this->once())->method('getBaseUrl')->willReturn('/');
         $this->backendUrlFactory = $this->createPartialMock(UrlFactory::class, ['create']);
         $this->backendUrlFactory->expects($this->any())->method('create')->willReturn($backendUrl);
 
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $dirMock = $this->createMock(WriteInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($dirMock);
@@ -81,17 +83,13 @@ class AdminConfigTest extends TestCase
 
     public function testSetCookiePathNonDefault()
     {
-        $mockFrontNameResolver = $this->getMockBuilder(FrontNameResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockFrontNameResolver = $this->createMock(FrontNameResolver::class);
 
         $mockFrontNameResolver->expects($this->once())
             ->method('getFrontName')
             ->willReturn('backend');
 
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);
@@ -117,17 +115,15 @@ class AdminConfigTest extends TestCase
 
     /**
      * Test for setting session name and secure_cookie for admin
-     * @dataProvider requestSecureDataProvider
      * @param $secureRequest
      */
+    #[DataProvider('requestSecureDataProvider')]
     public function testSetSessionSettingsByConstructor($secureRequest)
     {
         $sessionName = 'admin';
         $this->requestMock->expects($this->exactly(2))->method('isSecure')->willReturn($secureRequest);
 
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);

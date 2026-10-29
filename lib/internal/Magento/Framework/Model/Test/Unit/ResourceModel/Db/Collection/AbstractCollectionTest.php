@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,9 +18,11 @@ use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,7 +30,9 @@ use Psr\Log\LoggerInterface;
  */
 class AbstractCollectionTest extends TestCase
 {
-    const TABLE_NAME = 'some_table';
+    use MockCreationTrait;
+
+    private const TABLE_NAME = 'some_table';
 
     /** @var Uut */
     protected $uut;
@@ -67,11 +71,11 @@ class AbstractCollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->entityFactoryMock = $this->getMockForAbstractClass(EntityFactoryInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->fetchStrategyMock =
-            $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $this->managerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+            $this->createMock(FetchStrategyInterface::class);
+        $this->managerMock = $this->createMock(ManagerInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $renderer = $this->createMock(SelectRenderer::class);
         $this->resourceMock = $this->createMock(FlagResource::class);
@@ -103,7 +107,7 @@ class AbstractCollectionTest extends TestCase
     {
         parent::tearDown();
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
@@ -210,11 +214,23 @@ class AbstractCollectionTest extends TestCase
         $this->assertInstanceOf(Select::class, $this->uut->getSelect());
     }
 
-    /**
-     * @dataProvider getSelectDataProvider
-     */
+    /**     */
+    #[DataProvider('getSelectDataProvider')]
     public function testGetSelect($idFieldNameRet, $getPartRet, $expected)
     {
+        if (is_callable($idFieldNameRet['column_alias'])) {
+            $idFieldNameRet['column_alias'] = $idFieldNameRet['column_alias']($this);
+        }
+        if (is_callable($getPartRet[0][1])) {
+            $getPartRet[0][1] = $getPartRet[0][1]($this);
+        }
+        if (is_callable($expected[0][1]['column_alias'])) {
+            $expected[0][1]['column_alias'] = $expected[0][1]['column_alias']($this);
+        }
+        if (is_callable($expected['alias'][1])) {
+            $expected['alias'][1] = $expected['alias'][1]($this);
+        }
+
         $this->resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
@@ -238,9 +254,9 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getSelectDataProvider()
+    public static function getSelectDataProvider(): array
     {
-        $columnMock = $this->createPartialMock(\Zend_Db_Expr::class, ['__toString']);
+        $columnMock = static fn (self $testCase) => $testCase->getZendDbExprPartialMock();
 
         return [
             [
@@ -254,9 +270,13 @@ class AbstractCollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider addFieldToSelectDataProvider
-     */
+    public function getZendDbExprPartialMock()
+    {
+        return $this->createPartialMock(\Zend_Db_Expr::class, ['__toString']);
+    }
+
+    /**     */
+    #[DataProvider('addFieldToSelectDataProvider')]
     public function testAddFieldToSelect($field, $alias, $expectedFieldsToSelect)
     {
         $this->assertInstanceOf(Uut::class, $this->uut->addFieldToSelect($field, $alias));
@@ -267,7 +287,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addFieldToSelectDataProvider()
+    public static function addFieldToSelectDataProvider()
     {
         return [
             ['*', null, null],
@@ -277,9 +297,8 @@ class AbstractCollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider addExpressionFieldToSelectDataProvider
-     */
+    /**     */
+    #[DataProvider('addExpressionFieldToSelectDataProvider')]
     public function testAddExpressionFieldToSelect($alias, $expression, $fields, $expected)
     {
         $this->selectMock->expects($this->once())->method('columns')->with($expected);
@@ -289,7 +308,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addExpressionFieldToSelectDataProvider()
+    public static function addExpressionFieldToSelectDataProvider()
     {
         return [
             ['alias', '', 'some_field', ['alias' => '']],
@@ -297,9 +316,8 @@ class AbstractCollectionTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider removeFieldFromSelectDataProvider
-     */
+    /**     */
+    #[DataProvider('removeFieldFromSelectDataProvider')]
     public function testRemoveFieldFromSelect(
         $field,
         $isAlias,
@@ -316,7 +334,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function removeFieldFromSelectDataProvider()
+    public static function removeFieldFromSelectDataProvider()
     {
         return [
             ['some_field', false, [], [], false],
@@ -392,9 +410,8 @@ class AbstractCollectionTest extends TestCase
         $this->assertEquals(self::TABLE_NAME, $this->uut->getTable(''));
     }
 
-    /**
-     * @dataProvider joinDataProvider
-     */
+    /**     */
+    #[DataProvider('joinDataProvider')]
     public function testJoin($table, $cond, $cols, $expected)
     {
         $this->assertInstanceOf(Uut::class, $this->uut->join($table, $cond, $cols));
@@ -404,7 +421,7 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function joinDataProvider()
+    public static function joinDataProvider()
     {
         return [
             ['table', '', '*', ['table' => true]],
@@ -414,16 +431,22 @@ class AbstractCollectionTest extends TestCase
 
     public function testResetItemsDataChanged()
     {
+        // Use AbstractModel partial mocks with constructor to get proper hasDataChanges behavior
         for ($i = 0; $i < 3; $i++) {
-            /** @var AbstractModel $item */
-            $item = $this->getMockForAbstractClass(AbstractModel::class, [], '', false);
-            $this->uut->addItem($item->setDataChanges(true));
+            $item = $this->getMockBuilder(AbstractModel::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['_construct'])
+                ->getMock();
+            $item->setDataChanges(true);
+            $this->uut->addItem($item);
         }
 
-        $this->assertInstanceOf(Uut::class, $this->uut->resetItemsDataChanged());
+        $result = $this->uut->resetItemsDataChanged();
+        $this->assertInstanceOf(Uut::class, $result);
 
+        // Verify all items have dataChanges reset to false
         foreach ($this->uut->getItems() as $item) {
-            $this->assertFalse($item->hasDataChanges());
+            $this->assertFalse($item->hasDataChanges(), 'Item dataChanges should be false after reset');
         }
     }
 
@@ -431,10 +454,10 @@ class AbstractCollectionTest extends TestCase
     {
         for ($i = 0; $i < 3; $i++) {
             /** @var DataObject|MockObject $item */
-            $item = $this->getMockBuilder(DataObject::class)
-                ->addMethods(['save'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $item = $this->createPartialMockWithReflection(
+                DataObject::class,
+                ['save']
+            );
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);
         }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Config\CatalogClone\Media;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Config\CatalogClone\Media\Image;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
@@ -62,36 +63,18 @@ class ImageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eavConfig = $this->createMock(Config::class);
 
-        $this->attributeCollection = $this->getMockBuilder(
-            Collection::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeCollection = $this->createMock(Collection::class);
 
-        $this->attributeCollectionFactory = $this->getMockBuilder(
-            CollectionFactory::class
-        )
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeCollectionFactory->expects($this->any())->method('create')->willReturn(
+        $this->attributeCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $this->attributeCollectionFactory->method('create')->willReturn(
             $this->attributeCollection
         );
 
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attribute = $this->createMock(Attribute::class);
 
-        $this->escaperMock = $this->getMockBuilder(
-            Escaper::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['escapeHtml'])
-            ->getMock();
+        $this->escaperMock = $this->createPartialMock(Escaper::class, ['escapeHtml']);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -108,23 +91,17 @@ class ImageTest extends TestCase
      * @param string $actualLabel
      * @param string $expectedLabel
      * @return void
-     *
-     * @dataProvider getPrefixesDataProvider
      */
+    #[DataProvider('getPrefixesDataProvider')]
     public function testGetPrefixes(string $actualLabel, string $expectedLabel): void
     {
         $entityTypeId = 3;
         /** @var Type|MockObject $entityType */
-        $entityType = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createMock(Type::class);
         $entityType->expects($this->once())->method('getId')->willReturn($entityTypeId);
 
         /** @var AbstractFrontend|MockObject $frontend */
-        $frontend = $this->getMockBuilder(AbstractFrontend::class)
-            ->onlyMethods(['getLabel'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $frontend = $this->createMock(AbstractFrontend::class);
         $frontend->expects($this->once())->method('getLabel')->willReturn($actualLabel);
 
         $this->attributeCollection->expects($this->once())->method('setEntityTypeFilter')->with($entityTypeId);
@@ -133,8 +110,7 @@ class ImageTest extends TestCase
         $this->attribute->expects($this->once())->method('getAttributeCode')->willReturn('attributeCode');
         $this->attribute->expects($this->once())->method('getFrontend')->willReturn($frontend);
 
-        $this->attributeCollection->expects($this->any())->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->attribute]));
+        $this->attributeCollection->method('getIterator')->willReturn(new \ArrayIterator([$this->attribute]));
 
         $this->eavConfig->expects($this->any())->method('getEntityType')->with(Product::ENTITY)
             ->willReturn($entityType);
@@ -148,16 +124,16 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getPrefixesDataProvider(): array
+    public static function getPrefixesDataProvider(): array
     {
         return [
             [
-                'actual_label' => 'testLabel',
-                'expected_label' => 'testLabel',
+                'actualLabel' => 'testLabel',
+                'expectedLabel' => 'testLabel',
             ],
             [
-                'actual_label' => '<media-image-attributelabel',
-                'expected_label' => '&lt;media-image-attributelabel',
+                'actualLabel' => '<media-image-attributelabel',
+                'expectedLabel' => '&lt;media-image-attributelabel',
             ],
         ];
     }

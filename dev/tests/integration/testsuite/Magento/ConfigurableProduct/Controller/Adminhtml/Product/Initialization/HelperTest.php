@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -113,11 +114,11 @@ class HelperTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider initializeDataProvider
      * @param array $childProducts
      * @param array $expectedImages
      * @return void
      */
+    #[DataProvider('initializeDataProvider')]
     public function testInitialize(array $childProducts, array $expectedImages): void
     {
         $this->setRequestParams($childProducts);
@@ -130,11 +131,11 @@ class HelperTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider initializeWithExistingChildImagesDataProvider
      * @param array $childProducts
      * @param array $expectedImages
      * @return void
      */
+    #[DataProvider('initializeWithExistingChildImagesDataProvider')]
     public function testInitializeWithExistingChildImages(array $childProducts, array $expectedImages): void
     {
         $this->updateChildProductsImages(
@@ -155,7 +156,7 @@ class HelperTest extends TestCase
     {
         return [
             'children_with_same_image_and_roles' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_10' => [
                         'media_gallery' => self::getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
                         'images' => [
@@ -169,7 +170,7 @@ class HelperTest extends TestCase
                         ],
                     ],
                 ],
-                'expected_images' => [
+                'expectedImages' => [
                     'simple_10' => [
                         '/m/a/magento_image_1.jpg' => ['swatch_image', 'small_image', 'image', 'thumbnail'],
                     ],
@@ -179,7 +180,7 @@ class HelperTest extends TestCase
                 ],
             ],
             'children_with_different_images' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_10' => [
                         'media_gallery' => self::getMediaGallery(['ben062bdw2v' => '/m/a/magento_image.jpg.tmp']),
                         'images' => [
@@ -195,7 +196,7 @@ class HelperTest extends TestCase
                         ],
                     ],
                 ],
-                'expected_images' => [
+                'expectedImages' => [
                     'simple_10' => [
                         '/m/a/magento_image_1.jpg' => ['swatch_image', 'small_image', 'image', 'thumbnail'],
                     ],
@@ -205,7 +206,7 @@ class HelperTest extends TestCase
                 ],
             ],
             'children_with_different_image_roles' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_10' => [
                         'media_gallery' => self::getMediaGallery(
                             [
@@ -231,7 +232,7 @@ class HelperTest extends TestCase
                         ],
                     ],
                 ],
-                'expected_images' => [
+                'expectedImages' => [
                     'simple_10' => [
                         '/m/a/magento_image_1.jpg' => ['swatch_image', 'small_image'],
                         '/m/a/magento_small_image_1.jpg' => ['image', 'thumbnail'],
@@ -376,7 +377,6 @@ class HelperTest extends TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -11,7 +12,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Mail;
+use Magento\Indexer\Model\Indexer\Collection;
 use Magento\TestFramework;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
@@ -364,7 +367,7 @@ class Application
                             'filePath' => $this->installDir
                         ]
                     ),
-                    'debug'  => $objectManager->create(
+                    'debug' => $objectManager->create(
                         \Magento\Framework\Logger\Handler\Debug::class,
                         ['filePath' => $this->installDir]
                     ),
@@ -567,29 +570,43 @@ class Application
         );
 
         $this->runPostInstallCommands();
+        $this->makeIndexStatusRealtime();
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
+
         $this->_shell->execute(
             PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
             [BP . '/bin/magento', $initParamsQuery]
         );
+
+        $enabledCaches = $this->getEnabledCaches();
+
         $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
-            [
-                BP . '/bin/magento',
-                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-                $initParamsQuery,
-            ]
+            PHP_BINARY . ' -f %s cache:enable -vvv ' . str_repeat('%s ', count($enabledCaches)) . ' --bootstrap=%s',
+            [BP . '/bin/magento', ...$enabledCaches, $initParamsQuery]
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
         if (!$db->isDbDumpExists() && $this->dumpDb) {
             $this->getDbInstance()->storeDbDump();
         }
+    }
+
+    /**
+     * Caches that should be enabled during the Integration Tests execution
+     *
+     * @return array<string>
+     */
+    private function getEnabledCaches(): array
+    {
+        return [
+            \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Interception\Cache\CompiledConfig::TYPE_IDENTIFIER,
+            \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+        ];
     }
 
     /**
@@ -745,7 +762,7 @@ class Application
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($dir, 0777, true);
             umask($old);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
@@ -824,5 +841,91 @@ class Application
             DirectoryList::VAR_IMPORT_EXPORT => [$path => "{$this->installDir}/var"],
         ];
         return $customDirs;
+    }
+
+    /**
+     * Initialize the application and set the index status to realtime.
+     *
+     * @return void
+     */
+    private function makeIndexStatusRealtime(): void
+    {
+        $overriddenParams = $this->getOverriddenParams();
+        $directoryList = $this->getDirectoryList($overriddenParams);
+        $objectManager = $this->getObjectManagers($overriddenParams, $directoryList);
+        Helper\Bootstrap::setObjectManager($objectManager);
+        $objectManagerConfiguration = [
+            'preferences' => [
+                \Magento\Framework\App\State::class => TestFramework\App\State::class
+            ]
+        ];
+        $objectManager->configure($objectManagerConfiguration);
+        $this->setIndexerToRealtime($objectManager);
+    }
+
+    /**
+     * Retrieves the overridden parameters.
+     *
+     * @return array
+     */
+    private function getOverriddenParams(): array
+    {
+        $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
+        return $this->_customizeParams($overriddenParams);
+    }
+
+    /**
+     * Retrieves the directory list.
+     *
+     * @param array $overriddenParams
+     * @return DirectoryList
+     */
+    private function getDirectoryList($overriddenParams): DirectoryList
+    {
+        $directories = isset($overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : [];
+        return new DirectoryList(BP, $directories);
+    }
+
+    /**
+     * Retrieves the object manager.
+     *
+     * @param array $overriddenParams
+     * @param DirectoryList $directoryList The directory list.
+     * @return ObjectManager
+     */
+    private function getObjectManagers($overriddenParams, $directoryList): ObjectManager
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        if (!$objectManager) {
+            $objectManager = $this->_factory->create($overriddenParams);
+            $objectManager->addSharedInstance($directoryList, DirectoryList::class);
+            $objectManager->addSharedInstance($directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
+        } else {
+            $objectManager = $this->_factory->restore($objectManager, $directoryList, $overriddenParams);
+        }
+        return $objectManager;
+    }
+
+    /**
+     * Sets the indexer mode to realtime.
+     *
+     * @param ObjectManager $objectManager
+     * @return void
+     */
+    private function setIndexerToRealtime($objectManager): void
+    {
+        /** @var Collection $indexCollection */
+        $indexCollection = $objectManager->get(Collection::class);
+        $indexerIds = $indexCollection->getAllIds();
+        if (!empty($indexerIds)) {
+            foreach ($indexerIds as $indexerId) {
+                /** @var IndexerInterface $model */
+                $model = $objectManager->get(IndexerRegistry::class)
+                    ->get($indexerId);
+                $model->setScheduled(false);
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
@@ -18,6 +18,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\AppArea;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -267,8 +268,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param array $importData
      * @param string $importBehavior
      * @param array $invalidRows
-     * @dataProvider importValidationDuplicateWithSameBaseCurrencyDataProvider
      */
+    #[DataProvider('importValidationDuplicateWithSameBaseCurrencyDataProvider')]
     public function testImportValidationDuplicateWithSameBaseCurrency(
         array $dbData,
         array $importData,
@@ -294,8 +295,8 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      * @param array $importData
      * @param string $importBehavior
      * @param array $invalidRows
-     * @dataProvider importValidationDuplicateWithDifferentBaseCurrencyDataProvider
      */
+    #[DataProvider('importValidationDuplicateWithDifferentBaseCurrencyDataProvider')]
     public function testImportValidationDuplicateWithDifferentBaseCurrency(
         array $dbData,
         array $importData,
@@ -312,7 +313,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_same_currency_data_provider.php';
     }
@@ -320,7 +321,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
+    public static function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
     {
         return require __DIR__ . '/_files/import_validation_duplicate_diff_currency_data_provider.php';
     }

@@ -1,24 +1,14 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
@@ -108,7 +98,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
 
     /**
      * Test to verify customizable options honour `use default value` checkbox check
-     * @dataProvider optionDataProvider
+
      * @param array $optionData
      * @return void
      * @throws NoSuchEntityException
@@ -130,6 +120,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
             'cp1'
         ),
     ]
+    #[DataProvider('optionDataProvider')]
     public function testModifyData(array $optionData): void
     {
         $childProduct = $this->fixtures->get('p2');
@@ -245,7 +236,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function optionDataProvider(): array
+    public static function optionDataProvider(): array
     {
         $fixtureOptions = [];
         $fixture = include '_files/product_options.php';

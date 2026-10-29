@@ -10,7 +10,7 @@
 <div id="cancel-order-modal-<?=/* @noEscape */ $block->getOrder()->getId() ?>">
     <div class="modal-body-content">
         <h3><?= $escaper->escapeHtml(__('Cancel order')) ?>
-            <span class="cancel-order-id"><?=/* @noEscape */ $block->getOrder()->getRealOrderId() ?></span>
+            <span class="cancel-order-id"><?= $escaper->escapeHtml($block->getOrder()->getRealOrderId()) ?></span>
         </h3>
         <p><?= $escaper->escapeHtml(__('Provide a cancellation reason:')) ?></p>
         <form>

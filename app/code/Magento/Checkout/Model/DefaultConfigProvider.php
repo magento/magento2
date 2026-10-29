@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Model;
 
@@ -260,10 +260,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         UrlInterface $urlBuilder,
         CaptchaConfigPostProcessorInterface $configPostProcessor,
-        AddressMetadataInterface $addressMetadata = null,
-        AttributeOptionManagementInterface $attributeOptionManager = null,
-        CustomerAddressDataProvider $customerAddressData = null,
-        Escaper $escaper = null
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?AttributeOptionManagementInterface $attributeOptionManager = null,
+        ?CustomerAddressDataProvider $customerAddressData = null,
+        ?Escaper $escaper = null
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;

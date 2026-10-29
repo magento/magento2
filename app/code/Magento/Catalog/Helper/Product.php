@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
@@ -441,7 +441,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
         $categoryId = $params->getCategoryId();
         if (!$categoryId && $categoryId !== false) {
             $lastId = $this->_catalogSession->getLastVisitedCategoryId();
-            if ($product->canBeShowInCategory($lastId)) {
+            if ($lastId && $product->canBeShowInCategory($lastId)) {
                 $categoryId = $lastId;
             }
         } elseif (!$product->canBeShowInCategory($categoryId)) {

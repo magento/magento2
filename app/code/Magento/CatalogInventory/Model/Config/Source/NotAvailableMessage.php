@@ -15,6 +15,12 @@ use Magento\Framework\Data\OptionSourceInterface;
 class NotAvailableMessage implements OptionSourceInterface
 {
     /**
+     * Message config values
+     */
+    public const VALUE_ONLY_X_OF_Y = 1;
+    public const VALUE_NOT_ENOUGH_ITEMS = 2;
+
+    /**
      * Options getter
      *
      * @return array
@@ -23,12 +29,12 @@ class NotAvailableMessage implements OptionSourceInterface
     {
         $options = [];
         $options[] = [
-            'value' => 1,
-            'label' => __('Only X available for sale. Please adjust the quantity to continue'),
+            'value' => self::VALUE_ONLY_X_OF_Y,
+            'label' => __('Only X of Y available'),
         ];
         $options[] = [
-            'value' => 2,
-            'label' => __('Not enough items for sale. Please adjust the quantity to continue'),
+            'value' => self::VALUE_NOT_ENOUGH_ITEMS,
+            'label' => __('Not enough items for sale'),
         ];
         return $options;
     }
@@ -41,8 +47,8 @@ class NotAvailableMessage implements OptionSourceInterface
     public function toArray(): array
     {
         return [
-            1 => __('Only X available for sale. Please adjust the quantity to continue'),
-            2 => __('Not enough items for sale. Please adjust the quantity to continue')
+            self::VALUE_ONLY_X_OF_Y => __('Only X of Y available'),
+            self::VALUE_NOT_ENOUGH_ITEMS => __('Not enough items for sale')
         ];
     }
 }

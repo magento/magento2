@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,24 +14,20 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
     /**
      * Tests the setter/getter methods that bypass the ScopeConfigInterface object
-     *
-     * @param string $setterMethod
-     * @param string $getterMethod
-     *
-     * @param bool $value
-     * @dataProvider dataProviderDirectSettersGettersMethods
      */
-    public function testDirectSettersGettersMethods($setterMethod, $getterMethod, $value): void
+    #[DataProvider('dataProviderDirectSettersGettersMethods')]
+    public function testDirectSettersGettersMethods(string $setterMethod, string $getterMethod, $value): void
     {
         // Need a mocked object with only dummy methods.  It is just needed for construction.
         // The setter/getter methods do not use this object (for this set of tests).
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         /** @var Config */
         $model = new Config($scopeConfigMock);
@@ -42,7 +38,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderDirectSettersGettersMethods(): array
+    public static function dataProviderDirectSettersGettersMethods(): array
     {
         return [
             ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
@@ -57,17 +53,14 @@ class ConfigTest extends TestCase
 
     /**
      * Tests the getCalculationSequence method
-     *
-     * @param bool $applyTaxAfterDiscount
-     * @param bool $discountTaxIncl
-     * @param string $expectedValue
-     *
-     * @return void
-     * @dataProvider dataProviderGetCalculationSequence
      */
-    public function testGetCalculationSequence($applyTaxAfterDiscount, $discountTaxIncl, $expectedValue): void
-    {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+    #[DataProvider('dataProviderGetCalculationSequence')]
+    public function testGetCalculationSequence(
+        bool $applyTaxAfterDiscount,
+        bool $discountTaxIncl,
+        string $expectedValue
+    ): void {
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock
             ->method('getValue')
             ->willReturnOnConsecutiveCalls($applyTaxAfterDiscount, $discountTaxIncl);
@@ -80,7 +73,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetCalculationSequence(): array
+    public static function dataProviderGetCalculationSequence(): array
     {
         return [
             [true,  true,  Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
@@ -92,18 +85,11 @@ class ConfigTest extends TestCase
 
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
-     *
-     * @param string $method
-     * @param string $path
-     * @param bool|int $configValue
-     * @param bool $expectedValue
-     *
-     * @return void
-     * @dataProvider dataProviderScopeConfigMethods
      */
-    public function testScopeConfigMethods($method, $path, $configValue, $expectedValue): void
+    #[DataProvider('dataProviderScopeConfigMethods')]
+    public function testScopeConfigMethods(string $method, string $path, $configValue, $expectedValue): void
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with($path, ScopeInterface::SCOPE_STORE, null)
@@ -118,7 +104,7 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods(): array
+    public static function dataProviderScopeConfigMethods(): array
     {
         return [
             [
@@ -389,7 +375,7 @@ class ConfigTest extends TestCase
      */
     public function testNeedPriceConversion(): void
     {
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $scopeConfigMock
             ->method('getValue')
             ->willReturnMap(

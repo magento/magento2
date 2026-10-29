@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class TableDataTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
-        $this->_connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_connectionMock = $this->createMock(AdapterInterface::class);
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_productIndexerHelper = $this->createMock(Indexer::class);
     }
@@ -166,11 +166,7 @@ class TableDataTest extends TestCase
             sprintf('%s_tmp_indexer', $flatTable)
         );
 
-        $this->_resourceMock->expects(
-            $this->any()
-        )->method(
-            'getConnection'
-        )->willReturn(
+        $this->_resourceMock->method('getConnection')->willReturn(
             $this->_connectionMock
         );
 

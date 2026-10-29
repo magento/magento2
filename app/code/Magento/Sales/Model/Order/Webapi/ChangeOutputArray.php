@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\Order\Webapi;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+use Magento\Bundle\Model\Product\Type;
 
 /**
  * Class for changing row total in response.
@@ -62,7 +63,7 @@ class ChangeOutputArray
             + $dataObject->getBaseWeeeTaxAppliedAmount()
             - $dataObject->getBaseDiscountAmount());
 
-        return $result;
+        return $this->getBundleProductPrice($result);
     }
 
     /**
@@ -73,6 +74,26 @@ class ChangeOutputArray
      */
     private function round(float $value): float
     {
-        return (float) max($value, 0);
+        return (float) max(round($value, 2), 0);
+    }
+
+    /**
+     * Get bundle product price if miss in child item
+     *
+     * @param array $result
+     * @return array
+     */
+    private function getBundleProductPrice(array $result): array
+    {
+        if (isset($result[OrderItemInterface::PRICE], $result[OrderItemInterface::PARENT_ITEM]) &&
+            $result[OrderItemInterface::PRICE] == 0
+        ) {
+            if ($result[OrderItemInterface::PARENT_ITEM][OrderItemInterface::PRODUCT_TYPE] == Type::TYPE_CODE) {
+                $result[OrderItemInterface::PRICE] =
+                    $result[OrderItemInterface::PARENT_ITEM][OrderItemInterface::PRICE];
+            }
+        }
+
+        return $result;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- * @SuppressWarnings(PHPMD.LongVariable)
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +56,7 @@ class FactoryTest extends TestCase
             ['create']
         );
         $this->_vbMock = $this->createMock(Builder::class);
-        $this->_validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->_validatorMock = $this->createMock(ValidatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->_factory = $objectManager->getObject(

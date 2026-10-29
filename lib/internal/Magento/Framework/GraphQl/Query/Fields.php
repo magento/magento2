@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ class Fields implements ResetAfterRequestInterface
     /**
      * @param QueryParser|null $queryParser
      */
-    public function __construct(QueryParser $queryParser = null)
+    public function __construct(?QueryParser $queryParser = null)
     {
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
@@ -44,7 +44,7 @@ class Fields implements ResetAfterRequestInterface
      *
      * @return void
      */
-    public function setQuery(DocumentNode|string $query, array $variables = null)
+    public function setQuery(DocumentNode|string $query, ?array $variables = null)
     {
         $queryFields = [];
         try {

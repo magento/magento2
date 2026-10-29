@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\PageCache;
 
@@ -90,13 +90,13 @@ class Kernel
         \Magento\Framework\App\PageCache\Cache $cache,
         \Magento\Framework\App\PageCache\IdentifierInterface $identifier,
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\Http\Context $context = null,
-        \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
-        \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
-        \Magento\Framework\Serialize\SerializerInterface $serializer = null,
-        AppState $state = null,
-        \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
-        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null,
+        ?\Magento\Framework\App\Http\Context $context = null,
+        ?\Magento\Framework\App\Http\ContextFactory $contextFactory = null,
+        ?\Magento\Framework\App\Response\HttpFactory $httpFactory = null,
+        ?\Magento\Framework\Serialize\SerializerInterface $serializer = null,
+        ?AppState $state = null,
+        ?\Magento\PageCache\Model\Cache\Type $fullPageCache = null,
+        ?\Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null,
         ?CookieDisablerInterface $cookieDisabler = null,
     ) {
         $this->cache = $cache;
@@ -157,7 +157,7 @@ class Kernel
         if ($cacheControlHeader
             && preg_match('/public.*s-maxage=(\d+)/', $cacheControlHeader->getFieldValue(), $matches)
         ) {
-            $maxAge = $matches[1];
+            $maxAge = (int) $matches[1];
             $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
                 && !$response instanceof NotCacheableInterface

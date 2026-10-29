@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,6 +71,6 @@ class BackOrderTest extends \PHPUnit\Framework\TestCase
         $order = $this->objectManager->get(OrderRepository::class)->get($orderId);
         $this->assertNotNull($order);
         $orderitem = $order->getAllItems()[0];
-        $this->assertEquals($orderitem->getQtyBackordered(), 10);
+        $this->assertEquals(10, $orderitem->getQtyBackordered());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -21,9 +21,8 @@ use Magento\Framework\App\ObjectManager;
  */
 class InfoBackupsListCommand extends Command
 {
+    public const NAME = 'info:backups:list';
     /**
-     * File
-     *
      * @var File
      */
     private $file;
@@ -48,7 +47,7 @@ class InfoBackupsListCommand extends Command
     public function __construct(
         DirectoryList $directoryList,
         File $file,
-        TableFactory $tableHelperFactory = null
+        ?TableFactory $tableHelperFactory = null
     ) {
         $this->directoryList = $directoryList;
         $this->file = $file;
@@ -57,20 +56,20 @@ class InfoBackupsListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('info:backups:list')
+        $this->setName(self::NAME)
             ->setDescription('Prints list of available backup files');
 
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
             . '/' . BackupRollback::DEFAULT_BACKUP_DIRECTORY;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,5 +43,6 @@
         <element name="customAttribute" type="text" selector="input.admin__control-text[name='{{var}}']" parameterized="true"/>
         <element name="crossSellFilters" type="button" selector="//*[contains(@class, 'crosssell_product')]//button[text()='Filters']"/>
         <element name="upSellFilters" type="button" selector="//*[contains(@class, 'upsell_product')]//button[text()='Filters']"/>
+        <element name="removeFilters" type="button" selector="(//button[contains(@class, 'action-remove')])[1]"/>
     </section>
 </sections>

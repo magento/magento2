@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Shipping\Model\Rate\CarrierResult;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CarrierResultTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CarrierResult|MockObject
      */
@@ -34,9 +36,7 @@ class CarrierResultTest extends TestCase
     protected function setUp(): void
     {
         /** @var MockObject|StoreManagerInterface $storeManager */
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $this->result = new CarrierResult($storeManager);
     }
 
@@ -45,11 +45,10 @@ class CarrierResultTest extends TestCase
      */
     public function testComposing(): void
     {
-        $rate1 = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMethod', 'getPrice'])
-            ->onlyMethods(['setPrice'])
-            ->getMock();
+        $rate1 = $this->createPartialMockWithReflection(
+            Method::class,
+            ['getMethod', 'getPrice', 'setPrice']
+        );
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');
         $rate1->method('getPrice')->willReturnReference($price1);
@@ -66,11 +65,10 @@ class CarrierResultTest extends TestCase
         $result1->method('getAllRates')->willReturn([$rate1]);
         $result1->method('getError')->willReturn(false);
 
-        $rate2 = $this->getMockBuilder(Method::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMethod', 'getPrice'])
-            ->onlyMethods(['setPrice'])
-            ->getMock();
+        $rate2 = $this->createPartialMockWithReflection(
+            Method::class,
+            ['getMethod', 'getPrice', 'setPrice']
+        );
         $price2 = 4;
         $rate2->method('getMethod')->willReturn('method');
         $rate2->method('getPrice')->willReturnReference($price2);

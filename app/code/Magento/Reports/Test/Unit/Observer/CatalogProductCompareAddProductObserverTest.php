@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\Reports\Test\Unit\Observer;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
+use Magento\Framework\Event as FrameworkEvent;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\Event;
 use Magento\Reports\Model\EventFactory;
@@ -21,6 +23,7 @@ use Magento\Reports\Observer\CatalogProductCompareAddProductObserver;
 use Magento\Reports\Observer\EventSaver;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogProductCompareAddProductObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogProductCompareAddProductObserver
      */
@@ -100,7 +105,7 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
             ->willReturn($this->reportEventMock);
 
         /** @var StoreManagerInterface|MockObject $storeManager */
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,9 +153,9 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
      * @param bool $isLoggedIn
      * @param string $userKey
      * @param int $userId
-     * @dataProvider catalogProductCompareAddProductDataProvider
      * @return void
      */
+    #[DataProvider('catalogProductCompareAddProductDataProvider')]
     public function testCatalogProductCompareAddProduct($isLoggedIn, $userKey, $userId)
     {
         $productId = 111;
@@ -180,7 +185,7 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
     /**
      * @return array
      */
-    public function catalogProductCompareAddProductDataProvider()
+    public static function catalogProductCompareAddProductDataProvider()
     {
         return [
             'logged in' => [
@@ -202,15 +207,12 @@ class CatalogProductCompareAddProductObserverTest extends TestCase
      */
     protected function getObserverMock($productId)
     {
-        $eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct'])->getMock();
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventObserverMock = $this->createMock(Observer::class);
+        $eventMock = $this->createPartialMockWithReflection(
+            FrameworkEvent::class,
+            ['getProduct']
+        );
+        $productMock = $this->createMock(Product::class);
 
         $productMock->expects($this->any())->method('getId')->willReturn($productId);
 

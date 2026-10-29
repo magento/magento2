@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -88,7 +88,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
+        ?ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;

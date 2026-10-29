@@ -1,11 +1,16 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Store;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Store\Model\Group as StoreGroup;
 use Magento\Store\Model\Store;
@@ -18,6 +23,32 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements HttpPostActionInterface
 {
+    /**
+     * @var TypeListInterface
+     */
+    private $cacheTypeList;
+
+    /**
+     * Constructor
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FilterManager $filterManager
+     * @param ForwardFactory $resultForwardFactory
+     * @param PageFactory $resultPageFactory
+     * @param TypeListInterface $cacheTypeList
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        FilterManager $filterManager,
+        ForwardFactory $resultForwardFactory,
+        PageFactory $resultPageFactory,
+        TypeListInterface $cacheTypeList,
+    ) {
+        parent::__construct($context, $coreRegistry, $filterManager, $resultForwardFactory, $resultPageFactory);
+        $this->cacheTypeList = $cacheTypeList;
+    }
     /**
      * Process Website model save
      *
@@ -68,6 +99,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
         if ($postData['store']['store_id']) {
             $storeModel->load($postData['store']['store_id']);
         }
+        $originalCode = $storeModel->getCode();
+        $newCode = $postData['store']['code'] ?? null;
         $storeModel->setData($postData['store']);
         if ($postData['store']['store_id'] == '') {
             $storeModel->setId(null);
@@ -85,7 +118,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
         }
         $storeModel->save();
         $this->messageManager->addSuccessMessage(__('You saved the store view.'));
-
+        if ($originalCode !== $newCode) {
+            $this->cacheTypeList->cleanType('config');
+        }
         return $postData;
     }
 
@@ -121,7 +156,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
     }
 
     /**
+     * Saving edited store information
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

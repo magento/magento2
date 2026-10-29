@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,13 +12,19 @@ use Magento\CatalogInventory\Observer\ReindexQuoteInventoryObserver;
 use Magento\CatalogInventory\Observer\SubtractQuoteInventoryObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
 class CheckoutAllSubmitAfterObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CheckoutAllSubmitAfterObserver
      */
@@ -54,42 +60,29 @@ class CheckoutAllSubmitAfterObserverTest extends TestCase
             ReindexQuoteInventoryObserver::class
         );
 
-        $this->event = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getProduct', 'getCollection', 'getCreditmemo', 'getQuote', 'getWebsite'])
-            ->getMock();
+        $this->event = new Event();
 
-        $this->eventObserver = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])
-            ->getMock();
+        $this->eventObserver = $this->createMock(Observer::class);
 
         $this->eventObserver->expects($this->atLeastOnce())
             ->method('getEvent')
             ->willReturn($this->event);
 
-        $this->observer = (new ObjectManager($this))->getObject(
-            CheckoutAllSubmitAfterObserver::class,
-            [
-                'subtractQuoteInventoryObserver' => $this->subtractQuoteInventoryObserver,
-                'reindexQuoteInventoryObserver' => $this->reindexQuoteInventoryObserver,
-            ]
+        $this->observer = new CheckoutAllSubmitAfterObserver(
+            $this->subtractQuoteInventoryObserver,
+            $this->reindexQuoteInventoryObserver
         );
     }
 
     public function testCheckoutAllSubmitAfter()
     {
-        $quote = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getInventoryProcessed'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote->expects($this->once())
-            ->method('getInventoryProcessed')
-            ->willReturn(false);
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getAllVisibleItems', 'setAllVisibleItems', 'getAllItems', 'setAllItems']
+        );
 
-        $this->event->expects($this->once())
-            ->method('getQuote')
-            ->willReturn($quote);
+        $quote->setInventoryProcessed(false);
+        $this->event->setQuote($quote);
 
         $this->subtractQuoteInventoryObserver->expects($this->once())
             ->method('execute')

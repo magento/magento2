@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\App\Request;
@@ -16,6 +17,7 @@ use Magento\Store\App\Request\StorePathInfoValidator;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\Validation\StoreCodeValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -79,7 +81,7 @@ class StorePathInfoValidatorTest extends TestCase
             ->willReturn(true);
 
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(false);
         $this->storeRepositoryMock->expects($this->never())
@@ -94,7 +96,7 @@ class StorePathInfoValidatorTest extends TestCase
         $storeCode = 'store1';
 
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->expects($this->once())
@@ -117,7 +119,7 @@ class StorePathInfoValidatorTest extends TestCase
     public function testGetValidStoreCodeWithEmptyPathInfo(): void
     {
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->expects($this->once())
@@ -133,12 +135,12 @@ class StorePathInfoValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidStoreCodeExceptionDataProvider
      * @param \Throwable $exception
      */
+    #[DataProvider('getValidStoreCodeExceptionDataProvider')]
     public function testGetValidStoreCodeThrowsException(\Throwable $exception): void
     {
-        $this->configMock->method('getValue')
+        $this->configMock->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->storeCodeValidatorMock->method('isValid')
@@ -152,7 +154,7 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function getValidStoreCodeExceptionDataProvider(): array
+    public static function getValidStoreCodeExceptionDataProvider(): array
     {
         return [
             [new NoSuchEntityException()],
@@ -161,14 +163,14 @@ class StorePathInfoValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider getValidStoreCodeDataProvider
      * @param string $pathInfo
      * @param bool $isStoreCodeValid
      * @param string|null $expectedResult
      */
+    #[DataProvider('getValidStoreCodeDataProvider')]
     public function testGetValidStoreCode(string $pathInfo, bool $isStoreCodeValid, ?string $expectedResult): void
     {
-        $this->configMock->method('getValue')
+        $this->configMock->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->method('getPathInfo')
@@ -183,7 +185,37 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function getValidStoreCodeDataProvider(): array
+    /**
+     * @param string $pathInfo
+     * @param bool $isStoreCodeValid
+     * @param string|null $expectedResult
+     */
+    #[DataProvider('getValidStoreCodeDataProvider')]
+    public function testGetValidStoreCodeResultIsCached(
+        string $pathInfo,
+        bool $isStoreCodeValid,
+        ?string $expectedResult
+    ): void {
+        $this->configMock->method('isSetFlag')
+            ->with(Store::XML_PATH_STORE_IN_URL)
+            ->willReturn(true);
+        $this->pathInfoMock->method('getPathInfo')
+            ->willReturn('/store2/path2/');
+        $this->storeCodeValidatorMock->method('isValid')
+            ->willReturn($isStoreCodeValid);
+        $store = $this->createMock(Store::class);
+        $this->storeRepositoryMock
+            ->expects($expectedResult ? $this->once() : $this->never())
+            ->method('getActiveStoreByCode')
+            ->willReturn($store);
+
+        $result1 = $this->storePathInfoValidator->getValidStoreCode($this->requestMock, $pathInfo);
+        $result2 = $this->storePathInfoValidator->getValidStoreCode($this->requestMock, $pathInfo);
+        $this->assertEquals($expectedResult, $result1);
+        $this->assertEquals($result1, $result2);
+    }
+
+    public static function getValidStoreCodeDataProvider(): array
     {
         return [
             ['store1', true, 'store1'],

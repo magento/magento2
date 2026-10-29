@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Integration\Test\Unit\Model\Config\Integration;
 use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,14 +34,10 @@ class XsdTest extends TestCase
         );
     }
 
-    /**
-     * @param string $fixtureXml
-     * @param array $expectedErrors
-     * @dataProvider exemplarXmlDataProvider
-     */
-    public function testExemplarXml($fixtureXml, array $expectedErrors)
+    #[DataProvider('exemplarXmlDataProvider')]
+    public function testExemplarXml(string $fixtureXml, array $expectedErrors): void
     {
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $messageFormat = '%message%';
@@ -56,7 +53,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         return [
             /** Valid configurations */

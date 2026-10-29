@@ -1,27 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Csp\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Csp\Model\SubresourceIntegrity\StorageInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class contains methods equivalent to repository design to manage SRI hashes in cache.
+ * Class contains methods equivalent to repository design to manage SRI hashes.
  */
 class SubresourceIntegrityRepository
 {
-    /**
-     * Cache prefix.
-     *
-     * @var string
-     */
-    private const CACHE_PREFIX = 'INTEGRITY';
-
     /**
      * @var array|null
      */
@@ -33,36 +29,47 @@ class SubresourceIntegrityRepository
     private ?string $context;
 
     /**
-     * @var CacheInterface
-     */
-    private CacheInterface $cache;
-
-    /**
      * @var SerializerInterface
      */
     private SerializerInterface $serializer;
 
     /**
-     * @var SubresourceIntegrityFactory
+     * @var StorageInterface
      */
-    private SubresourceIntegrityFactory $integrityFactory;
+    private StorageInterface $storage;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
 
     /**
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param SubresourceIntegrityFactory $integrityFactory
      * @param string|null $context
+     * @param StorageInterface|null $storage
+     * @param LoggerInterface|null $logger
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CacheInterface $cache,
         SerializerInterface $serializer,
         SubresourceIntegrityFactory $integrityFactory,
-        ?string $context = null
+        ?string $context = null,
+        ?StorageInterface $storage = null,
+        ?LoggerInterface $logger = null
     ) {
-        $this->cache = $cache;
         $this->serializer = $serializer;
-        $this->integrityFactory = $integrityFactory;
         $this->context = $context;
+
+        $this->storage = $storage ?? ObjectManager::getInstance()->get(
+            StorageInterface::class
+        );
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(
+            LoggerInterface::class
+        );
     }
 
     /**
@@ -74,20 +81,7 @@ class SubresourceIntegrityRepository
      */
     public function getByPath(string $path): ?SubresourceIntegrity
     {
-        $data = $this->getData();
-
-        if (isset($data[$path])) {
-            return $this->integrityFactory->create(
-                [
-                    "data" => [
-                        "path" => $path,
-                        "hash" => $data[$path]
-                    ]
-                ]
-            );
-        }
-
-        return null;
+        return $this->getData()[$path] ?? null;
     }
 
     /**
@@ -97,20 +91,7 @@ class SubresourceIntegrityRepository
      */
     public function getAll(): array
     {
-        $result = [];
-
-        foreach ($this->getData() as $path => $hash) {
-            $result[] = $this->integrityFactory->create(
-                [
-                    "data" => [
-                        "path" => $path,
-                        "hash" => $hash
-                    ]
-                ]
-            );
-        }
-
-        return $result;
+        return array_values($this->getData());
     }
 
     /**
@@ -124,14 +105,16 @@ class SubresourceIntegrityRepository
     {
         $data = $this->getData();
 
-        $data[$integrity->getPath()] = $integrity->getHash();
+        $data[$integrity->getPath()] = $integrity;
 
         $this->data = $data;
 
-        return $this->cache->save(
-            $this->serializer->serialize($this->data),
-            $this->getCacheKey(),
-            [self::CACHE_PREFIX]
+        // Transform the data before saving.
+        $transformedData = array_map(fn($integrity) => $integrity->getHash(), $this->data);
+
+        return $this->storage->save(
+            $this->serializer->serialize($transformedData),
+            $this->context
         );
     }
 
@@ -147,15 +130,17 @@ class SubresourceIntegrityRepository
         $data = $this->getData();
 
         foreach ($bunch as $integrity) {
-            $data[$integrity->getPath()] = $integrity->getHash();
+            $data[$integrity->getPath()] = $integrity;
         }
 
         $this->data = $data;
 
-        return $this->cache->save(
-            $this->serializer->serialize($this->data),
-            $this->getCacheKey(),
-            [self::CACHE_PREFIX]
+        // Transform the data before saving.
+        $transformedData = array_map(fn($integrity) => $integrity->getHash(), $this->data);
+
+        return $this->storage->save(
+            $this->serializer->serialize($transformedData),
+            $this->context
         );
     }
 
@@ -168,9 +153,7 @@ class SubresourceIntegrityRepository
     {
         $this->data = null;
 
-        return $this->cache->remove(
-            $this->getCacheKey()
-        );
+        return $this->storage->remove($this->context);
     }
 
     /**
@@ -181,27 +164,31 @@ class SubresourceIntegrityRepository
     private function getData(): array
     {
         if ($this->data === null) {
-            $cache = $this->cache->load($this->getCacheKey());
+            $rawData = $this->storage->load($this->context);
 
-            $this->data = $cache ? $this->serializer->unserialize($cache) : [];
+            if ($rawData) {
+                try {
+                    $unserialized = $this->serializer->unserialize($rawData);
+                    $this->data = is_array($unserialized) ? $unserialized : [];
+                } catch (\InvalidArgumentException $e) {
+                    $this->logger->warning(
+                        'SRI: Failed to parse integrity hashes file',
+                        [
+                            'context' => $this->context,
+                            'exception' => $e->getMessage()
+                        ]
+                    );
+                    $this->data = [];
+                }
+            } else {
+                $this->data = [];
+            }
+
+            foreach ($this->data as $path => $hash) {
+                $this->data[$path] = new SubresourceIntegrity(["path" => $path, "hash" => $hash]);
+            }
         }
 
         return $this->data;
-    }
-
-    /**
-     * Gets a cache key based on current context.
-     *
-     * @return string
-     */
-    private function getCacheKey(): string
-    {
-        $cacheKey = self::CACHE_PREFIX;
-
-        if ($this->context) {
-            $cacheKey .= "_" . $this->context;
-        }
-
-        return $cacheKey;
     }
 }

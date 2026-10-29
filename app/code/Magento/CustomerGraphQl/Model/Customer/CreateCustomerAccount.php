@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\CustomerGraphQl\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -19,6 +21,7 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Create new customer account
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateCustomerAccount
 {
@@ -53,6 +56,11 @@ class CreateCustomerAccount
     private $subscriptionManager;
 
     /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * CreateCustomerAccount constructor.
      *
      * @param DataObjectHelper $dataObjectHelper
@@ -61,6 +69,7 @@ class CreateCustomerAccount
      * @param DataObjectProcessor $dataObjectProcessor
      * @param ValidateCustomerData $validateCustomerData
      * @param SubscriptionManagerInterface $subscriptionManager
+     * @param ValidatorExceptionProcessor $validatorExceptionProcessor
      */
     public function __construct(
         DataObjectHelper $dataObjectHelper,
@@ -68,7 +77,8 @@ class CreateCustomerAccount
         AccountManagementInterface $accountManagement,
         DataObjectProcessor $dataObjectProcessor,
         ValidateCustomerData $validateCustomerData,
-        SubscriptionManagerInterface $subscriptionManager
+        SubscriptionManagerInterface $subscriptionManager,
+        ValidatorExceptionProcessor $validatorExceptionProcessor
     ) {
         $this->dataObjectHelper = $dataObjectHelper;
         $this->customerFactory = $customerFactory;
@@ -76,6 +86,7 @@ class CreateCustomerAccount
         $this->validateCustomerData = $validateCustomerData;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->subscriptionManager = $subscriptionManager;
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor;
     }
 
     /**
@@ -90,6 +101,8 @@ class CreateCustomerAccount
     {
         try {
             $customer = $this->createAccount($data, $store);
+        } catch (InputException $e) {
+            throw $this->validatorExceptionProcessor->processInputExceptionForGraphQl($e);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }

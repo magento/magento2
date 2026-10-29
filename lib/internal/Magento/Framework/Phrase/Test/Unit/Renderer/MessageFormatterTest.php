@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Framework\Phrase\Renderer\MessageFormatter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests that messages sent through the MessageFormatter phrase renderer result in what would be expected when sent
@@ -36,7 +37,7 @@ class MessageFormatterTest extends TestCase
      * @return array [Raw Phrase, Locale, Arguments, Expected Result]
      * @throws \Exception
      */
-    public function renderMessageFormatterDataProvider(): array
+    public static function renderMessageFormatterDataProvider(): array
     {
         $twentynineteenJuneTwentyseven = new \DateTime('2019-06-27');
 
@@ -82,9 +83,8 @@ class MessageFormatterTest extends TestCase
      * @param string $locale
      * @param array $arguments The arguments supplying values for the variables
      * @param string $result The expected result of Phrase rendering
-     *
-     * @dataProvider renderMessageFormatterDataProvider
-     */
+     *     */
+    #[DataProvider('renderMessageFormatterDataProvider')]
     public function testRenderMessageFormatter(string $text, string $locale, array $arguments, string $result): void
     {
         $renderer = $this->getMessageFormatter($locale);

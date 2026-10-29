@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,11 +22,16 @@ use Magento\Framework\App\Response\Http;
  */
 class Processor
 {
-    const MAGE_ERRORS_LOCAL_XML = 'local.xml';
-    const MAGE_ERRORS_DESIGN_XML = 'design.xml';
-    const DEFAULT_SKIN = 'default';
-    const ERROR_DIR = 'pub/errors';
-    const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
+    public const MAGE_ERRORS_LOCAL_XML = 'local.xml';
+    public const MAGE_ERRORS_DESIGN_XML = 'design.xml';
+    public const DEFAULT_SKIN = 'default';
+    public const ERROR_DIR = 'pub/errors';
+    public const NUMBER_SYMBOLS_IN_SUBDIR_NAME = 2;
+
+    /**
+     * @var string
+     */
+    private const REPORT_EXECUTION_GUARD = '<?php exit; ?>';
 
     /**
      * Page title
@@ -178,9 +183,9 @@ class Processor
      */
     public function __construct(
         Http $response,
-        Json $serializer = null,
-        Escaper $escaper = null,
-        DocumentRoot $documentRoot = null
+        ?Json $serializer = null,
+        ?Escaper $escaper = null,
+        ?DocumentRoot $documentRoot = null
     ) {
         $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
@@ -530,7 +535,11 @@ class Processor
         }
         $this->_setReportData($reportData);
 
-        @file_put_contents($this->_reportFile, $this->serializer->serialize($reportData). PHP_EOL);
+        $reportData = $this->sanitizeReportData($reportData);
+        @file_put_contents(
+            $this->_reportFile,
+            self::REPORT_EXECUTION_GUARD . PHP_EOL . $this->serializer->serialize($reportData) . PHP_EOL
+        );
 
         if (isset($reportData['skin']) && self::DEFAULT_SKIN != $reportData['skin']) {
             $this->_setSkin($reportData['skin']);
@@ -538,6 +547,38 @@ class Processor
         $this->_setReportUrl();
 
         return $this->reportUrl;
+    }
+
+    /**
+     * Neutralize PHP open tags inside report values.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function sanitizeReportData(array $data): array
+    {
+        array_walk_recursive($data, static function (&$value) {
+            if (is_string($value)) {
+                $value = str_replace('<?', '< ?', $value);
+            }
+        });
+        return $data;
+    }
+
+    /**
+     * Read a report file, stripping the execution-guard prefix when present.
+     *
+     * @param string $reportFile
+     * @return string
+     */
+    private function readReportFile(string $reportFile): string
+    {
+        $contents = (string)file_get_contents($reportFile);
+        $guard = self::REPORT_EXECUTION_GUARD;
+        if (strncmp($contents, $guard, strlen($guard)) === 0) {
+            $contents = ltrim(substr($contents, strlen($guard)), "\r\n");
+        }
+        return $contents;
     }
 
     /**
@@ -558,7 +599,9 @@ class Processor
             }
             $this->reportId = $reportId;
             $this->_reportFile = $reportFile;
-            $this->_setReportData($this->serializer->unserialize(file_get_contents($this->_reportFile)));
+            $this->_setReportData(
+                $this->serializer->unserialize($this->readReportFile($this->_reportFile))
+            );
         } catch (\RuntimeException $e) {
             $this->redirectToBaseUrl();
         }
@@ -739,7 +782,7 @@ class Processor
      * @param \stdClass $config
      * @return void
      */
-    protected function _setSkin($value, \stdClass $config = null)
+    protected function _setSkin($value, ?\stdClass $config = null)
     {
         if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_errorDir . $value)) {
             if (!$config) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,23 +53,11 @@ class MediaGalleryProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->processorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->contentFactoryMock = $this->getMockBuilder(ImageContentInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->imageProcessorMock = $this->getMockBuilder(ImageProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->deleteValidatorMock = $this->getMockBuilder(DeleteValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getMediaGallery'])
-            ->onlyMethods(['hasGalleryAttribute', 'getMediaConfig', 'getMediaAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->processorMock = $this->createMock(Processor::class);
+        $this->contentFactoryMock = $this->createMock(ImageContentInterfaceFactory::class);
+        $this->imageProcessorMock = $this->createMock(ImageProcessorInterface::class);
+        $this->deleteValidatorMock = $this->createMock(DeleteValidator::class);
+        $this->productMock = $this->createPartialMock(Product::class, ['getMediaConfig', 'hasGalleryAttribute']);
 
         $this->galleryProcessor = new MediaGalleryProcessor(
             $this->processorMock,
@@ -127,28 +115,26 @@ class MediaGalleryProcessorTest extends TestCase
                 ]
             ]
         ];
-        $this->productMock->method('getMediaGallery')
-            ->willReturnOnConsecutiveCalls(
-                $newExitingEntriesData['images'],
-                $newExitingEntriesData['images']
-            );
-        $this->productMock->expects($this->any())
-            ->method('getMediaAttributes')
-            ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
-        $this->productMock->method('hasGalleryAttribute')->willReturn(true);
+        $this->productMock->setData('media_gallery', $newExitingEntriesData);
+        $this->productMock->setData(
+            'media_attributes',
+            ["image" => "imageAttribute", "small_image" => "small_image_attribute"]
+        );
         $mediaTmpPath = '/tmp';
         $absolutePath = '/a/b/filename.jpg';
         $this->processorMock->expects($this->once())->method('clearMediaAttribute')
             ->with($this->productMock, ['image', 'small_image']);
-        $mediaConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $mediaConfigMock = $this->createMock(Config::class);
+        $mediaConfigMock->method('getBaseTmpMediaPath')->willReturn($mediaTmpPath);
         $mediaConfigMock->expects($this->once())->method('getTmpMediaShortUrl')->with($absolutePath)
             ->willReturn($mediaTmpPath . $absolutePath);
         $this->productMock->expects($this->once())->method('getMediaConfig')->willReturn($mediaConfigMock);
+        $this->productMock->method('hasGalleryAttribute')->willReturn(true);
         //verify new entries
-        $contentDataObject = $this->getMockBuilder(ImageContent::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([])
-            ->getMock();
+        $contentDataObject = $this->createMock(ImageContent::class);
+        $contentDataObject->method('setName')->willReturnSelf();
+        $contentDataObject->method('setBase64EncodedData')->willReturnSelf();
+        $contentDataObject->method('setType')->willReturnSelf();
         $this->contentFactoryMock->expects($this->once())->method('create')->willReturn($contentDataObject);
         $this->imageProcessorMock->expects($this->once())->method('processImageContent')->willReturn($absolutePath);
         $imageFileUri = $mediaTmpPath . $absolutePath;

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Code\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Code\GeneratedFiles;
 use Magento\Framework\Exception\FileSystemException;
@@ -68,7 +70,7 @@ class GeneratedFilesTest extends TestCase
         $this->directoryList = $this->createMock(DirectoryList::class);
         $this->writeFactory = $this->createMock(WriteFactory::class);
         $this->lockManager = $this->createMock(FileLock::class);
-        $this->writeInterface = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->writeInterface = $this->createMock(WriteInterface::class);
 
         $this->directoryList->expects($this->any())->method('getPath')->willReturnMap(
             [
@@ -164,7 +166,7 @@ class GeneratedFilesTest extends TestCase
      * @param bool|null $lockResult
      * @return void
      */
-    private function expectLockOperation(int $times, bool $lockResult = null): void
+    private function expectLockOperation(int $times, ?bool $lockResult = null): void
     {
         $invocationMocker = $this->lockManager->expects($this->exactly($times))
             ->method('lock')
@@ -182,7 +184,7 @@ class GeneratedFilesTest extends TestCase
      * @param bool|null $unlockResult
      * @return void
      */
-    private function expectUnlockOperation(int $times, bool $unlockResult = null): void
+    private function expectUnlockOperation(int $times, ?bool $unlockResult = null): void
     {
         $invocationMocker = $this->lockManager->expects($this->exactly($times))
             ->method('unlock')
@@ -208,9 +210,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * Test request regeneration
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itRequestsRegenerationProperly()
     {
         $this->expectRegenerationRequested(1);
@@ -220,9 +222,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files if no flag is present
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itDoesNotCleanGeneratedFilesIfNoFlagIsPresent()
     {
         $this->expectFlagPresent(1, false);
@@ -234,9 +236,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files if process is locked
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itDoesNotCleanGeneratedFilesIfProcessIsLocked()
     {
         $this->expectFlagPresent(1, true);
@@ -248,12 +250,11 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files when checking flag exists due to exceptions
      *
-     * @test
      * @param string $exceptionClassName
      * @return void
-     *
-     * @dataProvider itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider
      */
+    #[Test]
+    #[DataProvider('itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider')]
     public function itDoesNotCleanGeneratedFilesWhenCheckingFlagExistsDueToExceptions(
         string $exceptionClassName
     ) {
@@ -271,12 +272,11 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files when checking process lock due to exceptions
      *
-     * @test
      * @param string $exceptionClassName
      * @return void
-     *
-     * @dataProvider itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider
      */
+    #[Test]
+    #[DataProvider('itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider')]
     public function itDoesNotCleanGeneratedFilesWhenCheckingProcessLockDueToExceptions(
         string $exceptionClassName
     ) {
@@ -297,7 +297,7 @@ class GeneratedFilesTest extends TestCase
      *
      * @return array
      */
-    public function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
+    public static function itDoesNotCleanGeneratedFilesDueToExceptionsDataProvider()
     {
         return [
             RuntimeException::class => [RuntimeException::class],
@@ -308,9 +308,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files if process lock is not acquired
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itDoesNotCleanGeneratedFilesIfProcessLockIsNotAcquired()
     {
         $this->expectFlagPresent(1, true);
@@ -329,9 +329,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It does not clean generated files if process lock is not acquired due to exception
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itDoesNotCleanGeneratedFilesIfProcessLockIsNotAcquiredDueToException()
     {
         $this->expectFlagPresent(1, true);
@@ -350,9 +350,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It cleans generated files properly, when no errors or exceptions raised
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itCleansGeneratedFilesProperly()
     {
         $this->expectFlagPresent(1, true);
@@ -380,9 +380,9 @@ class GeneratedFilesTest extends TestCase
     /**
      * It requests regeneration and unlock upon FileSystemException
      *
-     * @test
      * @return void
      */
+    #[Test]
     public function itRequestsRegenerationAndUnlockUponFileSystemException()
     {
         $this->expectFlagPresent(1, true);

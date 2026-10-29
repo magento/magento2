@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -34,8 +35,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $pageData
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider testGetByIdentifierDataProvider
      */
+    #[DataProvider('pageGetByIdentifierDataProvider')]
     public function testGetByIdentifier(array $pageData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -62,8 +63,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @param string $expectedIdentifier
      * @magentoDbIsolation enabled
-     * @dataProvider generateIdentifierFromTitleDataProvider
      */
+    #[DataProvider('generateIdentifierFromTitleDataProvider')]
     public function testGenerateIdentifierFromTitle($data, $expectedIdentifier)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -122,10 +123,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
      * Data provider for "testGetByIdentifier" method
      * @return array
      */
-    public static function testGetByIdentifierDataProvider() : array
+    public static function pageGetByIdentifierDataProvider() : array
     {
         return [
-            ['data' => [
+            ['pageData' => [
                 'title' => 'Test title',
                 'identifier' => 'test-identifier',
                 'page_layout' => '1column',

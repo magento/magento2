@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,6 +41,7 @@ use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -107,9 +108,7 @@ class ServiceInputProcessorTest extends TestCase
             AddressInterface::class => $this->addressMock
         ];
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
@@ -160,7 +159,7 @@ class ServiceInputProcessorTest extends TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -277,6 +276,22 @@ class ServiceInputProcessorTest extends TestCase
     public function testSimpleConstructorProperties()
     {
         $data = ['simpleConstructor' => ['entityId' => 15, 'name' => 'Test']];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'simpleConstructor',
+            $data
+        );
+        $this->assertNotNull($result);
+        $arg = $result[0];
+
+        $this->assertTrue($arg instanceof SimpleConstructor);
+        $this->assertEquals(15, $arg->getEntityId());
+        $this->assertEquals('Test', $arg->getName());
+    }
+
+    public function testSimpleConstructorPropertiesWithSnakeCase()
+    {
+        $data = ['simpleConstructor' => ['entity_id' => 15, 'name' => 'Test']];
         $result = $this->serviceInputProcessor->process(
             TestService::class,
             'simpleConstructor',
@@ -415,9 +430,10 @@ class ServiceInputProcessorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws Exception
      */
-    public function testDefaultPageSizeSetterIsInvoked()
+    public function testDefaultPageSizeSetterIsInvoked(): void
     {
         $this->defaultPageSizeSetter->expects(self::once())
             ->method('processSearchCriteria')
@@ -512,14 +528,16 @@ class ServiceInputProcessorTest extends TestCase
 
     /**
      * Covers object with custom attributes
-     *
-     * @dataProvider customAttributesDataProvider
-     * @param $customAttributeType
+     *     * @param $customAttributeType
      * @param $inputData
      * @param $expectedObject
      */
+    #[DataProvider('customAttributesDataProvider')]
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
+        if (is_callable($expectedObject)) {
+            $expectedObject = $expectedObject($this);
+        }
         $this->customAttributeTypeLocator->expects($this->any())->method('getType')->willReturn($customAttributeType);
         $this->serviceTypeToEntityTypeMap->expects($this->any())->method('getEntityType')->willReturn($expectedObject);
 
@@ -538,7 +556,7 @@ class ServiceInputProcessorTest extends TestCase
      *
      * @return array
      */
-    public function customAttributesDataProvider()
+    public static function customAttributesDataProvider()
     {
         return [
             'customAttributeInteger' => [
@@ -553,7 +571,10 @@ class ServiceInputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
+                'expectedObject'=>  static fn (self $testCase) => $testCase->getObjectWithCustomAttributes(
+                    'integer',
+                    TestService::DEFAULT_VALUE
+                ),
             ],
             'customAttributeIntegerCamelCaseCode' => [
                 'customAttributeType' => 'integer',
@@ -567,7 +588,10 @@ class ServiceInputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('integer', TestService::DEFAULT_VALUE),
+                'expectedObject'=>  static fn (self $testCase) => $testCase->getObjectWithCustomAttributes(
+                    'integer',
+                    TestService::DEFAULT_VALUE
+                ),
             ],
             'customAttributeObject' => [
                 'customAttributeType' => SimpleArray::class,
@@ -578,7 +602,10 @@ class ServiceInputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('SimpleArray', ['ids' => [1, 2, 3, 4]]),
+                'expectedObject'=>  static fn (self $testCase) => $testCase->getObjectWithCustomAttributes(
+                    'SimpleArray',
+                    ['ids' => [1, 2, 3, 4]]
+                ),
             ],
             'customAttributeArrayOfObjects' => [
                 'customAttributeType' => 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple[]',
@@ -592,10 +619,13 @@ class ServiceInputProcessorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedObject'=>  $this->getObjectWithCustomAttributes('Simple[]', [
-                    ['entityId' => 14, 'name' => 'First'],
-                    ['entityId' => 15, 'name' => 'Second'],
-                ]),
+                'expectedObject'=>  static fn (self $testCase) => $testCase->getObjectWithCustomAttributes(
+                    'Simple[]',
+                    [
+                        ['entityId' => 14, 'name' => 'First'],
+                        ['entityId' => 15, 'name' => 'Second'],
+                    ]
+                ),
             ],
         ];
     }
@@ -659,9 +689,8 @@ class ServiceInputProcessorTest extends TestCase
 
     /**
      * Cover invalid custom attribute data
-     *
-     * @dataProvider invalidCustomAttributesDataProvider
-     */
+     *     */
+    #[DataProvider('invalidCustomAttributesDataProvider')]
     public function testCustomAttributesExceptions($inputData)
     {
         $this->expectException('Magento\Framework\Webapi\Exception');
@@ -675,7 +704,7 @@ class ServiceInputProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidCustomAttributesDataProvider()
+    public static function invalidCustomAttributesDataProvider()
     {
         return [
             [
@@ -715,7 +744,7 @@ class ServiceInputProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function payloadDataProvider(): array
+    public static function payloadDataProvider(): array
     {
         return [
             [
@@ -751,9 +780,8 @@ class ServiceInputProcessorTest extends TestCase
      * @param array $payload
      * @param int $exception
      * @return void
-     * @throws Exception
-     * @dataProvider payloadDataProvider
-     */
+     * @throws Exception     */
+    #[DataProvider('payloadDataProvider')]
     public function testValidateApiPayload(array $payload, int $exception): void
     {
         if ($exception) {

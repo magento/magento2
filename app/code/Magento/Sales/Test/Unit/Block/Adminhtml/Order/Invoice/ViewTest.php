@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Invoice;
 use Magento\Sales\Block\Adminhtml\Order\Invoice\View;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
@@ -21,14 +22,12 @@ class ViewTest extends TestCase
      * @param bool $canReviewPayment
      * @param bool $canFetchUpdate
      * @param bool $expectedResult
-     * @dataProvider isPaymentReviewDataProvider
      */
+    #[DataProvider('isPaymentReviewDataProvider')]
     public function testIsPaymentReview($canReviewPayment, $canFetchUpdate, $expectedResult)
     {
         // Create order mock
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
         $order->expects($this->any())->method('canReviewPayment')->willReturn($canReviewPayment);
         $order->expects(
             $this->any()
@@ -59,7 +58,6 @@ class ViewTest extends TestCase
             View::class,
             '_isPaymentReview'
         );
-        $testMethod->setAccessible(true);
 
         $this->assertEquals($expectedResult, $testMethod->invoke($block));
     }
@@ -67,7 +65,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function isPaymentReviewDataProvider()
+    public static function isPaymentReviewDataProvider()
     {
         return [
             [true, true, true],

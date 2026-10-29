@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,6 +33,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\Warning;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
@@ -41,6 +42,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ResetPasswordTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * Request mock instance
      *
@@ -152,12 +156,10 @@ class ResetPasswordTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_session = $this->getMockBuilder(
-            Session::class
-        )->disableOriginalConstructor()
-            ->addMethods(
-                ['setIsUrlNotice', '__wakeup']
-            )->getMock();
+        $this->_session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', '__wakeup']
+        );
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
         $this->_helper = $this->getMockBuilder(
@@ -208,11 +210,8 @@ class ResetPasswordTest extends TestCase
             'getResultRedirectFactory'
         ];
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->addMethods($addContextArgs)
-            ->onlyMethods($contextArgs)
-            ->getMock();
+        $allMethods = array_merge($contextArgs, $addContextArgs);
+        $contextMock = $this->createPartialMockWithReflection(Context::class, $allMethods);
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);
@@ -382,7 +381,7 @@ class ResetPasswordTest extends TestCase
         )->willReturn(
             $customerId
         );
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->once())->method('getEmail')->willReturn($email);
         $customer->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $this->_customerRepositoryMock->expects(
@@ -499,7 +498,7 @@ class ResetPasswordTest extends TestCase
             $customerId
         );
 
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
 
         $customer->expects($this->once())->method('getEmail')->willReturn($email);
         $customer->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);

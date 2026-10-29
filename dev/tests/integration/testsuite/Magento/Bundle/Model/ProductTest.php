@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -29,6 +29,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -166,9 +167,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @dataProvider stockConfigDataProvider
      * @covers \Magento\Catalog\Model\Product::isSalable
      */
+    #[DataProvider('stockConfigDataProvider')]
     public function testIsSalable(
         float $selectionQty,
         float $qty,
@@ -205,7 +206,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function stockConfigDataProvider(): array
+    public static function stockConfigDataProvider(): array
     {
         $qtyVars = [0, 10];
         $isInStockVars = [
@@ -231,7 +232,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                                 . " isInStock: {$isInStock}"
                                 . " manageStock: {$manageStock}"
                                 . " backorders: {$backorders}";
-                            $isSalable = $this->checkIsSalable(
+                            $isSalable = self::checkIsSalable(
                                 $selectionQty,
                                 $qty,
                                 $isInStock,
@@ -259,7 +260,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/bundle_product_with_dynamic_price.php
-     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
      * @param bool $isOption1Required
      * @param bool $isOption2Required
      * @param array $outOfStockConfig
@@ -269,6 +269,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
     public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
         bool $isOption1Required,
         bool $isOption2Required,
@@ -312,18 +313,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
     {
         return [
             'all options are required' => [
                 true,
                 true,
-                'out-of-stock' => [
+                'outOfStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => false
                     ],
                 ],
-                'in-stock' => [
+                'inStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => true
                     ]
@@ -332,7 +333,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             'all options are optional' => [
                 false,
                 false,
-                'out-of-stock' => [
+                'outOfStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => false
                     ],
@@ -340,7 +341,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                         'is_in_stock' => false
                     ],
                 ],
-                'in-stock' => [
+                'inStockConfig' => [
                     'simple1' => [
                         'is_in_stock' => true
                     ]
@@ -393,7 +394,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @return bool
      * @see \Magento\Bundle\Model\ResourceModel\Selection\Collection::addQuantityFilter
      */
-    private function checkIsSalable(
+    private static function checkIsSalable(
         float $selectionQty,
         float $qty,
         int $isInStock,

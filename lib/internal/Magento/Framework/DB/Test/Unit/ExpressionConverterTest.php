@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,12 +9,12 @@ namespace Magento\Framework\DB\Test\Unit;
 
 use Magento\Framework\DB\ExpressionConverter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressionConverterTest extends TestCase
 {
-    /**
-     * @dataProvider shortenEntityNameDataProvider
-     */
+    /**     */
+    #[DataProvider('shortenEntityNameDataProvider')]
     public function testShortenEntityName($in, $prefix, $expectedOut)
     {
         $resultEntityName = ExpressionConverter::shortenEntityName($in, $prefix);
@@ -24,7 +24,7 @@ class ExpressionConverterTest extends TestCase
     /**
      * @return array
      */
-    public function shortenEntityNameDataProvider()
+    public static function shortenEntityNameDataProvider()
     {
         $length64 = '________________________________________________________________';
         $length40 = '________________________________________';

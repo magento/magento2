@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Robots\Block;
 
@@ -46,7 +46,7 @@ class Data extends AbstractBlock implements IdentityInterface
         Context $context,
         Robots $robots,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         array $data = []
     ) {
         $this->robots = $robots;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\Model\Adapter;
@@ -26,6 +26,8 @@ use Magento\AdvancedSearch\Helper\Data;
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Elasticsearch
 {
@@ -162,9 +164,9 @@ class Elasticsearch
         BatchDataMapperInterface $batchDocumentDataMapper,
         Data $helper,
         $options = [],
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        StaticField $staticFieldProvider = null,
-        ArrayManager $arrayManager = null,
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        ?StaticField $staticFieldProvider = null,
+        ?ArrayManager $arrayManager = null,
         array $responseErrorExceptionList = []
     ) {
         $this->connectionManager = $connectionManager;
@@ -307,7 +309,14 @@ class Elasticsearch
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
                 if ($this->isStackQueries === false) {
-                    $this->client->bulkQuery($bulkIndexDocuments);
+                    $result = $this->client->bulkQuery($bulkIndexDocuments);
+                    if ($result['errors']) {
+                        $errors = array_filter(
+                            array_column($result['items'], 'index'),
+                            fn ($item) => isset($item['error'])
+                        );
+                        $this->logger->critical('Errors happened during catalog search reindex', $errors);
+                    }
                 } else {
                     $this->stackQueries($bulkIndexDocuments);
                 }

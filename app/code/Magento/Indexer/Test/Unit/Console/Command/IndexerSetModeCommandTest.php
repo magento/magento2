@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Indexer\Console\Command\IndexerSetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Command for updating installed application after the code base has changed
@@ -64,7 +65,10 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
 
         $indexerOne->expects($this->exactly(2))
             ->method('isScheduled')
-            ->willReturnOnConsecutiveCalls([true, false]);
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                return $callCount === 1 ? true : false;
+            });
 
         $indexerOne->expects($this->once())->method('setScheduled')->with(false);
 
@@ -87,8 +91,8 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
      * @param bool $current
      * @param string $mode
      * @param $expectedValue
-     * @dataProvider executeWithIndexDataProvider
      */
+    #[DataProvider('executeWithIndexDataProvider')]
     public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
     {
         $this->configureAdminArea();

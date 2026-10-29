@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,9 +61,7 @@ class EnableAdminUsageTest extends \PHPUnit\Framework\TestCase
         $configFactory->method('create')
             ->willReturn($this->configMock);
 
-        $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
-            ->onlyMethods(['getVersion'])
-            ->getMockForAbstractClass();
+        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
 
         $this->productMetadataMock->method('getVersion')
             ->willReturn(self::STUB_PRODUCT_VERSION);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,10 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -46,10 +47,7 @@ class PriceTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getCustomerGroupId'])
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -63,12 +61,12 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $attributeCode
      * @param $context
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName($attributeCode, $context, $expected)
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
@@ -81,10 +79,7 @@ class PriceTest extends TestCase
         $this->customerSession->expects($this->any())
             ->method('getCustomerGroupId')
             ->willReturn(1);
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId'])
-            ->getMockForAbstractClass();
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn(2);
@@ -101,7 +96,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['price', [], 'price_1_2'],

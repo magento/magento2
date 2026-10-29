@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,9 @@ use Magento\Config\Model\Config\Structure\Element\FlyweightFactory;
 use Magento\Config\Model\Config\Structure\Element\Iterator\Tab as TabIterator;
 use Magento\Config\Model\Config\Structure\Element\Section;
 use Magento\Config\Model\Config\Structure\ElementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StructureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Structure|Mock
      */
@@ -57,22 +62,20 @@ class StructureTest extends TestCase
     protected $_structureData;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->_flyweightFactory = $this->getMockBuilder(FlyweightFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_tabIteratorMock = $this->getMockBuilder(TabIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_structureDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_scopeDefinerMock = $this->getMockBuilder(ScopeDefiner::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->_flyweightFactory = $this->createMock(FlyweightFactory::class);
+        $this->_tabIteratorMock = $this->createMock(TabIterator::class);
+        $this->_structureDataMock = $this->createMock(Data::class);
+        $this->_scopeDefinerMock = $this->createMock(ScopeDefiner::class);
 
         $this->_structureData = require dirname(__DIR__) . '/_files/converted_config.php';
 
@@ -100,9 +103,7 @@ class StructureTest extends TestCase
     {
         $expected = ['tab1' => ['children' => ['section1' => ['tab' => 'tab1']]]];
 
-        $this->_structureDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_structureDataMock = $this->createMock(Data::class);
         $this->_structureDataMock->expects($this->any())
             ->method('get')
             ->willReturn(
@@ -136,9 +137,7 @@ class StructureTest extends TestCase
             'section2_child_id_1' => true
         ];
 
-        $this->_structureDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_structureDataMock = $this->createMock(Data::class);
         $this->_structureDataMock->expects($this->any())
             ->method('get')
             ->willReturn(
@@ -177,8 +176,8 @@ class StructureTest extends TestCase
      * @param string $expectedType
      * @param string $expectedId
      * @param string $expectedPath
-     * @dataProvider emptyElementDataProvider
      */
+    #[DataProvider('emptyElementDataProvider')]
     public function testGetElementReturnsEmptyElementIfNotExistingElementIsRequested(
         $path,
         $expectedType,
@@ -201,8 +200,8 @@ class StructureTest extends TestCase
      * @param string $expectedType
      * @param string $expectedId
      * @param string $expectedPath
-     * @dataProvider emptyElementDataProvider
      */
+    #[DataProvider('emptyElementDataProvider')]
     public function testGetElementReturnsEmptyByConfigPathElementIfNotExistingElementIsRequested(
         $path,
         $expectedType,
@@ -233,8 +232,7 @@ class StructureTest extends TestCase
     ) {
         $expectedConfig = ['id' => $expectedId, 'path' => $expectedPath, '_elementType' => $expectedType];
 
-        $elementMock = $this->getMockBuilder(ElementInterface::class)
-            ->getMockForAbstractClass();
+        $elementMock = $this->createMock(ElementInterface::class);
         $elementMock->expects($this->once())
             ->method('setData')
             ->with($expectedConfig);
@@ -293,9 +291,7 @@ class StructureTest extends TestCase
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
 
-        $elementMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $elementMock = $this->createMock(Field::class);
 
         $elementMock->expects($this->once())
             ->method('setData')
@@ -322,12 +318,8 @@ class StructureTest extends TestCase
         ];
         $pathParts = explode('/', 'section_1/group_level_1/field_3');
 
-        $elementMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $structureDataMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $elementMock = $this->createMock(Field::class);
+        $structureDataMock = $this->createMock(Data::class);
 
         $elementMock->expects($this->once())
             ->method('setData')
@@ -352,21 +344,20 @@ class StructureTest extends TestCase
 
     public function testGetFirstSectionReturnsFirstAllowedSection()
     {
-        $tabMock = $this->getMockBuilder(Structure\Element\Tab::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['current', 'rewind'])
-            ->onlyMethods(['getChildren'])
-            ->getMock();
+        $tabMock = $this->createPartialMockWithReflection(
+            Structure\Element\Tab::class,
+            ['current', 'rewind', 'getChildren']
+        );
 
         $tabMock->expects($this->any())
             ->method('getChildren')
             ->willReturnSelf();
         $tabMock->expects($this->once())
             ->method('rewind');
-        $section = $this->getMockBuilder(Section::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isVisible', 'getData'])
-            ->getMock();
+        $section = $this->createPartialMock(
+            Section::class,
+            ['isVisible', 'getData']
+        );
         $section->expects($this->any())
             ->method('isVisible')
             ->willReturn(true);
@@ -419,9 +410,7 @@ class StructureTest extends TestCase
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
 
-        $elementMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $elementMock = $this->createMock(Field::class);
 
         $elementMock->expects($this->once())
             ->method('setData')
@@ -438,8 +427,8 @@ class StructureTest extends TestCase
      * @param $attributeName
      * @param $attributeValue
      * @param $paths
-     * @dataProvider getFieldPathsByAttributeDataProvider
      */
+    #[DataProvider('getFieldPathsByAttributeDataProvider')]
     public function testGetFieldPathsByAttribute($attributeName, $attributeValue, $paths)
     {
         $this->assertEquals($paths, $this->_model->getFieldPathsByAttribute($attributeName, $attributeValue));
@@ -469,10 +458,10 @@ class StructureTest extends TestCase
     /**
      * Verify get Fields paths method
      *
-     * @dataProvider getFieldPaths
      * @param array $expected
      * @return void
      */
+    #[DataProvider('getFieldPaths')]
     public function testGetFieldPaths(array $expected): void
     {
         $this->assertSame(

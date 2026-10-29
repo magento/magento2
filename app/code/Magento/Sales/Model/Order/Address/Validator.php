@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Address;
@@ -63,8 +63,8 @@ class Validator
     public function __construct(
         DirectoryHelper $directoryHelper,
         CountryFactory $countryFactory,
-        EavConfig $eavConfig = null,
-        EmailAddressValidator $emailAddressValidator = null
+        ?EavConfig $eavConfig = null,
+        ?EmailAddressValidator $emailAddressValidator = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;

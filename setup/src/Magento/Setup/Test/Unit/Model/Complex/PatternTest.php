@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Complex;
 
 use Magento\Setup\Model\Complex\Pattern;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PatternTest extends TestCase
 {
@@ -32,7 +33,7 @@ class PatternTest extends TestCase
      *
      * @return array
      */
-    public function patternDataProvider()
+    public static function patternDataProvider()
     {
         $result = [
             0 => [
@@ -51,7 +52,7 @@ class PatternTest extends TestCase
                         'name' => 'yyy %s'
                     ],
                 ],
-                'expectedCount'      => 3,
+                'expectedRowsCount'      => 3,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                     ['id' => '',  'name' => 'xxx 1',  'calculated' => ''],
@@ -66,7 +67,7 @@ class PatternTest extends TestCase
                         'calculated' => 'calc %s',
                     ],
                 ],
-                'expectedCount' => 1,
+                'expectedRowsCount' => 1,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Dynamic 1', 'calculated' => 'calc 1'],
                 ],
@@ -82,11 +83,11 @@ class PatternTest extends TestCase
      * @param int $expectedRowsCount
      * @param array $expectedRowsResult
      *
-     * @dataProvider patternDataProvider
      * @test
      *
      * @return void
      */
+    #[DataProvider('patternDataProvider')]
     public function testPattern($patternData, $expectedRowsCount, $expectedRowsResult)
     {
         $pattern = $this->getPattern($patternData);

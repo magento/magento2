@@ -1,18 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
+use Magento\Framework\App\Area;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test price rendering according to is_product_list flag for Configurable product
@@ -101,6 +107,26 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    #[
+        DataFixture('Magento/ConfigurableProduct/_files/product_configurable.php'),
+        AppArea(Area::AREA_FRONTEND),
+        DbIsolation(false),
+    ]
+    public function testHasSpecialPrice(): void
+    {
+        $productAttributeRepository = Bootstrap::getObjectManager()->get(ProductAttributeRepositoryInterface::class);
+        $specialPrice = $productAttributeRepository->get('special_price');
+        $specialPrice->setUsedInProductListing(false);
+        $productAttributeRepository->save($specialPrice);
+
+        try {
+            self::assertTrue($this->finalPriceBox->hasSpecialPrice());
+        } finally {
+            $specialPrice->setUsedInProductListing(true);
+            $productAttributeRepository->save($specialPrice);
+        }
+    }
+
     /**
      * Test when is_product_list flag is specified
      *
@@ -111,9 +137,9 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      * @param int|bool $count
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
-     * @dataProvider isProductListDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);

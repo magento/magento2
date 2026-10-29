@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -12,6 +12,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -259,9 +260,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param string $errorMessages
      * @throws \Magento\Framework\Exception\InputException
      *
-     * @dataProvider createDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('createDataProvider')]
     public function testSaveThrowsExceptionIfGivenDataIsInvalid($dataArray, $errorMessages)
     {
         $this->expectException(\Magento\Framework\Exception\InputException::class);
@@ -282,7 +283,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             'invalidZipRange' => [
@@ -291,7 +292,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_from' => 'from',
                     'zip_to' => 'to',
                 ],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -305,7 +306,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_from' => '',
                     'zip_to' => '',
                 ],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -315,7 +316,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'empty' => [
                 [],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -329,7 +330,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_from' => 78765,
                     'zip_to' => 78780,
                 ],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -341,7 +342,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_from' => 78765,
                     'zip_to' => 78780,
                 ],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -350,7 +351,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'invalidCountry' => [
                 ['tax_country_id' => 'XX'],
-                'error' => [
+                'errorMessages' => [
                     'Invalid value of "XX" provided for the country_id field.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -359,7 +360,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'invalidCountry2' => [
                 ['tax_country_id' => ' '],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -368,7 +369,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'invalidRegion1' => [
                 ['tax_region_id' => '-'],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     'Invalid value of "-" provided for the region_id field.',
                     '"percentage_rate" is required. Enter and try again.',
@@ -378,7 +379,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
             ],
             'spaceRegion' => [
                 ['tax_region_id' => ' '],
-                'error' => [
+                'errorMessages' => [
                     '"country_id" is required. Enter and try again.',
                     '"percentage_rate" is required. Enter and try again.',
                     '"code" is required. Enter and try again.',
@@ -395,7 +396,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
                     'zip_from' => 78765,
                     'zip_to' => 78780,
                 ],
-                'error' => [
+                'errorMessages' => [
                     '"percentage_rate" is required. Enter and try again.',
                 ],
             ]
@@ -567,9 +568,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param $expectedRateCodes
      *
      * @magentoDbIsolation enabled
-     * @dataProvider searchTaxRatesDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[DataProvider('searchTaxRatesDataProvider')]
     public function testGetList($filters, $filterGroup, $expectedRateCodes)
     {
         $taxRates = $this->taxRateFixtureFactory->createTaxRates(

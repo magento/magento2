@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoAdminConfigFixtures can be removed using override config
@@ -49,12 +50,11 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoAdminConfigFixture test_section/test_group/field_2 new_value
      * @magentoAdminConfigFixture test_section/test_group/field_3 new_value
      *
-     * @dataProvider testDataProvider
-     *
      * @param string $expectedFirstValue
      * @param string $expectedSecondValue
      * @return void
      */
+    #[DataProvider('datasetDataProvider')]
     public function testRemoveFixtureForMethod(string $expectedFirstValue, string $expectedSecondValue): void
     {
         $fistValue = $this->config->getValue(
@@ -72,16 +72,16 @@ class RemoveFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function datasetDataProvider(): array
     {
         return [
             'first_data_set' => [
-                'expected_first_config_value' => '2nd field default value',
-                'expected_second_config_value' => 'new_value',
+                '2nd field default value',
+                'new_value',
             ],
             'second_data_set' => [
-                'expected_first_config_value' => '2nd field default value',
-                'expected_second_config_value' => '3rd field default value',
+                '2nd field default value',
+                '3rd field default value',
             ],
         ];
     }

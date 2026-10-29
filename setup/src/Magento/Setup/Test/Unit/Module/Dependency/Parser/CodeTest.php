@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Parser;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\Dependency\Parser\Code;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CodeTest extends TestCase
 {
@@ -26,8 +27,8 @@ class CodeTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongOptionFilesForParse
      */
+    #[DataProvider('dataProviderWrongOptionFilesForParse')]
     public function testParseWithWrongOptionFilesForParse($options)
     {
         $this->expectException('InvalidArgumentException');
@@ -38,7 +39,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionFilesForParse()
+    public static function dataProviderWrongOptionFilesForParse()
     {
         return [
             [['files_for_parse' => [], 'declared_namespaces' => [1, 2]]],
@@ -49,8 +50,8 @@ class CodeTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongOptionDeclaredNamespace
      */
+    #[DataProvider('dataProviderWrongOptionDeclaredNamespace')]
     public function testParseWithWrongOptionDeclaredNamespace($options)
     {
         $this->expectException('InvalidArgumentException');
@@ -61,7 +62,7 @@ class CodeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionDeclaredNamespace()
+    public static function dataProviderWrongOptionDeclaredNamespace()
     {
         return [
             [['declared_namespaces' => [], 'files_for_parse' => [1, 2]]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\OsInfo;
 use Magento\Framework\Shell\CommandRendererBackground;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommandRendererBackgroundTest extends TestCase
 {
@@ -19,7 +20,7 @@ class CommandRendererBackgroundTest extends TestCase
      *
      * @var string
      */
-    protected $testCommand = 'php -r test.php';
+    protected static $testCommand = 'php -r test.php';
 
     /**
      * @var OsInfo|MockObject
@@ -32,11 +33,10 @@ class CommandRendererBackgroundTest extends TestCase
             ->getMock();
     }
 
-    /**
-     * @dataProvider commandPerOsTypeDataProvider
-     * @param bool $isWindows
+    /**     * @param bool $isWindows
      * @param string $expectedResults
      */
+    #[DataProvider('commandPerOsTypeDataProvider')]
     public function testRender($isWindows, $expectedResults)
     {
         $this->osInfo->expects($this->once())
@@ -46,7 +46,7 @@ class CommandRendererBackgroundTest extends TestCase
         $commandRenderer = new CommandRendererBackground($this->osInfo);
         $this->assertEquals(
             $expectedResults,
-            $commandRenderer->render($this->testCommand)
+            $commandRenderer->render(self::$testCommand)
         );
     }
 
@@ -55,11 +55,11 @@ class CommandRendererBackgroundTest extends TestCase
      *
      * @return array
      */
-    public function commandPerOsTypeDataProvider()
+    public static function commandPerOsTypeDataProvider()
     {
         return [
-            'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' 2>/dev/null >/dev/null &'],
+            'windows' => [true, 'start /B "magento background task" ' . self::$testCommand . ' 2>&1'],
+            'unix'    => [false, self::$testCommand . ' 2>/dev/null >/dev/null &'],
         ];
     }
 }

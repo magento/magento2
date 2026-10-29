@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 
@@ -72,19 +72,11 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
                 sprintf('"%s" data type is invalid. String is expected.', gettype($xmlRequestBody))
             );
         }
-        /** Disable external entity loading to prevent possible vulnerability */
-        if (version_compare(PHP_VERSION, '8.0') < 0) {
-            // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
-            $previousLoaderState = libxml_disable_entity_loader(true);
-        }
+
         set_error_handler([$this, 'handleErrors']);
         $xmlParser = $this->parserFactory->create();
         $xmlParser->loadXML($xmlRequestBody);
-
         restore_error_handler();
-        if (isset($previousLoaderState)) {
-            libxml_disable_entity_loader($previousLoaderState);
-        }
 
         /** Process errors during XML parsing. */
         if ($this->_errorMessage !== null) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
@@ -9,12 +9,14 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Indexer\Processor;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -76,7 +78,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
         $this->indexerProcessor = $this->objectManager->create(\Magento\Customer\Model\Indexer\Processor::class);
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
-        $propertyAccessor->setAccessible(true);
         $propertyAccessor->setValue($this->_model, []);
         $this->_customerData = [
             'firstname' => 'Firstname',
@@ -93,6 +94,24 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->writeFactory = $this->objectManager->get(WriteFactory::class);
         $this->csvFactory = $this->objectManager->get(CsvFactory::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $registry = $this->objectManager->get(Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        try {
+            $customerCollection = $this->objectManager->create(CustomerCollection::class);
+            $customerCollection->delete();
+        } finally {
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        }
+        parent::tearDown();
     }
 
     /**
@@ -113,9 +132,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $existingCustomer = $this->getCustomer('CharlesTAlston@teleworm.us', 1);
 
-        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customersCollection CustomerCollection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
 
@@ -276,9 +295,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $existingCustomer->setWebsiteId(1);
         $existingCustomer = $existingCustomer->loadByEmail('CharlesTAlston@teleworm.us');
 
-        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customersCollection CustomerCollection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $customersCollection->resetData();
         $customersCollection->clear();
@@ -346,9 +365,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $this->directoryWrite
         );
 
-        /** @var $customerCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customerCollection CustomerCollection */
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
 
@@ -495,7 +514,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test customer indexer gets invalidated after import when Update on Schedule mode is set
      *
-     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture deleteAllCustomers
      * @return void
      */
     public function testCustomerIndexer(): void
@@ -507,6 +528,40 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
         $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
         $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
+    }
+
+    public static function deleteAllCustomers(): void
+    {
+        //Do nothing. we just need the rollback method to be called
+    }
+
+    public static function deleteAllCustomersRollback(): void
+    {
+        static::deleteAllCustomersInCsvFile(__DIR__ . '/_files/customers_with_gender_to_import.csv');
+    }
+
+    private static function deleteAllCustomersInCsvFile(string $file): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $objectManager->get(CustomerRepositoryInterface::class);
+        $rows = $objectManager->get(\Magento\Framework\File\Csv::class)->getData($file);
+        $header = array_shift($rows);
+        if ($header === false) {
+            return;
+        }
+        $emailIndex = array_search('email', $header);
+        if ($emailIndex === false) {
+            return;
+        }
+        foreach (array_column($rows, $emailIndex) as $email) {
+            try {
+                $customer = $repository->get(strtolower(trim($email)));
+                $repository->delete($customer);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+                continue;
+            }
+        }
     }
 
     /**

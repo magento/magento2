@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Event\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer\Cron;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CronTest extends TestCase
 {
@@ -28,11 +29,10 @@ class CronTest extends TestCase
         $this->cron = null;
     }
 
-    /**
-     * @dataProvider numericValueProvider
-     * @param string|int $value
+    /**     * @param string|int $value
      * @param int|bool $expectedResult
      */
+    #[DataProvider('numericValueProvider')]
     public function testGetNumeric($value, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->cron->getNumeric($value));
@@ -41,7 +41,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function numericValueProvider()
+    public static function numericValueProvider()
     {
         return [
             ['jan', 1],
@@ -71,12 +71,11 @@ class CronTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider matchCronExpressionProvider
-     * @param string $expression
+    /**     * @param string $expression
      * @param int $number
      * @param bool $expectedResult
      */
+    #[DataProvider('matchCronExpressionProvider')]
     public function testMatchCronExpression($expression, $number, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->cron->matchCronExpression($expression, $number));
@@ -85,7 +84,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function matchCronExpressionProvider()
+    public static function matchCronExpressionProvider()
     {
         return [
             ['mon-fri', 2, true],
@@ -98,12 +97,11 @@ class CronTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider isValidForProvider
-     * @param int $time
+    /**     * @param int $time
      * @param string $expression
      * @param bool $expectedResult
      */
+    #[DataProvider('isValidForProvider')]
     public function testIsValidFor($time, $expression, $expectedResult)
     {
         $eventMock = $this->createMock(Event::class);
@@ -117,7 +115,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForProvider()
+    public static function isValidForProvider()
     {
         return [
             [mktime(0, 0, 12, 7, 1, 2000), '* * * * *', true],

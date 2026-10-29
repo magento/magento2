@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,7 @@
             <testCaseId value="AC-5461"/>
             <group value="paypalPaymentsPro"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
@@ -39,14 +40,14 @@
             <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
                 <argument name="cardData" value="VisaDefaultCard"/>
             </actionGroup>
-            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <actionGroup ref="StorefrontClickPlaceOrderButtonActionGroup" stepKey="placeOrder"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
             <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
             <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
         </before>
         <after>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnRemoveButtonToUnFiltersIfPresent"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickOnRemoveButtonToUnFiltersIfPresent"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -73,7 +74,7 @@
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.authorizationNotes('Voided')}}" userInput="$getVoidAuthorizationNotesWithID" stepKey="seeOrderHistoryNotes"/>
         <!-- Check the last transaction of the order and validate the details for Void and Authorization-->
-        <actionGroup ref="AdminViewTransactionsInOrderActionGroup" stepKey="validateVoidTransaction"/>
+        <actionGroup ref="AdminAssertTransactionIdOfVoidOrderActionGroup" stepKey="validateVoidTransaction"/>
         <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>

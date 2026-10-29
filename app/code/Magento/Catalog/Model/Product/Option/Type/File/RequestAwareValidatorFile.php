@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,8 +45,8 @@ class RequestAwareValidatorFile extends ValidatorFile
         Size $fileSize,
         FileTransferFactory $httpFactory,
         IsImage $isImageValidator,
-        Random $random = null,
-        Request $request = null
+        ?Random $random = null,
+        ?Request $request = null
     ) {
         $this->request = $request ?: ObjectManager::getInstance()->get(Request::class);
         parent::__construct(

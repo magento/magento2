@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Logger;
 
@@ -23,7 +23,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface, ResetAf
      * @var ObjectManagerInterface
      * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private readonly ObjectManagerInterface $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var LoggerInterface|null

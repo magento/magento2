@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\ViewModel\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\ViewModel\Product\Breadcrumbs;
@@ -56,15 +57,9 @@ class BreadcrumbsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->catalogHelperMock = $this->getMockBuilder(CatalogHelper::class)
-            ->onlyMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->catalogHelperMock = $this->createPartialMock(CatalogHelper::class, ['getProduct']);
 
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue', 'isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createPartialMock(ScopeConfigInterface::class, ['getValue', 'isSetFlag']);
 
         $escaper = $this->getObjectManager()->getObject(Escaper::class);
 
@@ -108,15 +103,17 @@ class BreadcrumbsTest extends TestCase
     }
 
     /**
-     * @dataProvider productDataProvider
      *
-     * @param Product|null $product
+     * @param $product
      * @param string $expectedName
-     *
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testGetProductName($product, string $expectedName) : void
     {
+        if ($product!=null) {
+            $product = $product($this);
+        }
         $this->catalogHelperMock->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($product);
@@ -127,24 +124,32 @@ class BreadcrumbsTest extends TestCase
     /**
      * @return array
      */
-    public function productDataProvider() : array
+    public static function productDataProvider() : array
     {
         return [
-            [$this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test']]), 'Test'],
+            [
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class,
+                    ['data' => ['name' => 'Test']]
+                ),
+                'Test'
+            ],
             [null, ''],
         ];
     }
 
     /**
-     * @dataProvider productJsonEncodeDataProvider
      *
-     * @param Product|null $product
+     * @param \Closure $product
      * @param string $expectedJson
-     *
      * @return void
      */
+    #[DataProvider('productJsonEncodeDataProvider')]
     public function testGetJsonConfigurationHtmlEscaped($product, string $expectedJson) : void
     {
+        if ($product!=null) {
+            $product = $product($this);
+        }
         $this->catalogHelperMock->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($product);
@@ -165,24 +170,36 @@ class BreadcrumbsTest extends TestCase
     /**
      * @return array
      */
-    public function productJsonEncodeDataProvider() : array
+    public static function productJsonEncodeDataProvider() : array
     {
         return [
             [
-                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test ™']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class,
+                    ['data' => ['name' => 'Test ™']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test \u2122"}}',
             ],
             [
-                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test "']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class,
+                    ['data' => ['name' => 'Test "']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &quot;"}}',
             ],
             [
-                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test <b>x</b>']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class,
+                    ['data' => ['name' => 'Test <b>x</b>']]
+                ),
                 '{"breadcrumbs":{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":'
                 . '"Test &lt;b&gt;x&lt;\/b&gt;"}}',
             ],
             [
-                $this->getObjectManager()->getObject(Product::class, ['data' => ['name' => 'Test \'abc\'']]),
+                static fn (self $testCase) => $testCase->getObjectManager()->getObject(
+                    Product::class,
+                    ['data' => ['name' => 'Test \'abc\'']]
+                ),
                 '{"breadcrumbs":'
                 . '{"categoryUrlSuffix":".&quot;html","useCategoryPathInUrl":0,"product":"Test &#039;abc&#039;"}}'
             ],
@@ -192,7 +209,7 @@ class BreadcrumbsTest extends TestCase
     /**
      * @return ObjectManager
      */
-    private function getObjectManager() : ObjectManager
+    protected function getObjectManager() : ObjectManager
     {
         if (null === $this->objectManager) {
             $this->objectManager = new ObjectManager($this);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -117,10 +117,10 @@ class StaticResource implements \Magento\Framework\AppInterface
         \Magento\Framework\Module\ModuleList $moduleList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         ConfigLoaderInterface $configLoader,
-        DeploymentConfig $deploymentConfig = null,
-        File $driver = null,
-        ThemePackageList $themePackageList = null,
-        Locale $localeValidator = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?File $driver = null,
+        ?ThemePackageList $themePackageList = null,
+        ?Locale $localeValidator = null
     ) {
         $this->state = $state;
         $this->response = $response;

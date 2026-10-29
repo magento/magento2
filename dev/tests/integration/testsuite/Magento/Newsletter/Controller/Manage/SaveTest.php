@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Newsletter\Model\CustomerSubscriberCache;
 use Magento\Newsletter\Model\Plugin\CustomerPlugin;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks customer subscription
@@ -61,12 +62,11 @@ class SaveTest extends AbstractController
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
      *
-     * @dataProvider subscriptionDataProvider
-     *
      * @param bool $isSubscribed
      * @param string $expectedMessage
      * @return void
      */
+    #[DataProvider('subscriptionDataProvider')]
     public function testSaveAction(bool $isSubscribed, string $expectedMessage): void
     {
         $this->loginCustomer('new_customer@example.com');
@@ -81,12 +81,12 @@ class SaveTest extends AbstractController
     {
         return [
             'subscribe_customer' => [
-                'is_subscribed' => true,
-                'expected_message' => 'We have saved your subscription.',
+                'isSubscribed' => true,
+                'expectedMessage' => 'We have saved your subscription.',
             ],
             'unsubscribe_customer' => [
-                'is_subscribed' => false,
-                'expected_message' => 'We have updated your subscription.',
+                'isSubscribed' => false,
+                'expectedMessage' => 'We have updated your subscription.',
             ],
         ];
     }

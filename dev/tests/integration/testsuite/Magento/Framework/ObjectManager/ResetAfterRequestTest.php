@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\ApplicationStateComparator\Collector;
 use Magento\Framework\TestFramework\ApplicationStateComparator\Comparator;
 use Magento\Framework\TestFramework\ApplicationStateComparator\CompareType;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
@@ -57,7 +58,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function resetAfterRequestClassDataProvider()
+    public static function resetAfterRequestClassDataProvider()
     {
         $resetAfterRequestClasses = [];
         foreach (Classes::getVirtualClasses() as $name => $type) {
@@ -118,12 +119,12 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * Verifies that resetState method for classes cause the state to be the same as it was initially constructed
      *
      * @param string $className
-     * @dataProvider resetAfterRequestClassDataProvider
      * @magentoAppArea graphql
      * @magentoDbIsolation disabled
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('resetAfterRequestClassDataProvider')]
     public function testResetAfterRequestClasses(string $className)
     {
         if (\Magento\Backend\Model\Locale\Resolver::class == $className) {  // FIXME: ACPT-1369

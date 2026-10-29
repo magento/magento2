@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,6 +71,12 @@ class Topmenu
         $collection = $this->getCategoryTree($storeId, $rootId);
         $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
+            $categoryId = $category->getId();
+            // Skip categories without valid IDs
+            if ($categoryId === null) {
+                continue;
+            }
+            
             $categoryParentId = $category->getParentId();
             if (!isset($mapping[$categoryParentId])) {
                 $parentIds = $category->getParentIds();
@@ -95,7 +101,7 @@ class Topmenu
             );
             $parentCategoryNode->addChild($categoryNode);
 
-            $mapping[$category->getId()] = $categoryNode; //add node in stack
+            $mapping[$categoryId] = $categoryNode; //add node in stack
         }
     }
 

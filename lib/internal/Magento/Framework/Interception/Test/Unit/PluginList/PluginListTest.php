@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,12 +20,18 @@ use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Adva
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemPlugin\Simple;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash\Plugin as StartingBackslashPlugin;
+use Magento\Framework\Interception\Definition\Runtime as InterceptionRuntime;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\ObjectManager\Definition\Runtime;
+use Magento\Framework\ObjectManager\Relations\Runtime as RelationsRuntime;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use ReflectionClass;
+use ReflectionObject;
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -42,6 +48,7 @@ require_once __DIR__ . '/../Custom/Module/Model/StartingBackslash/Plugin.php';
  */
 class PluginListTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var PluginList
      */
@@ -72,28 +79,34 @@ class PluginListTest extends TestCase
         $loadScoped = include __DIR__ . '/../_files/load_scoped_mock_map.php';
         $readerMock = $this->createMock(Dom::class);
 
-        $this->configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
-        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->addMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->configScopeMock = $this->createMock(ScopeInterface::class);
+        // CacheInterface extends FrontendInterface with 7 methods
+        $this->cacheMock = $this->createPartialMockWithReflection(
+            CacheInterface::class,
+            [
+                'test',               // FrontendInterface methods
+                'load',
+                'save',
+                'remove',
+                'clean',
+                'getBackend',
+                'getLowLevelFrontend'
+            ]
+        );
         // turn cache off
-        $this->cacheMock->method('get')->willReturn(false);
+        $this->cacheMock->method('load')->willReturn(false);
 
-        $omConfigMock =  $this->getMockForAbstractClass(
+        $omConfigMock =  $this->createMock(
             ConfigInterface::class
         );
 
         $omConfigMock->method('getOriginalInstanceType')->willReturnArgument(0);
 
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->method('get')->willReturnArgument(0);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
-        $this->configLoaderMock = $this->getMockBuilder(ConfigLoaderInterface::class)
-            ->onlyMethods(['load'])
-            ->getMockForAbstractClass();
+        $this->configLoaderMock = $this->createMock(ConfigLoaderInterface::class);
         $pluginListGeneratorMock = $this->getMockBuilder(PluginListGenerator::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['loadScopedVirtualTypes', 'inheritPlugins'])
@@ -108,16 +121,15 @@ class PluginListTest extends TestCase
 
         // tested class is a mock to be able to set its protected properties values in closure
         $this->object = $this->getMockBuilder(PluginList::class)
-            ->disableProxyingToOriginalMethods()
             ->onlyMethods(['_inheritPlugins'])
             ->setConstructorArgs(
                 [
                     'reader' => $readerMock,
                     'configScope' => $this->configScopeMock,
                     'cache' => $this->cacheMock,
-                    'relations' => new \Magento\Framework\ObjectManager\Relations\Runtime(),
+                    'relations' => new RelationsRuntime(),
                     'omConfig' => $omConfigMock,
-                    'definitions' => new \Magento\Framework\Interception\Definition\Runtime(),
+                    'definitions' => new InterceptionRuntime(),
                     'objectManager' => $objectManagerMock,
                     'classDefinitions' => $definitions,
                     'scopePriorityScheme' => ['global'],
@@ -233,9 +245,8 @@ class PluginListTest extends TestCase
      * @param string $method
      * @param string $scopeCode
      * @param string $code
-     * @param array $scopePriorityScheme
-     * @dataProvider getPluginsDataProvider
-     */
+     * @param array $scopePriorityScheme     */
+    #[DataProvider('getPluginsDataProvider')]
     public function testGetPlugins(
         ?array $expectedResult,
         string $type,
@@ -278,7 +289,7 @@ class PluginListTest extends TestCase
     /**
      * @return array
      */
-    public function getPluginsDataProvider()
+    public static function getPluginsDataProvider()
     {
         return [
             [
@@ -299,18 +310,42 @@ class PluginListTest extends TestCase
             ->method('getCurrentScope')
             ->willReturn('scope');
 
-        $data = [['key'], ['key'], ['key']];
+        // Properly structured data with all three components that get unserialized
+        $data = [
+            [], // _data
+            [], // _inherited
+            []  // _processed
+        ];
         $serializedData = 'serialized data';
+
+        // ConfigLoader should return empty array so cache path is taken
+        $this->configLoaderMock->expects($this->once())
+            ->method('load')
+            ->with('global|scope|interception')
+            ->willReturn([]); // Empty array is falsy
 
         $this->serializerMock->expects($this->never())
             ->method('serialize');
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
+            ->with($serializedData)
             ->willReturn($data);
-        $this->cacheMock->expects($this->once())
-            ->method('load')
-            ->with('global|scope|interception')
-            ->willReturn($serializedData);
+        
+        // Cannot override setUp's method()->willReturn() with expects()->willReturn()
+        // Use willReturnMap to provide specific return value for this cache ID
+        $this->cacheMock = $this->createPartialMockWithReflection(
+            CacheInterface::class,
+            ['test', 'load', 'save', 'remove', 'clean', 'getBackend', 'getLowLevelFrontend']
+        );
+        $this->cacheMock->method('load')
+            ->willReturnMap([
+                ['global|scope|interception', $serializedData]
+            ]);
+        
+        // Inject the new cache mock into the object via reflection
+        $reflection = new ReflectionObject($this->object);
+        $cacheProperty = $reflection->getParentClass()->getProperty('_cache');
+        $cacheProperty->setValue($this->object, $this->cacheMock);
 
         $inheritPlugins = function ($type) {
             $inherited = [
@@ -375,9 +410,8 @@ class PluginListTest extends TestCase
      */
     private function setScopePriorityScheme(array $areaCodes): void
     {
-        $reflection = new \ReflectionClass($this->object);
+        $reflection = new ReflectionClass($this->object);
         $reflection_property = $reflection->getProperty('_scopePriorityScheme');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->object, $areaCodes);
     }
 }

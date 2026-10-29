@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,8 +25,9 @@ class CreditmemoValidator
         if ($item->getQtyToRefund() <= 0) {
             return false;
         }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        $itemId = $item->getId();
+        if ($itemId !== null && isset($invoiceQtysRefundLimits[$itemId])) {
+            return $invoiceQtysRefundLimits[$itemId] > 0;
         }
 
         return true;
@@ -70,7 +71,8 @@ class CreditmemoValidator
                     return true;
                 }
             } else {
-                if (isset($qtys[$child->getId()]) && $qtys[$child->getId()] > 0) {
+                $childId = $child->getId();
+                if ($childId !== null && isset($qtys[$childId]) && $qtys[$childId] > 0) {
                     return true;
                 }
             }
@@ -93,7 +95,8 @@ class CreditmemoValidator
         if (empty($qtys)) {
             return $this->canRefundNoDummyItem($parent, $invoiceQtysRefundLimits);
         } else {
-            return isset($qtys[$parent->getId()]) && $qtys[$parent->getId()] > 0;
+            $parentId = $parent->getId();
+            return $parentId !== null && isset($qtys[$parentId]) && $qtys[$parentId] > 0;
         }
     }
 }

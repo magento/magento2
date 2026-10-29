@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\CacheDisableCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheDisableCommandTest extends AbstractCacheSetCommandTestCase
@@ -23,8 +24,8 @@ class CacheDisableCommandTest extends AbstractCacheSetCommandTestCase
      * @param array $enable
      * @param array $result
      * @param string $output
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($param, $enable, $result, $output)
     {
         $this->cacheManagerMock->expects($this->once())
@@ -44,8 +45,8 @@ class CacheDisableCommandTest extends AbstractCacheSetCommandTestCase
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $changes)
+    public static function getExpectedExecutionOutput(array $changes)
     {
-        return $this->getExpectedChangeOutput($changes, false);
+        return static::getExpectedChangeOutput($changes, false);
     }
 }

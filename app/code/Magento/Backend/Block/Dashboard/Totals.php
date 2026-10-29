@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,8 +72,7 @@ class Totals extends Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $firstPeriod = array_key_first($this->period->getDatePeriods());
-        $period = $this->getRequest()->getParam('period', $firstPeriod);
+        $period = $this->period->resolvePeriod($this->getRequest()->getParam('period'));
 
         /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(

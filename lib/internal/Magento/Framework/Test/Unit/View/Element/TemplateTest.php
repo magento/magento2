@@ -1,31 +1,23 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\View\Element;
 
 use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var FilterManager|MockObject
      */
@@ -43,14 +35,9 @@ class TemplateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['stripTags'])
-            ->getMock();
+        $this->filterManagerMock = $this->createPartialMockWithReflection(FilterManager::class, ['stripTags']);
 
         $this->contextMock->expects($this->once())
             ->method('getFilterManager')
@@ -64,8 +51,8 @@ class TemplateTest extends TestCase
      *
      * @param $input
      * @param $output
-     * @dataProvider tagDataProvider
      */
+    #[DataProvider('tagDataProvider')]
     public function testStripTags($input, $output): void
     {
         if ($input) {
@@ -80,7 +67,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function tagDataProvider(): array
+    public static function tagDataProvider(): array
     {
         return [
             ['-1', '-1'],

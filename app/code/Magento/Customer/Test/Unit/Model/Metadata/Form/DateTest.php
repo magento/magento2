@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Date;
@@ -60,9 +61,7 @@ class DateTest extends AbstractFormTestCase
      */
     public function testExtractValue()
     {
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->expects($this->once())->method('getParam')->willReturn('1999-1-2');
 
         // yyyy-MM-dd
@@ -76,13 +75,11 @@ class DateTest extends AbstractFormTestCase
     public function testExtractValueWithoutInputFilter()
     {
         /* local version of locale */
-        $localeMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects($this->any())->method('getDateFormat')->willReturn('d/M/yy');
 
         /* local version of attribute meta data */
-        $attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
         $attributeMetadataMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn('date');
@@ -108,9 +105,7 @@ class DateTest extends AbstractFormTestCase
             0
         );
 
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $requestMock = $this->createMock(RequestInterface::class);
         $requestMock->expects($this->once())->method('getParam')->willReturn('01/2/1999');
 
         $actual = $date->extractValue($requestMock);
@@ -122,16 +117,12 @@ class DateTest extends AbstractFormTestCase
      * @param array $validation Array of more validation metadata
      * @param bool $required Whether field is required
      * @param array|bool $expected Expected output
-     *
-     * @dataProvider validateValueDataProvider
-     */
+     * */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $validation, $required, $expected)
     {
         $validationRules = [];
-        $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getName', 'getValue'])
-            ->getMockForAbstractClass();
+        $validationRule = $this->createMock(ValidationRuleInterface::class);
         $validationRule->expects($this->any())
             ->method('getName')
             ->willReturn('input_validation');
@@ -142,10 +133,7 @@ class DateTest extends AbstractFormTestCase
         $validationRules[] = $validationRule;
         if (is_array($validation)) {
             foreach ($validation as $ruleName => $ruleValue) {
-                $validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-                    ->disableOriginalConstructor()
-                    ->onlyMethods(['getName', 'getValue'])
-                    ->getMockForAbstractClass();
+                $validationRule = $this->createMock(ValidationRuleInterface::class);
                 $validationRule->expects($this->any())
                     ->method('getName')
                     ->willReturn($ruleName);
@@ -174,7 +162,7 @@ class DateTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'false value, load original' => [false, [], false, true],
@@ -217,9 +205,8 @@ class DateTest extends AbstractFormTestCase
     /**
      * @param array|string $value value to pass to compactValue()
      * @param array|string|bool $expected expected output
-     *
-     * @dataProvider compactAndRestoreValueDataProvider
-     */
+     * */
+    #[DataProvider('compactAndRestoreValueDataProvider')]
     public function testCompactValue($value, $expected)
     {
         $this->assertSame($expected, $this->date->compactValue($value));
@@ -228,7 +215,7 @@ class DateTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function compactAndRestoreValueDataProvider()
+    public static function compactAndRestoreValueDataProvider()
     {
         return [
             [1, 1],
@@ -242,9 +229,8 @@ class DateTest extends AbstractFormTestCase
     /**
      * @param array|string $value Value to pass to restoreValue()
      * @param array|string|bool $expected Expected output
-     *
-     * @dataProvider compactAndRestoreValueDataProvider
-     */
+     * */
+    #[DataProvider('compactAndRestoreValueDataProvider')]
     public function testRestoreValue($value, $expected)
     {
         $this->assertSame($expected, $this->date->restoreValue($value));

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -16,6 +16,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,12 +87,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider executeDataProvider
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($scope, $scopeCode, callable $assertCallback)
     {
-        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock
             ->method('writeln')
             ->willReturnCallback(
@@ -137,20 +138,20 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $assertCallback($config);
     }
 
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                 null,
                 function (array $config) {
-                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_two']));
-                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    self::assertTrue(isset($config['system']['default']['some']['config']['path_two']));
+                    self::assertTrue(isset($config['system']['default']['some']['config']['path_three']));
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_three']
                     );
@@ -160,12 +161,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                 'website',
                 'test',
                 function (array $config) {
-                    $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
-                    $this->assertEquals(
+                    self::assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_three']
                     );
@@ -180,14 +181,14 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider executeInteractiveDataProvider
      * @return void
      */
+    #[DataProvider('executeInteractiveDataProvider')]
     public function testExecuteInteractive($scope, $scopeCode, callable $assertCallback)
     {
         $inputMock = $this->createInputMock(null, null, $scope, $scopeCode);
 
-        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock
             ->method('writeln')
             ->willReturnCallback(
@@ -211,25 +212,25 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $assertCallback($config);
     }
 
-    public function executeInteractiveDataProvider()
+    public static function executeInteractiveDataProvider()
     {
         return [
             [
                 ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                 null,
                 function (array $config) {
-                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_one']));
-                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_two']));
-                    $this->assertTrue(isset($config['system']['default']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    self::assertTrue(isset($config['system']['default']['some']['config']['path_one']));
+                    self::assertTrue(isset($config['system']['default']['some']['config']['path_two']));
+                    self::assertTrue(isset($config['system']['default']['some']['config']['path_three']));
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_one']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['default']['some']['config']['path_three']
                     );
@@ -239,18 +240,18 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
                 'website',
                 'test',
                 function (array $config) {
-                    $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_one']));
-                    $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
-                    $this->assertTrue(isset($config['system']['website']['test']['some']['config']['path_three']));
-                    $this->assertEquals(
+                    self::assertTrue(isset($config['system']['website']['test']['some']['config']['path_one']));
+                    self::assertTrue(isset($config['system']['website']['test']['some']['config']['path_two']));
+                    self::assertTrue(isset($config['system']['website']['test']['some']['config']['path_three']));
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_one']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_two']
                     );
-                    $this->assertEquals(
+                    self::assertEquals(
                         'sensitiveValue',
                         $config['system']['website']['test']['some']['config']['path_three']
                     );
@@ -307,7 +308,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function createInputMock($key, $val, $scope, $scopeCode)
     {
-        $inputMock = $this->getMockForAbstractClass(InputInterface::class);
+        $inputMock = $this->createMock(InputInterface::class);
         $isInteractive = $key === null;
 
         if (!$isInteractive) {

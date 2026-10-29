@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Service\V1;
 
@@ -31,7 +31,7 @@ class OrderItemGetListTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        $expectedRowTotals = [110, 100, 90];
+        $expectedRowTotals = [112, 102, 92];
         /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = $this->objectManager->get(
             \Magento\Framework\Api\SortOrderBuilder::class

@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea frontend
@@ -14,11 +16,11 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -52,12 +54,12 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -96,7 +98,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
     {
         return [
             '#1 Testing price for dynamic bundle product with one simple' => [
-                'strategy' => self::getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // just price from simple1
                     'minimalPrice' => 10,
@@ -106,7 +108,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for dynamic bundle product with three simples and different qty' => [
-                'strategy' => self::getBundleConfiguration2(),
+                'strategyModifiers' => self::getBundleConfiguration2(),
                 'expectedResults' => [
                     // min price from simples 3*10 or 30
                     'minimalPrice' => 30,
@@ -116,7 +118,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for dynamic bundle product with four simples and different price' => [
-                'strategy' => self::getBundleConfiguration3(),
+                'strategyModifiers' => self::getBundleConfiguration3(),
                 'expectedResults' => [
                     //  10
                     'minimalPrice' => 10,
@@ -126,7 +128,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#4 Testing price for dynamic bundle with two non required options' => [
-                'strategy' => self::getBundleConfiguration4(),
+                'strategyModifiers' => self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 1 * 10
                     'minimalPrice' => 10,
@@ -136,7 +138,7 @@ class DynamicBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '#5 Testing price for dynamic bundle with two required options' => [
-                'strategy' => self::getBundleConfiguration5(),
+                'strategyModifiers' => self::getBundleConfiguration5(),
                 'expectedResults' => [
                     // 1 * 10 + 1 * 10
                     'minimalPrice' => 20,

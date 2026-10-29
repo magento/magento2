@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\Hydrator as CategoryHydrator;
@@ -92,15 +93,19 @@ class Categories implements ResolverInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $value['model'];
-        $storeId = $this->storeManager->getStore()->getId();
-        $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
+        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE && in_array('orders', $info->path)) {
+            $categoryIds = $product->getCategoryIds();
+        } else {
+            $storeId = $this->storeManager->getStore()->getId();
+            $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
+        }
         $collection = $this->collectionFactory->create();
         return $this->valueFactory->create(
             function () use ($categoryIds, $info, $collection) {

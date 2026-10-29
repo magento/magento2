@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanExportOrderedProductsReportTest">
+        <annotations>
+            <features value="Report"/>
+            <stories value="Export ordered product report"/>
+            <title value="Admin can export ordered product report"/>
+            <description value="Verify admin can export ordered product report without facing any errors"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-13249"/>
+            <group value="reports"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Login as a customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <!-- Add product to cart and place the order-->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+                <argument name="product" value="$createSimpleProduct$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart"/>
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="clickToProceedToCheckout"/>
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+            <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1 & 2: Go to REPORTS > Products > Ordered and select a date range for which the product was sold. -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <generateDate stepKey="generateStartDate" date="-1 minute" format="m/d/Y"/>
+        <generateDate stepKey="generateEndDate" date="+1 minute" format="m/d/Y"/>
+        <actionGroup ref="AdminGenerateProductsOrderedReportActionGroup" stepKey="NavigateToProductOrderedReportAndGenerateReport">
+            <argument name="orderFromDate" value="$generateStartDate"/>
+            <argument name="orderToDate" value="$generateEndDate" />
+        </actionGroup>
+        <!-- Verify data -->
+        <grabTextFrom selector="{{SoldReportFilterSection.gridProduct}}" stepKey="grabData"/>
+        <assertStringContainsString stepKey="assertFirst">
+            <actualResult type="string">{$grabData}</actualResult>
+            <expectedResult type="string">{{SimpleProduct2.sku}}</expectedResult>
+        </assertStringContainsString>
+        <!--Step 3: Click on Export and verify there is no error while we are exporting -->
+        <waitForElementClickable selector="{{OrderReportMainSection.exportBtn}}" stepKey="waitForExportBtn"/>
+        <click selector="{{OrderReportMainSection.exportBtn}}" stepKey="clickOnExportBtn"/>
+        <waitForElementNotVisible selector="{{AdminCartPriceRulesFormSection.errorMessage}}" stepKey="verifyThereIsNoErrorWhileExportingOrderedReport"/>
+    </test>
+</tests>

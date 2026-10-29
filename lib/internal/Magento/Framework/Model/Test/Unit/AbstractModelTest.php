@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -64,9 +65,9 @@ class AbstractModelTest extends TestCase
     {
         $this->actionValidatorMock = $this->createMock(RemoveAction::class);
         $this->contextMock = new Context(
-            $this->getMockForAbstractClass(LoggerInterface::class),
-            $this->getMockForAbstractClass(ManagerInterface::class),
-            $this->getMockForAbstractClass(CacheInterface::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(ManagerInterface::class),
+            $this->createMock(CacheInterface::class),
             $this->createMock(State::class),
             $this->actionValidatorMock
         );
@@ -80,14 +81,24 @@ class AbstractModelTest extends TestCase
             'getIdFieldName',
             'rollBack'
         ]);
-        $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->model = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
+        $this->resourceCollectionMock = $this->createPartialMock(
+            \Magento\Framework\Data\Collection\AbstractDb::class,
+            ['getResource']
         );
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        
+        // Use getMockBuilder with onlyMethods([]) to allow real implementations
+        // This creates a partial mock that doesn't override any methods
+        $this->model = $this->getMockBuilder(AbstractModel::class)
+            ->setConstructorArgs([
+                $this->contextMock,
+                $this->registryMock,
+                $this->resourceMock,
+                $this->resourceCollectionMock
+            ])
+            ->onlyMethods([])
+            ->getMock();
+        
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -193,9 +204,8 @@ class AbstractModelTest extends TestCase
 
     /**
      * Test case for checking setData function is working for all possible key value pairs
-     *
-     * @dataProvider getKeyValueDataPairs
-     */
+     *     */
+    #[DataProvider('getKeyValueDataPairs')]
     public function testSetDataWithDifferentKeyValuePairs(
         array $data,
         mixed $testKey,
@@ -214,7 +224,7 @@ class AbstractModelTest extends TestCase
      *
      * @return array
      */
-    public function getKeyValueDataPairs(): array
+    public static function getKeyValueDataPairs(): array
     {
         return [
             'when test data and compare data are string' => [['key' => 'value'], 'key', 'value', false],

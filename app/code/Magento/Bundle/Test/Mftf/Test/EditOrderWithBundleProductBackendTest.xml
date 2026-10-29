@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -155,6 +155,7 @@
         <wait time="2" stepKey="waitForPageLoad2" />
         <click selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="clickEditButton"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ok}}" stepKey="clickOk"/>
+        <waitForElementClickable selector="{{AdminOrderFormItemsSection.configure}}" stepKey="waitForItemConfigureButton"/>
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickTodropdown2"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectProductOption('3')}}" stepKey="clickToSelectOption2"/>

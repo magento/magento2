@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,15 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\StockStateProvider;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StockStateProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
@@ -41,7 +45,7 @@ class StockStateProviderTest extends TestCase
     protected $productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product|MockObject
+     * @var Product|MockObject
      */
     protected $product;
 
@@ -132,9 +136,7 @@ class StockStateProviderTest extends TestCase
 
         $this->mathDivision = $this->createPartialMock(Division::class, ['getExactDivision']);
 
-        $this->localeFormat = $this->getMockForAbstractClass(
-            FormatInterface::class
-        );
+        $this->localeFormat = $this->createMock(FormatInterface::class);
         $this->localeFormat->expects($this->any())
             ->method('getNumber')
             ->willReturn($this->qty);
@@ -168,12 +170,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider verifyStockDataProvider
      */
-    public function testVerifyStock(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('verifyStockDataProvider')]
+    public function testVerifyStock(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->verifyStock($stockItem)
@@ -181,12 +184,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider verifyNotificationDataProvider
      */
-    public function testVerifyNotification(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('verifyNotificationDataProvider')]
+    public function testVerifyNotification(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->verifyNotification($stockItem)
@@ -194,12 +198,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider checkQtyDataProvider
      */
-    public function testCheckQty(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('checkQtyDataProvider')]
+    public function testCheckQty(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->checkQty($stockItem, $this->qty)
@@ -209,12 +214,13 @@ class StockStateProviderTest extends TestCase
     /**
      * Check quantity with out-of-stock status but positive or 0 quantity.
      *
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider checkQtyWithStockStatusDataProvider
      */
-    public function testCheckQtyWithPositiveQtyAndOutOfStockstatus(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('checkQtyWithStockStatusDataProvider')]
+    public function testCheckQtyWithPositiveQtyAndOutOfStockstatus(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->checkQty($stockItem, $this->qty)
@@ -222,12 +228,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider suggestQtyDataProvider
      */
-    public function testSuggestQty(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('suggestQtyDataProvider')]
+    public function testSuggestQty(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->suggestQty($stockItem, $this->qty)
@@ -235,12 +242,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider getStockQtyDataProvider
      */
-    public function testGetStockQty(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('getStockQtyDataProvider')]
+    public function testGetStockQty(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->getStockQty($stockItem)
@@ -248,12 +256,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider checkQtyIncrementsDataProvider
      */
-    public function testCheckQtyIncrements(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('checkQtyIncrementsDataProvider')]
+    public function testCheckQtyIncrements(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->checkQtyIncrements($stockItem, $this->qty)->getHasError()
@@ -261,12 +270,13 @@ class StockStateProviderTest extends TestCase
     }
 
     /**
-     * @param StockItemInterface $stockItem
+     * @param \Closure $stockItem
      * @param mixed $expectedResult
-     * @dataProvider checkQuoteItemQtyDataProvider
      */
-    public function testCheckQuoteItemQty(StockItemInterface $stockItem, $expectedResult)
+    #[DataProvider('checkQuoteItemQtyDataProvider')]
+    public function testCheckQuoteItemQty(\Closure $stockItem, $expectedResult)
     {
+        $stockItem = $stockItem($this);
         $this->assertEquals(
             $expectedResult,
             $this->stockStateProvider->checkQuoteItemQty(
@@ -281,65 +291,98 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    public function verifyStockDataProvider()
+    public static function verifyStockDataProvider()
     {
-        return $this->prepareDataForMethod('verifyStock');
+        return self::prepareDataForMethod('verifyStock');
     }
 
     /**
      * @return array
      */
-    public function verifyNotificationDataProvider()
+    public static function verifyNotificationDataProvider()
     {
-        return $this->prepareDataForMethod('verifyNotification');
+        return self::prepareDataForMethod('verifyNotification');
     }
 
     /**
      * @return array
      */
-    public function checkQtyDataProvider()
+    public static function checkQtyDataProvider()
     {
-        return $this->prepareDataForMethod('checkQty');
+        return self::prepareDataForMethod('checkQty');
     }
 
     /**
      * @return array
      */
-    public function checkQtyWithStockStatusDataProvider()
+    public static function checkQtyWithStockStatusDataProvider()
     {
-        return $this->prepareDataForMethod('checkQty', $this->getVariationsForQtyAndStock());
+        return self::prepareDataForMethod('checkQty', self::getVariationsForQtyAndStock());
     }
 
     /**
      * @return array
      */
-    public function suggestQtyDataProvider()
+    public static function suggestQtyDataProvider()
     {
-        return $this->prepareDataForMethod('suggestQty');
+        return self::prepareDataForMethod('suggestQty');
     }
 
     /**
      * @return array
      */
-    public function getStockQtyDataProvider()
+    public static function getStockQtyDataProvider()
     {
-        return $this->prepareDataForMethod('getStockQty');
+        return self::prepareDataForMethod('getStockQty');
     }
 
     /**
      * @return array
      */
-    public function checkQtyIncrementsDataProvider()
+    public static function checkQtyIncrementsDataProvider()
     {
-        return $this->prepareDataForMethod('checkQtyIncrements');
+        return self::prepareDataForMethod('checkQtyIncrements');
     }
 
     /**
      * @return array
      */
-    public function checkQuoteItemQtyDataProvider()
+    public static function checkQuoteItemQtyDataProvider()
     {
-        return $this->prepareDataForMethod('checkQuoteItemQty');
+        return self::prepareDataForMethod('checkQuoteItemQty');
+    }
+
+    protected function getStockItemClassMock($variation)
+    {
+        $stockItem = $this->createPartialMockWithReflection(
+            StockItem::class,
+            array_merge($this->stockAddItemMethods, $this->stockItemMethods)
+        );
+        $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(
+            $variation['values']['_suppress_check_qty_increments_']
+        );
+        $stockItem->expects($this->any())->method('getIsSaleable')->willReturn(
+            $variation['values']['_is_saleable_']
+        );
+        $stockItem->expects($this->any())->method('getOrderedItems')->willReturn(
+            $variation['values']['_ordered_items_']
+        );
+
+        $stockItem->expects($this->any())->method('getProductName')->willReturn($variation['values']['_product_']);
+        $stockItem->expects($this->any())->method('getIsChildItem')->willReturn(false);
+        $stockItem->expects($this->any())->method('hasStockQty')->willReturn(false);
+        $stockItem->expects($this->any())->method('setStockQty')->willReturnSelf();
+        $stockItem->expects($this->any())->method('setOrderedItems')->willReturnSelf();
+        $stockItem->expects($this->any())->method('getData')
+            ->with('stock_qty')
+            ->willReturn($variation['values']['_stock_qty_']);
+
+        foreach ($this->stockItemMethods as $method) {
+            $value = isset($variation['values'][$method]) ? $variation['values'][$method] : null;
+            $stockItem->expects($this->any())->method($method)->willReturn($value);
+        }
+
+        return $stockItem;
     }
 
     /**
@@ -347,41 +390,14 @@ class StockStateProviderTest extends TestCase
      * @param array|null $options
      * @return array
      */
-    protected function prepareDataForMethod($methodName, array $options = null)
+    protected static function prepareDataForMethod($methodName, ?array $options = null)
     {
         $variations = [];
         if ($options === null) {
-            $options = $this->getVariations();
+            $options = self::getVariations();
         }
         foreach ($options as $variation) {
-            $stockItem = $this->getMockBuilder(StockItemInterface::class)
-                ->disableOriginalConstructor()
-                ->addMethods($this->stockAddItemMethods)
-                ->onlyMethods($this->stockItemMethods)
-                ->getMockForAbstractClass();
-            $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(
-                $variation['values']['_suppress_check_qty_increments_']
-            );
-            $stockItem->expects($this->any())->method('getIsSaleable')->willReturn(
-                $variation['values']['_is_saleable_']
-            );
-            $stockItem->expects($this->any())->method('getOrderedItems')->willReturn(
-                $variation['values']['_ordered_items_']
-            );
-
-            $stockItem->expects($this->any())->method('getProductName')->willReturn($variation['values']['_product_']);
-            $stockItem->expects($this->any())->method('getIsChildItem')->willReturn(false);
-            $stockItem->expects($this->any())->method('hasStockQty')->willReturn(false);
-            $stockItem->expects($this->any())->method('setStockQty')->willReturnSelf();
-            $stockItem->expects($this->any())->method('setOrderedItems')->willReturnSelf();
-            $stockItem->expects($this->any())->method('getData')
-                ->with('stock_qty')
-                ->willReturn($variation['values']['_stock_qty_']);
-
-            foreach ($this->stockItemMethods as $method) {
-                $value = isset($variation['values'][$method]) ? $variation['values'][$method] : null;
-                $stockItem->expects($this->any())->method($method)->willReturn($value);
-            }
+            $stockItem = static fn (self $testCase) => $testCase->getStockItemClassMock($variation);
             $expectedResult = isset($variation['results'][$methodName]) ? $variation['results'][$methodName] : null;
             $variations[] = [
                 'stockItem' => $stockItem,
@@ -394,7 +410,7 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    private function getVariations()
+    private static function getVariations()
     {
         $stockQty = 100;
         return [
@@ -485,7 +501,7 @@ class StockStateProviderTest extends TestCase
     /**
      * @return array
      */
-    private function getVariationsForQtyAndStock()
+    private static function getVariationsForQtyAndStock()
     {
         $stockQty = 100;
         return [
@@ -537,16 +553,16 @@ class StockStateProviderTest extends TestCase
     /**
      * @param bool $isChildItem
      * @param string $expectedMsg
-     * @dataProvider checkQtyIncrementsMsgDataProvider
      */
+    #[DataProvider('checkQtyIncrementsMsgDataProvider')]
     public function testCheckQtyIncrementsMsg($isChildItem, $expectedMsg)
     {
         $qty = 1;
         $qtyIncrements = 5;
-        $stockItem = $this->getMockBuilder(StockItemInterface::class)
-            ->addMethods($this->stockAddItemMethods)
-            ->onlyMethods($this->stockItemMethods)
-            ->getMockForAbstractClass();
+        $stockItem = $this->createPartialMockWithReflection(
+            StockItem::class,
+            array_merge($this->stockAddItemMethods, $this->stockItemMethods)
+        );
         $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);
         $stockItem->expects($this->any())->method('getQtyIncrements')->willReturn($qtyIncrements);
         $stockItem->expects($this->any())->method('getIsChildItem')->willReturn($isChildItem);

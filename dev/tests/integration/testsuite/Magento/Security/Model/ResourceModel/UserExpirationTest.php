@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpirationFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,10 +37,11 @@ class UserExpirationTest extends TestCase
      * Verify user expiration saved with correct date.
      *
      * @magentoDataFixture Magento/User/_files/dummy_user.php
-     * @dataProvider userExpirationSaveDataProvider
      * @magentoAppArea adminhtml
+     * @param string $locale
      * @return void
      */
+    #[DataProvider('userExpirationSaveDataProvider')]
     public function testUserExpirationSave(string $locale): void
     {
         $localeResolver = Bootstrap::getObjectManager()->get(ResolverInterface::class);
@@ -70,17 +72,17 @@ class UserExpirationTest extends TestCase
      *
      * @return array
      */
-    public function userExpirationSaveDataProvider(): array
+    public static function userExpirationSaveDataProvider(): array
     {
         return [
             'default' => [
-                'locale_code' => 'en_US',
+                'locale' => 'en_US',
             ],
             'non_default_english_textual' => [
-                'locale_code' => 'de_DE',
+                'locale' => 'de_DE',
             ],
             'non_default_non_english_textual' => [
-                'locale_code' => 'uk_UA',
+                'locale' => 'uk_UA',
             ],
         ];
     }

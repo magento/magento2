@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,12 +24,15 @@ use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UiComponentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var UiComponent
      */
@@ -66,18 +69,12 @@ class UiComponentTest extends TestCase
             ->onlyMethods(['scheduleStructure'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->addMethods(['setElementToIfconfigList'])
-            ->onlyMethods(['getScheduledStructure'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataConfigFactory = $this->getMockBuilder(DataInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->dataConfig = $this->getMockBuilder(DataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->context = $this->createPartialMockWithReflection(
+            Context::class,
+            ['setElementToIfconfigList', 'getScheduledStructure']
+        );
+        $this->dataConfigFactory = $this->createMock(DataInterfaceFactory::class);
+        $this->dataConfig = $this->createMock(DataInterface::class);
         $this->readerPool = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -94,9 +91,8 @@ class UiComponentTest extends TestCase
 
     /**
      * @param Element $element
-     *
-     * @dataProvider interpretDataProvider
-     */
+     *     */
+    #[DataProvider('interpretDataProvider')]
     public function testInterpret($element)
     {
         $scheduleStructure = $this->getMockBuilder(ScheduledStructure::class)
@@ -105,10 +101,16 @@ class UiComponentTest extends TestCase
         $this->context->expects($this->any())->method('getScheduledStructure')->willReturn(
             $scheduleStructure
         );
+        // getParent() returns a new SimpleXML wrapper on each call, so an IsEqual match would (array)-cast both
+        // wrappers. That materializes SimpleXML property tables which PHP 8.5.12 double-frees during GC
+        // (php-src GH-24488). Comparing the serialized parent node keeps the same expectation without the cast.
+        $expectedParentXml = $element->getParent()->asXML();
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,
             $element,
-            $element->getParent()
+            $this->callback(
+                static fn (Element $parentNode): bool => $parentNode->asXML() === $expectedParentXml
+            )
         )->willReturn($element->getAttribute('name'));
 
         $scheduleStructure->expects($this->once())->method('setStructureElementData')->with(
@@ -168,11 +170,11 @@ class UiComponentTest extends TestCase
     /**
      * @return array
      */
-    public function interpretDataProvider()
+    public static function interpretDataProvider()
     {
         return [
             [
-                $this->getElement(
+                self::getElement(
                     '<uiComponent
                         name="cms_block_listing"
                         aclResource="test_acl"
@@ -190,7 +192,7 @@ class UiComponentTest extends TestCase
      * @param string $elementType
      * @return Element
      */
-    protected function getElement($xml, $elementType)
+    protected static function getElement($xml, $elementType)
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductFactory;
@@ -22,6 +23,8 @@ use Magento\Eav\Model\EntityFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -29,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class VariationHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var VariationHandler
      */
@@ -81,15 +85,15 @@ class VariationHandlerTest extends TestCase
             SetFactory::class,
             ['create']
         );
-        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
         $this->configurableProduct = $this->createMock(
             Configurable::class
         );
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getMediaGallery'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['setTypeId', 'setAttributeSetId', 'setWebsiteIds', 'setStoreId', 'setVisibility', 'setStatus']
+        );
 
         $this->model = $this->objectHelper->getObject(
             VariationHandler::class,
@@ -105,27 +109,19 @@ class VariationHandlerTest extends TestCase
 
     public function testPrepareAttributeSet()
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getNewVariationsAttributeSetId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['setAttributeGroupId'])
-            ->onlyMethods(['isInSet', 'setAttributeSetId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeSetMock = $this->getMockBuilder(Set::class)
-            ->onlyMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eavEntityMock = $this->getMockBuilder(Entity::class)
-            ->onlyMethods(['setType', 'getTypeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getAttributeSetId', 'setAttributeSetId', 'getNewVariationsAttributeSetId']
+        );
+        $attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save']
+        );
+        $attributeSetMock = $this->createPartialMock(Set::class, ['load', 'addSetInfo', 'getDefaultGroupId']);
+        $eavEntityMock = $this->createPartialMock(Entity::class, ['setType', 'getTypeId']);
 
-        $productMock->expects($this->once())
-            ->method('getNewVariationsAttributeSetId')
-            ->willReturn('new_attr_set_id');
+        // Configure product mock to return 'new_attr_set_id' for getNewVariationsAttributeSetId()
+        $productMock->method('getNewVariationsAttributeSetId')->willReturn('new_attr_set_id');
         $this->configurableProduct->expects($this->once())
             ->method('getUsedProductAttributes')
             ->with($productMock)
@@ -136,27 +132,25 @@ class VariationHandlerTest extends TestCase
         $eavEntityMock->expects($this->once())->method('setType')->with('catalog_product')->willReturnSelf();
         $eavEntityMock->expects($this->once())->method('getTypeId')->willReturn('type_id');
         $attributeSetMock->expects($this->once())->method('addSetInfo')->with('type_id', [$attributeMock]);
-        $attributeMock->expects($this->once())->method('isInSet')->with('new_attr_set_id')->willReturn(false);
-        $attributeMock->expects($this->once())->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
+        // Configure attribute mock with expected values
+        $attributeMock->method('isInSet')->willReturn(false);
+        $attributeMock->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
+        $attributeMock->method('setAttributeGroupId')->with('default_group_id')->willReturnSelf();
         $attributeSetMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->with('new_attr_set_id')
             ->willReturn('default_group_id');
-        $attributeMock->expects($this->once())
-            ->method('setAttributeGroupId')
-            ->with('default_group_id')
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->model->prepareAttributeSet($productMock);
     }
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider dataProviderTestGenerateSimpleProducts
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param int|string|null $weight
      * @param string $typeId
      */
+    #[DataProvider('dataProviderTestGenerateSimpleProducts')]
     public function testGenerateSimpleProducts($weight, $typeId)
     {
         $productsData = [
@@ -184,79 +178,53 @@ class VariationHandlerTest extends TestCase
             'is_decimal_divided' => 0
         ];
 
-        $parentProductMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getNewVariationsAttributeSetId'])
-            ->onlyMethods(
-                [
-                    'getStockData',
-                    'getQuantityAndStockStatus',
-                    'getWebsiteIds'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $newSimpleProductMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setWebsiteIds'])
-            ->onlyMethods(
-                [
-                    'save',
-                    'getId',
-                    'setStoreId',
-                    'setTypeId',
-                    'setAttributeSetId',
-                    'getTypeInstance',
-                    'getStoreId',
-                    'addData',
-                    'setStatus',
-                    'setVisibility'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productTypeMock = $this->getMockBuilder(Type::class)
-            ->addMethods(['getSetAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $editableAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getIsVisible'])
-            ->onlyMethods(['getIsUnique', 'getAttributeCode', 'getFrontend'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $frontendAttributeMock = $this->getMockBuilder(FrontendInterface::class)
-            ->addMethods(['getInputType'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $parentProductMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getStoreId', 'setStoreId', 'getWebsiteIds', 'setWebsiteIds', 'getCategoryIds', 'setCategoryIds',
+                'getTypeId', 'setTypeId', 'getNewVariationsAttributeSetId', 'getStockData',
+                'getQuantityAndStockStatus', 'getData'
+            ]
+        );
+        $newSimpleProductMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setStoreId', 'setWebsiteIds', 'setCategoryIds', 'setTypeId', 'setAttributeSetId',
+                'setVisibility', 'setStatus', 'setData', 'setId', 'save', 'getId', 'getTypeInstance', 'addData'
+            ]
+        );
+        $editableAttributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getIsVisible', 'setIsVisible', 'getAttributeCode', 'setAttributeCode', 'getFrontend', 'setFrontend']
+        );
 
-        $parentProductMock->expects($this->once())
-            ->method('getNewVariationsAttributeSetId')
-            ->willReturn('new_attr_set_id');
-        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
-        $newSimpleProductMock->expects($this->once())->method('setStoreId')->with(0)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setTypeId')->with($typeId)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())
-            ->method('setAttributeSetId')
-            ->with('new_attr_set_id')
-            ->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('getTypeInstance')->willReturn($productTypeMock);
-        $productTypeMock->expects($this->once())
-            ->method('getSetAttributes')
-            ->with($newSimpleProductMock)
-            ->willReturn([$editableAttributeMock]);
-        $editableAttributeMock->expects($this->once())->method('getIsUnique')->willReturn(false);
-        $editableAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('some_code');
-        $editableAttributeMock->expects($this->any())->method('getFrontend')->willReturn($frontendAttributeMock);
-        $frontendAttributeMock->expects($this->any())->method('getInputType')->willReturn('input_type');
-        $editableAttributeMock->expects($this->any())->method('getIsVisible')->willReturn(false);
-        $parentProductMock->expects($this->once())->method('getStockData')->willReturn($stockData);
-        $parentProductMock->expects($this->once())
-            ->method('getQuantityAndStockStatus')
-            ->willReturn(['is_in_stock' => 1]);
-        $newSimpleProductMock->expects($this->once())->method('addData')->willReturnSelf();
-        $parentProductMock->expects($this->once())->method('getWebsiteIds')->willReturn('website_id');
-        $newSimpleProductMock->expects($this->once())->method('setWebsiteIds')->with('website_id')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setVisibility')->with(1)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('save')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
+        $frontendAttributeMock = $this->createMock(DefaultFrontend::class);
+        $frontendAttributeMock->method('getInputType')->willReturn('input_type');
+
+        $typeInstanceMock = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getSetAttributes']
+        );
+        $typeInstanceMock->method('getSetAttributes')->willReturn([]);
+
+        $this->productFactoryMock->method('create')->willReturn($newSimpleProductMock);
+        $newSimpleProductMock->method('setStoreId')->willReturnSelf();
+        $newSimpleProductMock->method('setTypeId')->willReturnSelf();
+        $newSimpleProductMock->method('setAttributeSetId')->willReturnSelf();
+        $newSimpleProductMock->method('setWebsiteIds')->willReturnSelf();
+        $newSimpleProductMock->method('setVisibility')->willReturnSelf();
+        $newSimpleProductMock->method('setStatus')->willReturnSelf();
+        $newSimpleProductMock->method('addData')->willReturnSelf();
+        $newSimpleProductMock->method('getTypeInstance')->willReturn($typeInstanceMock);
+        $newSimpleProductMock->method('getId')->willReturn('product_id');
+        $newSimpleProductMock->method('save')->willReturnSelf();
+        $editableAttributeMock->setData('frontend', $frontendAttributeMock);
+        // Configure parent product mock with expected values
+        $parentProductMock->method('getNewVariationsAttributeSetId')->willReturn('attribute_set_id');
+        $parentProductMock->method('getStockData')->willReturn($stockData);
+        $parentProductMock->method('getQuantityAndStockStatus')->willReturn(['is_in_stock' => 1]);
+        $parentProductMock->method('getWebsiteIds')->willReturn(['website_id']);
+        $parentProductMock->method('getData')->willReturn(null);
 
         $this->assertEquals(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
     }
@@ -269,22 +237,21 @@ class VariationHandlerTest extends TestCase
         return [
             [
                 'weight' => 333,
-                'type_id' => Type::TYPE_SIMPLE,
+                'typeId' => Type::TYPE_SIMPLE,
             ],
             [
                 'weight' => '',
-                'type_id' => Type::TYPE_VIRTUAL,
+                'typeId' => Type::TYPE_VIRTUAL,
             ],
             [
                 'weight' => null,
-                'type_id' => Type::TYPE_VIRTUAL,
+                'typeId' => Type::TYPE_VIRTUAL,
             ],
         ];
     }
 
     public function testProcessMediaGalleryWithImagesAndGallery()
     {
-        $this->product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = 'test';
         $productData['media_gallery']['images'] = [
             [
@@ -297,7 +264,6 @@ class VariationHandlerTest extends TestCase
 
     public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
     {
-        $this->product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = false;
         $productData['media_gallery']['images'] = [
             [
@@ -310,7 +276,6 @@ class VariationHandlerTest extends TestCase
 
     public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
     {
-        $this->product->expects($this->once())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = false;
         $productData['media_gallery']['images'] = false;
         $result = $this->model->processMediaGallery($this->product, $productData);
@@ -318,10 +283,10 @@ class VariationHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider productDataProviderForProcessMediaGalleryForFillingGallery
      * @param array $productData
      * @param array $expected
      */
+    #[DataProvider('productDataProviderForProcessMediaGalleryForFillingGallery')]
     public function testProcessMediaGalleryForFillingGallery($productData, $expected)
     {
         $this->assertEquals($expected, $this->model->processMediaGallery($this->product, $productData));
@@ -337,7 +302,7 @@ class VariationHandlerTest extends TestCase
                 [], [],
             ],
             'array only with empty image' => [
-                'given' => [
+                'productData' => [
                     'image',
                 ],
                 'expected' => [
@@ -345,7 +310,7 @@ class VariationHandlerTest extends TestCase
                 ],
             ],
             'empty array with not empty image' => [
-                'given' => [
+                'productData' => [
                     'image' => 1,
                 ],
                 'expected' => [

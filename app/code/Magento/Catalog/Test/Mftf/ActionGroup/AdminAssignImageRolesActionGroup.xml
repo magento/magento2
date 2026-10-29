@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,10 +19,24 @@
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
         <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
-        <conditionalClick selector="{{AdminProductImagesSection.role('Base')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Base')}}" visible="false" stepKey="checkRoleBase"/>
-        <conditionalClick selector="{{AdminProductImagesSection.role('Small')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Small')}}" visible="false" stepKey="checkRoleSmall"/>
-        <conditionalClick selector="{{AdminProductImagesSection.role('Thumbnail')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Thumbnail')}}" visible="false" stepKey="checkRoleThumbnail"/>
-        <conditionalClick selector="{{AdminProductImagesSection.role('Swatch')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Swatch')}}" visible="false" stepKey="checkRoleSwatch"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        
+        <conditionalClick selector="{{AdminProductImagesSection.roleBaseUseDefault}}" dependentSelector="{{AdminProductImagesSection.isBaseUseDefaultSelected}}" visible="true" stepKey="uncheckBaseUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isBaseDisabled}}" stepKey="waitForRoleBaseEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="false" stepKey="checkRoleBase"/>
+
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmallUseDefault}}" dependentSelector="{{AdminProductImagesSection.isSmallUseDefaultSelected}}" visible="true" stepKey="uncheckSmallUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isSmallDisabled}}" stepKey="waitForRoleSmallEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isSmallSelected}}" visible="false" stepKey="checkRoleSmall"/>
+
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnailUseDefault}}" dependentSelector="{{AdminProductImagesSection.isThumbnailUseDefaultSelected}}" visible="true" stepKey="uncheckThumbnailUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isThumbnailDisabled}}" stepKey="waitForRoleThumbnailEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="false" stepKey="checkRoleThumbnail"/>
+        
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatchUseDefault}}" dependentSelector="{{AdminProductImagesSection.isSwatchUseDefaultSelected}}" visible="true" stepKey="uncheckSwatchUseDefault"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.isSwatchDisabled}}" stepKey="waitForRoleSwatchEnabled"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isSwatchSelected}}" visible="false" stepKey="checkRoleSwatch"/>
+        
         <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
     </actionGroup>
 </actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Quote\Test\Fixture\QuoteIdMask;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
@@ -31,7 +32,9 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\OfflinePayments\Model\Checkmo;
 
 /**
  * Test for placing an order for guest
@@ -112,7 +115,6 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('number', $response['placeOrder']['orderV2']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['orderV2']['number']);
-        self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
@@ -152,7 +154,6 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('number', $response['placeOrder']['orderV2']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['orderV2']['number']);
-        self::assertEmpty(count($response['placeOrder']['errors']));
         $orderIncrementId = $response['placeOrder']['order']['order_number'];
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
@@ -197,13 +198,20 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
 
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('GUEST_EMAIL_MISSING', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'Guest email for cart is missing.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Guest email for cart is missing.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_GUEST_EMAIL_MISSING,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -215,13 +223,21 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'A server error stopped your order from being placed. Please try to place your order again.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -236,13 +252,21 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'Some addresses can\'t be used due to the configurations for specific countries.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: Some addresses can\'t be used due to the' .
+                ' configurations for specific countries.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -258,13 +282,20 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'The shipping method is missing. Select the shipping method and try again.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: The shipping method is missing. Select the shipping method and try again.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -285,13 +316,24 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
 
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertStringContainsString(
-            'Please check the billing address information.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: Please check the billing address information. ' .
+                '"firstname" is required. Enter and try again. "lastname" is required. Enter and try again. ' .
+                '"street" is required. Enter and try again. "city" is required. Enter and try again. ' .
+                '"telephone" is required. Enter and try again. "postcode" is required. Enter and try again. ' .
+                '"countryId" is required. Enter and try again.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -312,13 +354,20 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'Enter a valid payment method and try again.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: Enter a valid payment method and try again.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -349,13 +398,20 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'Some of the products are out of stock.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: Some of the products are out of stock.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -386,13 +442,20 @@ class PlaceOrderTest extends GraphQlAbstract
         $cart = DataFixtureStorageManager::getStorage()->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
         $query = $this->getQuery($maskedQuoteId);
-        $response = $this->graphQlMutation($query);
-        self::assertEquals(1, count($response['placeOrder']['errors']));
-        self::assertEquals('UNABLE_TO_PLACE_ORDER', $response['placeOrder']['errors'][0]['code']);
-        self::assertEquals(
-            'Enter a valid payment method and try again.',
-            $response['placeOrder']['errors'][0]['message']
-        );
+        try {
+            $this->graphQlMutation($query);
+        } catch (ResponseContainsErrorsException $exception) {
+            $exceptionData = $exception->getResponseData();
+            self::assertEquals(1, count($exceptionData['errors']));
+            self::assertEquals(
+                'Unable to place order: Enter a valid payment method and try again.',
+                $exceptionData['errors'][0]['message']
+            );
+            self::assertEquals(
+                ErrorMapper::ERROR_UNABLE_TO_PLACE_ORDER,
+                $exceptionData['errors'][0]['extensions']['error_code']
+            );
+        }
     }
 
     #[
@@ -471,6 +534,56 @@ class PlaceOrderTest extends GraphQlAbstract
         $this->assertNotEmpty($order->getGiftMessageId());
     }
 
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/tablerate/active', '1', 'store', 'default'),
+        Config('carriers/freeshipping/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            SetPaymentMethodFixture::class,
+            ['cart_id' => '$cart.id$', 'method' => Checkmo::PAYMENT_METHOD_CHECKMO_CODE]
+        ),
+        Config('payment/checkmo/active', '0', 'store', 'default'),
+    ]
+    public function testSetPreviouslyAddedPaymentMethodAfterItWasDisabled()
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int)$cart->getId());
+
+        $query = $this->setPaymentMethodQuery($maskedQuoteId, Checkmo::PAYMENT_METHOD_CHECKMO_CODE);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $methodCode
+     * @return string
+     */
+    private function setPaymentMethodQuery(string $maskedQuoteId, string $methodCode): string
+    {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input: {
+    cart_id: "{$maskedQuoteId}",
+    payment_method: { code: "{$methodCode}" }
+  }) {
+    cart {
+      selected_payment_method { code }
+    }
+  }
+}
+QUERY;
+    }
+
     /**
      * @param string $maskedQuoteId
      * @return string
@@ -485,10 +598,6 @@ mutation {
     }
     orderV2 {
       number
-    }
-    errors {
-      message
-      code
     }
   }
 }

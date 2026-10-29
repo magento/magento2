@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -50,7 +50,7 @@ class StockItem
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
         StockStateInterface $stockState,
-        StockStateProviderInterface $stockStateProvider = null
+        ?StockStateProviderInterface $stockStateProvider = null
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;

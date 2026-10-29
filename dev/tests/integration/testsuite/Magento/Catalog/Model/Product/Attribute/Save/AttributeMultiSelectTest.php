@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Save;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -32,8 +34,8 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
 
     /**
      * @inheritdoc
-     * @dataProvider productProvider
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-29019');
@@ -43,10 +45,10 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         parent::testUniqueAttribute($firstSku, $secondSku);
@@ -59,7 +61,7 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
     {
         return [
             [
-                'product_sku' => 'simple2',
+                'productSku' => 'simple2',
             ],
         ];
     }
@@ -71,8 +73,8 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
     {
         return [
             [
-                'first_product_sku' => 'simple2',
-                'second_product_sku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

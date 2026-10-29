@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,16 +10,21 @@ namespace Magento\Sales\Test\Unit\Model\Order\Payment\State;
 use Magento\Directory\Model\Currency;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\State\OrderCommand;
 use Magento\Sales\Model\Order\StatusResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @see OrderCommand
  */
 class OrderCommandTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var float
      */
@@ -28,7 +33,7 @@ class OrderCommandTest extends TestCase
     /**
      * @var string
      */
-    private $newOrderStatus = 'custom_status';
+    private static $newOrderStatus = 'custom_status';
 
     /**
      * @see OrderCommand::execute
@@ -38,9 +43,8 @@ class OrderCommandTest extends TestCase
      * @param string $expectedState
      * @param string $expectedStatus
      * @param string $expectedMessage
-     *
-     * @dataProvider commandResultDataProvider
-     */
+     *     */
+    #[DataProvider('commandResultDataProvider')]
     public function testExecute(
         $isTransactionPending,
         $isFraudDetected,
@@ -48,34 +52,34 @@ class OrderCommandTest extends TestCase
         $expectedStatus,
         $expectedMessage
     ) {
-        $actualReturn = (new OrderCommand($this->getStatusResolver()))->execute(
-            $this->getPayment($isTransactionPending, $isFraudDetected),
-            $this->amount,
-            $this->getOrder()
-        );
+         $actualReturn = (new OrderCommand($this->getStatusResolver()))->execute(
+             $this->getPayment($isTransactionPending, $isFraudDetected),
+             $this->amount,
+             $this->getOrder()
+         );
 
-        $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
-        self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
+         $this->assertOrderStateAndStatus($this->getOrder(), $expectedState, $expectedStatus);
+         self::assertEquals(__($expectedMessage, $this->amount), $actualReturn);
     }
 
     /**
      * @return array
      */
-    public function commandResultDataProvider()
+    public static function commandResultDataProvider()
     {
         return [
             [
                 false,
                 false,
                 Order::STATE_PROCESSING,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Ordered amount of %1'
             ],
             [
                 true,
                 false,
                 Order::STATE_PAYMENT_REVIEW,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'The order amount of %1 is pending approval on the payment gateway.'
             ],
             [
@@ -100,11 +104,9 @@ class OrderCommandTest extends TestCase
      */
     private function getStatusResolver()
     {
-        $statusResolver = $this->getMockBuilder(StatusResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $statusResolver = $this->createMock(StatusResolver::class);
         $statusResolver->method('getOrderStatusByState')
-            ->willReturn($this->newOrderStatus);
+            ->willReturn(self::$newOrderStatus);
 
         return $statusResolver;
     }
@@ -114,9 +116,7 @@ class OrderCommandTest extends TestCase
      */
     private function getOrder()
     {
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $order = $this->createMock(Order::class);
         $order->method('getBaseCurrency')
             ->willReturn($this->getCurrency());
 
@@ -130,9 +130,10 @@ class OrderCommandTest extends TestCase
      */
     private function getPayment($isTransactionPending, $isFraudDetected)
     {
-        $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->addMethods(['getIsTransactionPending', 'getIsFraudDetected'])
-            ->getMockForAbstractClass();
+        $payment = $this->createPartialMockWithReflection(
+            Payment::class,
+            ['getIsTransactionPending', 'getIsFraudDetected']
+        );
         $payment->method('getIsTransactionPending')
             ->willReturn($isTransactionPending);
         $payment->method('getIsFraudDetected')
@@ -146,9 +147,7 @@ class OrderCommandTest extends TestCase
      */
     private function getCurrency()
     {
-        $currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $currency = $this->createMock(Currency::class);
         $currency->method('formatTxt')
             ->willReturn($this->amount);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +17,13 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultFrontendTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DefaultFrontend
      */
@@ -72,22 +76,16 @@ class DefaultFrontendTest extends TestCase
     {
         $this->cacheTags = ['tag1', 'tag2'];
 
-        $this->booleanFactory = $this->getMockBuilder(BooleanFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializer = $this->getMockBuilder(Serializer::class)
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
-        $this->cache = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
+        $this->booleanFactory = $this->createMock(BooleanFactory::class);
+        $this->serializer = $this->createMock(Serializer::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->attribute = $this->createAttribute();
-        $this->source = $this->getMockBuilder(AbstractSource::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAllOptions'])
-            ->getMockForAbstractClass();
+        $this->source = $this->createPartialMockWithReflection(
+            AbstractSource::class,
+            ['getAllOptions']
+        );
 
         $this->model = new DefaultFrontend(
             $this->booleanFactory,
@@ -124,8 +122,8 @@ class DefaultFrontendTest extends TestCase
      * @param String $validationRule
      * @param String $expectedClass
      * @return void
-     * @dataProvider validationRulesDataProvider
      */
+    #[DataProvider('validationRulesDataProvider')]
     public function testGetClass(String $validationRule, String $expectedClass): void
     {
         /** @var AbstractAttribute | MockObject $attribute */
@@ -156,7 +154,7 @@ class DefaultFrontendTest extends TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider(): array
+    public static function validationRulesDataProvider(): array
     {
         return [
             ['alphanumeric', 'validate-alphanum'],
@@ -199,16 +197,16 @@ class DefaultFrontendTest extends TestCase
      */
     private function createAttribute()
     {
-        return $this->getMockBuilder(AbstractAttribute::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValidateRules'])
-            ->onlyMethods([
+        return $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            [
+                'getValidateRules',
                 'getIsRequired',
                 'getFrontendClass',
                 'getAttributeCode',
                 'getSource'
-            ])
-            ->getMockForAbstractClass();
+            ]
+        );
     }
 
     public function testGetSelectOptions()

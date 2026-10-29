@@ -1,22 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Csp\Model\Collector\CspWhitelistXml;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\CompositeFileIteratorFactory;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\DesignInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface as DirectoryRead;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
 use Magento\Framework\View\Design\Theme\CustomizationInterfaceFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadInterface as DirectoryRead;
-use Magento\Framework\Config\CompositeFileIteratorFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Combines configuration files from both modules and current theme.
@@ -74,22 +74,29 @@ class FileResolver implements FileResolverInterface
      */
     public function get($filename, $scope)
     {
-         $configs = $this->moduleFileResolver->get($filename, $scope);
-        if ($scope === 'global') {
-            $files = [];
-            $theme = $this->theme;
-            while ($theme) {
-                /** @var CustomizationInterface $info */
-                $info = $this->themeInfoFactory->create(['theme' => $theme]);
-                $file = $info->getThemeFilesPath() .'/etc/' .$filename;
-                if ($this->rootDir->isExist($file)) {
-                    $files[] = $file;
+        $configs = $this->moduleFileResolver->get($filename, $scope);
+
+        switch ($scope) {
+            case 'frontend':
+            case 'adminhtml':
+                $files = [];
+                $theme = $this->theme;
+                while ($theme) {
+                    /** @var CustomizationInterface $info */
+                    $info = $this->themeInfoFactory->create(['theme' => $theme]);
+                    $file = $info->getThemeFilesPath() . '/etc/' . $filename;
+                    if ($this->rootDir->isExist($file)) {
+                        $files[] = $file;
+                    }
+                    $theme = $theme->getParentTheme();
                 }
-                $theme = $theme->getParentTheme();
-            }
-            $configs = $this->iteratorFactory->create(
-                ['paths' => array_reverse($files), 'existingIterator' => $configs]
-            );
+                $configs = $this->iteratorFactory->create(
+                    ['paths' => array_reverse($files), 'existingIterator' => $configs]
+                );
+                break;
+            case 'global':
+            default:
+                break;
         }
 
         return $configs;

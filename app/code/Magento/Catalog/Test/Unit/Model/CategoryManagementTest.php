@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,13 +65,9 @@ class CategoryManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
         $this->categoryTreeMock = $this->createMock(Tree::class);
-        $this->categoriesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(['addFilter', 'getFirstItem'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoriesFactoryMock = $this->createMock(CollectionFactory::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             CategoryManagement::class,
@@ -82,9 +78,9 @@ class CategoryManagementTest extends TestCase
             ]
         );
 
-        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
 
-        $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
 
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->model,
@@ -154,10 +150,9 @@ class CategoryManagementTest extends TestCase
     {
         $depth = null;
         $categoriesMock = $this->createMock(Collection::class);
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $categoryMock = $this->createMock(Category::class);
+
         $categoriesMock
             ->expects($this->once())
             ->method('getFirstItem')
@@ -204,14 +199,10 @@ class CategoryManagementTest extends TestCase
         $categoryId = 4;
         $parentId = 40;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('parentCategoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $categoryMock = $this->createMock(Category::class);
+
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(6))
@@ -246,14 +237,8 @@ class CategoryManagementTest extends TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('parentCategoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -274,14 +259,8 @@ class CategoryManagementTest extends TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMockClassName('categoryMock')
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMockClassName('parentCategoryMock')
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -305,6 +284,7 @@ class CategoryManagementTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($categoriesMock);
+
         $categoriesMock
             ->expects($this->once())
             ->method('addAttributeToFilter')

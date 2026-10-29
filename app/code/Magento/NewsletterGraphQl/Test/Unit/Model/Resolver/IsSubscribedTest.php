@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IsSubscribedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Object Manager Instance
      *
@@ -92,35 +95,23 @@ class IsSubscribedTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
 
-        $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMockForAbstractClass();
+        $this->contextExtensionMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
 
-        $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMockForAbstractClass();
+        $this->customerMock = $this->createMock(CustomerInterface::class);
 
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getWebsiteId'])
-            ->getMockForAbstractClass();
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
-        $this->fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fieldMock = $this->createMock(Field::class);
 
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
         $this->subscriberMock = $this->createMock(Subscriber::class);
 
-        $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
 
         $this->resolver = $this->objectManager->getObject(
             IsSubscribed::class,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
 
@@ -14,7 +14,6 @@ use Magento\Framework\Exception\LocalizedException;
  * Implement using different stores for retrieve attribute values
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -59,7 +58,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -167,18 +166,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $entityIdField = $indexList[$connection->getPrimaryKeyName($entityTable)]['COLUMNS_LIST'][0];
 
         if ($storeId) {
-
-            foreach ($attributeIds as $id) {
-                $attribute = $this->_eavConfig->getAttribute(
-                    $this->getEntity()->getType(),
-                    $id
-                );
-
-                if ($attribute->getAttributeCode() === 'price' && (int)$attribute->getIsGlobal() === 1) {
-                    $storeId = $this->getDefaultStoreId();
-                }
-            }
-
             $joinCondition = [
                 't_s.attribute_id = t_d.attribute_id',
                 "t_s.{$entityIdField} = t_d.{$entityIdField}",

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
@@ -14,6 +14,8 @@ use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConvert
 class ReadHandler extends AbstractHandler
 {
     /**
+     * Add video data to media gallery entries after loading them
+     *
      * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
@@ -44,11 +46,17 @@ class ReadHandler extends AbstractHandler
             $mediaGalleryReadHandler->getAttribute()->getAttributeCode(),
             $mediaEntriesDataCollection
         );
+        $product->setOrigData(
+            $mediaGalleryReadHandler->getAttribute()->getAttributeCode(),
+            $product->getData($mediaGalleryReadHandler->getAttribute()->getAttributeCode())
+        );
 
         return $product;
     }
 
     /**
+     * Collects IDs of video entries from media entries collection
+     *
      * @param array $mediaCollection
      * @return array
      */
@@ -66,6 +74,8 @@ class ReadHandler extends AbstractHandler
     }
 
     /**
+     * Loads video data by value IDs
+     *
      * @param array $ids
      * @param int $storeId
      * @return array
@@ -116,6 +126,8 @@ class ReadHandler extends AbstractHandler
     }
 
     /**
+     * Merges video data into corresponding media entries collection
+     *
      * @param array $mediaCollection
      * @param array $data
      * @return array
@@ -125,7 +137,7 @@ class ReadHandler extends AbstractHandler
         $data = $this->createIndexedCollection($data);
         foreach ($mediaCollection as &$mediaItem) {
             if (array_key_exists($mediaItem['value_id'], $data)) {
-                $mediaItem = array_merge($mediaItem, $data[$mediaItem['value_id']]);
+                $mediaItem = [...$mediaItem, ...$data[$mediaItem['value_id']]];
             }
         }
 
@@ -133,6 +145,8 @@ class ReadHandler extends AbstractHandler
     }
 
     /**
+     * Replace null values with default ones
+     *
      * @param array $rowData
      * @return mixed
      */
@@ -149,6 +163,8 @@ class ReadHandler extends AbstractHandler
     }
 
     /**
+     * Get video fields names
+     *
      * @param bool $withDbMapping
      * @return array
      */
@@ -161,6 +177,8 @@ class ReadHandler extends AbstractHandler
     }
 
     /**
+     * Indexes media entries collection by specified key.
+     *
      * @param array $mediaEntriesCollection
      * @param string $indexKey
      * @return array

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -70,6 +70,7 @@
         <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="United Kingdom" stepKey="assertCountryFieldInCartEstimateShippingSection"/>
         <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="" stepKey="assertStateProvinceInCartEstimateShippingSection"/>
         <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="KW1 7NQ" stepKey="assertZipPostalCodeInCartEstimateShippingSection"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
         <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPage">
             <argument name="customerVar" value="$$createCustomer$$" />

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\Framework\View\Helper;
 use Magento\Framework\View\Helper\SecureHtmlRender\TagData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for the secure HTML helper.
@@ -37,7 +38,7 @@ class SecureHtmlRendererTest extends TestCase
      *
      * @return array
      */
-    public function getTags(): array
+    public static function getTags(): array
     {
         return [
             [
@@ -61,8 +62,8 @@ class SecureHtmlRendererTest extends TestCase
      * @param TagData $tagData
      * @param string $expected Expected HTML.
      * @return void
-     * @dataProvider getTags
      */
+    #[DataProvider('getTags')]
     public function testRenderTag(TagData $tagData, string $expected): void
     {
         $this->assertEquals(

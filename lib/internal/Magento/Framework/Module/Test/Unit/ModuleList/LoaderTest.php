@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Xml\Parser;
 use Magento\Framework\Xml\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LoaderTest extends TestCase
 {
@@ -73,8 +74,8 @@ class LoaderTest extends TestCase
         $this->parser2->expects($this->any())->method('initErrorHandler');
         $this->parserFactory = $this->createMock(ParserFactory::class);
         $this->parserFactory->expects($this->any())->method('create')->willReturn($this->parser2);
-        $this->registry = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
-        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $this->registry = $this->createMock(ComponentRegistrarInterface::class);
+        $this->driver = $this->createMock(DriverInterface::class);
         $this->loader = new Loader(
             $this->converter,
             $this->parser,
@@ -87,9 +88,8 @@ class LoaderTest extends TestCase
     /**
      * @param $paths
      *
-     * @return void
-     * @dataProvider testLoadDataProvider
-     */
+     * @return void     */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($paths): void
     {
         $this->registry->expects($this->once())
@@ -134,7 +134,7 @@ class LoaderTest extends TestCase
     /**
      * @return array
      */
-    public function testLoadDataProvider(): array
+    public static function loadDataProvider(): array
     {
         return [
             'Ordered modules list returned by registrar' => [

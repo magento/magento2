@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,8 +53,8 @@ class PriceScopeTest extends TestCase
 
         $contextMock = $this->createMock(Context::class);
         $registryMock = $this->createMock(Registry::class);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $configMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->_model = $this->_objectManager->getObject(
             PriceScope::class,

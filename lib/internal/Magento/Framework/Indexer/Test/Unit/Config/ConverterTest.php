@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Indexer\Config\Converter;
 use Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConverterTest extends TestCase
 {
@@ -27,12 +28,11 @@ class ConverterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->sortingAdjustment = $this->getMockBuilder(SortingAdjustmentInterface::class)
-            ->getMockForAbstractClass();
-        $this->sortingAdjustment->method("adjust")->will(
-            $this->returnCallback(function ($arg) {
+        $this->sortingAdjustment = $this->createMock(SortingAdjustmentInterface::class);
+        $this->sortingAdjustment->method("adjust")->willReturnCallback(
+            function ($arg) {
                 return $arg;
-            })
+            }
         );
         $this->_model = new Converter($this->sortingAdjustment);
     }
@@ -48,9 +48,8 @@ class ConverterTest extends TestCase
 
     /**
      * @param string $xml
-     * @param array $indexersSequence
-     * @dataProvider convertWithDependenciesDataProvider
-     */
+     * @param array $indexersSequence     */
+    #[DataProvider('convertWithDependenciesDataProvider')]
     public function testConvertWithDependencies(string $xml, array $indexersSequence)
     {
         $dom = new \DOMDocument();
@@ -62,7 +61,7 @@ class ConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithDependenciesDataProvider()
+    public static function convertWithDependenciesDataProvider()
     {
         return [
             [
@@ -114,9 +113,8 @@ XML
 
     /**
      * @param string $inputXml
-     * @param string $exceptionMessage
-     * @dataProvider convertWithCircularDependenciesDataProvider
-     */
+     * @param string $exceptionMessage     */
+    #[DataProvider('convertWithCircularDependenciesDataProvider')]
     public function testConvertWithCircularDependencies($inputXml, $exceptionMessage)
     {
         $dom = new \DOMDocument();
@@ -129,18 +127,18 @@ XML
     /**
      * @return array
      */
-    public function convertWithCircularDependenciesDataProvider()
+    public static function convertWithCircularDependenciesDataProvider()
     {
         return [
             'Circular dependency on the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',
                 'exceptionMessage' => "Circular dependency references from 'indexer_2' to 'indexer_1'.",
             ],
             'Circular dependency a deeper than the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_3"><dependencies><indexer id="indexer_4"/></dependencies></indexer>'
@@ -153,9 +151,8 @@ XML
 
     /**
      * @param string $inputXml
-     * @param string $exceptionMessage
-     * @dataProvider convertWithDependencyOnNotExistingIndexerDataProvider
-     */
+     * @param string $exceptionMessage     */
+    #[DataProvider('convertWithDependencyOnNotExistingIndexerDataProvider')]
     public function testConvertWithDependencyOnNotExistingIndexer($inputXml, $exceptionMessage)
     {
         $dom = new \DOMDocument();
@@ -168,11 +165,11 @@ XML
     /**
      * @return array
      */
-    public function convertWithDependencyOnNotExistingIndexerDataProvider()
+    public static function convertWithDependencyOnNotExistingIndexerDataProvider()
     {
         return [
             [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',

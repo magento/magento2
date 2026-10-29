@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -35,6 +35,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -335,8 +336,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $expectedPrice
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoAppIsolation enabled
-     * @dataProvider addAddProductDataProvider
      */
+    #[DataProvider('addAddProductDataProvider')]
     public function testAddToCartSimpleProduct($area, $expectedPrice)
     {
         $formKey = $this->_objectManager->get(FormKey::class);
@@ -371,8 +372,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     public static function addAddProductDataProvider()
     {
         return [
-            'frontend' => ['frontend', 'expected_price' => 10],
-            'adminhtml' => ['adminhtml', 'expected_price' => 1]
+            'frontend' => ['frontend', 'expectedPrice' => 10],
+            'adminhtml' => ['adminhtml', 'expectedPrice' => 1]
         ];
     }
 
@@ -385,9 +386,9 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      * @param string $request
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Checkout/_files/order_items.php
-     * @dataProvider reorderItemsDataProvider
      * @return void
      */
+    #[DataProvider('reorderItemsDataProvider')]
     public function testReorderItems(bool $loggedIn, string $request)
     {
         // Make sure test starts without logged in customer.
@@ -426,20 +427,20 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         return [
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => false,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => false,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => false,
+                'request' => Request::METHOD_GET,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_POST,
+                'loggedIn' => true,
+                'request' => Request::METHOD_POST,
             ],
             [
-                'logged_in' => true,
-                'request_type' => Request::METHOD_GET,
+                'loggedIn' => true,
+                'request' => Request::METHOD_GET,
             ],
         ];
     }

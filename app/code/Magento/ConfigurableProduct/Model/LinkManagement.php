@@ -1,13 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\ConfigurableProduct\Api\LinkManagementInterface;
+use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -17,82 +26,82 @@ use Magento\Framework\Exception\StateException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
+class LinkManagement implements LinkManagementInterface
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    private ProductRepositoryInterface $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
+     * @var ProductInterfaceFactory
      */
-    private $productFactory;
+    private ProductInterfaceFactory $productFactory;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
+     * @var Configurable
      */
-    private $configurableType;
+    private Configurable $configurableType;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
-    private $dataObjectHelper;
+    private DataObjectHelper $dataObjectHelper;
 
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory;
+     * @var Factory;
      */
-    private $optionsFactory;
+    private Factory $optionsFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory
+     * @var AttributeFactory
      */
-    private $attributeFactory;
+    private AttributeFactory $attributeFactory;
 
     /**
      * @var ProductRepository|mixed
      */
-    private \Magento\Catalog\Model\ProductRepository $mediaGallery;
+    private ProductRepository $mediaGallery;
 
     /**
      * @var ProductAttributeMediaGalleryEntryInterfaceFactory|mixed
      */
-    private \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
+    private ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
-     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
-     * @param \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
-     * @param \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param ProductInterfaceFactory $productFactory
+     * @param Configurable $configurableType
+     * @param DataObjectHelper $dataObjectHelper
+     * @param AttributeFactory|null $attributeFactory
+     * @param ProductRepository|null $mediaGalleryProcessor
+     * @param ProductAttributeMediaGalleryEntryInterfaceFactory|null $myModelFactory
+     * @param Factory|null $optionsFactory
      */
     public function __construct(
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
-        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
-        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
-        \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
+        ProductRepositoryInterface $productRepository,
+        ProductInterfaceFactory $productFactory,
+        Configurable $configurableType,
+        DataObjectHelper $dataObjectHelper,
+        ?AttributeFactory $attributeFactory = null,
+        ?ProductRepository $mediaGalleryProcessor = null,
+        ?ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
+        ?Factory $optionsFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
-        $this->mediaGallery = $mediaGalleryProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Model\ProductRepository::class);
-        $this->myModelFactory = $myModelFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class);
-        $this->optionsFactory = $optionsFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
+        $this->attributeFactory = $attributeFactory ?: ObjectManager::getInstance()
+            ->get(AttributeFactory::class);
+        $this->mediaGallery = $mediaGalleryProcessor ?: ObjectManager::getInstance()
+            ->get(ProductRepository::class);
+        $this->myModelFactory = $myModelFactory ?: ObjectManager::getInstance()
+            ->get(ProductAttributeMediaGalleryEntryInterfaceFactory::class);
+        $this->optionsFactory = $optionsFactory ?: ObjectManager::getInstance()
+            ->get(Factory::class);
     }
 
     /**
@@ -102,10 +111,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($sku);
-        if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+        if ($product->getTypeId() != Product\Type\Configurable::TYPE_CODE) {
             return [];
         }
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productTypeInstance */
+        /** @var Product\Type\Configurable $productTypeInstance */
         $productTypeInstance = $product->getTypeInstance();
         $productTypeInstance->setStoreFilter($product->getStoreId(), $product);
         $childrenList = [];
@@ -119,15 +128,12 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
                     $attributes[$attrCode] = $value;
                 }
             }
-            $images= (array)$child->getMediaGallery('images');
             $attributes['store_id'] = $child->getStoreId();
-            $attributes['media_gallery_entries'] = $this->getMediaEntries($images);
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $productDataObject */
             $productDataObject = $this->productFactory->create();
             $this->dataObjectHelper->populateWithArray(
-                $productDataObject,
+                $productDataObject->setMediaGalleryEntries($child->getMediaGalleryEntries()),
                 $attributes,
-                \Magento\Catalog\Api\Data\ProductInterface::class
+                ProductInterface::class
             );
             $childrenList[] = $productDataObject;
         }
@@ -139,6 +145,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      *
      * @param array $images
      * @return array
+     * @deprecated This approach is designed only for images
+     * @see ProductInterface::getMediaGalleryEntries
      */
     public function getMediaEntries(array $images): array
     {
@@ -195,7 +203,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         }
         $configurableOptionData = $this->getConfigurableAttributesData($attributeData);
 
-        /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
+        /** @var Factory $optionFactory */
         $optionFactory = $this->optionsFactory;
         $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
@@ -216,7 +224,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     {
         $product = $this->productRepository->get($sku);
 
-        if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+        if ($product->getTypeId() != Product\Type\Configurable::TYPE_CODE) {
             throw new InputException(
                 __('The product with the "%1" SKU isn\'t a configurable product.', $sku)
             );

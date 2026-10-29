@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MysqlMq\Model\Driver;
 
@@ -161,6 +161,7 @@ class Queue implements CountableQueueInterface
             $envelope->getBody(),
             [$this->queueName]
         );
+        return $envelope;
     }
 
     /**
@@ -169,5 +170,29 @@ class Queue implements CountableQueueInterface
     public function count(): int
     {
         return $this->queueResourceModel->getMessagesCount($this->queueName);
+    }
+
+    /**
+     * Only subscribe queue
+     *
+     * @return void
+     */
+    public function subscribeQueue(): void
+    {
+        throw new \BadMethodCallException('subscribeQueue is not supported in MySQL MQ driver.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clearQueue(): int
+    {
+        $count = 0;
+        while ($message = $this->dequeue()) {
+            $this->acknowledge($message);
+            $count++;
+        }
+
+        return $count;
     }
 }

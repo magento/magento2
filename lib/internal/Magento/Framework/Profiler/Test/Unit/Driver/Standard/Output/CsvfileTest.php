@@ -2,23 +2,23 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Output\Csvfile
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard\Output;
 
 use Magento\Framework\Profiler\Driver\Standard\Output\Csvfile;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CsvfileTest extends TestCase
 {
-    /**
-     * @dataProvider constructorProvider
-     * @param array $config
+    /**     * @param array $config
      * @param string $expectedFilePath
      * @param string $expectedDelimiter
      * @param string $expectedEnclosure
      */
+    #[DataProvider('constructorProvider')]
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -32,25 +32,25 @@ class CsvfileTest extends TestCase
     /**
      * @return array
      */
-    public function constructorProvider()
+    public static function constructorProvider()
     {
         return [
             'Default config' => [
                 'config' => [],
-                'filePath' => '/var/log/profiler.csv',
-                'delimiter' => ',',
-                'enclosure' => '"',
+                'expectedFilePath' => '/var/log/profiler.csv',
+                'expectedDelimiter' => ',',
+                'expectedEnclosure' => '"',
             ],
             'Custom config' => [
                 'config' => [
                     'baseDir' => '/var/www/project/',
                     'filePath' => '/log/example.csv',
-                    'delimiter' => "\t",
-                    'enclosure' => '"',
+                    'expectedDelimiter' => "\t",
+                    'expectedEnclosure' => '"',
                 ],
-                'filePath' => '/var/www/project/log/example.csv',
-                'delimiter' => "\t",
-                'enclosure' => '"',
+                'expectedFilePath' => '/var/www/project/log/example.csv',
+                'expectedDelimiter' => "\t",
+                'expectedEnclosure' => '"',
             ]
         ];
     }

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit;
 
 /**
  * Adminhtml product edit tabs
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
 {
@@ -18,7 +16,9 @@ class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
     protected $_attributeTabBlock = \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes::class;
 
     /**
-     * @return $this|void
+     * Prepare the layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {

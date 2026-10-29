@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +18,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,9 +73,9 @@ class HttpTest extends TestCase
             Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->infoProcessorMock = $this->getMockForAbstractClass(PathInfoProcessorInterface::class);
+        $this->infoProcessorMock = $this->createMock(PathInfoProcessorInterface::class);
         $this->infoProcessorMock->expects($this->any())->method('process')->willReturnArgument(1);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createStub(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['cleanString'])
@@ -147,7 +147,7 @@ class HttpTest extends TestCase
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->getMockForAbstractClass(ConfigInterface::class);
+        $router = $this->createMock(ConfigInterface::class);
         $this->routerListMock->expects($this->any())->method('getRouteFrontName')->willReturn($router);
         $this->model = $this->getModel();
         $this->model->setRouteName('RouterName');
@@ -255,12 +255,9 @@ class HttpTest extends TestCase
         $this->assertFalse($this->model->isAjax());
     }
 
-    /**
-     * @param array $serverVariables
-     * @param string $cleanHeaderHttpHost
-     * @param string $expectedResult
-     * @dataProvider serverVariablesProvider
+    /**     * @param string $expectedResult
      */
+    #[DataProvider('serverVariablesProvider')]
     public function testGetDistroBaseUrl($serverVariables, $cleanHeaderHttpHost, $expectedResult)
     {
         $originalServerValue = $_SERVER;
@@ -272,11 +269,9 @@ class HttpTest extends TestCase
         $_SERVER = $originalServerValue;
     }
 
-    /**
-     * @param string $scriptName
-     * @param string $expected
-     * @dataProvider getDistroBaseUrlPathDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getDistroBaseUrlPathDataProvider')]
     public function testGetDistroBaseUrlPath($scriptName, $expected)
     {
         $this->assertEquals($expected, Http::getDistroBaseUrlPath(['SCRIPT_NAME' => $scriptName]));
@@ -285,7 +280,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function getDistroBaseUrlPathDataProvider()
+    public static function getDistroBaseUrlPathDataProvider()
     {
         return [
             [null, '/'],
@@ -302,7 +297,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function serverVariablesProvider()
+    public static function serverVariablesProvider()
     {
         $returnValue = [];
         $defaultServerData = [
@@ -367,7 +362,6 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @dataProvider isSecureDataProvider
      *
      * @param bool $isSecure expected output of isSecure method
      * @param string $serverHttps value of $_SERVER['HTTPS']
@@ -375,6 +369,7 @@ class HttpTest extends TestCase
      * @param string $headerOffloadValue value of $_SERVER[<Name-Of-Offload-Header>]
      * @param int $configCall number of times config->getValue is expected to be called
      */
+    #[DataProvider('isSecureDataProvider')]
     public function testIsSecure($isSecure, $serverHttps, $headerOffloadKey, $headerOffloadValue, $configCall)
     {
         $this->model = $this->getModel(null, false);
@@ -400,10 +395,10 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @dataProvider httpSafeMethodProvider
      * @backupGlobals enabled
      * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
+    #[DataProvider('httpSafeMethodProvider')]
     public function testIsSafeMethodTrue($httpMethod)
     {
         $this->model = $this->getModel();
@@ -412,10 +407,10 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @dataProvider httpNotSafeMethodProvider
      * @backupGlobals enabled
      * @param string $httpMethod value of $_SERVER['REQUEST_METHOD']
      */
+    #[DataProvider('httpNotSafeMethodProvider')]
     public function testIsSafeMethodFalse($httpMethod)
     {
         $this->model = $this->getModel();
@@ -426,7 +421,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpSafeMethodProvider()
+    public static function httpSafeMethodProvider()
     {
         return [
             'Test 1' => ['GET'],
@@ -439,7 +434,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpNotSafeMethodProvider()
+    public static function httpNotSafeMethodProvider()
     {
         return [
             'Test 1' => ['POST'],
@@ -454,7 +449,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function isSecureDataProvider()
+    public static function isSecureDataProvider()
     {
         /**
          * Data structure:
@@ -483,11 +478,11 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @dataProvider setPathInfoDataProvider
      * @param string $requestUri
      * @param string $basePath$
      * @param string $expected
      */
+    #[DataProvider('setPathInfoDataProvider')]
     public function testGetPathInfo($requestUri, $basePath, $expected)
     {
         $this->model = $this->getModel($requestUri);
@@ -512,7 +507,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function setPathInfoDataProvider()
+    public static function setPathInfoDataProvider()
     {
         return [
             ['http://svr.com/', '', ''],

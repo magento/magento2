@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Indexer\SaveHandlerFactory;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use Magento\Theme\Model\Data\Design\Config as DesignConfig;
 use Magento\Theme\Model\Indexer\Design\Config;
 use Magento\Theme\Model\ResourceModel\Design\Config\Scope\CollectionFactory;
@@ -91,19 +92,21 @@ class ConfigTest extends TestCase
      * @var CollectionFactory|MockObject
      */
     private $collectionFactory;
+    /***
+     * @var DtoFactoriesTable|MockObject
+     */
+    private $dtoFactoriesTable;
 
     protected function setUp(): void
     {
-        $this->indexerStructure = $this->getMockBuilder(IndexStructureInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerStructure = $this->createMock(IndexStructureInterface::class);
         $this->structureFactory = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->batch = $this->getMockBuilder(Batch::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,13 +128,14 @@ class ConfigTest extends TestCase
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerHandler = $this->getMockBuilder(HandlerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerHandler = $this->createMock(HandlerInterface::class);
         $this->handlerPool = $this->getMockBuilder(HandlerPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerFieldset = $this->getMockBuilder(FieldsetInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerFieldset = $this->createMock(FieldsetInterface::class);
+        $this->dtoFactoriesTable = $this->getMockBuilder(DtoFactoriesTable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -171,7 +175,9 @@ class ConfigTest extends TestCase
             [
                 'fieldsets' => [],
                 'indexer_id' => DesignConfig::DESIGN_CONFIG_GRID_INDEXER_ID
-            ]
+            ],
+            [],
+            $this->dtoFactoriesTable
         );
 
         $this->saveHandlerFactory->expects($this->any())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class EmailMessageTest
@@ -48,9 +49,9 @@ class TransportBuilderTest extends TestCase
      * @magentoDbIsolation enabled
      *
      * @param string|array $email
-     * @dataProvider emailDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('emailDataProvider')]
     public function testAddToEmail($email)
     {
         $template = $this->template->load('email_exception_fixture', 'template_code');
@@ -80,8 +81,8 @@ class TransportBuilderTest extends TestCase
 
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
-
-        $this->assertStringContainsStringIgnoringCase($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $header = 'text/' . $emailMessage->getSymfonyMessage()->getBody()->getMediaSubtype();
+        $this->assertStringContainsStringIgnoringCase($templateType, $header);
 
         $addresses = $emailMessage->getTo();
 
@@ -124,9 +125,9 @@ class TransportBuilderTest extends TestCase
      * @magentoDbIsolation enabled
      *
      * @param string|array $emails
-     * @dataProvider invalidEmailDataProvider
      * @throws LocalizedException
      */
+    #[DataProvider('invalidEmailDataProvider')]
     public function testAddToInvalidEmailInTheQueue($emails)
     {
         $template = $this->template->load('email_exception_fixture', 'template_code');
@@ -161,7 +162,8 @@ class TransportBuilderTest extends TestCase
 
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
-        $this->assertStringContainsStringIgnoringCase($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $header = 'text/' . $emailMessage->getSymfonyMessage()->getBody()->getMediaSubtype();
+        $this->assertStringContainsStringIgnoringCase($templateType, $header);
 
         $resultEmails = [];
         /** @var Address $toAddress */

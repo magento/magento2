@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -300,7 +300,7 @@ class Pro
             );
             $canRefundMore = $payment->getCreditmemo()->getInvoice()->canRefund();
             $isFullRefund = !$canRefundMore &&
-                0 == (double)$order->getBaseTotalOnlineRefunded() + (double)$order->getBaseTotalOfflineRefunded();
+                0 == (float)$order->getBaseTotalOnlineRefunded() + (float)$order->getBaseTotalOfflineRefunded();
             $api->setRefundType(
                 $isFullRefund
                     ? \Magento\Paypal\Model\Config::REFUND_TYPE_FULL

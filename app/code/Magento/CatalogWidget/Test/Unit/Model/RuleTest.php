@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,10 +34,7 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->combineFactory = $this->getMockBuilder(CombineFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->combineFactory = $this->createMock(CombineFactory::class);
 
         $this->rule = $this->objectManager->getObject(
             Rule::class,
@@ -49,9 +46,7 @@ class RuleTest extends TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder(Combine::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $condition = $this->createMock(Combine::class);
         $this->combineFactory->expects($this->once())->method('create')->willReturn($condition);
         $this->assertSame($condition, $this->rule->getConditionsInstance());
     }

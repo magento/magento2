@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,11 +21,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Helper\Storage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ImagesTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Images
      */
@@ -108,9 +112,9 @@ class ImagesTest extends TestCase
     {
         $this->path = 'PATH';
         $this->objectManager = new ObjectManager($this);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->urlEncoderMock = $this->createMock(EncoderInterface::class);
         $this->backendDataMock = $this->createMock(Data::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
@@ -137,17 +141,15 @@ class ImagesTest extends TestCase
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryReadMock);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->addMethods(['clearWebsiteCache'])
-            ->onlyMethods(
-                [
-                    'getDefaultStoreView', 'getGroup', 'getGroups',
-                    'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',
-                    'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed',
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createPartialMockWithReflection(
+            StoreManagerInterface::class,
+            [
+                'clearWebsiteCache',
+                'getDefaultStoreView', 'getGroup', 'getGroups',
+                'getStore', 'getStores', 'getWebsite', 'getWebsites', 'hasSingleStore',
+                'isSingleStoreMode', 'reinitStores', 'setCurrentStore', 'setIsSingleStoreModeAllowed',
+            ]
+        );
         $this->storeMock = $this->createMock(Store::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->imagesHelper = $this->objectManager->getObject(
@@ -279,8 +281,8 @@ class ImagesTest extends TestCase
     /**
      * @param string $path
      * @param string $pathId
-     * @dataProvider providerConvertIdToPath
      */
+    #[DataProvider('providerConvertIdToPath')]
     public function testConvertIdToPathAnyId($path, $pathId)
     {
         $pathOne = $this->imagesHelper->getStorageRoot() . $path;
@@ -309,8 +311,8 @@ class ImagesTest extends TestCase
      * @param string $fileName
      * @param int $maxLength
      * @param string $expectedFilename
-     * @dataProvider providerShortFilename
      */
+    #[DataProvider('providerShortFilename')]
     public function testGetShortFilename($fileName, $maxLength, $expectedFilename)
     {
         $this->assertEquals($expectedFilename, $this->imagesHelper->getShortFilename($fileName, $maxLength));
@@ -331,8 +333,8 @@ class ImagesTest extends TestCase
     /**
      * @param string $fileName
      * @param string $expectedFilename
-     * @dataProvider providerShortFilenameDefaultMaxLength
      */
+    #[DataProvider('providerShortFilenameDefaultMaxLength')]
     public function testGetShortFilenameDefaultMaxLength($fileName, $expectedFilename)
     {
         $this->assertEquals($expectedFilename, $this->imagesHelper->getShortFilename($fileName));
@@ -352,8 +354,8 @@ class ImagesTest extends TestCase
 
     /**
      * @param bool $allowedValue
-     * @dataProvider providerIsUsingStaticUrlsAllowed
      */
+    #[DataProvider('providerIsUsingStaticUrlsAllowed')]
     public function testIsUsingStaticUrlsAllowed($allowedValue)
     {
         $this->generalSettingsIsUsingStaticUrlsAllowed($allowedValue);
@@ -394,8 +396,8 @@ class ImagesTest extends TestCase
      * @param string $pathId
      * @param string $expectedPath
      * @param bool $isExist
-     * @dataProvider providerGetCurrentPath
      */
+    #[DataProvider('providerGetCurrentPath')]
     public function testGetCurrentPath($pathId, $subDir, $expectedPath, $isExist)
     {
         $this->requestMock->expects($this->any())
@@ -509,8 +511,8 @@ class ImagesTest extends TestCase
      * @param bool $isUsingStaticUrls
      * @param string|null $escapedValue
      * @param string $expectedHtml
-     * @dataProvider providerGetImageHtmlDeclarationRenderingAsTag
      */
+    #[DataProvider('providerGetImageHtmlDeclarationRenderingAsTag')]
     public function testGetImageHtmlDeclarationRenderingAsTag(
         $baseUrl,
         $fileName,
@@ -550,8 +552,8 @@ class ImagesTest extends TestCase
      * @param string $fileName
      * @param bool $isUsingStaticUrls
      * @param string $expectedHtml
-     * @dataProvider providerGetImageHtmlDeclaration
      */
+    #[DataProvider('providerGetImageHtmlDeclaration')]
     public function testGetImageHtmlDeclaration($baseUrl, $fileName, $isUsingStaticUrls, $expectedHtml)
     {
         $directive = '{{media url="/' . $fileName . '"}}';

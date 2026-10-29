@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
@@ -336,6 +336,9 @@ class FlatTableBuilder
                 /* @var $attribute Attribute */
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
+                    if ($attributeCode === null) {
+                        continue;
+                    }
                     $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .

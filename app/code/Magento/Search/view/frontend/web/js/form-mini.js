@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -12,7 +12,6 @@ define([
     'mage/template',
     'matchMedia',
     'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
@@ -212,71 +211,71 @@ define([
             var keyCode = e.keyCode || e.which;
 
             switch (keyCode) {
-                case $.ui.keyCode.HOME:
-                    if (this._getFirstVisibleElement()) {
+            case $.ui.keyCode.HOME:
+                if (this._getFirstVisibleElement()) {
+                    this._getFirstVisibleElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getFirstVisibleElement();
+                }
+                break;
+
+            case $.ui.keyCode.END:
+                if (this._getLastElement()) {
+                    this._getLastElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getLastElement();
+                }
+                break;
+
+            case $.ui.keyCode.ESCAPE:
+                this._resetResponseList(true);
+                this.autoComplete.hide();
+                break;
+
+            case $.ui.keyCode.ENTER:
+                if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                    this.searchForm.trigger('submit');
+                    e.preventDefault();
+                }
+                break;
+
+            case $.ui.keyCode.DOWN:
+                if (this.responseList.indexList) {
+                    if (!this.responseList.selected) {  //eslint-disable-line max-depth
+                        this._getFirstVisibleElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getFirstVisibleElement();
+                    } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                        this.responseList.selected = this.responseList.selected
+                            .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
+                    } else {
+                        this.responseList.selected.removeClass(this.options.selectClass);
                         this._getFirstVisibleElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getFirstVisibleElement();
                     }
-                    break;
+                    this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                    this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                    this._updateAriaHasPopup(true);
+                    this.autoComplete.show();
+                }
+                break;
 
-                case $.ui.keyCode.END:
-                    if (this._getLastElement()) {
+            case $.ui.keyCode.UP:
+                if (this.responseList.indexList !== null) {
+                    if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
+                        this.responseList.selected = this.responseList.selected
+                            .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
+
+                    } else {
+                        this.responseList.selected.removeClass(this.options.selectClass);
                         this._getLastElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getLastElement();
                     }
-                    break;
-
-                case $.ui.keyCode.ESCAPE:
-                    this._resetResponseList(true);
-                    this.autoComplete.hide();
-                    break;
-
-                case $.ui.keyCode.ENTER:
-                    if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
-                        this.searchForm.trigger('submit');
-                        e.preventDefault();
-                    }
-                    break;
-
-                case $.ui.keyCode.DOWN:
-                    if (this.responseList.indexList) {
-                        if (!this.responseList.selected) {  //eslint-disable-line max-depth
-                            this._getFirstVisibleElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getFirstVisibleElement();
-                        } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected
-                                .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
-                        } else {
-                            this.responseList.selected.removeClass(this.options.selectClass);
-                            this._getFirstVisibleElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getFirstVisibleElement();
-                        }
-                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
-                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
-                        this._updateAriaHasPopup(true);
-                        this.autoComplete.show();
-                    }
-                    break;
-
-                case $.ui.keyCode.UP:
-                    if (this.responseList.indexList !== null) {
-                        if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected
-                                .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
-
-                        } else {
-                            this.responseList.selected.removeClass(this.options.selectClass);
-                            this._getLastElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getLastElement();
-                        }
-                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
-                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
-                        this._updateAriaHasPopup(true);
-                        this.autoComplete.show();
-                    }
-                    break;
-                default:
-                    return true;
+                    this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                    this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                    this._updateAriaHasPopup(true);
+                    this.autoComplete.show();
+                }
+                break;
+            default:
+                return true;
             }
         },
 

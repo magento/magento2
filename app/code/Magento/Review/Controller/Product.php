@@ -1,127 +1,156 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Controller;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Session\Generic;
+use Magento\Review\Helper\Data;
+use Magento\Review\Model\RatingFactory;
 use Magento\Review\Model\Review;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Review controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class Product extends \Magento\Framework\App\Action\Action
+abstract class Product extends Action
 {
     /**
-     * Core registry
+     * Core Registry class
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry = null;
 
     /**
      * Customer session model
      *
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
      * Generic session
      *
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $reviewSession;
 
     /**
      * Catalog category model
      *
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
+     * @var CategoryRepositoryInterface
      */
     protected $categoryRepository;
 
     /**
-     * Logger
+     * Logger for adding logs
      *
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
      * Catalog product model
      *
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
      * Review model
      *
-     * @var \Magento\Review\Model\ReviewFactory
+     * @var ReviewFactory
      */
     protected $reviewFactory;
 
     /**
      * Rating model
      *
-     * @var \Magento\Review\Model\RatingFactory
+     * @var RatingFactory
      */
     protected $ratingFactory;
 
     /**
      * Catalog design model
      *
-     * @var \Magento\Catalog\Model\Design
+     * @var Design
      */
     protected $catalogDesign;
 
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * Core form key validator
      *
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $formKeyValidator;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Review\Model\RatingFactory $ratingFactory
-     * @param \Magento\Catalog\Model\Design $catalogDesign
-     * @param \Magento\Framework\Session\Generic $reviewSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * Review config
+     *
+     * @var ReviewsConfig
+     */
+    protected $reviewsConfig;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param Session $customerSession
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param LoggerInterface $logger
+     * @param ProductRepositoryInterface $productRepository
+     * @param ReviewFactory $reviewFactory
+     * @param RatingFactory $ratingFactory
+     * @param Design $catalogDesign
+     * @param Generic $reviewSession
+     * @param StoreManagerInterface $storeManager
+     * @param Validator $formKeyValidator
+     * @param ReviewsConfig $reviewsConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Review\Model\RatingFactory $ratingFactory,
-        \Magento\Catalog\Model\Design $catalogDesign,
-        \Magento\Framework\Session\Generic $reviewSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+        Context $context,
+        Registry $coreRegistry,
+        Session $customerSession,
+        CategoryRepositoryInterface $categoryRepository,
+        LoggerInterface $logger,
+        ProductRepositoryInterface $productRepository,
+        ReviewFactory $reviewFactory,
+        RatingFactory $ratingFactory,
+        Design $catalogDesign,
+        Generic $reviewSession,
+        StoreManagerInterface $storeManager,
+        Validator $formKeyValidator,
+        ?ReviewsConfig $reviewsConfig = null
     ) {
         $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
@@ -134,7 +163,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         $this->ratingFactory = $ratingFactory;
         $this->catalogDesign = $catalogDesign;
         $this->formKeyValidator = $formKeyValidator;
-
+        $this->reviewsConfig = $reviewsConfig ?: ObjectManager::getInstance()->get(ReviewsConfig::class);
         parent::__construct($context);
     }
 
@@ -146,7 +175,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        $allowGuest = $this->_objectManager->get(\Magento\Review\Helper\Data::class)->getIsGuestAllowToWrite();
+        $allowGuest = $this->_objectManager->get(Data::class)->getIsGuestAllowToWrite();
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
@@ -161,7 +190,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
                     $this->_redirect->getRefererUrl()
                 );
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get(\Magento\Customer\Model\Url::class)->getLoginUrl()
+                    $this->_objectManager->get(Url::class)->getLoginUrl()
                 );
             }
         }
@@ -196,7 +225,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
                 'review_controller_product_init_after',
                 ['product' => $product, 'controller_action' => $this]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical($e);
             return false;
         }
@@ -205,8 +234,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Load product model with data by passed id.
-     * Return false if product was not loaded or has incorrect status.
+     * Load product model with data by passed id. Return false if product was not loaded or has incorrect status.
      *
      * @param int $productId
      * @return bool|CatalogProduct
@@ -216,16 +244,13 @@ abstract class Product extends \Magento\Framework\App\Action\Action
         if (!$productId) {
             return false;
         }
-
         try {
             $product = $this->productRepository->getById($productId);
 
-            if (!in_array($this->storeManager->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-                throw new NoSuchEntityException();
-            }
-
-            if (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility()) {
-                throw new NoSuchEntityException();
+            if ((!in_array($this->storeManager->getStore()->getWebsiteId(), $product->getWebsiteIds()))
+                || (!$product->isVisibleInCatalog() || !$product->isVisibleInSiteVisibility())
+            ) {
+                    return false;
             }
         } catch (NoSuchEntityException $noEntityException) {
             return false;

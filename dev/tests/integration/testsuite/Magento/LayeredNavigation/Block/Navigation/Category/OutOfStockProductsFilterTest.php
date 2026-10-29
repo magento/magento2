@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Store\Model\ScopeInterface as StoreScope;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for select filter in navigation block on category page with out of stock products
@@ -43,11 +44,11 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
      * @magentoDataFixture Magento/Catalog/_files/product_dropdown_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/out_of_stock_product_with_category.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_category.php
-     * @dataProvider getFiltersWithOutOfStockProduct
      * @param int $showOutOfStock
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithOutOfStockProduct')]
     public function testGetFiltersWithOutOfStockProduct(int $showOutOfStock, array $expectation): void
     {
         $this->updateConfigShowOutOfStockFlag($showOutOfStock);

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\CacheFlushCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
@@ -24,8 +25,8 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
      * @param array $types
      * @param bool $shouldDispatch
      * @param string $output
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($param, $types, $shouldDispatch, $output)
     {
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn([
@@ -48,7 +49,7 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $types)
+    public static function getExpectedExecutionOutput(array $types)
     {
         return 'Flushed cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNoReorderAfterProductDeletionTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Reorder is unavailable when ordered product was deleted"/>
+            <title value="Reorder must be absent in customer's orders grid and order view after product deletion"/>
+            <description value="This test case verifies reorder is unavailable in customer's orders grid and order view after product deletion"/>
+            <testCaseId value="AC-13946"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Step 1: Create configurable product-->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete attribute, customer -->
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigAttributeCleanup"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Place an order with a customer -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrder">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add configurable product and select option -->
+        <actionGroup ref="NewAddConfigurableProductToOrderActionGroup" stepKey="addConfigurableToOrder">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <!-- Grab increment id from success page -->
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getOrderId"/>
+        <!--Step 2 Delete product post-order -->
+        <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1AfterOrder"/>
+        <deleteData createDataKey="createConfigProduct" stepKey="deleteProductAfterOrder"/>
+        <!-- Step 3: Open customer edit page-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!-- Step 4: Select the orders tab -->
+        <waitForElementClickable selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="waitToNavigateToOrdersTab"/>
+        <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="navigateToOrdersTab"/>
+        <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
+        <!-- Step 5: Verify specific order row appears  and verify reorder is not present in the grid -->
+        <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderIdInGridUsingClassName('{$getOrderId}')}}" stepKey="waitOrderRowVisible"/>
+        <waitForElementNotVisible selector="{{AdminEditCustomerOrdersSection.reorderLinkInGrid('{$getOrderId}')}}" stepKey="assertNoReorderInGrid"/>
+        <!-- Click the order in the customer's grid and verify reorder is not present -->
+        <actionGroup ref="AdminOpenOrderByIdFromOrdersGridOnCustomerEditPageActionGroup" stepKey="openOrderFromCustomerOrdersTab">
+            <argument name="orderId" value="{$getOrderId}"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="assertReorderNotVisibleOnOrderView"/>
+    </test>
+</tests>
+

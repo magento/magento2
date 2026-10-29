@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/** @var \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Element $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+$element = $block->getElement();
+$elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
+$addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
+$fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
+$fieldClass = "admin__field field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass .= ($elementBeforeLabel) ? ' choice' : '';
+$fieldClass .= ($addOn) ? ' with-addon' : '';
+$fieldClass .= ($element->getRequired()) ? ' required' : '';
+$fieldClass .= ($element->getNote()) ? ' with-note' : '';
+
+$fieldAttributes = $fieldId . ' class="' . $escaper->escapeHtmlAttr($fieldClass) . '" '
+    . $block->getUiId('form-field', $escaper->escapeHtmlAttr($element->getId()));
+?>
+
+<?php if (!$element->getNoDisplay()):?>
+    <?php if ($element->getType() == 'hidden'):?>
+        <?= $element->getElementHtml() ?>
+    <?php else:?>
+    <div<?= /* @noEscape */ $fieldAttributes ?>>
+        <?php if ($elementBeforeLabel):?>
+            <?= $element->getElementHtml() ?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <?php if ($element->getNote()):?>
+                <div class="note admin__field-note">
+                    <?= $escaper->escapeHtml($element->getNote()) ?>
+                </div>
+            <?php endif; ?>
+        <?php else:?>
+            <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+            <div class="admin__field-control">
+                <?php if ($addOn):?>
+                    <div class="addon">
+                        <?= $element->getElementHtml() ?>
+                    </div>
+                <?php else:?>
+                    <?= $element->getElementHtml() ?>
+                <?php endif; ?>
+                <?php if ($element->getNote()):?>
+                    <div class="note admin__field-note">
+                        <?= $escaper->escapeHtml($element->getNote()) ?>
+                    </div>
+                <?php endif; ?>
+                <?php if ($element->hasUseDefault()):?>
+                    <div class="admin__field-service">
+                        <input type="checkbox" class="admin__control-checkbox"
+                               id="<?= $element->getHtmlId() ?>-use_default"
+                               data-role="use-default"
+                               data-target=""
+                               value="1"
+                                <?= $escaper->escapeHtmlAttr($element->getUseDefault() ? 'checked' : '') ?>>
+
+                        <label class="admin__field-label"
+                               for="<?= $element->getHtmlId() ?>-use_default">
+                            <?= $escaper->escapeHtml(__('Use Default Value')); ?>
+                        </label>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
+<?php endif; ?>

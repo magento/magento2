@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,9 +49,11 @@ class MediaGalleryProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
-        if (in_array('media_gallery_entries', $attributeNames)) {
+        if (in_array('media_gallery_entries', $attributeNames) ||
+            in_array('media_gallery', $attributeNames)
+        ) {
             $mediaAttributes = $this->mediaConfig->getMediaAttributeCodes();
             foreach ($mediaAttributes as $mediaAttribute) {
                 if (!in_array($mediaAttribute, $attributeNames)) {

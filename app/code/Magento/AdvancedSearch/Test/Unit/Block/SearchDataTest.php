@@ -1,29 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use Magento\AdvancedSearch\Block\SearchData;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Magento\AdvancedSearch\Block\Suggestions;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Search\Model\QueryFactoryInterface;
 use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\AdvancedSearch\Block\SearchData;
 
-/**
- * @covers \Magento\AdvancedSearch\Block\SearchData
- */
+#[CoversClass(SearchData::class)]
 class SearchDataTest extends TestCase
 {
     /**
      * Testable Object
      *
-     * @var SearchData
+     * @var Suggestions
      */
     private $block;
 
@@ -49,37 +49,27 @@ class SearchDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataProvider = $this->getMockBuilder(SuggestedQueriesInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItems', 'isResultsCountEnabled'])
-            ->getMockForAbstractClass();
+        $this->dataProvider = $this->createMock(SuggestedQueriesInterface::class);
 
-        $this->searchQueryMock = $this->getMockBuilder(QueryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getQueryText'])
-            ->getMockForAbstractClass();
-        $this->queryFactoryMock = $this->getMockBuilder(QueryFactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->searchQueryMock = $this->createMock(QueryInterface::class);
+        $this->queryFactoryMock = $this->createMock(QueryFactoryInterface::class);
         $this->queryFactoryMock->expects($this->once())
             ->method('get')
             ->willReturn($this->searchQueryMock);
         $this->contextMock = $this->getMockBuilder(TemplateContext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->block = $this->getMockBuilder(SearchData::class)
-            ->setConstructorArgs(
-                [
-                    $this->contextMock,
-                    $this->dataProvider,
-                    $this->queryFactoryMock,
-                    'Test Title',
-                    [],
-                ]
-            )
+        
+        // Create a real instance of Suggestions (concrete implementation of SearchData) to test actual behavior
+        $this->block = $this->getMockBuilder(Suggestions::class)
+            ->setConstructorArgs([$this->contextMock, $this->dataProvider, $this->queryFactoryMock, 'title'])
             ->onlyMethods(['getUrl'])
-            ->getMockForAbstractClass();
+            ->getMock();
+        
+        // Mock the getUrl method to return a predictable URL
+        $this->block->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('http://example.com/');
     }
 
     public function testGetSuggestions(): void
@@ -90,6 +80,7 @@ class SearchDataTest extends TestCase
             ->method('getItems')
             ->with($this->searchQueryMock)
             ->willReturn($value);
+            
         $actualValue = $this->block->getItems();
         $this->assertEquals($value, $actualValue);
     }
@@ -97,7 +88,8 @@ class SearchDataTest extends TestCase
     public function testGetLink(): void
     {
         $searchQueryMock = 'Some test search query';
-        $expectedResult = '?q=Some+test+search+query';
+        $expectedResult = 'http://example.com/?q=Some+test+search+query';
+        
         $actualResult = $this->block->getLink($searchQueryMock);
         $this->assertEquals($expectedResult, $actualResult);
     }
@@ -108,6 +100,7 @@ class SearchDataTest extends TestCase
         $this->dataProvider->expects($this->once())
             ->method('isResultsCountEnabled')
             ->willReturn($value);
+            
         $this->assertEquals($value, $this->block->isShowResultsCount());
     }
 }

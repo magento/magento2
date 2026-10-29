@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,23 +50,13 @@ class SynchronizeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->synchronizerMock = $this->getMockBuilder(Synchronizer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->jsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->synchronizerMock = $this->createMock(Synchronizer::class);
+        $this->jsonFactoryMock = $this->createMock(JsonFactory::class);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
+        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
 
         $this->synchronize = new Synchronize(
             $this->contextMock,
@@ -85,9 +75,7 @@ class SynchronizeTest extends TestCase
             'ids' => []
         ];
 
-        $jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonObject = $this->createMock(Json::class);
 
         $this->jsonFactoryMock->expects($this->once())
             ->method('create')
@@ -123,9 +111,7 @@ class SynchronizeTest extends TestCase
             'type_id' => null,
             'ids' => []
         ];
-        $jsonObject = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonObject = $this->createMock(Json::class);
 
         $this->jsonFactoryMock->expects($this->once())
             ->method('create')

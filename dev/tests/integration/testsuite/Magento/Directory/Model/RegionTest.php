@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionColl
 use Magento\Directory\Setup\Patch\Data\UpdateRegionNamesForSwitzerland as SwitzerlandRegionData;
 use Magento\Framework\AppInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -41,12 +42,12 @@ class RegionTest extends TestCase
      * Verify country has regions.
      *
      * @param string $countryId
-     * @dataProvider getCountryIdDataProvider
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws LocalizedException
      */
+    #[DataProvider('getCountryIdDataProvider')]
     public function testCountryHasRegions(string $countryId): void
     {
         $country = $this->country->loadByCode($countryId);
@@ -60,37 +61,12 @@ class RegionTest extends TestCase
      *
      * @return array
      */
-    public function getCountryIdDataProvider(): array
+    public static function getCountryIdDataProvider(): array
     {
         return [
-            ['countryId' => 'US'],
-            ['countryId' => 'CA'],
-            ['countryId' => 'CN'],
-            ['countryId' => 'IN'],
-            ['countryId' => 'AU'],
-            ['countryId' => 'BE'],
-            ['countryId' => 'CO'],
-            ['countryId' => 'MX'],
-            ['countryId' => 'PL'],
-            ['countryId' => 'IT'],
-            ['countryId' => 'BG'],
-            ['countryId' => 'AR'],
-            ['countryId' => 'BO'],
-            ['countryId' => 'CL'],
-            ['countryId' => 'EC'],
-            ['countryId' => 'GY'],
-            ['countryId' => 'PY'],
-            ['countryId' => 'PE'],
-            ['countryId' => 'SR'],
-            ['countryId' => 'VE'],
-            ['countryId' => 'PT'],
-            ['countryId' => 'IS'],
-            ['countryId' => 'SE'],
-            ['countryId' => 'GR'],
-            ['countryId' => 'DK'],
-            ['countryId' => 'AL'],
-            ['countryId' => 'BY'],
-            ['countryId' => 'UA'],
+            ['US'], ['CA'], ['CN'], ['IN'], ['AU'], ['BE'], ['CO'], ['MX'], ['PL'], ['IT'],
+            ['BG'], ['AR'], ['BO'], ['CL'], ['EC'], ['GY'], ['PY'], ['PE'], ['SR'], ['VE'],
+            ['PT'], ['IS'], ['SE'], ['GR'], ['DK'], ['AL'], ['BY'], ['UA'],
         ];
     }
 

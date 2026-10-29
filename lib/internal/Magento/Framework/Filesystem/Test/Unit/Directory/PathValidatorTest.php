@@ -1,17 +1,7 @@
 <?php declare(strict_types=1);
-/************************************************************************
- * Copyright 2024 Adobe
+/**
+ * Copyright 2020 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
@@ -19,6 +9,7 @@ use Magento\Framework\Filesystem\Directory\PathValidator;
 use Magento\Framework\Filesystem\Driver\File;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathValidatorTest extends TestCase
 {
@@ -58,9 +49,8 @@ class PathValidatorTest extends TestCase
      * @param string $path
      * @param string $scheme
      * @param bool $absolutePath
-     * @param string $prefix
-     * @dataProvider validateDataProvider
-     */
+     * @param string $prefix     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($directoryPath, $path, $scheme, $absolutePath, $prefix)
     {
         $this->driver->expects($this->exactly(2))
@@ -80,7 +70,7 @@ class PathValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             ['/directory/path/', '/directory/path/', '/', false, '/://'],

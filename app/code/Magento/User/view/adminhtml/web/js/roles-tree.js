@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All rights reserved.
  */
 
 /**
@@ -9,10 +9,12 @@
 define([
     'jquery',
     'jquery/ui',
-    'jquery/jstree/jquery.jstree'
+    'jquery/jstree/jquery.jstree',
+    'mage/translate'
 ], function ($) {
     'use strict';
 
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     $.widget('mage.rolesTree', {
         options: {
             treeInitData: {},
@@ -26,9 +28,7 @@ define([
             this.element.jstree({
                 plugins: ['checkbox'],
                 checkbox: {
-                    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                     three_state: false,
-                    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
                     visible: this.options.checkboxVisible,
                     cascade: 'undetermined'
                 },
@@ -40,6 +40,55 @@ define([
                 }
             });
             this._bind();
+            this._createButtons();
+        },
+
+        _createButtons: function () {
+            const $tree = $.jstree.reference(this.element),
+                collapseAllButton = document.createElement('button'),
+                expandAllButton = document.createElement('button'),
+                expandUsedButton = document.createElement('button'),
+                parent = this.element[0],
+                ul = this.element.find('ul')[0];
+
+            collapseAllButton.innerText = $.mage.__('Collapse all');
+            collapseAllButton.addEventListener('click', function () {
+                $tree.close_all();
+            });
+
+            expandAllButton.innerText = $.mage.__('Expand all');
+            expandAllButton.addEventListener('click', function () {
+                $tree.open_all();
+            });
+
+            expandUsedButton.innerText = $.mage.__('Expand selected');
+            expandUsedButton.addEventListener('click', function () {
+                const hasOpened = [];
+
+                $tree.get_checked(true).forEach(function (node) {
+                    $tree.open_node(node);
+                    hasOpened.push(node.id);
+                    for (let i = 0; i < node.parents.length - 1; i++) {
+                        const id = node.parents[i];
+
+                        if (!hasOpened.includes(id)) {
+                            $tree.open_node($tree.get_node(id));
+                            hasOpened.push(id);
+                        }
+                    }
+                });
+            });
+
+            this.buttons = [
+                collapseAllButton,
+                expandAllButton,
+                expandUsedButton
+            ];
+
+            this.buttons.forEach(function (button) {
+                button.type = 'button';
+                parent.insertBefore(button, ul);
+            });
         },
 
         /**
@@ -47,6 +96,14 @@ define([
          */
         _destroy: function () {
             this.element.jstree('destroy');
+
+            if (this.buttons) {
+                this.buttons.forEach(function (element) {
+                    if (element && element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                });
+            }
         },
 
         /**
@@ -64,7 +121,6 @@ define([
          * @private
          */
         _selectChildNodes: function (event, selected) {
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             selected.instance.open_node(selected.node);
             selected.node.children.each(function (id) {
                 var selector = '[id="' + id + '"]';
@@ -73,7 +129,6 @@ define([
                     selected.instance.get_node($(selector), false)
                 );
             });
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         },
 
         /**

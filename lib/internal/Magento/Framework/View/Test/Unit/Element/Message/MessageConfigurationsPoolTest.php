@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Element\Message;
 
 use Magento\Framework\View\Element\Message\MessageConfigurationsPool;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MessageConfigurationsPoolTest extends TestCase
 {
@@ -36,9 +37,8 @@ class MessageConfigurationsPoolTest extends TestCase
     }
 
     /**
-     * @param array $configuration
-     * @dataProvider wrongRenderersDataProvider
-     */
+     * @param array $configuration     */
+    #[DataProvider('wrongRenderersDataProvider')]
     public function testConstructNoRendererException(array $configuration)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -50,7 +50,7 @@ class MessageConfigurationsPoolTest extends TestCase
     /**
      * @return array
      */
-    public function wrongRenderersDataProvider()
+    public static function wrongRenderersDataProvider()
     {
         return [
             [['message_identifier' => []]],
@@ -60,9 +60,8 @@ class MessageConfigurationsPoolTest extends TestCase
     }
 
     /**
-     * @param array $configuration
-     * @dataProvider wrongDataDataProvider
-     */
+     * @param array $configuration     */
+    #[DataProvider('wrongDataDataProvider')]
     public function testConstructWrongDataException(array $configuration)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -74,7 +73,7 @@ class MessageConfigurationsPoolTest extends TestCase
     /**
      * @return array
      */
-    public function wrongDataDataProvider()
+    public static function wrongDataDataProvider()
     {
         return [
             [

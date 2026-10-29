@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,8 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Customer\Model\CustomerFactory;
 
 /**
  * API-functional tests cases for generateCustomerToken mutation
@@ -31,12 +33,18 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
     private $logger;
 
     /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->logger = Bootstrap::getObjectManager()->get(Logger::class);
+        $this->customerFactory = Bootstrap::getObjectManager()->get(CustomerFactory::class);
     }
 
     /**
@@ -46,9 +54,23 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      */
     public function testGenerateCustomerValidToken(): void
     {
+        $mutation = $this->getQuery('customer@example.com', 'wrongpassword');
+        try {
+            $response = $this->graphQlMutation($mutation);
+        } catch (\Exception $e) {
+        }
+        $customer = $this->customerFactory->create()->setWebsiteId(1)
+            ->loadByEmail('customer@example.com');
+        $this->assertEquals(1, $customer->getFailuresNum());
+        $this->assertNotNull($customer->getFirstFailure());
+
         $mutation = $this->getQuery();
 
         $response = $this->graphQlMutation($mutation);
+        $customer = $this->customerFactory->create()->setWebsiteId(1)
+            ->loadByEmail('customer@example.com');
+        $this->assertEquals(0, $customer->getFailuresNum());
+        $this->assertNull($customer->getFirstFailure());
         $this->assertArrayHasKey('generateCustomerToken', $response);
         $this->assertIsArray($response['generateCustomerToken']);
     }
@@ -58,11 +80,11 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider dataProviderInvalidCustomerInfo
      * @param string $email
      * @param string $password
      * @param string $message
      */
+    #[DataProvider('dataProviderInvalidCustomerInfo')]
     public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message): void
     {
         $this->expectException(\Exception::class);
@@ -116,7 +138,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderInvalidCustomerInfo(): array
+    public static function dataProviderInvalidCustomerInfo(): array
     {
         return [
             'invalid_email' => [

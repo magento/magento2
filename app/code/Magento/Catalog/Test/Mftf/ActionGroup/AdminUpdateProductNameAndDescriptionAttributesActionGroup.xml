@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,7 +20,8 @@
         <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
         <click selector="{{AdminUpdateAttributesSection.toggleName}}" stepKey="clickToChangeName"/>
         <fillField selector="{{AdminUpdateAttributesSection.name}}" userInput="{{product.name}}" stepKey="fillFieldName"/>
-        <scrollTo selector="{{AdminUpdateAttributesSection.toggleDescription}}" x="0" y="-80" stepKey="scrollToDescription"/>
+        <scrollTo selector="{{AdminUpdateAttributesSection.toggleDescription}}" x="0" y="-150" stepKey="scrollToDescription"/>
+        <waitForElementClickable selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="waitForDescriptionToggleClickable"/>
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="{{product.description}}" stepKey="fillFieldDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>

@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
-* Copyright © Magento, Inc. All rights reserved.
-* See COPYING.txt for license details.
-*/
+ /**
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
+  */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminShippingMethodUPSSection">
+        <element name="carriersUPSTypeSystem" type="checkbox" selector="//*[@id='carriers_ups_type_inherit']"/>
+        <element name="carriersUpsType" type="select" selector="//*[@id='carriers_ups_type']"/>
+        <element name="carriersUpsGatewayRestUrlSystem" type="checkbox" selector="//*[@id='carriers_ups_gateway_rest_url_inherit']"/>
+        <element name="carriersUpsGatewayRestUrl" type="input" selector="//*[@id='carriers_ups_gateway_rest_url']"/>
+        <element name="carriersUpsTrackingRestUrlSystem" type="checkbox" selector="//*[@id='carriers_ups_tracking_rest_url_inherit']"/>
+        <element name="carriersUpsTrackingRestUrl" type="input" selector="//*[@id='carriers_ups_tracking_rest_url']"/>
         <element name="UPSTab" type="button" selector="//div[@class='section-config']//div[@class='entry-edit-head admin__collapsible-block']//a[@id='carriers_ups-head']"/>
         <element name="enableCheckoutCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_active']//td//input[@id='carriers_ups_active_inherit']"/>
         <element name="enableCheckoutSelect" type="select" selector="//tr[@id='row_carriers_ups_active']//td//select[@id='carriers_ups_active']"/>
@@ -37,5 +43,6 @@
         <element name="handlingFee" type="input" selector="//tr[@id='row_carriers_ups_handling_fee']//td//input[@id='carriers_ups_handling_fee']"/>
         <element name="showMethodIfNotApplicableSelect" type="select" selector="//tr[@id='row_carriers_ups_showmethod']//td//select[@id='carriers_ups_showmethod']"/>
         <element name="debugSelect" type="select" selector="//tr[@id='row_carriers_ups_debug']//td//select[@id='carriers_ups_debug']"/>
+        <element name="upsShippingNotAvailableAlertInAdmin" type="text" selector="//div[@class='message message-error error']"/>
     </section>
 </sections>

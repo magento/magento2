@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\GoogleOptimizer\Helper;
@@ -53,7 +53,7 @@ class Data extends AbstractHelper
     public function __construct(
         Context $context,
         \Magento\GoogleAnalytics\Helper\Data $analyticsHelper,
-        GtagConfiguration $gtagConfiguration = null
+        ?GtagConfiguration $gtagConfiguration = null
     ) {
         $this->_analyticsHelper = $analyticsHelper;
         $this->gtagConfiguration = $gtagConfiguration ?: ObjectManager::getInstance()->get(GtagConfiguration::class);

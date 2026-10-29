@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for FieldsFilter
@@ -214,9 +215,8 @@ class FieldsFilterTest extends TestCase
         $this->assertEquals($expected, $filteredResponse);
     }
 
-    /**
-     * @dataProvider invalidFilterDataProvider
-     */
+    /**     */
+    #[DataProvider('invalidFilterDataProvider')]
     public function testInvalidFilters($invalidFilter)
     {
         $this->requestMock->expects($this->any())->method('getParam')->willReturn($invalidFilter);
@@ -230,7 +230,7 @@ class FieldsFilterTest extends TestCase
      *
      * @return array
      */
-    public function invalidFilterDataProvider()
+    public static function invalidFilterDataProvider()
     {
         return [
             ['  '],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,13 +43,12 @@ class SalableTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      *
-     * @dataProvider salableDataProvider
-     *
      * @param array $productSkus
      * @param array $productData
      * @param bool $expectedValue
      * @return void
      */
+    #[DataProvider('salableDataProvider')]
     public function testIsSalable(array $productSkus, array $productData, bool $expectedValue): void
     {
         $this->updateProduct($productSkus, $productData);
@@ -64,39 +64,39 @@ class SalableTest extends TestCase
     {
         return [
             'all children enabled_and_in_stock' => [
-                'product_skus' => [],
-                'data' => [],
-                'expected_value' => true,
+                'productSkus' => [],
+                'productData' => [],
+                'expectedValue' => true,
             ],
             'one_child_out_of_stock' => [
-                'product_skus' => ['simple_10'],
-                'data' => [
+                'productSkus' => ['simple_10'],
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => true,
+                'expectedValue' => true,
             ],
             'one_child_disabled' => [
-                'product_skus' => ['simple_10'],
-                'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => true,
+                'productSkus' => ['simple_10'],
+                'productData' => ['status' => Status::STATUS_DISABLED],
+                'expectedValue' => true,
             ],
             'all_children_disabled' => [
-                'product_skus' => ['simple_10', 'simple_20'],
-                'data' => ['status' => Status::STATUS_DISABLED],
-                'expected_value' => false,
+                'productSkus' => ['simple_10', 'simple_20'],
+                'productData' => ['status' => Status::STATUS_DISABLED],
+                'expectedValue' => false,
             ],
             'all_children_out_of_stock' => [
-                'product_skus' => ['simple_10', 'simple_20'],
-                'data' => [
+                'productSkus' => ['simple_10', 'simple_20'],
+                'productData' => [
                     'stock_data' => [
                         'use_config_manage_stock' => 1,
                         'is_in_stock' => StockStatusInterface::STATUS_OUT_OF_STOCK,
                     ],
                 ],
-                'expected_value' => false,
+                'expectedValue' => false,
             ]
         ];
     }

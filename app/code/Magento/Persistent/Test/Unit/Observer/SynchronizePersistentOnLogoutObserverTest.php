@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +12,7 @@ use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\SessionFactory;
 use Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver;
+use Magento\Persistent\Model\Session as PersistentSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,7 +55,7 @@ class SynchronizePersistentOnLogoutObserverTest extends TestCase
         $this->sessionFactoryMock =
             $this->createPartialMock(SessionFactory::class, ['create']);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->sessionMock = $this->createMock(\Magento\Persistent\Model\Session::class);
+        $this->sessionMock = $this->createMock(PersistentSession::class);
         $this->model = new SynchronizePersistentOnLogoutObserver(
             $this->helperMock,
             $this->sessionHelperMock,

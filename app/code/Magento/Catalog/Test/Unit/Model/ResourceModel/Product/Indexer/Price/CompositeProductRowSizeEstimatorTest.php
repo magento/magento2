@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class CompositeProductRowSizeEstimatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->websiteManagementMock = $this->getMockForAbstractClass(WebsiteManagementInterface::class);
+        $this->websiteManagementMock = $this->createMock(WebsiteManagementInterface::class);
         $this->collectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Form\Element\DataType\Date;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DateTest extends TestCase
@@ -49,12 +50,13 @@ class DateTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->method('getProcessor')->willReturn($this->processorMock);
-        $this->dateFormatterFactoryMock = $this->getMockForAbstractClass(DateFormatterFactory::class);
+        $this->dateFormatterFactoryMock = $this->createMock(DateFormatterFactory::class);
     }
 
     /**
@@ -158,8 +160,8 @@ class DateTest extends TestCase
      * @param string $dateStr
      * @param bool $setUtcTimeZone
      * @param string $convertedDate
-     * @dataProvider convertDatetimeDataProvider
      */
+    #[DataProvider('convertDatetimeDataProvider')]
     public function testConvertDatetime(string $dateStr, bool $setUtcTimeZone, string $convertedDate)
     {
         $this->localeDateMock->method('getConfigTimezone')
@@ -182,7 +184,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function convertDatetimeDataProvider(): array
+    public static function convertDatetimeDataProvider(): array
     {
         return [
             ['2019-09-30T12:32:00.000Z', false, '2019-09-30 12:32:00'],
@@ -192,35 +194,35 @@ class DateTest extends TestCase
     }
 
     /**
-     * Run test for convertDateFormat() method
+     * Test to Convert given date to default (UTC) timezone
      *
-     * @param string $date
-     * @param string $locale
-     * @param string $expected
-     * @return void
-     * @dataProvider convertDateFormatDataProvider
-     * @throws Exception
+     * @param string $dateStr
+     * @param bool $setUtcTimeZone
+     * @param string $convertedDate
      */
+    #[DataProvider('convertDateFormatDataProvider')]
     public function testConvertDateFormat(
         string $date,
         string $locale,
         string $expected
     ): void {
+        $realDateFormatterFactory = new DateFormatterFactory();
+        
         $this->localeResolverMock
             ->expects($this->any())
             ->method('getLocale')
             ->willReturn($locale);
+            
         $this->date = $this->objectManagerHelper->getObject(
             Date::class,
             [
                 'localeResolver' => $this->localeResolverMock,
-                'dateFormatterFactory' => $this->dateFormatterFactoryMock
+                'dateFormatterFactory' => $realDateFormatterFactory
             ]
         );
-        $this->assertEquals(
-            $expected,
-            $this->date->convertDateFormat($date)
-        );
+        
+        $result = $this->date->convertDateFormat($date);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -228,7 +230,7 @@ class DateTest extends TestCase
      *
      * @return array
      */
-    public function convertDateFormatDataProvider(): array
+    public static function convertDateFormatDataProvider(): array
     {
         return [
             [

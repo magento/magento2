@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Setup;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for Magento\Eav\Setup\EavSetup.
@@ -33,8 +35,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $attributeCode
      *
-     * @dataProvider addAttributeDataProvider
+     * 
      */
+    #[DataProvider('addAttributeDataProvider')]
     public function testAddAttribute($attributeCode)
     {
         $attributeData = $this->getAttributeData();
@@ -51,7 +54,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function addAttributeDataProvider()
+    public static function addAttributeDataProvider()
     {
         return [
             ['eav_setup_test'],
@@ -64,8 +67,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string|null $attributeCode
      *
-     * @dataProvider addAttributeThrowExceptionDataProvider
+     * 
      */
+    #[DataProvider('addAttributeThrowExceptionDataProvider')]
     public function testAddAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -96,8 +100,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string|null $attributeCode
      *
-     * @dataProvider addInvalidAttributeThrowExceptionDataProvider
+     * 
      */
+    #[DataProvider('addInvalidAttributeThrowExceptionDataProvider')]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -157,7 +162,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

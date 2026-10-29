@@ -3,8 +3,8 @@
 /**
  * Valid argument types declaration
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <arguments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Data/Test/Unit/Argument/_files/types_schema.xsd">

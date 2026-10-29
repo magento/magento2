@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,8 +33,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @param bool $isPrefixAllowed
      * @param bool $isMiddleNameAllowed
      * @param bool $isSuffixAllowed
-     * @dataProvider getCustomerNameDataProvider
      */
+    #[DataProvider('getCustomerNameDataProvider')]
     public function testGetCustomerName(
         $customerData,
         $expectedCustomerName,
@@ -132,7 +133,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 )->setLastname(
                     '<strong>LastName</strong>'
                 ),
-                '&lt;h1&gt;FirstName&lt;/h1&gt; &lt;strong&gt;LastName&lt;/strong&gt;',
+                '<h1>FirstName</h1> <strong>LastName</strong>',
             ],
         ];
     }

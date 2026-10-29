@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,8 +13,10 @@ use Magento\CmsUrlRewrite\Observer\ProcessUrlRewriteSavingObserver;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessUrlRewriteSavingObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -65,8 +69,7 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->cmsPageUrlRewriteGeneratorMock = $this->getMockBuilder(CmsPageUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,10 +77,10 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
             ->onlyMethods(['getId', 'dataHasChangedFor'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
         $this->eventObserverMock = $this->getMockBuilder(EventObserver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -102,8 +105,8 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
      * @param bool $identifierChanged
      * @param bool $storeIdChanged
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($identifierChanged, $storeIdChanged)
     {
         $pageId = 1;
@@ -141,9 +144,9 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     public static function executeDataProvider()
     {
         return  [
-            ['identifier' => true, 'storeIdChanged' => true],
-            ['identifier' => true, 'storeIdChanged' => false],
-            ['identifier' => false, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => false],
+            ['identifierChanged' => false, 'storeIdChanged' => true],
         ];
     }
 

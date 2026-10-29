@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,7 @@ class ResetterFactory
     private static string $resetterClassName = Resetter::class;
 
     /**
-     * Create resseter factory
+     * Create resseter instance
      *
      * @return ResetterInterface
      * @phpcs:disable Magento2.Functions.StaticFunction

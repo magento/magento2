@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\BackpressureLogger;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BackpressureLoggerTest extends TestCase
@@ -33,10 +34,13 @@ class BackpressureLoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
-        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->validatorMock = $this->createStub(RedisConnectionValidator::class);
+        $this->deploymentConfigMock = $this->createStub(DeploymentConfig::class);
 
-        $this->configList = new BackpressureLogger($this->validatorMock);
+        $this->configList = new BackpressureLogger(
+            $this->validatorMock,
+            ['redis' => 'redis', 'valkey' => 'valkey']
+        );
     }
 
     /**
@@ -85,8 +89,8 @@ class BackpressureLoggerTest extends TestCase
 
     /**
      * testCreateConfigCacheRedis
-     * @dataProvider dataProviderCreateConfigCacheRedis
      */
+    #[DataProvider('dataProviderCreateConfigCacheRedis')]
     public function testCreateConfigCacheRedis(
         array $options,
         array $deploymentConfigReturnMap,
@@ -101,7 +105,7 @@ class BackpressureLoggerTest extends TestCase
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderCreateConfigCacheRedis(): array
+    public static function dataProviderCreateConfigCacheRedis(): array
     {
         return [
             'minimum options' => [
@@ -116,7 +120,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -129,7 +133,7 @@ class BackpressureLoggerTest extends TestCase
                                 'persistent' => '',
                                 'user' => null
                             ],
-                            'id-prefix' => $this->expectedIdPrefix()
+                            'id-prefix' => self::expectedIdPrefix()
                         ]
                     ]
                 ],
@@ -157,7 +161,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, null],
                     ['backpressure/logger/id-prefix', null, null],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -198,7 +202,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -212,6 +216,77 @@ class BackpressureLoggerTest extends TestCase
                                 'user' => '<new-user>',
                             ],
                             'id-prefix' => '<new-prefix>'
+                        ]
+                    ]
+                ],
+            ],
+            'valkey minimum options' => [
+                'options' => ['backpressure-logger' => 'valkey'],
+                'deploymentConfigReturnMap' => [
+                    ['backpressure/logger/options/server', null, null],
+                    ['backpressure/logger/options/port', null, null],
+                    ['backpressure/logger/options/timeout', null, null],
+                    ['backpressure/logger/options/persistent', null, null],
+                    ['backpressure/logger/options/db', null, null],
+                    ['backpressure/logger/options/password', null, null],
+                    ['backpressure/logger/options/user', null, null],
+                    ['backpressure/logger/id-prefix', null, null],
+                ],
+                'expectedConfigData' => [
+                    'backpressure' => [
+                        'logger' => [
+                            'type' => 'valkey',
+                            'options' => [
+                                'server' => '127.0.0.1',
+                                'port' => 6379,
+                                'db' => 3,
+                                'password' => null,
+                                'timeout' => null,
+                                'persistent' => '',
+                                'user' => null
+                            ],
+                            'id-prefix' => self::expectedIdPrefix()
+                        ]
+                    ]
+                ],
+            ],
+            'valkey maximum options' => [
+                'options' => [
+                    'backpressure-logger' => 'valkey',
+                    'backpressure-logger-redis-server' => '<some-server>',
+                    'backpressure-logger-redis-port' => 3344,
+                    'backpressure-logger-redis-timeout' => 5,
+                    'backpressure-logger-redis-persistent' => '<persistent>',
+                    'backpressure-logger-redis-db' => 23,
+                    'backpressure-logger-redis-password' => '<some-password>',
+                    'backpressure-logger-redis-user' => '<some-user>',
+                    'backpressure-logger-id-prefix' => '<some-prefix>',
+                ],
+                'deploymentConfigReturnMap' => [
+                    ['backpressure/logger/type', null, null],
+                    ['backpressure/logger/options/server', null, null],
+                    ['backpressure/logger/options/port', null, null],
+                    ['backpressure/logger/options/timeout', null, null],
+                    ['backpressure/logger/options/persistent', null, null],
+                    ['backpressure/logger/options/db', null, null],
+                    ['backpressure/logger/options/password', null, null],
+                    ['backpressure/logger/options/user', null, null],
+                    ['backpressure/logger/id-prefix', null, null],
+                ],
+                'expectedConfigData' => [
+                    'backpressure' => [
+                        'logger' => [
+                            'type' => 'valkey',
+                            'options' => [
+                                'server' => '<some-server>',
+                                'port' => 3344,
+                                'db' => 23,
+                                'password' => '<some-password>',
+                                'timeout' => 5,
+                                'persistent' => '<persistent>',
+                                'user' => '<some-user>',
+                            ],
+                            'id-prefix' => '<some-prefix>'
                         ]
                     ]
                 ],
@@ -235,7 +310,7 @@ class BackpressureLoggerTest extends TestCase
                     ['backpressure/logger/options/user', null, '<current-user>'],
                     ['backpressure/logger/id-prefix', null, '<current-prefix>'],
                 ],
-                'expected-config-data' => [
+                'expectedConfigData' => [
                     'backpressure' => [
                         'logger' => [
                             'type' => 'redis',
@@ -257,11 +332,48 @@ class BackpressureLoggerTest extends TestCase
     }
 
     /**
+     * @return array[]
+     */
+    public static function dataProviderValidate(): array
+    {
+        return [
+            'redis valid connection' => ['redis', true, []],
+            'valkey valid connection' => ['valkey', true, []],
+            'redis invalid connection' => [
+                'redis',
+                false,
+                ['Invalid Redis configuration. Could not connect to Redis server.']
+            ],
+            'valkey invalid connection' => [
+                'valkey',
+                false,
+                ['Invalid Redis configuration. Could not connect to Redis server.']
+            ],
+            'unknown type' => ['unknown', null, ["Invalid backpressure request logger type: 'unknown'"]],
+        ];
+    }
+
+    #[DataProvider('dataProviderValidate')]
+    public function testValidate(string $loggerType, ?bool $connectionValid, array $expectedErrors): void
+    {
+        if ($connectionValid !== null) {
+            $this->validatorMock->method('isValidConnection')->willReturn($connectionValid);
+        }
+
+        $errors = $this->configList->validate(
+            ['backpressure-logger' => $loggerType],
+            $this->deploymentConfigMock
+        );
+
+        $this->assertEquals($expectedErrors, $errors);
+    }
+
+    /**
      * The default ID prefix, based on installation directory
      *
      * @return string
      */
-    private function expectedIdPrefix(): string
+    private static function expectedIdPrefix(): string
     {
         return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,8 +55,8 @@ class Price extends Column
         PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = [],
-        Currency $currency = null,
-        StoreManagerInterface $storeManager = null
+        ?Currency $currency = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: ObjectManager::getInstance()

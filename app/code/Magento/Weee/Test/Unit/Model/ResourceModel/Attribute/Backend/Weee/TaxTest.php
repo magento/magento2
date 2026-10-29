@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,8 +41,8 @@ class TaxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, []);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->once())

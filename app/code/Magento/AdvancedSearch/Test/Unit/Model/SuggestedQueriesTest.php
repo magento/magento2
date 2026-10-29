@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedSearch\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use InvalidArgumentException;
 use Magento\AdvancedSearch\Model\SuggestedQueries;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
@@ -18,9 +19,7 @@ use Magento\Search\Model\QueryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Magento\AdvancedSearch\Model\SuggestedQueries
- */
+#[CoversClass(SuggestedQueries::class)]
 class SuggestedQueriesTest extends TestCase
 {
     /**
@@ -56,21 +55,13 @@ class SuggestedQueriesTest extends TestCase
             ->onlyMethods(['getCurrentSearchEngine'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->engineResolverMock->expects($this->any())
-            ->method('getCurrentSearchEngine')
-            ->willReturn('my_engine');
+        $this->engineResolverMock->method('getCurrentSearchEngine')->willReturn('my_engine');
 
         /** @var SuggestedQueriesInterface|MockObject $suggestedQueriesMock */
-        $suggestedQueriesMock = $this->getMockForAbstractClass(SuggestedQueriesInterface::class);
-        $suggestedQueriesMock->expects($this->any())
-            ->method('isResultsCountEnabled')
-            ->willReturn(true);
-        $suggestedQueriesMock->expects($this->any())
-            ->method('getItems')
-            ->willReturn([]);
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $suggestedQueriesMock = $this->createMock(SuggestedQueriesInterface::class);
+        $suggestedQueriesMock->method('isResultsCountEnabled')->willReturn(true);
+        $suggestedQueriesMock->method('getItems')->willReturn([]);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->with('search_engine')
@@ -105,9 +96,7 @@ class SuggestedQueriesTest extends TestCase
      */
     public function testIsResultsCountEnabledException(): void
     {
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(null);
@@ -134,7 +123,7 @@ class SuggestedQueriesTest extends TestCase
     public function testGetItems(): void
     {
         /** @var QueryInterface|MockObject $queryInterfaceMock */
-        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
+        $queryInterfaceMock = $this->createMock(QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
     }

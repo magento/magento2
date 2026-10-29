@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Shipping\Model\Shipment\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use Magento\Ups\Model\UpsAuth;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -69,7 +70,7 @@ class CarrierTest extends TestCase
         $this->httpClient = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
         $this->config = Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class);
         $this->logs = [];
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->loggerMock->method('debug')
             ->willReturnCallback(
                 function (string $message) {
@@ -189,13 +190,6 @@ class CarrierTest extends TestCase
     /**
      * Test processing rates response.
      *
-     * @param int $negotiable
-     * @param int $tax
-     * @param int $responseId
-     * @param string $method
-     * @param float $price
-     * @return void
-     * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture current_store carriers/ups/type UPS_REST
@@ -207,6 +201,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */
+    #[DataProvider('collectRatesDataProvider')]
     public function testCollectRates(int $negotiable, int $tax, int $responseId, string $method, float $price): void
     {
         $request = Bootstrap::getObjectManager()->create(
@@ -296,10 +291,8 @@ class CarrierTest extends TestCase
 
     /**
      * Get list of rates variations
-     *
-     * @return array
      */
-    public function collectRatesDataProvider()
+    public static function collectRatesDataProvider(): array
     {
         return [
             [0, 0, 1, '03', 136.09 ],
@@ -424,9 +417,7 @@ class CarrierTest extends TestCase
      */
     public function testGetRatesWithHttpException(): void
     {
-        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
+        $deferredResponse = $this->createMock(HttpResponseDeferredInterface::class);
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);
@@ -450,5 +441,108 @@ class CarrierTest extends TestCase
         $error->setErrorMessage($this->carrier->getConfigData('specificerrmsg'));
 
         $this->assertEquals($error, $resultRate);
+    }
+
+    /**
+     * Test commercial destination excludes ResidentialAddressIndicator field
+     *
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
+     * @magentoConfigFixture default_store carriers/ups/dest_type COM
+     * @magentoConfigFixture default_store carriers/ups/allowed_methods 03
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     */
+    public function testCommercialDestinationDoesNotIncludeResidentialAddressIndicator(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'US',
+                    'dest_postal' => '90001',
+                    'package_weight' => '20.8',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'LBS',
+                    'base_currency' => new DataObject(['code' => 'USD'])
+                ]
+            ]
+        );
+
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . "/../_files/ups_rates_response_option1.json"))
+            ]
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->clearRequests();
+        $this->upsAuthMock->method('getAccessToken')->willReturn('abcdefghijklmnop');
+
+        $this->carrier->collectRates($request);
+
+        $requests = $this->httpClient->getRequests();
+        $this->assertNotEmpty($requests);
+
+        $requestData = json_decode($requests[0]->getBody(), true);
+        $shipToAddress = $requestData['RateRequest']['Shipment']['ShipTo']['Address'];
+
+        $this->assertFalse(
+            isset($shipToAddress['ResidentialAddressIndicator'])
+             && !empty($shipToAddress['ResidentialAddressIndicator']),
+            'ResidentialAddressIndicator should not be present for commercial addresses'
+        );
+    }
+
+    /**
+     * Test residential destination includes ResidentialAddressIndicator field
+     *
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
+     * @magentoConfigFixture default_store carriers/ups/dest_type RES
+     * @magentoConfigFixture default_store carriers/ups/allowed_methods 03
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     */
+    public function testResidentialDestinationIncludesResidentialAddressIndicator(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'US',
+                    'dest_postal' => '90001',
+                    'package_weight' => '20.8',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'LBS',
+                    'base_currency' => new DataObject(['code' => 'USD'])
+                ]
+            ]
+        );
+
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            [
+                new Response(200, [], file_get_contents(__DIR__ . "/../_files/ups_rates_response_option1.json"))
+            ]
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->clearRequests();
+        $this->upsAuthMock->method('getAccessToken')->willReturn('abcdefghijklmnop');
+
+        $this->carrier->collectRates($request);
+
+        $requests = $this->httpClient->getRequests();
+        $this->assertNotEmpty($requests);
+
+        $requestData = json_decode($requests[0]->getBody(), true);
+        $shipToAddress = $requestData['RateRequest']['Shipment']['ShipTo']['Address'];
+
+        $this->assertArrayHasKey('ResidentialAddressIndicator', $shipToAddress);
+        $this->assertEquals('01', $shipToAddress['ResidentialAddressIndicator']);
     }
 }

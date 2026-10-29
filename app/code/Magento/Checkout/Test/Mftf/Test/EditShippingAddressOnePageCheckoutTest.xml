@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -73,6 +73,7 @@
         <!-- Go to *Next* -->
         <scrollTo selector="{{CheckoutShippingMethodsSection.next}}" stepKey="scrollToButtonNext"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
 
         <!-- Select payment solution -->
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection as GridCollection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks subscription behaviour from frontend
@@ -74,12 +75,11 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @dataProvider subscribersDataProvider
-     *
      * @param string $email
      * @param string $expectedMessage
      * @return void
      */
+    #[DataProvider('subscribersDataProvider')]
     public function testNewAction(string $email, string $expectedMessage): void
     {
         $this->subscriberToDelete = $email ? $email : null;
@@ -90,7 +90,7 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture newsletter/general/active 1
+     * @magentoConfigFixture current_store newsletter/general/active 1
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture newsletter/general/active 0
+     * @magentoConfigFixture current_store newsletter/general/active 0
      *
      * @return void
      */
@@ -129,25 +129,25 @@ class NewActionTest extends AbstractController
         return [
             'without_email' => [
                 'email' => '',
-                'message' => '',
+                'expectedMessage' => '',
             ],
             'with_unused_email' => [
                 'email' => 'not_used@example.com',
-                'message' => 'Thank you for your subscription.',
+                'expectedMessage' => 'Thank you for your subscription.',
             ],
             'with_invalid_email' => [
                 'email' => 'invalid_email.com',
-                'message' => 'Please enter a valid email address.'
+                'expectedMessage' => 'Please enter a valid email address.'
             ],
         ];
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
-     * @dataProvider emailAndStatusDataProvider
      *
      * @return void
      */
+    #[DataProvider('emailAndStatusDataProvider')]
     public function testNewActionUsedEmail($email, $subscriptionType): void
     {
         $this->prepareRequest($email);
@@ -166,8 +166,8 @@ class NewActionTest extends AbstractController
     public static function emailAndStatusDataProvider()
     {
         return [
-            'customer' => ['new_customer@example.com', 2],
-            'not_a_customer' => ['not_a_customer@gmail.com', 1],
+            'email' => ['new_customer@example.com', 2],
+            'subscriptionType' => ['not_a_customer@gmail.com', 1],
         ];
     }
 

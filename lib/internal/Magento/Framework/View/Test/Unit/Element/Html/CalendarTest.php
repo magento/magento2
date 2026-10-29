@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\Html\Calendar;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see Calendar
@@ -24,9 +25,8 @@ class CalendarTest extends TestCase
      * @see MAGETWO-60828
      * @see Calendar::_toHtml
      *
-     * @param string $locale
-     * @dataProvider localesDataProvider
-     */
+     * @param string $locale     */
+    #[DataProvider('localesDataProvider')]
     public function testToHtmlWithDifferentLocales($locale)
     {
         $calendarBlock = (new ObjectManager($this))->getObject(
@@ -42,7 +42,7 @@ class CalendarTest extends TestCase
     /**
      * @return array
      */
-    public function localesDataProvider()
+    public static function localesDataProvider()
     {
         return [
             ['en_US'],
@@ -51,6 +51,7 @@ class CalendarTest extends TestCase
             ['lv_LV'],
             ['sv_SE'],
             ['de_AT'],
+            ['ar_SA'],
         ];
     }
 
@@ -79,8 +80,7 @@ class CalendarTest extends TestCase
      */
     private function getLocalResolver($locale)
     {
-        $localResolver = $this->getMockBuilder(ResolverInterface::class)
-            ->getMockForAbstractClass();
+        $localResolver = $this->createMock(ResolverInterface::class);
         $localResolver->method('getLocale')->willReturn($locale);
 
         return $localResolver;
@@ -91,8 +91,7 @@ class CalendarTest extends TestCase
      */
     private function getContext()
     {
-        $localeDate = $this->getMockBuilder(TimezoneInterface::class)
-            ->getMockForAbstractClass();
+        $localeDate = $this->createMock(TimezoneInterface::class);
 
         return (new ObjectManager($this))->getObject(
             Context::class,

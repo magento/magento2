@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class EngineTest extends TestCase
 {
@@ -45,10 +46,7 @@ class EngineTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getIfNullSql'])
-            ->getMockForAbstractClass();
+        $this->connection = $this->createMock(AdapterInterface::class);
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getConnection', 'getTableName'])
@@ -66,12 +64,7 @@ class EngineTest extends TestCase
             ->onlyMethods(['getVisibleInSiteIds'])
             ->getMock();
 
-        $this->indexScopeResolver = $this->getMockBuilder(
-            IndexScopeResolver::class
-        )
-            ->disableOriginalConstructor()
-            ->addMethods(['getVisibleInSiteIds'])
-            ->getMock();
+        $this->indexScopeResolver = $this->createMock(IndexScopeResolver::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -86,8 +79,8 @@ class EngineTest extends TestCase
     /**
      * @param null|string $expected
      * @param array $data
-     * @dataProvider prepareEntityIndexDataProvider
      */
+    #[DataProvider('prepareEntityIndexDataProvider')]
     public function testPrepareEntityIndex($expected, array $data)
     {
         $this->assertEquals($expected, $this->model->prepareEntityIndex($data['index'], $data['separator']));
@@ -95,7 +88,6 @@ class EngineTest extends TestCase
 
     /**
      *  Test allowAdvancedIndex method
-     */
     public function testAllowAdvancedIndex()
     {
         $this->assertFalse($this->model->allowAdvancedIndex());
@@ -133,7 +125,7 @@ class EngineTest extends TestCase
     /**
      * @return array
      */
-    public function prepareEntityIndexDataProvider()
+    public static function prepareEntityIndexDataProvider()
     {
         return [
             [

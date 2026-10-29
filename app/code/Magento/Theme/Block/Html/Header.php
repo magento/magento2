@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Theme\Block\Html;
@@ -33,7 +33,7 @@ class Header extends Template
     public function __construct(
         Context $context,
         array $data = [],
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         parent::__construct($context, $data);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);

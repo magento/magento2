@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
 
@@ -37,8 +37,8 @@ class ArgumentsReader extends ParameterReflection
      * @param ScalarTypesProvider|null $scalarTypesProvider
      */
     public function __construct(
-        NamespaceResolver $namespaceResolver = null,
-        ScalarTypesProvider $scalarTypesProvider = null
+        ?NamespaceResolver $namespaceResolver = null,
+        ?ScalarTypesProvider $scalarTypesProvider = null
     ) {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
         $this->scalarTypesProvider = $scalarTypesProvider ?: new ScalarTypesProvider();

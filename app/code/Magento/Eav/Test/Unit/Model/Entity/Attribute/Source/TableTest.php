@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,12 +25,16 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TableTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Table
      */
@@ -75,45 +79,44 @@ class TableTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(
-                [
-                    'setPositionOrder',
-                    'setAttributeFilter',
-                    'addFieldToFilter',
-                    'setStoreFilter',
-                    'load',
-                    'toOptionArray'
-                ]
-            )
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactory = $this->createPartialMockWithReflection(
+            CollectionFactory::class,
+            [
+                'create',
+                'setPositionOrder',
+                'setAttributeFilter',
+                'addFieldToFilter',
+                'setStoreFilter',
+                'load',
+                'toOptionArray'
+            ]
+        );
 
-        $this->attributeOptionCollectionMock = $this->getMockBuilder(AttributeOptionCollection::class)
-            ->onlyMethods(['toOptionArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeOptionCollectionMock = $this->createPartialMockWithReflection(
+            AttributeOptionCollection::class,
+            ['toOptionArray']
+        );
 
         $this->attrOptionFactory = $this->createPartialMock(
             OptionFactory::class,
             ['create']
         );
 
-        $this->sourceMock = $this->getMockBuilder(AbstractSource::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->sourceMock = $this->createMock(AbstractSource::class);
 
-        $this->abstractAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(
-                [
-                    'getFrontend', 'getAttributeCode', '__wakeup',
-                    'getId', 'getIsRequired', 'getEntity', 'getBackend'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->abstractAttributeMock = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            [
+                'getStoreId',
+                'getFrontend',
+                'getAttributeCode',
+                'getEntity',
+                'getId',
+                'getBackend',
+                'getIsRequired',
+                'setPositionOrder'
+            ]
+        );
 
         $this->model = $objectManager->getObject(
             Table::class,
@@ -124,8 +127,8 @@ class TableTest extends TestCase
         );
         $this->model->setAttribute($this->abstractAttributeMock);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
         $objectManager->setBackwardCompatibleProperty(
             $this->model,
@@ -158,10 +161,10 @@ class TableTest extends TestCase
     }
 
     /**
-     * @dataProvider specificOptionsProvider
      * @param array $optionIds
      * @param bool $withEmpty
      */
+    #[DataProvider('specificOptionsProvider')]
     public function testGetSpecificOptions($optionIds, $withEmpty)
     {
         $attributeId = 1;
@@ -222,12 +225,12 @@ class TableTest extends TestCase
     }
 
     /**
-     * @dataProvider getOptionTextProvider
      * @param array $optionsIds
      * @param array|string $value
      * @param array $options
      * @param array|string $expectedResult
      */
+    #[DataProvider('getOptionTextProvider')]
     public function testGetOptionText($optionsIds, $value, $options, $expectedResult)
     {
         $attributeId = 1;
@@ -289,44 +292,40 @@ class TableTest extends TestCase
     {
         $attributeCode = 'attribute_code';
         $dir = Select::SQL_ASC;
-        $collection = $this->getMockBuilder(AbstractCollection::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getSelect'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $collection = $this->createPartialMockWithReflection(
+            AbstractCollection::class,
+            ['getStoreId', 'getSelect']
+        );
 
         $this->abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $entity = $this->getMockBuilder(AbstractEntity::class)
-            ->onlyMethods(['getLinkField'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $entity = $this->createPartialMockWithReflection(
+            AbstractEntity::class,
+            ['getLinkField']
+        );
         $this->abstractAttributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
-        $select = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['joinLeft', 'getConnection', 'order'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createPartialMockWithReflection(
+            Select::class,
+            ['joinLeft', 'getConnection', 'order']
+        );
         $collection->expects($this->any())->method('getSelect')->willReturn($select);
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $backend = $this->getMockBuilder(AbstractBackend::class)
-            ->onlyMethods(['getTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $backend = $this->createPartialMockWithReflection(
+            AbstractBackend::class,
+            ['getTable']
+        );
         $this->abstractAttributeMock->expects($this->any())->method('getBackend')->willReturn($backend);
         $backend->expects($this->any())->method('getTable')->willReturn('table_name');
         $this->abstractAttributeMock->expects($this->any())->method('getId')->willReturn(1);
         $collection->expects($this->once())->method('getStoreId')->willReturn(1);
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $expr = $this->getMockBuilder(\Zend_Db_Expr::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createMock(AdapterInterface::class);
+        $expr = $this->createMock(\Zend_Db_Expr::class);
         $connection->expects($this->once())->method('getCheckSql')->willReturn($expr);
         $select->expects($this->once())->method('getConnection')->willReturn($connection);
-        $attrOption = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attrOption = $this->createPartialMock(
+            Option::class,
+            ['addOptionValueToCollection', 'addOptionToCollection']
+        );
         $this->attrOptionFactory->expects($this->once())->method('create')->willReturn($attrOption);
         $attrOption->expects($this->once())->method('addOptionValueToCollection')
             ->with($collection, $this->abstractAttributeMock, $expr)
@@ -345,8 +344,8 @@ class TableTest extends TestCase
      * @param array $options
      * @param array $optionsDefault
      * @param array $expectedResult
-     * @dataProvider getAllOptionsDataProvider
      */
+    #[DataProvider('getAllOptionsDataProvider')]
     public function testGetAllOptions(
         $withEmpty,
         $defaultValues,
@@ -418,6 +417,17 @@ class TableTest extends TestCase
                 false,
                 [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
+                [
+                    ['label' => ' ', 'value' => ''],
+                    ['value' => '16', 'label' => 'black'],
+                    ['value' => '17', 'label' => 'white']
+                ]
+            ],
+            [
+                true,
+                true,
+                [['value' => '16', 'label' => 'default sv black'], ['value' => '17', 'label' => 'default sv white']],
+                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [
                     ['label' => ' ', 'value' => ''],
                     ['value' => '16', 'label' => 'black'],

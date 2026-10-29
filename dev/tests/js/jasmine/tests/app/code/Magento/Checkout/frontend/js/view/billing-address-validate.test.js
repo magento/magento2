@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint max-nested-callbacks: 0 */
@@ -105,9 +105,9 @@ define([
         });
     });
 
-    describe('Magento_Checkout/js/view/billing-address', function () {
+    describe('Magento_Checkout/js/view/billing-address validation', function () {
         describe('"updateAddress" method', function () {
-            it('should not call updateAddresses when form is invalid', function () {
+            it('should call updateAddresses when form is invalid with false', function () {
                 billingAddress.source.set.and.callFake(function (key, value) {
                     if (key === 'params.invalid' && value === true) {
                         billingAddress.source.get.and.callFake(function () {
@@ -120,8 +120,24 @@ define([
                 });
                 spyOn(billingAddress, 'updateAddresses');
                 billingAddress.updateAddress();
-                expect(billingAddress.updateAddresses).not.toHaveBeenCalled();
+                expect(billingAddress.updateAddresses).toHaveBeenCalledWith(false);
                 expect(selectBillingAddress).not.toHaveBeenCalled();
+            });
+
+            it('should call updateAddresses when form is valid with true', function () {
+                billingAddress.source.get.and.callFake(function (key) {
+                    if (key === 'params.invalid') {
+                        return false; // Simulate valid form data
+                    } else if (key === billingAddress.dataScopePrefix) {
+                        return lastSelectedBillingAddress; // Return mock address data
+                    }
+                    return null;
+                });
+
+                spyOn(billingAddress, 'updateAddresses');
+                billingAddress.updateAddress();
+                expect(billingAddress.updateAddresses).toHaveBeenCalledWith(true);
+                expect(selectBillingAddress).toHaveBeenCalled();
             });
         });
     });

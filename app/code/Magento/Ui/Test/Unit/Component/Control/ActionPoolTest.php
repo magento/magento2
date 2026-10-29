@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class ActionPoolTest extends TestCase
             AbstractBlock::class,
             ['setChild']
         );
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->contextMock->expects($this->any())->method('getPageLayout')->willReturn($this->layoutMock);
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
@@ -84,7 +84,7 @@ class ActionPoolTest extends TestCase
 
         $this->itemFactoryMock = $this->createPartialMock(ItemFactory::class, ['create']);
 
-        $this->uiComponentInterfaceMock = $this->getMockForAbstractClass(
+        $this->uiComponentInterfaceMock = $this->createMock(
             UiComponentInterface::class
         );
         $this->items[$this->key] = $this->createPartialMock(Item::class, ['setData']);

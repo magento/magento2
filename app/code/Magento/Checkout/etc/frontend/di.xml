@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -120,5 +120,9 @@
                 <item name="checkout_session" xsi:type="object">Magento\Checkout\Model\StoreSwitcher\RedirectDataPostprocessor</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Message\ManagerInterface">
+        <plugin name="add_related_products_to_success_message"
+                type="Magento\Checkout\Plugin\Model\Message\AddRelatedProductsToSuccessMessagePlugin"/>
     </type>
 </config>

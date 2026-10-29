@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCategoryDescriptionActionGroup">
+        <annotations>
+            <description>Update Category Description</description>
+        </annotations>
+        <arguments>
+            <argument name="description" type="string"/>
+        </arguments>
+        <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
+        <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
+        <scrollTo selector="{{AdminCategoryContentSection.description}}" x="0" y="-80" stepKey="scrollToDescription"/>
+        <conditionalClick selector="{{AdminCategoryContentSection.categoryDescriptionUseDefault}}" dependentSelector="{{AdminCategoryContentSection.categoryDescriptionUseDefault}}" visible="true" stepKey="uncheckUseDefaultValueStoreView"/>
+        <fillField selector="{{AdminCategoryContentSection.description}}" userInput="{{description}}" stepKey="fillUpdatedDescription"/>
+    </actionGroup>
+</actionGroups>
+

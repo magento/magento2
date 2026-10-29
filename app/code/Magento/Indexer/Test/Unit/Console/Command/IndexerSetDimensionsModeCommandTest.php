@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\ModeSwitcherInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for class \Magento\Indexer\Model\ModeSwitcherInterface.
@@ -62,9 +63,8 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->dimensionModeSwitcherMock =
-            $this->getMockForAbstractClass(ModeSwitcherInterface::class);
+        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->dimensionModeSwitcherMock = $this->createMock(ModeSwitcherInterface::class);
         $this->dimensionProviders = [
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];
@@ -100,9 +100,9 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
      * @param string $previousMode
      * @param array $command
      * @param string $consoleOutput
-     * @dataProvider dimensionModesDataProvider
      * @return void
      */
+    #[DataProvider('dimensionModesDataProvider')]
     public function testExecuteWithAttributes($indexerTitle, $previousMode, $command, $consoleOutput)
     {
         $this->configureAdminArea();
@@ -129,13 +129,13 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         return [
             'was_changed'     => [
-                'indexer_title' => 'indexer_title',
+                'indexerTitle' => 'indexer_title',
                 'previousMode'  => 'none',
                 'command'       => [
                     'indexer' => 'indexer_title',
                     'mode'    => 'store',
                 ],
-                'output'        => sprintf(
+                'consoleOutput'        => sprintf(
                     'Dimensions mode for indexer "%s" was changed from \'%s\' to \'%s\'',
                     'indexer_title',
                     'none',
@@ -144,13 +144,13 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
                 ,
             ],
             'was_not_changed' => [
-                'indexer_title' => 'indexer_title',
+                'indexerTitle' => 'indexer_title',
                 'previousMode'  => 'none',
                 'command'       => [
                     'indexer' => 'indexer_title',
                     'mode'    => 'none',
                 ],
-                'output'        => sprintf(
+                'consoleOutput'        => sprintf(
                     'Dimensions mode for indexer "%s" has not been changed',
                     'indexer_title'
                 ) . PHP_EOL

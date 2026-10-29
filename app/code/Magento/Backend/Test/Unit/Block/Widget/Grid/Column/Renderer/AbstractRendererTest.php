@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,11 +10,16 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AbstractRendererTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Column|MockObject
      */
@@ -31,21 +36,22 @@ class AbstractRendererTest extends TestCase
     protected $renderer;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $this->dataObjectMock = $this->createPartialMock(DataObject::class, ['getData']);
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEditable', 'getIndex', 'getEditOnly'])
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $this->renderer =
-            $this->getMockBuilder(AbstractRenderer::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods([])
-                ->getMock();
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getEditable', 'getIndex', 'getEditOnly', 'getId']
+        );
+        $this->renderer = $this->createPartialMock(AbstractRenderer::class, []);
     }
 
     /**
@@ -53,8 +59,8 @@ class AbstractRendererTest extends TestCase
      * @param bool $onlyEdit
      * @param string $expectedResult
      * @return void
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($editable, $onlyEdit, $expectedResult)
     {
         $value = 'some value';

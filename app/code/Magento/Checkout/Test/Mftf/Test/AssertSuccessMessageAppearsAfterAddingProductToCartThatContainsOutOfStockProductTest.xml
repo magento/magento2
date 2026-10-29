@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -64,7 +64,7 @@
         <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Some of the products are out of stock." stepKey="verifyErrorMessage"/>
 
         <!--Open product in storefront-->
-        <amOnPage url="{{StorefrontProductPage.url(createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront2"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2"/>
 
         <!-- Add Simple Product to cart and verify success message-->

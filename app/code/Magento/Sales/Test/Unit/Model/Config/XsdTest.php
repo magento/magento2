@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Config;
 
 use Magento\Framework\Config\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
@@ -27,8 +28,8 @@ class XsdTest extends TestCase
 
     /**
      * @param string $xmlFile
-     * @dataProvider validXmlFileDataProvider
      */
+    #[DataProvider('validXmlFileDataProvider')]
     public function testValidXmlFile($xmlFile)
     {
         $dom = new \DOMDocument();
@@ -42,7 +43,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function validXmlFileDataProvider()
+    public static function validXmlFileDataProvider()
     {
         return [['sales_valid.xml']];
     }
@@ -50,8 +51,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlFile
      * @param array $expectedErrors
-     * @dataProvider invalidXmlFileDataProvider
      */
+    #[DataProvider('invalidXmlFileDataProvider')]
     public function testInvalidXmlFile($xmlFile, $expectedErrors)
     {
         $dom = new \DOMDocument();
@@ -68,20 +69,20 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [
             [
                 'sales_invalid.xml',
                 [
                     "Element 'section', attribute 'wrongName': The attribute 'wrongName' is not allowed.\nLine: 9\n" .
-                    "The xml was: \n4: * See COPYING.txt for license details.\n5: */\n6:-->\n" .
+                    "The xml was: \n4: * All Rights Reserved.\n5: */\n6:-->\n" .
                     "7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
                     "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Sales:etc/sales.xsd\">\n8:    " .
                     "<section wrongName=\"section1\">\n9:        <wrongGroup wrongName=\"group1\"/>\n" .
                     "10:    </section>\n11:</config>\n12:\n",
                     "Element 'section': The attribute 'name' is required but missing.\nLine: 9\n" .
-                    "The xml was: \n4: * See COPYING.txt for license details.\n5: */\n6:-->\n" .
+                    "The xml was: \n4: * All Rights Reserved.\n5: */\n6:-->\n" .
                     "7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
                     "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Sales:etc/sales.xsd\">\n8:    " .
                     "<section wrongName=\"section1\">\n9:        <wrongGroup wrongName=\"group1\"/>\n" .
@@ -135,7 +136,7 @@ class XsdTest extends TestCase
                 'sales_invalid_without_attributes.xml',
                 [
                     "Element 'section': The attribute 'name' is required but missing.\nLine: 9\nThe xml was: \n" .
-                    "4: * See COPYING.txt for license details.\n5: */\n6:-->\n7:<config " .
+                    "4: * All Rights Reserved.\n5: */\n6:-->\n7:<config " .
                     "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
                     "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Sales:etc/sales.xsd\">\n8:    " .
                     "<section>\n9:        <group>\n10:            <item>\n11:                " .
@@ -172,7 +173,7 @@ class XsdTest extends TestCase
                 'sales_invalid_root_node.xml',
                 [
                     "Element 'wrong': This element is not expected. Expected is one of ( section, order ).\n" .
-                    "Line: 9\nThe xml was: \n4: * See COPYING.txt for license details.\n5: */\n6:-->\n7:<config " .
+                    "Line: 9\nThe xml was: \n4: * All Rights Reserved.\n5: */\n6:-->\n7:<config " .
                     "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
                     "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Sales:etc/sales.xsd\">\n8:    " .
                     "<wrong/>\n9:</config>\n10:\n"

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Url.
@@ -55,10 +56,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @dataProvider getUrlsWithSecondStoreProvider
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
+    #[DataProvider('getUrlsWithSecondStoreProvider')]
     public function testGetUrlInStoreWithSecondStore($storeCode, $expectedProductUrl)
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -81,7 +82,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlsWithSecondStoreProvider()
+    public static function getUrlsWithSecondStoreProvider()
     {
         return [
            'case1' => ['fixturestore', 'http://sample-second.com/index.php/simple-product-one.html'],

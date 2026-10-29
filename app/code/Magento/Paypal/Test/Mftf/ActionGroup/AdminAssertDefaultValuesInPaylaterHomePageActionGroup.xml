@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDefaultValuesInPaylaterHomePageActionGroup">
+        <annotations>
+            <description>Check the default Dropdown Values Available in HomePage.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForElementClickable selector="{{PayPalPaymentsProConfigSection.paymentsAdvanced(countryCode)}}" stepKey="waitForPayPalPaymentsAdvancedConfigureBtn"/>
+        <click selector ="{{PayPalPaymentsProConfigSection.paymentsAdvanced(countryCode)}}" stepKey="clickPayPalPaymentsAdvancedConfigureBtn"/>
+        <waitForPageLoad stepKey="waitForAdvisepaylaterExpand"/>
+        <waitForElementClickable selector ="{{AdminEnablePaylaterSection.advisepaylaterBtn(countryCode)}}" stepKey="waitForClickPayPalPaymentsAdvisepaylatereBtn"/>
+        <click selector ="{{AdminEnablePaylaterSection.advisepaylaterBtn(countryCode)}}" stepKey="clickPayPalPaymentsAdvisepaylatereBtn"/>
+        <waitForElementClickable selector="{{AdminEnablePaylaterSection.expandHomePage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
+        <click selector="{{AdminEnablePaylaterSection.expandHomePage(countryCode)}}" stepKey="clickCheckoutCart"/>
+        <selectOption selector ="{{AdminEnablePaylaterSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <selectOption selector="{{AdminEnablePaylaterSection.position(countryCode)}}" userInput="Header (center)" stepKey="selectDefaultPosition"/>
+        <!--Verify Default Option was Selected correctly-->
+        <seeOptionIsSelected selector="{{AdminEnablePaylaterSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{AdminEnablePaylaterSection.styleLayout(countryCode)}}" userInput="Flex" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{AdminEnablePaylaterSection.ratio(countryCode)}}" userInput="1x1" stepKey="seeSelectedRatio"/>
+        <seeOptionIsSelected selector="{{AdminEnablePaylaterSection.color(countryCode)}}" userInput="Blue" stepKey="seeSelectedColor"/>
+    </actionGroup>
+</actionGroups>

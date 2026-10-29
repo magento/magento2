@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,15 +84,9 @@ class FileTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
 
-        $this->factoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->factoryCollectionMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->factoryCollectionMock = $this->createMock(CollectionFactory::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->file = $objectManager->getObject(
             File::class,
             [
@@ -114,11 +108,13 @@ class FileTest extends TestCase
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']
             . $this->testData['html_id_suffix'];
+        $escapeValue = $this->testData['value'];
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnMap(
             [
                 [$expectedHtmlId, null, $expectedHtmlId],
                 [self::XSS_FILE_NAME_TEST, null, self::XSS_FILE_NAME_TEST],
                 [self::INPUT_NAME_TEST, null, self::INPUT_NAME_TEST],
+                [$escapeValue, null, $escapeValue],
             ]
         );
 

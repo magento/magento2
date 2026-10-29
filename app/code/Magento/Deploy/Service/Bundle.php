@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Service;
 
@@ -102,7 +102,7 @@ class Bundle
         BundleInterfaceFactory $bundleFactory,
         BundleConfig $bundleConfig,
         Files $files,
-        File $file = null
+        ?File $file = null
     ) {
         $this->pubStaticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $this->bundleFactory = $bundleFactory;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Cms\Model\ResourceModel\Page\Query\PageIdsList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,8 +44,8 @@ class PageIdsListTest extends TestCase
      * @param $blockEntityIds
      * @param $pageEntityIds
      * @param $blockIdentifiers
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testExecute($blockEntityIds, $pageEntityIds, $blockIdentifiers)
     {
         $this->selectMock->expects($this->any())
@@ -93,7 +94,7 @@ class PageIdsListTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             [[1, 2, 3], [1], ['test1', 'test2', 'test3']],

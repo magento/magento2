@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -54,7 +55,7 @@ class AddCommentTest extends AbstractShipmentControllerTest
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
+        $this->assertThat(quoted_printable_decode($message->getBody()->bodyToString()), $messageConstraint);
     }
 
     /**
@@ -94,8 +95,7 @@ class AddCommentTest extends AbstractShipmentControllerTest
             ]
         );
 
-        $data = $params ?? [];
-        $this->getRequest()->setPostValue($data);
+        $this->getRequest()->setPostValue($params);
 
         return $order;
     }

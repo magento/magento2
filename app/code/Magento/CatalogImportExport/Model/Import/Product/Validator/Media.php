@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
@@ -39,8 +39,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @param File|null $file
      */
     public function __construct(
-        Validator $validator = null,
-        File      $file = null
+        ?Validator $validator = null,
+        ?File      $file = null
     ) {
         $this->validator = $validator ?: ObjectManager::getInstance()->get(Validator::class);
         $this->file = $file ?: ObjectManager::getInstance()->get(File::class);

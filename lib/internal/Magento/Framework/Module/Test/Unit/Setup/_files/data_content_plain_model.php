@@ -5,11 +5,11 @@ use Magento\Customer\Model\Customer;
 use Magento\Framework\Module\Setup\Migration;
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'field',
@@ -17,13 +17,13 @@ return [
             Migration::FIELD_CONTENT_TYPE_PLAIN,
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['field' => 'customer/customer'],
         ['field' => 'customer/attribute_data_postcode'],
         ['field' => 'customer/attribute_data_postcode::someMethod'],
         ['field' => Customer::class],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',
@@ -51,7 +51,7 @@ return [
             ],
         ],
     ],
-    '$aliasesMap' => [
+    'aliasesMap' => [
         Migration::ENTITY_TYPE_MODEL => [
             'customer/customer' => \Magento\Customer\Model\Customer_FROM_MAP::class,
         ],

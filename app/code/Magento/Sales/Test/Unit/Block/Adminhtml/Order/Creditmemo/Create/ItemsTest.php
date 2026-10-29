@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,15 +18,21 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Items */
     protected $items;
 
@@ -55,6 +61,8 @@ class ItemsTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->contextMock = $this->createMock(Context::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
@@ -76,12 +84,11 @@ class ItemsTest extends TestCase
             ->willReturn($this->stockItemMock);
 
         $this->registryMock = $this->createMock(Registry::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfig);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->items = $this->objectManagerHelper->getObject(
             Items::class,
             [
@@ -97,13 +104,12 @@ class ItemsTest extends TestCase
      * @param bool $canReturnToStock
      * @param bool $manageStock
      * @param bool $result
-     * @dataProvider canReturnItemsToStockDataProvider
      */
+    #[DataProvider('canReturnItemsToStockDataProvider')]
     public function testCanReturnItemsToStock($canReturnToStock, $manageStock, $result)
     {
         $productId = 7;
         $property = new \ReflectionProperty($this->items, '_canReturnToStock');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->items));
         $this->stockConfiguration->expects($this->once())
             ->method('canSubtractQty')
@@ -111,7 +117,7 @@ class ItemsTest extends TestCase
 
         if ($canReturnToStock) {
             $orderItem = $this->createPartialMock(
-                \Magento\Sales\Model\Order\Item::class,
+                OrderItem::class,
                 ['getProductId', 'getStore']
             );
             $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
@@ -125,12 +131,10 @@ class ItemsTest extends TestCase
                 ->method('getProductId')
                 ->willReturn($productId);
 
-            $creditMemoItem = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)->addMethods(
-                ['setCanReturnToStock']
-            )
-                ->onlyMethods(['getOrderItem'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $creditMemoItem = $this->createPartialMockWithReflection(
+                CreditmemoItem::class,
+                ['setCanReturnToStock', 'getOrderItem']
+            );
 
             $creditMemo = $this->createMock(Creditmemo::class);
             $creditMemo->expects($this->once())
@@ -148,10 +152,7 @@ class ItemsTest extends TestCase
                 ->method('setCanReturnToStock')
                 ->with($manageStock)->willReturnSelf();
 
-            $order = $this->getMockBuilder(Order::class)
-                ->addMethods(['setCanReturnToStock'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $order = $this->createPartialMockWithReflection(Order::class, ['setCanReturnToStock']);
             $order->expects($this->once())
                 ->method('setCanReturnToStock')
                 ->with($manageStock)->willReturnSelf();
@@ -174,7 +175,7 @@ class ItemsTest extends TestCase
     /**
      * @return array
      */
-    public function canReturnItemsToStockDataProvider()
+    public static function canReturnItemsToStockDataProvider()
     {
         return [
             'cannot subtract by config' => [false, true, false],

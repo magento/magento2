@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Usps;
@@ -11,6 +12,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting USPS shipping method on cart.
@@ -45,12 +47,12 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Defines carrier label for "USPS" shipping method
      */
-    const CARRIER_TITLE = 'United States Postal Service';
+    public const CARRIER_TITLE = 'United States Postal Service';
 
     /**
      * Defines carrier code for "USPS" shipping method
      */
-    const CARRIER_CODE = 'usps';
+    public const CARRIER_CODE = 'usps';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -81,10 +83,10 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
      *
-     * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethods')]
     public function testSetUspsShippingMethod(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -117,7 +119,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethods(): array
+    public static function dataProviderShippingMethods(): array
     {
         return [
             'Library Mail Parcel' =>
@@ -154,10 +156,10 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/Usps/_files/enable_usps_shipping_method.php
      *
-     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethodsBasedOnCanadaAddress')]
     public function testSetUspsShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -190,7 +192,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    public static function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
             'First-Class Package International Service' =>
@@ -249,9 +251,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 
