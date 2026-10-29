@@ -15,7 +15,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     /**
      * Path to sort order values of checkout totals
      */
-    const XML_PATH_SALES_TOTALS_SORT = 'sales/totals_sort';
+    public const XML_PATH_SALES_TOTALS_SORT = 'sales/totals_sort';
 
     /**
      * Total models array ordered for right display sequence
@@ -126,7 +126,8 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         if (!$model instanceof \Magento\Quote\Model\Quote\Address\Total\AbstractTotal) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
+                    'The address total model should be extended from '
+                    . '\Magento\Quote\Model\Quote\Address\Total\AbstractTotal.'
                 )
             );
         }
