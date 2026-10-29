@@ -59,6 +59,7 @@ class Website implements OptionSourceInterface
     private function getWebsiteOptions(): array
     {
         $options = $this->systemStore->getWebsiteValuesForForm();
+        $defaultStoreViewIds = $this->getWebsiteDefaultStoreViewIds();
         foreach ($options as $key => $option) {
             $websiteId = $option['value'];
             $groupId = $this->scopeConfig->getValue(
@@ -67,34 +68,25 @@ class Website implements OptionSourceInterface
                 $websiteId
             );
             $options[$key]['group_id'] = $groupId;
-            $options[$key]['default_store_view_id'] = $this->getWebsiteDefaultStoreViewId($websiteId);
+            $options[$key]['default_store_view_id'] = $defaultStoreViewIds[$websiteId] ?? null;
         }
 
         return $options;
     }
 
     /**
-     * Get Default store view id by Website id
+     * Build a map of website id => default store view id in a single pass
      *
-     * @param string $websiteId
-     * @return mixed
+     * @return array
      */
-    private function getWebsiteDefaultStoreViewId($websiteId)
+    private function getWebsiteDefaultStoreViewIds(): array
     {
-        $defaultStoreViewId = null;
-        $websites = $this->systemStore->getWebsiteCollection();
-
-        foreach ($websites as $website) {
-            if ($website->getId() === $websiteId) {
-                $defaultStore = $website->getDefaultStore();
-                // Check if the default store exist
-                if ($defaultStore) {
-                    $defaultStoreViewId = $defaultStore->getId();
-                }
-                break;
-            }
+        $defaultStoreViewIds = [];
+        foreach ($this->systemStore->getWebsiteCollection() as $website) {
+            $defaultStore = $website->getDefaultStore();
+            $defaultStoreViewIds[$website->getId()] = $defaultStore ? $defaultStore->getId() : null;
         }
 
-        return $defaultStoreViewId;
+        return $defaultStoreViewIds;
     }
 }

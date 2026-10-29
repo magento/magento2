@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Event;
 
+use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Test\PreparationStarted;
 use PHPUnit\Event\Test\PreparationStartedSubscriber;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * TestPreparation Started Subscriber
@@ -30,19 +32,42 @@ class TestPreprationStartedSubscriber implements PreparationStartedSubscriber
      */
     public function notify(PreparationStarted $event): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $className = $event->test()->className();
-        $methodName = $event->test()->methodName();
-
-        $testObj = $objectManager->create($className, ['name' => $methodName]);
+        $test = $event->test();
+        if (!$test->isTestMethod()) {
+            return;
+        }
+        $testObj = $this->createTestObject($test);
 
         Magento::setCurrentEventObject($event);
 
-        $phpUnit = $objectManager->create(PhpUnit::class);
+        $phpUnit = Bootstrap::getObjectManager()->create(PhpUnit::class);
         try {
             $phpUnit->startTest($testObj);
         } catch (\Throwable $e) {
             $this->executionState->registerPreparationFailure($testObj->toString(), $e);
         }
+    }
+
+    /**
+     * Create test instance
+     *
+     * @param TestMethod $test
+     * @return TestCase
+     */
+    private function createTestObject(TestMethod $test): TestCase
+    {
+        $className = $test->className();
+        $methodName = $test->methodName();
+        $testData = $test->testData();
+
+        $testObj = Bootstrap::getObjectManager()->create($className, ['name' => $methodName]);
+        if ($testData->hasDataFromDataProvider()) {
+            // IMPORTANT: It's not actual data returned from data provider. It's simplified readable version of them.
+            $dataFromDataProvider = $testData->dataFromDataProvider();
+            $data = array_map(trim(...), explode(',', $dataFromDataProvider->data()));
+            $testObj->setData($dataFromDataProvider->dataSetName(), $data);
+        }
+
+        return $testObj;
     }
 }

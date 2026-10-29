@@ -16,7 +16,9 @@
         "magento/module-graph-ql": "*",
         "magento/module-graph-ql-resolver-cache": "*",
         "magento/module-config": "*",
-        "magento/module-advanced-search": "*"
+        "magento/module-advanced-search": "*",
+        "magento/module-tax": "*",
+        "magento/module-customer": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*",

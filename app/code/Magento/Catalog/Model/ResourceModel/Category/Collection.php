@@ -431,18 +431,25 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             );
         $connection->createTemporaryTable($tempTable);
 
+        // Scan the whole category table (paginated, not filtered by $categoryIds) because a category's
+        // descendants may not be part of the current $categoryIds batch, e.g. when only a partial subtree
+        // is loaded; skipping descendants outside the batch would undercount the ancestor's product total.
         $categoryTable = $this->getTable('catalog_category_entity');
-        foreach (array_chunk($categoryIds, $this->readBatchSize) as $categoryIdsBatch) {
+        $lastEntityId = 0;
+        do {
             $rows = $connection->fetchAll(
                 $connection->select()
                     ->from($categoryTable, ['entity_id', 'path'])
-                    ->where('entity_id IN (?)', $categoryIdsBatch)
+                    ->where('entity_id > ?', $lastEntityId)
+                    ->order('entity_id ' . Select::SQL_ASC)
+                    ->limit($this->readBatchSize)
             );
 
             $insertData = [];
 
             foreach ($rows as $row) {
                 $descendantId = (int) $row['entity_id'];
+                $lastEntityId = $descendantId;
                 $ancestorIds = array_filter(
                     array_map('intval', explode('/', (string) $row['path']))
                 );
@@ -463,7 +470,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             if ($insertData) {
                 $connection->insertMultiple($tempTableName, $insertData);
             }
-        }
+        } while (count($rows) === $this->readBatchSize);
 
         $select = $connection->select()
             ->from(
@@ -474,7 +481,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['cp' => $this->getTable('catalog_category_product')],
                 'cp.category_id = t.descendant_id',
                 ['product_count' => 'COUNT(DISTINCT cp.product_id)']
-            );
+            )
+            ->where('t.category_id IN (?)', $categoryIds);
         if ($websiteId) {
             $select->join(
                 ['w' => $this->getProductWebsiteTable()],

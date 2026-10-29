@@ -85,7 +85,9 @@ class NotProtectedExtension extends AbstractValidator
     {
         if (!$this->_protectedFileExtensions) {
             $extensions = $this->getProtectedFileExtensions();
-            if (is_string($extensions)) {
+            if ($extensions === null || $extensions === '') {
+                $extensions = [];
+            } elseif (is_string($extensions)) {
                 $extensions = explode(',', $extensions);
             }
             foreach ($extensions as &$ext) {

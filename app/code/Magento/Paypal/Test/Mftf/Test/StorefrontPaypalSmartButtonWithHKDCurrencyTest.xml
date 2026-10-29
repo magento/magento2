@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -55,9 +52,7 @@
         </actionGroup>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
-            <argument name="payerName" value="{{Payer.firstName}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal"/>
 
 
         <!--Submit payment on PayPal site-->

@@ -40,6 +40,7 @@
         </before>
 
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <!-- delete category,product,customer -->
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>

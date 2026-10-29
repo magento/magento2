@@ -11,13 +11,15 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Grid as AbstractGrid;
-use Magento\Sales\Model\ResourceModel\Order\Grid;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
 /**
  * Class for testing asynchronous inserts into grid.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
 {
@@ -54,7 +56,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
         $resourceConnection = $this->objectManager->get(ResourceConnection::class);
         $this->connection = $resourceConnection->getConnection('sales');
         $this->orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
-        $this->grid = $this->objectManager->get(Grid::class);
+        $this->grid = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Grid');
 
         $this->gridAsyncInsert = $this->objectManager->create(
             GridAsyncInsert::class,
@@ -78,14 +80,27 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
 
         // to un-sync main table and grid table need to wait at least one second
         sleep(1);
-        $order->setStatus('complete');
+        // Fixture order is already processing; hold it so main status diverges from grid until async insert.
+        $order->setState(Order::STATE_HOLDED);
+        $order->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_HOLDED));
         $this->orderRepository->save($order);
 
         $gridRow = $this->getGridRow($order->getEntityId());
         self::assertNotEquals($order->getStatus(), $gridRow['status']);
 
+        // refreshBySchedule() only indexes rows whose main.updated_at is at/before UTC (now-1s);
+        // the hold save bumps updated_at to "now", so wait until the row is stale enough.
+        sleep(2);
+        $order = $this->getOrder('100000001');
+
+        $expectedGridUpdatedAt = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->sub(new \DateInterval('PT1S'))
+            ->format('Y-m-d H:i:s');
         $this->gridAsyncInsert->asyncInsert();
-        $this->performUpdateAssertions($order);
+
+        $gridRow = $this->getGridRow($order->getEntityId());
+        self::assertEquals($order->getStatus(), $gridRow['status']);
+        self::assertEquals($expectedGridUpdatedAt, $gridRow['updated_at']);
     }
 
     /**

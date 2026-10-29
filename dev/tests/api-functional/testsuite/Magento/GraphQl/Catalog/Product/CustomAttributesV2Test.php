@@ -92,10 +92,7 @@ QUERY;
     }
 
     /**
-     * Test that custom_attributesV2 gracefully handles multi-dimensional array attributes
-     *
-     * This test verifies that attributes with complex nested array structures
-     * are skipped without causing errors, while other simple attributes are still returned.
+     * Nested array attribute values are JSON-encoded; query still succeeds without errors.
      *
      * @return void
      */
@@ -111,7 +108,7 @@ QUERY;
         ),
         DataFixture(Indexer::class)
     ]
-    public function testCustomAttributesV2SkipsMultiDimensionalArrays()
+    public function testCustomAttributesV2HandlesNestedArrayPayloads()
     {
         $query = <<<QUERY
 {
@@ -142,12 +139,78 @@ QUERY;
         $this->assertArrayHasKey('products', $response);
         $this->assertNotEmpty($response['products']['items']);
 
-        // Verify custom_attributesV2 is accessible
         $product = $response['products']['items'][0];
         $this->assertArrayHasKey('custom_attributesV2', $product);
 
-        // The query should not have errors even if some attributes are skipped
         $this->assertArrayHasKey('errors', $product['custom_attributesV2']);
+        $this->assertEmpty($product['custom_attributesV2']['errors']);
+        $this->assertNotEmpty($product['custom_attributesV2']['items']);
+    }
+
+    /**
+     * Numeric catalog attributes (e.g. weight) resolve as AttributeValue strings through custom_attributesV2.
+     *
+     * @return void
+     */
+    #[
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'test-custom-attrs-weight-product',
+                'name' => 'Weight Product',
+                'price' => 11,
+                'weight' => 2.75,
+            ],
+            'weight_product'
+        ),
+        DataFixture(Indexer::class)
+    ]
+    public function testCustomAttributesV2ReturnsWeightAsScalarAttributeValue()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "test-custom-attrs-weight-product"}})
+    {
+        items {
+            sku
+            custom_attributesV2 {
+                items {
+                    code
+                    ... on AttributeValue {
+                        value
+                    }
+                }
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('products', $response);
+        $this->assertNotEmpty($response['products']['items']);
+
+        $product = $response['products']['items'][0];
+        $this->assertSame('test-custom-attrs-weight-product', $product['sku']);
+        $this->assertEmpty($product['custom_attributesV2']['errors']);
+
+        $weightItem = null;
+        foreach ($product['custom_attributesV2']['items'] as $item) {
+            if (($item['code'] ?? '') === 'weight') {
+                $weightItem = $item;
+                break;
+            }
+        }
+
+        $this->assertNotNull($weightItem, 'weight should be present in custom_attributesV2 items');
+        $this->assertArrayHasKey('value', $weightItem);
+        $this->assertIsString($weightItem['value']);
+        $this->assertEqualsWithDelta(2.75, (float) $weightItem['value'], 0.001);
     }
 
     /**

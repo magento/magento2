@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
- * Class Reader
+ * Reads and merges system.xml configuration files describing the admin configuration structure.
+ *
  * @api
  * @since 100.0.2
  */
@@ -132,10 +133,20 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     {
         $object = new DataObject();
         $document = new \DOMDocument();
+        $useInternalErrors = libxml_use_internal_errors(true);
         try {
-            $document->loadXML($content);
+            $isLoaded = $document->loadXML($content);
+            $errors = libxml_get_errors();
         } catch (\Exception $e) {
+            libxml_clear_errors();
+            libxml_use_internal_errors($useInternalErrors);
             throw new \Magento\Framework\Config\Dom\ValidationException($e->getMessage());
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+        if (!$isLoaded) {
+            $message = $errors ? trim($errors[0]->message) : 'Invalid XML content.';
+            throw new \Magento\Framework\Config\Dom\ValidationException($message);
         }
         $this->compiler->compile($document->documentElement, $object, $object);
 

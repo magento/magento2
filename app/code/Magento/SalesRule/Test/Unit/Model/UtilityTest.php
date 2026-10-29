@@ -25,6 +25,7 @@ use Magento\SalesRule\Model\Rule\Customer;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use Magento\Rule\Model\Condition\Combine as RuleCombine;
+use Magento\SalesRule\Model\OrderEditUsageOffset;
 use Magento\SalesRule\Model\Utility;
 use Magento\SalesRule\Model\ValidateCoupon;
 use Magento\Store\Model\Store;
@@ -104,6 +105,11 @@ class UtilityTest extends TestCase
     protected $validateCoupon;
 
     /**
+     * @var OrderEditUsageOffset|MockObject
+     */
+    protected $orderEditUsageOffset;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -165,13 +171,15 @@ class UtilityTest extends TestCase
 
         $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->validateCoupon = $this->createMock(ValidateCoupon::class);
+        $this->orderEditUsageOffset = $this->createMock(OrderEditUsageOffset::class);
         $this->utility = new Utility(
             $this->usageFactory,
             $this->couponFactory,
             $this->customerFactory,
             $this->objectFactory,
             $this->priceCurrency,
-            $this->validateCoupon
+            $this->validateCoupon,
+            $this->orderEditUsageOffset
         );
     }
 
@@ -182,6 +190,12 @@ class UtilityTest extends TestCase
      */
     public function testCanProcessRuleValidAddress(): void
     {
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(0);
         $this->rule->expects($this->once())
             ->method('hasIsValidForAddress')
             ->with($this->address)
@@ -270,6 +284,269 @@ class UtilityTest extends TestCase
             ->willReturn(true);
 
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * Verify rule is allowed during admin order edit when usage limit was reached by the original order.
+     *
+     * @return void
+     */
+    public function testCanProcessRuleAllowsUsageDuringOrderEdit(): void
+    {
+        $customerId = 1;
+        $usageLimit = 1;
+        $timesUsed = 1;
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->rule->setUsesPerCustomer($usageLimit);
+        $this->quote->setCustomerId($customerId);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->customer->setId($customerId);
+        $this->customer->setTimesUsed($timesUsed);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(1);
+
+        $this->validateCoupon->method('execute')
+            ->willReturn(true);
+
+        $this->rule->expects($this->once())->method('afterLoad');
+        $this->rule->expects($this->once())->method('validate')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleReturnsCachedInvalidAddressResult(): void
+    {
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(0);
+        $this->rule->expects($this->once())
+            ->method('hasIsValidForAddress')
+            ->with($this->address)
+            ->willReturn(true);
+        $this->rule->expects($this->once())
+            ->method('getIsValidForAddress')
+            ->with($this->address)
+            ->willReturn(false);
+        $this->address->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn(false);
+
+        $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * Cached invalid result must not block rule revalidation during admin order edit.
+     *
+     * @return void
+     */
+    public function testCanProcessRuleRevalidatesWhenOrderEditOffsetApplies(): void
+    {
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->rule->setUsesPerCustomer(1);
+        $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $this->quote->setCustomerId(1);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(1);
+        $this->rule->expects($this->once())
+            ->method('hasIsValidForAddress')
+            ->with($this->address)
+            ->willReturn(true);
+        $this->rule->expects($this->never())
+            ->method('getIsValidForAddress');
+        $this->address->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn(false);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->customer->setId(1);
+        $this->customer->setTimesUsed(1);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+        $this->validateCoupon->method('execute')->willReturn(true);
+        $this->rule->expects($this->once())->method('validate')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleRevalidatesWhenAddressIsObjectNew(): void
+    {
+        $this->rule->expects($this->once())
+            ->method('hasIsValidForAddress')
+            ->with($this->address)
+            ->willReturn(true);
+        $this->rule->expects($this->never())
+            ->method('getIsValidForAddress');
+        $this->address->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn(true);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $this->rule->expects($this->once())
+            ->method('validate')
+            ->willReturn(true);
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleSkipsUsageCheckWhenRuleCustomerNotFound(): void
+    {
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->rule->setUsesPerCustomer(1);
+        $this->quote->setCustomerId(1);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->customer->setId(null);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(0);
+        $this->validateCoupon->method('execute')->willReturn(true);
+        $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $this->rule->expects($this->once())->method('validate')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleRejectsRuleWhenUsageLimitStillExceededAfterOffset(): void
+    {
+        $customerId = 1;
+        $ruleId = 4;
+        $this->rule->setId($ruleId);
+        $this->rule->setUsesPerCustomer(1);
+        $this->quote->setCustomerId($customerId);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->customer->setId($customerId);
+        $this->customer->setTimesUsed(2);
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+        $this->orderEditUsageOffset->expects($this->once())
+            ->method('getOffset')
+            ->with($this->address, $ruleId)
+            ->willReturn(0);
+        $this->validateCoupon->method('execute')->willReturn(true);
+        $this->rule->expects($this->once())
+            ->method('setIsValidForAddress')
+            ->with($this->address, false);
+
+        $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleWhenGetActionsThrowsSkipsEligibleItemTotals(): void
+    {
+        $rule = $this->createPartialMock(Rule::class, [
+            'getActions',
+            'validate',
+            'hasIsValidForAddress',
+            'getIsValidForAddress',
+            'setIsValidForAddress',
+            'afterLoad',
+        ]);
+        $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $rule->method('hasIsValidForAddress')->willReturn(false);
+        $rule->method('getActions')->willThrowException(new \RuntimeException('Actions unavailable'));
+        $rule->method('validate')->willReturn(true);
+        $rule->method('afterLoad');
+        $rule->expects($this->once())
+            ->method('setIsValidForAddress')
+            ->with($this->address, true);
+
+        $this->address->method('getQuote')->willReturn($this->quote);
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleWhenActionsHaveEmptyConditionsSkipsEligibleItemTotals(): void
+    {
+        $actionsCombine = $this->createMock(RuleCombine::class);
+        $actionsCombine->method('getConditions')->willReturn([]);
+
+        $rule = $this->createPartialMock(Rule::class, [
+            'getActions',
+            'validate',
+            'hasIsValidForAddress',
+            'getIsValidForAddress',
+            'setIsValidForAddress',
+            'afterLoad',
+        ]);
+        $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $rule->method('hasIsValidForAddress')->willReturn(false);
+        $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('validate')->willReturn(true);
+        $rule->method('afterLoad');
+        $rule->expects($this->once())
+            ->method('setIsValidForAddress')
+            ->with($this->address, true);
+
+        $this->address->method('getQuote')->willReturn($this->quote);
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($rule, $this->address));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCanProcessRuleValidateFailureRestoresAddressTotalsWhenRuleHasItemRestrictions(): void
+    {
+        $fixtures = $this->buildEligibleItemTotalsCanProcessRuleFixtures(false);
+        $addressState = $this->defaultEligibleTotalsAddressState();
+        $address = $this->createAddressMockWithTrackedTotals($addressState, $fixtures['lineItems']);
+
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertFalse($this->utility->canProcessRule($fixtures['rule'], $address));
+
+        $this->assertSame(500.0, $addressState['base_subtotal']);
+        $this->assertSame(490.0, $addressState['base_subtotal_with_discount']);
+        $this->assertSame(550.0, $addressState['base_subtotal_total_incl_tax']);
+        $this->assertSame(10.0, $addressState['total_qty']);
+        $this->assertSame(20.0, $addressState['weight']);
     }
 
     /**
@@ -462,7 +739,7 @@ class UtilityTest extends TestCase
     /**
      * @return array{rule: Rule&MockObject, lineItems: list<AbstractItem|MockObject>}
      */
-    private function buildEligibleItemTotalsCanProcessRuleFixtures(): array
+    private function buildEligibleItemTotalsCanProcessRuleFixtures(bool $validationResult = true): array
     {
         $itemEligible = $this->eligibleTotalsItemStub([
             'getParentItem' => null,
@@ -531,11 +808,11 @@ class UtilityTest extends TestCase
         $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $rule->method('hasIsValidForAddress')->willReturn(false);
         $rule->method('getActions')->willReturn($actionsCombine);
-        $rule->method('validate')->willReturn(true);
+        $rule->method('validate')->willReturn($validationResult);
         $rule->method('afterLoad');
         $rule->expects($this->once())
             ->method('setIsValidForAddress')
-            ->with($this->isInstanceOf(Address::class), true);
+            ->with($this->isInstanceOf(Address::class), $validationResult);
 
         return ['rule' => $rule, 'lineItems' => $lineItems];
     }

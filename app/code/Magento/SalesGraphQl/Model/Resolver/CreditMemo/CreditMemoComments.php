@@ -52,8 +52,15 @@ class CreditMemoComments implements ResolverInterface
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
                     'message' => $comment->getComment(),
-                    'timestamp' => $this->timezone->date($comment->getCreatedAt())
-                        ->format(DateTime::DATETIME_SLASH_PHP_FORMAT)
+                    'timestamp' => $this->timezone->date(
+                        $comment->getCreatedAt()
+                            ? \DateTime::createFromFormat(
+                                DateTime::DATETIME_PHP_FORMAT,
+                                $comment->getCreatedAt(),
+                                new \DateTimeZone('UTC')
+                            )
+                            : null
+                    )->format(DateTime::DATETIME_PHP_FORMAT)
                 ];
             }
         }

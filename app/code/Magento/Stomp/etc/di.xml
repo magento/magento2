@@ -10,10 +10,7 @@
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="async" xsi:type="array">
-                    <item name="stomp" xsi:type="object">Magento\Stomp\Model\Publisher</item>
-                </item>
-                <item name="sync" xsi:type="array">
-                    <item name="stomp" xsi:type="object">Magento\Stomp\Model\Rpc\Publisher</item>
+                    <item name="stomp" xsi:type="object">Magento\Framework\MessageQueue\Publisher</item>
                 </item>
             </argument>
         </arguments>
@@ -22,10 +19,7 @@
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="async" xsi:type="array">
-                    <item name="stomp" xsi:type="object">Magento\Stomp\Model\Bulk\Publisher</item>
-                </item>
-                <item name="sync" xsi:type="array">
-                    <item name="stomp" xsi:type="object">Magento\Stomp\Model\Rpc\Publisher</item>
+                    <item name="stomp" xsi:type="object">Magento\Framework\MessageQueue\Bulk\Publisher</item>
                 </item>
             </argument>
         </arguments>
@@ -55,14 +49,51 @@
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="async" xsi:type="array">
-                    <item name="stomp" xsi:type="object">Magento\Stomp\Model\MassPublisher</item>
+                    <item name="stomp" xsi:type="object">Magento\AsynchronousOperations\Model\MassPublisher</item>
                 </item>
             </argument>
         </arguments>
     </virtualType>
+    <!-- @deprecated not used anymore -->
     <virtualType name="Magento\Framework\Stomp\Bulk\QueueFactory" type="Magento\Framework\Stomp\QueueFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">\Magento\Framework\Stomp\Bulk\Queue</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\Framework\Stomp\Bulk\ExchangeFactory" type="Magento\Framework\Stomp\ExchangeFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">\Magento\Framework\Stomp\Bulk\Exchange</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\MessageQueue\ExchangeFactory">
+        <arguments>
+            <argument name="exchangeFactories" xsi:type="array">
+                <item name="stomp" xsi:type="object">Magento\Framework\Stomp\ExchangeFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\MessageQueue\Bulk\ExchangeFactory">
+        <arguments>
+            <argument name="exchangeFactories" xsi:type="array">
+                <item name="stomp" xsi:type="object">Magento\Framework\Stomp\Bulk\ExchangeFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Stomp\StompClient">
+        <arguments>
+            <argument name="subscriptionHeaders" xsi:type="array">
+                <item name="ActiveMQ" xsi:type="array">
+                    <item name="activemq.prefetchSize" xsi:type="number">100</item>
+                </item>
+                <item name="ActiveMQ-Artemis" xsi:type="array">
+                    <item name="consumer-window-size" xsi:type="number">1048576</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Stomp\Queue">
+        <arguments>
+            <argument name="jolokiaClient" xsi:type="object">Magento\Framework\Stomp\Jolokia\ArtemisClient</argument>
+        </arguments>
+    </type>
 </config>

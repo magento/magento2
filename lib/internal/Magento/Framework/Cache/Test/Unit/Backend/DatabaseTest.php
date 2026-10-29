@@ -9,7 +9,6 @@ namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\Database;
 use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -44,7 +43,7 @@ class DatabaseTest extends TestCase
         if ($options['adapter']!='' && is_callable($options['adapter'])) {
             $options['adapter'] = $options['adapter']($this);
         }
-        $this->expectException(CacheException::class);
+        $this->expectException(\Zend_Cache_Exception::class);
         $this->objectManager->getObject(
             Database::class,
             ['options' => $options]
@@ -436,7 +435,7 @@ class DatabaseTest extends TestCase
      */
     public function testCleanException(): void
     {
-        $this->expectException(CacheException::class);
+        $this->expectException(\Zend_Cache_Exception::class);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,

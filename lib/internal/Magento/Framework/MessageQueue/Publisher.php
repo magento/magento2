@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\Amqp\Config as AmqpConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
@@ -35,6 +36,11 @@ class Publisher implements PublisherInterface
     private $messageValidator;
 
     /**
+     * @var MessageIdGeneratorInterface
+     */
+    private $messageIdGenerator;
+
+    /**
      * @var PublisherConfig
      */
     private $publisherConfig;
@@ -54,6 +60,7 @@ class Publisher implements PublisherInterface
      * @param MessageQueueConfig $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param MessageValidator $messageValidator
+     * @param MessageIdGeneratorInterface|null $messageIdGenerator
      * @internal param ExchangeInterface $exchange
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -63,12 +70,15 @@ class Publisher implements PublisherInterface
         EnvelopeFactory $envelopeFactory,
         MessageQueueConfig $messageQueueConfig,
         MessageEncoder $messageEncoder,
-        MessageValidator $messageValidator
+        MessageValidator $messageValidator,
+        ?MessageIdGeneratorInterface $messageIdGenerator = null,
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
+        $this->messageIdGenerator = $messageIdGenerator
+            ?? ObjectManager::getInstance()->get(MessageIdGeneratorInterface::class);
     }
 
     /**
@@ -82,10 +92,9 @@ class Publisher implements PublisherInterface
             [
                 'body' => $data,
                 'properties' => [
-                    'delivery_mode' => 2,
-                    // md5() here is not for cryptographic use.
-                    // phpcs:ignore Magento2.Security.InsecureFunction
-                    'message_id' => md5(gethostname() . microtime(true) . uniqid($topicName, true))
+                    'delivery_mode' => MessageDeliveryMode::PERSISTENT->value,
+                    'topic_name' => $topicName,
+                    'message_id' => $this->messageIdGenerator->generate($topicName),
                 ]
             ]
         );
@@ -112,6 +121,7 @@ class Publisher implements PublisherInterface
      * @return PublisherConfig
      *
      * @deprecated 103.0.0
+     * @see nothing
      */
     private function getPublisherConfig()
     {
@@ -127,6 +137,7 @@ class Publisher implements PublisherInterface
      * @return AmqpConfig
      *
      * @deprecated 100.2.0 103.0.0
+     * @see nothing
      */
     private function getAmqpConfig()
     {

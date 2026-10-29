@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductGlobalPriceStoreScopedDecimal;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
@@ -383,5 +384,35 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'condition is int' => [1],
             'condition is null' => [null]
         ];
+    }
+
+    /**
+     * Global `price` and store-scoped decimals share `catalog_product_entity_decimal`; collection load must not
+     * collapse store scope for other attributes in that batch (see AC-40218 / PR 40419).
+     *
+     * DbIsolation disabled: fixture uses CategorySetup::addAttribute (DDL) and product save triggers indexers;
+     * wrapping those in a DB transaction causes MySQL ER_CANT_EXECUTE_WITH_PRIMARY_CHANGED / 1412 in MSI + ES
+     * pipelines.
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(ProductGlobalPriceStoreScopedDecimal::class),
+    ]
+    public function testStoreScopedDecimalLoadedWithGlobalPriceOnSameDecimalTable(): void
+    {
+        $sku = 'simple-global-price-store-decimal-pr40419';
+        $attributeCode = 'decimal_attr_store_scope_pr40419';
+
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->setStore('fixture_second_store')
+            ->addAttributeToSelect(['price', $attributeCode])
+            ->addFieldToFilter('sku', $sku)
+            ->load();
+
+        $this->assertCount(1, $collection->getItems());
+        $item = $collection->getFirstItem();
+        $this->assertSame(77.5, (float)$item->getPrice());
+        $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
     }
 }

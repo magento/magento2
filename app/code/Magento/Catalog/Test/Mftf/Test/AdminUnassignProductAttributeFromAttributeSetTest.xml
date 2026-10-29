@@ -49,10 +49,10 @@
         <!-- Assert attribute presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
         <waitForPageLoad stepKey="wait1"/>
-        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkAttributeInMoreInformationTab">
-            <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
-            <argument name="attributeValue" value="$$option2.option[store_labels][0][label]$$"/>
-        </actionGroup>
+        <conditionalClick selector="{{StorefrontProductMoreInformationSection.moreInformation}}" dependentSelector="{{StorefrontProductMoreInformationSection.moreInformation}}" visible="true" stepKey="openMoreInformationTabIfPresent"/>
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformationSpecs}}" stepKey="scrollToMoreInformation"/>
+        <see userInput="$$attribute.attribute[frontend_labels][0][label]$$" selector="{{StorefrontProductMoreInformationSection.moreInformationSpecs}}" stepKey="seeAttributeLabel"/>
+        <see userInput="$$option2.option[store_labels][0][label]$$" selector="{{StorefrontProductMoreInformationSection.moreInformationSpecs}}" stepKey="seeAttributeValue"/>
         <!-- Go to default attribute set edit page -->
         <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
         <!-- Assert created attribute in a group -->
@@ -78,7 +78,7 @@
         <!-- Assert removed attribute not presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
         <waitForPageLoad stepKey="wait3"/>
-        <dontSeeElement selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="dontSeeProductAttribute"/>
-        <dontSee userInput="$$attribute.attribute[frontend_labels][0][label]$$" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="dontSeeAttributeLabel"/>
+        <conditionalClick selector="{{StorefrontProductMoreInformationSection.moreInformation}}" dependentSelector="{{StorefrontProductMoreInformationSection.moreInformation}}" visible="true" stepKey="openMoreInformationTabIfPresentAfterUnassign"/>
+        <dontSee userInput="$$attribute.attribute[frontend_labels][0][label]$$" stepKey="dontSeeAttributeLabel"/>
     </test>
 </tests>

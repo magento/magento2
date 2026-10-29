@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyFedExInternationalPriorityShippingMethodIsAvailableTest">
+        <annotations>
+            <features value="Fedex"/>
+            <stories value="International Priority Shipping Method"/>
+            <title value="Storefront displays FedEx International Priority shipping method for non-US address"/>
+            <description value="Verify international priority shipping method is displayed on checkout when FedEx is enabled."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3667"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create simple product with weight -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!-- Enable FedEx -->
+            <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedExConfiguration"/>
+            <!-- Enable only International Priority shipping method -->
+            <magentoCLI command="config:set {{AdminFedexInternationalPriorityOnlyAllowedMethodsConfigData.path}} {{AdminFedexInternationalPriorityOnlyAllowedMethodsConfigData.value}}" stepKey="setInternationalPriorityOnlyAllowedMethod"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Restore FedEx configuration -->
+            <actionGroup ref="AdminDisableFedexConfigurationActionGroup" stepKey="disableFedExConfiguration"/>
+            <magentoCLI command="config:set {{AdminFedexRestoreDefaultAllowedMethodsConfigData.path}} {{AdminFedexRestoreDefaultAllowedMethodsConfigData.value}}" stepKey="restoreDefaultFedExAllowedMethods"/>
+        </after>
+        <!-- Add product to cart -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Go to checkout shipping page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
+        <!-- Fill non-US shipping address -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillGuestShippingAddressWithCanada">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customerAddress" value="Canada_Address"/>
+        </actionGroup>
+        <!-- Assert International Priority shipping method is displayed -->
+        <waitForElementVisible selector="{{AdminShippingMethodFedExSection.fedExInternationalPriorityShippingMethod}}" stepKey="waitForShippingMethodLoad"/>
+    </test>
+</tests>

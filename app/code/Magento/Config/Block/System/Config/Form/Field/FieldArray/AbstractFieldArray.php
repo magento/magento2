@@ -9,7 +9,8 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
 /**
  * Backend system config array field renderer
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
+ * phpcs:ignore Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -196,7 +197,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function renderCellTemplate($columnName)
     {
         if (empty($this->_columns[$columnName])) {
-            throw new \Exception('Wrong column name specified.');
+            throw new \Exception('Wrong column name specified.'); // phpcs:ignore
         }
         $column = $this->_columns[$columnName];
         $inputName = $this->_getCellInputElementName($columnName);
@@ -255,7 +256,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $this->_isPreparedToRender = true;
         }
         if (empty($this->_columns)) {
-            throw new \Exception('At least one column must be defined.');
+            throw new \Exception('At least one column must be defined.'); // phpcs:ignore
         }
         return parent::_toHtml();
     }
@@ -281,6 +282,8 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     }
 
     /**
+     * Retrieve the label for the 'add' button
+     *
      * @return string
      * @since 101.0.0
      */

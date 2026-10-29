@@ -20,27 +20,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Used for "name" attribute of captcha's input field
      */
-    const INPUT_NAME_FIELD_VALUE = 'captcha';
+    public const INPUT_NAME_FIELD_VALUE = 'captcha';
 
     /**
      * Always show captcha
      */
-    const MODE_ALWAYS = 'always';
+    public const MODE_ALWAYS = 'always';
 
     /**
      * Show captcha only after certain number of unsuccessful attempts
      */
-    const MODE_AFTER_FAIL = 'after_fail';
+    public const MODE_AFTER_FAIL = 'after_fail';
 
     /**
      * Captcha fonts path
      */
-    const XML_PATH_CAPTCHA_FONTS = 'captcha/fonts';
+    public const XML_PATH_CAPTCHA_FONTS = 'captcha/fonts';
 
     /**
      * Default captcha type
      */
-    const DEFAULT_CAPTCHA_TYPE = 'Zend';
+    public const DEFAULT_CAPTCHA_TYPE = 'Zend';
 
     /**
      * List uses Models of Captcha
@@ -84,11 +84,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get Captcha
      *
-     * @param string $formId
+     * @param string|null $formId
      * @return \Magento\Captcha\Model\CaptchaInterface
      */
     public function getCaptcha($formId)
     {
+        $formId = $formId ?? '';
         if (!array_key_exists($formId, $this->_captcha)) {
             $captchaType = ucfirst($this->getConfig('type'));
             if (!$captchaType) {

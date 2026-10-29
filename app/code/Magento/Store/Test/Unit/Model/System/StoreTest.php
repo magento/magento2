@@ -110,6 +110,7 @@ class StoreTest extends TestCase
         $this->groupMock->expects($this->any())->method('getName')->willReturn($groupName);
         $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->storeMock->expects($this->any())->method('getName')->willReturn($storeName);
+        $this->storeMock->expects($this->once())->method('getGroupId')->willReturn($groupId);
         $this->assertEquals(
             $this->model->getStoresStructure($isAll, $storeIds, $groupIds, $websiteIds),
             $expectedResult

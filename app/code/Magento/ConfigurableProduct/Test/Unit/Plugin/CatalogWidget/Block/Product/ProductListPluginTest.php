@@ -120,18 +120,17 @@ class ProductListPluginTest extends TestCase
 
         $baseCollection = $this->createMock(Collection::class);
         $baseCollection->expects($this->once())->method('getAllIds')->willReturn($baseIds);
-        $baseCollection->expects($this->once())->method('setVisibility')->with($visibleCatalogIds);
-        $finalSelect = $this->createMock(Select::class);
-        $finalSelect->expects($this->once())
+        $subject = $this->createMock(ProductsList::class);
+        $subject->expects($this->once())->method('getBaseCollection')->willReturn($baseCollection);
+
+        $resultSelect = $this->createMock(Select::class);
+        $resultSelect->expects($this->once())
             ->method('orWhere')
             ->with('e.entity_id IN (?)', $configurableEntityIds)
             ->willReturnSelf();
-        $baseCollection->expects($this->once())->method('getSelect')->willReturn($finalSelect);
-        $subject = $this->createMock(ProductsList::class);
-        $subject->expects($this->exactly(2))->method('getBaseCollection')->willReturn($baseCollection);
-
         $result = $this->createMock(Collection::class);
         $result->expects($this->once())->method('getAllIds')->willReturn($resultIds);
+        $result->expects($this->once())->method('getSelect')->willReturn($resultSelect);
         $entity = $this->createMock(EntityMetadataInterface::class);
         $entity->expects($this->once())->method('getLinkField')->willReturn($linkField);
         $this->metadataPool->expects($this->once())
@@ -182,6 +181,6 @@ class ProductListPluginTest extends TestCase
         $collection->expects($this->once())->method('addIdFilter');
         $collection->expects($this->once())->method('getAllIds')->willReturn($configurableEntityIds);
 
-        $this->plugin->afterCreateCollection($subject, $result);
+        $this->assertSame($result, $this->plugin->afterCreateCollection($subject, $result));
     }
 }

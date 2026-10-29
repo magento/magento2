@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2022 Adobe
  * All Rights Reserved.
  */
 
@@ -46,6 +46,7 @@ use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -249,8 +250,8 @@ class RendererTest extends TestCase
             BundleProductFixture::class,
             [
                 '_options' => ['$opt1$', '$opt2$'],
-                'price_type' => Price::PRICE_TYPE_DYNAMIC,
-                'shipment_type' => AbstractType::SHIPMENT_TOGETHER,
+                'price_type' => '$dataset.price_type$',
+                'shipment_type' => '$dataset.shipment_type$',
             ],
             'b1'
         ),
@@ -273,177 +274,28 @@ class RendererTest extends TestCase
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        TestWith(
+            ['price_type' => Price::PRICE_TYPE_DYNAMIC, 'shipment_type' => AbstractType::SHIPMENT_TOGETHER],
+            'bundle_dynamic_price_ship_together'
+        ),
+        TestWith(
+            ['price_type' => Price::PRICE_TYPE_DYNAMIC, 'shipment_type' => AbstractType::SHIPMENT_SEPARATELY],
+            'bundle_dynamic_price_ship_separately'
+        ),
+        TestWith(
+            ['price_type' => Price::PRICE_TYPE_FIXED, 'shipment_type' => AbstractType::SHIPMENT_TOGETHER],
+            'bundle_fixed_price_ship_together'
+        ),
+        TestWith(
+            ['price_type' => Price::PRICE_TYPE_FIXED, 'shipment_type' => AbstractType::SHIPMENT_SEPARATELY],
+            'bundle_fixed_price_ship_separately'
+        ),
     ]
-    public function testOrderViewForBundleDynamicPriceShipTogether(): void
+    public function testOrderViewForBundleProduct(int $price_type, int $shipment_type): void
     {
         $b1 = $this->fixtures->get('b1');
-        $this->assertEquals(Price::PRICE_TYPE_DYNAMIC, $b1->getPriceType());
-        $this->assertEquals(AbstractType::SHIPMENT_TOGETHER, $b1->getShipmentType());
-        $this->assertQty(['b1' => 2, 'p1' => 6, 'p2' => 10]);
-    }
-
-    #[
-        AppArea('frontend'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
-        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p1.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt1'
-        ),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p2.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt2'
-        ),
-        DataFixture(
-            BundleProductFixture::class,
-            [
-                '_options' => ['$opt1$', '$opt2$'],
-                'price_type' => Price::PRICE_TYPE_DYNAMIC,
-                'shipment_type' => AbstractType::SHIPMENT_SEPARATELY,
-            ],
-            'b1'
-        ),
-        DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(
-            AddBundleProductToCartFixture::class,
-            [
-                'cart_id' => '$cart.id$',
-                'product_id' => '$b1.id$',
-                'qty' => '2',
-                'selections' => [
-                    [['product_id' => '$p1.id$', 'qty' => 3]],
-                    [['product_id' => '$p2.id$', 'qty' => 5]],
-                ]
-            ],
-        ),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
-    ]
-    public function testOrderViewForBundleDynamicPriceShipSeparately(): void
-    {
-        $b1 = $this->fixtures->get('b1');
-        $this->assertEquals(Price::PRICE_TYPE_DYNAMIC, $b1->getPriceType());
-        $this->assertEquals(AbstractType::SHIPMENT_SEPARATELY, $b1->getShipmentType());
-        $this->assertQty(['b1' => 2, 'p1' => 6, 'p2' => 10]);
-    }
-
-    #[
-        AppArea('frontend'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
-        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p1.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt1'
-        ),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p2.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt2'
-        ),
-        DataFixture(
-            BundleProductFixture::class,
-            [
-                '_options' => ['$opt1$', '$opt2$'],
-                'price_type' => Price::PRICE_TYPE_FIXED,
-                'shipment_type' => AbstractType::SHIPMENT_TOGETHER,
-            ],
-            'b1'
-        ),
-        DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(
-            AddBundleProductToCartFixture::class,
-            [
-                'cart_id' => '$cart.id$',
-                'product_id' => '$b1.id$',
-                'qty' => '2',
-                'selections' => [
-                    [['product_id' => '$p1.id$', 'qty' => 3]],
-                    [['product_id' => '$p2.id$', 'qty' => 5]],
-                ]
-            ],
-        ),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
-    ]
-    public function testOrderViewForBundleFixedPriceShipTogether(): void
-    {
-        $b1 = $this->fixtures->get('b1');
-        $this->assertEquals(Price::PRICE_TYPE_FIXED, $b1->getPriceType());
-        $this->assertEquals(AbstractType::SHIPMENT_TOGETHER, $b1->getShipmentType());
-        $this->assertQty(['b1' => 2, 'p1' => 6, 'p2' => 10]);
-    }
-
-    #[
-        AppArea('frontend'),
-        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
-        DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p1.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt1'
-        ),
-        DataFixture(
-            BundleOptionFixture::class,
-            [
-                'product_links' => [['sku' => '$p2.sku$', 'can_change_quantity' => 1]]
-            ],
-            'opt2'
-        ),
-        DataFixture(
-            BundleProductFixture::class,
-            [
-                '_options' => ['$opt1$', '$opt2$'],
-                'price_type' => Price::PRICE_TYPE_FIXED,
-                'shipment_type' => AbstractType::SHIPMENT_SEPARATELY,
-            ],
-            'b1'
-        ),
-        DataFixture(GuestCartFixture::class, as: 'cart'),
-        DataFixture(
-            AddBundleProductToCartFixture::class,
-            [
-                'cart_id' => '$cart.id$',
-                'product_id' => '$b1.id$',
-                'qty' => '2',
-                'selections' => [
-                    [['product_id' => '$p1.id$', 'qty' => 3]],
-                    [['product_id' => '$p2.id$', 'qty' => 5]],
-                ]
-            ],
-        ),
-        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
-        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
-    ]
-    public function testOrderViewForBundleFixedPriceShipSeparately(): void
-    {
-        $b1 = $this->fixtures->get('b1');
-        $this->assertEquals(Price::PRICE_TYPE_FIXED, $b1->getPriceType());
-        $this->assertEquals(AbstractType::SHIPMENT_SEPARATELY, $b1->getShipmentType());
+        $this->assertEquals($price_type, $b1->getPriceType());
+        $this->assertEquals($shipment_type, $b1->getShipmentType());
         $this->assertQty(['b1' => 2, 'p1' => 6, 'p2' => 10]);
     }
 

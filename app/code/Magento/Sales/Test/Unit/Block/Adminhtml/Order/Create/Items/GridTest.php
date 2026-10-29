@@ -251,16 +251,37 @@ class GridTest extends TestCase
      */
     public function testGetItems()
     {
-        $productId = 8;
-        $itemQty = 23;
+        $productId1 = 8;
+        $productId2 = 12;
+        $childItem1Qty = 23;
+        $childItem2Qty = 5;
+        $parentItemQty = 1;
+        $expectedQty1 = $childItem1Qty * $parentItemQty;
+        $expectedQty2 = $childItem2Qty * $parentItemQty;
         $layoutMock = $this->createMock(LayoutInterface::class);
         $blockMock = $this->createPartialMockWithReflection(AbstractBlock::class, ['getItems']);
 
-        $itemMock = $this->createPartialMock(
+        $parentItemMock = $this->createPartialMock(
             Item::class,
             ['getProduct', 'setHasError', 'setQty', 'getQty', 'getChildren']
         );
-        $productMock = $this->createPartialMockWithReflection(
+
+        $childItemMock1 = $this->createPartialMock(
+            Item::class,
+            ['getProduct', 'getQty']
+        );
+
+        $childItemMock2 = $this->createPartialMock(
+            Item::class,
+            ['getProduct', 'getQty']
+        );
+
+        $productMock1 = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStockItem', 'getStatus', 'getID']
+        );
+
+        $productMock2 = $this->createPartialMockWithReflection(
             Product::class,
             ['getStockItem', 'getStatus', 'getID']
         );
@@ -271,29 +292,53 @@ class GridTest extends TestCase
         $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
             ->willReturn($blockMock);
 
-        $blockMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
+        $blockMock->expects($this->once())->method('getItems')->willReturn([$parentItemMock]);
 
-        $itemMock->expects($this->any())->method('getChildren')->willReturn([$itemMock]);
-        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
-        $itemMock->expects($this->any())->method('getQty')->willReturn($itemQty);
+        $parentItemMock->expects($this->any())->method('getChildren')
+            ->willReturn([$childItemMock1, $childItemMock2]);
+        $parentItemMock->expects($this->any())->method('getQty')->willReturn($parentItemQty);
+        $parentItemMock->expects($this->any())->method('getProduct')->willReturn($productMock1);
 
-        $productMock->expects($this->any())->method('getId')->willReturn($productId);
-        $productMock->expects($this->any())->method('getStatus')
+        $childItemMock1->expects($this->any())->method('getQty')->willReturn($childItem1Qty);
+        $childItemMock1->expects($this->any())->method('getProduct')->willReturn($productMock1);
+
+        $childItemMock2->expects($this->any())->method('getQty')->willReturn($childItem2Qty);
+        $childItemMock2->expects($this->any())->method('getProduct')->willReturn($productMock2);
+
+        $productMock1->expects($this->any())->method('getId')->willReturn($productId1);
+        $productMock1->expects($this->any())->method('getStatus')
+            ->willReturn(Status::STATUS_ENABLED);
+
+        $productMock2->expects($this->any())->method('getId')->willReturn($productId2);
+        $productMock2->expects($this->any())->method('getStatus')
             ->willReturn(Status::STATUS_ENABLED);
 
         $checkMock->expects($this->any())->method('getMessage')->willReturn('Message');
         $checkMock->expects($this->any())->method('getHasError')->willReturn(false);
 
-        $this->stockState->expects($this->once())
+        $this->stockState->expects($this->exactly(2))
             ->method('checkQuoteItemQty')
-            ->with(
-                $productId,
-                $itemQty,
-                $itemQty,
-                $itemQty,
-                null
-            )
-            ->willReturn($checkMock);
+            ->willReturnCallback(
+                function (
+                    $productId,
+                    $qty
+                ) use (
+                    $productId1,
+                    $productId2,
+                    $expectedQty1,
+                    $expectedQty2,
+                    $checkMock
+                ) {
+                    if ($productId === $productId1) {
+                        $this->assertEquals($expectedQty1, $qty);
+                    } elseif ($productId === $productId2) {
+                        $this->assertEquals($expectedQty2, $qty);
+                    } else {
+                        $this->fail('Unexpected product ID: ' . $productId);
+                    }
+                    return $checkMock;
+                }
+            );
 
         $this->block->getQuote()->setIsSuperMode(true);
         $items = $this->block->setLayout($layoutMock)->getItems();

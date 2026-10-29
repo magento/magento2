@@ -316,4 +316,165 @@ class ValidateTest extends TestCase
             ->willReturn($resultLayoutMock);
         $this->assertEquals($resultLayoutMock, $this->validate->execute());
     }
+
+    /**
+     * Test execute() method
+     *
+     * When validation fails under the "Stop on Error" strategy, the "Import" button must not be
+     * offered: the skip-errors success message is not added (regression test for ACP2E-5124).
+     */
+    public function testStopOnErrorDoesNotOfferImportButton()
+    {
+        $data = ['key' => 'value'];
+
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn($data);
+
+        $resultBlock = $this->createMock(Result::class);
+        $resultBlock->expects($this->once())
+            ->method('addError')
+            ->with(__('Data validation failed. Please fix the following errors and upload the file again.'));
+        $resultBlock->expects($this->never())
+            ->method('addSuccess');
+
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('import.frame.result')
+            ->willReturn($resultBlock);
+
+        $resultLayoutMock = $this->createMock(Layout::class);
+        $resultLayoutMock->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($layoutMock);
+
+        $this->importMock->expects($this->once())
+            ->method('setData')
+            ->with($data)
+            ->willReturn($this->importMock);
+        $this->importMock->expects($this->once())
+            ->method('uploadFileAndGetSource')
+            ->willReturn($this->abstractSourceMock);
+        $this->importMock->expects($this->once())
+            ->method('validateSource')
+            ->with($this->abstractSourceMock)
+            ->willReturn(false);
+        $this->importMock->expects($this->any())
+            ->method('getProcessedRowsCount')
+            ->willReturn(2);
+        $this->importMock->expects($this->any())
+            ->method('getProcessedEntitiesCount')
+            ->willReturn(2);
+        $this->importMock->expects($this->any())
+            ->method('getValidatedIds')
+            ->willReturn([]);
+        $this->importMock->expects($this->any())
+            ->method('getData')
+            ->with(Import::FIELD_NAME_VALIDATION_STRATEGY)
+            ->willReturn(ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_STOP_ON_ERROR);
+
+        $errorAggregatorMock = $this->createMock(ProcessingErrorAggregatorInterface::class);
+        $this->importMock->expects($this->any())
+            ->method('getErrorAggregator')
+            ->willReturn($errorAggregatorMock);
+        $errorAggregatorMock->expects($this->any())
+            ->method('getErrorsCount')
+            ->willReturn(2);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('log_admin_import');
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_LAYOUT)
+            ->willReturn($resultLayoutMock);
+
+        $this->assertEquals($resultLayoutMock, $this->validate->execute());
+    }
+
+    /**
+     * Test execute() method
+     *
+     * When validation fails under the "Skip error entries" strategy, the skip-errors success
+     * message (with the "Import" button) is still offered - the fix must not regress this flow.
+     */
+    public function testSkipErrorsStillOffersImportButton()
+    {
+        $data = ['key' => 'value'];
+
+        $this->requestMock->expects($this->once())
+            ->method('getPostValue')
+            ->willReturn($data);
+
+        $resultBlock = $this->createMock(Result::class);
+        $resultBlock->expects($this->once())
+            ->method('addError')
+            ->with(__('Data validation failed. Please fix the following errors and upload the file again.'));
+        $resultBlock->expects($this->once())
+            ->method('addSuccess')
+            ->with(
+                __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
+                true
+            );
+
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('import.frame.result')
+            ->willReturn($resultBlock);
+
+        $resultLayoutMock = $this->createMock(Layout::class);
+        $resultLayoutMock->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($layoutMock);
+
+        $this->importMock->expects($this->once())
+            ->method('setData')
+            ->with($data)
+            ->willReturn($this->importMock);
+        $this->importMock->expects($this->once())
+            ->method('uploadFileAndGetSource')
+            ->willReturn($this->abstractSourceMock);
+        $this->importMock->expects($this->once())
+            ->method('validateSource')
+            ->with($this->abstractSourceMock)
+            ->willReturn(false);
+        $this->importMock->expects($this->any())
+            ->method('getProcessedRowsCount')
+            ->willReturn(2);
+        $this->importMock->expects($this->any())
+            ->method('getProcessedEntitiesCount')
+            ->willReturn(2);
+        $this->importMock->expects($this->any())
+            ->method('getValidatedIds')
+            ->willReturn([]);
+        $this->importMock->expects($this->any())
+            ->method('getData')
+            ->with(Import::FIELD_NAME_VALIDATION_STRATEGY)
+            ->willReturn(ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS);
+
+        $errorAggregatorMock = $this->createMock(ProcessingErrorAggregatorInterface::class);
+        $this->importMock->expects($this->any())
+            ->method('getErrorAggregator')
+            ->willReturn($errorAggregatorMock);
+        $errorAggregatorMock->expects($this->any())
+            ->method('getErrorsCount')
+            ->willReturn(2);
+        $errorAggregatorMock->expects($this->any())
+            ->method('hasFatalExceptions')
+            ->willReturn(false);
+
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('log_admin_import');
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_LAYOUT)
+            ->willReturn($resultLayoutMock);
+
+        $this->assertEquals($resultLayoutMock, $this->validate->execute());
+    }
 }

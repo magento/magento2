@@ -18,12 +18,14 @@ use Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider;
 use Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test for Graphql Resolver-level cache key provider.
  * @magentoAppArea graphql
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AllowMockObjectsWithoutExpectations]
 class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**

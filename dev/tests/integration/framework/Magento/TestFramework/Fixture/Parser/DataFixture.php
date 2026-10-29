@@ -52,16 +52,18 @@ class DataFixture implements ParserInterface
         $fixtures = [];
         $attributes = $reflection->getAttributes($this->attributeClass);
         foreach ($attributes as $attribute) {
-            $args = $attribute->getArguments();
-            $alias = $args['as'] ?? $args[2] ?? null;
-            $count = $args['count'] ?? $args[4] ?? 1;
+            /** @var \Magento\TestFramework\Fixture\DataFixture $dataFixture */
+            $dataFixture = $attribute->newInstance();
+            $alias = $dataFixture->as;
+            $count = $dataFixture->count;
             $id = $count > 1 ? 1 : '';
             do {
                 $fixtures[] = [
                     'name' => $alias !== null ? $alias.(!empty($id) ? $id++ : '') : null,
-                    'factory' => $args[0],
-                    'data' => $args[1] ?? [],
-                    'scope' => $args['scope'] ?? $args[3] ?? null,
+                    'factory' => $dataFixture->type,
+                    'data' => $dataFixture->data,
+                    'scope' => $dataFixture->scope,
+                    'scopeType' => $dataFixture->scopeType,
                 ];
             } while (--$count > 0);
 

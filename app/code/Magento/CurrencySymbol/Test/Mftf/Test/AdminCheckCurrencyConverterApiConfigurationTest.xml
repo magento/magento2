@@ -20,9 +20,8 @@
             <group value="currency"/>
             <!--      Remove this group when Subscription is finalized or Mocking is enabled      -->
             <group value="pr_exclude" />
-            <!-- added skip tag for test because of api key issue -->
             <skip>
-                <issueId value="Issue with currency converter api key" />
+                <issueId value="AC-17384" />
             </skip>
         </annotations>
         <before>

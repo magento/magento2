@@ -34,8 +34,8 @@ class BackpressureLoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
-        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->validatorMock = $this->createStub(RedisConnectionValidator::class);
+        $this->deploymentConfigMock = $this->createStub(DeploymentConfig::class);
 
         $this->configList = new BackpressureLogger(
             $this->validatorMock,
@@ -246,6 +246,47 @@ class BackpressureLoggerTest extends TestCase
                                 'user' => null
                             ],
                             'id-prefix' => self::expectedIdPrefix()
+                        ]
+                    ]
+                ],
+            ],
+            'valkey maximum options' => [
+                'options' => [
+                    'backpressure-logger' => 'valkey',
+                    'backpressure-logger-redis-server' => '<some-server>',
+                    'backpressure-logger-redis-port' => 3344,
+                    'backpressure-logger-redis-timeout' => 5,
+                    'backpressure-logger-redis-persistent' => '<persistent>',
+                    'backpressure-logger-redis-db' => 23,
+                    'backpressure-logger-redis-password' => '<some-password>',
+                    'backpressure-logger-redis-user' => '<some-user>',
+                    'backpressure-logger-id-prefix' => '<some-prefix>',
+                ],
+                'deploymentConfigReturnMap' => [
+                    ['backpressure/logger/type', null, null],
+                    ['backpressure/logger/options/server', null, null],
+                    ['backpressure/logger/options/port', null, null],
+                    ['backpressure/logger/options/timeout', null, null],
+                    ['backpressure/logger/options/persistent', null, null],
+                    ['backpressure/logger/options/db', null, null],
+                    ['backpressure/logger/options/password', null, null],
+                    ['backpressure/logger/options/user', null, null],
+                    ['backpressure/logger/id-prefix', null, null],
+                ],
+                'expectedConfigData' => [
+                    'backpressure' => [
+                        'logger' => [
+                            'type' => 'valkey',
+                            'options' => [
+                                'server' => '<some-server>',
+                                'port' => 3344,
+                                'db' => 23,
+                                'password' => '<some-password>',
+                                'timeout' => 5,
+                                'persistent' => '<persistent>',
+                                'user' => '<some-user>',
+                            ],
+                            'id-prefix' => '<some-prefix>'
                         ]
                     ]
                 ],

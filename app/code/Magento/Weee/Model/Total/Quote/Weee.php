@@ -330,6 +330,7 @@ class Weee extends AbstractTotal
         if (isset($childItem)) {
             $item->setWeeeTaxApplied($childItem->getWeeeTaxApplied());
             $item->setWeeeTaxAppliedAmount($childItem->getWeeeTaxAppliedAmount());
+            $item->setBaseWeeeTaxAppliedAmount($childItem->getBaseWeeeTaxAppliedAmount());
         }
     }
 

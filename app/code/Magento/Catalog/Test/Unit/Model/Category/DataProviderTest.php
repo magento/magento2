@@ -369,4 +369,27 @@ class DataProviderTest extends TestCase
 
         $this->getModel()->getMeta();
     }
+
+    /**
+     * Regression test for https://github.com/magento/magento2/issues/40908
+     *
+     * A category attribute can have a null 'frontend_input'. On PHP 8.5 that made
+     * getAttributesMeta() trigger "Using null as an array offset is deprecated",
+     * so this test should fail when the null check is ever removed.
+     */
+    public function testGetAttributesMetaWithNullFrontendInput()
+    {
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->method('getAttributeCode')->willReturn('custom_attribute');
+        $attributeMock->method('getDataUsingMethod')->willReturn(null);
+
+        $entityTypeMock = $this->createMock(Type::class);
+        $entityTypeMock->method('getAttributeCollection')->willReturn([$attributeMock]);
+
+        $this->arrayUtils->method('flatten')->willReturn([]);
+
+        $meta = $this->getModel()->getAttributesMeta($entityTypeMock);
+
+        $this->assertNull($meta['custom_attribute']['formElement']);
+    }
 }

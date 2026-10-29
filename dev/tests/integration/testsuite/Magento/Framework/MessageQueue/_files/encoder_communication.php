@@ -31,5 +31,10 @@ return [
             'request' => \Magento\Catalog\Api\Data\ProductInterface::class,
             'response' => null,
         ],
+        'readonly.message.created' => [
+            'request_type' => 'object_interface',
+            'request' => \Magento\Framework\MessageQueue\ReadonlyMessage::class,
+            'response' => null,
+        ],
     ],
 ];

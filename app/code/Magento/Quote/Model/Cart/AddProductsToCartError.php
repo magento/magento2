@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
+use Magento\Framework\Phrase;
 use Magento\Quote\Api\ErrorInterface;
 
 /**
@@ -27,20 +28,25 @@ class AddProductsToCartError
     /**
      * Returns an error object
      *
-     * @param string $message
+     * The error code is resolved from the original, untranslated phrase text so it stays stable
+     * regardless of the store locale, while the message shown to the client is still rendered
+     * (and therefore translated) as usual.
+     *
+     * @param string|Phrase $message
      * @param int $cartItemPosition
      * @param float $stockItemQuantity
      * @return Data\Error
      */
     public function create(
-        string $message,
+        string|Phrase $message,
         int $cartItemPosition = 0,
         float $stockItemQuantity = 0.0
     ): ErrorInterface {
+        $codeSource = $message instanceof Phrase ? $message->getText() : $message;
 
         return new Data\InsufficientStockError(
-            $message,
-            $this->getErrorCode($message),
+            (string)$message,
+            $this->getErrorCode($codeSource),
             $cartItemPosition,
             $stockItemQuantity
         );

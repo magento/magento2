@@ -185,9 +185,9 @@ define([
                     patternPlaceholderClose: /^ \/BLOCK (.+) $/
                 }
             };
-            // eslint-disable-next-line jquery-no-bind-unbind
+            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-bind-unbind
             replacer = $.mage.pageCache.prototype._replacePlaceholder.bind(context);
-            // eslint-disable-next-line jquery-no-bind-unbind
+            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-bind-unbind
             searcher = $.mage.pageCache.prototype._searchPlaceholders.bind(context);
 
             wdContainer
@@ -210,9 +210,9 @@ define([
                     patternPlaceholderClose: /^ \/BLOCK (.+) $/
                 }
             };
-            // eslint-disable-next-line jquery-no-bind-unbind
+            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-bind-unbind
             replacer = $.mage.pageCache.prototype._replacePlaceholder.bind(context);
-            // eslint-disable-next-line jquery-no-bind-unbind
+            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-bind-unbind
             searcher = $.mage.pageCache.prototype._searchPlaceholders.bind(context);
 
             wdContainer

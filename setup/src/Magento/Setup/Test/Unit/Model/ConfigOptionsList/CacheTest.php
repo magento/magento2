@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Cache;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList\L1L2Cache;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -42,7 +43,8 @@ class CacheTest extends TestCase
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->configOptionsList = new CacheConfigOptionsList(
-            $this->validatorMock
+            $this->validatorMock,
+            new L1L2Cache()
         );
     }
 
@@ -155,7 +157,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'redis',
+                        'backend' => Cache::CONFIG_VALUE_CACHE_REDIS,
                         'backend_options' => [
                             'server' => '127.0.0.1',
                             'port' => '6379',
@@ -165,7 +167,6 @@ class CacheTest extends TestCase
                             'compression_lib' => '',
                             'use_lua' => '0',
                             'use_lua_on_gc' => '1',
-                            'serializer' => 'igbinary'
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -200,7 +201,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'redis',
+                        'backend' => Cache::CONFIG_VALUE_CACHE_REDIS,
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -210,7 +211,6 @@ class CacheTest extends TestCase
                             'compression_lib' => 'gzip',
                             'use_lua' => '0',
                             'use_lua_on_gc' => '1',
-                            'serializer' => 'igbinary'
                         ],
                     ]
                 ],
@@ -244,9 +244,6 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $this->expectedIdPrefix(),
-                        'backend_options' => [
-                            'serializer' => 'igbinary'
-                        ]
                     ]
                 ]
             ]
@@ -270,9 +267,6 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $explicitPrefix,
-                        'backend_options' => [
-                            'serializer' => 'igbinary'
-                        ]
                     ]
                 ]
             ]

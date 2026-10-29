@@ -183,12 +183,16 @@ class Queue implements CountableQueueInterface
     }
 
     /**
-     * Clear queue
-     *
-     * @return int
+     * @inheritdoc
      */
     public function clearQueue(): int
     {
-        return 1;
+        $count = 0;
+        while ($message = $this->dequeue()) {
+            $this->acknowledge($message);
+            $count++;
+        }
+
+        return $count;
     }
 }

@@ -116,6 +116,26 @@ class ProductViewCounter extends Template
     }
 
     /**
+     * Recursively adds __disableTmpl to every array level
+     *
+     * @param array $data
+     * @return array
+     */
+    private function disableTemplating(array $data): array
+    {
+        $isAssociative = (bool) count(array_filter(array_keys($data), 'is_string'));
+        if ($isAssociative) {
+            $data['__disableTmpl'] = true;
+        }
+        foreach ($data as &$value) {
+            if (is_array($value)) {
+                $value = $this->disableTemplating($value);
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Calculate item data, that will need to application on frontend
      *
      * Product data calculated on this page, will be cached, for all next web api
@@ -154,6 +174,7 @@ class ProductViewCounter extends Template
             ->collect($product, $productRender);
         $data = $this->hydrator->extract($productRender);
         $data['is_available'] = $product->isAvailable();
+        $data = $this->disableTemplating($data);
 
         $currentProductData = [
             'items' => [

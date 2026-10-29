@@ -6,8 +6,6 @@
 
 /**
  * New category creation form
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 

@@ -6,8 +6,6 @@
 
 /**
  * Product attribute add form variations main tab
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations;
 

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFixedBundleUserDefinedChildQtyOnOrderViewTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product order view"/>
+            <title value="Fixed bundle with user-defined option quantities shows correct child item qty on storefront order view"/>
+            <description value="Verify bundle child option ordered quantities on storefront order view for a fixed bundle with user-defined options."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4821"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createFirstBundleOption">
+                <field key="title">Bundle Option One</field>
+                <field key="position">1</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createSecondBundleOption">
+                <field key="title">Bundle Option Two</field>
+                <field key="position">2</field>
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkFirstSimpleProductToFirstOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createFirstBundleOption"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+                <field key="is_default">1</field>
+                <field key="can_change_quantity">1</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkSecondSimpleProductToSecondOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createSecondBundleOption"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+                <field key="is_default">1</field>
+                <field key="can_change_quantity">1</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openBundleProductEditPage">
+                <argument name="productId" value="$createFixedBundleProduct.id$"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" dependentSelector="{{AdminProductFormBundleSection.dynamicSkuToggleOff}}" visible="false" stepKey="disableDynamicSkuIfEnabled"/>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="enableUserDefinedQtyForFirstOption"/>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('1', '0')}}" stepKey="enableUserDefinedQtyForSecondOption"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createFixedBundleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Bundle Option One')}}" stepKey="waitForFirstOptionQtyField"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Bundle Option One')}}" userInput="4" stepKey="setFirstOptionQty"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Bundle Option Two')}}" stepKey="waitForSecondOptionQtyField"/>
+        <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Bundle Option Two')}}" userInput="5" stepKey="setSecondOptionQty"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="addBundleProductToCartWithQtyTwo">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextOnCheckout"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <waitForText userInput="Ordered 8" selector="{{StorefrontCustomerOrderViewSection.productOptionProductQuantity('1', '1')}}" stepKey="seeFirstBundleOptionOrderedQty"/>
+        <waitForText userInput="Ordered 10" selector="{{StorefrontCustomerOrderViewSection.productOptionProductQuantity('1', '2')}}" stepKey="seeSecondBundleOptionOrderedQty"/>
+    </test>
+</tests>

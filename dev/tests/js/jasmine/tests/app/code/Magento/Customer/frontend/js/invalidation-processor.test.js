@@ -1,3 +1,8 @@
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+
 /* eslint-disable max-nested-callbacks */
 define([
     'squire'
@@ -40,7 +45,7 @@ define([
 
         describe('"process" method', function () {
             it('record status is 1', function () {
-                /* eslint-disable no-native-reassign */
+                /* eslint-disable no-native-reassign, no-global-assign */
 
                 var requireTmp = require;
 

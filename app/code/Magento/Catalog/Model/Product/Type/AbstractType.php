@@ -731,9 +731,8 @@ abstract class AbstractType
      */
     public function save($product)
     {
-        // OPTIMIZATION: Batch cache operations for performance
-        // This batching covers Simple, Virtual, Downloadable, and all non-configurable product types
-        // Configurable products have their own batching implementation that wraps this call
+        // OPTIMIZATION: Use beginBatch()/endBatch() when supported (Symfony cache only);
+        // legacy backends safely fall back to individual save() calls.
         $cache = $this->getCache();
         $batchingStarted = false;
 
@@ -912,7 +911,10 @@ abstract class AbstractType
      */
     public function hasOptions($product)
     {
-        return $product->getHasOptions();
+        if ($product->getHasOptions()) {
+            return true;
+        }
+        return false;
     }
 
     /**

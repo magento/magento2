@@ -19,29 +19,31 @@ class Block implements Layout\ReaderInterface
     /**#@+
      * Supported types
      */
-    const TYPE_BLOCK = 'block';
-    const TYPE_REFERENCE_BLOCK = 'referenceBlock';
+    public const TYPE_BLOCK = 'block';
+    public const TYPE_REFERENCE_BLOCK = 'referenceBlock';
     /**#@-*/
 
     /**#@+
      * Supported subtypes for blocks
      */
-    const TYPE_ARGUMENTS = 'arguments';
-    const TYPE_ACTION = 'action';
+    public const TYPE_ARGUMENTS = 'arguments';
+    public const TYPE_ACTION = 'action';
     /**#@-*/
 
     /**#@+
      * Names of block attributes in layout
      */
-    const ATTRIBUTE_GROUP = 'group';
-    const ATTRIBUTE_CLASS = 'class';
-    const ATTRIBUTE_TEMPLATE = 'template';
-    const ATTRIBUTE_TTL = 'ttl';
-    const ATTRIBUTE_DISPLAY = 'display';
-    const ATTRIBUTE_ACL = 'aclResource';
+    public const ATTRIBUTE_GROUP = 'group';
+    public const ATTRIBUTE_CLASS = 'class';
+    public const ATTRIBUTE_TEMPLATE = 'template';
+    public const ATTRIBUTE_TTL = 'ttl';
+    public const ATTRIBUTE_DISPLAY = 'display';
+    public const ATTRIBUTE_ACL = 'aclResource';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var string[]
+     */
     protected $attributes = [
         self::ATTRIBUTE_GROUP,
         self::ATTRIBUTE_CLASS,
@@ -81,7 +83,8 @@ class Block implements Layout\ReaderInterface
     private $conditionReader;
 
     /**
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 'acl' attribute name is deprecated. Use self::ATTRIBUTE_ACL instead.
+     * @see self::ATTRIBUTE_ACL
      * @var string
      */
     private $deprecatedAttributeAcl = 'acl';
@@ -255,9 +258,43 @@ class Block implements Layout\ReaderInterface
             ? array_merge($data['actions'], $actions)
             : $actions;
         $data['arguments'] = isset($data['arguments'])
-            ? array_replace_recursive($data['arguments'], $arguments)
+            ? $this->mergeArguments($data['arguments'], $arguments)
             : $arguments;
         return $data;
+    }
+
+    /**
+     * Merge layout arguments from a reference block into existing arguments
+     *
+     * @param array $existingArguments
+     * @param array $newArguments
+     * @return array
+     */
+    protected function mergeArguments(array $existingArguments, array $newArguments)
+    {
+        foreach ($newArguments as $argumentName => $newArgument) {
+            if (!isset($existingArguments[$argumentName])) {
+                $existingArguments[$argumentName] = $newArgument;
+                continue;
+            }
+
+            $existingArgument = $existingArguments[$argumentName];
+            if (!is_array($existingArgument)) {
+                if (is_array($newArgument)) {
+                    if (!array_key_exists('value', $newArgument)) {
+                        $newArgument = array_replace_recursive($newArgument, ['value' => $existingArgument]);
+                    }
+                    $existingArguments[$argumentName] = $newArgument;
+                } else {
+                    $existingArguments[$argumentName] = $newArgument;
+                }
+                continue;
+            }
+
+            $existingArguments[$argumentName] = array_replace_recursive($existingArgument, $newArgument);
+        }
+
+        return $existingArguments;
     }
 
     /**

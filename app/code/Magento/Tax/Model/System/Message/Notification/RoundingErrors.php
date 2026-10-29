@@ -50,7 +50,8 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getIdentity()
@@ -59,7 +60,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isDisplayed()
     {
@@ -70,7 +71,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getText()
     {
@@ -94,7 +95,8 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @codeCoverageIgnore
      */
     public function getSeverity()
@@ -103,20 +105,24 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
     }
 
     /**
-     * Check if tax calculation type and price display settings are compatible
+     * Whether the (website-scoped) tax calculation algorithm is unit-based
      *
-     * Invalid settings if
-     *      Tax Calculation Method Based On 'Total' or 'Row'
-     *      and at least one Price Display Settings has 'Including and Excluding Tax' value
-     *
-     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store
      * @return bool
      */
-    private function checkSettings($store = null)
+    private function isUnitBaseCalculation($store = null): bool
     {
-        if ($this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE) {
-            return true;
-        }
+        return $this->taxConfig->getAlgorithm($store) == \Magento\Tax\Model\Calculation::CALC_UNIT_BASE;
+    }
+
+    /**
+     * Check the (store-scoped) price display settings for "Including and Excluding Tax"
+     *
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store
+     * @return bool
+     */
+    private function checkDisplaySettings($store = null)
+    {
         return $this->taxConfig->getPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
             && $this->taxConfig->getShippingPriceDisplayType($store) != \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH
             && !$this->taxConfig->displayCartPricesBoth($store)
@@ -129,6 +135,7 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
 
     /**
      * Return list of store names which have not compatible tax calculation type and price display settings.
+     *
      * Return true if settings are wrong for default store.
      *
      * @return array
@@ -139,10 +146,18 @@ class RoundingErrors implements \Magento\Tax\Model\System\Message\NotificationIn
             return $this->storesWithInvalidSettings;
         }
         $this->storesWithInvalidSettings = [];
-        $storeCollection = $this->storeManager->getStores(true);
-        foreach ($storeCollection as $store) {
-            if (!$this->checkSettings($store)) {
-                $website = $store->getWebsite();
+        $websites = $this->storeManager->getWebsites(true);
+        $unitBaseByWebsite = [];
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $websiteId = (int)$store->getWebsiteId();
+            if (!array_key_exists($websiteId, $unitBaseByWebsite)) {
+                $unitBaseByWebsite[$websiteId] = $this->isUnitBaseCalculation($store);
+            }
+            if ($unitBaseByWebsite[$websiteId]) {
+                continue;
+            }
+            if (!$this->checkDisplaySettings($store)) {
+                $website = $websites[$websiteId] ?? $store->getWebsite();
                 $this->storesWithInvalidSettings[] = $website->getName() . ' (' . $store->getName() . ')';
             }
         }

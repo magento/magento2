@@ -24,6 +24,7 @@
         <click selector="{{AdminProductCustomizableOptionsSection.optionType('File')}}" stepKey="selectTypeFile"/>
         <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" stepKey="waitForElements"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionPriceByTitle(option.title)}}" userInput="{{option.price}}" stepKey="fillPrice"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" stepKey="waitForPriceTypeElement"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceTypeByTitle(option.title)}}" userInput="{{option.price_type}}" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.optionFileExtensionByTitle(option.title)}}" userInput="{{option.file_extension}}" stepKey="fillCompatibleExtensions"/>
     </actionGroup>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCanRemoveBundleProductOptionTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Modify bundle product in Admin"/>
+            <title value="Admin can remove the bundle option from a saved bundle product"/>
+            <description value="Verify that admin can remove the only bundle option from a saved bundle product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3770"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductForBundleOption"/>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete simple product  -->
+            <deleteData createDataKey="createSimpleProductForBundleOption" stepKey="deleteSimpleProductForBundleOption"/>
+            <!-- Open products grid for cleanup -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGridForCleanup"/>
+            <!-- Removes bundle product created in the test -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <!--  Clears product grid filters after deletion -->
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetProductGridAfterCleanup"/>
+            <!--  Signs out from admin panel -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Navigates to catalog > products > add Product > bundle -->
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openBundleProductCreatePage">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <!-- Step 2: Fills name, SKU, and stock status using BundleProduct entity -->
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillRequiredBundleProductFields"/>
+        <!-- Step 3: Adds option, selects simple product, and sets quantity -->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithSimpleProduct">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$createSimpleProductForBundleOption.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="{{DropDownBundleOption.title}}"/>
+            <argument name="inputType" value="{{DropDownBundleOption.type}}"/>
+        </actionGroup>
+        <!-- Step 4: Saves the bundle product with one option -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveBundleProductWithOneOption"/>
+        <!-- Step 5:Removes the only bundle option from the edit page -->
+        <actionGroup ref="DeleteBundleOptionByIndexActionGroup" stepKey="removeLastBundleOption">
+            <argument name="deleteIndex" value="1"/>
+        </actionGroup>
+        <!-- Step 6: Save the bundle product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProductAfterRemovingLastOption"/>
+        <!-- Step 7: Verify the bundle option was removed from the product edit page -->
+        <seeNumberOfElements selector="{{AdminProductFormBundleSection.allBundleOptions}}" userInput="0" stepKey="assertLastBundleOptionWasRemovedFromProduct"/>
+    </test>
+</tests>

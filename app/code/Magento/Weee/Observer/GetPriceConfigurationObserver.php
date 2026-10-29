@@ -10,14 +10,14 @@ use Magento\Framework\Event\ObserverInterface;
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
-     * Tax data
+     * Tax data helper
      *
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxData;
 
     /**
-     * Weee data
+     * Weee data helper
      *
      * @var \Magento\Weee\Helper\Data
      */
@@ -80,32 +80,36 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @param  string $calcPrice
      * @param  array $weeeAttributesForBundle
      * @return array
+     * phpcs:ignore Generic.Metrics.NestingLevel
      */
     private function recurConfigAndInsertWeeePrice($input, $searchKey, $calcPrice, $weeeAttributesForBundle = null)
     {
+        if (!is_array($input)) {
+            return [];
+        }
         $holder = [];
-        if (is_array($input)) {
-            foreach ($input as $key => $el) {
-                if (is_array($el)) {
-                    $holder[$key] =
-                        $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice, $weeeAttributesForBundle);
-                    if ($key === $searchKey) {
-                        if ((!array_key_exists('weeePrice', $holder[$key])) &&
-                            (array_key_exists($calcPrice, $holder[$key]))
-                        ) {
-                            //this is required for product options && bundle
-                            $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
-                            // only do processing on product options
-                            if (array_key_exists('optionId', $input) && $weeeAttributesForBundle) {
-                                $holder = $this->insertWeeePrice($holder, $key, $weeeAttributesForBundle);
-                            }
+
+        foreach ($input as $key => $el) {
+            if (is_array($el)) {
+                $holder[$key] =
+                    $this->recurConfigAndInsertWeeePrice($el, $searchKey, $calcPrice, $weeeAttributesForBundle);
+                if ($key === $searchKey) {
+                    if ((!array_key_exists('weeePrice', $holder[$key])) &&
+                        (array_key_exists($calcPrice, $holder[$key]))
+                    ) {
+                        //this is required for product options && bundle
+                        $holder[$key]['weeePrice'] = $holder[$key][$calcPrice];
+                        // only do processing on product options
+                        if (array_key_exists('optionId', $input) && $weeeAttributesForBundle) {
+                            $holder = $this->insertWeeePrice($holder, $key, $weeeAttributesForBundle);
                         }
                     }
-                } else {
-                    $holder[$key] = $el;
                 }
+            } else {
+                $holder[$key] = $el;
             }
         }
+        
         return $holder;
     }
 
@@ -124,12 +128,22 @@ class GetPriceConfigurationObserver implements ObserverInterface
                 is_array($weeeAttributesForBundle[$holder['optionId']])
             ) {
                 $weeeSum = 0;
+                $weeeSumExclTax = 0;
                 foreach ($weeeAttributesForBundle[$holder['optionId']] as $weeeAttribute) {
                     $holder[$key]['weeePrice' . $weeeAttribute->getCode()] =
                         ['amount' => (float)$weeeAttribute->getAmount()];
                     $weeeSum += (float)$weeeAttribute->getAmount();
+                    $weeeSumExclTax += (float)$weeeAttribute->getAmountExclTax();
                 }
                 $holder[$key]['weeePrice']['amount'] += (float)$weeeSum;
+                $product = $this->registry->registry('current_product');
+                $storeId = $product->getStoreId();
+                if ($this->taxData->displayBothPrices($storeId) &&
+                    ($this->weeeData->isDisplayIncl($storeId) || $this->weeeData->isDisplayInclDesc($storeId)) &&
+                    isset($holder[$key]['basePrice']['amount'])
+                ) {
+                    $holder[$key]['basePrice']['amount'] += $weeeSumExclTax;
+                }
             } else {
                 //there were no Weee attributes for this option
                 unset($holder[$key]['weeePrice']);

@@ -114,6 +114,7 @@
     <type name="Magento\Config\App\Config\Type\System\Reader">
         <arguments>
             <argument name="source" xsi:type="object">systemConfigSourceAggregated</argument>
+            <argument name="fallback" xsi:type="object">Magento\Store\Model\Config\Processor\Fallback</argument>
             <argument name="postProcessor" xsi:type="object">systemConfigPostProcessorComposite</argument>
             <argument name="preProcessor" xsi:type="object">Magento\Framework\App\Config\PreProcessorComposite</argument>
         </arguments>
@@ -395,6 +396,16 @@
             <argument name="processors" xsi:type="array">
                 <item name="Magento_Config::config" xsi:type="object">Magento\Config\App\Config\ReloadConfig</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\App\Config\ReloadConfig">
+        <arguments>
+            <argument name="system" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache">
+        <arguments>
+            <argument name="system" xsi:type="object">Magento\Config\App\Config\Type\System</argument>
         </arguments>
     </type>
     <!-- TODO: Move these to Framework's di.xml after issue with array_replace_recursive in configuration are resolved.

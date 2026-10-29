@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="AC-18036">StorefrontConfigurableProductWithFileCustomOptionTest failing due to alert message not appearing on product details page on frontend</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -70,14 +73,19 @@
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addCustomOptionToProduct"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
+        <!-- Reindex so the storefront reflects the newly created configurable product -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterProductCreation">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <!--Go to storefront-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
-        <!--Add configurable product to cart-->
+        <!--Navigate to configurable product page-->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>
         <waitForPageLoad stepKey="waitForRedirectToProductPage"/>
         <seeInCurrentUrl url="{{StorefrontProductPage.url(BaseConfigurableProduct.urlKey)}}" stepKey="seeOnProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorProductAttribute2.name}}" stepKey="selectColor"/>

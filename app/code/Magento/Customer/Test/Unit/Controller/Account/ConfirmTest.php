@@ -25,11 +25,10 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\State\InputMismatchException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Phrase;
-use Magento\Framework\Stdlib\Cookie\CookieMetadata;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlFactory;
@@ -563,6 +562,53 @@ class ConfirmTest extends TestCase
                 'some data',
                 null,
             ]
+        ];
+    }
+
+    /**
+     * @param \Exception $exception
+     */
+    #[DataProvider('stateExceptionsProvider')]
+    public function testStateExceptionOccurs(\Exception $exception): void
+    {
+        $customerId = 123;
+        $email = 'test@example.com';
+        $key = 'invalid_key';
+        $this->requestMock->method('getParam')->willReturnMap(
+            [
+                ['id', 0, $customerId],
+                ['key', false, $key],
+            ]
+        );
+
+        $this->customerSessionMock->expects(self::once())->method('isLoggedIn')->willReturn(false);
+        $this->customerRepositoryMock->expects(self::once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($this->customerDataMock);
+        $this->customerDataMock->expects(self::once())->method('getEmail')->willReturn($email);
+        $this->customerAccountManagementMock->expects(self::once())
+            ->method('activate')
+            ->with($email, $key)
+            ->willThrowException($exception);
+        $this->messageManagerMock->expects(self::once())->method('addNoticeMessage')->with(
+            __(
+                'Your account is already active, or the confirmation code was incorrect.'
+                . ' Sign in or request a new confirmation email.'
+            )
+        );
+
+        $this->model->execute();
+    }
+
+    /**
+     * @return array
+     */
+    public static function stateExceptionsProvider(): array
+    {
+        return [
+            [new InputMismatchException(__('The confirmation key is invalid.`'))],
+            [new InvalidTransitionException(__('The account is already active.'))],
         ];
     }
 }

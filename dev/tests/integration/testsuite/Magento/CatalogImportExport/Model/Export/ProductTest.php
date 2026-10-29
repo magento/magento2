@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
@@ -1079,5 +1080,51 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         sort($exportedSkus);
 
         $this->assertSame($dbSkus, $exportedSkus);
+    }
+
+    /**
+     * A single product left in an orphaned gallery state (an image label at a non-default store view
+     * with no default-scope image) must not cause the whole export batch to be silently truncated.
+     */
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2'], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3'], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod4'], 'p4'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod5'], 'p5'),
+    ]
+    public function testExportIsNotTruncatedByOrphanedImageLabel(): void
+    {
+        // Put one of the middle products into the orphaned gallery state: clear the default-scope
+        // image so the fallback lookup has no value to read, then leave an image label at a store view.
+        $productId = (int)$this->fixtures->get('p3')->getId();
+        $store2Id = (int)$this->fixtures->get('store2')->getId();
+        $action = $this->objectManager->get(ProductAction::class);
+        $action->updateAttributes([$productId], ['image' => ''], Store::DEFAULT_STORE_ID);
+        $action->updateAttributes([$productId], ['image_label' => 'Orphaned Label - No Image'], $store2Id);
+
+        $this->model->setWriter(
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+        );
+        $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
+        $exportedSkus = [];
+        foreach ($rows as $row) {
+            if (($row['store_view_code'] ?? '') === '' && !empty($row['sku'])) {
+                $exportedSkus[] = $row['sku'];
+            }
+        }
+
+        foreach (['prod1', 'prod2', 'prod3', 'prod4', 'prod5'] as $sku) {
+            $this->assertContains(
+                $sku,
+                $exportedSkus,
+                sprintf('Product "%s" is missing from the export - the batch was truncated.', $sku)
+            );
+        }
     }
 }

@@ -156,6 +156,8 @@ script
         if ($this->getData('disabled')) {
             // if element is disabled then no data modification is allowed
             $html .= ' disabled="disabled" data-is-removable="no" data-is-editable="no"';
+        } elseif ($option['disabled'] ?? false) {
+            $html .= ' disabled="disabled"';
         }
 
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";

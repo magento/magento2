@@ -389,8 +389,9 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $data = html_entity_decode((string)$data);
+        $data = (string)$data;
         $this->getTranslateInline()->processResponseBody($data);
+        $data = $this->decodeHtmlEntitiesToFixedPoint($data);
 
         return htmlspecialchars(
             $this->escapeScriptIdentifiers($data),
@@ -398,6 +399,26 @@ class Escaper
             'UTF-8',
             false
         );
+    }
+
+    /**
+     * Decode HTML entities repeatedly until stable, or return empty if still decoding at the cap.
+     *
+     * @param string $data
+     * @return string
+     */
+    private function decodeHtmlEntitiesToFixedPoint(string $data): string
+    {
+        $iterationCap = 10;
+        for ($iteration = 0; $iteration < $iterationCap; $iteration++) {
+            $decoded = html_entity_decode($data);
+            if ($decoded === $data) {
+                return $data;
+            }
+            $data = $decoded;
+        }
+
+        return '';
     }
 
     /**

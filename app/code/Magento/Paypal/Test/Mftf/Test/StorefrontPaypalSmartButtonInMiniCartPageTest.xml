@@ -17,12 +17,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27604"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set carriers/flatrate/sallowspecific 0" stepKey="setFlatRateForAllCountries"/>
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
@@ -50,6 +48,7 @@
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
+        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
 
         <!--Login to storefront as previously created customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -66,19 +65,18 @@
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentFromCartAccountActionGroup" stepKey="LoginToPayPal">
-            <argument name="payerName" value="{{Payer.firstName}}"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
 
         <!--Transfer Cart Line and Shipping Method assertion-->
-        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodActionGroup" stepKey="assertPayPalSettings">
-            <argument name="productName" value="$$createProduct.name$$"/>
-        </actionGroup>
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodActionGroup" stepKey="assertPayPalSettings"/>
 
         <!--Click PayPal button and go back to Magento site-->
-        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoActionGroup" stepKey="goBackToMagentoSite"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
 
-        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod"/>
+        <!--Select shipping method on review page-->
+        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShipping">
+            <argument name="shippingMethod" value="Fixed - $5.00"/>
+        </actionGroup>
 
         <!--Assert grand total-->
         <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">

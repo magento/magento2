@@ -43,6 +43,11 @@ class ChildrenCategoriesProviderTest extends TestCase
     protected $childrenCategoriesProvider;
 
     /**
+     * @var MockObject|AbstractCollection
+     */
+    protected $categoryCollection;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -60,8 +65,9 @@ class ChildrenCategoriesProviderTest extends TestCase
         );
         $categoryCollection = $this->createPartialMockWithReflection(
             AbstractCollection::class,
-            ['addAttributeToSelect', 'addIdFilter']
+            ['addAttributeToSelect', 'addIdFilter', 'setStoreId']
         );
+        $this->categoryCollection = $categoryCollection;
         $this->category->method('getPath')->willReturn('category-path');
         $this->category->method('getResourceCollection')->willReturn($categoryCollection);
         $categoryCollection->method('addAttributeToSelect')->willReturnSelf();
@@ -102,6 +108,34 @@ class ChildrenCategoriesProviderTest extends TestCase
     {
         $this->category->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->assertEquals([], $this->childrenCategoriesProvider->getChildren($this->category));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetChildrenScopedToStore(): void
+    {
+        $bind = ['c_path' => 'category-path/%'];
+        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->select->method('where')->with('path LIKE :c_path')->willReturnSelf();
+        $this->connection->method('fetchCol')->with($this->select, $bind)->willReturn(['id']);
+        $this->categoryCollection->expects($this->once())->method('setStoreId')->with(2)->willReturnSelf();
+
+        $this->childrenCategoriesProvider->getChildren($this->category, true, 2);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetChildrenDoesNotScopeStoreWhenNotRequested(): void
+    {
+        $bind = ['c_path' => 'category-path/%'];
+        $this->category->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->select->method('where')->with('path LIKE :c_path')->willReturnSelf();
+        $this->connection->method('fetchCol')->with($this->select, $bind)->willReturn(['id']);
+        $this->categoryCollection->expects($this->never())->method('setStoreId');
+
+        $this->childrenCategoriesProvider->getChildren($this->category, true);
     }
 
     /**

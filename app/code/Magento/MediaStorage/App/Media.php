@@ -219,7 +219,11 @@ class Media implements AppInterface
         }
 
         if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName), true);
+            $this->imageResize->resizeFromImageName(
+                $this->getOriginalImage($this->relativeFileName),
+                true,
+                $this->relativeFileName
+            );
             if (!$this->directoryPub->isReadable($this->relativeFileName)) {
                 $synchronizer->synchronize($this->relativeFileName);
             }

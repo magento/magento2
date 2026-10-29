@@ -15,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
-use Magento\Persistent\Model\SessionFactory;
 use Magento\Persistent\Observer\SetCheckoutSessionPersistentDataObserver;
 use Magento\Persistent\Model\Session as PersistentSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
@@ -64,11 +63,6 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
     private $customerRepositoryMock;
 
     /**
-     * @var SessionFactory|MockObject
-     */
-    private $sessionFactory;
-
-    /**
      * @var Observer|MockObject
      */
     private $observerMock;
@@ -96,15 +90,11 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
         $this->customerRepositoryMock = $this->createMock(
             CustomerRepositoryInterface::class
         );
-        $this->sessionFactory = $this->createMock(
-            SessionFactory::class
-        );
         $this->model = new SetCheckoutSessionPersistentDataObserver(
             $this->sessionHelperMock,
             $this->customerSessionMock,
             $this->helperMock,
-            $this->customerRepositoryMock,
-            $this->sessionFactory,
+            $this->customerRepositoryMock
         );
     }
 
@@ -149,7 +139,7 @@ class SetCheckoutSessionPersistentDataObserverTest extends TestCase
         $this->sessionHelperMock->expects($this->exactly(2))
             ->method('isPersistent')
             ->willReturn(true);
-        $this->customerSessionMock->expects($this->any())
+        $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
         $this->helperMock->expects($this->exactly(2))

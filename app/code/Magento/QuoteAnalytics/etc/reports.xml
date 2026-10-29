@@ -10,6 +10,9 @@
         <source name="quote">
             <attribute name="entity_id"/>
             <attribute name="customer_id"/>
+            <attribute name="customer_firstname"/>
+            <attribute name="customer_middlename"/>
+            <attribute name="customer_lastname"/>
             <attribute name="store_id"/>
             <attribute name="created_at"/>
             <attribute name="converted_at"/>

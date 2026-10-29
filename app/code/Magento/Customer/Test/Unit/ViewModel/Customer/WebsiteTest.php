@@ -10,7 +10,6 @@ namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
 use Magento\Customer\ViewModel\Customer\Website as CustomerWebsite;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -22,9 +21,6 @@ use Magento\Store\Model\Store;
  */
 class WebsiteTest extends TestCase
 {
-    /** @var ObjectManagerHelper */
-    private $objectManagerHelper;
-
     /**
      * @var CustomerWebsite
      */
@@ -44,13 +40,9 @@ class WebsiteTest extends TestCase
     {
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->customerWebsite = $this->objectManagerHelper->getObject(
-            CustomerWebsite::class,
-            [
-                'systemStore' => $this->systemStore,
-                'scopeConfig' => $this->scopeConfig
-            ]
+        $this->customerWebsite = new CustomerWebsite(
+            $this->systemStore,
+            $this->scopeConfig
         );
         $websiteMock1 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
         $websiteMock2 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);

@@ -10,12 +10,12 @@ namespace Magento\CatalogRuleConfigurable\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\CatalogRuleConfigurable\Test\Fixture\ConfigurableProductWithPercentCatalogRule;
 use Magento\CatalogRuleConfigurable\Test\Fixture\DisableConfigurableParentAfterChildrenCatalogRules;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductWithCustomOptionAndSimpleTierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
 use Magento\TestFramework\Fixture\AppArea;
@@ -71,8 +71,8 @@ class PriceTest extends TestCase
         $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
     }
 
-    #[DataFixture(ConfigurableProductWithCustomOptionAndSimpleTierPrice::class)]
-    #[DataFixture(ConfigurableProductWithPercentCatalogRule::class)]
+    #[DataFixture('Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rule.php')]
+    #[DataFixture(Indexer::class)]
     public function testGetFinalPriceWithCustomOptionAndCatalogRule(): void
     {
         $indexPrices = [
@@ -101,8 +101,10 @@ class PriceTest extends TestCase
         $this->assertConfigurableProductPrice(20, 25, $indexPrices);
     }
 
-    #[DataFixture(ConfigurableProductWithCustomOptionAndSimpleTierPrice::class)]
-    #[DataFixture(DisableConfigurableParentAfterChildrenCatalogRules::class)]
+    #[DataFixture(
+        'Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rules_for_children.php'
+    )]
+    #[DataFixture(Indexer::class)]
     public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
     {
         $indexPrices = [
@@ -142,6 +144,7 @@ class PriceTest extends TestCase
         DisableConfigurableParentAfterChildrenCatalogRules::class,
         [DisableConfigurableParentAfterChildrenCatalogRules::DISABLE_CONFIGURABLE_PARENT => true]
     )]
+    #[DataFixture(Indexer::class)]
     public function testCatalogRulePercentConditionIsAppliedPerChildWithDisabledParent(): void
     {
         $firstChild = $this->productRepository->get('simple_10');

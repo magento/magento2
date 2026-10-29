@@ -106,6 +106,18 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
     }
 
+    public function testEncodeDecodeReadonlyMessage()
+    {
+        $message = new ReadonlyMessage(10, 'Test Message');
+
+        $encodedMessage = $this->encoder->encode('readonly.message.created', $message);
+        $decodedMessage = $this->encoder->decode('readonly.message.created', $encodedMessage);
+
+        $this->assertInstanceOf(ReadonlyMessage::class, $decodedMessage);
+        $this->assertSame(10, $decodedMessage->entityId);
+        $this->assertSame('Test Message', $decodedMessage->name);
+    }
+
     /**
      */
     public function testDecodeInvalidMessageFormat()

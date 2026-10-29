@@ -165,37 +165,34 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private function sanitizeProductAttributes($attributesData)
     {
+        $normalised = [];
         foreach ($attributesData as $attributeCode => $value) {
             if ($attributeCode === ProductAttributeInterface::CODE_HAS_WEIGHT) {
+                $normalised[$attributeCode] = $value;
                 continue;
             }
-
             $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-
             if (!$attribute->getAttributeId()) {
-                unset($attributesData[$attributeCode]);
                 continue;
             }
+            $canonicalCode = $attribute->getAttributeCode();
 
             if ($attribute->getBackendType() === 'datetime') {
-                $attributesData[$attributeCode] = $this->filterDate(
+                $value = $this->filterDate(
                     $value,
                     $attribute->getFrontendInput() === 'datetime'
                 );
             } elseif ($attribute->getFrontendInput() === 'multiselect') {
-                // Check if 'Change' checkbox has been checked by admin for this attribute
-                $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
+                $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $canonicalCode);
                 if (!$isChanged) {
-                    unset($attributesData[$attributeCode]);
                     continue;
                 }
-                if (is_array($value)) {
-                    $value = implode(',', $value);
-                }
-                $attributesData[$attributeCode] = $value;
+                $value = is_array($value) ? implode(',', $value) : $value;
             }
+
+            $normalised[$canonicalCode] = $value;
         }
-        return $attributesData;
+        return $normalised;
     }
 
     /**

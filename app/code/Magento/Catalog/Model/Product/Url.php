@@ -109,11 +109,12 @@ class Url extends \Magento\Framework\DataObject
     /**
      * Format Key for URL
      *
-     * @param string $str
+     * @param ?string $str
      * @return string
      */
     public function formatUrlKey($str)
     {
+        $str = $str ?? '';
         if ($this->scopeConfig->getValue(
             \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

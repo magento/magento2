@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreditMemosGridClearFiltersActionGroup">
+        <annotations>
+            <description>Opens the Admin Credit Memos grid and clicks Clear Filters when that control is visible.</description>
+        </annotations>
+        <amOnPage url="{{AdminCreditMemosGridPage.url}}" stepKey="goToCreditMemoGridToClearFilters"/>
+        <waitForPageLoad stepKey="waitForCreditMemoGridToLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          visible="true"
+                          stepKey="clearCreditMemoGridFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitAfterClearCreditMemoGridFilters"/>
+    </actionGroup>
+</actionGroups>

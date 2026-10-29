@@ -55,6 +55,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForShippingPageToLoadShippingMethods"/>
         <!-- Step 8:Select USPS Shipping method which is configured with free shipping -->
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Library Mail')}}" time="60" stepKey="waitForLibraryMailShippingMethodVisible"/>
         <checkOption selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Library Mail')}}" stepKey="checkUSPSLibraryMailParcelShippingMethod"/>
         <!-- Step 9:Check shipping price is showing Zero -->
         <waitForText selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Library Mail')}}" userInput="$0.00" stepKey="assertUSPSLibraryMailParcelShippingMethodPriceAsZero"/>

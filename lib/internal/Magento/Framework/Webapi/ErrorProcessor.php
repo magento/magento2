@@ -46,6 +46,11 @@ class ErrorProcessor
     public const DATA_FORMAT_XML = 'xml';
 
     /**
+     * @var string
+     */
+    private const REPORT_EXECUTION_GUARD = '<?php exit; ?>';
+
+    /**
      * @var \Magento\Framework\Json\Encoder $encoder
      */
     protected $encoder;
@@ -425,7 +430,13 @@ class ErrorProcessor
     {
         $this->directoryWrite->create('report/api');
         $reportId = abs((int)(microtime(true) * random_int(100, 1000)));
-        $this->directoryWrite->writeFile('report/api/' . $reportId, $this->serializer->serialize($reportData));
+        if (is_string($reportData)) {
+            $reportData = str_replace('<?', '< ?', $reportData);
+        }
+        $this->directoryWrite->writeFile(
+            'report/api/' . $reportId,
+            self::REPORT_EXECUTION_GUARD . PHP_EOL . $this->serializer->serialize($reportData)
+        );
         return $reportId;
     }
 }

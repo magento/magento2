@@ -54,6 +54,7 @@
             <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage2">
                 <argument name="imageName" value="{{ImageUpload.fileName}}"/>
             </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

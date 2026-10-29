@@ -27,5 +27,6 @@
         <element name="carriersFedExSpecificErrMsg" type="input" selector="#carriers_fedex_specificerrmsg_inherit"/>
         <element name="carriersFedExAllowSpecific" type="input" selector="#carriers_fedex_sallowspecific_inherit"/>
         <element name="carriersFedExSpecificCountry" type="input" selector="#carriers_fedex_specificcountry"/>
+        <element name="fedExInternationalPriorityShippingMethod" type="block" selector="//td[@id='label_method_FEDEX_INTERNATIONAL_PRIORITY_fedex']"/>
     </section>
 </sections>

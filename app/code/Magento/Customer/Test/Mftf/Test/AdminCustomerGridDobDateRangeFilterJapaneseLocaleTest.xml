@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomerGridDobDateRangeFilterJapaneseLocaleTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Admin customer grid date of birth filter with japanese interface locale"/>
+            <title value="Customer grid dob range filter returns matching customer when admin locale is japanese"/>
+            <description value="Verify customer grid dob range filter returns matching customer when admin locale is japanese"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4052"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Deploy static content with japanese locale -->
+            <magentoCLI command="setup:static-content:deploy -f ja_JP" stepKey="deployStaticContentWithJapaneseLocale"/>
+            <!-- Step 1: Create customers and login as admin -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer">
+                <field key="dob">01/01/2025</field>
+            </createData>
+            <createData entity="CustomerEntityOne" stepKey="createCustomerOutsideDobRange"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 2,3: In account settings change the interface locale to japanese -->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleJapanese">
+                <argument name="InterfaceLocaleByValue" value="ja_JP"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Clear filter, change the interface locale to default, delete customers and logout from admin -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearTheCustomerGridFilters"/>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleDefault">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <deleteData createDataKey="createCustomerOutsideDobRange" stepKey="deleteCustomerOutsideRange"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 4,5,6: In customers, all customers set birthday filter and apply -->
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openAllCustomersGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilters"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="fillDobFromFilter">
+            <argument name="filterInputName" value="dob[from]"/>
+            <argument name="filterValue" value="2025/01/01"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="fillDobToFilter">
+            <argument name="filterInputName" value="dob[to]"/>
+            <argument name="filterValue" value="2025/07/01"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyCustomerGridFilters"/>
+        <!-- Step 7 Assertion: It should show the actual result between added dates -->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomerFromDobRangeFilterVisible">
+            <argument name="text" value="$$createCustomer.email$$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <dontSee userInput="$$createCustomerOutsideDobRange.email$$" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="dontSeeCustomerOutsideDobRangeInFilteredGrid"/>
+    </test>
+</tests>

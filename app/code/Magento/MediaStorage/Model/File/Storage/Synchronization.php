@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaStorage\Model\File\Storage;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\WriteInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database as DatabaseStorageHelper;
 
 /**
  * Synchronize files from Db storage to local file system
@@ -31,13 +33,23 @@ class Synchronization
     protected $mediaDirectory;
 
     /**
+     * @var DatabaseStorageHelper
+     */
+    private $databaseStorageHelper;
+
+    /**
      * @param DatabaseFactory $storageFactory
      * @param DirectoryWrite $directory
+     * @param ?DatabaseStorageHelper $databaseStorageHelper
      */
     public function __construct(
         DatabaseFactory $storageFactory,
-        DirectoryWrite $directory
+        DirectoryWrite $directory,
+        ?DatabaseStorageHelper $databaseStorageHelper = null,
     ) {
+        $this->databaseStorageHelper = $databaseStorageHelper ??
+            ObjectManager::getInstance()->get(DatabaseStorageHelper::class);
+
         $this->storageFactory = $storageFactory;
         $this->mediaDirectory = $directory;
     }
@@ -51,11 +63,15 @@ class Synchronization
      */
     public function synchronize($relativeFileName)
     {
-        /** @var $storage Database */
+        if (!$this->databaseStorageHelper->checkDbUsage()) {
+            return;
+        }
+
+        /** @var Database $storage */
         $storage = $this->storageFactory->create();
         try {
             $storage->loadByFilename($relativeFileName);
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         }
         if ($storage->getId()) {
             /** @var WriteInterface $file */

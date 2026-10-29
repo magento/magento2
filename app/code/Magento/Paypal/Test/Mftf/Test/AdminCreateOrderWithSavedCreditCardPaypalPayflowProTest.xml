@@ -61,7 +61,14 @@
             <waitForPageLoad stepKey="waitForFillCardData"/>
             <!--Save credit card for the registered user-->
             <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
-            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+            <comment userInput="BIC workaround: ClickPlaceOrderActionGroup replaced by inline steps with one retry" stepKey="clickOnPlaceOrder"/>
+            <!-- Place Order with one retry after an occasional Payflow Pro sandbox inline Transaction has been declined response -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonClickable"/>
+            <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+            <waitForPageLoad stepKey="waitForPlaceOrderRequest"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForPayflowProDeclineOrRedirect"/>
+            <conditionalClick selector="{{CheckoutPaymentSection.placeOrder}}" dependentSelector="{{CheckoutPaymentSection.errormessage}}" visible="true" stepKey="retryPlaceOrderIfPayflowProDeclined"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
             <!-- Grab order number-->
             <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
             <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>

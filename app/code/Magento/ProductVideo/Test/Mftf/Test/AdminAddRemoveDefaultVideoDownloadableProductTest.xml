@@ -23,6 +23,7 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
+            <createData entity="ProductYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
             <magentoCLI command="downloadable:domains:add" arguments="static.magento.com" before="setYoutubeApiKeyConfig" stepKey="addDownloadableDomain"/>
             <createData entity="ApiDownloadableProduct" stepKey="createProduct"/>
             <createData entity="ApiDownloadableLink" after="createProduct" stepKey="addDownloadableLink">

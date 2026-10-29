@@ -101,10 +101,16 @@ class UiComponentTest extends TestCase
         $this->context->expects($this->any())->method('getScheduledStructure')->willReturn(
             $scheduleStructure
         );
+        // getParent() returns a new SimpleXML wrapper on each call, so an IsEqual match would (array)-cast both
+        // wrappers. That materializes SimpleXML property tables which PHP 8.5.12 double-frees during GC
+        // (php-src GH-24488). Comparing the serialized parent node keeps the same expectation without the cast.
+        $expectedParentXml = $element->getParent()->asXML();
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,
             $element,
-            $element->getParent()
+            $this->callback(
+                static fn (Element $parentNode): bool => $parentNode->asXML() === $expectedParentXml
+            )
         )->willReturn($element->getAttribute('name'));
 
         $scheduleStructure->expects($this->once())->method('setStructureElementData')->with(

@@ -13,6 +13,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlServerException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
@@ -22,6 +23,7 @@ use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderSort;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Orders data resolver
@@ -67,6 +69,7 @@ class CustomerOrders implements ResolverInterface
      * @param OrderFormatter $orderFormatter
      * @param OrderSort $orderSort
      * @param StoreManagerInterface|null $storeManager
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -74,7 +77,8 @@ class CustomerOrders implements ResolverInterface
         OrderFilter $orderFilter,
         OrderFormatter $orderFormatter,
         OrderSort $orderSort,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        private ?LoggerInterface $logger = null,
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -82,6 +86,7 @@ class CustomerOrders implements ResolverInterface
         $this->orderFormatter = $orderFormatter;
         $this->orderSort = $orderSort;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->logger ??= ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -115,6 +120,9 @@ class CustomerOrders implements ResolverInterface
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            throw new GraphQlServerException(__('Unable to load one or more orders.'));
         }
 
         $ordersArray = [];

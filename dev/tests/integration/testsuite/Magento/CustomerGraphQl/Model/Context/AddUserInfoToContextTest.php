@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Authorization\Model\UserContextInterfaceFactory;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
@@ -22,7 +21,7 @@ class AddUserInfoToContextTest extends TestCase
     #[
         DataFixture(Customer::class, as: 'customer'),
     ]
-    public function testExecute()
+    public function testExecute(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $service = $objectManager->get(AddUserInfoToContext::class);
@@ -46,10 +45,13 @@ class AddUserInfoToContextTest extends TestCase
         $extensionAttributes = $returnedParameters->getExtensionAttributesData();
         $this->assertArrayHasKey('is_customer', $extensionAttributes);
         $this->assertTrue($extensionAttributes['is_customer']);
-
+        $loggedInCustomerData = $service->getLoggedInCustomerData();
+        $this->assertNotNull($loggedInCustomerData);
+        $this->assertEquals($customer->getId(), $loggedInCustomerData->getId());
+        $this->assertEquals($customer->getEmail(), $loggedInCustomerData->getEmail());
+        $this->assertEquals($customer->getWebsiteId(), $loggedInCustomerData->getWebsiteId());
         $session = $objectManager->get(Session::class);
-
-        $this->assertEquals($session->getCustomer()->getData(), $customer->getData());
-        $this->assertEquals($session->getCustomerGroupId(), $customer->getGroupId());
+        $this->assertEquals($customer->getId(), $session->getCustomerData()->getId());
+        $this->assertEquals($customer->getGroupId(), $session->getCustomerGroupId());
     }
 }

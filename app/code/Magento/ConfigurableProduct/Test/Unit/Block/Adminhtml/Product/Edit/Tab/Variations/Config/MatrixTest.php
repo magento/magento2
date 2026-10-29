@@ -77,7 +77,7 @@ class MatrixTest extends TestCase
     private Context $context;
 
     /**
-     * @inhertidoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

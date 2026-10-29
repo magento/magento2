@@ -16,6 +16,13 @@ use Magento\Framework\Registry;
 class OnInsert extends Images implements HttpPostActionInterface
 {
     /**
+     * Authorization for inserting files
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::insert_assets';
+
+    /**
      * @var RawFactory
      */
     protected $resultRawFactory;

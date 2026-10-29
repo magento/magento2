@@ -45,6 +45,8 @@
             <!-- Delete product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
+            <actionGroup ref="ClearInvoicesGridFiltersActionGroup" stepKey="clearInvoicesGridFilters"/>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
