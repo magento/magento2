@@ -53,6 +53,50 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    #[DataProvider('isMultipleFilesDataProvider')]
+    public function testConvertNestedFileUploaderIsMultipleFiles(
+        string $formElement,
+        string $value,
+        bool $expected
+    ): void {
+        $dom = new \DOMDocument();
+        $dom->loadXML(
+            <<<XML
+            <field name="files" formElement="{$formElement}">
+                <formElements>
+                    <{$formElement}>
+                        <settings>
+                            <isMultipleFiles>{$value}</isMultipleFiles>
+                        </settings>
+                    </{$formElement}>
+                </formElements>
+            </field>
+            XML
+        );
+
+        $actualResult = $this->converter->convert($dom);
+        $item = $actualResult['arguments']['data']['item']['config']['item']['isMultipleFiles'] ?? null;
+
+        $this->assertSame(
+            ['name' => 'isMultipleFiles', 'xsi:type' => 'boolean', 'value' => $value],
+            $item
+        );
+        $this->assertSame(
+            $expected,
+            Bootstrap::getObjectManager()->get('layoutArgumentGeneratorInterpreterInternal')->evaluate($item)
+        );
+    }
+
+    public static function isMultipleFilesDataProvider(): array
+    {
+        return [
+            'fileUploader enabled' => ['fileUploader', 'true', true],
+            'fileUploader disabled' => ['fileUploader', 'false', false],
+            'imageUploader enabled' => ['imageUploader', 'true', true],
+            'imageUploader disabled' => ['imageUploader', 'false', false],
+        ];
+    }
+
     public static function getComponentNameDataProvider(): array
     {
         return [
