@@ -22,7 +22,7 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
-            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
+            <createData entity="ProductYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
