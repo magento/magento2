@@ -299,6 +299,17 @@
             <column name="state"/>
             <column name="created_at"/>
         </index>
+        <index referenceId="SALES_ORDER_LIFETIME_COVER" indexType="btree">
+            <column name="status"/>
+            <column name="state"/>
+            <column name="base_total_invoiced"/>
+            <column name="base_tax_invoiced"/>
+            <column name="base_shipping_invoiced"/>
+            <column name="base_total_refunded"/>
+            <column name="base_tax_refunded"/>
+            <column name="base_shipping_refunded"/>
+            <column name="base_to_global_rate"/>
+        </index>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb" comment="Sales Flat Order Grid">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
