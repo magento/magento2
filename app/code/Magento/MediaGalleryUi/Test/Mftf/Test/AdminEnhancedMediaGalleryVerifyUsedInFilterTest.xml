@@ -66,6 +66,7 @@
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridReloadAfterSave"/>
 
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="deselectEditedImageInGrid">
             <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
