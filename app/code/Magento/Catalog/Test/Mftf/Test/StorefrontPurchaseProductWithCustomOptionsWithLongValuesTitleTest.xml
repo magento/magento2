@@ -103,19 +103,21 @@
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappearOnSearch"/>
+        <waitForAjaxLoad stepKey="waitForOrdersGridAjaxAfterSearch"/>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
         <dontSee selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="dontSeeAdminOrderProductOptionValueDropdown1"/>
-        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="productOptionValueText"/>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.productNameOptionValue}}" stepKey="productOptionValueText"/>
         <assertEquals stepKey="checkProductOptionValue">
             <actualResult type="variable">productOptionValueText</actualResult>
             <expectedResult type="string">Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 ...</expectedResult>
         </assertEquals>
-        <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
-        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
+        <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" stepKey="hoverAwayFromProduct"/>
+        <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptionValue}}" stepKey="hoverProduct"/>
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptionValueFullName}}" stepKey="waitForCustomOptionValueFullName"/>
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>

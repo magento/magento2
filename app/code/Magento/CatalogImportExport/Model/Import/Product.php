@@ -2875,10 +2875,11 @@ class Product extends AbstractEntity
             }
         }
 
-        if (!empty($rowData['new_from_date']) && !empty($rowData['new_to_date'])
-        ) {
-            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData['new_from_date'], false));
-            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData['new_to_date'], false));
+        $newFromDate = trim((string)($rowData['new_from_date'] ?? ''));
+        $newToDate = trim((string)($rowData['new_to_date'] ?? ''));
+        if (!empty($newFromDate) && !empty($newToDate)) {
+            $newFromTimestamp = strtotime($this->dateTime->formatDate($newFromDate, false));
+            $newToTimestamp = strtotime($this->dateTime->formatDate($newToDate, false));
             if ($newFromTimestamp > $newToTimestamp) {
                 $this->skipRow(
                     $rowNum,
