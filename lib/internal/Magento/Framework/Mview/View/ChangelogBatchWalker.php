@@ -6,185 +6,152 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Query\Generator;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsContext;
-use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
-use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\Expression;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangelogBatchWalkerInterface
- *
+ * Walk changelog entries in bounded, cursor-aware batches.
  */
 class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
 {
-    /**
-     * @var ResourceConnection
-     */
-    private ResourceConnection $resourceConnection;
+    private const CURSOR_COLUMN = 'max_version_id';
 
-    /**
-     * @var Generator
-     */
-    private Generator $generator;
+    /** @var ResourceConnection */
+    protected ResourceConnection $resourceConnection;
 
-    /**
-     * @var IdsTableBuilderInterface
-     */
-    private IdsTableBuilderInterface $idsTableBuilder;
+    /** @var IdsSelectBuilderInterface */
+    protected IdsSelectBuilderInterface $idsSelectBuilder;
 
-    /**
-     * @var IdsSelectBuilderInterface
-     */
-    private IdsSelectBuilderInterface $idsSelectBuilder;
-
-    /**
-     * @var IdsFetcherInterface
-     */
-    private IdsFetcherInterface $idsFetcher;
+    /** @var ChangelogBatchFactory */
+    protected ChangelogBatchFactory $batchFactory;
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param Generator $generator
+     * @param Generator $generator Retained for constructor compatibility.
      * @param IdsContext $idsContext
+     * @param ChangelogBatchFactory|null $batchFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        Generator          $generator,
-        IdsContext         $idsContext
+        Generator $generator,
+        IdsContext $idsContext,
+        ?ChangelogBatchFactory $batchFactory = null
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->generator = $generator;
-        $this->idsTableBuilder = $idsContext->getTableBuilder();
         $this->idsSelectBuilder = $idsContext->getSelectBuilder();
-        $this->idsFetcher = $idsContext->getFetcher();
+        $this->batchFactory = $batchFactory ?? ObjectManager::getInstance()->get(ChangelogBatchFactory::class);
     }
 
     /**
-     * @inheritdoc
+     * Walk through batches with their highest covered changelog version.
+     *
+     * @param ChangelogInterface $changelog
+     * @param int $fromVersionId
+     * @param int $lastVersionId
+     * @param int $batchSize
+     * @return iterable
      */
     public function walk(
         ChangelogInterface $changelog,
-        int                $fromVersionId,
-        int                $lastVersionId,
-        int                $batchSize
+        int $fromVersionId,
+        int $lastVersionId,
+        int $batchSize
     ): iterable {
         $connection = $this->resourceConnection->getConnection();
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
 
         if (!$connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
+            throw new ChangelogTableNotExistsException(\__('Table %1 does not exist', $changelogTableName));
         }
 
-        $processID = getmypid();
+        if ($fromVersionId >= $lastVersionId) {
+            return;
+        }
 
-        $idsTable = $this->idsTableBuilder->build($changelog);
-        $idsColumns = $this->getIdsColumns($idsTable);
+        $baseSelect = $this->idsSelectBuilder->build($changelog)
+            ->where('version_id <= ?', $lastVersionId);
+        $columnName = $changelog->getColumnName();
+        $hasCustomGrouping = (bool)$baseSelect->getPart(Select::GROUP);
+        if ($hasCustomGrouping) {
+            // Grouped payloads need the full aggregation window on every page.
+            $baseSelect->where('version_id > ?', $fromVersionId);
+        } else {
+            $baseSelect->group($columnName);
+        }
+        $baseSelect->columns([
+            self::CURSOR_COLUMN => new Expression('MAX(version_id)'),
+        ])
+            ->reset(Select::ORDER)
+            ->order(self::CURSOR_COLUMN . ' ASC');
 
-        try {
-            # Prepare list of changed entries to return
-            $connection->createTable($idsTable);
+        $cursorVersionId = $fromVersionId;
+        $processId = \getmypid();
 
-            $baseSelect = $this->idsSelectBuilder->build($changelog)->distinct(true);
-
-            # Insert in batches is recommended to avoid db going away
-            do {
-                $toVersionId =  $fromVersionId+$batchSize;
-
-                if ($toVersionId > $lastVersionId) {
-                    $toVersionId = $lastVersionId; # Avoid set more than last version id
-                }
-
-                $select = clone $baseSelect;
-                
-                $select->where('version_id > ?', $fromVersionId)
-                    ->where('version_id <= ?', $toVersionId);
-
-                $connection->query(
-                    $connection->insertFromSelect(
-                        $select,
-                        $idsTable->getName(),
-                        $idsColumns,
-                        AdapterInterface::INSERT_IGNORE
-                    )
-                );
-                # from version for next batch
-                $fromVersionId = $toVersionId;
-                # if last version id is greater than the last version id of  the current run then loop again
-            } while ($lastVersionId > $toVersionId);
-
-            # Provide list of changed entries
-            $select = $connection->select()
-                ->from($idsTable->getName());
-
-            $queries = $this->generator->generate(
-                IdsTableBuilderInterface::FIELD_ID,
-                $select,
-                $batchSize
-            );
-
-            foreach ($queries as $query) {
-                $idsQuery = (clone $query)
-                    ->reset(Select::COLUMNS)
-                    ->columns($idsColumns);
-
-                $ids = $this->idsFetcher->fetch($idsQuery);
-
-                if (empty($ids)) {
-                    continue;
-                }
-
-                yield $ids;
-
-                if ($this->isChildProcess($processID)) {
-                    return;
-                }
+        while ($cursorVersionId < $lastVersionId && !$this->isChildProcess($processId)) {
+            $select = clone $baseSelect;
+            if ($hasCustomGrouping) {
+                $select->having('MAX(version_id) > ?', $cursorVersionId);
+            } else {
+                $select->where('version_id > ?', $cursorVersionId);
             }
-        } finally {
-            # Cleanup list of changed entries
-            if (!$this->isChildProcess($processID)) {
-                $connection->dropTable($idsTable->getName());
+            $select->limit($batchSize);
+
+            $nextBatch = $this->buildBatch($select, $columnName, $hasCustomGrouping);
+            if (!$nextBatch) {
+                return;
             }
+            $cursorVersionId = $nextBatch->getMaxVersionId();
+
+            yield $nextBatch;
         }
     }
 
     /**
-     * Collect columns used as ID of changed entries
+     * Build a cursor-aware batch from the select
      *
-     * @param \Magento\Framework\DB\Ddl\Table $idsTable
-     * @return array
+     * @param Select $select
+     * @param string $columnName
+     * @param bool $hasCustomGrouping
+     * @return iterable
      */
-    private function getIdsColumns(Table $idsTable): array
+    public function buildBatch(Select $select, string $columnName, bool $hasCustomGrouping): iterable
     {
-        return array_values(
-            array_map(
-                static function (array $column) {
-                    return $column['COLUMN_NAME'];
-                },
-                array_filter(
-                    $idsTable->getColumns(),
-                    static function (array $column) {
-                        return $column['PRIMARY'] === false;
-                    }
-                )
+        $rows = $this->resourceConnection->getConnection()->fetchAll($select);
+        if (!$rows) {
+            return [];
+        }
+
+        $maxVersionId = (int)$rows[\array_key_last($rows)][self::CURSOR_COLUMN];
+        $ids = $hasCustomGrouping
+            ? \array_map(
+                static fn (array $row): array => \array_diff_key($row, [self::CURSOR_COLUMN => true]),
+                $rows
             )
-        );
+            : \array_column($rows, $columnName);
+
+        return $this->batchFactory->create([
+            'data' => [
+                'ids' => $ids,
+                'max_version_id' => $maxVersionId,
+                'can_checkpoint' => !$hasCustomGrouping,
+            ],
+        ]);
     }
 
     /**
-     * Check if the process was forked
+     * Check if the process was forked.
      *
      * @param int $processID
      * @return bool
      */
-    private function isChildProcess(
-        int $processID
-    ): bool {
-        return $processID !== getmypid();
+    protected function isChildProcess(int $processID): bool
+    {
+        return $processID !== \getmypid();
     }
 }
