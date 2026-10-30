@@ -20,8 +20,10 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\CarrierFactory;
 use Magento\Shipping\Model\Shipping;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -157,6 +159,40 @@ class ShippingTest extends TestCase
             ->with('active');
 
         $this->shipping->collectCarrierRates($carrierCode, new RateRequest());
+    }
+
+    /**
+     * Rates are collected for every configured carrier, and for none when the store has no carriers configuration.
+     *
+     * @param array|null $carriersConfig
+     * @param int $expectedCarrierCount
+     * @return void
+     */
+    #[DataProvider('carriersConfigDataProvider')]
+    public function testCollectRatesWithoutLimitCarrier(?array $carriersConfig, int $expectedCarrierCount): void
+    {
+        $request = new RateRequest();
+        $request->setOrig(true);
+        $this->scopeConfig->method('getValue')
+            ->with('carriers', ScopeInterface::SCOPE_STORE, null)
+            ->willReturn($carriersConfig);
+        $this->scopeConfig->expects($this->exactly($expectedCarrierCount))
+            ->method('isSetFlag')
+            ->willReturn(false);
+
+        $this->assertSame($this->shipping, $this->shipping->collectRates($request));
+    }
+
+    /**
+     * @return array
+     */
+    public static function carriersConfigDataProvider(): array
+    {
+        return [
+            'no carriers configuration' => [null, 0],
+            'empty carriers configuration' => [[], 0],
+            'configured carriers' => [['flatrate' => ['active' => '1'], 'tablerate' => ['active' => '1']], 2],
+        ];
     }
 
     /**
