@@ -99,6 +99,11 @@ class Index implements HttpGetActionInterface
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         $secret = $this->request->getParam('secret');
+        if (!is_string($secret) || $secret === '') {
+            $this->messageManager->addErrorMessage(__('Login was not successful.'));
+            return $resultRedirect->setPath('/');
+        }
+
         if ($this->checkoutSession->getQuoteId()) {
             $this->checkoutSession->clearQuote();
             $this->checkoutSession->clearStorage();

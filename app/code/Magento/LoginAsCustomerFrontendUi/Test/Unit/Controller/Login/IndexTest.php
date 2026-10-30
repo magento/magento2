@@ -21,6 +21,7 @@ use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerFrontendUi\Controller\Login\Index;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -217,6 +218,37 @@ class IndexTest extends TestCase
         $this->redirectMock->expects($this->once())->method('setPath')->with('/');
         $result = $this->controller->execute();
         $this->assertInstanceOf(ResultInterface::class, $result);
+    }
+
+    /**
+     * Missing, empty or non-string secret must redirect without authenticating or touching the quote
+     */
+    #[DataProvider('invalidSecretDataProvider')]
+    public function testExecuteWithInvalidSecretParam(mixed $secretParam): void
+    {
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('secret')
+            ->willReturn($secretParam);
+        $this->checkoutSessionMock->expects($this->never())->method('getQuoteId');
+        $this->checkoutSessionMock->expects($this->never())->method('clearQuote');
+        $this->authenticateCustomerBySecretMock->expects($this->never())->method('execute');
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->with('Login was not successful.');
+        $this->loggerMock->expects($this->never())->method('error');
+        $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->once())->method('setPath')->with('/')->willReturnSelf();
+        $this->assertSame($this->redirectMock, $this->controller->execute());
+    }
+
+    public static function invalidSecretDataProvider(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'array' => [['x']],
+        ];
     }
 
     /**
