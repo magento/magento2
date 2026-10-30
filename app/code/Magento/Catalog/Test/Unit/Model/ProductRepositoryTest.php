@@ -24,6 +24,7 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ProductRepository\ListItemsPreloader;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -189,6 +190,11 @@ class ProductRepositoryTest extends TestCase
     private $serializerMock;
 
     /**
+     * @var ListItemsPreloader|MockObject
+     */
+    private $listItemsPreloader;
+
+    /**
      * Product repository cache limit.
      *
      * @var int
@@ -323,6 +329,7 @@ class ProductRepositoryTest extends TestCase
         $this->storeManager->method('getStore')->willReturn($storeMock);
 
         $this->processor = $this->createMock(Processor::class);
+        $this->listItemsPreloader = $this->createMock(ListItemsPreloader::class);
 
         $this->collectionProcessor = $this->createMock(CollectionProcessorInterface::class);
 
@@ -363,7 +370,8 @@ class ProductRepositoryTest extends TestCase
                 'mediaGalleryProcessor' => $this->processor,
                 'collectionProcessor' => $this->collectionProcessor,
                 'serializer' => $this->serializerMock,
-                'cacheLimit' => $this->cacheLimit
+                'cacheLimit' => $this->cacheLimit,
+                'listItemsPreloader' => $this->listItemsPreloader
             ]
         );
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'mediaProcessor', $mediaProcessor);
@@ -947,6 +955,8 @@ class ProductRepositoryTest extends TestCase
         $collectionMock->expects($this->once())->method('load');
         $collectionMock->expects($this->once())->method('addCategoryIds');
         $collectionMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$this->product]);
+        $this->listItemsPreloader->expects($this->once())->method('execute')->with([$this->product])
+            ->willReturn([]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
         $searchResultsMock = $this->createMock(ProductSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
