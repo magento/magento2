@@ -1247,4 +1247,43 @@ class DiscountTest extends TestCase
         $this->assertEquals(465.0, $discounts['operator']);
         $this->assertEquals(0.0, $discounts['cover']);
     }
+
+    #[
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, ['sku' => 'simple-eligible', 'price' => 100], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple-excluded', 'price' => 100], as: 'p2'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 10,
+                'conditions' => [
+                    ['attribute' => 'base_subtotal', 'operator' => '<', 'value' => 150],
+                ],
+                'actions' => [
+                    ['attribute' => 'sku', 'operator' => '!=', 'value' => 'simple-excluded'],
+                ],
+            ],
+            'rule'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 1]),
+    ]
+    public function testSubtotalConditionIsEvaluatedAgainstItemsMatchingTheRuleActions(): void
+    {
+        $quote = $this->quoteRepository->get($this->fixtures->get('cart')->getId());
+        $quote->collectTotals();
+
+        $this->assertEquals(200, $quote->getSubtotal());
+        $this->assertEquals(190, $quote->getSubtotalWithDiscount());
+
+        $discounts = [];
+        foreach ($quote->getAllItems() as $item) {
+            $discounts[$item->getSku()] = (float)$item->getDiscountAmount();
+        }
+
+        $this->assertEquals(10.0, $discounts['simple-eligible']);
+        $this->assertEquals(0.0, $discounts['simple-excluded']);
+    }
 }
