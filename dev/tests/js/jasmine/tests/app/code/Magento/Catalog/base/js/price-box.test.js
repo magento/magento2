@@ -96,5 +96,38 @@ define([
 
             expect(priceBox.priceBox('instance').cache.displayPrices.finalPrice.amount).toBe(20);
         });
+
+        it('updates data-price-amount attribute when price is reloaded', function () {
+            qty.val(1);
+
+            priceBox.priceBox({
+                priceConfig: {
+                    prices: {
+                        finalPrice: {
+                            amount: 100,
+                            adjustments: {}
+                        },
+                        basePrice: {
+                            amount: 100,
+                            adjustments: {}
+                        }
+                    }
+                }
+            });
+
+            priceBox.priceBox('instance').updatePrice({
+                option1: {
+                    finalPrice: {
+                        amount: 25.5
+                    },
+                    basePrice: {
+                        amount: 20
+                    }
+                }
+            });
+
+            expect(priceBox.find('[data-price-type="finalPrice"]').attr('data-price-amount')).toBe('125.5');
+            expect(priceBox.find('[data-price-type="basePrice"]').attr('data-price-amount')).toBe('120');
+        });
     });
 });
