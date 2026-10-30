@@ -286,6 +286,64 @@ class KernelTest extends TestCase
     }
 
     /**
+     * The saved page must keep its cacheable headers, so a cache hit does not replay no-store.
+     *
+     * @return void
+     */
+    public function testProcessSavesHeadersBeforeSettingNoCacheHeaders(): void
+    {
+        $noCacheHeadersSet = false;
+        // A fresh mock: the shared one already stubs getHeaders() in setUp().
+        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $response->method('getHeader')
+            ->willReturnCallback(function ($name) {
+                return $name === 'Cache-Control'
+                    ? CacheControl::fromString('Cache-Control: public, max-age=100, s-maxage=100')
+                    : null;
+            });
+        $response->method('getHttpResponseCode')->willReturn(200);
+        $this->requestMock->method('isGet')->willReturn(true);
+        $response->method('setNoCacheHeaders')
+            ->willReturnCallback(function () use (&$noCacheHeadersSet) {
+                $noCacheHeadersSet = true;
+            });
+        $response->method('getHeaders')
+            ->willReturnCallback(function () use (&$noCacheHeadersSet) {
+                return Headers::fromString(
+                    $noCacheHeadersSet
+                        ? 'Cache-Control: max-age=0, must-revalidate, no-cache, no-store'
+                        : 'Cache-Control: public, max-age=100, s-maxage=100'
+                );
+            });
+        $this->serializer->method('serialize')
+            ->willReturnCallback(function ($value) {
+                return json_encode($value);
+            });
+
+        $savedData = null;
+        $this->fullPageCacheMock->expects($this->once())
+            ->method('save')
+            ->willReturnCallback(function ($data) use (&$savedData) {
+                $savedData = json_decode($data, true);
+                return true;
+            });
+
+        $this->kernel->process($response);
+
+        $this->assertStringContainsString(
+            'public',
+            $savedData['headers']['Cache-Control'],
+            'The cached page should keep its public Cache-Control header.'
+        );
+        $this->assertStringNotContainsString(
+            'no-store',
+            $savedData['headers']['Cache-Control'],
+            'The cached page should not be saved with no-store.'
+        );
+        $this->assertTrue($noCacheHeadersSet, 'The live response should still get no-cache headers.');
+    }
+
+    /**
      * @return array
      */
     public static function processSaveCacheDataProvider(): array
