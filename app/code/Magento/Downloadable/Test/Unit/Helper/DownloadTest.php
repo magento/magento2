@@ -10,6 +10,7 @@ namespace Magento\Downloadable\Test\Unit\Helper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Helper\File as DownloadableFile;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
@@ -69,6 +70,11 @@ class DownloadTest extends TestCase
      */
     private $mime;
 
+    /**
+     * @var DomainValidator|MockObject
+     */
+    private $domainValidator;
+
     protected function setUp(): void
     {
         require_once __DIR__ . '/../_files/download_mock.php';
@@ -83,6 +89,7 @@ class DownloadTest extends TestCase
         $this->sessionManager = $this->createMock(SessionManagerInterface::class);
         $this->fileReadFactory = $this->createMock(ReadFactory::class);
         $this->mime = $this->createMock(Mime::class);
+        $this->domainValidator = $this->createMock(DomainValidator::class);
 
         $this->_helper = (new ObjectManager($this))->getObject(
             DownloadHelper::class,
@@ -91,7 +98,8 @@ class DownloadTest extends TestCase
                 'filesystem'       => $this->_filesystemMock,
                 'session'          => $this->sessionManager,
                 'fileReadFactory'  => $this->fileReadFactory,
-                'mime' => $this->mime
+                'mime' => $this->mime,
+                'domainValidator' => $this->domainValidator
             ]
         );
     }
@@ -100,6 +108,39 @@ class DownloadTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->_helper->setResource('/some/path/../file', DownloadHelper::LINK_TYPE_FILE);
+    }
+
+    #[DataProvider('dataProviderForTestSetResourceUrlNotAllowedRedirect')]
+    public function testSetResourceUrlNotAllowedRedirect($location)
+    {
+        self::$headers = ['302 Found', 'location' => $location];
+        $this->domainValidator->expects($this->once())->method('isValid')->with($location)->willReturn(false);
+
+        $this->expectException('InvalidArgumentException');
+        $this->_helper->setResource(self::URL, DownloadHelper::LINK_TYPE_URL);
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderForTestSetResourceUrlNotAllowedRedirect()
+    {
+        return [
+            ['http://169.254.169.254/latest/meta-data/'],
+            ['/etc/passwd'],
+        ];
+    }
+
+    public function testSetResourceUrlAllowedRedirect()
+    {
+        $location = 'http://example.com/other.file';
+        self::$headers = ['302 Found', 'location' => $location];
+        $this->domainValidator->expects($this->once())->method('isValid')->with($location)->willReturn(true);
+        $this->_handleMock->method('stat')->willReturn(['size' => self::FILE_SIZE, 'type' => self::MIME_TYPE]);
+        $this->fileReadFactory->expects($this->once())->method('create')->willReturn($this->_handleMock);
+
+        $this->_helper->setResource(self::URL, DownloadHelper::LINK_TYPE_URL);
+        $this->assertEquals('other.file', $this->_helper->getFilename());
     }
 
     public function testGetFileSizeNoResource()
