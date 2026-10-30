@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
 use Magento\Catalog\Model\Product\Option;
@@ -65,17 +66,20 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
+        /** @var ProductInterface $entity */
         $options = $entity->getOptions();
-        $optionIds = [];
+        $persistedOptions = $this->optionRepository->getProductOptions($entity);
 
         if ($options) {
+            $this->resolveOptionIds($options, $persistedOptions);
             $optionIds = array_map(function (Option $option) {
                 return $option->getOptionId();
             }, $options);
+        } else {
+            $optionIds = [];
         }
 
-        /** @var ProductInterface $entity */
-        foreach ($this->optionRepository->getProductOptions($entity) as $option) {
+        foreach ($persistedOptions as $option) {
             if (!in_array($option->getOptionId(), $optionIds)) {
                 $this->optionRepository->delete($option);
             }
@@ -85,6 +89,96 @@ class SaveHandler implements ExtensionInterface
         }
 
         return $entity;
+    }
+
+    /**
+     * Resolve missing option and value IDs from uniquely matching persisted options
+     *
+     * @param ProductCustomOptionInterface[] $options
+     * @param ProductCustomOptionInterface[] $persistedOptions
+     * @return void
+     */
+    private function resolveOptionIds(array $options, array $persistedOptions): void
+    {
+        $persistedOptionsById = [];
+        foreach ($persistedOptions as $persistedOption) {
+            $persistedOptionsById[$persistedOption->getOptionId()] = $persistedOption;
+        }
+
+        $resolvedIds = [];
+        foreach ($options as $option) {
+            if ($option->getOptionId()) {
+                $resolvedIds[] = $option->getOptionId();
+            }
+        }
+
+        foreach ($options as $option) {
+            $persistedOption = null;
+            if ($option->getOptionId()) {
+                $persistedOption = $persistedOptionsById[$option->getOptionId()] ?? null;
+            } else {
+                $matches = array_filter(
+                    $persistedOptions,
+                    static fn (ProductCustomOptionInterface $persistedOption): bool =>
+                        !in_array($persistedOption->getOptionId(), $resolvedIds)
+                        && $persistedOption->getTitle() === $option->getTitle()
+                        && $persistedOption->getType() === $option->getType()
+                );
+                if (count($matches) === 1) {
+                    $persistedOption = reset($matches);
+                    $option->setOptionId($persistedOption->getOptionId());
+                    $resolvedIds[] = $persistedOption->getOptionId();
+                }
+            }
+
+            if ($persistedOption) {
+                $this->resolveOptionValueIds($option, $persistedOption);
+            }
+        }
+    }
+
+    /**
+     * Resolve missing value IDs from uniquely matching persisted values
+     *
+     * @param ProductCustomOptionInterface $option
+     * @param ProductCustomOptionInterface $persistedOption
+     * @return void
+     */
+    private function resolveOptionValueIds(
+        ProductCustomOptionInterface $option,
+        ProductCustomOptionInterface $persistedOption
+    ): void {
+        $values = $option->getValues() ?? [];
+        $persistedValues = $persistedOption->getValues() ?? [];
+        $resolvedIds = [];
+
+        foreach ($values as $value) {
+            if ($value->getOptionTypeId()) {
+                $resolvedIds[] = $value->getOptionTypeId();
+            }
+        }
+
+        foreach ($values as $value) {
+            if ($value->getOptionTypeId()) {
+                continue;
+            }
+            $matches = array_filter(
+                $persistedValues,
+                static function (ProductCustomOptionValuesInterface $persistedValue) use ($value, $resolvedIds): bool {
+                    if (in_array($persistedValue->getOptionTypeId(), $resolvedIds)) {
+                        return false;
+                    }
+                    return $value->getSku() !== null && $value->getSku() !== ''
+                        ? $persistedValue->getSku() === $value->getSku()
+                        : $persistedValue->getTitle() === $value->getTitle();
+                }
+            );
+            if (count($matches) === 1) {
+                $persistedValue = reset($matches);
+                $value->setOptionTypeId($persistedValue->getOptionTypeId());
+                $resolvedIds[] = $persistedValue->getOptionTypeId();
+            }
+        }
     }
 
     /**
