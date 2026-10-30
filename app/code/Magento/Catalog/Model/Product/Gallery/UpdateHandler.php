@@ -53,6 +53,7 @@ class UpdateHandler extends CreateHandler
      * @param StoreManagerInterface|null $storeManager
      * @param AttributeValue|null $attributeValue
      * @param RemoveDeletedImagesFromCache|null $removeDeletedImagesFromCache
+     * @param string[] $mediaAttributesWithLabels
      * @throws FileSystemException
      */
     public function __construct(
@@ -65,7 +66,8 @@ class UpdateHandler extends CreateHandler
         Database $fileStorageDb,
         ?StoreManagerInterface $storeManager = null,
         ?AttributeValue $attributeValue = null,
-        ?RemoveDeletedImagesFromCache $removeDeletedImagesFromCache = null
+        ?RemoveDeletedImagesFromCache $removeDeletedImagesFromCache = null,
+        array $mediaAttributesWithLabels = []
     ) {
         parent::__construct(
             $metadataPool,
@@ -75,7 +77,12 @@ class UpdateHandler extends CreateHandler
             $mediaConfig,
             $filesystem,
             $fileStorageDb,
-            $storeManager
+            $storeManager,
+            null,
+            null,
+            null,
+            null,
+            $mediaAttributesWithLabels
         );
         $this->attributeValue = $attributeValue ?: ObjectManager::getInstance()->get(AttributeValue::class);
         $this->removeDeletedImagesFromCache = $removeDeletedImagesFromCache ?:
