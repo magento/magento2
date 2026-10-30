@@ -257,6 +257,58 @@ class ProductTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public static function categoryNegationDataProvider(): array
+    {
+        return [
+            'is not, product in other categories' => ['!=', [571, 573], true],
+            'is not, product in the category' => ['!=', [583], false],
+            'is not, product without categories' => ['!=', [], true],
+            'is not one of, product without categories' => ['!()', [], true],
+            'is, product without categories' => ['==', [], false],
+        ];
+    }
+
+    /**
+     * Test category conditions with negative operators for products with and without categories
+     *
+     * @param string $operator
+     * @param array $productCategoryIds
+     * @param bool $expectedResult
+     */
+    #[DataProvider('categoryNegationDataProvider')]
+    public function testValidateCategoryNegation(
+        string $operator,
+        array $productCategoryIds,
+        bool $expectedResult
+    ): void {
+        /* @var CatalogProduct|MockObject $product */
+        $product = $this->createPartialMockWithReflection(
+            CatalogProduct::class,
+            ['getId', 'setQuoteItemQty', 'setQuoteItemPrice', 'setQuoteItemRowTotal']
+        );
+        $product->method('getId')->willReturn(42);
+        $product->method('setQuoteItemQty')->willReturnSelf();
+        $product->method('setQuoteItemPrice')->willReturnSelf();
+        $product->method('setQuoteItemRowTotal')->willReturnSelf();
+        /* @var AbstractItem|MockObject $item */
+        $item = $this->createMock(AbstractItem::class);
+        $item->method('getProduct')->willReturn($product);
+        $this->configMock->method('getAttribute')
+            ->willReturn(new DataObject(['attribute_code' => 'category_ids']));
+        $this->productCategoryListMock->method('getCategoryIds')
+            ->with(42)
+            ->willReturn($productCategoryIds);
+
+        $this->model->setAttribute('category_ids');
+        $this->model->setOperator($operator);
+        $this->model->setValue('583');
+
+        $this->assertSame($expectedResult, $this->model->validate($item));
+    }
+
+    /**
      * @param boolean $isValid
      * @param string $conditionValue
      * @param string $operator
