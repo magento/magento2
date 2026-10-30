@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component;
 
@@ -21,7 +21,7 @@ use Magento\Ui\Component\Listing\Columns\ColumnInterface;
  */
 class Filters extends AbstractComponent implements ObserverInterface
 {
-    const NAME = 'filters';
+    public const NAME = 'filters';
 
     /**
      * Filters created from columns
@@ -114,10 +114,16 @@ class Filters extends AbstractComponent implements ObserverInterface
             }
 
             if (isset($this->filterMap[$filterType]) && !isset($this->columnFilters[$component->getName()])) {
+                $config = (array) $component->getData('config');
+                $userDefined = (bool) ($config['userDefined'] ?? false);
+
                 $filterComponent = $this->uiComponentFactory->create(
                     $component->getName(),
                     $this->filterMap[$filterType],
-                    ['context' => $this->getContext()]
+                    [
+                        'context'     => $this->getContext(),
+                        'userDefined' => $userDefined,
+                    ]
                 );
                 $filterComponent->setData('config', $component->getConfiguration());
                 $filterComponent->prepare();

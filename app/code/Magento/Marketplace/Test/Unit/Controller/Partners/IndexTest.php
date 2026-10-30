@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,7 +101,7 @@ class IndexTest extends TestCase
      */
     public function getLayoutMock()
     {
-        return $this->getMockForAbstractClass(LayoutInterface::class);
+        return $this->createMock(LayoutInterface::class);
     }
 
     /**
@@ -125,6 +125,6 @@ class IndexTest extends TestCase
      */
     public function getBlockInterfaceMock()
     {
-        return $this->getMockForAbstractClass(BlockInterface::class);
+        return $this->createMock(BlockInterface::class);
     }
 }

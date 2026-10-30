@@ -221,7 +221,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     {
         $validCoupons = $this->validateCouponCode->execute(
             $quote->getCouponCode() ? [$quote->getCouponCode()] : [],
-            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId()
+            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId(),
+            $quote
         );
 
         if (empty($validCoupons)) {
@@ -438,7 +439,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $appliedRuleIds = [];
         foreach ($this->getRules($address) as $rule) {
             /* @var Rule $rule */
-            if (!$rule->getApplyToShipping() || !$this->validatorUtility->canProcessRule($rule, $address)) {
+            if (!$rule->getApplyToShipping()) {
+                if ($rule->getStopRulesProcessing()) {
+                    $addressAppliedRuleIds = $address->getAppliedRuleIds()
+                        ? explode(',', $address->getAppliedRuleIds()) : [];
+                    if (in_array($rule->getId(), $addressAppliedRuleIds)) {
+                        break;
+                    }
+                }
+                continue;
+            }
+            
+            if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
 
@@ -471,10 +483,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $cartRules = $address->getCartFixedRules();
                     $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $quote->getStore());
                     $isAppliedToShipping = (int) $rule->getApplyToShipping();
-                    if (!isset($cartRules[$rule->getId()])) {
-                        $cartRules[$rule->getId()] = $rule->getDiscountAmount();
+                    $ruleId = $rule->getId() ?? '';
+                    if (!isset($cartRules[$ruleId])) {
+                        $cartRules[$ruleId] = $rule->getDiscountAmount();
                     }
-                    if ($cartRules[$rule->getId()] > 0) {
+                    if ($cartRules[$ruleId] > 0) {
                         $shippingQuoteAmount = (float) $address->getShippingAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
@@ -497,10 +510,10 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                             $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(
                                 $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
-                                $cartRules[$rule->getId()]
+                                $cartRules[$ruleId]
                             );
                         }
-                        $cartRules[$rule->getId()] -= $baseDiscountAmount;
+                        $cartRules[$ruleId] -= $baseDiscountAmount;
                     }
                     $address->setCartFixedRules($cartRules);
                     break;
@@ -530,7 +543,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             );
             $address->setShippingDiscountAmount($this->priceCurrency->roundPrice($discountAmount));
             $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
-            $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
+            $ruleId = $rule->getRuleId() ?? '';
+            $appliedRuleIds[$ruleId] = $ruleId;
 
             $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
             $this->rulesApplier->addDiscountDescription(

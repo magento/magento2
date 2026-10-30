@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ResultTest extends TestCase
@@ -21,8 +22,8 @@ class ResultTest extends TestCase
      * @param $failsDescription array
      * @param $expectedIsValid mixed
      * @param $expectedFailsDescription array
-     * @dataProvider resultDataProvider
      */
+    #[DataProvider('resultDataProvider')]
     public function testResult($isValid, $failsDescription, $expectedIsValid, $expectedFailsDescription)
     {
         $this->model = new Result($isValid, $failsDescription);
@@ -30,10 +31,9 @@ class ResultTest extends TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
-    protected function getMockForPhrase() {
-        $phraseMock = $this->getMockBuilder(Phrase::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+    protected function getMockForPhrase()
+    {
+        $phraseMock = $this->createMock(Phrase::class);
         return $phraseMock;
     }
 

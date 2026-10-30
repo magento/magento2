@@ -54,6 +54,14 @@
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
+        <plugin name="clear_salesrule_product_attribute_cache" type="Magento\SalesRule\Model\Plugin\ResourceModel\Rule"/>
+    </type>
+    <type name="Magento\Quote\Model\ResourceModel\Quote\Item\Collection">
+        <plugin name="set_flag_based_on_trigger_recollect"
+                type="Magento\SalesRule\Model\Plugin\QuoteItemCollection"
+                sortOrder="100" />
+    </type>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
@@ -212,4 +220,11 @@
         </arguments>
     </type>
     <type name="Magento\SalesRule\Model\Rule\Action\Discount\ExistingDiscountRuleCollector" shared="true" />
+    <type name="Magento\SalesRule\Model\Data\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="condition" xsi:type="object">Magento\SalesRule\Model\Data\Condition\Validator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

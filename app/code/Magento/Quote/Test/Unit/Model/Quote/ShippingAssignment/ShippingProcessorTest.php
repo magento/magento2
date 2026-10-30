@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\ShippingAssignment;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -58,15 +59,15 @@ class ShippingProcessorTest extends TestCase
      * @param string $method
      * @param string $carrierCode
      * @param string $methodCode
-     * @dataProvider saveDataProvider
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave($method, $carrierCode, $methodCode)
     {
-        $shipping = $this->getMockForAbstractClass(ShippingInterface::class);
-        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $shipping = $this->createMock(ShippingInterface::class);
+        $quote = $this->createMock(CartInterface::class);
         $quoteId = 1;
 
-        $address = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->createMock(AddressInterface::class);
 
         $quote->expects(static::exactly(2))
             ->method('getId')

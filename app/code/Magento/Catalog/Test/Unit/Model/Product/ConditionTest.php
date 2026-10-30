@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,10 +51,7 @@ class ConditionTest extends TestCase
      */
     private function getMockedAbstractCollection()
     {
-        $mockBuilder = $this->getMockBuilder(AbstractCollection::class)
-            ->onlyMethods(['joinTable'])
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
+        $mock = $this->createPartialMock(AbstractCollection::class, ['joinTable']);
 
         $mock->expects($this->any())
             ->method('joinTable');
@@ -69,14 +66,8 @@ class ConditionTest extends TestCase
     {
         $mockedDbSelect = $this->getMockedDbSelect();
 
-        $mockBuilder = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['select'])
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
-
-        $mock->expects($this->any())
-            ->method('select')
-            ->willReturn($mockedDbSelect);
+        $mock = $this->createStub(AdapterInterface::class);
+        $mock->method('select')->willReturn($mockedDbSelect);
 
         return $mock;
     }
@@ -86,14 +77,9 @@ class ConditionTest extends TestCase
      */
     private function getMockedDbSelect()
     {
-        $mockBuilder = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['from'])
-            ->disableOriginalConstructor();
-        $mock = $mockBuilder->getMockForAbstractClass();
+        $mock = $this->createPartialMock(Select::class, ['from']);
 
-        $mock->expects($this->any())
-            ->method('from')
-            ->willReturn($mock);
+        $mock->method('from')->willReturn($mock);
 
         return $mock;
     }

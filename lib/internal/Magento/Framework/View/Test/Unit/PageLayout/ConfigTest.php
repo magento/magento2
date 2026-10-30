@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class ConfigTest extends TestCase
             ->method('getRealPath')
             ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
             ->willReturn($urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd'));
-        $validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
         $domFactoryMock = $this->createMock(DomFactory::class);

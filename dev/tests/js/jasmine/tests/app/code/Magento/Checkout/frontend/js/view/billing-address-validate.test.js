@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint max-nested-callbacks: 0 */
@@ -105,7 +105,7 @@ define([
         });
     });
 
-    describe('Magento_Checkout/js/view/billing-address', function () {
+    describe('Magento_Checkout/js/view/billing-address validation', function () {
         describe('"updateAddress" method', function () {
             it('should call updateAddresses when form is invalid with false', function () {
                 billingAddress.source.set.and.callFake(function (key, value) {

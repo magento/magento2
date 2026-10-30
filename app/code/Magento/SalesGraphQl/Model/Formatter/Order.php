@@ -48,8 +48,15 @@ class Order
             'id' => base64_encode((string)$orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
-            'order_date' => $this->timezone->date($orderModel->getCreatedAt())
-                ->format(DateTime::DATETIME_PHP_FORMAT),
+            'order_date' => $this->timezone->date(
+                $orderModel->getCreatedAt()
+                    ? \DateTime::createFromFormat(
+                        DateTime::DATETIME_PHP_FORMAT,
+                        $orderModel->getCreatedAt(),
+                        new \DateTimeZone('UTC')
+                    )
+                    : null
+            )->format(DateTime::DATETIME_PHP_FORMAT),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'email' => $orderModel->getCustomerEmail(),
@@ -57,7 +64,7 @@ class Order
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
-            'applied_coupons' => $orderModel->getCouponCode() ? ['code' => $orderModel->getCouponCode()] : [],
+            'applied_coupons' => $orderModel->getCouponCode() ? [['code' => $orderModel->getCouponCode()]] : [],
             'model' => $orderModel,
             'comments' => $this->getOrderComments($orderModel)
         ];

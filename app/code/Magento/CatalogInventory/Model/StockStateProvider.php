@@ -3,6 +3,7 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Model;
 
@@ -169,13 +170,13 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
             $message = __('The requested qty. is not available');
             if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
-                $itemMessage = (__(sprintf(
-                    'Only %s of %s available',
+                $itemMessage = __(
+                    'Only %1 of %2 available',
                     $stockItem->getQty() - $stockItem->getMinQty(),
                     $this->localeFormat->getNumber($qty)
-                )));
+                );
             } else {
-                $itemMessage = (__('Not enough items for sale'));
+                $itemMessage = __('Not enough items for sale');
             }
             $result->setHasError(true)
                 ->setErrorCode('qty_available')

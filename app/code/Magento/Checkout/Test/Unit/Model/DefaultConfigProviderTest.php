@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Captcha\Api\CaptchaConfigPostProcessorInterface;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
@@ -32,7 +33,6 @@ use Magento\Framework\UrlInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
-use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Quote\Model\Quote;
@@ -44,12 +44,16 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Escaper;
+use Magento\Quote\Model\Cart\Totals as QuoteCartTotals;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var DefaultConfigProvider
      */
@@ -104,9 +108,10 @@ class DefaultConfigProviderTest extends TestCase
         $httpContext = $this->createMock(HttpContext::class);
         $quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $quoteItemRepository = $this->createMock(QuoteItemRepository::class);
-        $this->shippingMethodManager = $this->getMockBuilder(ShippingMethodManager::class)
-            ->addMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->shippingMethodManager = $this->createPartialMockWithReflection(
+            ShippingMethodManager::class,
+            ['get', 'getList', 'estimateByExtendedAddress', 'estimateByAddress', 'estimateByAddressId']
+        );
         $configurationPool = $this->createMock(ConfigurationPool::class);
         $quoteIdMaskFactory = $this->createMock(QuoteIdMaskFactory::class);
         $localeFormat = $this->createMock(LocaleFormat::class);
@@ -168,7 +173,10 @@ class DefaultConfigProviderTest extends TestCase
      * @param array $shippingAddressData
      * @param array $billingAddressData
      * @param array $expected
-     * @dataProvider getConfigQuoteAddressDataDataProvider
+     */
+    #[DataProvider('getConfigQuoteAddressDataDataProvider')]
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetConfigQuoteAddressData(
         array $shippingAddressData,
@@ -184,20 +192,18 @@ class DefaultConfigProviderTest extends TestCase
             'billingAddressFromData',
         ];
         $quote = $this->createMock(Quote::class);
-        $shippingAddress = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['validate'])
-            ->getMockForAbstractClass();
-        $shippingAddress->addData($shippingAddressData);
-        $shippingAddress->method('validate')
-            ->willReturn(!empty($shippingAddress['firstname']));
-        $billingAddress = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['validate'])
-            ->getMockForAbstractClass();
-        $billingAddress->addData($billingAddressData);
-        $billingAddress->method('validate')
-            ->willReturn(!empty($shippingAddress['firstname']));
+        $shippingAddress = $this->createMock(Address::class);
+        $shippingAddress->method('getEmail')->willReturn($shippingAddressData['email'] ?? null);
+        $shippingAddress->method('validate')->willReturn(!empty($shippingAddressData['firstname']));
+        $shippingAddress->method('getData')->willReturnCallback(function ($key) use ($shippingAddressData) {
+            return $shippingAddressData[$key] ?? null;
+        });
+        $billingAddress = $this->createMock(Address::class);
+        $billingAddress->method('getEmail')->willReturn($billingAddressData['email'] ?? null);
+        $billingAddress->method('validate')->willReturn(!empty($billingAddressData['firstname']));
+        $billingAddress->method('getData')->willReturnCallback(function ($key) use ($billingAddressData) {
+            return $billingAddressData[$key] ?? null;
+        });
         $quote->method('getShippingAddress')
             ->willReturn($shippingAddress);
         $quote->method('getBillingAddress')
@@ -223,13 +229,11 @@ class DefaultConfigProviderTest extends TestCase
         $this->addressMetadata->method('getAllAttributesMetadata')
             ->willReturn([$attributeMetadata1, $attributeMetadata2]);
 
-        $totals = $this->getMockBuilder(TotalsInterface::class)
-            ->addMethods(['toArray'])
-            ->getMockForAbstractClass();
-        $totals->method('getItems')
-            ->willReturn([]);
-        $totals->method('getTotalSegments')
-            ->willReturn([]);
+        $totals = $this->createMock(QuoteCartTotals::class);
+        $totals->method('getItems')->willReturn([]);
+        $totals->method('getTotalSegments')->willReturn([]);
+        $totals->method('getExtensionAttributes')->willReturn(null);
+        $totals->method('toArray')->willReturn([]);
         $this->cartTotalRepository->method('get')
             ->willReturn($totals);
         $this->shippingMethodConfig->method('getActiveCarriers')

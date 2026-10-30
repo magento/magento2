@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\I18n;
 
@@ -35,7 +35,9 @@ class Dictionary
     public function addPhrase(Phrase $phrase)
     {
         $this->_phrases[] = $phrase;
-        $this->_phrasesByKey[$phrase->getKey()][] = $phrase;
+        // Normalize null keys to empty string to avoid deprecated null array offset on PHP 8.1+
+        $key = (string)($phrase->getKey() ?? '');
+        $this->_phrasesByKey[$key][] = $phrase;
     }
 
     /**

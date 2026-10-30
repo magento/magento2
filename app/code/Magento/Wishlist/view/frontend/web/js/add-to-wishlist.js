@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -16,7 +16,7 @@ define([
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
-            qtyInfo: '#qty',
+            qtyInfo: 'input.qty',
             actionElement: '[data-action="add-to-wishlist"]',
             productListWrapper: '.product-item-info',
             productPageWrapper: '.product-info-main'
@@ -55,7 +55,7 @@ define([
 
             for (key in options.productType) {
                 if (options.productType.hasOwnProperty(key) && options.productType[key] + 'Info' in options) {
-                    events['change ' + options[options.productType[key] + 'Info']] = dataUpdateFunc;
+                    events['addToWishlist ' + options[options.productType[key] + 'Info']] = dataUpdateFunc;
                 }
             }
             this._on(events);
@@ -73,7 +73,7 @@ define([
             for (key in this.options.productType) {
                 if (this.options.productType.hasOwnProperty(key)
                     && this.options.productType[key] + 'Info' in this.options) {
-                    $(this.options[this.options.productType[key] + 'Info']).trigger('change');
+                    $(this.options[this.options.productType[key] + 'Info']).trigger('addToWishlist');
                 }
             }
         },
@@ -293,9 +293,15 @@ define([
          * @private
          */
         _validateWishlistQty: function (event) {
-            var element = $(this.options.qtyInfo);
+            var element = $(this.options.qtyInfo), isValid = true;
 
-            if (!(element.validation() && element.validation('isValid'))) {
+            $(element).each(function () {
+                if (!($(this).validation() && $(this).validation('isValid'))) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
                 event.preventDefault();
                 event.stopPropagation();
 

@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
@@ -23,6 +24,7 @@ use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Calculation;
 use Magento\Weee\Helper\Data as WeeeHelperData;
 use Magento\Weee\Model\Total\Quote\Weee;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class WeeeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|PriceCurrencyInterface
      */
@@ -93,7 +97,7 @@ class WeeeTest extends TestCase
         $taxCalculation
             ->expects($this->any())
             ->method('getRate')
-            ->will($this->onConsecutiveCalls($storeTaxRate, $customerTaxRate));
+            ->willReturnOnConsecutiveCalls($storeTaxRate, $customerTaxRate);
 
         return $taxCalculation;
     }
@@ -130,21 +134,19 @@ class WeeeTest extends TestCase
      */
     protected function setupItemMockBasics($itemTotalQty): Item
     {
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(
-                [
-                    'getProduct',
-                    'getQuote',
-                    'getAddress',
-                    'getTotalQty',
-                    'getParentItem',
-                    'getChildren',
-                    'isChildrenCalculated'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getHasChildren',
+                'getProduct',
+                'getQuote',
+                'getAddress',
+                'getTotalQty',
+                'getParentItem',
+                'getChildren',
+                'isChildrenCalculated'
+            ]
+        );
 
         $productMock = $this->createMock(Product::class);
         $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
@@ -244,9 +246,9 @@ class WeeeTest extends TestCase
      */
     protected function setupShippingAssignmentMock($addressMock, $itemMock): MockObject
     {
-        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+        $shippingMock = $this->createMock(ShippingInterface::class);
         $shippingMock->expects($this->any())->method('getAddress')->willReturn($addressMock);
-        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn($itemMock);
         $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
 
@@ -296,8 +298,8 @@ class WeeeTest extends TestCase
      * @param bool $assertSetApplied
      *
      * @return void
-     * @dataProvider collectDataProvider
      */
+    #[DataProvider('collectDataProvider')]
     public function testCollect(
         $taxConfig,
         $weeeConfig,
@@ -843,11 +845,11 @@ class WeeeTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_taxable_unit_included_in_subtotal_PARENT_ITEM'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => true,
@@ -861,11 +863,11 @@ class WeeeTest extends TestCase
                     )
                 ]
             ],
-            'tax_rates' => [
+            'taxRates' => [
                 'store_tax_rate' => 8.25,
                 'customer_tax_rate' => 8.25
             ],
-            'item' => [
+            'itemData' => [
                 'weee_tax_applied_amount' => 10,
                 'base_weee_tax_applied_amount' => 10,
                 'weee_tax_applied_row_amount' => 20,
@@ -875,9 +877,9 @@ class WeeeTest extends TestCase
                 'weee_tax_applied_row_amount_incl_tax' => 20,
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20
             ],
-            'item_qty' => 2,
-            'parent_qty' => 1,
-            'address_data' => [
+            'itemQty' => 2,
+            'parentQty' => 1,
+            'addressData' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
                 'weee_total_excl_tax' => 0,

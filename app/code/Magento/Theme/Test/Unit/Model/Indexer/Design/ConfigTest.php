@@ -99,16 +99,14 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->indexerStructure = $this->getMockBuilder(IndexStructureInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerStructure = $this->createMock(IndexStructureInterface::class);
         $this->structureFactory = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
         $this->batch = $this->getMockBuilder(Batch::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -130,13 +128,11 @@ class ConfigTest extends TestCase
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerHandler = $this->getMockBuilder(HandlerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerHandler = $this->createMock(HandlerInterface::class);
         $this->handlerPool = $this->getMockBuilder(HandlerPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerFieldset = $this->getMockBuilder(FieldsetInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerFieldset = $this->createMock(FieldsetInterface::class);
         $this->dtoFactoriesTable = $this->getMockBuilder(DtoFactoriesTable::class)
             ->disableOriginalConstructor()
             ->getMock();

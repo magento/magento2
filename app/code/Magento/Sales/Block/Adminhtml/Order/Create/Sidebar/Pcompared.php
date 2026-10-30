@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
@@ -11,21 +11,16 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create sidebar recently compared block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
 {
     /**
-     * Product factory
-     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Event
-     *
      * @var \Magento\Reports\Model\ResourceModel\Event
      */
     protected $_event;

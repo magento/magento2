@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -18,14 +19,18 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Invoice\PrintAction;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Pdf\Invoice as InvoicePdf;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PrintActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -68,26 +73,16 @@ class PrintActionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
 
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sessionMock = $this->createMock(Session::class);
 
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -104,9 +99,7 @@ class PrintActionTest extends TestCase
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
 
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileFactory = $this->createMock(FileFactory::class);
 
         $this->controller = $objectManager->getObject(
             PrintAction::class,
@@ -131,10 +124,10 @@ class PrintActionTest extends TestCase
 
         $invoiceMock = $this->createMock(Invoice::class);
 
-        $pdfMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Invoice::class)->addMethods(['render'])
-            ->onlyMethods(['getPdf'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pdfMock = $this->createPartialMockWithReflection(
+            InvoicePdf::class,
+            ['render', 'getPdf']
+        );
         $pdfMock->expects($this->once())
             ->method('getPdf')
             ->willReturnSelf();
@@ -142,9 +135,7 @@ class PrintActionTest extends TestCase
             ->method('render');
         $dateTimeMock = $this->createMock(DateTime::class);
 
-        $invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $invoiceRepository = $this->createMock(InvoiceRepositoryInterface::class);
         $invoiceRepository->expects($this->any())
             ->method('get')
             ->willReturn($invoiceMock);
@@ -153,7 +144,7 @@ class PrintActionTest extends TestCase
             ->method('create')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 [InvoiceRepositoryInterface::class] => $invoiceRepository,
-                [\Magento\Sales\Model\Order\Pdf\Invoice::class] => $pdfMock
+                [InvoicePdf::class] => $pdfMock
             });
         $this->objectManagerMock
             ->method('get')

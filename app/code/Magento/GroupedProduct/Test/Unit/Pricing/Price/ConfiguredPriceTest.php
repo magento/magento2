@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,35 +61,16 @@ class ConfiguredPriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->price = $this->getMockBuilder(PriceInterface::class)
-            ->getMock();
+        $this->price = $this->createMock(PriceInterface::class);
 
-        $this->priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
-            ->getMock();
+        $this->priceInfo = $this->createMock(PriceInfoInterface::class);
 
-        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->addMethods([
-                'getTypeInstance',
-                'getStore',
-                'getCustomOption',
-                'hasFinalPrice',
-            ])
-            ->onlyMethods([
-                'getTypeId',
-                'getId',
-                'getQty',
-                'getPriceInfo'
-            ])
-            ->getMockForAbstractClass();
-        $this->saleableItem->expects($this->once())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfo);
+        $this->saleableItem = $this->createMock(Product::class);
+        $this->saleableItem->method('getPriceInfo')->willReturn($this->priceInfo);
 
-        $this->calculator = $this->getMockBuilder(CalculatorInterface::class)
-            ->getMock();
+        $this->calculator = $this->createMock(CalculatorInterface::class);
 
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMock();
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
         $this->model = new ConfiguredPrice(
             $this->saleableItem,
@@ -101,8 +82,7 @@ class ConfiguredPriceTest extends TestCase
 
     public function testSetItem()
     {
-        $item = $this->getMockBuilder(ItemInterface::class)
-            ->getMock();
+        $item = $this->createMock(ItemInterface::class);
 
         $this->model->setItem($item);
     }
@@ -129,17 +109,13 @@ class ConfiguredPriceTest extends TestCase
         $customOptionOneQty = rand(1, 9);
         $customOptionTwoQty = rand(1, 9);
 
-        $priceInfoBase = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceInfoBase = $this->createMock(Base::class);
         $priceInfoBase->expects($this->any())
             ->method('getPrice')
             ->with(FinalPrice::PRICE_CODE)
             ->willReturn($this->price);
 
-        $productOne = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productOne = $this->createMock(Product::class);
         $productOne->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -147,9 +123,7 @@ class ConfiguredPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($priceInfoBase);
 
-        $productTwo = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTwo = $this->createMock(Product::class);
         $productTwo->expects($this->once())
             ->method('getId')
             ->willReturn(2);
@@ -157,31 +131,17 @@ class ConfiguredPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($priceInfoBase);
 
-        $this->price->expects($this->any())
-            ->method('getValue')
-            ->willReturn($resultPrice);
+        $this->price->method('getValue')->willReturn($resultPrice);
 
-        $customOptionOne = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customOptionOne->expects($this->any())
-            ->method('getValue')
-            ->willReturn($customOptionOneQty);
+        $customOptionOne = $this->createMock(Option::class);
+        $customOptionOne->method('getValue')->willReturn($customOptionOneQty);
 
-        $customOptionTwo = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customOptionTwo->expects($this->any())
-            ->method('getValue')
-            ->willReturn($customOptionTwoQty);
+        $customOptionTwo = $this->createMock(Option::class);
+        $customOptionTwo->method('getValue')->willReturn($customOptionTwoQty);
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createMock(Store::class);
 
-        $groupedProduct = $this->getMockBuilder(Grouped::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $groupedProduct = $this->createMock(Grouped::class);
         $groupedProduct->expects($this->once())
             ->method('setStoreFilter')
             ->with($store, $this->saleableItem)
@@ -191,21 +151,14 @@ class ConfiguredPriceTest extends TestCase
             ->with($this->saleableItem)
             ->willReturn([$productOne, $productTwo]);
 
-        $this->saleableItem->expects($this->once())
-            ->method('getTypeInstance')
-            ->willReturn($groupedProduct);
-        $this->saleableItem->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
-        $this->saleableItem->expects($this->any())
-            ->method('getCustomOption')
-            ->willReturnMap([
-                ['associated_product_' . 1, $customOptionOne],
-                ['associated_product_' . 2, $customOptionTwo],
-            ]);
+        $this->saleableItem->method('getTypeInstance')->willReturn($groupedProduct);
+        $this->saleableItem->method('getStore')->willReturn($store);
+        $this->saleableItem->method('getCustomOption')->willReturnMap([
+            ['associated_product_1', $customOptionOne],
+            ['associated_product_2', $customOptionTwo]
+        ]);
 
-        $item = $this->getMockBuilder(ItemInterface::class)
-            ->getMock();
+        $item = $this->createMock(ItemInterface::class);
 
         $this->model->setItem($item);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,9 +40,9 @@ class AttributeProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->concreteAttributeProviderMock = $this->getMockBuilder(
+        $this->concreteAttributeProviderMock = $this->createMock(
             AttributeProviderInterface::class
-        )->getMockForAbstractClass();
+        );
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,8 +67,7 @@ class AttributeProviderTest extends TestCase
             ->getMock();
         $attributes = ['test' => 1];
         $this->metadataPoolMock->expects($this->atLeastOnce())->method('getMetadata')->willReturn($metadata);
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $metadata->expects($this->once())->method('getEntityConnection')->willReturn($connection);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($entityTable);
         $metadata->expects($this->exactly(2))->method('getLinkField')->willReturn($linkField);

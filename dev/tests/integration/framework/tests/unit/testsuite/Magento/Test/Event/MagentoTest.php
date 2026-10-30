@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Test class for \Magento\TestFramework\Event\Magento.
  */
 namespace Magento\Test\Event;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MagentoTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,9 +45,9 @@ class MagentoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider constructorExceptionDataProvider
      * @param mixed $eventManager
      */
+    #[DataProvider('constructorExceptionDataProvider')]
     public function testConstructorException($eventManager)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);

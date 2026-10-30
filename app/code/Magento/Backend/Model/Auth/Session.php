@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);

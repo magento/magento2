@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Download;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Downloadable\Controller\Download\Link;
@@ -19,6 +20,7 @@ use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\HTTP\Mime;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Link
      */
@@ -107,13 +110,17 @@ class LinkTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(Http::class);
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            [
+                'setHttpResponseCode',
+                'clearBody',
+                'setHeader',
+                'sendHeaders',
+                'sendResponse'
+            ]
+        );
         $this->session = $this->createPartialMock(Session::class, [
             'getCustomerId',
             'authenticate',
@@ -130,13 +137,10 @@ class LinkTest extends TestCase
             'getContentDisposition',
             'output'
         ]);
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods(['_wakeup'])
-            ->onlyMethods(['load', 'getId', 'getProductUrl', 'getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->linkPurchasedItem = $this->getMockBuilder(Item::class)
-            ->addMethods([
+        $this->product = $this->createMock(Product::class);
+        $this->linkPurchasedItem = $this->createPartialMockWithReflection(
+            Item::class,
+            [
                 'getProductId',
                 'getPurchasedId',
                 'getNumberOfDownloadsBought',
@@ -146,19 +150,22 @@ class LinkTest extends TestCase
                 'getLinkUrl',
                 'getLinkFile',
                 'setNumberOfDownloadsUsed',
-                'setStatus'
-            ])
-            ->onlyMethods(['load', 'getId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->linkPurchased = $this->getMockBuilder(Purchased::class)
-            ->addMethods(['getCustomerId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
-        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
+                'setStatus',
+                'load',
+                'getId',
+                'save'
+            ]
+        );
+        $this->linkPurchased = $this->createPartialMockWithReflection(
+            Purchased::class,
+            [
+                'load',
+                'getCustomerId'
+            ]
+        );
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->urlInterface = $this->createMock(UrlInterface::class);
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
             'create',
             'get'
@@ -314,8 +321,8 @@ class LinkTest extends TestCase
      * @param string $disposition
      *
      * @return void
-     * @dataProvider downloadTypesDataProvider
      */
+    #[DataProvider('downloadTypesDataProvider')]
     public function testExceptionInUpdateLinkStatus($mimeType, $disposition): void
     {
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
@@ -348,8 +355,8 @@ class LinkTest extends TestCase
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
             ->willReturn(true);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsBought')->willReturn(10);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsUsed')->willReturn(9);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsBought')->willReturn(10);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsUsed')->willReturn(9);
         $this->linkPurchasedItem->expects($this->once())->method('getStatus')->willReturn('available');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');
@@ -423,8 +430,8 @@ class LinkTest extends TestCase
      * @param string $notice
      *
      * @return void
-     * @dataProvider linkNotAvailableDataProvider
      */
+    #[DataProvider('linkNotAvailableDataProvider')]
     public function testLinkNotAvailable($messageType, $status, $notice): void
     {
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
@@ -452,8 +459,8 @@ class LinkTest extends TestCase
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
             ->willReturn(true);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsBought')->willReturn(10);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsUsed')->willReturn(9);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsBought')->willReturn(10);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsUsed')->willReturn(9);
         $this->linkPurchasedItem->expects($this->once())->method('getStatus')->willReturn($status);
         $this->messageManager->expects($this->once())->method($messageType)->with($notice)->willReturnSelf();
 
@@ -465,9 +472,9 @@ class LinkTest extends TestCase
      * @param string $disposition
      *
      * @return void
-     * @dataProvider downloadTypesDataProvider
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('downloadTypesDataProvider')]
     public function testContentDisposition($mimeType, $disposition): void
     {
         $this->objectManager->expects($this->any())
@@ -501,8 +508,8 @@ class LinkTest extends TestCase
             ->method('getIsShareable')
             ->with($this->linkPurchasedItem)
             ->willReturn(true);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsBought')->willReturn(10);
-        $this->linkPurchasedItem->expects($this->any())->method('getNumberOfDownloadsUsed')->willReturn(9);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsBought')->willReturn(10);
+        $this->linkPurchasedItem->method('getNumberOfDownloadsUsed')->willReturn(9);
         $this->linkPurchasedItem->expects($this->once())->method('getStatus')->willReturn('available');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkType')->willReturn('url');
         $this->linkPurchasedItem->expects($this->once())->method('getLinkUrl')->willReturn('link_url');

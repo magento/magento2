@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,10 +29,9 @@ class SchemaLocatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_moduleReaderMock = $this->getMockBuilder(
+        $this->_moduleReaderMock = $this->createMock(
             Reader::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->_moduleReaderMock->expects(
             $this->once()
         )->method(

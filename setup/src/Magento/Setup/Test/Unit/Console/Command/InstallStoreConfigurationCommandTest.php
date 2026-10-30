@@ -18,6 +18,7 @@ use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -119,10 +120,10 @@ class InstallStoreConfigurationCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider validateDataProvider
      * @param array $option
      * @param string $error
      */
+    #[DataProvider('validateDataProvider')]
     public function testExecuteInvalidData(array $option, $error)
     {
         $this->localeValidatorMock->expects($this->any())->method('isValid')->willReturn(false);

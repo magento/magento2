@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Adminhtml catalog product bundle items tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -23,8 +21,6 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     protected $_template = 'Magento_Bundle::product/edit/bundle.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -44,6 +40,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return tab URL
+     *
      * @return string
      */
     public function getTabUrl()
@@ -52,6 +50,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return tab CSS class
+     *
      * @return string
      */
     public function getTabClass()
@@ -100,6 +100,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return HTML for add button
+     *
      * @return string
      */
     public function getAddButtonHtml()
@@ -108,6 +110,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return HTML for options box
+     *
      * @return string
      */
     public function getOptionsBoxHtml()
@@ -116,6 +120,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return field suffix
+     *
      * @return string
      */
     public function getFieldSuffix()
@@ -124,6 +130,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return product from core registry
+     *
      * @return mixed
      */
     public function getProduct()
@@ -132,6 +140,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return tab label
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
@@ -140,6 +150,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return tab title
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
@@ -148,6 +160,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return true always
+     *
      * @return bool
      */
     public function canShowTab()
@@ -156,6 +170,8 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Return false always
+     *
      * @return bool
      */
     public function isHidden()

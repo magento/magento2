@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -71,7 +71,7 @@ class DataObject implements \ArrayAccess
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
-     * @param string|array $key
+     * @param string|array|null $key
      * @param mixed $value
      * @return $this
      */
@@ -80,6 +80,7 @@ class DataObject implements \ArrayAccess
         if ($key === (array)$key) {
             $this->_data = $key;
         } else {
+            $key = $key ?? '';
             $this->_data[$key] = $value;
         }
         return $this;
@@ -127,6 +128,10 @@ class DataObject implements \ArrayAccess
     {
         if ('' === $key) {
             return $this->_data;
+        }
+
+        if( $key === null) {
+            return null;
         }
 
         $data = $this->_data[$key] ?? null;
@@ -194,6 +199,7 @@ class DataObject implements \ArrayAccess
      */
     protected function _getData($key)
     {
+        $key = $key ?? '';
         if (isset($this->_data[$key])) {
             return $this->_data[$key];
         }

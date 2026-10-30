@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Console\Command\App;
 
@@ -365,7 +365,6 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             $currencyImportSettings,
             '_configValueFactory'
         );
-        $reflectionProperty->setAccessible(true);
         $valueFactory = $reflectionProperty->getValue($currencyImportSettings);
         /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
         $configValue = $valueFactory->create();

@@ -118,9 +118,14 @@ class InputParamsResolverTest extends TestCase
         $this->assertEquals($requestData, $this->getModel(true)->resolve());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     #[DataProvider('requestBodyDataProvider')]
-    public function testResolveAsync(array $requestData): void
-    {
+    public function testResolveAsync(
+        array $requestData,
+        string $expectedExceptionMessage
+    ): void {
         $this->webapiInputParamsResolverMock->expects($this->once())
             ->method('resolve')
             ->willReturn($requestData);

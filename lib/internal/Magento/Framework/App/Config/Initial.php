@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -57,6 +57,10 @@ class Initial
             $cache->save($this->serializer->serialize($data), self::CACHE_ID);
         } else {
             $data = $this->serializer->unserialize($data);
+        }
+        if (!\is_array($data) || !isset($data['data'], $data['metadata'])) {
+            $data = $reader->read();
+            $cache->save($this->serializer->serialize($data), self::CACHE_ID);
         }
         $this->_data = $data['data'];
         $this->_metadata = $data['metadata'];

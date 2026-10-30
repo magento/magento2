@@ -176,7 +176,6 @@ class AddressTest extends TestCase
 
         // invoke _saveAddressEntities
         $saveAddressEntities = new \ReflectionMethod($this->_testClassName, '_saveAddressEntities');
-        $saveAddressEntities->setAccessible(true);
         $saveAddressEntities->invoke($entityAdapter, $newEntityData, []);
 
         return [$customerId, $addressId];
@@ -192,7 +191,6 @@ class AddressTest extends TestCase
         $this->markTestSkipped("to test _saveAddressAttributes attribute need to add custom address attribute");
         // get attributes list
         $attributesReflection = new \ReflectionProperty($this->_testClassName, '_attributes');
-        $attributesReflection->setAccessible(true);
         $attributes = $attributesReflection->getValue($this->_entityAdapter);
 
         // get some attribute
@@ -214,7 +212,6 @@ class AddressTest extends TestCase
 
         // invoke _saveAddressAttributes
         $saveAttributes = new \ReflectionMethod($this->_testClassName, '_saveAddressAttributes');
-        $saveAttributes->setAccessible(true);
         $saveAttributes->invoke($this->_entityAdapter, $attributeArray);
 
         // check DB
@@ -272,7 +269,6 @@ class AddressTest extends TestCase
 
         // invoke _saveCustomerDefaults
         $saveDefaults = new \ReflectionMethod($this->_testClassName, '_saveCustomerDefaults');
-        $saveDefaults->setAccessible(true);
         $saveDefaults->invoke($this->_entityAdapter, $defaults);
 
         // check DB

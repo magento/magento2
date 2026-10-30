@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Item;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
@@ -119,8 +120,6 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
-     * @dataProvider invoiceDataProvider
-     *
      * @magentoDataFixture Magento/Sales/_files/order.php
      *
      * @param int $invoicedItemsQty
@@ -128,6 +127,7 @@ class SaveTest extends AbstractInvoiceControllerTest
      * @param bool $doShipment
      * @return void
      */
+    #[DataProvider('invoiceDataProvider')]
     public function testSuccessfulInvoice(
         int $invoicedItemsQty,
         string $commentMessage = '',

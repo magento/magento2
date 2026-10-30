@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,12 +42,8 @@ class HtmlContentFactoryTest extends TestCase
         $this->layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->block = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->block = $this->createMock(AbstractBlock::class);
+        $this->context = $this->createMock(ContextInterface::class);
 
         $this->htmlContentFactory = new HtmlContentFactory();
     }

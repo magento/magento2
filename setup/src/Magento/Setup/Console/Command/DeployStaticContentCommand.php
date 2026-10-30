@@ -106,7 +106,7 @@ class DeployStaticContentCommand extends Command
      * @throws \InvalidArgumentException
      * @throws LocalizedException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $time = microtime(true);
 

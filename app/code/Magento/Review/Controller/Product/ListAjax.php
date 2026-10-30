@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Review\Controller\Product;
@@ -22,7 +22,9 @@ class ListAjax extends ProductController implements HttpGetActionInterface
      */
     public function execute()
     {
-        if (!$this->initProduct()) {
+        if (!$this->getRequest()->isAjax() ||
+            !$this->initProduct()
+        ) {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             return $resultForward->forward('noroute');

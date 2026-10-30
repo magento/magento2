@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,13 +39,10 @@ class ExportButtonTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $this->objectManager = new ObjectManager($this);
 
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->model = $this->objectManager->getObject(
             ExportButton::class,
             [
@@ -63,9 +60,7 @@ class ExportButtonTest extends TestCase
 
     public function testPrepare()
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->context->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $this->context->expects($this->any())
             ->method('getRequestParam')

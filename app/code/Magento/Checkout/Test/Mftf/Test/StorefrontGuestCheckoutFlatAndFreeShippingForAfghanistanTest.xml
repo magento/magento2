@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutFlatAndFreeShippingForAfghanistanTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout for Afghanistan Countries"/>
+            <title value="Storefront guest checkout for Afghanistan countries with flat rate and free shipping"/>
+            <description value="Checkout flow if flat rate and free shipping method are disabled for all countries except Afghanistan"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7617"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Precondition Step 1: Create simple product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct"/>
+            <!-- Precondition Step 2: Enable Free Shipping for Specific Countries = Afghanistan -->
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShippingMethod"/>
+            <actionGroup ref="AdminEnableFreeShippingToSpecificCountriesActionGroup" stepKey="enableToSpecificCountries"/>
+            <!-- Enable Flat Rate for Specific Countries = Afghanistan -->
+            <actionGroup ref="AdminEnableFlatRateToSpecificCountriesActionGroup" stepKey="enableFlatRateToSpecificCountries"/>
+        </before>
+        <after>
+            <!-- Revert Free Shipping and Flat Rate restrictions -->
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+            <actionGroup ref="AdminEnableFreeShippingToAllCountriesActionGroup" stepKey="enableAllCountries"/>
+            <actionGroup ref="AdminEnableFlatRateToAllCountriesActionGroup" stepKey="selectAllCountries"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Step 1: Go to Storefront as Guest -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <!-- Step 2: Add simple product to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Step 3: Go to checkout -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShipping"/>
+        <actionGroup ref="AssertStoreFrontNoQuotesMessageActionGroup" stepKey="assertNoQuoteMessage"/>
+        <!-- Assert Next button -->
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="dontSeeNextBtn"/>
+        <!-- Step 4: Fill form with valid data and set: -->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillBaseShippingAddress"/>
+        <!-- Assert no quotes message -->
+        <actionGroup ref="AssertStoreFrontNoQuotesMessageActionGroup" stepKey="assertNoQuotesMessage"/>
+        <!-- Assert Next button -->
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="dontSeeNextButton"/>
+        <!-- Step 5: Change values for: Afghanistan -->
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="selectCountryAfghanistan"/>
+        <!-- Assert only Free Shipping and Flat Rate are available -->
+        <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="seeFlatRate"/>
+        <actionGroup ref="AssertStoreFrontShippingMethodAvailableActionGroup" stepKey="seeFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="seeNextButton"/>
+    </test>
+</tests>

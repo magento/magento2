@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Interception\Code\Generator\SampleBackendMenu;
 use Magento\Framework\Interception\Code\Generator\TSample;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,9 +51,8 @@ class InterceptorTest extends TestCase
      *
      * @param string $className
      * @param string $resultClassName
-     * @param string $fileName
-     * @dataProvider interceptorDataProvider
-     */
+     * @param string $fileName     */
+    #[DataProvider('interceptorDataProvider')]
     public function testGenerate($className, $resultClassName, $fileName)
     {
         /** @var Interceptor|MockObject $interceptor */

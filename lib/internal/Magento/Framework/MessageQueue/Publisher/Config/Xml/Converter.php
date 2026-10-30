@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Xml;
 
@@ -57,7 +57,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $connectionConfig,
                     'name',
                     $this->defaultValueProvider->getConnection()
-                );
+                ) ?? '';
                 $exchangeName = $this->getAttributeValue(
                     $connectionConfig,
                     'exchange',
@@ -71,8 +71,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ];
             }
             if (count($connections) === 0) {
-                $connections[$this->defaultValueProvider->getConnection()] = [
-                    'name' => $this->defaultValueProvider->getConnection(),
+                $defaultConnection = $this->defaultValueProvider->getConnection() ?? '';
+                $connections[$defaultConnection] = [
+                    'name' => $defaultConnection,
                     'exchange' => $this->defaultValueProvider->getExchange(),
                     'disabled' => false
                 ];

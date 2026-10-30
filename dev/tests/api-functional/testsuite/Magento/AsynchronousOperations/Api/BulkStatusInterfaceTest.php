@@ -1,31 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Bulk\OperationInterface;
 
 class BulkStatusInterfaceTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/bulk/';
-    const SERVICE_NAME = 'asynchronousOperationsBulkStatusV1';
-    const GET_COUNT_OPERATION_NAME = "getOperationsCountByBulkIdAndStatus";
+    public const RESOURCE_PATH = '/V1/bulk/';
+    public const SERVICE_NAME = 'asynchronousOperationsBulkStatusV1';
+    public const GET_COUNT_OPERATION_NAME = "getOperationsCountByBulkIdAndStatus";
 
     /**
      * @magentoApiDataFixture Magento/AsynchronousOperations/_files/operation_searchable.php
-     * @dataProvider getBulkOperationCountDataProvider
      * @param string $bulkUuid
      * @param int $expectedOperationCount
      * @param int $status
      * @return void
      */
+    #[DataProvider('getBulkOperationCountDataProvider')]
     public function testGetOperationsCountByBulkIdAndStatus(
         string $bulkUuid,
         int $expectedOperationCount,

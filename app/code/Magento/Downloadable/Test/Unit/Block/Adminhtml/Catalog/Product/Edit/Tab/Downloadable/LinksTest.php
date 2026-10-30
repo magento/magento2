@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,9 @@ use Magento\Eav\Model\Entity\AttributeFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LinksTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Links
      */
@@ -71,9 +75,20 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
+        $objectManagerHelper->prepareObjectManager();
+        $this->setupMocks();
+        $this->setupDownloadableProductModel();
+        $this->setupLinksBlock($objectManagerHelper);
+    }
+
+    /**
+     * Setup basic mocks for testing
+     *
+     * @return void
+     */
+    private function setupMocks(): void
+    {
         $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
-        $attributeFactory = $this->createMock(AttributeFactory::class);
-        $urlFactory = $this->createMock(UrlFactory::class);
         $this->fileHelper = $this->createPartialMock(File::class, [
             'getFilePath',
             'ensureFileInFilesystem',
@@ -85,36 +100,42 @@ class LinksTest extends TestCase
             'getTypeInstance',
             'getStoreId'
         ]);
-        $this->downloadableProductModel = $this->getMockBuilder(Type::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getLinks'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->downloadableLinkModel = $this->getMockBuilder(Link::class)
-            ->addMethods(['getStoreTitle'])
-            ->onlyMethods([
-                '__wakeup',
-                'getId',
-                'getTitle',
-                'getPrice',
-                'getNumberOfDownloads',
-                'getLinkUrl',
-                'getLinkType',
-                'getSampleFile',
-                'getSampleType',
-                'getSortOrder',
-                'getLinkFile'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+    }
 
-        $this->coreRegistry = $this->getMockBuilder(Registry::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['registry'])
-            ->disableOriginalConstructor()
-            ->getMock();
+    /**
+     * Setup downloadable product model mock
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function setupDownloadableProductModel(): void
+    {
+        $this->downloadableProductModel = $this->createPartialMockWithReflection(
+            Type::class,
+            ['getLinks']
+        );
+        
+        $this->downloadableLinkModel = $this->createPartialMockWithReflection(
+            Link::class,
+            ['getId', 'getTitle', 'getPrice', 'getNumberOfDownloads', 'getLinkUrl', 'getLinkType',
+             'getSampleFile', 'getSampleType', 'getSortOrder', 'getLinkFile', 'getStoreTitle']
+        );
+
+        $this->coreRegistry = $this->createPartialMock(Registry::class, ['registry']);
 
         $this->escaper = $this->createPartialMock(Escaper::class, ['escapeHtml']);
+    }
+
+    /**
+     * Setup Links block with dependencies
+     *
+     * @param ObjectManager $objectManagerHelper
+     * @return void
+     */
+    private function setupLinksBlock(ObjectManager $objectManagerHelper): void
+    {
+        $attributeFactory = $this->createMock(AttributeFactory::class);
+        $urlFactory = $this->createMock(UrlFactory::class);
 
         $this->block = $objectManagerHelper->getObject(
             Links::class,
@@ -154,48 +175,30 @@ class LinksTest extends TestCase
             ],
         ];
 
-        $this->productModel->expects($this->any())->method('getTypeId')
-            ->willReturn('downloadable');
-        $this->productModel->expects($this->any())->method('getTypeInstance')
-            ->willReturn($this->downloadableProductModel);
-        $this->productModel->expects($this->any())->method('getStoreId')
-            ->willReturn(0);
-        $this->downloadableProductModel->expects($this->any())->method('getLinks')
-            ->willReturn([$this->downloadableLinkModel]);
-        $this->coreRegistry->expects($this->any())->method('registry')
-            ->willReturn($this->productModel);
-        $this->downloadableLinkModel->expects($this->any())->method('getId')
-            ->willReturn(1);
-        $this->downloadableLinkModel->expects($this->any())->method('getTitle')
-            ->willReturn('Link Title');
-        $this->downloadableLinkModel->expects($this->any())->method('getPrice')
-            ->willReturn('10');
-        $this->downloadableLinkModel->expects($this->any())->method('getNumberOfDownloads')
-            ->willReturn('6');
-        $this->downloadableLinkModel->expects($this->any())->method('getLinkUrl')
-            ->willReturn(null);
-        $this->downloadableLinkModel->expects($this->any())->method('getLinkType')
-            ->willReturn('file');
-        $this->downloadableLinkModel->expects($this->any())->method('getSampleFile')
-            ->willReturn('file/sample.gif');
-        $this->downloadableLinkModel->expects($this->any())->method('getSampleType')
-            ->willReturn('file');
-        $this->downloadableLinkModel->expects($this->any())->method('getSortOrder')
-            ->willReturn(0);
-        $this->downloadableLinkModel->expects($this->any())->method('getLinkFile')
-            ->willReturn('file/link.gif');
-        $this->downloadableLinkModel->expects($this->any())->method('getStoreTitle')
-            ->willReturn('Store Title');
-        $this->escaper->expects($this->any())->method('escapeHtml')
-            ->willReturn('Link Title');
-        $this->fileHelper->expects($this->any())->method('getFilePath')
-            ->willReturn('/file/path/link.gif');
-        $this->fileHelper->expects($this->any())->method('ensureFileInFilesystem')
-            ->willReturn(true);
-        $this->fileHelper->expects($this->any())->method('getFileSize')
-            ->willReturn('1.1');
-        $this->urlBuilder->expects($this->any())->method('getUrl')
-            ->willReturn('final_url');
+        $this->productModel->method('getTypeId')->willReturn('downloadable');
+        $this->productModel->method('getTypeInstance')->willReturn($this->downloadableProductModel);
+        $this->productModel->method('getStoreId')->willReturn(0);
+        
+        // Configure the link model for this test with getter returns instead of setters
+        $this->downloadableLinkModel->method('getId')->willReturn(1);
+        $this->downloadableLinkModel->method('getTitle')->willReturn('Link Title');
+        $this->downloadableLinkModel->method('getPrice')->willReturn('10');
+        $this->downloadableLinkModel->method('getNumberOfDownloads')->willReturn('6');
+        $this->downloadableLinkModel->method('getLinkUrl')->willReturn(null);
+        $this->downloadableLinkModel->method('getLinkType')->willReturn('file');
+        $this->downloadableLinkModel->method('getSampleFile')->willReturn('file/sample.gif');
+        $this->downloadableLinkModel->method('getSampleType')->willReturn('file');
+        $this->downloadableLinkModel->method('getSortOrder')->willReturn(0);
+        $this->downloadableLinkModel->method('getLinkFile')->willReturn('file/link.gif');
+        $this->downloadableLinkModel->method('getStoreTitle')->willReturn('Store Title');
+
+        $this->downloadableProductModel->method('getLinks')->willReturn([$this->downloadableLinkModel]);
+        $this->coreRegistry->method('registry')->willReturn($this->productModel);
+        $this->escaper->method('escapeHtml')->willReturn('Link Title');
+        $this->fileHelper->method('getFilePath')->willReturn('/file/path/link.gif');
+        $this->fileHelper->method('ensureFileInFilesystem')->willReturn(true);
+        $this->fileHelper->method('getFileSize')->willReturn('1.1');
+        $this->urlBuilder->method('getUrl')->willReturn('final_url');
         $linkData = $this->block->getLinkData();
         foreach ($linkData as $link) {
             $fileSave = $link->getFileSave(0);

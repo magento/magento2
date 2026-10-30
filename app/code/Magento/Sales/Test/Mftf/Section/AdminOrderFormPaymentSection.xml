@@ -38,5 +38,7 @@
         <element name="DHLShipping" type="text" selector="//dd[@class='admin__order-shipment-methods-options' and contains(text(),'{{paymentMethodName}}')]" parameterized="true"/>
         <element name="shippingMethodName" type="text" selector="//*[contains(text(), '{{paymentMethodName}}')]" parameterized="true"/>
         <element name="verifyCheckMoneyPayment" type="text" selector="//label[@for='p_method_checkmo']"/>
+        <element name="paymentErrorMessage" type="text" selector="#order-message div.message-error"/>
+        <element name="verifyCashOnDelivery" type="text" selector="//label[@for='p_method_cashondelivery']"/>
     </section>
 </sections>

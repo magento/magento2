@@ -1,10 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Config;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Magento\Framework\Config\Convert
@@ -21,8 +23,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sourceString
      * @param array $expected
-     * @dataProvider parseVarElementDataProvider
      */
+    #[DataProvider('parseVarElementDataProvider')]
     public function testParseVarElement($sourceString, $expected)
     {
         $document = new \DOMDocument();

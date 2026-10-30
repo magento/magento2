@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,10 +38,10 @@ class TextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $configMock = $this->createMock(ConfigInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $priceConfigMock = new Price($storeManagerMock);
-        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
+        $this->localeFormatMock = $this->createMock(FormatInterface::class);
         $config = [
             [
                 'label' => 'group label 1',

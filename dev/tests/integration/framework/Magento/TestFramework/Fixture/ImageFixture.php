@@ -88,7 +88,6 @@ class ImageFixture implements RevertibleDataFixtureInterface
                     throw new \InvalidArgumentException('Unsupported image type');
             }
             $data['content'] = ob_get_clean();
-            imagedestroy($image);
         }
         $data['path'] = str_replace('%ext%', $ext, $data['path']);
         $directory->writeFile($data['path'], $data['content']);

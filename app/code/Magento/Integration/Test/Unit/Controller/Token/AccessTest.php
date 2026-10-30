@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Oauth\Helper\Request;
 use Magento\Framework\Oauth\OauthInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ProcessorInterface;
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AccessTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RequestInterface|MockObject
      */
@@ -82,29 +85,28 @@ class AccessTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['getMethod'])
-            ->onlyMethods(
-                [
-                    'getModuleName',
-                    'setModuleName',
-                    'getActionName',
-                    'setActionName',
-                    'getParam',
-                    'setParams',
-                    'getParams',
-                    'getCookie',
-                    'isSecure'
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->request = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            [
+                'getMethod',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'setParams',
+                'getParams',
+                'getCookie',
+                'isSecure'
+            ]
+        );
         $this->response = $this->createMock(Response::class);
         /** @var ObjectManagerInterface|MockObject */
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         /** @var ManagerInterface|MockObject */
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         /** @var ProcessorInterface|MockObject */
-        $update = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $update = $this->createMock(ProcessorInterface::class);
         /** @var Layout|MockObject */
         $layout = $this->createMock(Layout::class);
         $layout->expects($this->any())->method('getUpdate')->willReturn($update);
@@ -121,7 +123,7 @@ class AccessTest extends TestCase
         $page->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ViewInterface|MockObject */
-        $view = $this->getMockForAbstractClass(ViewInterface::class);
+        $view = $this->createMock(ViewInterface::class);
         $view->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ResultFactory|MockObject */
@@ -139,9 +141,9 @@ class AccessTest extends TestCase
             ->willReturn($resultFactory);
 
         $this->helperMock = $this->createMock(Request::class);
-        $this->frameworkOauthSvcMock = $this->getMockForAbstractClass(OauthInterface::class);
-        $this->intOauthServiceMock = $this->getMockForAbstractClass(OauthServiceInterface::class);
-        $this->integrationServiceMock = $this->getMockForAbstractClass(IntegrationServiceInterface::class);
+        $this->frameworkOauthSvcMock = $this->createMock(OauthInterface::class);
+        $this->intOauthServiceMock = $this->createMock(OauthServiceInterface::class);
+        $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);
         /** @var ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new ObjectManager($this);
         $this->accessAction = $this->objectManagerHelper->getObject(
@@ -159,7 +161,7 @@ class AccessTest extends TestCase
     /**
      * Test the basic Access action.
      */
-    public function testAccessAction()
+    public function testAccessAction(): void
     {
         $this->request->expects($this->any())
             ->method('getMethod')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Template\Html\MinifierInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TemplateFileTest extends TestCase
 {
@@ -53,10 +54,10 @@ class TemplateFileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->minifier = $this->getMockForAbstractClass(MinifierInterface::class);
+        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->minifier = $this->createMock(MinifierInterface::class);
         $this->state = $this->createMock(State::class);
-        $this->assetConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->assetConfig = $this->createMock(ConfigInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->object = new TemplateFile(
             $this->resolver,
@@ -77,7 +78,7 @@ class TemplateFileTest extends TestCase
             ->method('isMinifyHtml')
             ->willReturn(true);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $expected = 'some/file.ext';
 
         $this->state->expects($this->once())
@@ -97,9 +98,8 @@ class TemplateFileTest extends TestCase
      * @param string $mode
      * @param integer $onDemandInProduction
      * @param integer $forceMinification
-     * @param string $method
-     * @dataProvider getMinifiedDataProvider
-     */
+     * @param string $method     */
+    #[DataProvider('getMinifiedDataProvider')]
     public function testGetFileWhenModifiedNeeded($mode, $onDemandInProduction, $forceMinification, $method)
     {
         $this->assetConfig
@@ -107,7 +107,7 @@ class TemplateFileTest extends TestCase
             ->method('isMinifyHtml')
             ->willReturn(true);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $expected = 'some/file.ext';
         $expectedMinified = '/path/to/minified/some/file.ext';
 
@@ -140,7 +140,7 @@ class TemplateFileTest extends TestCase
             ->method('isMinifyHtml')
             ->willReturn(false);
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $expected = 'some/file.ext';
 
         $this->resolver->expects($this->once())

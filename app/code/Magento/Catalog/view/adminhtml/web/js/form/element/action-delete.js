@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 define([
     'underscore',
@@ -92,13 +92,13 @@ define([
         /**
          * Delete record instance
          * update data provider dataScope
-         *
-         * @param {Object} parents
+         * @param index
+         * @param recordId
+         * @returns {*}
          */
-        deleteRecord: function (parents) {
-            this.value(1);
-            parents[1].deleteRecord(parents[0].index, parents[0].recordId);
-
+        deleteRecord: function (index, recordId) {
+            this.value(1);                         // sets option.delete[option_X] = 1
+            this.bubble('deleteRecord', index, recordId); // triggers dynamicRows deletion
             return this;
         }
     });

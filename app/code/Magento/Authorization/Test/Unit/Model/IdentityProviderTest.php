@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +13,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -91,8 +91,8 @@ class IdentityProviderTest extends TestCase
      * @param int $expectedType
      * @param string $expectedIdentity
      * @return void
-     * @dataProvider getIdentityCases
      */
+    #[DataProvider('getIdentityCases')]
     public function testFetchIdentity(
         ?int $userType,
         ?int $userId,

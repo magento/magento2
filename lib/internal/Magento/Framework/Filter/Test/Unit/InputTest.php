@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ class InputTest extends TestCase
 {
     public function testFilterLaminasFilterAsObject()
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** @var FilterInterface $filterMock */
@@ -37,7 +37,7 @@ class InputTest extends TestCase
 
     public function testFilterLaminasFilterAsArray()
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** This filter should be applied to 'field1' field value only */

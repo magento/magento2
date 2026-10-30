@@ -69,6 +69,7 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_ENTITY_ID": true,
             "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true,
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE": true
         },
@@ -156,7 +157,8 @@
         },
         "index": {
             "CATALOG_CATEGORY_ENTITY_LEVEL": true,
-            "CATALOG_CATEGORY_ENTITY_PATH": true
+            "CATALOG_CATEGORY_ENTITY_PATH": true,
+            "CATALOG_CATEGORY_ENTITY_PARENT_ID_LEVEL_POSITION": true
         },
         "constraint": {
             "PRIMARY": true
@@ -215,7 +217,8 @@
         "index": {
             "CATALOG_CATEGORY_ENTITY_INT_ENTITY_ID": true,
             "CATALOG_CATEGORY_ENTITY_INT_ATTRIBUTE_ID": true,
-            "CATALOG_CATEGORY_ENTITY_INT_STORE_ID": true
+            "CATALOG_CATEGORY_ENTITY_INT_STORE_ID": true,
+            "CATALOG_CATEGORY_ENTITY_INT_STORE_ID_VALUE": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -275,7 +278,8 @@
             "position": true
         },
         "index": {
-            "CATALOG_CATEGORY_PRODUCT_PRODUCT_ID": true
+            "CATALOG_CATEGORY_PRODUCT_PRODUCT_ID": true,
+            "CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID_POSITION": true
         },
         "constraint": {
             "PRIMARY": true,

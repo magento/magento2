@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Query\Fields;
 use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FieldsTest extends TestCase
 {
@@ -158,9 +159,8 @@ class FieldsTest extends TestCase
 
     /**
      * @covers \Magento\Framework\GraphQl\Query\Fields::setQuery
-     * @return void
-     * @dataProvider setQueryDataProvider
-     */
+     * @return void     */
+    #[DataProvider('setQueryDataProvider')]
     public function testSetQuery(array $query, array $variables, $expected)
     {
         $this->fields->setQuery($query['query'], $variables);

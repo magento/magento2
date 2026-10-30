@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,12 +52,7 @@ class ThemeUninstallerTest extends TestCase
         $this->remove = $this->createMock(Remove::class);
         $this->themeProvider = $this->createMock(ThemeProvider::class);
         $this->themeUninstaller = new ThemeUninstaller($this->themePackageInfo, $this->remove, $this->themeProvider);
-        $this->output = $this->getMockForAbstractClass(
-            OutputInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->output = $this->createMock(OutputInterface::class);
     }
 
     /**

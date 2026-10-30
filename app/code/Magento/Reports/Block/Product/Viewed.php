@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Product;
@@ -11,15 +11,15 @@ use \Magento\Framework\DataObject\IdentityInterface;
 /**
  * Reports Recently Viewed Products Block
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @deprecated 100.2.0
+ * @see nothing
  */
 class Viewed extends AbstractProduct implements IdentityInterface
 {
     /**
      * Config path to recently viewed product count
      */
-    const XML_PATH_RECENTLY_VIEWED_COUNT = 'catalog/recently_products/viewed_count';
+    public const XML_PATH_RECENTLY_VIEWED_COUNT = 'catalog/recently_products/viewed_count';
 
     /**
      * Viewed Product Index type

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,7 +26,7 @@ class UrlRewriteBunchReplacerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlPersistMock = $this->getMockForAbstractClass(UrlPersistInterface::class);
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->urlRewriteBunchReplacer = new UrlRewriteBunchReplacer(
             $this->urlPersistMock
         );

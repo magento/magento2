@@ -16,6 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -115,7 +116,6 @@ class ResetPasswordTest extends TestCase
 
     /**
      * @magentoAppArea frontend
-     * @dataProvider passwordResetErrorsProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
      *
@@ -123,6 +123,7 @@ class ResetPasswordTest extends TestCase
      * @param int|null $websiteId
      * @return void
      */
+    #[DataProvider('passwordResetErrorsProvider')]
     public function testPasswordResetErrors(string $email, ?int $websiteId = null): void
     {
         $websiteId = $websiteId ?? (int)$this->storeManager->getWebsite('base')->getId();

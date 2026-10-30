@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentMethodTest extends TestCase
 {
+
     /**
      * @var PaymentMethod
      */
@@ -32,10 +33,8 @@ class PaymentMethodTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->paymentHelper = $this->createMock(Data::class);
         $this->model = $objectManager->getObject(
@@ -57,7 +56,7 @@ class PaymentMethodTest extends TestCase
             ]
         ];
 
-        $payment = $this->getMockForAbstractClass(MethodInterface::class);
+        $payment = $this->createMock(MethodInterface::class);
         $payment->expects($this->once())
             ->method('getTitle')
             ->willReturn($newItemValue);

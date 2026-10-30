@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSearchToolbarTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Search Result Toolbar"/>
+            <title value="Verify sorting toolbar changes on search results work as expected and don't cause form resubmission dialog"/>
+            <description value="Test that sorting toolbar changes apply properly and redirect properly to prevent 'Confirm Form Resubmission' dialog when using back button, and toolbar settings are preserved"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15666,AC-8905"/>
+            <useCaseId value="ACP2E-4208"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+
+        <before>
+            <!-- Create several products to have enough for pagination/sorting -->
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <field key="name">StorefrontSearchToolbarTestProduct C</field>
+                <field key="price">30.00</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2">
+                <field key="name">StorefrontSearchToolbarTestProduct B</field>
+                <field key="price">10.00</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct3">
+                <field key="name">StorefrontSearchToolbarTestProduct A</field>
+                <field key="price">20.00</field>
+            </createData>
+
+            <!-- Enable remember pagination -->
+            <createData entity="RememberPaginationCatalogStorefrontConfig" stepKey="setRememberPaginationCatalogStorefrontConfig"/>
+        </before>
+
+        <after>
+            <!-- Reset display settings to default -->
+            <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchForProductsCleanup">
+                <argument name="phrase" value="StorefrontSearchToolbarTestProduct"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontSearchSetDefaultDisplaySettingsActionGroup" stepKey="resetDisplaySettingsToDefault"/>
+
+            <!-- Clean up products and category -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+
+            <!-- Reset configuration -->
+            <createData entity="DefaultCatalogStorefrontConfiguration" stepKey="setDefaultCatalogStorefrontConfiguration"/>
+        </after>
+
+        <!-- Step 1: Navigate to storefront and perform initial search -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchForProducts">
+            <argument name="phrase" value="StorefrontSearchToolbarTestProduct"/>
+        </actionGroup>
+
+        <!-- Set default search display settings once at the beginning -->
+        <actionGroup ref="StorefrontSearchSetDefaultDisplaySettingsActionGroup" stepKey="setSearchDisplayDefaultSettings"/>
+
+        <!-- Step 2: Change sort order to price, then to name -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="price" stepKey="selectSortByPrice"/>
+        <waitForPageLoad stepKey="waitForPriceSortingApplied"/>
+
+        <!-- Change to ascending price order -->
+        <click selector="{{StorefrontSearchTopToolbarSection.sortDirectionDesc}}" stepKey="changePriceToAscending"/>
+        <waitForPageLoad stepKey="waitForAscendingPriceApplied"/>
+
+        <!-- Verify Product B is displayed first (lowest price $10.00) -->
+        <see userInput="StorefrontSearchToolbarTestProduct B" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="seeProductBFirstByPrice"/>
+
+        <!-- Now change sort to name -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="name" stepKey="selectSortByName"/>
+        <waitForPageLoad stepKey="waitForNameSortingApplied"/>
+
+        <!-- Verify Product A is displayed first (alphabetically first in ascending order) -->
+        <see userInput="StorefrontSearchToolbarTestProduct A" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="seeProductAFirstByName"/>
+
+        <!-- Step 3: Change sort direction to descending -->
+        <click selector="{{StorefrontSearchTopToolbarSection.sortDirectionAsc}}" stepKey="changeSortToDescending"/>
+        <waitForPageLoad stepKey="waitForDescendingSortingApplied"/>
+
+        <!-- Verify Product C is displayed first (alphabetically last in descending order) -->
+        <see userInput="StorefrontSearchToolbarTestProduct C" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="seeProductCFirstByNameDesc"/>
+
+        <!-- Change items per page -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.showDropdown}}" userInput="24" stepKey="selectItemsPerPage"/>
+        <waitForPageLoad stepKey="waitForLimitApplied"/>
+
+        <!-- Step 4: Navigate to a product page -->
+        <comment userInput="Navigate to product page to test back button behavior" stepKey="commentNavigateToProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo('StorefrontSearchToolbarTestProduct C')}}" stepKey="clickOnFirstProduct"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!-- Verify we're on Product C page -->
+        <see userInput="StorefrontSearchToolbarTestProduct C" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductCName"/>
+        <seeInCurrentUrl url=".html" stepKey="seeProductUrl"/>
+
+        <!-- Step 5: Use back button to return to search results -->
+        <moveBack stepKey="clickBackButton"/>
+        <waitForPageLoad stepKey="waitForBackNavigation"/>
+
+        <!-- Step 6: Verify we're back on search page -->
+        <comment userInput="Verify search results page is displayed and toolbar settings are preserved" stepKey="commentVerifySearchPage"/>
+        <see userInput="Search results for: 'StorefrontSearchToolbarTestProduct'" stepKey="seeSearchResultsTitleAfterBack"/>
+        <seeInCurrentUrl url="catalogsearch/result" stepKey="seeSearchUrlAfterBack"/>
+
+        <!-- Step 7: "Verify all display settings are preserved -->
+        <comment userInput="Verify all display settings are preserved: grid mode, name sort descending, 24 items per page" stepKey="commentVerifyAllSettings"/>
+        <seeElement selector="{{StorefrontSearchTopToolbarSection.gridMode}}" stepKey="verifyGridModePreserved"/>
+        <seeOptionIsSelected selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="name" stepKey="verifyNameSortPreserved"/>
+        <seeElement selector="{{StorefrontSearchTopToolbarSection.sortDirectionDesc}}" stepKey="verifyDescendingSortPreserved"/>
+        <seeOptionIsSelected selector="{{StorefrontSearchTopToolbarSection.showDropdown}}" userInput="24" stepKey="verify24ItemsPerPagePreserved"/>
+
+        <!-- Product order matches expectations (C-B-A descending by name) -->
+        <see userInput="StorefrontSearchToolbarTestProduct C" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="finalVerifyProductCFirst"/>
+        <see userInput="StorefrontSearchToolbarTestProduct B" selector="{{StorefrontCategoryMainSection.productNameByPosition('2')}}" stepKey="finalVerifyProductBSecond"/>
+        <see userInput="StorefrontSearchToolbarTestProduct A" selector="{{StorefrontCategoryMainSection.productNameByPosition('3')}}" stepKey="finalVerifyProductAThird"/>
+
+        <!-- Step 8: Verify sorting functionality still works after back button navigation -->
+        <comment userInput="Test that sorting functionality is still operational after back button navigation" stepKey="commentTestSortingStillWorks"/>
+
+        <!-- Change sort direction to ascending to test sorting still works -->
+        <click selector="{{StorefrontSearchTopToolbarSection.sortDirectionDesc}}" stepKey="changeSortToAscendingAfterBack"/>
+        <waitForPageLoad stepKey="waitForAscendingSortingAfterBack"/>
+
+        <!-- Verify Product A is now first (alphabetically first in ascending order) -->
+        <see userInput="StorefrontSearchToolbarTestProduct A" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="verifyProductAFirstAfterSortChange"/>
+
+        <!-- Change sort back to price to test different sorting option -->
+        <selectOption selector="{{StorefrontSearchTopToolbarSection.sortByDropdown}}" userInput="price" stepKey="selectSortByPriceAfterBack"/>
+        <waitForPageLoad stepKey="waitForPriceSortingAfterBack"/>
+
+        <!-- Verify Product B is first (lowest price $10.00) -->
+        <see userInput="StorefrontSearchToolbarTestProduct B" selector="{{StorefrontCategoryMainSection.productNameByPosition('1')}}" stepKey="verifyProductBFirstByPriceAfterBack"/>
+    </test>
+</tests>

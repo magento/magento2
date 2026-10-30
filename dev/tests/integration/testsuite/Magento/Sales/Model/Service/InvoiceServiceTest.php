@@ -29,6 +29,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests \Magento\Sales\Model\Service\InvoiceService
@@ -66,8 +67,8 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
      * @param int $invoiceQty
      * @magentoDataFixture Magento/Sales/_files/order_configurable_product.php
      * @return void
-     * @dataProvider prepareInvoiceConfigurableProductDataProvider
      */
+    #[DataProvider('prepareInvoiceConfigurableProductDataProvider')]
     public function testPrepareInvoiceConfigurableProduct(int $invoiceQty): void
     {
         /** @var OrderInterface $order */
@@ -86,7 +87,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function prepareInvoiceConfigurableProductDataProvider()
+    public static function prepareInvoiceConfigurableProductDataProvider(): array
     {
         return [
             'full invoice' => [2],
@@ -98,8 +99,8 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
      * @param int $invoiceQty
      * @magentoDataFixture Magento/Sales/_files/order.php
      * @return void
-     * @dataProvider prepareInvoiceSimpleProductDataProvider
      */
+    #[DataProvider('prepareInvoiceSimpleProductDataProvider')]
     public function testPrepareInvoiceSimpleProduct(int $invoiceQty): void
     {
         /** @var OrderInterface $order */
@@ -116,7 +117,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function prepareInvoiceSimpleProductDataProvider()
+    public static function prepareInvoiceSimpleProductDataProvider(): array
     {
         return [
             'full invoice' => [2],
@@ -133,8 +134,8 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @magentoDataFixture Magento/Sales/_files/order_with_bundle.php
-     * @dataProvider bundleProductQtyOrderedDataProvider
      */
+    #[DataProvider('bundleProductQtyOrderedDataProvider')]
     public function testPrepareInvoiceBundleProduct(
         array $qtyToInvoice,
         array $qtyInvoiced,

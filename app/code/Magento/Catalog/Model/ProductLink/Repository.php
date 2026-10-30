@@ -139,7 +139,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 . 'Please ensure the parent product SKU is provided and try again.'
             ));
         }
-        if (!$entity->getLinkedProductSku()) {
+        if ($entity->getLinkedProductSku() === null || $entity->getLinkedProductSku() === '') {
             throw new CouldNotSaveException(__('The linked product SKU is invalid. Verify the data and try again.'));
         }
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());

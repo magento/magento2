@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,7 +51,7 @@
         <!-- Assert block_id value in page content -->
         <actionGroup ref="AdminAssertCMSPageContentParamValueActionGroup" stepKey="assertBlockId">
             <argument name="param" value="block_id"/>
-            <argument name="value" value="$$createPreReqBlock.identifier$$"/>
+            <argument name="value" value="$$createPreReqBlock.id$$"/>
         </actionGroup>
     </test>
 </tests>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertProductCountInListAndGridViewTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Apply catalog storefront configuration settings"/>
+            <title value="Verify Product Count Display in List and Grid Views After Storefront Catalog Configuration Changes"/>
+            <description value="Admin should apply catalog storefront configuration settings and verify the products in storefront based on configuration"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="AC-5027"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="createProduct" stepKey="createProducts">
+                <argument name="categoryStepKey">createCategory</argument>
+                <argument name="count">12</argument>
+            </helper>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Set Default Values in Configuration -->
+            <magentoCLI command="config:set {{DefaultListMode.path}} {{DefaultListMode.value}}" stepKey="setListMode1"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+            <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPage"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontListPerPageValuesConfigData.path}} {{DefaultStoreFrontListPerPageValuesConfigData.value}}" stepKey="setDefaultListPerPageValues"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontListPerPageConfigData.path}} {{DefaultStoreFrontListPerPageConfigData.value}}" stepKey="setDefaultListPerPage"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortBy.path}} {{DefaultStoreFrontProductsSortBy.value}}" stepKey="setDefaultProductSortBy"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontAllProductsPerPage.path}} {{DefaultStoreFrontAllProductsPerPage.value}}" stepKey="setDefaultAllProductsPerPage"/>
+            <!-- Delete simple product created via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1&2: Open Admin > Stores > Configuration > Catalog > Catalog > Storefront & Save the following settings -->
+        <magentoCLI command="config:set {{CustomListMode.path}} {{CustomListMode.value}}" stepKey="setListMode"/>
+        <magentoCLI command="config:set {{CustomStoreFrontGridPerPageValuesConfigData.path}} {{CustomStoreFrontGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+        <magentoCLI command="config:set {{CustomStoreFrontGridPerPageConfigData.path}} {{CustomStoreFrontGridPerPageConfigData.value}}" stepKey="setCustomGridPerPage"/>
+        <magentoCLI command="config:set {{CustomStoreFrontListPerPageValuesConfigData.path}} {{CustomStoreFrontListPerPageValuesConfigData.value}}" stepKey="setCustomListPerPageValues"/>
+        <magentoCLI command="config:set {{CustomStoreFrontListPerPageConfigData.path}} {{CustomStoreFrontListPerPageConfigData.value}}" stepKey="setCustomListPerPage"/>
+        <magentoCLI command="config:set {{CustomStoreFrontProductsSortBy.path}} {{CustomStoreFrontProductsSortBy.value}}" stepKey="setProductSortBy"/>
+        <magentoCLI command="config:set {{CustomStoreFrontAllProductsPerPage.path}} {{CustomStoreFrontAllProductsPerPage.value}}" stepKey="setAllProductsPerPage"/>
+        <!-- Step 3: Open a category page on Storefront that has more than 10 products   -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <!-- Step 4&5: Select All products & Switch to Grid view -->
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView"/>
+        <scrollTo selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="scrollToGridMode"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="waitToClickGridMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="clickGridMode"/>
+        <waitForPageLoad stepKey="waitForGridMode"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInGridView"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="waitToClickListMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="clickListMode"/>
+        <waitForPageLoad stepKey="waitForListMode"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="seeAnyProductOnPage"/>
+        <seeOptionIsSelected userInput="{{CustomStoreFrontProductsSortBy.value}}" selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" after="seeAnyProductOnPage" stepKey="selectSortBy"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="waitToClickProductsPerPageButtonInListMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInListMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPage"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('1')}}" stepKey="seeLimiterOption1"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('2')}}" stepKey="seeLimiterOption2"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('3')}}" stepKey="seeLimiterOption3"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="seeAllButton"/>
+        <click selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="selectAllButton"/>
+        <waitForPageLoad stepKey="waitForSelectAll"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seeAllProducts"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="waitToSwitchToGridMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView2"/>
+        <waitForElementClickable selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="waitToSwitchToListMode1"/>
+        <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListMode1"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView1"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="waitToSwitchToGridMode1"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode1"/>
+        <seeOptionIsSelected userInput="{{CustomStoreFrontProductsSortBy.value}}" selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" after="switchToGridMode1" stepKey="selectSortByPrice"/>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="waitToClickProductsPerPageButtonInGridMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInGridMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPageOpen"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('1')}}" stepKey="seeLimiterOption1Grid"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('2')}}" stepKey="seeLimiterOption2Grid"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.pageOptions('3')}}" stepKey="seeLimiterOption3Grid"/>
+        <waitForElementVisible selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="seeAllBtn"/>
+        <!-- Step 6: Open the same category again from navigation menu. Switch to Grid mode. -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="waitToSwitchToGridMode4"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchAgainToGridMode"/>
+        <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsDisplayed"/>
+    </test>
+</tests>

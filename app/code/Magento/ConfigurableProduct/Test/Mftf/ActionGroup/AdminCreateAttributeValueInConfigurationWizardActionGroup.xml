@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateAttributeValueInConfigurationWizardActionGroup">
+        <annotations>
+            <description>Creates a new attribute value/option in the configurable product configuration wizard
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+            <argument name="optionValue" type="string"/>
+        </arguments>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValueForAttribute(attributeLabel)}}"
+               stepKey="clickCreateNewValue"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attributeName}}"
+                               stepKey="waitForInput"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" userInput="{{optionValue}}"
+                   stepKey="fillValue"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="saveValue"/>
+    </actionGroup>
+</actionGroups>

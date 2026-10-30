@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Observer;
 
@@ -114,7 +114,8 @@ class GetPriceConfigurationObserver implements ObserverInterface, ResetAfterRequ
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->registry->registry('current_product');
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                if (!isset($this->selectionCache[$product->getId()])) {
+                $productId = $product->getId() ?? '';
+                if (!isset($this->selectionCache[$productId])) {
                     $typeInstance = $product->getTypeInstance();
                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
@@ -122,9 +123,9 @@ class GetPriceConfigurationObserver implements ObserverInterface, ResetAfterRequ
                         $typeInstance->getOptionsIds($product),
                         $product
                     );
-                    $this->selectionCache[$product->getId()] = $selectionCollection->getItems();
+                    $this->selectionCache[$productId] = $selectionCollection->getItems();
                 }
-                $arrSelections = $this->selectionCache[$product->getId()];
+                $arrSelections = $this->selectionCache[$productId];
 
                 foreach ($arrSelections as $selectionItem) {
                     if ($holder['optionId'] == $selectionItem->getId()) {

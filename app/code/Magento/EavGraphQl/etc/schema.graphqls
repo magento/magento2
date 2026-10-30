@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 
 type Query {
     customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")):

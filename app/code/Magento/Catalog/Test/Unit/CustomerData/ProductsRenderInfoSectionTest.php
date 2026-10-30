@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,27 +55,12 @@ class ProductsRenderInfoSectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->searchCriteriaBuilderMock = $this
-            ->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productRenderRepositoryMock = $this
-            ->getMockBuilder(ProductRenderList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->synchronizerMock = $this
-            ->getMockBuilder(Synchronizer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->hydratorMock = $this->getMockBuilder(Hydrator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManager::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
+        $this->productRenderRepositoryMock = $this->createMock(ProductRenderList::class);
+        $this->synchronizerMock = $this->createMock(Synchronizer::class);
+        $this->hydratorMock = $this->createMock(Hydrator::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -93,28 +78,22 @@ class ProductsRenderInfoSectionTest extends TestCase
 
     private function prepareProductIds()
     {
-        $actionFirst = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
-        $actionSecond = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
+        $actionFirst = $this->createMock(ProductFrontendActionInterface::class);
+        $actionSecond = $this->createMock(ProductFrontendActionInterface::class);
         $actions = [$actionFirst, $actionSecond];
         $this->synchronizerMock->expects($this->once())
             ->method('getAllActions')
             ->willReturn($actions);
-        $actionFirst->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
-        $actionSecond->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(2);
+        $actionFirst->method('getProductId')->willReturn(1);
+        $actionSecond->method('getProductId')->willReturn(2);
     }
 
     public function testGetSectionData()
     {
-        $productRender = $this->getMockForAbstractClass(ProductRenderInterface::class);
-        $searchResult = $this->getMockForAbstractClass(ProductRenderSearchResultsInterface::class);
+        $productRender = $this->createMock(ProductRenderInterface::class);
+        $searchResult = $this->createMock(ProductRenderSearchResultsInterface::class);
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $store = $this->createPartialMock(Store::class, ['getId', 'getCurrentCurrencyCode']);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn(3);
@@ -158,9 +137,7 @@ class ProductsRenderInfoSectionTest extends TestCase
             ->method('getList')
             ->with($searchCriteria, 3, 'UAH')
             ->willReturn($searchResult);
-        $searchResult->expects($this->any())
-            ->method('getItems')
-            ->willReturn([$productRender]);
+        $searchResult->method('getItems')->willReturn([$productRender]);
         $this->hydratorMock->expects($this->once())
             ->method('extract')
             ->with($productRender)

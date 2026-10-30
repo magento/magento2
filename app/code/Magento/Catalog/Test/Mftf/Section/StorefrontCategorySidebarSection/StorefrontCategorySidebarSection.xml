@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -15,6 +15,7 @@
         <element name="optionQty" type="text" selector=".filter-options-content .item .count"/>
         <element name="filterOptionByLabel" type="button" selector=" div.filter-options-item div[data-option-label='{{optionLabel}}']" parameterized="true"/>
         <element name="removeFilter" type="button" selector="div.filter-current .remove" timeout="30"/>
+        <element name="removeAllFilters" type="button" selector="//a[@class='action clear filter-clear']" timeout="30"/>
         <element name="activeFilterOptions" type="text" selector=".filter-options-item.active .items"/>
         <element name="activeFilterOptionItemByPosition" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a" parameterized="true" timeout="30"/>
         <element name="enabledFilterOptionItemByLabel" type="text" selector="//div[contains(@class, 'filter-options')]//li[@class='item']//a[contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>

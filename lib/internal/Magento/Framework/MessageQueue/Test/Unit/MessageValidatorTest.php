@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\MessageValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers Magento\Framework\MessageQueue\MessageValidator
@@ -45,9 +46,7 @@ class MessageValidatorTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigDataObjectType()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
 
         $this->model->validate('customer.created', $object, true);
     }
@@ -57,9 +56,7 @@ class MessageValidatorTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigDataMethodType()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
 
         $this->model->validate('customer.created', [$object, 'password', 'redirect'], true);
     }
@@ -129,9 +126,8 @@ class MessageValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getQueueConfigRequestType
-     */
+    /**     */
+    #[DataProvider('getQueueConfigRequestType')]
     public function testInvalidMessageType($requestType, $message, $expectedResult = null)
     {
         if (is_array($message)) {
@@ -295,8 +291,6 @@ class MessageValidatorTest extends TestCase
 
     public function getCustomerInterfaceMock()
     {
-        return $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        return $this->createMock(CustomerInterface::class);
     }
 }

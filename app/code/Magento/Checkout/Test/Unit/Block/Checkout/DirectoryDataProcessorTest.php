@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,9 +79,7 @@ class DirectoryDataProcessorTest extends TestCase
             StoreResolverInterface::class
         );
         $this->directoryDataHelperMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new DirectoryDataProcessor(
             $this->countryCollectionFactoryMock,
@@ -99,9 +97,7 @@ class DirectoryDataProcessorTest extends TestCase
             'region_id' => [],
         ];
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(42);
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
 

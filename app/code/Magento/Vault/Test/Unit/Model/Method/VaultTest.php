@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,10 +20,12 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class VaultTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -53,7 +57,7 @@ class VaultTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->vaultProvider = $this->getMockForAbstractClass(MethodInterface::class);
+        $this->vaultProvider = $this->createMock(MethodInterface::class);
         $this->jsonSerializer = $this->createMock(Json::class);
     }
 
@@ -61,7 +65,7 @@ class VaultTest extends TestCase
     {
         $this->expectException('DomainException');
         $this->expectExceptionMessage('Not implemented');
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
@@ -70,15 +74,13 @@ class VaultTest extends TestCase
 
     /**
      * @param array $additionalInfo
-     * @dataProvider additionalInfoDataProvider
      */
+    #[DataProvider('additionalInfoDataProvider')]
     public function testAuthorizeNoTokenMetadata(array $additionalInfo)
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Public hash should be defined');
-        $paymentModel = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentModel = $this->createMock(Payment::class);
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
@@ -109,10 +111,8 @@ class VaultTest extends TestCase
         $customerId = 1;
         $publicHash = 'token_public_hash';
 
-        $paymentModel = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $tokenManagement = $this->getMockForAbstractClass(PaymentTokenManagementInterface::class);
+        $paymentModel = $this->createMock(Payment::class);
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getAdditionalInformation')
@@ -144,18 +144,17 @@ class VaultTest extends TestCase
         $vaultProviderCode = 'vault_provider_code';
         $amount = 10.01;
 
-        $paymentModel = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
-            ->getMockForAbstractClass();
+        $paymentModel = $this->createMock(Payment::class);
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken']
+        );
 
-        $commandManagerPool = $this->getMockForAbstractClass(CommandManagerPoolInterface::class);
-        $commandManager = $this->getMockForAbstractClass(CommandManagerInterface::class);
+        $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
+        $commandManager = $this->createMock(CommandManagerInterface::class);
 
-        $tokenManagement = $this->getMockForAbstractClass(PaymentTokenManagementInterface::class);
-        $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
 
         $tokenDetails = [
             'cc_last4' => '1111',
@@ -226,7 +225,7 @@ class VaultTest extends TestCase
     {
         $this->expectException('DomainException');
         $this->expectExceptionMessage('Not implemented');
-        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentModel = $this->createMock(InfoInterface::class);
 
         /** @var Vault $model */
         $model = $this->objectManager->getObject(Vault::class);
@@ -237,11 +236,9 @@ class VaultTest extends TestCase
     {
         $this->expectException('DomainException');
         $this->expectExceptionMessage('Capture can not be performed through vault');
-        $paymentModel = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentModel = $this->createMock(Payment::class);
 
-        $authorizationTransaction = $this->getMockForAbstractClass(TransactionInterface::class);
+        $authorizationTransaction = $this->createMock(TransactionInterface::class);
         $paymentModel->expects(static::once())
             ->method('getAuthorizationTransaction')
             ->willReturn($authorizationTransaction);
@@ -251,15 +248,113 @@ class VaultTest extends TestCase
         $model->capture($paymentModel, 0);
     }
 
+    public function testCaptureSuccess()
+    {
+        $customerId = 1;
+        $publicHash = 'token_public_hash';
+        $vaultProviderCode = 'vault_provider_code';
+        $amount = 10.01;
+
+        $paymentModel = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken']
+        );
+
+        $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
+        $commandManager = $this->createMock(CommandManagerInterface::class);
+
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
+
+        $tokenDetails = [
+            'cc_last4' => '1111',
+            'cc_type' => 'VI',
+            'cc_exp_year' => '2020',
+            'cc_exp_month' => '01',
+        ];
+
+        $extensionAttributes->method('getVaultPaymentToken')
+            ->willReturn($token);
+
+        $token->expects(static::atLeastOnce())
+            ->method('getTokenDetails')
+            ->willReturn(json_encode($tokenDetails));
+
+        $this->jsonSerializer->expects(static::once())
+            ->method('unserialize')
+            ->with(json_encode($tokenDetails))
+            ->willReturn($tokenDetails);
+
+        $paymentModel->expects(static::once())
+            ->method('getAdditionalInformation')
+            ->willReturn(
+                [
+                    PaymentTokenInterface::CUSTOMER_ID => $customerId,
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
+                ]
+            );
+        $paymentModel->expects(static::once())
+            ->method('getAuthorizationTransaction')
+            ->willReturn(null);
+        $tokenManagement->expects(static::once())
+            ->method('getByPublicHash')
+            ->with($publicHash, $customerId)
+            ->willReturn($token);
+        $paymentModel->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+        $extensionAttributes->expects(static::once())
+            ->method('setVaultPaymentToken')
+            ->with($token);
+        $paymentModel->expects(static::once())
+            ->method('addData')
+            ->with($tokenDetails);
+
+        $this->vaultProvider->expects(static::atLeastOnce())
+            ->method('getCode')
+            ->willReturn($vaultProviderCode);
+        $commandManagerPool->expects(static::once())
+            ->method('get')
+            ->with($vaultProviderCode)
+            ->willReturn($commandManager);
+        $commandManager->expects(static::once())
+            ->method('executeByCode')
+            ->with(
+                VaultPaymentInterface::VAULT_SALE_COMMAND,
+                $paymentModel,
+                [
+                    'amount' => $amount
+                ]
+            );
+
+        $paymentModel->expects(static::once())
+            ->method('setMethod')
+            ->with($vaultProviderCode);
+
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'tokenManagement' => $tokenManagement,
+                'commandManagerPool' => $commandManagerPool,
+                'vaultProvider' => $this->vaultProvider,
+                'jsonSerializer' => $this->jsonSerializer,
+            ]
+        );
+        $model->capture($paymentModel, $amount);
+    }
+
     /**
      * @covers       \Magento\Vault\Model\Method\Vault::isAvailable
-     * @dataProvider isAvailableDataProvider
      */
+    #[DataProvider('isAvailableDataProvider')]
     public function testIsAvailable($isAvailableProvider, $isActive, $expected)
     {
         $storeId = 1;
-        $quote = $this->getMockForAbstractClass(CartInterface::class);
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $quote = $this->createMock(CartInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->vaultProvider->expects(static::once())
             ->method('isAvailable')
@@ -310,7 +405,7 @@ class VaultTest extends TestCase
     public function testIsAvailableWithoutQuote()
     {
         $quote = null;
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->vaultProvider->expects(static::once())
             ->method('isAvailable')
@@ -341,12 +436,12 @@ class VaultTest extends TestCase
      * @param bool|null $configValue
      * @param bool|null $paymentValue
      * @param bool $expected
-     * @dataProvider internalUsageDataProvider
      */
+    #[DataProvider('internalUsageDataProvider')]
     public function testCanUseInternal($configValue, $paymentValue, $expected)
     {
-        $handlerPool = $this->getMockForAbstractClass(ValueHandlerPoolInterface::class);
-        $handler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $handlerPool = $this->createMock(ValueHandlerPoolInterface::class);
+        $handler = $this->createMock(ValueHandlerInterface::class);
 
         $handlerPool->expects(static::once())
             ->method('get')
@@ -392,5 +487,21 @@ class VaultTest extends TestCase
             ['configValue' => null, 'paymentValue' => false, 'expected' => false],
             ['configValue' => null, 'paymentValue' => null, 'expected' => false],
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        /** @var Vault $model */
+        $model = $this->objectManager->getObject(
+            Vault::class,
+            [
+                'vaultProvider' => $this->vaultProvider,
+            ]
+        );
+        $this->vaultProvider->expects($this->once())
+            ->method('setStore')
+            ->willReturn($storeId);
+        $model->setStore($storeId);
     }
 }

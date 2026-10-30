@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\Framework\Encryption\Test\Unit;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class KeyValidatorTest extends TestCase
 {
@@ -26,9 +27,8 @@ class KeyValidatorTest extends TestCase
 
     /**
      * @param $key
-     * @param bool $expected
-     * @dataProvider isValidDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($key, $expected = true)
     {
         $this->assertEquals($expected, $this->keyValidator->isValid($key));

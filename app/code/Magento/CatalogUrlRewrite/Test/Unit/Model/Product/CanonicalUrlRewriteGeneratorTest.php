@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,12 +73,10 @@ class CanonicalUrlRewriteGeneratorTest extends TestCase
         $productId = 'product_id';
         $targetPath = 'catalog/product/view/id/' . $productId;
 
-        $this->product->expects($this->any())->method('getId')->willReturn($productId);
-        $this->productUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-            ->willReturn($requestPath);
-        $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-            ->willReturn($targetPath);
-        $this->categoryRegistry->expects($this->any())->method('getList')->willReturn([]);
+        $this->product->method('getId')->willReturn($productId);
+        $this->productUrlPathGenerator->method('getUrlPathWithSuffix')->willReturn($requestPath);
+        $this->productUrlPathGenerator->method('getCanonicalUrlPath')->willReturn($targetPath);
+        $this->categoryRegistry->method('getList')->willReturn([]);
 
         $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')->with($productId)->willReturnSelf();
@@ -86,7 +84,7 @@ class CanonicalUrlRewriteGeneratorTest extends TestCase
             ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)->willReturnSelf();
-        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+        $this->urlRewriteFactory->method('create')->willReturn($this->urlRewrite);
         $this->assertEquals(
             [
                 $this->urlRewrite,

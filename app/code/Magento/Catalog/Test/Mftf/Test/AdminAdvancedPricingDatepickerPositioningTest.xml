@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdvancedPricingDatepickerPositioningTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="ACQE-10128: Advanced pricing datepicker positioning in admin product form"/>
+            <title value="Advanced pricing modal datepicker appears correctly positioned relative to date input"/>
+            <description value="Verify Advanced pricing modal datepicker appears correctly positioned relative to date input"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-16379"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create product and log in to admin panel -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product and logout from admin -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 2 & 3: Navigate to catalog, products and open the existing product for edit -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Step 4: In the price section, click advanced pricing -->
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingModal"/>
+        <!-- Step 5: Click the calendar icon on special price from date field and verify datepicker positioning relative to input field -->
+        <actionGroup ref="AdminAssertDatepickerPositionedRelativeToInputActionGroup" stepKey="assertSpecialPriceFromDatepickerPositioned">
+            <argument name="calendarIconSelector" value="{{AdminProductFormAdvancedPricingSection.specialPriceFromDatePicker}}"/>
+            <argument name="inputXPathSelector" value="{{AdminProductFormSection.customInputField('special_from_date')}}"/>
+            <argument name="datePickerWidgetSelector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertElementVisibleOnScreenActionGroup" stepKey="assertSpecialPriceFromDatepickerVisibleOnScreen">
+            <argument name="selector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCloseDatepickerWidgetActionGroup" stepKey="closeSpecialPriceFromDatepicker">
+            <argument name="inputSelector" value="{{AdminProductFormAdvancedPricingSection.specialPriceFrom}}"/>
+            <argument name="datePickerWidgetSelector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+        <!-- Step 6: Click the calendar icon on special price To date field and verify datepicker positioning relative to input field -->
+        <actionGroup ref="AdminAssertDatepickerPositionedRelativeToInputActionGroup" stepKey="assertSpecialPriceToDatepickerPositioned">
+            <argument name="calendarIconSelector" value="{{AdminProductFormAdvancedPricingSection.specialPriceToDatePicker}}"/>
+            <argument name="inputXPathSelector" value="{{AdminProductFormSection.customInputField('special_to_date')}}"/>
+            <argument name="datePickerWidgetSelector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertElementVisibleOnScreenActionGroup" stepKey="assertSpecialPriceToDatepickerVisibleOnScreen">
+            <argument name="selector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCloseDatepickerWidgetActionGroup" stepKey="closeSpecialPriceToDatepicker">
+            <argument name="inputSelector" value="{{AdminProductFormAdvancedPricingSection.specialPriceTo}}"/>
+            <argument name="datePickerWidgetSelector" value="{{AdminProductFormAdvancedPricingSection.datePickerWidget}}"/>
+        </actionGroup>
+    </test>
+</tests>

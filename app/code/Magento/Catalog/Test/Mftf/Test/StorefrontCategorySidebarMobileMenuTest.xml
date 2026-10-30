@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -49,6 +49,9 @@
         <waitForElementClickable selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="waitForCategoryMenuClickable" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
         <waitForPageLoad stepKey="waitForSearchResult" time="60"/>
+
+        <conditionalClick selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" dependentSelector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" visible="false" stepKey="reclickCategoryMenuIfNotExpanded"/>
+        <waitForPageLoad stepKey="waitForSubmenuExpand"/>
 
         <!-- Assert the category expanded successfully -->
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="verifySubCatMenuItemIsVisibleInTheSidebar">

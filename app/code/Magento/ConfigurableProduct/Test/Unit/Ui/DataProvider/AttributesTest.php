@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,17 +38,12 @@ class AttributesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['where'])
-            ->getMock();
-        $collectionAttributeHandlerMock = $this->getMockBuilder(ConfigurableAttributeHandler::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getApplicableAttributes'])
-            ->getMock();
+        $this->collectionMock = $this->createMock(Collection::class);
+        $this->selectMock = $this->createPartialMock(Select::class, ['where']);
+        $collectionAttributeHandlerMock = $this->createPartialMock(
+            ConfigurableAttributeHandler::class,
+            ['getApplicableAttributes']
+        );
         $collectionAttributeHandlerMock->expects($this->once())
             ->method('getApplicableAttributes')
             ->willReturn($this->collectionMock);

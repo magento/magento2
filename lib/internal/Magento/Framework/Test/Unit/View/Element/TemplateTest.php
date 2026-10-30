@@ -8,13 +8,16 @@ declare(strict_types=1);
 namespace Magento\Framework\Test\Unit\View\Element;
 
 use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var FilterManager|MockObject
      */
@@ -32,14 +35,9 @@ class TemplateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['stripTags'])
-            ->getMock();
+        $this->filterManagerMock = $this->createPartialMockWithReflection(FilterManager::class, ['stripTags']);
 
         $this->contextMock->expects($this->once())
             ->method('getFilterManager')
@@ -53,8 +51,8 @@ class TemplateTest extends TestCase
      *
      * @param $input
      * @param $output
-     * @dataProvider tagDataProvider
      */
+    #[DataProvider('tagDataProvider')]
     public function testStripTags($input, $output): void
     {
         if ($input) {

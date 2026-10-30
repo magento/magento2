@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class CanRefundTest extends TestCase
 {
+
     /**
      * @var Invoice|MockObject
      */
@@ -56,20 +57,12 @@ class CanRefundTest extends TestCase
             ]
         ];
         $objectManager->prepareObjectManager($objects);
-        $this->invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderPaymentRepositoryMock = $this->getMockBuilder(
+        $this->invoiceMock = $this->createMock(Invoice::class);
+        $this->orderPaymentRepositoryMock = $this->createMock(
             OrderPaymentRepositoryInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        );
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->paymentMock = $this->createMock(InfoInterface::class);
         $this->validator = new CanRefund(
             $this->orderPaymentRepositoryMock,
             $this->orderRepositoryMock
@@ -116,18 +109,14 @@ class CanRefundTest extends TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getState')
             ->willReturn(Invoice::STATE_PAID);
-        $orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderMock = $this->createMock(OrderInterface::class);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->willReturn($orderMock);
         $orderMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($this->paymentMock);
-        $methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $methodInstanceMock = $this->createMock(MethodInterface::class);
         $this->paymentMock->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($methodInstanceMock);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\DataConverter;
@@ -72,10 +72,7 @@ class DataConverterTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var InQueryModifier $queryModifier */
-        $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['modify'])
-            ->getMockForAbstractClass();
+        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 

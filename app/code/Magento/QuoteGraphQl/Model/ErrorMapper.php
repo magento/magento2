@@ -43,6 +43,7 @@ class ErrorMapper
         'Please check the billing address information' => self::ERROR_UNABLE_TO_PLACE_ORDER_ID,
         'Enter a valid payment method and try again' => self::ERROR_UNABLE_TO_PLACE_ORDER_ID,
         'Some of the products are out of stock' => self::ERROR_UNABLE_TO_PLACE_ORDER_ID,
+        'Unable to place order' => self::ERROR_UNABLE_TO_PLACE_ORDER_ID,
     ];
 
     /**

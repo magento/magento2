@@ -1,11 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Options;
+
+use Magento\TestFramework\Catalog\Block\Product\View\Options\DateGroupDataProvider;
+use Magento\TestFramework\Catalog\Block\Product\View\Options\FileGroupDataProvider;
+use Magento\TestFramework\Catalog\Block\Product\View\Options\SelectGroupDataProvider;
+use Magento\TestFramework\Catalog\Block\Product\View\Options\TextGroupDataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Test cases related to check that simple product custom option renders as expected.
@@ -15,46 +21,47 @@ namespace Magento\Catalog\Block\Product\View\Options;
 class RenderOptionsTest extends AbstractRenderCustomOptionsTest
 {
     /**
-     * Check that options from text group(field, area) render as expected.
+     * Check that options from text group (field, area) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\TextGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(TextGroupDataProvider::class, 'getData')]
     public function testRenderCustomOptionsFromTextGroup(array $optionData, array $checkArray): void
     {
         $this->assertTextOptionRenderingOnProduct('simple', $optionData, $checkArray);
     }
 
     /**
-     * Check that options from file group(file) render as expected.
+     * Check that options from file group (file) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\FileGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(FileGroupDataProvider::class, 'getData')]
     public function testRenderCustomOptionsFromFileGroup(array $optionData, array $checkArray): void
     {
         $this->assertFileOptionRenderingOnProduct('simple', $optionData, $checkArray);
     }
 
     /**
-     * Check that options from select group(drop-down, radio buttons, checkbox, multiple select) render as expected.
+     * Check that options from select group (drop-down, radio buttons, checkbox, multiple select)
+     * render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\SelectGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $optionValueData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(SelectGroupDataProvider::class, 'getData')]
     public function testRenderCustomOptionsFromSelectGroup(
         array $optionData,
         array $optionValueData,
@@ -64,15 +71,15 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
     }
 
     /**
-     * Check that options from date group(date, date & time, time) render as expected.
+     * Check that options from date group (date, date & time, time) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider \Magento\TestFramework\Catalog\Block\Product\View\Options\DateGroupDataProvider::getData
      *
      * @param array $optionData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(DateGroupDataProvider::class, 'getData')]
     public function testRenderCustomOptionsFromDateGroup(array $optionData, array $checkArray): void
     {
         $this->assertDateOptionRenderingOnProduct('simple', $optionData, $checkArray);

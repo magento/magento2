@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,6 +30,20 @@ if (!$attribute->getId()) {
     /** @var $store \Magento\Store\Model\Store */
     $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
     $store = $store->load('test', 'code');
+    $storeId = $store->getId();
+
+    $frontendLabels = [
+        Store::DEFAULT_STORE_ID => 'Test Configurable Admin Store',
+        Store::DISTRO_STORE_ID => 'Test Configurable Default Store',
+    ];
+    $optionValues = [
+        Store::DEFAULT_STORE_ID => 'Option Admin Store',
+        Store::DISTRO_STORE_ID => 'Option Default Store',
+    ];
+    if ($storeId !== null) {
+        $frontendLabels[$storeId] = 'Test Configurable Test Store';
+        $optionValues[$storeId] = 'Option Test Store';
+    }
 
     $attribute->setData(
         [
@@ -50,18 +64,10 @@ if (!$attribute->getId()) {
             'is_visible_on_front' => 1,
             'used_in_product_listing' => 1,
             'used_for_sort_by' => 1,
-            'frontend_label' => [
-                Store::DEFAULT_STORE_ID => 'Test Configurable Admin Store',
-                Store::DISTRO_STORE_ID => 'Test Configurable Default Store',
-                $store->getId() => 'Test Configurable Test Store'
-            ],
+            'frontend_label' => $frontendLabels,
             'backend_type' => 'int',
             'option' => [
-                'value' => ['option_0' => [
-                    Store::DEFAULT_STORE_ID => 'Option Admin Store',
-                    Store::DISTRO_STORE_ID => 'Option Default Store',
-                    $store->getId() => 'Option Test Store'
-                ], 'option_1' => ['Option 2']],
+                'value' => ['option_0' => $optionValues, 'option_1' => ['Option 2']],
                 'order' => ['option_0' => 1, 'option_1' => 2],
             ],
             'default' => ['option_0']

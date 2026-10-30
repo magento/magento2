@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\MediaStorage\Model\File\Storage\Response;
 use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -97,8 +98,8 @@ class MediaTest extends TestCase
         $this->responseMock = $this->createMock(Response::class);
         $this->syncFactoryMock = $this->createPartialMock(SynchronizationFactory::class, ['create']);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->directoryPubMock = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->directoryMediaMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryPubMock = $this->createMock(WriteInterface::class);
+        $this->directoryMediaMock = $this->createMock(WriteInterface::class);
 
         $this->configFactoryMock->method('create')
             ->willReturn($this->configMock);
@@ -196,9 +197,8 @@ class MediaTest extends TestCase
     /**
      * @param bool $isDeveloper
      * @param int $setBodyCalls
-     *
-     * @dataProvider catchExceptionDataProvider
      */
+    #[DataProvider('catchExceptionDataProvider')]
     public function testCatchException(bool $isDeveloper, int $setBodyCalls): void
     {
         /** @var Bootstrap|MockObject $bootstrap */

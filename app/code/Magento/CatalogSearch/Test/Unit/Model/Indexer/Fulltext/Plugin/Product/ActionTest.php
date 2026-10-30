@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,8 +48,7 @@ class ActionTest extends TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->subjectMock = $this->getMockBuilder(ProductAction::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Newsletter templates page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
@@ -19,6 +17,8 @@ class Template extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Newsletter::template/list.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()

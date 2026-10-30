@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -20,7 +20,7 @@ use Magento\Framework\Console\Cli;
 class EncryptionPaymentDataUpdateCommand extends Command
 {
     /** Command name */
-    const NAME = 'encryption:payment-data:update';
+    public const NAME = 'encryption:payment-data:update';
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Payment\EncryptionUpdate
@@ -38,7 +38,7 @@ class EncryptionPaymentDataUpdateCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -50,9 +50,9 @@ class EncryptionPaymentDataUpdateCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->paymentResource->reEncryptCreditCardNumbers();

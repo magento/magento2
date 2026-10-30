@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -50,7 +50,7 @@ class Sanitizer
             } elseif (!is_bool($config)
                 && !array_key_exists($key, $config)
                 && (is_string($datum) || $datum instanceof Phrase)
-                && preg_match('/\$\{.+\}/', (string)$datum)
+                && $this->validateSyntax((string)$datum)
             ) {
                 //Templating is not disabled for all properties or for this property specifically
                 //Property is a string that contains template syntax, so we are disabling its rendering
@@ -66,15 +66,30 @@ class Sanitizer
     }
 
     /**
+     * Validate value syntax.
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function validateSyntax(string $value): bool
+    {
+        return strpos($value, '${') !== false && strpos($value, '${{') === false;
+    }
+
+    /**
      * Sanitize a component's metadata.
      *
      * Will sanitize full component's metadata as well as metadata of it's child components.
      *
-     * @param array $meta
+     * @param array|null $meta
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function sanitizeComponentMetadata(array $meta): array
+    public function sanitizeComponentMetadata(?array $meta): array
     {
+        if ($meta === null) {
+            return [];
+        }
         if (array_key_exists('arguments', $meta)
             && is_array($meta['arguments'])
             && array_key_exists('data', $meta['arguments'])

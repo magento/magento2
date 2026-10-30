@@ -1,4 +1,3 @@
-# SalesGraphQl
+# Magento_SalesGraphQl module
 
-**SalesGraphQl** provides type and resolver information for the GraphQl module
-to generate sales orders information.
+This module provides type and resolver information for the GraphQL module to generate sales orders information.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,20 +36,14 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
-        /**
-         * @var Context|MockObject $contextMock
-         */
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var Context|MockObject $contextMock */
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
-        $escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $escaperMock = $this->createMock(Escaper::class);
         $escaperMock->method('escapeUrl')
             ->willReturnCallback(
                 function ($string) {
@@ -65,7 +59,7 @@ class CurrencyTest extends TestCase
         $this->postDataHelperMock = $this->createMock(PostHelper::class);
 
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->object = new Currency(
             $contextMock,

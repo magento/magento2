@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -36,6 +36,10 @@ define([
 
             box.trigger('updatePrice');
             this.cache.displayPrices = utils.deepClone(this.options.prices);
+
+            if (this.options.priceConfig && this.options.priceConfig.tierPrices) {
+                this.updateProductTierPrice();
+            }
         },
 
         /**

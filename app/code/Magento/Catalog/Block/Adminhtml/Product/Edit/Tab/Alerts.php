@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Product alerts tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
@@ -19,6 +17,8 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     protected $_template = 'Magento_Catalog::catalog/product/tab/alert.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -68,6 +68,8 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
     }
 
     /**
+     * Return HTML for accordion
+     *
      * @return string
      */
     public function getAccordionHtml()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Console\Command;
 
@@ -145,7 +145,7 @@ class SourceThemeDeployCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $area = $input->getOption(self::AREA_OPTION);
         $locale = $input->getOption(self::LOCALE_OPTION);

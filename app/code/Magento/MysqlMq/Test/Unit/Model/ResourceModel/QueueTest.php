@@ -9,7 +9,9 @@ namespace Magento\MysqlMq\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MysqlMq\Model\QueueManagement;
 use Magento\MysqlMq\Model\ResourceModel\Queue;
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueueTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ResourceConnection|MockObject
      */
@@ -38,9 +42,7 @@ class QueueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resources = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resources = $this->createMock(ResourceConnection::class);
 
         $objectManager = new ObjectManager($this);
         $this->queue = $objectManager->getObject(
@@ -62,11 +64,10 @@ class QueueTest extends TestCase
         $message = 'messageBody';
         $tableName = 'queue_message';
         $messageId = 2;
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->addMethods(['lastInsertId'])
-            ->onlyMethods(['insert'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['lastInsertId', 'insert']
+        );
         $this->resources->expects($this->exactly(2))->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())
             ->method('getTableName')->with($tableName, 'default')->willReturn($tableName);
@@ -87,11 +88,10 @@ class QueueTest extends TestCase
         $messages = ['messageBody0', 'messageBody1'];
         $tableName = 'queue_message';
         $messageIds = [3, 4];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->onlyMethods(['insertMultiple'])
-            ->addMethods(['lastInsertId'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['insertMultiple', 'lastInsertId', 'select', 'fetchCol']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())
@@ -105,9 +105,7 @@ class QueueTest extends TestCase
                 ]
             )->willReturn(2);
         $connection->expects($this->once())->method('lastInsertId')->with($tableName)->willReturn($messageIds[0]);
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['qm' => $tableName], ['id'])->willReturnSelf();
         $select->expects($this->once())->method('where')->with('qm.id >= ?', $messageIds[0])->willReturnSelf();
@@ -127,9 +125,10 @@ class QueueTest extends TestCase
         $queueNames = ['queueName0', 'queueName1'];
         $queueIds = [5, 6];
         $tableNames = ['queue', 'queue_message_status'];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
@@ -142,9 +141,7 @@ class QueueTest extends TestCase
                     }
                 }
             );
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(['queue' => $tableNames[0]])->willReturnSelf();
         $select->expects($this->once())->method('columns')->with(['id'])->willReturnSelf();
@@ -182,9 +179,10 @@ class QueueTest extends TestCase
         $queueName = 'queueName0';
         $tableNames = ['queue_message', 'queue_message_status', 'queue'];
         $messages = [['message0_data'], ['message1_data']];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(3))->method('getTableName')
@@ -199,9 +197,7 @@ class QueueTest extends TestCase
                     }
                 }
             );
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['queue_message' => $tableNames[0]],
@@ -264,9 +260,10 @@ class QueueTest extends TestCase
     public function testDeleteMarkedMessages()
     {
         $tableNames = ['queue_message_status', 'queue_message'];
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
@@ -279,9 +276,7 @@ class QueueTest extends TestCase
                     }
                 }
             );
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())
             ->method('from')->with(['queue_message_status' => $tableNames[0]], ['message_id'])->willReturnSelf();
@@ -315,9 +310,10 @@ class QueueTest extends TestCase
     {
         $relationIds = [1, 2];
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -349,9 +345,10 @@ class QueueTest extends TestCase
     {
         $relationId = 1;
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -376,9 +373,10 @@ class QueueTest extends TestCase
         $relationIds = [1, 2];
         $status = QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED;
         $tableName = 'queue_message_status';
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createPartialMock(
+            Mysql::class,
+            ['select', 'fetchCol', 'insertArray', 'fetchAll', 'delete', 'update']
+        );
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);

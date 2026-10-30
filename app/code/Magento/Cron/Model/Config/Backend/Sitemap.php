@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Backend Model for Currency import options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Cron\Model\Config\Backend;
 

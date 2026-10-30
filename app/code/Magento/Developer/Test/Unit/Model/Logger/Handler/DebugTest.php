@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
 
@@ -64,15 +64,12 @@ class DebugTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
-            ->getMockForAbstractClass();
+        $this->filesystemMock = $this->createMock(DriverInterface::class);
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->formatterMock = $this->getMockBuilder(FormatterInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->formatterMock = $this->createMock(FormatterInterface::class);
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()

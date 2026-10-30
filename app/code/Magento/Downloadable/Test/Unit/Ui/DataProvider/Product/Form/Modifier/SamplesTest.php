@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,12 +76,12 @@ class SamplesTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $this->samplesDataMock = $this->createMock(SamplesData::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->samples = $this->objectManagerHelper->getObject(
             Samples::class,
@@ -118,9 +118,7 @@ class SamplesTest extends TestCase
         $this->locatorMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productId);
+        $this->productMock->method('getId')->willReturn($productId);
         $this->samplesDataMock->expects($this->once())
             ->method('getSamplesTitle')
             ->willReturn($samplesTitle);

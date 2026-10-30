@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2021 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,10 +17,12 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set sales/gift_options/allow_items 0" stepKey="disableGiftMessagesForOrderItems"/>
             <magentoCLI command="config:set sales/gift_options/allow_order 1" stepKey="enableGiftMessageForOrder"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <magentoCLI command="config:set sales/gift_options/allow_order 0" stepKey="disableGiftMessageForOrder"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>

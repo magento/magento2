@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckoutFreeShippingRecalculationAfterCouponCodeAppliedTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout with Free Shipping"/>
+            <title value="Checkout Free Shipping Recalculation after Coupon Code Applied"/>
+            <description value="Verify customer should be able to do checkout free shipping recalculation after adding coupon code"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6178"/>
+            <group value="Checkout"/>
+        </annotations>
+        <before>
+            <!--Precondition 1: Create US Customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Precondition 2: Create Simple product-->
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="_defaultProduct" stepKey="simpleProduct">
+                <field key="price">90</field>
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+            <!--Precondition 4: Enable Free Shipping-->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
+            <!--Precondition 5: Create cart price rule-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CatPriceRule"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
+            </actionGroup>
+            <!--Login to Storefront-->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
+                <argument name="Customer" value="$createCustomer$"/>
+            </actionGroup>
+            <!--Navigate to product page-->
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+                <argument name="productUrl" value="$simpleProduct.custom_attributes[url_key]$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1:Add product to cart and apply cart price discount-->
+        <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <!--Step 2:Navigate to checkout page and verify free shipping is not available-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartAfterCouponApplied"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}" stepKey="verifyFreeShippingIsNotAvailable"/>
+        <!--Step 3:Navigate back to shopping cart and cancel the discount-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="openDiscountTabIfClosed"/>
+        <waitForElementClickable selector="{{DiscountSection.CancelCoupon}}" stepKey="waitForCancelCouponButton"/>
+        <click selector="{{DiscountSection.CancelCoupon}}" stepKey="clickCancelCouponButton"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.cancelCouponText('You canceled the coupon code.')}}" stepKey="seeCancellationMessage"/>
+        <!--Step 4:Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicartAfterCouponCancelled"/>
+        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <!--Step 5:Select free shipping method-->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!--Step 6:Apply Discount Code -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCouponCode">
+            <argument name="discountCode" value="{{CatPriceRule.coupon_code}}"/>
+        </actionGroup>
+        <!--Step 7:Click on place order and verify assert order cannot be placed and error message will show.-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
+        <actionGroup ref="AssertStorefrontOrderIsNotPlacedActionGroup" stepKey="seeShippingMethodError">
+            <argument name="error" value="{{ErrorMessageAfterAddingCoupon.text}}"/>
+        </actionGroup>
+        <!--Step 8:Navigate back to shipping page and select flatrate-->
+        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="checkFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextAfterFlatRateShippingMethodSelection"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!--Step 9: Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

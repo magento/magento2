@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Category\Flat\Processor;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\Indexer\IndexerInterface;
@@ -46,11 +47,11 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider stateDataProvider
      * @param bool $isFlatEnabled
      * @param int $numMethodCalled
      * @return void
      */
+    #[DataProvider('stateDataProvider')]
     public function testReindexRow(bool $isFlatEnabled, int $numMethodCalled): void
     {
         $id = 123;
@@ -66,11 +67,11 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider stateDataProvider
      * @param bool $isFlatEnabled
      * @param int $numMethodCalled
      * @return void
      */
+    #[DataProvider('stateDataProvider')]
     public function testReindexList(bool $isFlatEnabled, int $numMethodCalled): void
     {
         $ids = [123];
@@ -86,11 +87,11 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider stateDataProvider
      * @param bool $isFlatEnabled
      * @param int $numMethodCalled
      * @return void
      */
+    #[DataProvider('stateDataProvider')]
     public function testReindexAll(bool $isFlatEnabled, int $numMethodCalled): void
     {
         $this->stateMock->expects($this->once())
@@ -103,11 +104,11 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider stateDataProvider
      * @param bool $isFlatEnabled
      * @param int $numMethodCalled
      * @return void
      */
+    #[DataProvider('stateDataProvider')]
     public function testMarkIndexerAsInvalid(bool $isFlatEnabled, int $numMethodCalled): void
     {
         $this->stateMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -27,7 +27,7 @@ class ResetPaymentAttemptsAfterOrderIsPlacedPluginTest extends TestCase
      */
     public function testExecuteExpectsDeleteUserAttemptsCalled()
     {
-        $orderManagementInterfaceMock = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagementInterfaceMock = $this->createMock(OrderManagementInterface::class);
         $resultOrderMock = $this->createMock(OrderInterface::class);
         $orderMock = $this->createMock(OrderInterface::class);
         $orderMock->expects($this->once())->method('getCustomerEmail')->willReturn('email@example.com');

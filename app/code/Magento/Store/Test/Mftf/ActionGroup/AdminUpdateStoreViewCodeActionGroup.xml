@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateStoreViewCodeActionGroup">
+        <annotations>
+            <description>Opens the store view by name on the Admin Stores grid, clears and updates the code field, then saves.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+            <argument name="storeViewCode" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
+        <waitForPageLoad stepKey="waitForStoresIndexPageLoad"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForStoreViewFilterFieldVisible"/>
+        <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{storeViewName}}" stepKey="fillStoreViewFilterField"/>
+        <waitForElementClickable selector="{{AdminStoresGridSection.searchButton}}" stepKey="waitForSearchStoreViewButtonClickable"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchStoreViewInGrid"/>
+        <waitForElementClickable selector="{{AdminStoresGridSection.storeViewLinkByName(storeViewName)}}" stepKey="waitForStoreViewLinkByNameClickable"/>
+        <click selector="{{AdminStoresGridSection.storeViewLinkByName(storeViewName)}}" stepKey="clickStoreViewLinkByName"/>
+        <waitForElementVisible selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="waitForStoreViewCodeFieldVisible"/>
+        <clearField selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="clearStoreViewCodeField"/>
+        <fillField selector="{{AdminNewStoreSection.storeCodeTextField}}" userInput="{{storeViewCode}}" stepKey="fillStoreViewCode"/>
+        <waitForElementClickable selector="{{AdminNewStoreViewActionsSection.btnSaveStoreView}}" stepKey="waitForSaveStoreViewButtonClickable"/>
+        <click selector="{{AdminNewStoreViewActionsSection.btnSaveStoreView}}" stepKey="clickSaveStoreViewAfterCodeChange"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForStoreViewSavedSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

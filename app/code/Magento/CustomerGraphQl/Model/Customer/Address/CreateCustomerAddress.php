@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\CustomerGraphQl\Model\Customer\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\CustomerGraphQl\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Exception\AbstractAggregateException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -24,12 +26,14 @@ class CreateCustomerAddress
      * @param AddressRepositoryInterface $addressRepository
      * @param ValidateAddress $addressValidator
      * @param PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
+     * @param ValidatorExceptionProcessor $validatorExceptionProcessor
      */
     public function __construct(
         private readonly AddressInterfaceFactory $addressFactory,
         private readonly AddressRepositoryInterface $addressRepository,
         private readonly ValidateAddress $addressValidator,
-        private readonly PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
+        private readonly PopulateCustomerAddressFromInput $populateCustomerAddressFromInput,
+        private readonly ValidatorExceptionProcessor $validatorExceptionProcessor
     ) {
     }
 
@@ -56,6 +60,8 @@ class CreateCustomerAddress
 
         try {
             $this->addressRepository->save($address);
+        } catch (InputException $e) {
+            throw $this->validatorExceptionProcessor->processInputExceptionForGraphQl($e, "\n");
         } catch (AbstractAggregateException $e) {
             $errors = $e->getErrors();
             if (is_array($errors) && !empty($errors)) {

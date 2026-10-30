@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 
@@ -14,8 +14,10 @@
         <element name="expandedSwatchThumbnails" type="block" selector="//div[@aria-expanded='true' and contains(text(),'{{attribute_code}}')]/..//div[contains(@class,'{{swatch_types}}')]" parameterized="true"/>
         <element name="swatchThumbnailsImgLayeredNav" type="block" selector="//div[@class='image' and contains(@style,'{{swatch_thumb}}')]" parameterized="true"/>
         <element name="swatchTextLayeredNav" type="block" selector="//div[@class='swatch-option text ' and @data-option-label='{{args}}']" parameterized="true"/>
+        <element name="swatchVisualLayeredNav" type="block" selector="//div[@class='swatch-option ' and @data-option-label='{{args}}']" parameterized="true"/>
         <element name="swatchTextLayeredNavHover" type="block" selector="//div[@class='title' and text()='{{args}}']" parameterized="true"/>
         <element name="swatchSelectedInFilteredProd" type="block" selector="//div[@class='swatch-option {{args}} selected']" parameterized="true"/>
         <element name="swatchTextFilteredProdHover" type="block" selector="//div[@class='swatch-option-tooltip']//div[@class='title' and contains(text(),'{{args}}')]" parameterized="true"/>
+        <element name="removeFilterByAttributeLabel" type="button" selector="//ol[@class='items']//li[contains(@class,'item')]//span[@class='filter-label' and contains(text(),'{{attribute_label}}')]/..//a[contains(@class,'action remove')]" parameterized="true"/>
     </section>
 </sections>

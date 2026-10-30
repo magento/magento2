@@ -1,9 +1,7 @@
 <?php
 /**
- * Options for Query Id column
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\Adminhtml\Search\Grid;
 
@@ -44,7 +42,7 @@ class Options implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Console\Test\Unit\QuestionPerformer;
 use Magento\Framework\Console\QuestionPerformer\YesNo;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,10 +49,8 @@ class YesNoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -65,9 +64,8 @@ class YesNoTest extends TestCase
 
     /**
      * @param string $answer
-     * @param bool $expectedResult
-     * @dataProvider executeDataProvider
-     */
+     * @param bool $expectedResult     */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($answer, $expectedResult)
     {
         $firstMessage = 'First message';

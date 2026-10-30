@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data;
@@ -362,7 +362,7 @@ class Collection implements
      * Search all items by field value
      *
      * @param string $column
-     * @param array $value
+     * @param float|int|null|string $value
      * @return array
      */
     public function getItemsByColumnValue($column, $value)
@@ -829,6 +829,7 @@ class Collection implements
      */
     public function getItemById($idValue)
     {
+        $idValue = $idValue ?? '';
         $this->load();
         if (isset($this->_items[$idValue])) {
             return $this->_items[$idValue];

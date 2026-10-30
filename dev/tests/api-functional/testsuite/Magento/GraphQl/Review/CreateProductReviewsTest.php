@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Review\Model\ResourceModel\Review\CollectionFactory as ReviewCollect
 use Magento\Review\Model\Review;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test coverage for adding product reviews mutation
@@ -64,8 +65,8 @@ class CreateProductReviewsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider customerDataProvider
      */
+    #[DataProvider('customerDataProvider')]
     public function testCustomerAddProductReviews(string $customerName, bool $isGuest)
     {
         $productSku = 'simple_product';

@@ -231,7 +231,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);

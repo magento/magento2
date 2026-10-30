@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 type StoreConfig {
     front : String @doc(description: "The landing page that is associated with the base URL.")
     cms_home_page : String @doc(description: "The name of the CMS page that identifies the home page for the store.")

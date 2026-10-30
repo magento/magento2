@@ -19,7 +19,11 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GetCartPaginatedItemsTest extends GraphQlAbstract
 {
     /**
@@ -49,9 +53,9 @@ class GetCartPaginatedItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @dataProvider paginatedDataProvider
      * @throws \Exception
      */
+    #[DataProvider('paginatedDataProvider')]
     #[
         DataFixture(ProductFixture::class, ['sku' => 'p1'], as: 'product1'),
         DataFixture(ProductFixture::class, ['sku' => 'p2'], as: 'product2'),
@@ -126,7 +130,7 @@ QUERY;
     /**
      * @return array
      */
-    public function paginatedDataProvider(): array
+    public static function paginatedDataProvider(): array
     {
         return [
             [

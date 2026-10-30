@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetLoginAsCustomerAssi
 use Magento\TestFramework\Authentication\OauthHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Api tests for @see \Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::afterSave.
@@ -67,12 +68,11 @@ class CustomerAfterPluginTest extends WebapiAbstract
      * Check that 'assistance_allowed' set as expected.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider assistanceStatesDataProvider
-     *
      * @param int $state
      * @param bool $expected
      * @return void
      */
+    #[DataProvider('assistanceStatesDataProvider')]
     public function testUpdateCustomer(int $state, bool $expected): void
     {
         $customerId = (int)$this->customerRepository->get('customer@example.com')->getId();
@@ -106,13 +106,14 @@ class CustomerAfterPluginTest extends WebapiAbstract
      * Check that 'assistance_allowed' set as expected with limited resources.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider assistanceStatesDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param int $state
+     * @param bool $expected Unused - with limited ACL, always expects false
      * @return void
      */
-    public function testUpdateCustomerWithLimitedResources(int $state): void
+    #[DataProvider('assistanceStatesDataProvider')]
+    public function testUpdateCustomerWithLimitedResources(int $state, bool $expected): void
     {
         $resources = [
             'Magento_Customer::customer',

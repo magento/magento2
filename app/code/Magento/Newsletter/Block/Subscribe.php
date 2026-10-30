@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Newsletter subscribe block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block;
 
@@ -18,8 +16,7 @@ namespace Magento\Newsletter\Block;
 class Subscribe extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Retrieve form action url and set "secure" param to avoid confirm
-     * message when we submit form from secure page to unsecure
+     * Get form action url & set secure param to avoid confirm message when we submit form from secure page to unsecure
      *
      * @return string
      */

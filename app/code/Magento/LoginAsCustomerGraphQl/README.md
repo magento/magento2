@@ -9,14 +9,14 @@ Before installing this module, note that the Magento_GroupedProductGraphQl is de
 - Magento_LoginAsCustomerApi
 - Magento_Customer
 - Magento_Store
-- Magento_CatalogGraphQlr
+- Magento_CatalogGraphQl
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Additional information
 
 This module is a part of Login As Customer feature.
 
-[Learn more about Login As Customer feature](https://experienceleague.adobe.com/docs/commerce-admin/customers/customer-accounts/manage/login-as-customer.html).
+[Learn more about Login As Customer feature](https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customer-accounts/manage/login-as-customer).
 
-You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
+You can get more information about GraphQl in the [Adobe Developer documentation](https://developer.adobe.com/commerce/webapi/graphql/).

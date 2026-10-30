@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,14 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler;
 use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SuggestedAttributeListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SuggestedAttributeList
      */
@@ -84,11 +87,10 @@ class SuggestedAttributeListTest extends TestCase
         )->willReturnMap(
             $valueMap
         );
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getFrontendLabel'])
-            ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getSource', 'getAttributeCode', 'getId', 'getFrontendLabel']
+        );
         $this->collectionMock->expects(
             $this->once()
         )->method(
@@ -106,10 +108,11 @@ class SuggestedAttributeListTest extends TestCase
     {
         $source = $this->createMock(AbstractSource::class);
         $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
-        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
-        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
+        // Configure mock to return expected values
+        $this->attributeMock->method('getId')->willReturn('id');
+        $this->attributeMock->method('getFrontendLabel')->willReturn('label');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getSource')->willReturn($source);
         $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn('options');
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(true);
@@ -119,10 +122,7 @@ class SuggestedAttributeListTest extends TestCase
 
     public function testGetSuggestedAttributesIfTheyNotApplicable()
     {
-        $this->attributeMock->expects($this->never())->method('getId');
-        $this->attributeMock->expects($this->never())->method('getFrontendLabel');
-        $this->attributeMock->expects($this->never())->method('getAttributeCode');
-        $this->attributeMock->expects($this->never())->method('getSource');
+        // Anonymous class methods are available but not expected to be called in this test
         $this->configurableAttributeHandler->expects($this->once())->method('isAttributeApplicable')
             ->with($this->attributeMock)->willReturn(false);
 

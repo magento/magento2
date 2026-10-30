@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Persistent\Helper\Session as PersistentSession;
 use Magento\Persistent\Model\Plugin\ConvertCustomerCartToGuest;
 use Magento\Persistent\Model\QuoteManager;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class ConvertCustomerCartToGuestTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ConvertCustomerCartToGuest
      */
@@ -54,11 +57,10 @@ class ConvertCustomerCartToGuestTest extends TestCase
     public function testBeforeSubmit(): void
     {
         $quoteManagementMock = $this->createMock(QuoteManagement::class);
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsPersistent', 'getCustomerId'])
-            ->onlyMethods(['getCustomerIsGuest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsPersistent', 'getCustomerId', 'getCustomerIsGuest']
+        );
         $quoteMock->expects(self::once())->method('getIsPersistent')->willReturn(true);
         $quoteMock->expects(self::once())->method('getCustomerId')->willReturn(1);
         $quoteMock->expects(self::once())->method('getCustomerIsGuest')->willReturn(true);
@@ -74,10 +76,10 @@ class ConvertCustomerCartToGuestTest extends TestCase
     public function testBeforeSubmitQuoteIsNotPersistent(): void
     {
         $quoteManagementMock = $this->createMock(QuoteManagement::class);
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsPersistent'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsPersistent']
+        );
         $quoteMock->expects(self::once())->method('getIsPersistent')->willReturn(false);
         $this->customerSessionMock->expects(self::never())->method('setCustomerId');
         $this->persistentSessionMock->expects(self::never())->method('getSession');
@@ -89,10 +91,10 @@ class ConvertCustomerCartToGuestTest extends TestCase
     public function testBeforeSubmitQuoteWithoutCustomerId(): void
     {
         $quoteManagementMock = $this->createMock(QuoteManagement::class);
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsPersistent', 'getCustomerId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsPersistent', 'getCustomerId']
+        );
         $quoteMock->expects(self::once())->method('getIsPersistent')->willReturn(true);
         $quoteMock->expects(self::once())->method('getCustomerId')->willReturn(null);
         $this->customerSessionMock->expects(self::never())->method('setCustomerId');
@@ -105,11 +107,10 @@ class ConvertCustomerCartToGuestTest extends TestCase
     public function testBeforeSubmitQuoteIsGuest(): void
     {
         $quoteManagementMock = $this->createMock(QuoteManagement::class);
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsPersistent', 'getCustomerId'])
-            ->onlyMethods(['getCustomerIsGuest'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsPersistent', 'getCustomerId', 'getCustomerIsGuest']
+        );
         $quoteMock->expects(self::once())->method('getIsPersistent')->willReturn(true);
         $quoteMock->expects(self::once())->method('getCustomerId')->willReturn(1);
         $quoteMock->expects(self::once())->method('getCustomerIsGuest')->willReturn(false);

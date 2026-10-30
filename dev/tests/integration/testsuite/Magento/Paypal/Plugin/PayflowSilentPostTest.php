@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\Order\Payment;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -92,8 +93,8 @@ class PayflowSilentPostTest extends AbstractController
      * @param string $orderState
      * @param string $orderStatus
      * @magentoDataFixture Magento/Paypal/_files/order_payflow_link.php
-     * @dataProvider responseCodeDataProvider
      */
+    #[DataProvider('responseCodeDataProvider')]
     public function testOrderStatusWithDifferentPaypalResponse($resultCode, $orderState, $orderStatus)
     {
         $this->withRequest($resultCode);

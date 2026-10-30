@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Form;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Data\Form;
 
 /**
  * Form element widget block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Element extends \Magento\Backend\Block\Template
 {
@@ -35,6 +33,8 @@ class Element extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::widget/form/element.phtml';
 
     /**
+     * Set element and return self
+     *
      * @param string $element
      * @return $this
      */
@@ -45,6 +45,8 @@ class Element extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Set form and return self
+     *
      * @param Form $form
      * @return $this
      */
@@ -55,6 +57,8 @@ class Element extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Set form block and return self
+     *
      * @param \Magento\Framework\DataObject $formBlock
      * @return $this
      */
@@ -65,7 +69,7 @@ class Element extends \Magento\Backend\Block\Template
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _beforeToHtml()
     {

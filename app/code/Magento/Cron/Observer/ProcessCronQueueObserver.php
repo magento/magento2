@@ -849,11 +849,12 @@ class ProcessCronQueueObserver implements ObserverInterface
         $pendingJobs = $this->getPendingSchedules($groupId);
         /** @var Schedule $schedule */
         foreach ($pendingJobs as $schedule) {
-            if (isset($processedJobs[$schedule->getJobCode()])) {
+            $jobCode = $schedule->getJobCode() ?? '';
+            if (isset($processedJobs[$jobCode])) {
                 // process only one of each job per run
                 continue;
             }
-            $jobConfig = isset($jobsRoot[$schedule->getJobCode()]) ? $jobsRoot[$schedule->getJobCode()] : null;
+            $jobConfig = isset($jobsRoot[$jobCode]) ? $jobsRoot[$jobCode] : null;
             if (!$jobConfig) {
                 continue;
             }
@@ -866,7 +867,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             try {
                 $this->tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                 if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
-                    $processedJobs[$schedule->getJobCode()] = true;
+                    $processedJobs[$jobCode] = true;
                 }
             } catch (CronException $e) {
                 $this->logger->warning($e->getMessage());

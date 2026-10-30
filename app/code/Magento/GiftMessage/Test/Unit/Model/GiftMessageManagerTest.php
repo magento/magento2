@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +12,7 @@ use Magento\GiftMessage\Model\Message;
 use Magento\GiftMessage\Model\MessageFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Address\Item as QuoteAddressItem;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class GiftMessageManagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GiftMessageManager
      */
@@ -57,45 +59,33 @@ class GiftMessageManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->messageFactoryMock =
-            $this->getMockBuilder(MessageFactory::class)
-                ->addMethods(['__wakeup'])
-                ->onlyMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->messageFactoryMock = $this->createPartialMockWithReflection(
+            MessageFactory::class,
+            ['__wakeup', 'create']
+        );
 
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setGiftMessageId', 'getGiftMessageId', 'getCustomerId'])
-            ->onlyMethods([
-                'save',
-                'getItemById',
-                'getAddressById',
-                'getBillingAddress',
-                'getShippingAddress',
-                '__wakeup'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['setGiftMessageId', 'getGiftMessageId'])
-            ->onlyMethods(['save', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'setGiftMessageId', 'getGiftMessageId', 'getCustomerId',
+                'save', 'getItemById', 'getAddressById', 'getBillingAddress',
+                'getShippingAddress', '__wakeup'
+            ]
+        );
+        $this->quoteItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['setGiftMessageId', 'getGiftMessageId', 'save', '__wakeup']
+        );
 
-        $this->quoteAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getGiftMessageId', 'setGiftMessageId'])
-            ->onlyMethods(['getItemById', 'save', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['getGiftMessageId', 'setGiftMessageId', 'getItemById', 'save', '__wakeup']
+        );
 
-        $this->quoteAddressItemMock = $this->getMockBuilder(QuoteAddressItem::class)
-            ->addMethods([
-                'getGiftMessageId',
-                'setGiftMessageId'
-            ])
-            ->onlyMethods(['save', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteAddressItemMock = $this->createPartialMockWithReflection(
+            QuoteAddressItem::class,
+            ['getGiftMessageId', 'setGiftMessageId', 'save', '__wakeup']
+        );
 
         $this->giftMessageMock = $this->createPartialMock(
             Message::class,

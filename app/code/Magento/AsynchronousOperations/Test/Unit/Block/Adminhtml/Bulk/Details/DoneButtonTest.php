@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
 use Magento\Framework\Bulk\OperationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class DoneButtonTest extends TestCase
@@ -33,8 +35,8 @@ class DoneButtonTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->block = new DoneButton(
             $this->bulkStatusMock,
             $this->requestMock
@@ -45,8 +47,8 @@ class DoneButtonTest extends TestCase
      * @param int $failedCount
      * @param int $buttonsParam
      * @param array $expectedResult
-     * @dataProvider getButtonDataProvider
      */
+    #[DataProvider('getButtonDataProvider')]
     public function testGetButtonData($failedCount, $buttonsParam, $expectedResult)
     {
         $uuid = 'some standard uuid string';

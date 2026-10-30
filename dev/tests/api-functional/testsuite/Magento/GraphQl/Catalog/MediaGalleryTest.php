@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -119,6 +119,7 @@ QUERY;
         url
         position
         disabled
+        types
       }
     }
   }
@@ -136,6 +137,10 @@ QUERY;
         $this->assertEquals(2, $mediaGallery[1]['position']);
         $this->assertFalse($mediaGallery[1]['disabled']);
         $this->assertTrue($this->checkImageExists($mediaGallery[1]['url']));
+        $this->assertNotEmpty($mediaGallery[0]['types']);
+        $this->assertEquals('image', $mediaGallery[0]['types'][0]);
+        $this->assertNotEmpty($mediaGallery[1]['types']);
+        $this->assertEquals('thumbnail', $mediaGallery[1]['types'][0]);
     }
 
     /**
@@ -155,6 +160,7 @@ QUERY;
       	label
         url
         position
+        types
         disabled
         ... on ProductVideo {
               video_content {
@@ -179,6 +185,8 @@ QUERY;
         $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
         $this->assertFalse($mediaGallery[0]['disabled']);
         $this->assertEquals(2, $mediaGallery[0]['position']);
+        $this->assertNotEmpty($mediaGallery[0]['types']);
+        $this->assertEquals('image', $mediaGallery[0]['types'][0]);
         $this->assertNotEmpty($mediaGallery[0]['video_content']);
         $video_content = $mediaGallery[0]['video_content'];
         $this->assertEquals('external-video', $video_content['media_type']);

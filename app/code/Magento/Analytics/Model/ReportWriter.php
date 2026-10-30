@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -104,17 +104,18 @@ class ReportWriter implements ReportWriterInterface
         $stream = $directory->openFile($fileFullPath, 'w+');
         $stream->lock();
 
-        $headers = [];
         if ($providerObject instanceof \Magento\Analytics\ReportXml\BatchReportProviderInterface) {
+            $writeHeaders = true;
             $fileData = $providerObject->getBatchReport(...array_values($provider['parameters']));
             do {
-                $this->doWrite($fileData, $stream, $headers);
+                $this->doWrite($fileData, $stream, $writeHeaders);
+                $writeHeaders = false;
                 $fileData = $providerObject->getBatchReport(...array_values($provider['parameters']));
                 $fileData->rewind();
             } while ($fileData->valid());
         } else {
             $fileData = $providerObject->getReport(...array_values($provider['parameters']));
-            $this->doWrite($fileData, $stream, $headers);
+            $this->doWrite($fileData, $stream);
         }
 
         $stream->unlock();
@@ -126,15 +127,16 @@ class ReportWriter implements ReportWriterInterface
      *
      * @param \Traversable $fileData
      * @param FileWriteInterface $stream
-     * @param array $headers
+     * @param bool $writeHeaders
      * @return void
      */
-    private function doWrite(\Traversable $fileData, FileWriteInterface $stream, array $headers)
+    private function doWrite(\Traversable $fileData, FileWriteInterface $stream, bool $writeHeaders = true): void
     {
         foreach ($fileData as $row) {
-            if (!$headers) {
+            if ($writeHeaders) {
                 $headers = array_keys($row);
                 $stream->writeCsv($headers);
+                $writeHeaders = false;
             }
             $stream->writeCsv($this->prepareRow($row));
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
@@ -51,7 +51,7 @@ class DownloadablePanel extends AbstractModifier
     {
         $model = $this->locator->getProduct();
 
-        $data[$model->getId()][ProductAttributeInterface::CODE_IS_DOWNLOADABLE] =
+        $data[$model->getId() ?? ''][ProductAttributeInterface::CODE_IS_DOWNLOADABLE] =
             ($model->getTypeId() === Type::TYPE_DOWNLOADABLE) ? '1' : '0';
 
         return $data;

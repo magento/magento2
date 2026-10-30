@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,7 +85,7 @@ class ProcessInvoiceOperation extends AbstractOperation
         // prepare parent transaction and its amount
         $paidWorkaround = 0;
         if (!$invoice->wasPayCalled()) {
-            $paidWorkaround = (double)$amountToCapture;
+            $paidWorkaround = (float)$amountToCapture;
         }
         if ($payment->isCaptureFinal($paidWorkaround)) {
             $payment->setShouldCloseParentTransaction(true);

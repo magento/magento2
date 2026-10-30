@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,6 +101,7 @@ class SortingProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'addOrder'])
             ->getMock();
 
         $collectionMock->expects($this->exactly(3))
@@ -163,6 +164,7 @@ class SortingProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'addOrder'])
             ->getMock();
 
         $collectionMock->expects($this->exactly(3))

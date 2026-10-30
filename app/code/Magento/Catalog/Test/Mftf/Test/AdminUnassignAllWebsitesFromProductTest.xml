@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUnassignAllWebsitesFromProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create multi-website and multi-store, assign product to both, then unassign all websites and save."/>
+            <title value="Unassign all websites from a product and set visibility to Not Visible Individually"/>
+            <description value="Validate Removing a product from all websites in admin the product is saved successfully"/>
+            <testCaseId value="AC-3653"/>
+            <severity value="AVERAGE"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Pre-condition 1: Create product -->
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
+            <!-- Pre-condition 2: Create a second website, store and store view -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{defaultSimpleProduct.sku}}"/>
+            </actionGroup>
+            <!-- Delete the second website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 1: Go to Admin panel, navigate to product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="addProductToWebsite">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="addProductToWeb">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step 2: Edit the product and set the visibility to "not visible individually", navigate to products and website section and uncheck all the websites and save the product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPageAgain">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <!-- Set visibility to "not visible individually" -->
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductNotVisibleIndividually.visibility}}" stepKey="setVisibilityNotVisibleIndividually"/>
+        <!-- Uncheck all websites -->
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignCreatedWebsiteInProduct">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <!-- Save the product -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductAfterUpdate"/>
+        <!-- Step 3: Verify the product is saved successfully -->
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+    </test>
+</tests>

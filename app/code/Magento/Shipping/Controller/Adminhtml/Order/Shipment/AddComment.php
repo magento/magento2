@@ -1,27 +1,38 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Sales\Model\Order\Shipment\Comment as ShipmentComment;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment as ShipmentCommentResource;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
-class AddComment extends \Magento\Backend\App\Action
+/**
+ * Shipment add comment
+ */
+class AddComment extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
+     * @var ShipmentLoader
      */
     protected $shipmentLoader;
 
@@ -36,20 +47,38 @@ class AddComment extends \Magento\Backend\App\Action
     protected $resultLayoutFactory;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @var ShipmentComment
+     */
+    protected $shipmentComment;
+
+    /**
+     * @var ShipmentCommentResource
+     */
+    protected $shipmentCommentResource;
+
+    /**
+     * @param Context $context
+     * @param ShipmentLoader $shipmentLoader
      * @param ShipmentCommentSender $shipmentCommentSender
      * @param LayoutFactory $resultLayoutFactory
+     * @param ShipmentComment|null $shipmentComment
+     * @param ShipmentCommentResource|null $shipmentCommentResource
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        ShipmentLoader $shipmentLoader,
         ShipmentCommentSender $shipmentCommentSender,
-        LayoutFactory $resultLayoutFactory
+        LayoutFactory $resultLayoutFactory,
+        ?ShipmentComment $shipmentComment = null,
+        ?ShipmentCommentResource $shipmentCommentResource = null
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->shipmentCommentSender = $shipmentCommentSender;
         $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->shipmentComment = $shipmentComment ??
+            ObjectManager::getInstance()->get(ShipmentComment::class);
+        $this->shipmentCommentResource = $shipmentCommentResource ??
+            ObjectManager::getInstance()->get(ShipmentCommentResource::class);
         parent::__construct($context);
     }
 
@@ -64,7 +93,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('shipment_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The comment is missing. Enter and try again.')
                 );
             }
@@ -73,24 +102,31 @@ class AddComment extends \Magento\Backend\App\Action
             $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
             $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
             $shipment = $this->shipmentLoader->load();
-            $shipment->addComment(
-                $data['comment'],
-                isset($data['is_customer_notified']),
-                isset($data['is_visible_on_front'])
-            );
 
-            $this->shipmentCommentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
-            $shipment->save();
+            if (empty($data['comment_id'])) {
+                $shipment->addComment(
+                    $data['comment'],
+                    isset($data['is_customer_notified']),
+                    isset($data['is_visible_on_front'])
+                );
+                $this->shipmentCommentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
+                $shipment->save();
+            } else {
+                $comment = $this->shipmentComment->setComment($data['comment'])->setId($data['comment_id']);
+                $comment->setShipment($shipment);
+                $this->shipmentCommentResource->save($comment);
+            }
+
             $resultLayout = $this->resultLayoutFactory->create();
             $resultLayout->addDefaultHandle();
             $response = $resultLayout->getLayout()->getBlock('shipment_comments')->toHtml();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($response);
+            $response = $this->_objectManager->get(Data::class)->jsonEncode($response);
             $this->getResponse()->representJson($response);
         } else {
             $this->getResponse()->setBody($response);

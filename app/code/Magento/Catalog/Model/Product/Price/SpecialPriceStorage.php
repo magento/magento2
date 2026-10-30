@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\Result;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Data;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -122,8 +123,13 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function update(array $prices)
+    public function update($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
         $prices = $this->retrieveValidPrices($prices);
         $this->specialPriceResource->update($prices);
 
@@ -133,8 +139,14 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
     /**
      * @inheritdoc
      */
-    public function delete(array $prices)
+    public function delete($prices)
     {
+        if ($prices === null || !is_array($prices)) {
+            throw new InputException(
+                __('Invalid input data format. Expected an array of prices.')
+            );
+        }
+
         $prices = $this->retrieveValidPrices($prices);
         $this->specialPriceResource->delete($prices);
 
@@ -147,8 +159,13 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
      * @param array $prices
      * @return array
      */
-    private function retrieveValidPrices(array $prices)
+    private function retrieveValidPrices($prices)
     {
+        // Add null check at the beginning
+        if ($prices === null || !is_array($prices)) {
+            return [];
+        }
+
         $skus = array_unique(
             array_map(function ($price) {
                 return $price->getSku();

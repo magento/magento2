@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,11 @@ namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Product\Attribute\Edit;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Block\Adminhtml\Product\Attribute\Edit\Form;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FormTest extends TestCase
 {
-    /**
-     * @dataProvider dataForAddValues
-     */
+    #[DataProvider('dataForAddValues')]
     public function testAddValues($values)
     {
         $objectManager = new ObjectManager($this);

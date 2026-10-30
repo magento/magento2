@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,9 +43,7 @@ class DataProductUrlRewriteDatabaseMapTest extends TestCase
         $this->temporaryTableServiceMock = $this->createMock(TemporaryTableService::class);
         $this->connectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->hashMapPoolMock->expects($this->any())
-            ->method('getDataMap')
-            ->willReturn($this->dataProductMapMock);
+        $this->hashMapPoolMock->method('getDataMap')->willReturn($this->dataProductMapMock);
 
         $this->model = (new ObjectManager($this))->getObject(
             DataProductUrlRewriteDatabaseMap::class,
@@ -70,18 +68,12 @@ class DataProductUrlRewriteDatabaseMapTest extends TestCase
             '5' => ['store_id' => 2, 'product_id' => 2],
         ];
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
-        $this->connectionMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($connectionMock);
-        $connectionMock->expects($this->any())
-            ->method('select')
-            ->willReturn($selectMock);
-        $connectionMock->expects($this->any())
-            ->method('fetchAll')
-            ->willReturn($productStoreIds[3]);
+        $this->connectionMock->method('getConnection')->willReturn($connectionMock);
+        $connectionMock->method('select')->willReturn($selectMock);
+        $connectionMock->method('fetchAll')->willReturn($productStoreIds[3]);
         $selectMock->expects($this->any())
             ->method('from')
             ->willReturnSelf();
@@ -92,9 +84,7 @@ class DataProductUrlRewriteDatabaseMapTest extends TestCase
             ->method('where')
             ->willReturnSelf();
 
-        $this->dataProductMapMock->expects($this->any())
-            ->method('getAllData')
-            ->willReturn([]);
+        $this->dataProductMapMock->method('getAllData')->willReturn([]);
 
         $this->temporaryTableServiceMock->expects($this->any())
             ->method('createFromSelect')

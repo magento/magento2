@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Block;
 
@@ -14,7 +14,7 @@ namespace Magento\User\Block;
 class Buttons extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */
@@ -58,14 +58,15 @@ class Buttons extends \Magento\Backend\Block\Template
         );
 
         if ((int)$this->getRequest()->getParam('rid')) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to do this?'))
+            );
             $this->getToolbar()->addChild(
                 'deleteButton',
                 \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete Role'),
-                    'onclick' => 'deleteConfirm(\'' . __(
-                        'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getUrl(
+                    'onclick' => 'deleteConfirm(\'' . $confirmMessage . '\', \'' . $this->getUrl(
                         '*/*/delete',
                         ['rid' => $this->getRequest()->getParam('rid')]
                     ) . '\', {data: {}})',

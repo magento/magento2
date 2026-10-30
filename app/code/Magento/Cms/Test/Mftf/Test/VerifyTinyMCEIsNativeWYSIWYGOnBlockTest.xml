@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,7 +32,7 @@
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
-        <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
+        <executeJS function="hugerte.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
         <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="waitForInsertWidget" />
         <see selector="{{TinyMCESection.InsertImageBtn}}" userInput="Insert Image..." stepKey="assertInf17"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -337,6 +337,9 @@ class Write extends Read implements WriteInterface
     public function openFile($path, $mode = 'w')
     {
         $this->validatePath($path);
+        if ($path === null || $path === '') {
+            throw new FileSystemException(new Phrase('Invalid file path: path cannot be null or empty'));
+        }
         $folder = dirname($path);
         $this->create($folder);
         $this->assertWritable($this->isExist($path) ? $path : $folder);

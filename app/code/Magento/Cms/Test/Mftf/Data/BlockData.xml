@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,18 @@
         <data key="identifier" unique="suffix">ActiveTestBlock</data>
         <data key="store_id">All Store Views</data>
         <data key="content">Test Block content</data>
+        <data key="is_active">1</data>
+    </entity>
+     <entity name="CmsBlockForDefaultStoreView" type="block">
+        <data key="title">Block For Default Store View</data>
+        <data key="identifier">store_view_block</data>
+        <data key="content">Content for Default Store View</data>
+        <data key="is_active">1</data>
+    </entity>
+    <entity name="CmsBlockForCustomStoreView" type="block">
+        <data key="title">Block For Custom Store View</data>
+        <data key="identifier">store_view_block</data>
+        <data key="content">Content for Custom Store View</data>
         <data key="is_active">1</data>
     </entity>
 </entities>

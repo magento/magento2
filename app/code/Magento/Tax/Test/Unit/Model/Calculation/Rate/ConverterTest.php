@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,10 +76,10 @@ class ConverterTest extends TestCase
         );
     }
 
-    public function testCreateTitlesFromServiceObject()
+    public function testCreateTitlesFromServiceObject(): void
     {
-        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
-        $titlesMock = $this->getMockForAbstractClass(TaxRateTitleInterface::class);
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
+        $titlesMock = $this->createMock(TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->once())->method('getStoreId')->willReturn(1);
@@ -88,19 +88,19 @@ class ConverterTest extends TestCase
         $this->assertEquals([1 => 'Value'], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
     }
 
-    public function testCreateTitlesFromServiceObjectWhenTitlesAreNotProvided()
+    public function testCreateTitlesFromServiceObjectWhenTitlesAreNotProvided(): void
     {
-        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([]);
 
         $this->assertEquals([], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
     }
 
-    public function testCreateArrayFromServiceObject()
+    public function testCreateArrayFromServiceObject(): void
     {
-        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
-        $titlesMock = $this->getMockForAbstractClass(TaxRateTitleInterface::class);
+        $taxRateMock = $this->createMock(TaxRateInterface::class);
+        $titlesMock = $this->createMock(TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->atLeastOnce())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);

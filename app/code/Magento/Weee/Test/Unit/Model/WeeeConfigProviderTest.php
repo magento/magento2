@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Model;
 
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Config;
 use Magento\Weee\Model\WeeeConfigProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class WeeeConfigProviderTest extends TestCase
@@ -46,7 +48,7 @@ class WeeeConfigProviderTest extends TestCase
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
         $this->weeeConfigMock = $this->createMock(Config::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createPartialMock(StoreManager::class, ['getStore']);
         $this->storeMock = $this->createMock(Store::class);
 
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
@@ -59,13 +61,13 @@ class WeeeConfigProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider getConfigDataProvider
      * @param array $expectedResult
      * @param bool $weeeHelperEnabled
      * @param bool $displayWeeeDetails
      * @param bool $weeeConfigEnabled
      * @param bool $includeInSubtotal
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(
         $expectedResult,
         $weeeHelperEnabled,

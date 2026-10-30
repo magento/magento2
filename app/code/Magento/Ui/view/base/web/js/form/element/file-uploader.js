@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -110,10 +110,9 @@ define([
                         }
 
                         // code to allow duplicate files from same folder
-                        const modifiedFile = {
-                            ...currentFile,
-                            id:  currentFile.id + '-' + Date.now()
-                        };
+                        const modifiedFile = Object.assign({}, currentFile, {
+                            id: currentFile.id + '-' + Date.now()
+                        });
 
                         this.onLoadingStart();
                         return modifiedFile;
@@ -175,12 +174,64 @@ define([
          */
         replaceInputTypeFile: function (fileInput) {
             let fileId = fileInput.id, fileName = fileInput.name,
-                spanElement = '<span id=\'' + fileId + '\'></span>';
+                spanElement = '<span id=\'' + fileId + '\'></span>',
+                self = this;
 
-            $('#' + fileId).closest('.file-uploader-area').attr('upload-area-id', fileName);
+            $(fileInput).closest('.file-uploader-area').attr('upload-area-id', fileName);
             $(fileInput).replaceWith(spanElement);
-            $('#' + fileId).closest('.file-uploader-area').find('.file-uploader-button:first').on('click', function () {
-                $('#' + fileId).closest('.file-uploader-area').find('.uppy-Dashboard-browse').trigger('click');
+            $('#' + fileId).closest('.file-uploader-area').find('.file-uploader-button').first()
+                .off('click.mageFileUploader')
+                .on('click.mageFileUploader', function (e) {
+                    e.preventDefault();
+                    self.triggerFileBrowser($(this).closest('.file-uploader-area'));
+                });
+        },
+
+        /**
+         * Trigger the file browser dialog
+         *
+         * @param {jQuery} $area
+         */
+        triggerFileBrowser: function ($area) {
+            let $browseBtn = $area.find('.uppy-Dashboard-browse').first(),
+                $dashboard,
+                $fileInput;
+
+            if (!$browseBtn.length) {
+                $browseBtn = $area.closest('[data-role=drop-zone]').find('.uppy-Dashboard-browse').first();
+            }
+
+            if ($browseBtn.length > 0) {
+                $browseBtn[0].click();
+                return;
+            }
+
+            $dashboard = $area.find('.uppy-Dashboard-inner');
+            $fileInput = $dashboard.find('input[type="file"]:visible').first();
+
+            if ($fileInput.length > 0) {
+                $fileInput[0].click();
+            }
+        },
+
+        /**
+         * Binds click events for file browser triggers using event delegation
+         *
+         * @param {String} fileId
+         */
+        bindFileBrowserTriggers: function (fileId) {
+            let self = this,
+                $area = $('[upload-area-id="' + fileId + '"]').closest('.file-uploader-area'),
+                $dropZone = $area.closest('[data-role=drop-zone]');
+
+            if (!$area.length) {
+                $area = $('span[id="' + fileId + '"]').closest('.file-uploader-area');
+                $dropZone = $area.closest('[data-role=drop-zone]');
+            }
+
+            $dropZone.off('click.fileUploader').on('click.fileUploader', '.file-uploader-placeholder', function (e) {
+                e.preventDefault();
+                self.triggerFileBrowser($area);
             });
         },
 
@@ -216,11 +267,14 @@ define([
          * @param value
          * @returns {Promise<void>}
          */
-        async setImageSize(value) {
-            let response = await fetch(value.url),
-                blob = await response.blob();
-
-            value.size = blob.size;
+        setImageSize: function (value) {
+            return fetch(value.url)
+                .then(function (response) {
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    value.size = blob.size;
+                });
         },
 
         /**
@@ -614,6 +668,7 @@ define([
          */
         onElementRender: function (fileInput) {
             this.initUploader(fileInput);
+            this.bindFileBrowserTriggers(fileInput.id);
         },
 
         /**

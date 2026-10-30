@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Tree;
 
@@ -12,8 +12,6 @@ use Magento\Framework\DB\Select;
  *
  * Data model:
  * id  |  path  |  order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Dbp extends \Magento\Framework\Data\Tree
 {
@@ -225,7 +223,8 @@ class Dbp extends \Magento\Framework\Data\Tree
      */
     public function addChildNodes($children, $path, $parentNode, $level = 0)
     {
-        if (isset($children[$path])) {
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($path !== null && isset($children[$path])) {
             foreach ($children[$path] as $child) {
                 $nodeId = isset($child[$this->_idField]) ? $child[$this->_idField] : false;
                 if ($parentNode && $nodeId && ($node = $parentNode->getChildren()->searchById($nodeId))) {

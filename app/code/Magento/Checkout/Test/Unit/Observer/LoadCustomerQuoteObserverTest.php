@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class LoadCustomerQuoteObserverTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->checkoutSession = $this->createMock(Session::class);
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->object = $this->objectManager->getObject(
             LoadCustomerQuoteObserver::class,
             [

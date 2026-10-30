@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Test\Unit\View\Element;
 
@@ -34,10 +34,8 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->interpreterMock = $this->getMockBuilder(\Magento\Framework\Data\Argument\InterpreterInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->interpreterMock = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
         $this->contextFactoryMock = $this
             ->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextFactory::class)
             ->onlyMethods(['create'])

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,14 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
@@ -18,6 +25,7 @@ use Magento\PageCache\Model\Cache\Type as FullPageCache;
 use Magento\TestFramework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -43,6 +51,11 @@ class ResolverCacheAbstract extends GraphQlAbstract
      * @var bool
      */
     private $fullPageCacheStatusChanged = false;
+
+    /**
+     * @var array|null
+     */
+    private $originalCacheTypesConfig = null;
 
     /**
      * @var string
@@ -110,6 +123,26 @@ class ResolverCacheAbstract extends GraphQlAbstract
             $this->fullPageCacheStatusChanged = false;
         }
 
+        // Restore original cache_types config to prevent test cross-contamination
+        if ($this->originalCacheTypesConfig !== null) {
+            $writer = $this->objectManager->get(Writer::class);
+            $writer->saveConfig(
+                [ConfigFilePool::APP_ENV => ['cache_types' => $this->originalCacheTypesConfig]],
+                true // override
+            );
+            
+            // Clear DeploymentConfig cache so next test reads the restored env.php
+            $this->objectManager->get(DeploymentConfig::class)->resetData();
+            
+            // CRITICAL: Clear State's in-memory cache and remove shared instance
+            // so next test gets a fresh State object that reloads from restored env.php
+            $cacheState = $this->objectManager->get(StateInterface::class);
+            $cacheState->_resetState();
+            $this->objectManager->removeSharedInstance(StateInterface::class);
+            
+            $this->originalCacheTypesConfig = null;
+        }
+
         /** @var ConfigLoader $configLoader */
         $configLoader = $this->objectManager->get(ConfigLoader::class);
         $this->objectManager->configure($configLoader->load($this->initialAppArea));
@@ -128,6 +161,7 @@ class ResolverCacheAbstract extends GraphQlAbstract
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[AllowMockObjectsWithoutExpectations]
     protected function mockCustomerUserInfoContext(CustomerInterface $customer)
     {
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
@@ -152,6 +186,7 @@ class ResolverCacheAbstract extends GraphQlAbstract
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[AllowMockObjectsWithoutExpectations]
     protected function mockGuestUserInfoContext()
     {
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
@@ -181,13 +216,9 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     private function isCacheEnabled(string $cacheType): bool
     {
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento cache:status", $out);
-        $cacheStatus = implode('| ', $out);
-        preg_match("/(?<cache_type>$cacheType): (?<enabled>\d+)/", $cacheStatus, $matches);
-        return !empty($matches) && array_key_exists('enabled', $matches) && $matches['enabled'];
+        /** @var StateInterface $cacheState */
+        $cacheState = $this->objectManager->get(StateInterface::class);
+        return $cacheState->isEnabled($cacheType);
     }
 
     /**
@@ -200,15 +231,20 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     private function setCacheTypeStatusEnabled(string $cacheType, bool $enable): void
     {
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
-        if ($enable) {
-            // phpcs:ignore Magento2.Security.InsecureFunction
-            exec("php -f {$appDir}/bin/magento cache:enable $cacheType", $out);
-        } else {
-            // phpcs:ignore Magento2.Security.InsecureFunction
-            exec("php -f {$appDir}/bin/magento cache:disable $cacheType", $out);
+        /** @var StateInterface $cacheState */
+        $cacheState = $this->objectManager->get(StateInterface::class);
+        
+        // Save original cache_types config before first persist() call
+        if ($this->originalCacheTypesConfig === null) {
+            $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
+            $this->originalCacheTypesConfig = $deploymentConfig->get('cache_types') ?: [];
         }
+        
+        $cacheState->setEnabled($cacheType, $enable);
+        
+        // CRITICAL: For GraphQL cache tests to work, HTTP requests must see the cache enabled
+        // We persist to env.php but will restore original state in tearDown()
+        $cacheState->persist();
     }
 
     /**
@@ -220,10 +256,29 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     private function cleanCacheType(string $cacheType): void
     {
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
+        try {
+            // Get a fresh Pool instance without affecting shared instances
+            $cachePool = $this->objectManager->create(Pool::class);
+            $cache = $cachePool->get($cacheType);
 
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento cache:clean $cacheType", $out);
+            // Clean all cache entries for this type
+            $cache->clean(CacheConstants::CLEANING_MODE_ALL);
+
+            if ($cacheType === GraphQlResolverCache::TYPE_IDENTIFIER) {
+                $backend = $cache->getBackend();
+                if (method_exists($backend, 'clean')) {
+                    $backend->clean(CacheConstants::CLEANING_MODE_ALL);
+                }
+
+                $this->objectManager->removeSharedInstance(
+                    GraphQlResolverCache::class
+                );
+            }
+        } catch (\Exception $e) {
+            // If direct clean fails, use cache manager
+            /** @var Manager $cacheManager */
+            $cacheManager = $this->objectManager->get(Manager::class);
+            $cacheManager->clean([$cacheType]);
+        }
     }
 }

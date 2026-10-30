@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,23 +47,11 @@ class FlatTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productFlatIndexerRow = $this->getMockBuilder(
-            Row::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerRow = $this->createMock(Row::class);
 
-        $this->productFlatIndexerRows = $this->getMockBuilder(
-            Rows::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerRows = $this->createMock(Rows::class);
 
-        $this->productFlatIndexerFull = $this->getMockBuilder(
-            Full::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productFlatIndexerFull = $this->createMock(Full::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -81,7 +69,6 @@ class FlatTest extends TestCase
             Flat::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 

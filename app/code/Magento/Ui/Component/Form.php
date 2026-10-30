@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component;
 
@@ -70,9 +70,10 @@ class Form extends AbstractComponent
 
         $data = $this->getContext()->getDataProvider()->getData();
 
-        if (isset($data[$id])) {
+        $dataKey = $id ?? '';
+        if (isset($data[$dataKey])) {
             $dataSource = [
-                'data' => $data[$id]
+                'data' => $data[$dataKey]
             ];
         } elseif (isset($data['items'])) {
             foreach ($data['items'] as $item) {

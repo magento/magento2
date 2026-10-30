@@ -1,23 +1,23 @@
 # Magento_AdminNotification module
 
-The Magento_AdminNotification module provides the ability to alert administrators via system messages and provides a message inbox for surveys and notifications.
+This module provides the ability to alert administrators via system messages and provides a message inbox for surveys and notifications.
 
 ## Installation details
 
-The Magento_AdminNotification module creates the following tables in the database:
+This module creates the following tables in the database:
 
 - `adminnotification_inbox`
 - `admin_system_messages`
 
 Before disabling or uninstalling this module, note that the Magento_Indexer module depends on this module.
 
-For information about module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+For information about module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_AdminNotification module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with this module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_AdminNotification module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of this module.
 
 ### Events
 
@@ -32,10 +32,10 @@ This module introduces the following layouts and layout handles in the `view/adm
 - `adminhtml_notification_index`
 - `adminhtml_notification_block`
 
-For more information about layouts in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
+For more information about layouts, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
 You can extend admin notifications using the `view/adminhtml/ui_component/notification_area.xml` configuration file.
 
-For information about UI components in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
+For information about UI components, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).

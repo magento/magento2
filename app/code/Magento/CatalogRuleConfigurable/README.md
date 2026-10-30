@@ -1,1 +1,3 @@
-Magento_CatalogRuleConfigurable module is an extension of Magento_CatalogRule and Magento_ConfigurableProduct modules that handle catalog rule indexer for configurable product
+# Magento_CatalogRuleConfigurable module
+
+This module is an extension of Magento_CatalogRule and Magento_ConfigurableProduct modules that handle catalog rule indexer for configurable product.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +83,7 @@ class ExportInfoFactory
      *
      * @param string $fileFormat
      * @param string $entity
-     * @param string $exportFilter
+     * @param array $exportFilter
      * @param array $skipAttr
      * @param string|null $locale
      * @param bool|null $fieldsEnclosure

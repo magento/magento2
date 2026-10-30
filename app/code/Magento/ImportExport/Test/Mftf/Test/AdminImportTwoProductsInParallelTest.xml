@@ -30,6 +30,9 @@
                 <argument name="perPage" value="100"/>
             </actionGroup>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="subcat"/>
+            </actionGroup>
             <!-- Logout from Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

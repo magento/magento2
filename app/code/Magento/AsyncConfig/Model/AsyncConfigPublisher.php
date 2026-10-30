@@ -1,20 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AsyncConfig\Model;
 
+use Magento\AsyncConfig\Api\AsyncConfigPublisherInterface;
 use Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Filesystem\DirectoryList as FilesystemDirectoryList;
 
-class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublisherInterface
+class AsyncConfigPublisher implements AsyncConfigPublisherInterface
 {
     /**
      * @var PublisherInterface
@@ -32,7 +34,7 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     private $serializer;
 
     /**
-     * @var \Magento\Framework\Filesystem\DirectoryList
+     * @var FilesystemDirectoryList
      */
     private $dir;
 
@@ -46,14 +48,14 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
      * @param AsyncConfigMessageInterfaceFactory $asyncConfigFactory
      * @param PublisherInterface $publisher
      * @param Json $json
-     * @param \Magento\Framework\Filesystem\DirectoryList $dir
+     * @param FilesystemDirectoryList $dir
      * @param File $file
      */
     public function __construct(
         AsyncConfigMessageInterfaceFactory $asyncConfigFactory,
         PublisherInterface $publisher,
         Json $json,
-        \Magento\Framework\Filesystem\DirectoryList $dir,
+        FilesystemDirectoryList $dir,
         File $file
     ) {
         $this->asyncConfigFactory = $asyncConfigFactory;
@@ -100,7 +102,11 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
     private function changeImagePath(array &$fields)
     {
         foreach ($fields as &$data) {
-            if (!empty($data['value']['tmp_name'])) {
+            if (!isset($data['value']) || !is_array($data['value'])) {
+                continue;
+            }
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            if (!empty($data['value']['tmp_name']) && is_uploaded_file($data['value']['tmp_name'])) {
                 $newPath =
                     $this->dir->getPath(DirectoryList::MEDIA) . '/' .
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -110,6 +116,8 @@ class AsyncConfigPublisher implements \Magento\AsyncConfig\Api\AsyncConfigPublis
                     $newPath
                 );
                 $data['value']['tmp_name'] = $newPath;
+            } elseif (array_key_exists('tmp_name', $data['value'])) {
+                unset($data['value']['tmp_name']);
             }
         }
     }

@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Review\Model\ResourceModel\Review\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests some functionality of the Product Review collection
@@ -18,9 +20,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param string $sortAttribute
      * @param string $dir
      * @param callable $assertion
-     * @dataProvider sortOrderAssertionsDataProvider
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
      */
+    #[DataProvider('sortOrderAssertionsDataProvider')]
     public function testGetResultingIds(
         ?int $status,
         int $expectedCount,

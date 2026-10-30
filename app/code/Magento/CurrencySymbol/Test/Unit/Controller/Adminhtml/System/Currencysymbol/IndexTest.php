@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,9 +19,11 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Index
      */
@@ -80,19 +82,14 @@ class IndexTest extends TestCase
 
         $this->pageMock = $this->createMock(Page::class);
 
-        $this->blockMock = $this->getMockForAbstractClass(
+        $this->blockMock = $this->createPartialMockWithReflection(
             BlockInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['addLink', 'setActive', 'getMenuModel']
+            ['addLink', 'setActive', 'getMenuModel', 'toHtml']
         );
 
         $this->layoutMock = $this->createMock(Layout::class);
 
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
 
         $this->action = $objectManager->getObject(
             Index::class,

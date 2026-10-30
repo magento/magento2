@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Paypal\Observer\AddBillingAgreementToSessionObserver;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,10 +56,7 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
         $this->_observer = new Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->_agreementFactory = $this->createPartialMock(
-            AgreementFactory::class,
-            ['create']
-        );
+        $this->_agreementFactory = $this->createMock(AgreementFactory::class);
         $this->_checkoutSession = $this->createMock(Session::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
@@ -90,21 +88,13 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
 
     /**
      * @param bool $isValid
-     * @dataProvider addBillingAgreementToSessionDataProvider
      */
+    #[DataProvider('addBillingAgreementToSessionDataProvider')]
     public function testAddBillingAgreementToSession($isValid)
     {
         $agreement = $this->createMock(Agreement::class);
         $agreement->expects($this->once())->method('isValid')->willReturn($isValid);
-        $comment = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup']
-        );
+        $comment = $this->createMock(AbstractModel::class);
         $order = $this->createMock(Order::class);
         $order->expects(
             $this->once()

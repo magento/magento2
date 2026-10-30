@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Design\Theme\Customization;
 use Magento\Framework\View\Design\Theme\Customization\Path;
 use Magento\Framework\View\Design\Theme\FileFactory;
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CopyServiceTest extends TestCase
 {
+    use MockCreationTrait;
     /**#@+
      * @var \Magento\Theme\Model\CopyService
      */
@@ -158,11 +160,10 @@ class CopyServiceTest extends TestCase
         );
         $this->filesystem =
             $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
-        $this->dirWriteMock = $this->getMockBuilder(Write::class)
-            ->addMethods(['copy'])
-            ->onlyMethods(['isDirectory', 'search', 'delete', 'read', 'copyFile', 'isExist'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dirWriteMock = $this->createPartialMockWithReflection(
+            Write::class,
+            ['copy', 'isDirectory', 'search', 'delete', 'read', 'copyFile', 'isExist']
+        );
         $this->filesystem->expects(
             $this->any()
         )->method(
@@ -183,11 +184,9 @@ class CopyServiceTest extends TestCase
         $classInstance = $this;
         $this->updateFactory
             ->method('create')
-            ->will(
-                $this->returnCallback(function () use ($classInstance) {
-                    return $classInstance->updateFactoryReturn[$classInstance->updateFactoryCalls++];
-                })
-            );
+            ->willReturnCallback(function () use ($classInstance) {
+                return $classInstance->updateFactoryReturn[$classInstance->updateFactoryCalls++];
+            });
         $this->updateCollection = $this->createPartialMock(
             Collection::class,
             ['addThemeFilter', 'delete', 'getIterator']
@@ -265,17 +264,15 @@ class CopyServiceTest extends TestCase
         );
         $this->updateCollection->expects($this->once())->method('delete');
         $this->linkCollection->expects($this->once())->method('addThemeFilter');
-        $targetLinkOne = $this->getMockBuilder(Link::class)
-            ->addMethods(['setThemeId', 'setLayoutUpdateId'])
-            ->onlyMethods(['__wakeup', 'setId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $targetLinkOne = $this->createPartialMockWithReflection(
+            Link::class,
+            ['setThemeId', 'setLayoutUpdateId', '__wakeup', 'setId', 'save']
+        );
         $targetLinkOne->setData(['id' => 1, 'layout_update_id' => 1]);
-        $targetLinkTwo = $this->getMockBuilder(Link::class)
-            ->addMethods(['setThemeId', 'setLayoutUpdateId'])
-            ->onlyMethods(['__wakeup', 'setId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $targetLinkTwo = $this->createPartialMockWithReflection(
+            Link::class,
+            ['setThemeId', 'setLayoutUpdateId', '__wakeup', 'setId', 'save']
+        );
         $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
         $targetLinkOne
             ->method('setThemeId')->willReturnCallback(function ($arg1) {
@@ -318,8 +315,9 @@ class CopyServiceTest extends TestCase
             });
         $targetLinkTwo
             ->method('save');
-        $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
-        $this->linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
+        $this->linkCollection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
         $targetUpdateOne = $this->createPartialMock(
             Update::class,
             ['__wakeup', 'setId', 'load', 'save']
@@ -432,15 +430,17 @@ class CopyServiceTest extends TestCase
             );
         $newFileTwo->method('save');
 
+        $fileFactoryCallCount = 0;
         $this->fileFactory->expects(
             $this->any()
         )->method(
             'create'
         )->with(
             []
-        )->will(
-            $this->onConsecutiveCalls($newFileOne, $newFileTwo)
-        );
+        )->willReturnCallback(function () use (&$fileFactoryCallCount, $newFileOne, $newFileTwo) {
+            $fileFactoryCallCount++;
+            return $fileFactoryCallCount === 1 ? $newFileOne : $newFileTwo;
+        });
 
         $this->object->copy($this->sourceTheme, $this->targetTheme);
     }

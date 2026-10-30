@@ -112,7 +112,7 @@ class RollbackCommand extends AbstractSetupCommand
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->isAvailable() && ($input->getOption(self::INPUT_KEY_MEDIA_BACKUP_FILE)
                 || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))

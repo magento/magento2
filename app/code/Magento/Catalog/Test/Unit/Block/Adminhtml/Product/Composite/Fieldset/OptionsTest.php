@@ -1,22 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 
 use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\OptionFactory;
+use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Model\Product\Option\ValueFactory;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Option;
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Pricing\Helper\Data as PricingHelper;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\ArrayUtils;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +37,7 @@ use PHPUnit\Framework\TestCase;
  */
 class OptionsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -59,28 +69,34 @@ class OptionsTest extends TestCase
             Context::class,
             ['layout' => $layout]
         );
-        $optionFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\ValueFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $optionFactoryMock = $this->createPartialMock(ValueFactory::class, ['create']);
         $option = $this->_objectHelper->getObject(
-            \Magento\Catalog\Model\Product\Option::class,
+            ProductOption::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]
         );
-        $dateBlock = $this->getMockBuilder(Options::class)
-            ->addMethods(['setSkipJsReloadPrice'])
-            ->setConstructorArgs(['context' => $context, 'option' => $option])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dateBlock->expects($this->any())->method('setSkipJsReloadPrice')->willReturn($dateBlock);
+        
+        $dateBlock = $this->createPartialMockWithReflection(
+            Text::class,
+            ['setProduct', 'setOption']
+        );
+        $dateBlock->method('setProduct')->willReturnSelf();
+        $dateBlock->method('setOption')->willReturnSelf();
 
-        $layout->expects($this->any())->method('getChildName')->willReturn('date');
+        $layout->method('getChildName')->willReturn('date');
         $layout->expects($this->any())->method('getBlock')->with('date')->willReturn($dateBlock);
         $layout->expects($this->any())->method('renderElement')->with('date', false)->willReturn('html');
 
         $this->_optionsBlock = $this->_objectHelper->getObject(
             Options::class,
-            ['context' => $context, 'option' => $option]
+            [
+                'context' => $context,
+                'pricingHelper' => $this->createMock(PricingHelper::class),
+                'catalogData' => $this->createMock(CatalogHelper::class),
+                'jsonEncoder' => $this->createMock(EncoderInterface::class),
+                'option' => $option,
+                'registry' => $this->createMock(Registry::class),
+                'arrayUtils' => $this->createMock(ArrayUtils::class)
+            ]
         );
 
         $itemOptFactoryMock = $this->createPartialMock(
@@ -108,7 +124,7 @@ class OptionsTest extends TestCase
         );
 
         $option = $this->_objectHelper->getObject(
-            \Magento\Catalog\Model\Product\Option::class,
+            ProductOption::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]
         );
         $option->setType('date');

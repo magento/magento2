@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Block;
 
 use Magento\Cms\Block\Page;
+use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,7 @@ class PageTest extends TestCase
     protected $block;
 
     /**
-     * @var \Magento\Cms\Model\Page
+     * @var CmsPage
      */
     protected $page;
 
@@ -27,10 +28,9 @@ class PageTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(Page::class);
-        $this->page = $objectManager->getObject(\Magento\Cms\Model\Page::class);
+        $this->page = $objectManager->getObject(CmsPage::class);
         $reflection = new \ReflectionClass($this->page);
         $reflectionProperty = $reflection->getProperty('_idFieldName');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->page, 'page_id');
         $this->page->setId(1);
     }
@@ -45,7 +45,7 @@ class PageTest extends TestCase
         $id = 1;
         $this->block->setPage($this->page);
         $this->assertEquals(
-            [\Magento\Cms\Model\Page::CACHE_TAG . '_' . $id],
+            [CmsPage::CACHE_TAG . '_' . $id],
             $this->block->getIdentities()
         );
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,8 @@ use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +35,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PersonalInfoTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
@@ -79,7 +83,7 @@ class PersonalInfoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->willReturn(1);
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 
@@ -89,26 +93,23 @@ class PersonalInfoTest extends TestCase
         );
         $customerDataFactory->expects($this->any())->method('create')->willReturn($customer);
 
-        $backendSession = $this->getMockBuilder(Session::class)
-            ->addMethods(['getCustomerData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $backendSession = $this->createPartialMockWithReflection(Session::class, ['getCustomerData']);
         $backendSession->expects($this->any())->method('getCustomerData')->willReturn(['account' => []]);
 
-        $this->customerLog = $this->getMockBuilder(Log::class)
-            ->addMethods(['loadByCustomer'])
-            ->onlyMethods(['getLastLoginAt', 'getLastVisitAt', 'getLastLogoutAt'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customerLog = $this->createPartialMockWithReflection(
+            Log::class,
+            ['loadByCustomer',
+                            'getLastLoginAt',
+                            'getLastVisitAt',
+                            'getLastLogoutAt'
+                            ]
+        );
         $this->customerLog->expects($this->any())->method('loadByCustomer')->willReturnSelf();
 
         $customerLogger = $this->createPartialMock(Logger::class, ['get']);
         $customerLogger->expects($this->any())->method('get')->willReturn($this->customerLog);
 
-        $dateTime = $this->getMockBuilder(DateTime::class)
-            ->addMethods(['now'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $dateTime = $this->createPartialMockWithReflection(DateTime::class, ['now']);
         $dateTime->expects($this->any())->method('now')->willReturn('2015-03-04 12:00:00');
 
         $this->localeDate = $this->createPartialMock(
@@ -165,9 +166,8 @@ class PersonalInfoTest extends TestCase
      * @param string|null $lastLoginAt
      * @param string|null $lastVisitAt
      * @param string|null $lastLogoutAt
-     * @return void
-     * @dataProvider getCurrentStatusDataProvider
-     */
+     * @return void */
+    #[DataProvider('getCurrentStatusDataProvider')]
     public function testGetCurrentStatus($status, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
     {
         $this->scopeConfig->expects($this->any())
@@ -201,9 +201,9 @@ class PersonalInfoTest extends TestCase
     /**
      * @param string $result
      * @param string|null $lastLoginAt
-     * @dataProvider getLastLoginDateDataProvider
      * @return void
      */
+    #[DataProvider('getLastLoginDateDataProvider')]
     public function testGetLastLoginDate($result, $lastLoginAt)
     {
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
@@ -226,9 +226,9 @@ class PersonalInfoTest extends TestCase
     /**
      * @param string $result
      * @param string|null $lastLoginAt
-     * @dataProvider getStoreLastLoginDateDataProvider
      * @return void
      */
+    #[DataProvider('getStoreLastLoginDateDataProvider')]
     public function testGetStoreLastLoginDate($result, $lastLoginAt)
     {
         $this->customerLog->expects($this->once())->method('getLastLoginAt')->willReturn($lastLoginAt);
@@ -253,9 +253,9 @@ class PersonalInfoTest extends TestCase
     /**
      * @param string $expectedResult
      * @param bool $value
-     * @dataProvider getAccountLockDataProvider
      * @return void
      */
+    #[DataProvider('getAccountLockDataProvider')]
     public function testGetAccountLock($expectedResult, $value)
     {
         $this->customerRegistry->expects($this->once())->method('retrieve')->willReturn($this->customerModel);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Swatches\Block\Product\Renderer\Configurable\Listing;
 
 use Magento\Swatches\Block\Product\Renderer\Configurable\ProductPageViewTest;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class to check configurable product with swatch attributes view behaviour on category page
@@ -32,12 +33,11 @@ class CategoryPageViewTest extends ProductPageViewTest
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_visual_swatch_attribute.php
      *
-     * @dataProvider expectedVisualSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedVisualSwatchDataProvider')]
     public function testCategoryPageVisualSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductViewCategoryPage($expectedConfig, $expectedSwatchConfig, ['visual_swatch_attribute']);
@@ -46,12 +46,11 @@ class CategoryPageViewTest extends ProductPageViewTest
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_text_swatch_attribute.php
      *
-     * @dataProvider expectedTextSwatchDataProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTextSwatchDataProvider')]
     public function testCategoryPageTextSwatchAttributeView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductViewCategoryPage($expectedConfig, $expectedSwatchConfig, ['text_swatch_attribute']);
@@ -60,12 +59,11 @@ class CategoryPageViewTest extends ProductPageViewTest
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      *
-     * @dataProvider expectedTwoAttributesProvider
-     *
      * @param array $expectedConfig
      * @param array $expectedSwatchConfig
      * @return void
      */
+    #[DataProvider('expectedTwoAttributesProvider')]
     public function testCategoryPageTwoAttributesView(array $expectedConfig, array $expectedSwatchConfig): void
     {
         $this->checkProductViewCategoryPage(

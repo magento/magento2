@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
 /**
  * Catalog product form gallery content
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @method \Magento\Framework\Data\Form\Element\AbstractElement getElement()
  */

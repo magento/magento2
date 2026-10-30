@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,7 +165,6 @@ class PageTest extends ResolverCacheAbstract
         $page = $this->getPageByTitle('Page with 1column layout');
 
         $getGraphQlClient = new \ReflectionMethod($this, 'getGraphQlClient');
-        $getGraphQlClient->setAccessible(true);
 
         $query = $this->getQuery($page->getIdentifier());
         $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
@@ -450,16 +449,16 @@ class PageTest extends ResolverCacheAbstract
     private function generateExpectedDataFromPage(PageInterface $page): array
     {
         return [
-            'page_id' => $page->getId(),
-            'identifier' => $page->getIdentifier(),
             'url_key' => $page->getIdentifier(),
             'title' => $page->getTitle(),
-            'content' => $page->getContent(),
             'content_heading' => $page->getContentHeading(),
             'page_layout' => $page->getPageLayout(),
-            'meta_keywords' => $page->getMetaKeywords(),
             'meta_title' => $page->getMetaTitle(),
             'meta_description' => $page->getMetaDescription(),
+            'meta_keywords' => $page->getMetaKeywords(),
+            'page_id' => $page->getId(),
+            'identifier' => $page->getIdentifier(),
+            'content' => $page->getContent(),
         ];
     }
 
@@ -469,7 +468,6 @@ class PageTest extends ResolverCacheAbstract
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
         $metadatas = $lowLevelFrontendCache->getMetadatas($cacheKey);
         $tags = $metadatas['tags'];
-
         $this->assertEqualsCanonicalizing(
             [
                 $cacheIdPrefix . strtoupper(CmsPage::CACHE_TAG) . '_' . $page->getId(),
@@ -499,7 +497,8 @@ class PageTest extends ResolverCacheAbstract
         return <<<QUERY
 {
   cmsPage(identifier: "$identifier") {
-    title
+    title,
+    content
   }
 }
 QUERY;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -80,7 +80,9 @@ class Template extends \Magento\Framework\View\Element\Template
         $this->formKey = $context->getFormKey();
         $this->nameBuilder = $context->getNameBuilder();
         $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
-        $data['directoryHelper']= $directoryHelper ?? ObjectManager::getInstance()->get(DirectoryHelper::class);
+        if (empty($data['directoryHelper'])) {
+            $data['directoryHelper'] = $directoryHelper ?? ObjectManager::getInstance()->get(DirectoryHelper::class);
+        }
         parent::__construct($context, $data);
     }
 
@@ -107,6 +109,7 @@ class Template extends \Magento\Framework\View\Element\Template
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
      * issues that will be addressed in future releases.
+     * @see no alternatives
      */
     public function isOutputEnabled($moduleName = null)
     {

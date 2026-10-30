@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GoogleAdwords\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAdwords\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -64,8 +65,8 @@ class DataTest extends TestCase
      * @param bool $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
@@ -77,7 +78,11 @@ class DataTest extends TestCase
         )->willReturn(
             $isActive
         );
-        $this->_scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+        $this->_scopeConfigMock->method('getValue')->with(
+            $this->callback(function ($value) {
+                return is_string($value);
+            })
+        )->willReturnCallback(
             function () use ($returnConfigValue) {
                 return $returnConfigValue;
             }
@@ -123,8 +128,8 @@ class DataTest extends TestCase
      * @param string $returnLanguage
      *
      * @return void
-     * @dataProvider dataProviderForTestConvertLanguage
      */
+    #[DataProvider('dataProviderForTestConvertLanguage')]
     public function testConvertLanguageCodeToLocaleCode(string $language, string $returnLanguage): void
     {
         $convertArray = ['zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans'];
@@ -203,8 +208,8 @@ class DataTest extends TestCase
      * @param string $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestStoreConfig
      */
+    #[DataProvider('dataProviderForTestStoreConfig')]
     public function testGetStoreConfigValue($method, $xmlPath, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
@@ -291,8 +296,8 @@ class DataTest extends TestCase
      * @param string $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestConversionValueConstant
      */
+    #[DataProvider('dataProviderForTestConversionValueConstant')]
     public function testGetConversionValueConstant($conversionValueConst, $returnValue): void
     {
         $this->_registryMock->expects($this->never())->method('registry');

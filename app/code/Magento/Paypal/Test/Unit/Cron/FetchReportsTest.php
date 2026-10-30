@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,13 +45,12 @@ class FetchReportsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->settlementFactoryMock = $this->getMockBuilder(SettlementFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->fetchReports = $this->objectManager->getObject(

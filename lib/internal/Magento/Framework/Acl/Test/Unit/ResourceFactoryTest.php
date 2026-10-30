@@ -2,8 +2,8 @@
 /**
  * Test class for \Magento\Framework\Acl\AclResourceFactory
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Acl\Test\Unit;
 
@@ -34,7 +34,7 @@ class ResourceFactoryTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->_expectedObject = $this->createMock(AclResource::class);
 

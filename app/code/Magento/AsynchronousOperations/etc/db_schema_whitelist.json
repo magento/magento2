@@ -35,7 +35,8 @@
         },
         "index": {
             "MAGENTO_OPERATION_BULK_UUID_ERROR_CODE": true,
-            "MAGENTO_OPERATION_STATUS_STARTED_AT": true
+            "MAGENTO_OPERATION_STATUS_STARTED_AT": true,
+            "MAGENTO_OPERATION_BULK_UUID_OPERATION_KEY": true
         },
         "constraint": {
             "PRIMARY": true,

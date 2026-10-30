@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectSingleImageAndPriceForConfigurationAttributeActionGroup" extends="AdminSelectAllValueOfTwoAttributesPageActionGroup">
+        <annotations>
+            <description>Select values of each attribute to include in the product and assigns a image to the product.</description>
+        </annotations>
+        <arguments>
+            <argument name="price" type="string" defaultValue="100"/>
+            <argument name="image" type="string" defaultValue="MagentoLogo"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForImagesPage" after="clickNextToApplyQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleSetOfImages}}"
+               stepKey="clickApplySingleSetOfImages" after="waitForImagesPage"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageUploadButton}}"
+                               stepKey="waitForImageUploadSection" after="clickApplySingleSetOfImages"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanel.imageFileUpload}}" userInput="{{image}}"
+                    stepKey="uploadImageForAllConfigurations" after="waitForImageUploadSection"/>
+        <waitForElementNotVisible selector="{{AdminCreateProductConfigurationsPanel.uploadProgressBar}}"
+                                  stepKey="waitForImageUpload" after="uploadImageForAllConfigurations"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}"
+                                 stepKey="waitForPriceRadio" after="waitForImageUpload"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}"
+               stepKey="selectSinglePrice" after="waitForPriceRadio"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="{{price}}"
+                   stepKey="enterPrice" after="selectSinglePrice"/>
+    </actionGroup>
+</actionGroups>

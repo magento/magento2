@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\UpdateHandler;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -24,7 +26,6 @@ class ExecuteProcessForCustomAttributeInCustomStoreTest extends UpdateHandlerAbs
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider getCustomAttributeDataProvider
      * @param $code
      * @param $defaultStoreValue
      * @param $snapshotValue
@@ -32,6 +33,7 @@ class ExecuteProcessForCustomAttributeInCustomStoreTest extends UpdateHandlerAbs
      * @param $expected
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getCustomAttributeDataProvider')]
     public function testExecuteProcessForCustomAttributeInCustomStore(
         $code,
         $defaultStoreValue,

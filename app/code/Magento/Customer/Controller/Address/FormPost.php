@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Controller\Address;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
@@ -14,19 +14,24 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Validator\Address\File as FileNameValidator;
 use Magento\Directory\Helper\Data as HelperData;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
+use Magento\Customer\Model\ValidatorExceptionProcessor;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Message\AbstractMessage;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Customer Address Form Post Controller
@@ -56,6 +61,21 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     private $filesystem;
 
     /**
+     * @var AddressMetadataInterface
+     */
+    private $addressMetadata;
+
+    /**
+     * @var FileNameValidator
+     */
+    private $fileNameValidator;
+
+    /**
+     * @var ValidatorExceptionProcessor
+     */
+    private $validatorExceptionProcessor;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
@@ -69,7 +89,10 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
-     * @param Filesystem $filesystem
+     * @param Filesystem|null $filesystem
+     * @param AddressMetadataInterface|null $addressMetadata
+     * @param FileNameValidator|null $fileNameValidator
+     * @param ValidatorExceptionProcessor|null $validatorExceptionProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -86,11 +109,18 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
         HelperData $helperData,
-        ?Filesystem $filesystem = null
+        ?Filesystem $filesystem = null,
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?FileNameValidator $fileNameValidator = null,
+        ?ValidatorExceptionProcessor $validatorExceptionProcessor = null
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
+        $this->addressMetadata = $addressMetadata
+            ?: ObjectManager::getInstance()->get(AddressMetadataInterface::class);
+        $this->fileNameValidator = $fileNameValidator
+            ?: ObjectManager::getInstance()->get(FileNameValidator::class);
         parent::__construct(
             $context,
             $customerSession,
@@ -104,6 +134,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $resultForwardFactory,
             $resultPageFactory
         );
+        $this->validatorExceptionProcessor = $validatorExceptionProcessor
+            ?? ObjectManager::getInstance()->get(ValidatorExceptionProcessor::class);
+        if ($this->validatorExceptionProcessor !== null) {
+            $this->validatorExceptionProcessor->setMessageManager($context->getMessageManager());
+        }
     }
 
     /**
@@ -229,9 +264,10 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            foreach ($e->getErrors() as $error) {
-                $this->messageManager->addErrorMessage($error->getMessage());
+            if ($this->validatorExceptionProcessor !== null) {
+                $this->validatorExceptionProcessor->processInputException($e);
+            } else {
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         } catch (\Exception $e) {
             $redirectUrl = $this->_buildUrl('*/*/index');
@@ -253,6 +289,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @return Mapper
      *
      * @deprecated 100.1.3
+     * @see Mapper
      */
     private function getCustomerAddressMapper()
     {
@@ -272,19 +309,33 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      */
     private function deleteAddressFileAttribute($address)
     {
-        $attributeValue = $address->getCustomAttribute($this->_request->getParam('delete_attribute_value'));
-        if ($attributeValue!== null) {
-            if ($attributeValue->getValue() !== '') {
+        $attributeCode = $this->_request->getParam('delete_attribute_value');
+        $attributeValue = $address->getCustomAttribute($attributeCode);
+
+        if ($attributeValue !== null) {
+            $attributeMetadata = $this->addressMetadata->getAttributeMetadata($attributeCode);
+
+            if ($attributeMetadata &&
+                $attributeMetadata->getFrontendInput() === 'file' &&
+                $attributeValue->getValue() !== ''
+            ) {
                 $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $fileName = $attributeValue->getValue();
-                $path = $mediaDirectory->getAbsolutePath('customer_address' . $fileName);
-                if ($fileName && $mediaDirectory->isFile($path)) {
-                    $mediaDirectory->delete($path);
+
+                $filePath = AddressMetadataInterface::ENTITY_TYPE_ADDRESS
+                    . DIRECTORY_SEPARATOR
+                    . ltrim($fileName, DIRECTORY_SEPARATOR);
+                $absolutePath = $mediaDirectory->getAbsolutePath($filePath);
+                $allowedAbsolutePath = $mediaDirectory->getAbsolutePath(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
+
+                // Validate the file path
+                $this->fileNameValidator->validate($fileName, $absolutePath, $allowedAbsolutePath);
+
+                if ($fileName && $mediaDirectory->isFile($filePath)) {
+                    $mediaDirectory->delete($filePath);
                 }
-                $address->setCustomAttribute(
-                    $this->_request->getParam('delete_attribute_value'),
-                    ''
-                );
+
+                $address->setCustomAttribute($attributeCode, '');
             }
         }
 

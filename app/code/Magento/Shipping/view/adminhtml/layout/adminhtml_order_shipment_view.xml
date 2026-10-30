@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -26,6 +26,9 @@
                         <action method="setParentType">
                             <argument name="type" xsi:type="string">shipment</argument>
                         </action>
+                        <arguments>
+                            <argument name="editCommentCheck" xsi:type="object">Magento\Sales\ViewModel\Order\Entity\EditCommentCheck</argument>
+                        </arguments>
                     </block>
                     <block class="Magento\Shipping\Block\Adminhtml\Order\Tracking\View" name="shipment_tracking" template="Magento_Shipping::order/tracking/view.phtml"/>
                     <block class="Magento\Shipping\Block\Adminhtml\Order\Packaging" name="shipment_packaging" template="Magento_Shipping::order/packaging/popup.phtml"/>

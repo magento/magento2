@@ -156,9 +156,6 @@ class Subselect extends Combine
     public function validate(AbstractModel $model)
     {
         $subSelectConditionsFlag = true;
-        if (!$this->getConditions()) {
-            return false;
-        }
         $attr = $this->getAttribute();
         $total = 0;
         $isMultiShipping = (bool) $model->getQuote()->getIsMultiShipping();
@@ -168,6 +165,9 @@ class Subselect extends Combine
                 $subSelectConditionsFlag = $this->validateSubSelectConditions($item);
             }
             $total = $this->getBaseRowTotalForChildrenProduct($item, $attr, $total);
+            if ($subSelectConditionsFlag && $this->validateAttribute($total)) {
+                return true;
+            }
         }
         return $subSelectConditionsFlag && $this->validateAttribute($total);
     }
@@ -207,11 +207,11 @@ class Subselect extends Combine
      *
      * @param mixed $item
      * @param mixed $attr
-     * @param int $total
-     * @return int|mixed
+     * @param float $total
+     * @return float
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getBaseRowTotalForChildrenProduct(mixed $item, mixed $attr, int $total): mixed
+    private function getBaseRowTotalForChildrenProduct(mixed $item, mixed $attr, float $total): float
     {
         $hasValidChild = false;
         $useChildrenTotal = ($item->getProductType() == Type::TYPE_BUNDLE);

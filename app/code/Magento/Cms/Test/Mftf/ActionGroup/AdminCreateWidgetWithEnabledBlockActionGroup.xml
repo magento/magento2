@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateWidgetWithEnabledBlockActionGroup" extends="AdminCreateWidgetWithBlockActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetWithBlockActionGroup. Creates the provided Widget which includes the provided enabled Block (instead of disabled).</description>
+        </annotations>
+
+        <remove keyForRemoval="chooseStatus"/>
+        <selectOption selector="{{AdminNewWidgetSection.blockStatus}}" userInput="Enable" stepKey="chooseStatusEnabled" after="waitForLoadBlocks"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,6 @@ use Magento\Store\Model\ScopeInterface;
  * Adminhtml sales order create sidebar cart block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -59,16 +58,6 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         $collection = $this->getData('item_collection');
         if ($collection === null) {
             $collection = $this->getCreateOrderModel()->getCustomerCart()->getAllVisibleItems();
-            $transferredItems = $this->getCreateOrderModel()->getSession()->getTransferredItems() ?? [];
-            $transferredItems = $transferredItems[$this->getDataId()] ?? [];
-            if (!empty($transferredItems)) {
-                foreach ($collection as $key => $item) {
-                    if (in_array($item->getId(), $transferredItems)) {
-                        unset($collection[$key]);
-                    }
-                }
-            }
-
             $this->setData('item_collection', $collection);
         }
         return $collection;
@@ -128,7 +117,9 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      */
     protected function _prepareLayout()
     {
-        $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
+        $deleteAllConfirmString = $this->escapeJs(
+            $this->escapeHtml(__('Are you sure you want to delete all items from shopping cart?'))
+        );
         $this->addChild(
             'empty_customer_cart_button',
             \Magento\Backend\Block\Widget\Button::class,

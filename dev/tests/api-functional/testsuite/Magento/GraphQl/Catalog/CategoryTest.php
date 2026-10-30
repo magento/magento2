@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test loading of category tree
@@ -610,8 +611,8 @@ QUERY;
      *
      * @param string $imagePrefix
      * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_image.php
-     * @dataProvider categoryImageDataProvider
      */
+    #[DataProvider('categoryImageDataProvider')]
     public function testCategoryImage(?string $imagePrefix)
     {
         /** @var CategoryCollection $categoryCollection */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Analytics\ReportXml;
@@ -66,6 +66,8 @@ class SelectHydrator
     }
 
     /**
+     * Perform merge of parts
+     *
      * @return array
      */
     private function getSelectParts()
@@ -90,6 +92,8 @@ class SelectHydrator
     }
 
     /**
+     * Set parts to the select object
+     *
      * @param array $selectParts
      * @return Select
      */

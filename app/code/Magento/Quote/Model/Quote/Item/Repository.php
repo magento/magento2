@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model\Quote\Item;
@@ -57,12 +57,18 @@ class Repository implements CartItemRepositoryInterface
     private ?QuoteMutexInterface $quoteMutex;
 
     /**
+     * @var CartItemValidatorInterface|null
+     */
+    private ?CartItemValidatorInterface $cartItemValidator;
+
+    /**
      * @param CartRepositoryInterface $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param CartItemInterfaceFactory $itemDataFactory
      * @param CartItemOptionsProcessor $cartItemOptionsProcessor
      * @param CartItemProcessorInterface[] $cartItemProcessors
      * @param QuoteMutexInterface|null $quoteMutex
+     * @param CartItemValidatorInterface|null $cartItemValidator
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -70,7 +76,8 @@ class Repository implements CartItemRepositoryInterface
         CartItemInterfaceFactory $itemDataFactory,
         CartItemOptionsProcessor $cartItemOptionsProcessor,
         array $cartItemProcessors = [],
-        ?QuoteMutexInterface $quoteMutex = null
+        ?QuoteMutexInterface $quoteMutex = null,
+        ?CartItemValidatorInterface $cartItemValidator = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
@@ -78,6 +85,8 @@ class Repository implements CartItemRepositoryInterface
         $this->cartItemOptionsProcessor = $cartItemOptionsProcessor;
         $this->cartItemProcessors = $cartItemProcessors;
         $this->quoteMutex = $quoteMutex ?: ObjectManager::getInstance()->get(QuoteMutexInterface::class);
+        $this->cartItemValidator = $cartItemValidator ?? ObjectManager::getInstance()
+            ->get(CartItemValidatorInterface::class);
     }
 
     /**
@@ -136,6 +145,12 @@ class Repository implements CartItemRepositoryInterface
         $quoteItems = $quote->getItems();
         $quoteItems[] = $cartItem;
         $quote->setItems($quoteItems);
+        $result = $this->cartItemValidator->validate($quote, $cartItem);
+        if ($result->getErrors()) {
+            throw new InputException(
+                __(join(PHP_EOL, $result->getErrors()))
+            );
+        }
         $this->quoteRepository->save($quote);
         $quote->collectTotals();
 

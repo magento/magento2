@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,15 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EncryptedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var MockObject */
     protected $_encryptorMock;
 
@@ -44,13 +48,12 @@ class EncryptedTest extends TestCase
         )->willReturn(
             $eventDispatcherMock
         );
-        $this->_resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName', 'save'])
-            ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->_configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->_encryptorMock = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->_resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', 'save', 'getConnection', 'beginTransaction', 'commit', 'addCommitCallback', '_construct']
+        );
+        $this->_configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_encryptorMock = $this->createMock(EncryptorInterface::class);
         $this->_model = $helper->getObject(
             Encrypted::class,
             [
@@ -80,12 +83,12 @@ class EncryptedTest extends TestCase
 
     /**
      * @covers \Magento\Config\Model\Config\Backend\Encrypted::beforeSave
-     * @dataProvider beforeSaveDataProvider
      *
      * @param string $value
      * @param string $expectedValue
      * @param int $encryptMethodCall
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $expectedValue, $encryptMethodCall)
     {
         $this->_encryptorMock->expects($this->exactly($encryptMethodCall))

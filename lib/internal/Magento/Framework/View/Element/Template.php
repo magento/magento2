@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element;
 
@@ -35,7 +35,7 @@ class Template extends AbstractBlock
     /**
      * Config path to 'Allow Symlinks' template settings
      */
-    const XML_PATH_TEMPLATE_ALLOW_SYMLINK = 'dev/template/allow_symlink';
+    public const XML_PATH_TEMPLATE_ALLOW_SYMLINK = 'dev/template/allow_symlink';
 
     /**
      * Assigned variables for view
@@ -211,6 +211,7 @@ class Template extends AbstractBlock
         if ($area) {
             $params['area'] = $area;
         }
+        $params['store_id'] = $this->_storeManager->getStore()?->getId();
         return $this->resolver->getTemplateFileName($template ?: $this->getTemplate(), $params);
     }
 

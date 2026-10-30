@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class ConverterTest extends TestCase
     {
         $this->defaultConfigProviderMock =
             $this->createMock(DefaultValueProvider::class);
-        $this->interpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $this->interpreter = $this->createMock(InterpreterInterface::class);
         $this->converter = new Converter(new BooleanUtils(), $this->interpreter, $this->defaultConfigProviderMock);
         $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
     }

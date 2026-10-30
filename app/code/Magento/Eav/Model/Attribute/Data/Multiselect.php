@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
@@ -9,8 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Multiselect extends AbstractData
 {
@@ -81,7 +79,11 @@ class Multiselect extends AbstractData
     }
 
     /**
-     * @inheritdoc
+     * Validate the data
+     *
+     * @param array|string $value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -93,13 +95,22 @@ class Multiselect extends AbstractData
             $value = $this->getEntity()->getData($attribute->getAttributeCode());
         }
 
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
+        }
+
         if ($attribute->getIsRequired() && empty($value) && $value != '0') {
             $label = __($attribute->getStoreLabel());
             $errors[] = __('"%1" is a required value.', $label);
         }
 
         if (!empty($value) && $attribute->getSourceModel()) {
-            $values = is_array($value) ? $value : explode(',', (string) $value);
+            if (is_array($value)) {
+                $values = $value;
+            } else {
+                $values = preg_split('/[,\n\r]+/', (string) $value);
+            }
+            $values = array_map('trim', $values);
             $errors = array_merge(
                 $errors,
                 $this->validateBySource($values)
@@ -119,7 +130,9 @@ class Multiselect extends AbstractData
     {
         $errors = [];
         foreach ($values as $value) {
-            if (!$this->getAttribute()->getSource()->getOptionText($value)) {
+            $optionText = $this->getAttribute()->getSource()->getOptionText($value);
+            // Sources report a missing option either with false or with null, while a valid label may be "0"
+            if ($optionText === false || $optionText === null) {
                 $errors[] = __(
                     'Attribute %1 does not contain option with Id %2',
                     $this->getAttribute()->getAttributeCode(),

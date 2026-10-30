@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,16 +77,16 @@ abstract class ExpressTestCase extends TestCase
     protected function setUp(): void
     {
         $this->markTestSkipped();
-        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $this->config = $this->createMock(Config::class);
         $this->request = $this->createMock(Http::class);
         $this->quote = $this->createMock(Quote::class);
         $this->quote->expects($this->any())
             ->method('hasItems')
             ->willReturn(true);
-        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->redirect = $this->createMock(RedirectInterface::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->customerData = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerData = $this->createMock(CustomerInterface::class);
         $this->checkout = $this->createMock(Checkout::class);
         $this->customerSession = $this->createMock(Session::class);
         $this->customerSession->expects($this->any())
@@ -101,7 +101,7 @@ abstract class ExpressTestCase extends TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
         $this->session = $this->createMock(Generic::class);
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerCallback = function ($className) {
             if ($className == Config::class) {
                 return $this->config;

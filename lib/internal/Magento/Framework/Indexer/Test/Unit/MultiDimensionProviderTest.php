@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -219,10 +219,8 @@ class MultiDimensionProviderTest extends TestCase
         $dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getIterator'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $dimensionProviderMock->expects($this->any())
             ->method('getIterator')
@@ -246,8 +244,6 @@ class MultiDimensionProviderTest extends TestCase
         $dimensionMock = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getName', 'getValue'])
             ->getMock();
 

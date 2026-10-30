@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing\Validator;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing as AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPriceType;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -36,10 +37,10 @@ class TierPriceTypeTest extends TestCase
     /**
      * Test for isValid() method.
      *
-     * @dataProvider isValidDataProvider
      * @param array $value
      * @param bool $expectedResult
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(array $value, $expectedResult)
     {
         $result = $this->tierPriceType->isValid($value);

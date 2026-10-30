@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,23 +66,23 @@ class CounterTest extends TestCase
     {
         $this->productManagement = $this->getMockBuilder(ProductManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configurableManagement = $this
             ->getMockBuilder(ConfigurableProductManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->categoryManagement = $this->getMockBuilder(CategoryManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->customerManagement = $this->getMockBuilder(CustomerManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->websiteManagement = $this->getMockBuilder(WebsiteManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->storeManagement = $this->getMockBuilder(StoreManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new Counter(
             $this->productManagement,

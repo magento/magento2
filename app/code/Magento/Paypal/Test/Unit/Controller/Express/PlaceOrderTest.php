@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +12,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Paypal\Model\Api\ProcessableException;
 use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PlaceOrderTest extends ExpressTestCase
 {
@@ -20,8 +20,8 @@ class PlaceOrderTest extends ExpressTestCase
 
     /**
      * @param bool $isGeneral
-     * @dataProvider trueFalseDataProvider
      */
+    #[DataProvider('trueFalseDataProvider')]
     public function testExecuteNonProcessableException($isGeneral)
     {
         if (!$isGeneral) {
@@ -55,8 +55,8 @@ class PlaceOrderTest extends ExpressTestCase
     /**
      * @param int $code
      * @param null|string $paymentAction
-     * @dataProvider executeProcessableExceptionDataProvider
      */
+    #[DataProvider('executeProcessableExceptionDataProvider')]
     public function testExecuteProcessableException($code, $paymentAction = null)
     {
         $this->request->expects($this->once())

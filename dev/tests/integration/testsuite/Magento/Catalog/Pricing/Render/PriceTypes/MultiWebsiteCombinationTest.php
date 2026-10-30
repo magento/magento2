@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Pricing\Render\PriceTypes;
 
 use Magento\Framework\View\Result\PageFactory;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Assertions related to check product price rendering with combination of different price types on second website.
@@ -37,13 +38,13 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
      * product has special price which lower than regular and tier prices on second website.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
-     * @dataProvider tierPricesForAllCustomerGroupsDataProvider
      *
      * @param float $specialPrice
      * @param float $regularPrice
      * @param array $tierData
      * @return void
      */
+    #[DataProvider('tierPricesForAllCustomerGroupsDataProvider')]
     public function testRenderSpecialPriceInCombinationWithTierPrice(
         float $specialPrice,
         float $regularPrice,
@@ -70,13 +71,12 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
      *
      * @magentoAppIsolation enabled
      *
-     * @dataProvider tierPricesForLoggedCustomerGroupDataProvider
-     *
      * @param float $specialPrice
      * @param float $regularPrice
      * @param array $tierData
      * @return void
      */
+    #[DataProvider('tierPricesForLoggedCustomerGroupDataProvider')]
     public function testRenderSpecialPriceInCombinationWithTierPriceForLoggedInUser(
         float $specialPrice,
         float $regularPrice,
@@ -106,14 +106,13 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      * @magentoDataFixture Magento/CatalogRule/_files/delete_catalog_rule_data.php
      *
-     * @dataProvider catalogRulesDataProvider
-     *
      * @param float $specialPrice
      * @param float $regularPrice
      * @param array $catalogRules
      * @param array $tierData
      * @return void
      */
+    #[DataProvider('catalogRulesDataProvider')]
     public function testRenderCatalogRulePriceInCombinationWithDifferentPriceTypes(
         float $specialPrice,
         float $regularPrice,
@@ -139,12 +138,11 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      *
-     * @dataProvider percentCustomOptionsDataProvider
-     *
      * @param float $optionPrice
      * @param array $productPrices
      * @return void
      */
+    #[DataProvider('percentCustomOptionsDataProvider')]
     public function testRenderSpecialPriceInCombinationWithCustomOptionPrice(
         float $optionPrice,
         array $productPrices

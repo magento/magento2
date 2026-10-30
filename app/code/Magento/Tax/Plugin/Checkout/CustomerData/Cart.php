@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Plugin\Checkout\CustomerData;
@@ -71,7 +71,7 @@ class Cart
                 if ($item = $this->findItemById($itemAsArray['item_id'], $items)) {
                     $this->itemPriceRenderer->setItem($item);
                     $this->itemPriceRenderer->setTemplate('checkout/cart/item/price/sidebar.phtml');
-                    $result['items'][$key]['product_price']=$this->itemPriceRenderer->toHtml();
+                    $result['items'][$key]['product_price'] = $this->itemPriceRenderer->toHtml();
                     if ($this->itemPriceRenderer->displayPriceExclTax()) {
                         $result['items'][$key]['product_price_value'] = $item->getCalculationPrice();
                     } elseif ($this->itemPriceRenderer->displayPriceInclTax()) {

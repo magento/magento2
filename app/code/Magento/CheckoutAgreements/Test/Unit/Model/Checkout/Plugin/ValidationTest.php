@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidationTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Validation
      */
@@ -95,18 +97,17 @@ class ValidationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->agreementsValidatorMock = $this->getMockForAbstractClass(AgreementsValidatorInterface::class);
-        $this->subjectMock = $this->getMockForAbstractClass(PaymentInformationManagementInterface::class);
-        $this->paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
-        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getIsMultiShipping'])
-            ->onlyMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->agreementsValidatorMock = $this->createMock(AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->createMock(PaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->createMock(PaymentInterface::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getIsMultiShipping', 'getStoreId']
+        );
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->extensionAttributesMock = $this->getPaymentExtension();
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
             CheckoutAgreementsListInterface::class
         );
@@ -158,7 +159,7 @@ class ValidationTest extends TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([1]);
-        $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
+        $this->extensionAttributesMock->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
@@ -202,7 +203,7 @@ class ValidationTest extends TestCase
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn([1]);
-        $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
+        $this->extensionAttributesMock->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
         $this->paymentMock->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
@@ -228,16 +229,11 @@ class ValidationTest extends TestCase
      *
      * @return MockObject
      */
-    private function getPaymentExtension(): MockObject
+    private function getPaymentExtension(): PaymentExtensionInterface
     {
-        $mockBuilder = $this->getMockBuilder(PaymentExtensionInterface::class)
-            ->disableOriginalConstructor();
-        try {
-            $mockBuilder->addMethods(['getAgreementIds', 'setAgreementIds']);
-        } catch (RuntimeException $e) {
-            // Payment extension already generated.
-        }
-
-        return $mockBuilder->getMock();
+        return $this->createPartialMockWithReflection(
+            PaymentExtensionInterface::class,
+            ['getAgreementIds', 'setAgreementIds']
+        );
     }
 }

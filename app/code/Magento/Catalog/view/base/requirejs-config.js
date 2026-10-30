@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 var config = {
@@ -10,7 +10,8 @@ var config = {
             priceOptionDate:      'Magento_Catalog/js/price-option-date',
             priceOptionFile:      'Magento_Catalog/js/price-option-file',
             priceOptions:         'Magento_Catalog/js/price-options',
-            priceUtils:           'Magento_Catalog/js/price-utils'
+            priceUtils:           'Magento_Catalog/js/price-utils',
+            catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
         }
     }
 };

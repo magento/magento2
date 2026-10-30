@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2020 Adobe.
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -10,11 +10,11 @@ namespace Magento\SalesGraphQl\Model\OrderItem;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
@@ -22,6 +22,8 @@ use Magento\Tax\Helper\Data as TaxHelper;
  */
 class DataProvider
 {
+    public const APPLIED_TO_ITEM = 'ITEM';
+    public const APPLIED_TO_SHIPPING = 'SHIPPING';
     /**
      * @var OrderItemRepositoryInterface
      */
@@ -240,12 +242,28 @@ class DataProvider
         } else {
             $discounts [] = [
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
+                'applied_to' => $this->getAppliedTo($associatedOrder),
                 'amount' => [
                     'value' => abs((float) $orderItem->getDiscountAmount()),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
-                ]
+                ],
+                'order_model' => $associatedOrder,
             ];
         }
         return $discounts;
+    }
+
+    /**
+     * Get entity type the discount is applied to
+     *
+     * @param OrderInterface $order
+     * @return string
+     */
+    private function getAppliedTo($order)
+    {
+        if ((float) $order->getShippingDiscountAmount() > 0) {
+            return self::APPLIED_TO_SHIPPING;
+        }
+        return self::APPLIED_TO_ITEM;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Cache\Backend;
@@ -20,6 +20,8 @@ use Magento\Framework\Cache\StaleCacheNotifierInterface;
  */
 class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache adapter
      *
@@ -189,6 +191,49 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
+     * Save the data key and its paired hash key on the remote backend.
+     *
+     * When the remote backend supports atomic pair operations, both keys are written in a
+     * single atomic transaction so a concurrent remove() can never observe one updated and not
+     * the other. Other backend types keep the previous two-step save, which remains racy.
+     *
+     * @param string $data
+     * @param string $id
+     * @param array $tags
+     * @param mixed $specificLifetime
+     * @param bool $sameRemoteData
+     * @return void
+     */
+    private function saveRemoteDataAndVersion(
+        string $data,
+        string $id,
+        array $tags,
+        $specificLifetime,
+        bool $sameRemoteData
+    ): void {
+        if ($this->remote instanceof AtomicPairBackendInterface) {
+            $this->remote->saveAtomicPair(
+                $data,
+                $id,
+                $tags,
+                $specificLifetime,
+                $this->getDataVersion($data),
+                $id . self::HASH_SUFFIX,
+                $tags,
+                $specificLifetime
+            );
+            return;
+        }
+
+        if (!empty($tags) && $sameRemoteData) {
+            // Remove first so Redis backends drop the previous tag memberships before re-save.
+            $this->remote->remove($id);
+        }
+        $this->remote->save($data, $id, $tags, $specificLifetime);
+        $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
+    }
+
+    /**
      * @inheritdoc
      */
     public function load($id, $doNotTestCacheValidity = false)
@@ -230,13 +275,18 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
         $isRemoteUpToDate = false;
-        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
+        $sameRemoteData = $remHash !== false && $this->getDataVersion($data) === $remHash;
+        // Tagged saves must reach the remote backend so a changed tag set is re-indexed even when
+        // the payload is identical. Keep the redundant-write optimization for tagless saves.
+        if (empty($tags) && $sameRemoteData) {
             $remoteData = $this->remote->load($id);
             if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
                 $isRemoteUpToDate = true;
@@ -244,8 +294,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             }
         }
         if (!$isRemoteUpToDate) {
-            $this->remote->save($data, $id, $tags, $specificLifetime);
-            $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
+            $this->saveRemoteDataAndVersion($data, $id, $tags, $specificLifetime, $sameRemoteData);
         }
 
         if ($this->_options['use_stale_cache']) {
@@ -278,7 +327,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-        $result = $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+        $result = $this->remote instanceof AtomicPairBackendInterface
+            ? $this->remote->removeAtomicPair($id, $id . self::HASH_SUFFIX)
+            : $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+
         if ($result && !$this->_options['use_stale_cache']) {
             $result = $this->local->remove($id);
         }
@@ -437,7 +489,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlockAll()
     {
-        foreach ($this->lockList as $id) {
+        foreach (array_keys($this->lockList) as $id) {
             $this->unlock($id);
         }
     }
@@ -450,29 +502,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function __destruct()
     {
         $this->unlockAll();
-    }
-
-    /**
-     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
-     *
-     * @return string
-     */
-    private function generateLockSign()
-    {
-        $sign = \implode(
-            '-',
-            [
-                \getmypid(), \crc32(\gethostname())
-            ]
-        );
-
-        try {
-            $sign .= '-' . \bin2hex(\random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . \uniqid('-uniqid-');
-        }
-
-        return $sign;
     }
 
     /**

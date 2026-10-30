@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,11 +22,13 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Theme\Helper\Storage as HelperStorage;
 use Magento\Theme\Model\Wysiwyg\Storage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 
 /**
@@ -34,6 +36,8 @@ use ReflectionClass;
  */
 class StorageTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var string
      */
@@ -113,28 +117,25 @@ class StorageTest extends TestCase
                 }
             );
 
-        $this->helperStorage = $this->getMockBuilder(HelperStorage::class)
-            ->addMethods(['urlEncode'])
-            ->onlyMethods(
-                [
-                    'getStorageType',
-                    'getCurrentPath',
-                    'getStorageRoot',
-                    'getShortFilename',
-                    'getSession',
-                    'convertPathToId',
-                    'getRequestParams'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helperStorage = $this->createPartialMockWithReflection(
+            HelperStorage::class,
+            [
+                'urlEncode',
+                'getStorageType',
+                'getCurrentPath',
+                'getStorageRoot',
+                'getShortFilename',
+                'getSession',
+                'convertPathToId',
+                'getRequestParams'
+            ]
+        );
 
         $reflection = new ReflectionClass(HelperStorage::class);
         $reflection_property = $reflection->getProperty('file');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->helperStorage, $file);
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->imageFactory = $this->createMock(AdapterFactory::class);
         $this->directoryWrite = $this->createMock(Write::class);
         $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
@@ -243,9 +244,9 @@ class StorageTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider booleanCasesDataProvider
      * cover Storage::createFolder
      */
+    #[DataProvider('booleanCasesDataProvider')]
     public function testCreateFolder($isWritable): void
     {
         $newDirectoryName = 'dir1';

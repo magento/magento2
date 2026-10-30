@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\Argument\Interpreter;
 
@@ -65,7 +65,7 @@ class ServiceUrl implements InterpreterInterface
      *
      * @return string
      */
-    private function getServiceUrl()
+    public function getServiceUrl()
     {
         $store = $this->storeRepository->getById($this->storeManager->getStore()->getId());
         return $this->url->getUrl(

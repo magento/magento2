@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -26,7 +26,6 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Zend_Db_Expr;
-use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
  * Product collection
@@ -723,6 +722,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_prepareUrlDataObject();
         $this->prepareStoreId();
 
+        if (isset($this->_selectAttributes['media_gallery'])) {
+            $this->addMediaGalleryData();
+        }
+
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
         }
@@ -1238,9 +1241,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select->where($this->getPriceExpression($select) . ' IS NOT NULL');
         $row = $this->getConnection()->fetchRow($select, $this->_bindParams, \Zend_Db::FETCH_NUM);
         $this->_pricesCount = (int)$row[0];
-        $this->_maxPrice = (double)$row[1];
-        $this->_minPrice = (double)$row[2];
-        $this->_priceStandardDeviation = (double)$row[3];
+        $this->_maxPrice = (float)$row[1];
+        $this->_minPrice = (float)$row[2];
+        $this->_priceStandardDeviation = (float)$row[3];
 
         return $this;
     }
@@ -2362,7 +2365,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->getSize()) {
+        $size = $this->isLoaded() ? $this->count() : $this->getSize();
+
+        if (!$size) {
             return $this;
         }
 

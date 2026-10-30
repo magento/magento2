@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -190,8 +190,11 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
 
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
-        } catch (StateException $e) {
-            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+        } catch (StateException) {
+            $this->messageManager->addNoticeMessage(__(
+                'Your account is already active, or the confirmation code was incorrect.'
+                . ' Sign in or request a new confirmation email.'
+            ));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('There was an error confirming the account'));
         }

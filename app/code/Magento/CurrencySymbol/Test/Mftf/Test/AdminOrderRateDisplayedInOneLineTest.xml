@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -57,6 +57,7 @@
             <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSDWebsites"/>
             <comment userInput="BIC workaround" stepKey="setCurrencyDefaultUSDWebsites"/>
             <comment userInput="BIC workaround" stepKey="setAllowedCurrencyUSDWebsites"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created product on Storefront and place for order-->

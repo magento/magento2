@@ -1,15 +1,15 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View;
 
-class Cancel extends View implements HttpPostActionInterface
+class Cancel extends View implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

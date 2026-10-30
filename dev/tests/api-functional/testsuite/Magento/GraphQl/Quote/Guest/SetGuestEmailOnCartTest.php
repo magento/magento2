@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setGuestEmailOnCart mutation
@@ -105,11 +106,10 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     *
-     * @dataProvider incorrectEmailDataProvider
      * @param string $email
      * @param string $exceptionMessage
      */
+    #[DataProvider('incorrectEmailDataProvider')]
     public function testSetGuestEmailOnCartWithIncorrectEmail(
         string $email,
         string $exceptionMessage

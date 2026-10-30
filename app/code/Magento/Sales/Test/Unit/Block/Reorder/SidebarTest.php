@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,17 +12,21 @@ use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Sales\Block\Reorder\Sidebar;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Item as OrderItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -30,13 +34,15 @@ use PHPUnit\Framework\TestCase;
  */
 class SidebarTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Sidebar|MockObject
      */
     private $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|MockObject
+     * @var TemplateContext|MockObject
      */
     private $context;
 
@@ -56,7 +62,7 @@ class SidebarTest extends TestCase
     private $orderConfig;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|MockObject
+     * @var HttpContext|MockObject
      */
     private $httpContext;
 
@@ -85,8 +91,8 @@ class SidebarTest extends TestCase
     {
         $this->markTestSkipped('MAGETWO-36789');
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->httpContext = $this->createPartialMock(\Magento\Framework\App\Http\Context::class, ['getValue']);
+        $this->context = $this->createMock(TemplateContext::class);
+        $this->httpContext = $this->createPartialMock(HttpContext::class, ['getValue']);
         $this->orderCollectionFactory = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
@@ -96,11 +102,10 @@ class SidebarTest extends TestCase
             Config::class,
             ['getVisibleOnFrontStatuses']
         );
-        $this->orderCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setOrders'])
-            ->onlyMethods(['addAttributeToFilter', 'addAttributeToSort', 'setPage'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setOrders', 'addAttributeToFilter', 'addAttributeToSort', 'setPage']
+        );
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getStockItem'])
@@ -177,10 +182,10 @@ class SidebarTest extends TestCase
             ->method('getWebsiteIds')
             ->willReturn([$websiteId]);
 
-        $item = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            OrderItem::class,
+            ['getProduct']
+        );
         $item->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($product);

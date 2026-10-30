@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeConverterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -37,10 +38,7 @@ class KeywordTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['convert'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createPartialMock(FieldTypeConverterInterface::class, ['convert']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -53,7 +51,6 @@ class KeywordTypeTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldTypeProvider
      * @param bool $isComplexType
      * @param bool $isSearchable
      * @param bool $isAlwaysIndexable
@@ -62,6 +59,7 @@ class KeywordTypeTest extends TestCase
      * @param string $expected
      * @return void
      */
+    #[DataProvider('getFieldTypeProvider')]
     public function testGetFieldType(
         bool $isComplexType,
         bool $isSearchable,

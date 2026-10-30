@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,8 +62,8 @@ class ConfigTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $readFactoryMock = $this->createMock(ReadFactory::class);
-        $this->coreConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
+        $this->coreConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheState = $this->createMock(StateInterface::class);
 
         $modulesDirectoryMock = $this->createMock(Write::class);
         $readFactoryMock->expects(

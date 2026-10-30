@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Vault\Model\Method;
 
@@ -25,7 +25,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Class Vault
+ * Vault payment method
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,7 +38,7 @@ class Vault implements VaultPaymentInterface
     /**
      * @deprecated
      */
-    const TOKEN_METADATA_KEY = 'token_metadata';
+    public const TOKEN_METADATA_KEY = 'token_metadata';
 
     /**
      * @var string
@@ -202,6 +202,7 @@ class Vault implements VaultPaymentInterface
     public function setStore($storeId)
     {
         $this->storeId = (int)$storeId;
+        $this->vaultProvider->setStore($storeId);
     }
 
     /**
@@ -474,6 +475,7 @@ class Vault implements VaultPaymentInterface
         }
 
         $this->attachTokenExtensionAttribute($payment);
+        $this->attachCreditCardInfo($payment);
 
         $commandExecutor = $this->commandManagerPool->get(
             $this->vaultProvider->getCode()
@@ -488,6 +490,7 @@ class Vault implements VaultPaymentInterface
         );
 
         $payment->setMethod($this->vaultProvider->getCode());
+        return $this;
     }
 
     /**

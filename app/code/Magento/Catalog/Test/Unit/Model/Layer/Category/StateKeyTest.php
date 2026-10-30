@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Layer\Category\StateKey;
 use Magento\Customer\Model\Session;
@@ -15,6 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\Catalog\Model\Layer\Category\StateKey::class)]
 class StateKeyTest extends TestCase
 {
     /**
@@ -34,15 +36,11 @@ class StateKeyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->model = new StateKey($this->storeManagerMock, $this->customerSessionMock);
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::toString
-     * @covers \Magento\Catalog\Model\Layer\Category\StateKey::__construct
-     */
     public function testToString()
     {
         $categoryMock = $this->createMock(Category::class);

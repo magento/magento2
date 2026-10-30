@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
 
 /**
  * Test for empty cart creation mutation for customer
@@ -21,9 +22,14 @@ use Magento\Quote\Api\GuestCartRepositoryInterface;
 class CreateEmptyCartTest extends GraphQlAbstract
 {
     /**
-     * @var GuestCartRepositoryInterface
+     * @var MaskedQuoteIdToQuoteIdInterface
      */
-    private $guestCartRepository;
+    private $maskedQuoteIdToQuoteId;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
 
     /**
      * @var CustomerTokenServiceInterface
@@ -49,7 +55,8 @@ class CreateEmptyCartTest extends GraphQlAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
-        $this->guestCartRepository = $objectManager->get(GuestCartRepositoryInterface::class);
+        $this->maskedQuoteIdToQuoteId = $objectManager->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $this->cartRepository = $objectManager->get(CartRepositoryInterface::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
@@ -66,11 +73,12 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertArrayHasKey('createEmptyCart', $response);
         self::assertNotEmpty($response['createEmptyCart']);
 
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        $quoteId = $this->maskedQuoteIdToQuoteId->execute($response['createEmptyCart']);
+        $cart = $this->cartRepository->get($quoteId);
 
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertEquals('default', $guestCart->getStore()->getCode());
+        self::assertNotNull($cart->getId());
+        self::assertEquals(1, $cart->getCustomer()->getId());
+        self::assertEquals('default', $cart->getStore()->getCode());
     }
 
     /**
@@ -107,12 +115,12 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertArrayHasKey('createEmptyCart', $response);
         self::assertNotEmpty($response['createEmptyCart']);
 
-        /* guestCartRepository is used for registered customer to get the cart hash */
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
+        $quoteId = $this->maskedQuoteIdToQuoteId->execute($response['createEmptyCart']);
+        $cart = $this->cartRepository->get($quoteId);
 
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertEquals('fixture_second_store', $guestCart->getStore()->getCode());
+        self::assertNotNull($cart->getId());
+        self::assertEquals(1, $cart->getCustomer()->getId());
+        self::assertEquals('fixture_second_store', $cart->getStore()->getCode());
     }
 
     /**
@@ -132,9 +140,10 @@ QUERY;
         self::assertArrayHasKey('createEmptyCart', $response);
         self::assertEquals($predefinedCartId, $response['createEmptyCart']);
 
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
+        $quoteId = $this->maskedQuoteIdToQuoteId->execute($response['createEmptyCart']);
+        $cart = $this->cartRepository->get($quoteId);
+        self::assertNotNull($cart->getId());
+        self::assertEquals(1, $cart->getCustomer()->getId());
     }
 
     /**

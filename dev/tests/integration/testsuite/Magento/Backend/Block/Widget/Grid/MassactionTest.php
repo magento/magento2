@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\TestFramework\App\State;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -90,8 +91,8 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mageMode
      * @param int $expectedCount
-     * @dataProvider getCountDataProvider
      */
+    #[DataProvider('getCountDataProvider')]
     public function testGetCount($mageMode, $expectedCount)
     {
         $this->loadLayout($mageMode);
@@ -122,8 +123,8 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $itemId
      * @param array $expectedItem
-     * @dataProvider getItemsDataProvider
      */
+    #[DataProvider('getItemsDataProvider')]
     public function testGetItems($itemId, $expectedItem)
     {
         $this->loadLayout();

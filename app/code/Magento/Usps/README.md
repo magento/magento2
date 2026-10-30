@@ -1,1 +1,3 @@
-The Magento_Usps module provides integration with the United States Postal Service shipping carrier.
+# Magento_Usps module
+
+This module provides integration with the United States Postal Service shipping carrier.

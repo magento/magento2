@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,11 +35,8 @@ class PaymentMethodListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMethodList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
-        $this->instanceFactory = $this->getMockBuilder(InstanceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
+        $this->instanceFactory = $this->createMock(InstanceFactory::class);
 
         $this->vaultPaymentList = new PaymentMethodList($this->paymentMethodList, $this->instanceFactory);
     }
@@ -50,9 +47,9 @@ class PaymentMethodListTest extends TestCase
     public function testGetActivePaymentList()
     {
         $storeId = 1;
-        $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $paymentMethodInterface1 = $this->getMockForAbstractClass(PaymentMethodInterface::class);
-        $paymentMethodInterface2 = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $vaultPayment = $this->createMock(VaultPaymentInterface::class);
+        $paymentMethodInterface1 = $this->createMock(PaymentMethodInterface::class);
+        $paymentMethodInterface2 = $this->createMock(PaymentMethodInterface::class);
         $activePayments = [
             $paymentMethodInterface1,
             $paymentMethodInterface2
@@ -66,7 +63,7 @@ class PaymentMethodListTest extends TestCase
         $this->instanceFactory->expects(static::exactly(2))
             ->method('create')
             ->willReturnMap([
-                [$paymentMethodInterface1, $this->getMockForAbstractClass(MethodInterface::class)],
+                [$paymentMethodInterface1, $this->createMock(MethodInterface::class)],
                 [$paymentMethodInterface2, $vaultPayment]
             ]);
 

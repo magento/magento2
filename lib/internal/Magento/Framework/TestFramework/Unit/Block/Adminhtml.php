@@ -2,8 +2,9 @@
 /**
  * Framework for testing Block_Adminhtml code
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ *
  *
  * Number of fields is necessary because of the number of fields used by multiple layers
  * of parent classes.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
@@ -81,6 +81,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
                 UrlRewrite::ENTITY_ID => $rewriteData[1],
                 UrlRewrite::ENTITY_TYPE => $rewriteData[0],
                 UrlRewrite::STORE_ID => $store->getId(),
+                UrlRewrite::REDIRECT_TYPE => 0,
             ];
             if (!empty($rewriteData[2]) && $rewriteData[0] == ProductUrlRewriteGenerator::ENTITY_TYPE) {
                 $filterData[UrlRewrite::METADATA]['category_id'] = $rewriteData[2];

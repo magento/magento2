@@ -22,10 +22,13 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
+use Magento\Sales\Model\Order\Creditmemo as CreditmemoModel;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -35,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class EmailSenderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var EmailSender
      */
@@ -131,14 +136,9 @@ class EmailSenderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
 
         $this->storeMock->expects($this->any())
             ->method('getStoreId')
@@ -147,34 +147,24 @@ class EmailSenderTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->senderMock = $this->getMockBuilder(Sender::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['send', 'sendCopyTo'])
-            ->getMock();
+        $this->senderMock = $this->createPartialMockWithReflection(Sender::class, ['send', 'sendCopyTo']);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setEmailSent', 'getId'])
-            ->addMethods(['setSendEmail'])
-            ->getMock();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            CreditmemoModel::class,
+            ['setEmailSent', 'getId', 'setSendEmail']
+        );
         $this->creditmemoMock->method('getId')
             ->willReturn(self::CREDITMEMO_ID);
 
-        $this->commentMock = $this->getMockBuilder(CreditmemoCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->commentMock = $this->createMock(CreditmemoCommentCreationInterface::class);
 
         $this->commentMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Comment text');
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressMock = $this->createMock(Address::class);
 
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
@@ -183,17 +173,11 @@ class EmailSenderTest extends TestCase
             ->method('getShippingAddress')
             ->willReturn($this->addressMock);
 
-        $this->globalConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->globalConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->paymentInfoMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentInfoMock = $this->createMock(Info::class);
 
         $this->orderMock->expects($this->any())
             ->method('getPayment')
@@ -201,38 +185,29 @@ class EmailSenderTest extends TestCase
         $this->orderMock->method('getId')
             ->willReturn(self::ORDER_ID);
 
-        $this->paymentHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentHelperMock = $this->createMock(Data::class);
 
         $this->paymentHelperMock->expects($this->any())
             ->method('getInfoBlockHtml')
             ->with($this->paymentInfoMock, 1)
             ->willReturn('Payment Info Block');
 
-        $this->creditmemoResourceMock = $this->getMockBuilder(
+        $this->creditmemoResourceMock = $this->createMock(
             Creditmemo::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
-        $this->addressRendererMock = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressRendererMock = $this->createMock(Renderer::class);
 
         $this->addressRendererMock->expects($this->any())
             ->method('format')
             ->with($this->addressMock, 'html')
             ->willReturn('Formatted address');
 
-        $this->templateContainerMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->templateContainerMock = $this->createMock(Template::class);
 
-        $this->identityContainerMock = $this->getMockBuilder(
+        $this->identityContainerMock = $this->createMock(
             CreditmemoIdentity::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -264,15 +239,15 @@ class EmailSenderTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider sendDataProvider
      */
+    #[DataProvider('sendDataProvider')]
     public function testSend(
         int $configValue,
         bool $forceSyncMode,
         bool $isComment,
         bool $emailSendingResult
     ): void {
-        $this->globalConfigMock->expects($this->once())
+         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
             ->willReturn($configValue);
@@ -281,77 +256,77 @@ class EmailSenderTest extends TestCase
             $this->commentMock = null;
         }
 
-        $this->creditmemoMock->expects($this->once())
+         $this->creditmemoMock->expects($this->once())
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
-        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
-        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
-        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
-        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
+         $this->orderMock->method('getCustomerName')->willReturn('Customer name');
+         $this->orderMock->method('getIsNotVirtual')->willReturn(true);
+         $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
+         $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
 
         if (!$configValue || $forceSyncMode) {
             $transport = [
-                'order' => $this->orderMock,
-                'order_id' => self::ORDER_ID,
-                'creditmemo' => $this->creditmemoMock,
-                'creditmemo_id' => self::CREDITMEMO_ID,
-                'comment' => $isComment ? 'Comment text' : '',
-                'billing' => $this->addressMock,
-                'payment_html' => 'Payment Info Block',
-                'store' => $this->storeMock,
-                'formattedShippingAddress' => 'Formatted address',
-                'formattedBillingAddress' => 'Formatted address',
-                'order_data' => [
-                    'customer_name' => 'Customer name',
-                    'is_not_virtual' => true,
-                    'email_customer_note' => null,
-                    'frontend_status_label' => 'Pending'
-                ]
+               'order' => $this->orderMock,
+               'order_id' => self::ORDER_ID,
+               'creditmemo' => $this->creditmemoMock,
+               'creditmemo_id' => self::CREDITMEMO_ID,
+               'comment' => $isComment ? 'Comment text' : '',
+               'billing' => $this->addressMock,
+               'payment_html' => 'Payment Info Block',
+               'store' => $this->storeMock,
+               'formattedShippingAddress' => 'Formatted address',
+               'formattedBillingAddress' => 'Formatted address',
+               'order_data' => [
+                   'customer_name' => 'Customer name',
+                   'is_not_virtual' => true,
+                   'email_customer_note' => null,
+                   'frontend_status_label' => 'Pending'
+               ]
             ];
             $transport = new DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
-                ->method('dispatch')
-                ->with(
-                    'email_creditmemo_set_template_vars_before',
-                    [
-                        'sender' => $this->subject,
-                        'transport' => $transport->getData(),
-                        'transportObject' => $transport
-                    ]
-                );
+               ->method('dispatch')
+               ->with(
+                   'email_creditmemo_set_template_vars_before',
+                   [
+                       'sender' => $this->subject,
+                       'transport' => $transport->getData(),
+                       'transportObject' => $transport
+                   ]
+               );
 
             $this->templateContainerMock->expects($this->once())
-                ->method('setTemplateVars')
-                ->with($transport->getData());
+               ->method('setTemplateVars')
+               ->with($transport->getData());
 
             $this->identityContainerMock->expects($this->exactly(2))
-                ->method('isEnabled')
-                ->willReturn($emailSendingResult);
+               ->method('isEnabled')
+               ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())
-                    ->method('getCopyMethod')
-                    ->willReturn('copy');
+                   ->method('getCopyMethod')
+                   ->willReturn('copy');
 
                 $this->senderBuilderFactoryMock->expects($this->once())
-                    ->method('create')
-                    ->willReturn($this->senderMock);
+                   ->method('create')
+                   ->willReturn($this->senderMock);
 
                 $this->senderMock->expects($this->once())
-                    ->method('send');
+                   ->method('send');
 
                 $this->senderMock->expects($this->once())
-                    ->method('sendCopyTo');
+                   ->method('sendCopyTo');
 
                 $this->creditmemoMock->expects($this->once())
-                    ->method('setEmailSent')
-                    ->with(true);
+                   ->method('setEmailSent')
+                   ->with(true);
 
                 $this->creditmemoResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->creditmemoMock, ['send_email', 'email_sent']);
+                   ->method('saveAttribute')
+                   ->with($this->creditmemoMock, ['send_email', 'email_sent']);
 
                 $this->assertTrue(
                     $this->subject->send(
@@ -363,8 +338,8 @@ class EmailSenderTest extends TestCase
                 );
             } else {
                 $this->creditmemoResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->creditmemoMock, 'send_email');
+                   ->method('saveAttribute')
+                   ->with($this->creditmemoMock, 'send_email');
 
                 $this->assertFalse(
                     $this->subject->send(
@@ -377,18 +352,18 @@ class EmailSenderTest extends TestCase
             }
         } else {
             $this->creditmemoMock->expects($this->once())
-                ->method('setEmailSent')
-                ->with(null);
+               ->method('setEmailSent')
+               ->with(null);
 
             $this->creditmemoResourceMock
-                ->method('saveAttribute')
-                ->willReturnCallback(function ($arg1, $arg2) {
-                    if ($arg1 == $this->creditmemoMock &&
-                        $arg2 == 'email_sent' ||
-                        $arg2 == 'send_email') {
-                        return null;
-                    }
-                });
+               ->method('saveAttribute')
+               ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == $this->creditmemoMock &&
+                       $arg2 == 'email_sent' ||
+                       $arg2 == 'send_email') {
+                    return null;
+                }
+               });
 
             $this->assertFalse(
                 $this->subject->send(

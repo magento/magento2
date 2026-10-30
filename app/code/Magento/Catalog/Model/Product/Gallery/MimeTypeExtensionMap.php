@@ -1,15 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 class MimeTypeExtensionMap
 {
     /**
-     * MIME type/extension map
+     * Mapping of image MIME types to file extensions.
      *
      * @var array
      */
@@ -21,12 +20,14 @@ class MimeTypeExtensionMap
     ];
 
     /**
+     * Resolve extension from a MIME type.
+     *
      * @param string $mimeType
      * @return string
      */
     public function getMimeTypeExtension($mimeType)
     {
-        if (isset($this->mimeTypeExtensionMap[$mimeType])) {
+        if ($mimeType !==null && isset($this->mimeTypeExtensionMap[$mimeType])) {
             return $this->mimeTypeExtensionMap[$mimeType];
         } else {
             return "";

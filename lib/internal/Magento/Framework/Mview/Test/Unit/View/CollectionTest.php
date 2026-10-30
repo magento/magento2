@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Mview\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CollectionTest extends TestCase
 {
@@ -56,18 +57,14 @@ class CollectionTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->indexerConfigMock = $this->getMockBuilder(IndexerConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->indexerConfigMock = $this->createMock(IndexerConfigInterface::class);
 
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->mviewConfigMock = $this->getMockBuilder(MviewConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->mviewConfigMock = $this->createMock(MviewConfigInterface::class);
 
         $this->statesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->onlyMethods(['create'])
@@ -90,9 +87,8 @@ class CollectionTest extends TestCase
      * @param array $views
      * @param array $stateMode
      * @param int $numDisabledViews
-     * @param int $numEnabledViews
-     * @dataProvider loadDataAndGetViewsByStateModeDataProvider
-     */
+     * @param int $numEnabledViews     */
+    #[DataProvider('loadDataAndGetViewsByStateModeDataProvider')]
     public function testLoadDataAndGetViewsByStateMode(
         array $indexers,
         array $views,
@@ -157,8 +153,7 @@ class CollectionTest extends TestCase
                 [ViewInterface::class, [], $emptyView]
             ]);
 
-        $states = $this->getMockBuilder(StateCollectionInterface::class)
-            ->getMockForAbstractClass();
+        $states = $this->createMock(StateCollectionInterface::class);
         $states->method('getItems')
             ->willReturn(array_map(
                 function ($elem) {
@@ -189,10 +184,7 @@ class CollectionTest extends TestCase
      */
     private function getStateMock(array $methods = [], array $data = [])
     {
-        $state = $this->getMockBuilder(StateInterface::class)
-            ->onlyMethods(array_merge($methods, ['getViewId']))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $state = $this->createStub(StateInterface::class);
         $state->method('getViewId')
             ->willReturn($data['view_id'] ?? '');
         return $state;
@@ -204,10 +196,7 @@ class CollectionTest extends TestCase
      */
     private function getViewMock(array $methods = [])
     {
-        $view = $this->getMockBuilder(ViewInterface::class)
-            ->onlyMethods(array_merge($methods, ['load']))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $view = $this->createMock(ViewInterface::class);
         return $view;
     }
 
@@ -219,10 +208,7 @@ class CollectionTest extends TestCase
     private function getIndexerMock(array $methods = [], array $data = [])
     {
         /** @var MockObject|IndexerInterface $indexer */
-        $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->onlyMethods(array_merge($methods, ['getId', 'getViewId']))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $indexer = $this->createMock(IndexerInterface::class);
         $indexer->method('getId')
             ->willReturn($data['indexer_id'] ?? '');
         $indexer->method('getViewId')

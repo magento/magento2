@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
@@ -128,7 +128,7 @@ class AlertProcessor
         if (!empty($errors)) {
             /** @var Website $website */
             $website = $this->storeManager->getWebsite($websiteId);
-            $defaultStoreId = $website->getDefaultStore()->getId();
+            $defaultStoreId = (int)$website->getDefaultStore()->getId();
             $this->errorEmailSender->execute($errors, $defaultStoreId);
         }
     }

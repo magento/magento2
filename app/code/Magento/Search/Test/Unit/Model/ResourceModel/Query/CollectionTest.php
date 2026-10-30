@@ -69,12 +69,12 @@ class CollectionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManager = $this->createStub(StoreManagerInterface::class);
         $this->_resourceHelper = $this->createMock(Helper::class);
         $this->entityFactory = $this->createMock(EntityFactoryInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->fetchStrategy = $this->createMock(FetchStrategyInterface::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eventManager = $this->createStub(ManagerInterface::class);
         $this->connection = $this->createMock(AdapterInterface::class);
         $this->resource = $this->createMock(AbstractDb::class);
     }

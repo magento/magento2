@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -167,7 +167,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             $this->_saveShipment($shipment);
 
-            if (!empty($data['send_email']) && $this->salesData->canSendNewShipmentEmail()) {
+            // Pass the specific store ID from the order to check if shipment emails are enabled for that store
+            if (!empty($data['send_email'])
+                && $this->salesData->canSendNewShipmentEmail($shipment->getOrder()->getStoreId())) {
                 $this->shipmentSender->send($shipment);
             }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Account;
 
@@ -93,7 +93,6 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
                 );
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
-            $this->session->destroy(['send_expire_cookie']);
             $this->messageManager->addSuccessMessage($this->getSuccessMessage($email));
             return $resultRedirect->setPath('*/*/');
         } else {

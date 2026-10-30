@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,7 +87,7 @@ class BackendTest extends TestCase
         $backendMock->expects($this->once())->method('validate')->with($this->entityMock)->willReturn(false);
 
         $attributeMock->expects($this->once())->method('getBackend')->willReturn($backendMock);
-        $attributeMock->expects($this->exactly(2))->method('getAttributeCode')->willReturn('attribute_code');
+        $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attribute_code');
 
         $this->assertFalse($this->model->isValid($this->entityMock));
     }

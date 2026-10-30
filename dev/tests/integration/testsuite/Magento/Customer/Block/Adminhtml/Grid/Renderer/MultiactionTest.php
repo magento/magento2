@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Block\Adminhtml\Grid\Renderer;
 
 use Magento\Framework\DataObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks multiaction block rendering with simple product and simple product with options.
@@ -17,10 +18,10 @@ use Magento\Framework\DataObject;
 class MultiactionTest extends AbstractMultiactionTest
 {
     /**
-     * @dataProvider renderEmptyProvider
      * @param array $columnData
      * @return void
      */
+    #[DataProvider('renderEmptyProvider')]
     public function testRenderEmpty(array $columnData): void
     {
         /** @var DataObject $row */

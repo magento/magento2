@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
 
 /**
  * Backend grid widget massaction item additional action default
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function createFromConfiguration(array $configuration)
     {

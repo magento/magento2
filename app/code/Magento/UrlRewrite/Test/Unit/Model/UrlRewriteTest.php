@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,15 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlRewrite;
 use PHPUnit\Framework\TestCase;
 
 class UrlRewriteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UrlRewrite
      */
@@ -29,11 +32,10 @@ class UrlRewriteTest extends TestCase
 
         $context = $this->createMock(Context::class);
         $registry = $this->createMock(Registry::class);
-        $resource = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName'])
-            ->onlyMethods(['getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resource = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getConnection', 'getIdFieldName', '_construct']
+        );
         $resourceCollection = $this->createMock(AbstractDb::class);
         $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())

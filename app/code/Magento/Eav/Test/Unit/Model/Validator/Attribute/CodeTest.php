@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,17 +13,17 @@ namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
 use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\Validator\ValidateException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CodeTest extends TestCase
 {
     /**
      * Testing \Magento\Eav\Model\Validator\Attribute\Code::isValid
-     *
-     * @dataProvider isValidDataProvider
      * @param string $attributeCode
      * @param bool $expected
      * @throws ValidateException
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(string $attributeCode, bool $expected): void
     {
         $validator = new Code();

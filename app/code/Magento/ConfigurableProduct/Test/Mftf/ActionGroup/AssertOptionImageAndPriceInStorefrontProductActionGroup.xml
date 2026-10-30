@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,8 @@
 
         <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
         <waitForPageLoad stepKey="waitForOptionLoad"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitForGallerySpinnerDisappear"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
         <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeProductPrice"/>
     </actionGroup>

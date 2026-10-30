@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Component\Filters\Type;
 
@@ -74,7 +74,7 @@ class Input extends AbstractFilter
                 $valueExpression = $filterConfig['valueExpression'] ?? null;
             }
             if ($conditionType === self::CONDITION_LIKE) {
-                $value = str_replace(['%', '_'], ['\%', '\_'], $value);
+                $value = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $value);
                 $valueExpression = $valueExpression ?? '%%%s%%';
             }
             if ($valueExpression) {

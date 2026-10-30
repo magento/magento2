@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -26,14 +26,14 @@ class WordsFinder
      *
      * @var string
      */
-    protected $copyrightString = 'Copyright © Magento, Inc. All rights reserved.';
+    protected $copyrightString = 'Adobe';
 
     /**
      * Copying string which must be present in every non-binary file right after copyright string
      *
      * @var string
      */
-    protected $copyingString = 'See COPYING.txt for license details.';
+    protected $copyingString = 'All Rights Reserved.';
 
     /**
      * List of extensions for which copyright check must be skipped

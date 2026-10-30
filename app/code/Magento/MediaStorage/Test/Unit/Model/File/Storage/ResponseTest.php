@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Laminas\Http\Headers;
 use Magento\Framework\File\Transfer\Adapter\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Model\File\Storage\Response;
+use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,10 +34,16 @@ class ResponseTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->transferAdapter = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['send'])
-            ->getMock();
+
+        $objects = [
+            [
+                Context::class,
+                $this->createMock(Context::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
+        $this->transferAdapter = $this->createPartialMock(Http::class, ['send']);
         $this->response = $objectManager->getObject(
             Response::class,
             [
@@ -52,8 +59,7 @@ class ResponseTest extends TestCase
     public function testSendResponse(): void
     {
         $filePath = 'file_path';
-        $headers = $this->getMockBuilder(Headers::class)
-            ->getMock();
+        $headers = $this->createMock(Headers::class);
         $this->response->setFilePath($filePath);
         $this->response->setHeaders($headers);
         $this->transferAdapter

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,17 +55,15 @@ class AbstractSearchResultTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->criteria = $this->getMockForAbstractClass(CriteriaInterface::class);
-        $this->query = $this->getMockForAbstractClass(QueryInterface::class);
+        $this->criteria = $this->createMock(CriteriaInterface::class);
+        $this->query = $this->createMock(QueryInterface::class);
         $this->query->expects($this->any())
             ->method('getCriteria')
             ->willReturn($this->criteria);
-        $this->entityFactory = $this->getMockForAbstractClass(
+        $this->entityFactory = $this->createMock(
             EntityFactoryInterface::class
         );
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->searchResultIteratorMock = $this->getMockBuilder(
             SearchResultIteratorFactory::class
         )->disableOriginalConstructor()

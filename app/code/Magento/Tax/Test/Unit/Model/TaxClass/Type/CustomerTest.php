@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
 {
-    public function testIsAssignedToObjects()
+    public function testIsAssignedToObjects(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
@@ -50,15 +50,11 @@ class CustomerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $expectedSearchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->getMockForAbstractClass();
+        $expectedSearchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $searchCriteriaBuilder->expects($this->once())->method('addFilters')->willReturnSelf();
         $searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($expectedSearchCriteria);
 
-        $customerGroupServiceMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->onlyMethods(['getList'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customerGroupServiceMock = $this->createMock(GroupRepositoryInterface::class);
         $customerGroupServiceMock->expects($this->once())
             ->method('getList')
             ->with($expectedSearchCriteria)

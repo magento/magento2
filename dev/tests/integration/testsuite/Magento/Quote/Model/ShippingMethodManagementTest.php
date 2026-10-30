@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model;
 
@@ -44,6 +44,15 @@ use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Customer\Model\Session;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\OfflineShipping\Test\Fixture\TablerateFixture as TablerateFixture;
+use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Customer\Test\Fixture\CustomerGroup as CustomerGroupFixture;
+use Magento\Tax\Test\Fixture\TaxRate;
+use Magento\Tax\Test\Fixture\TaxRule;
+use Magento\Tax\Test\Fixture\CustomerTaxClass;
+use Magento\Tax\Test\Fixture\ProductTaxClass;
 
 /**
  * Test for shipping methods management
@@ -132,16 +141,140 @@ class ShippingMethodManagementTest extends TestCase
     /**
      * Test table rate amount for the cart that contains some items with free shipping applied.
      * @magentoDbIsolation enabled
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/flatrate/active 0
-     * @magentoConfigFixture current_store carriers/freeshipping/active 0
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_category.php
-     * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/freeshipping/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_value_with_discount', 'store'),
+        DataFixture(
+            CategoryFixture::class,
+            [
+                'name' => 'Category 1',
+                'parent_id' => 2
+            ],
+            'cat3'
+        ),
+        DataFixture(
+            CategoryFixture::class,
+            [
+                'name' => 'Category 2',
+                'parent_id' => 2
+            ],
+            'cat6'
+        ),
+
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-tablerate-1',
+                'price' => 30,
+                'category_ids' => ['$cat3.id$']
+            ],
+            'p1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-tablerate-2',
+                'price' => 40,
+                'category_ids' => ['$cat6.id$']
+            ],
+            'p2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-tablerate-3',
+                'price' => 50,
+                'category_ids' => ['$cat6.id$']
+            ],
+            'p3'
+        ),
+
+        DataFixture(
+            GuestCartFixture::class,
+            [
+                'reserved_order_id' => 'tableRate'
+            ],
+            'cart'
+        ),
+
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$p1.id$'
+            ]
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$p2.id$'
+            ]
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$p3.id$'
+            ]
+        ),
+
+        DataFixture(
+            SetBillingAddressFixture::class,
+            [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            SetShippingAddressFixture::class,
+            [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing' => 0,
+                'simple_free_shipping' => 1,
+                'apply_to_shipping' => 1,
+                'actions' => [
+                    [
+                        'attribute' => 'category_ids',
+                        'operator' => '()',
+                        'value' => '$cat3.id$'
+                    ]
+                ]
+            ]
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 0.00,
+                'price' => 15
+            ]
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 50.00,
+                'price' => 10
+            ]
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 100.00,
+                'price' => 5
+            ]
+        )
+    ]
     public function testTableRateWithCartRuleForFreeShipping()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -175,31 +308,70 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_100_percent_off.php
-     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * Verify 100% off rule applied to shipping and items using new fixtures
      * @return void
      * @throws NoSuchEntityException
      */
+    #[
+        DataFixture(
+            RuleFixture::class,
+            [
+                'discount_amount' => 100,
+                'simple_action' => 'by_percent',
+                'apply_to_shipping' => 1,
+                'simple_free_shipping' => 1
+            ]
+        ),
+        DataFixture(ProductFixture::class, as: 'prod'),
+        DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], 'customer'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], 'ccart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$ccart.id$',
+                'product_id' => '$prod.id$'
+            ]
+        ),
+    ]
     public function testRateAppliedToShipping(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var CartRepositoryInterface $quoteRepository */
         $quoteRepository = $objectManager->create(CartRepositoryInterface::class);
-        $customerQuote = $quoteRepository->getForCustomer(1);
+        $customerId = (int)$this->fixtures->get('customer')->getId();
+        $customerQuote = $quoteRepository->getForCustomer($customerId);
         $this->assertEquals(0, $customerQuote->getBaseGrandTotal());
     }
 
     /**
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/flatrate/active 0
-     * @magentoConfigFixture current_store carriers/freeshipping/active 0
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_cart.php
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * Table rate free shipping using new fixtures
      * @return void
      */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/freeshipping/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_qty', 'store'),
+        DataFixture(ProductFixture::class, ['sku' => 'free_item', 'price' => 7], as: 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test01'], 'q1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$q1.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$q1.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$q1.id$']),
+        DataFixture(RuleFixture::class, [
+            'stop_rules_processing' => 0,
+            'simple_free_shipping' => 1,
+            'apply_to_shipping' => 1,
+            'actions' => [
+                [
+                    'attribute' => 'quote_item_price',
+                    'operator' => '==',
+                    'value' => '7'
+                ]
+            ]
+        ]),
+        DataFixture(TablerateFixture::class, ['price' => 0, 'condition_name' => 'package_qty', 'condition_value' => 1]),
+    ]
     public function testTableRateFreeShipping()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -262,26 +434,69 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * Estimate by address with cart price rule by item using new fixtures
      * @return void
      */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_qty', 'store'),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, ['sku' => 'free_item', 'price' => 7], as: 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test01'], 'q2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$q2.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$q2.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$q2.id$']),
+        DataFixture(TablerateFixture::class, ['price' => 0]),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'stop_rules_processing' => 0,
+                'simple_free_shipping' => 1,
+                'apply_to_shipping' => 1,
+                'actions' => [
+                    [
+                        'attribute' => 'quote_item_price',
+                        'operator' => '==',
+                        'value' => '7'
+                    ]
+                ]
+            ]
+        ),
+    ]
     public function testEstimateByAddressWithCartPriceRuleByItem()
     {
         $this->executeTestFlow(0, 0);
     }
 
     /**
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
-     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_free_shipping_by_cart.php
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * Estimate by address with cart price rule by shipment using new fixtures
      * @return void
      */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_qty', 'store'),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '0', 'store', 'default'),
+        DataFixture(ProductFixture::class, ['sku' => 'free_item', 'price' => 7], as: 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test01'], 'q3'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$q3.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$q3.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$q3.id$']),
+        DataFixture(TablerateFixture::class),
+        DataFixture(RuleFixture::class, [
+            'stop_rules_processing' => 0,
+            'simple_free_shipping' => 1,
+            'apply_to_shipping' => 1,
+            'actions' => [
+                [
+                    'attribute' => 'quote_item_price',
+                    'operator' => '==',
+                    'value' => '7'
+                ]
+            ]
+        ]),
+    ]
     public function testEstimateByAddressWithCartPriceRuleByShipment()
     {
         $this->markTestSkipped('According to MAGETWO-69940 it is an incorrect behavior');
@@ -291,12 +506,19 @@ class ShippingMethodManagementTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store carriers/tablerate/active 1
-     * @magentoConfigFixture current_store carriers/tablerate/condition_name package_qty
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates.php
+     * Estimate by address using new fixtures
      * @return void
      */
+    #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_qty', 'store'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test01'], 'q4'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$q4.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$q4.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$q4.id$']),
+        DataFixture(TablerateFixture::class, ['price' => 10]),
+    ]
     public function testEstimateByAddress()
     {
         $this->executeTestFlow(5, 10);
@@ -360,16 +582,66 @@ class ShippingMethodManagementTest extends TestCase
      * Test for estimate shipping with tax and changed VAT customer group
      *
      * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Tax/_files/tax_classes_de.php
-     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_group.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoConfigFixture current_store customer/create_account/tax_calculation_address_type shipping
-     * @magentoConfigFixture current_store customer/create_account/default_group 1
-     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
-     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
-     * @magentoConfigFixture current_store tax/calculation/shipping_includes_tax 1
      */
+    #[
+        // Shipping: only Flat Rate, base/net price 5.00
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '5', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/freeshipping/active', '0', 'store', 'default'),
+
+        // Tax calculation: compute shipping tax from shipping address, shipping price is excl tax
+        ConfigFixture('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        ConfigFixture('tax/calculation/price_includes_tax', '1', 'store', 'default'),
+        ConfigFixture('tax/calculation/shipping_includes_tax', '0', 'store', 'default'),
+
+        // Tax classes, rate and rule (21% for DE)
+        DataFixture(CustomerTaxClass::class, ['class_name' => 'CustomerTaxClass'], 'customer_tax_class'),
+        DataFixture(ProductTaxClass::class, ['class_name' => 'ProductTaxClass'], 'product_tax_class'),
+        DataFixture(TaxRate::class, [
+            'tax_country_id' => 'DE',
+            'tax_region_id' => 0,
+            'tax_postcode' => '*',
+            'code' => 'Denmark',
+            'rate' => 21
+        ], 'tax_rate'),
+        DataFixture(TaxRule::class, [
+            'customer_tax_class_ids' => ['$customer_tax_class.id$'],
+            'product_tax_class_ids' => ['$product_tax_class.id$'],
+            'tax_rate_ids' => ['$tax_rate.id$'],
+            'priority' => 0,
+            'code' => 'Test Rule'
+        ], 'tax_rule'),
+
+        // Customer group + customer with DE default shipping address
+        DataFixture(CustomerGroupFixture::class, [GroupInterface::CODE => 'custom_group'], 'group'),
+        DataFixture(CustomerFixture::class, [
+            'email' => 'customer@example.com',
+            'group_id' => '$group.id$',
+            'addresses' => [[
+                'country_id' => 'DE',
+                'region_id' => 0,
+                'city' => 'Berlin',
+                'street' => ['1059 George Avenue'],
+                'postcode' => '10178',
+                'telephone' => '1234567890',
+                'default_billing' => true,
+                'default_shipping' => true
+            ]]
+        ], 'customer'),
+
+        // Customer cart with reserved order id and one physical item
+        DataFixture(
+            CustomerCartFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'reserved_order_id' => 'test01'
+            ],
+            'cart'
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'vat-simple', 'price' => 10], 'p1'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$']),
+    ]
     public function testEstimateByAddressWithInclExclTaxAndVATGroup()
     {
         /** @var GroupInterface $customerGroup */
@@ -378,20 +650,28 @@ class ShippingMethodManagementTest extends TestCase
 
         $customerGroup->setTaxClassId($this->getTaxClass('CustomerTaxClass')->getClassId());
         $this->groupRepository->save($customerGroup);
+
         /** @var CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
         $customer->setGroupId($customerGroup->getId());
         $customer->setTaxvat('12');
         $customerRepository->save($customer);
+
+        // Set shipping tax class to ProductTaxClass
         $this->setConfig($customerGroup->getId(), $this->getTaxClass('ProductTaxClass')->getClassId());
+        // Ensure address is DE for 21% VAT
         $this->changeCustomerAddress($customer->getDefaultShipping());
 
         $quote = $this->objectManager->get(GetQuoteByReservedOrderId::class)->execute('test01');
+        // Ensure quote uses the updated group (so customer tax class applies)
+        $quote->setCustomerGroupId((int)$customerGroup->getId())->save();
+
         $addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
-        $address = $addressRepository->getById(1);
+        $address = $addressRepository->getById((int)$customer->getDefaultShipping());
         $address->setIsDefaultShipping(true);
         $customer->setAddresses([$address]);
+
         $customerSession = $this->objectManager->get(Session::class);
         $customerSession->loginById($customer->getId());
 
@@ -528,15 +808,22 @@ class ShippingMethodManagementTest extends TestCase
      * Test table rate with zero amount is available for the cart when discount coupon cart price rule to all items
      * and freeshipping cart price rule is applied when order subtotal is greater than specified amount.
      *
-     * @magentoConfigFixture default_store carriers/tablerate/active 1
-     * @magentoConfigFixture default_store carriers/flatrate/active 0
-     * @magentoConfigFixture default_store carriers/freeshipping/active 0
-     * @magentoConfigFixture default_store carriers/tablerate/condition_name package_value_with_discount
-     * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
-     * @magentoDataFixture Magento/OfflineShipping/_files/tablerates_price.php
      * @return void
      */
     #[
+        ConfigFixture('carriers/tablerate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/freeshipping/active', '0', 'store', 'default'),
+        ConfigFixture('carriers/tablerate/condition_name', 'package_value_with_discount', 'store'),
+        DataFixture(ProductFixture::class, ['sku' => 'tableRateP1', 'price' => 30], 'tp1'),
+        DataFixture(ProductFixture::class, ['sku' => 'tableRateP2', 'price' => 40], 'tp2'),
+        DataFixture(ProductFixture::class, ['sku' => 'tableRateP3', 'price' => 50], 'tp3'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'tableRate'], 'tquote'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$tquote.id$', 'product_id' => '$tp1.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$tquote.id$', 'product_id' => '$tp2.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$tquote.id$', 'product_id' => '$tp3.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$tquote.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$tquote.id$']),
         DataFixture(
             AddressConditionFixture::class,
             ['attribute' => 'base_subtotal', 'operator' => '>=', 'value' => 30],
@@ -545,12 +832,36 @@ class ShippingMethodManagementTest extends TestCase
         DataFixture(
             RuleFixture::class,
             ['stop_rules_processing' => 0, 'simple_free_shipping' => 1, 'conditions' => ['$c1$']],
-            'r1'
+            'r_free_ship'
         ),
         DataFixture(
             RuleFixture::class,
             ['stop_rules_processing' => 0, 'coupon_code' => '123', 'discount_amount' => 20],
-            'r1'
+            'r_discount'
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 0.00,
+                'price' => 15
+            ]
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 50.00,
+                'price' => 10
+            ]
+        ),
+        DataFixture(
+            TablerateFixture::class,
+            [
+                'condition_name' => 'package_value_with_discount',
+                'condition_value' => 100.00,
+                'price' => 5
+            ]
         ),
     ]
     public function testTableRateWithZeroPriceShownWhenDiscountCouponAndFreeShippingCartRuleApplied()

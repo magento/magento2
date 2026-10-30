@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel\Db\Collection;
 
@@ -21,15 +21,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             ['resource' => $resourceModel]
         );
 
-        $resource = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            [$context],
-            '',
-            true,
-            true,
-            true,
-            ['getMainTable', 'getIdFieldName']
-        );
+        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+            ->setConstructorArgs([$context])
+            ->onlyMethods(['_construct', 'getMainTable', 'getIdFieldName'])
+            ->getMock();
 
         $resource->expects(
             $this->any()
@@ -40,7 +35,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
         $resource->expects($this->any())->method('getIdFieldName')->willReturn('website_id');
 
-        $fetchStrategy = $this->getMockForAbstractClass(
+        $fetchStrategy = $this->createMock(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
         );
 
@@ -53,10 +48,10 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
         $logger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Psr\Log\LoggerInterface::class);
 
-        $this->_model = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class,
-            [$entityFactory, $logger, $fetchStrategy, $eventManager, null, $resource]
-        );
+        $this->_model = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection::class)
+            ->setConstructorArgs([$entityFactory, $logger, $fetchStrategy, $eventManager, null, $resource])
+            ->onlyMethods(['_construct'])
+            ->getMock();
     }
 
     public function testGetAllIds()

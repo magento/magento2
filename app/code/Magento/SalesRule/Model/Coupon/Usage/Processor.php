@@ -127,7 +127,7 @@ class Processor
                     if (!empty($incrementedCouponIds)) {
                         $this->revertCouponTimesUsed($incrementedCouponIds);
                     }
-                    throw new CouldNotSaveException(__(sprintf('%s %s', $coupon->getCode(), self::ERROR_MESSAGE)));
+                    throw new CouldNotSaveException(__('%1 %2', $coupon->getCode(), self::ERROR_MESSAGE));
                 }
 
                 if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {

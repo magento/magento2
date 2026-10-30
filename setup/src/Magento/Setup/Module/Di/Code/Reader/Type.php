@@ -1,14 +1,16 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 class Type
 {
+    /** @var array<string, bool> */
+    private array $concreteCache = [];
+
     /**
      * Whether instance is concrete implementation
      *
@@ -17,11 +19,14 @@ class Type
      */
     public function isConcrete($type)
     {
-        try {
-            $instance = new \ReflectionClass($type);
-        } catch (\ReflectionException $e) {
-            return false;
+        if (!array_key_exists($type, $this->concreteCache)) {
+            try {
+                $instance = new \ReflectionClass($type);
+                $this->concreteCache[$type] = !$instance->isAbstract() && !$instance->isInterface();
+            } catch (\ReflectionException $e) {
+                $this->concreteCache[$type] = false;
+            }
         }
-        return !$instance->isAbstract() && !$instance->isInterface();
+        return $this->concreteCache[$type];
     }
 }

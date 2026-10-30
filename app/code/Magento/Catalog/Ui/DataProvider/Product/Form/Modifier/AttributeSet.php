@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -23,7 +25,7 @@ class AttributeSet extends AbstractModifier
     /**
      * Sort order of "Attribute Set" field inside of fieldset
      */
-    const ATTRIBUTE_SET_FIELD_ORDER = 30;
+    public const ATTRIBUTE_SET_FIELD_ORDER = 30;
 
     /**
      * Set collection factory
@@ -123,10 +125,11 @@ class AttributeSet extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        $productId = $this->locator->getProduct()->getId() ?? '';
         return array_replace_recursive(
             $data,
             [
-                $this->locator->getProduct()->getId() => [
+                $productId => [
                     self::DATA_SOURCE_DEFAULT => [
                         'attribute_set_id' => $this->locator->getProduct()->getAttributeSetId()
                     ],

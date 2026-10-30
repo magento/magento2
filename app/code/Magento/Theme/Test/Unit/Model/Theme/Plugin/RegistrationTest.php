@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollectionResourceModel;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection as ThemeCollection;
@@ -19,10 +20,13 @@ use Magento\Theme\Model\Theme\Plugin\Registration as RegistrationPlugin;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class RegistrationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ThemeRegistration|MockObject
      */
@@ -61,8 +65,8 @@ class RegistrationTest extends TestCase
     protected function setUp(): void
     {
         $this->themeRegistrationMock = $this->createMock(ThemeRegistration::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
-        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->actionMock = $this->createMock(ActionInterface::class);
         $this->appStateMock = $this->createMock(State::class);
         $this->themeCollectionMock = $this->createMock(ThemeCollection::class);
         $this->themeLoaderMock = $this->createMock(ThemeCollectionResourceModel::class);
@@ -79,35 +83,30 @@ class RegistrationTest extends TestCase
 
     /**
      * @param bool $hasParentTheme
-     * @dataProvider dataProviderBeforeExecute
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[DataProvider('dataProviderBeforeExecute')]
     public function testBeforeExecute($hasParentTheme)
     {
         $themeId = 1;
         $themeTitle = 'Theme title';
 
-        $themeFromConfigMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getThemeTitle'])
-            ->onlyMethods([
-                'getArea',
-                'getThemePath',
-                'getParentTheme',
-            ])
-            ->getMock();
+        $themeFromConfigMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            [
+                'getThemeTitle',
+                'getArea', 'getThemePath', 'getParentTheme'
+            ]
+        );
 
-        $themeFromDbMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'save',
-            ])
-            ->addMethods(['setParentId', 'setThemeTitle'])
-            ->getMock();
+        $themeFromDbMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            [
+                'save', 'setParentId', 'setThemeTitle'
+            ]
+        );
 
-        $parentThemeFromDbMock = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentThemeFromDbMock = $this->createMock(Theme::class);
 
         $parentThemeFromConfigMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()

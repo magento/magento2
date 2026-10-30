@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model;
 
@@ -137,10 +137,10 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_model->setData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
 
         /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject $source */
-        $source = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\AbstractSource::class,
-            [['sku', 'name']]
-        );
+        $source = $this->getMockBuilder(\Magento\ImportExport\Model\Import\AbstractSource::class)
+            ->setConstructorArgs([['sku', 'name']])
+            ->onlyMethods(['_getNextRow'])
+            ->getMock();
         $source->expects($this->any())->method('_getNextRow')->willReturn(false);
         $this->assertFalse($this->_model->validateSource($source));
     }
@@ -152,12 +152,10 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('Entity is unknown');
 
-        $source = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\AbstractSource::class,
-            [],
-            '',
-            false
-        );
+        $source = $this->getMockBuilder(\Magento\ImportExport\Model\Import\AbstractSource::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_getNextRow'])
+            ->getMock();
         $this->_model->validateSource($source);
     }
 

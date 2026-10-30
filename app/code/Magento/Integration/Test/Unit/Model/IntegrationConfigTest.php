@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,9 +47,7 @@ class IntegrationConfigTest extends TestCase
         $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->integrationConfigModel = new IntegrationConfig(
             $this->configCacheTypeMock,
             $this->configReaderMock,
@@ -57,7 +55,7 @@ class IntegrationConfigTest extends TestCase
         );
     }
 
-    public function testGetIntegrationsFromConfigCacheType()
+    public function testGetIntegrationsFromConfigCacheType(): void
     {
         $integrations = ['foo', 'bar', 'baz'];
         $serializedIntegrations = '["foo","bar","baz"]';
@@ -73,7 +71,7 @@ class IntegrationConfigTest extends TestCase
         $this->assertEquals($integrations, $this->integrationConfigModel->getIntegrations());
     }
 
-    public function testGetIntegrationsFromConfigReader()
+    public function testGetIntegrationsFromConfigReader(): void
     {
         $integrations = ['foo', 'bar', 'baz'];
         $serializedIntegrations = '["foo","bar","baz"]';

@@ -1,22 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Data;
 
 use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Layout\Data\Structure;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 class StructureTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var LoggerInterface|MockObject
      */
@@ -42,7 +45,7 @@ class StructureTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -58,9 +61,8 @@ class StructureTest extends TestCase
     /**
      * @param InvokedCount $loggerExpects
      * @param string $stateMode
-     * @return void
-     * @dataProvider reorderChildElementLogDataProvider
-     */
+     * @return void     */
+    #[DataProvider('reorderChildElementLogDataProvider')]
     public function testReorderChildElementLog($loggerExpects, $stateMode)
     {
         $parentName = 'parent';
@@ -70,7 +72,10 @@ class StructureTest extends TestCase
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn($stateMode);
-        $this->loggerMock->expects($loggerExpects)
+        $expects = is_string($loggerExpects) 
+            ? $this->createInvocationMatcher($loggerExpects) 
+            : $loggerExpects;
+        $this->loggerMock->expects($expects)
             ->method('info')
             ->with(
                 "Broken reference: the '{$childName}' tries to reorder itself towards '', but " .
@@ -87,15 +92,15 @@ class StructureTest extends TestCase
     {
         return [
             [
-                'loggerExpects' => self::once(),
+                'loggerExpects' => 'once',
                 'stateMode' => State::MODE_DEVELOPER
             ],
             [
-                'loggerExpects' => self::never(),
+                'loggerExpects' => 'never',
                 'stateMode' => State::MODE_DEFAULT
             ],
             [
-                'loggerExpects' => self::never(),
+                'loggerExpects' => 'never',
                 'stateMode' => State::MODE_PRODUCTION
             ]
         ];

@@ -85,7 +85,7 @@ class SampleDataRemoveCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {

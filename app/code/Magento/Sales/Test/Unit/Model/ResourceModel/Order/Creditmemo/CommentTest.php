@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -18,7 +19,12 @@ use Magento\Sales\Model\Order\Creditmemo\Comment\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\Creditmemo as OrderCreditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Comment as CreditmemoComment;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CommentTest extends TestCase
 {
     /**
@@ -27,7 +33,7 @@ class CommentTest extends TestCase
     protected $commentResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|MockObject
+     * @var CreditmemoComment|MockObject
      */
     protected $commentModelMock;
 
@@ -52,14 +58,26 @@ class CommentTest extends TestCase
     protected $entitySnapshotMock;
 
     /**
+     * @var Select|MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * @var OrderCreditmemo|MockObject
+     */
+    protected $orderCreditmemo;
+
+    /**
      * Set up
      */
     protected function setUp(): void
     {
-        $this->commentModelMock = $this->createMock(\Magento\Sales\Model\Order\Creditmemo\Comment::class);
+        $this->commentModelMock = $this->createMock(CreditmemoComment::class);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->orderCreditmemo = $this->createMock(OrderCreditmemo::class);
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
         );
@@ -86,6 +104,7 @@ class CommentTest extends TestCase
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
         $objectManager = new ObjectManager($this);
+
         $this->commentResource = $objectManager->getObject(
             Comment::class,
             [
@@ -101,6 +120,33 @@ class CommentTest extends TestCase
      */
     public function testSave()
     {
+        $commentId = 1;
+        $output = [
+            'user_id' => 1,
+            'user_type' => 'test',
+        ];
+
+        $this->commentModelMock->expects($this->any())->method('getId')->willReturn($commentId);
+        $this->commentModelMock->expects($this->any())->method('getCreditmemo')->willReturn($this->orderCreditmemo);
+        $this->orderCreditmemo->expects($this->any())->method('getId')->willReturn($commentId);
+
+        $this->connectionMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->willReturnSelf();
+
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->with($this->selectMock)
+            ->willReturn($output);
+
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->commentModelMock)
@@ -109,6 +155,7 @@ class CommentTest extends TestCase
             ->method('isModified')
             ->with($this->commentModelMock)
             ->willReturn(true);
+
         $this->commentModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);

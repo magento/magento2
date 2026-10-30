@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -29,6 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 class ImageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Image
      */
@@ -100,11 +102,15 @@ class ImageTest extends TestCase
     public function testResolve(): void
     {
         $this->valueMock = ['model' => $this->categoryMock];
-        $contextExtensionInterfaceMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMockForAbstractClass();
         $storeMock = $this->createMock(Store::class);
+        $contextExtensionInterfaceMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
+        $contextExtensionInterfaceMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        
         $this->categoryMock
             ->expects($this->once())
             ->method('getData')
@@ -114,10 +120,6 @@ class ImageTest extends TestCase
             ->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($contextExtensionInterfaceMock);
-        $contextExtensionInterfaceMock
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
         $storeMock
             ->expects($this->once())
             ->method('getBaseUrl')
@@ -152,11 +154,15 @@ class ImageTest extends TestCase
     public function testResolveWhenImageFileDoesntExist(): void
     {
         $this->valueMock = ['model' => $this->categoryMock];
-        $contextExtensionInterfaceMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMockForAbstractClass();
         $storeMock = $this->createMock(Store::class);
+        $contextExtensionInterfaceMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
+        $contextExtensionInterfaceMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        
         $this->categoryMock
             ->expects($this->once())
             ->method('getData')
@@ -166,10 +172,6 @@ class ImageTest extends TestCase
             ->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($contextExtensionInterfaceMock);
-        $contextExtensionInterfaceMock
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($storeMock);
         $storeMock
             ->expects($this->once())
             ->method('getBaseUrl')

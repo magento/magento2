@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Model\Product;
@@ -16,6 +17,7 @@ use Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plug
 use Magento\Downloadable\Model\Link\Builder;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DownloadableTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Downloadable
      */
@@ -60,32 +63,29 @@ class DownloadableTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Http::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['setDownloadableData'])
-            ->onlyMethods(['getExtensionAttributes', '__wakeup', 'getTypeInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setDownloadableData',
+                'getExtensionAttributes',
+                '__wakeup',
+                'getTypeInstance'
+            ]
+        );
         $this->subjectMock = $this->createMock(
             Helper::class
         );
-        $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
-            ->getMockForAbstractClass();
-        $sampleFactoryMock = $this->getMockBuilder(SampleInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $linkFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $linkBuilderMock = $this->getMockBuilder(Builder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sampleBuilderMock = $this->getMockBuilder(\Magento\Downloadable\Model\Sample\Builder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'setDownloadableProductLinks',
+                'setDownloadableProductSamples'
+            ]
+        );
+        $sampleFactoryMock = $this->createPartialMock(SampleInterfaceFactory::class, ['create']);
+        $linkFactoryMock = $this->createPartialMock(LinkInterfaceFactory::class, ['create']);
+        $linkBuilderMock = $this->createMock(Builder::class);
+        $sampleBuilderMock = $this->createMock(\Magento\Downloadable\Model\Sample\Builder::class);
         $this->downloadableProductTypeMock = $this->createPartialMock(
             Type::class,
             ['getLinks', 'getSamples']
@@ -102,8 +102,8 @@ class DownloadableTest extends TestCase
 
     /**
      * @param array $downloadable
-     * @dataProvider afterInitializeWithEmptyDataDataProvider
      */
+    #[DataProvider('afterInitializeWithEmptyDataDataProvider')]
     public function testAfterInitializeWithNoDataToSave($downloadable)
     {
         $this->requestMock->expects($this->once())
@@ -158,8 +158,8 @@ class DownloadableTest extends TestCase
 
     /**
      * @param mixed $downloadable
-     * @dataProvider afterInitializeIfDownloadableNotExistDataProvider
      */
+    #[DataProvider('afterInitializeIfDownloadableNotExistDataProvider')]
     public function testAfterInitializeIfDownloadableNotExist($downloadable)
     {
         $this->requestMock->expects($this->once())

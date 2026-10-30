@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Account\Edit;
@@ -10,7 +10,6 @@ use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Adminhtml edit admin user account form
- *
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {

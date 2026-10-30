@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,19 +56,10 @@ class ExchangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->amqpConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->communicationConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->publisherConfig = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->exchange = $this->getMockBuilder(Exchange::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->amqpConfig = $this->createMock(Config::class);
+        $this->communicationConfig = $this->createMock(ConfigInterface::class);
+        $this->publisherConfig = $this->createMock(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
+        $this->exchange = $this->createMock(Exchange::class);
 
         $objectManager = new ObjectManager($this);
         $this->bulkExchange = $objectManager->getObject(
@@ -103,22 +94,13 @@ class ExchangeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->amqpConfig->expects($this->once())->method('getChannel')->willReturn($channel);
-        $publisher = $this
-            ->getMockBuilder(PublisherConfigItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $publisher = $this->createMock(PublisherConfigItemInterface::class);
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
-        $connection = $this
-            ->getMockBuilder(PublisherConnectionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(PublisherConnectionInterface::class);
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getExchange')->with()->willReturn($exchangeName);
-        $envelope = $this
-            ->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $envelope->expects($this->once())->method('getBody')->willReturn($envelopeBody);
         $envelope->expects($this->once())->method('getProperties')->willReturn($envelopeProperties);
         $channel->expects($this->once())->method('batch_basic_publish')
@@ -141,10 +123,7 @@ class ExchangeTest extends TestCase
         ];
         $this->communicationConfig->expects($this->once())
             ->method('getTopic')->with($topicName)->willReturn($topicData);
-        $envelope = $this
-            ->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $this->exchange->expects($this->once())->method('enqueue')->with($topicName, $envelope)->willReturn($response);
         $this->assertEquals([$response], $this->bulkExchange->enqueue($topicName, [$envelope]));
     }

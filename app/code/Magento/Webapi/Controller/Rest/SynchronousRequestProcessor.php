@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\Rest\Response as RestResponse;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
@@ -19,7 +20,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
  */
 class SynchronousRequestProcessor implements RequestProcessorInterface
 {
-    const PROCESSOR_PATH = "/^\\/V\\d+/";
+    public const PROCESSOR_PATH = "/^\\/V\\d+/";
 
     /**
      * @var RestResponse
@@ -78,7 +79,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     *  {@inheritdoc}
+     * @inheritdoc
      */
     public function process(\Magento\Framework\Webapi\Rest\Request $request)
     {
@@ -92,7 +93,13 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
         /**
          * @var \Magento\Framework\Api\AbstractExtensibleObject $outputData
          */
-        $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+        try {
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
+            $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+            // phpcs:enable Magento2.Functions.DiscouragedFunction
+        } catch (\TypeError $e) {
+            throw new WebapiException(__($e->getMessage()));
+        }
         $outputData = $this->serviceOutputProcessor->process(
             $outputData,
             $serviceClassName,
@@ -109,7 +116,7 @@ class SynchronousRequestProcessor implements RequestProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canProcess(\Magento\Framework\Webapi\Rest\Request $request)
     {

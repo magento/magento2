@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Patch;
 
@@ -153,19 +154,15 @@ class PatchApplier
                     new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
                 );
             }
+            if ($this->isApplied($dataPatch)) {
+                continue;
+            }
             if ($dataPatch instanceof NonTransactionableInterface) {
-                $dataPatch->apply();
-                $this->patchHistory->fixPatch(get_class($dataPatch));
+                $this->applyPatch($dataPatch);
             } else {
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();
-                    $dataPatch->apply();
-                    $this->patchHistory->fixPatch(get_class($dataPatch));
-                    foreach ($dataPatch->getAliases() as $patchAlias) {
-                        if (!$this->patchHistory->isApplied($patchAlias)) {
-                            $this->patchHistory->fixPatch($patchAlias);
-                        }
-                    }
+                    $this->applyPatch($dataPatch);
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -185,35 +182,6 @@ class PatchApplier
                 }
             }
         }
-    }
-
-    /**
-     * Register all patches in registry in order to manipulate chains and dependencies of patches of patches
-     *
-     * @param string $moduleName
-     * @param string $patchType
-     * @return PatchRegistry
-     */
-    private function prepareRegistry($moduleName, $patchType)
-    {
-        $reader = $patchType === self::DATA_PATCH ? $this->dataPatchReader : $this->schemaPatchReader;
-        $registry = $this->patchRegistryFactory->create();
-
-        //Prepare modules to read
-        if ($moduleName === null) {
-            $patchNames = [];
-            foreach ($this->moduleList->getNames() as $moduleName) {
-                $patchNames += $reader->read($moduleName);
-            }
-        } else {
-            $patchNames = $reader->read($moduleName);
-        }
-
-        foreach ($patchNames as $patchName) {
-            $registry->registerPatch($patchName);
-        }
-
-        return $registry;
     }
 
     /**
@@ -240,12 +208,8 @@ class PatchApplier
                  * @var SchemaPatchInterface $schemaPatch
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
-                $schemaPatch->apply();
-                $this->patchHistory->fixPatch(get_class($schemaPatch));
-                foreach ($schemaPatch->getAliases() as $patchAlias) {
-                    if (!$this->patchHistory->isApplied($patchAlias)) {
-                        $this->patchHistory->fixPatch($patchAlias);
-                    }
+                if (!$this->isApplied($schemaPatch)) {
+                    $this->applyPatch($schemaPatch);
                 }
             } catch (\Exception $e) {
                 $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
@@ -296,5 +260,70 @@ class PatchApplier
                 }
             }
         }
+    }
+
+    /**
+     * Register all patches in registry in order to manipulate chains and dependencies of patches of patches
+     *
+     * @param string $moduleName
+     * @param string $patchType
+     * @return PatchRegistry
+     */
+    private function prepareRegistry(string $moduleName, string $patchType): PatchRegistry
+    {
+        $reader = $patchType === self::DATA_PATCH ? $this->dataPatchReader : $this->schemaPatchReader;
+        $registry = $this->patchRegistryFactory->create();
+
+        //Prepare modules to read
+        if ($moduleName === null) {
+            $patchNames = [];
+            foreach ($this->moduleList->getNames() as $moduleName) {
+                $patchNames += $reader->read($moduleName);
+            }
+        } else {
+            $patchNames = $reader->read($moduleName);
+        }
+
+        foreach ($patchNames as $patchName) {
+            $registry->registerPatch($patchName);
+        }
+
+        return $registry;
+    }
+
+    /**
+     * Apply the given patch. The patch is and its aliases are added to the history.
+     *
+     * @param PatchInterface $patch
+     */
+    private function applyPatch(PatchInterface $patch): void
+    {
+        $patch->apply();
+        $this->patchHistory->fixPatch(get_class($patch));
+        foreach ($patch->getAliases() ?? [] as $patchAlias) {
+            if (!$this->patchHistory->isApplied($patchAlias)) {
+                $this->patchHistory->fixPatch($patchAlias);
+            }
+        }
+    }
+
+    /**
+     * Check wether the given patch or any of its aliases are already applied or not.
+     *
+     * @param PatchInterface $patch
+     */
+    private function isApplied(PatchInterface $patch): bool
+    {
+        $patchIdentity = get_class($patch);
+        if (!$this->patchHistory->isApplied($patchIdentity)) {
+            foreach ($patch->getAliases() ?? [] as $alias) {
+                if ($this->patchHistory->isApplied($alias)) {
+                    $this->patchHistory->fixPatch($patchIdentity);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

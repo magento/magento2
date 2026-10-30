@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,10 +10,11 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Downloadable\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
 /** @var DomainManagerInterface $domainManager */
 $domainManager = Bootstrap::getObjectManager()->get(DomainManagerInterface::class);
-$domainManager->addDomains(['example.com']);
+DownloadableDomains::addDomains($domainManager, ['example.com']);
 
 /**
  * @var \Magento\Catalog\Model\Product $product

@@ -105,8 +105,13 @@
         </actionGroup>
 
         <!-- Check the total number of expanded categories in the category tree widget ensuring all of them are loaded. -->
-        <actionGroup ref="AdminAssertCategoryCountInCategoryTreeWidgetActionGroup" stepKey="checkCategoryCount">
-            <argument name="ExpectedCount" value="9"/>
-        </actionGroup>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createBaseCategory.name$$')}}" stepKey="waitForBaseCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelTwoCategory.name$$')}}" stepKey="waitForLevelTwoCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelThreeCategory.name$$')}}" stepKey="waitForLevelThreeCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelFourCategory.name$$')}}" stepKey="waitForLevelFourCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelFiveCategory.name$$')}}" stepKey="waitForLevelFiveCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelSixCategory.name$$')}}" stepKey="waitForLevelSixCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelFiveSubCategory.name$$')}}" stepKey="waitForLevelFiveSubCategoryVisible"/>
+        <waitForElementVisible selector="{{CmsNewWidgetUpdateLayoutSection.CategoryName('$$createLevelFiveOneSubCategory.name$$')}}" stepKey="waitForLevelFiveOneSubCategoryVisible"/>
     </test>
 </tests>

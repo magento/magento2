@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Cms\Ui\Component\Listing\Column\PageActions class.
+ *
  */
 class PageActionsTest extends TestCase
 {
@@ -58,11 +60,10 @@ class PageActionsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->scopeUrlBuilderMock = $this->createMock(UrlBuilder::class);
         $this->processorMock = $this->createMock(Processor::class);
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['escapeHtml'])
@@ -85,7 +86,6 @@ class PageActionsTest extends TestCase
     /**
      * Verify Prepare Items by page Id.
      *
-     * @dataProvider configDataProvider
      * @param int $pageId
      * @param string $title
      * @param string $name
@@ -93,6 +93,7 @@ class PageActionsTest extends TestCase
      * @param array $expectedItems
      * @return void
      */
+    #[DataProvider('configDataProvider')]
     public function testPrepareItemsByPageId(
         int $pageId,
         string $title,

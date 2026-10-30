@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,7 +10,9 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -25,6 +27,24 @@ class ProductRepositoryTest extends WebapiAbstract
 
     private const PRODUCT_SAMPLES = 'downloadable_product_samples';
     private const PRODUCT_LINKS = 'downloadable_product_links';
+
+    /**
+     * Name of the lock guarding concurrent read-modify-write access to the downloadable domains
+     * whitelist in env.php (see Magento\Downloadable\Model\DomainManager).
+     */
+    private const DOMAIN_LOCK_NAME = 'downloadable_domains';
+
+    /**
+     * Number of attempts for requests that may transiently fail because the domain just
+     * whitelisted in env.php (see setUp()) has not yet been picked up by the web server
+     */
+    private const DOMAIN_RETRY_ATTEMPTS = 3;
+
+    /**
+     * Delay between retries, in seconds. Chosen to exceed a typical opcache.revalidate_freq
+     * window so a retry has a real chance of observing the freshly written env.php.
+     */
+    private const DOMAIN_RETRY_DELAY_SECONDS = 2;
 
     /**
      * @var string
@@ -42,7 +62,14 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['www.example.com']);
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::addDomains($domainManager, ['www.example.com']);
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     /**
@@ -57,7 +84,14 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['www.example.com']);
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::removeDomains($domainManager, ['www.example.com']);
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     protected function getLinkData()
@@ -635,8 +669,34 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->webApiCallWithDomainRetry($serviceInfo, $requestData);
         return $response;
+    }
+
+    /**
+     * Call the webapi, retrying if it transiently fails with the "domain not whitelisted"
+     * error caused by the web server not yet observing the env.php write from setUp().
+     *
+     * @param array $serviceInfo
+     * @param array $requestData
+     * @return array
+     */
+    private function webApiCallWithDomainRetry(array $serviceInfo, array $requestData)
+    {
+        $attempt = 0;
+        do {
+            try {
+                return $this->_webApiCall($serviceInfo, $requestData);
+            } catch (\Exception $e) {
+                $attempt++;
+                if ($attempt >= self::DOMAIN_RETRY_ATTEMPTS
+                    || strpos($e->getMessage(), self::DOMAIN_LOCK_NAME) === false
+                ) {
+                    throw $e;
+                }
+                sleep(self::DOMAIN_RETRY_DELAY_SECONDS);
+            }
+        } while (true);
     }
 
     /**
@@ -694,7 +754,7 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->webApiCallWithDomainRetry($serviceInfo, $requestData);
         return $response;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Complex;
 
 use Magento\Setup\Model\Complex\Pattern;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PatternTest extends TestCase
 {
@@ -82,11 +83,11 @@ class PatternTest extends TestCase
      * @param int $expectedRowsCount
      * @param array $expectedRowsResult
      *
-     * @dataProvider patternDataProvider
      * @test
      *
      * @return void
      */
+    #[DataProvider('patternDataProvider')]
     public function testPattern($patternData, $expectedRowsCount, $expectedRowsResult)
     {
         $pattern = $this->getPattern($patternData);

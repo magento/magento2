@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RequestTest extends TestCase
 {
@@ -46,8 +47,8 @@ class RequestTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->cookieReader = $this->getMockForAbstractClass(CookieReaderInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->cookieReader = $this->createMock(CookieReaderInterface::class);
         $this->converter = $this->createMock(StringUtils::class);
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -93,9 +94,8 @@ class RequestTest extends TestCase
     /**
      * @param string $name
      * @param string $default
-     * @param string $result
-     * @dataProvider getServerProvider
-     */
+     * @param string $result     */
+    #[DataProvider('getServerProvider')]
     public function testGetServer($name, $default, $result)
     {
         $this->model = $this->getModel();

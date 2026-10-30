@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Quote\Model\CartLockedException;
 use Magento\Quote\Model\CartMutex;
@@ -48,8 +49,8 @@ class CartMutexTest extends TestCase
      * @param array $args
      * @param mixed $expectedResult
      * @return void
-     * @dataProvider callableDataProvider
      */
+    #[DataProvider('callableDataProvider')]
     public function testSuccessfulExecution(callable|string $callable, array $args, $expectedResult): void
     {
         if ($callable === 'privateMethod') {

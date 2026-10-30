@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -22,8 +22,17 @@
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
         </before>
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
             <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetProductFilters"/>
+            <!--Clean up categories-->
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanSimpleSubCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanDefaultCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
@@ -251,11 +260,6 @@
         </actionGroup>
 
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
-        <!--Clean up categories-->
-        <comment userInput="Clean up categories" stepKey="cleanupCategoriesComment"/>
-        <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanSimpleSubCategory">
-            <argument name="categoryEntity" value="SimpleSubCategory"/>
-        </actionGroup>
         <!--Clean up products-->
         <comment userInput="Clean up simple product" stepKey="cleanUpSimpleProduct"/>
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,6 @@ use Magento\Store\Model\Website;
 /**
  * ProductAlert Email processor
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
@@ -45,15 +44,13 @@ use Magento\Store\Model\Website;
  */
 class Email extends AbstractModel
 {
-    const XML_PATH_EMAIL_PRICE_TEMPLATE = 'catalog/productalert/email_price_template';
+    public const XML_PATH_EMAIL_PRICE_TEMPLATE = 'catalog/productalert/email_price_template';
 
-    const XML_PATH_EMAIL_STOCK_TEMPLATE = 'catalog/productalert/email_stock_template';
+    public const XML_PATH_EMAIL_STOCK_TEMPLATE = 'catalog/productalert/email_stock_template';
 
-    const XML_PATH_EMAIL_IDENTITY = 'catalog/productalert/email_identity';
+    public const XML_PATH_EMAIL_IDENTITY = 'catalog/productalert/email_identity';
 
     /**
-     * Type
-     *
      * @var string
      */
     protected $_type = 'price';
@@ -87,22 +84,16 @@ class Email extends AbstractModel
     protected $_stockProducts = [];
 
     /**
-     * Price block
-     *
      * @var Price
      */
     protected $_priceBlock;
 
     /**
-     * Stock block
-     *
      * @var Stock
      */
     protected $_stockBlock;
 
     /**
-     * Product alert data
-     *
      * @var Data
      */
     protected $_productAlertData = null;
@@ -370,7 +361,7 @@ class Email extends AbstractModel
         $this->_appEmulation->stopEnvironmentEmulation();
 
         $customerName = $this->_customerHelper->getCustomerName($this->_customer);
-        $this->_transportBuilder->setTemplateIdentifier(
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
             ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
@@ -389,8 +380,11 @@ class Email extends AbstractModel
         )->addTo(
             $this->_customer->getEmail(),
             $customerName
-        )->getTransport()->sendMessage();
+        )->getTransport();
 
+        $this->_appEmulation->startEnvironmentEmulation($storeId);
+        $transport->sendMessage();
+        $this->_appEmulation->stopEnvironmentEmulation();
         return true;
     }
 

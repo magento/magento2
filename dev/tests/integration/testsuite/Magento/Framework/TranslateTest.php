@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework;
@@ -9,6 +9,7 @@ namespace Magento\Framework;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppIsolation enabled
@@ -101,13 +102,13 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoCache all disabled
-     * @dataProvider translateDataProvider
      *
      * @param string $inputText
      * @param string $expectedTranslation
      * @return void
      * @throws Exception\LocalizedException
      */
+    #[DataProvider('translateDataProvider')]
     public function testTranslate($inputText, $expectedTranslation)
     {
         $this->translate->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Widget\Model\Config;
@@ -22,7 +22,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+        $this->fileResolver = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(
             \Magento\Widget\Model\Config\Reader::class,

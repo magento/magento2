@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class ConditionResolverTest extends TestCase
 
         $this->selectBuilderMock = $this->createMock(SelectBuilder::class);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->conditionResolver = new ConditionResolver($this->resourceConnectionMock);
     }

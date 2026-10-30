@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,19 +17,21 @@ use Magento\Framework\View\Design\Theme\Domain\VirtualInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class FactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @covers \Magento\Framework\View\Design\Theme\Domain\Factory::create
      */
     public function testCreate()
     {
-        $themeMock = $this->getMockBuilder(Theme::class)
-            ->addMethods(['getType'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $themeMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getType', '__wakeup']
+        );
         $themeMock->expects(
             $this->any()
         )->method(
@@ -40,7 +42,7 @@ class FactoryTest extends TestCase
 
         $newThemeMock = $this->createMock(Theme::class);
 
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -62,14 +64,13 @@ class FactoryTest extends TestCase
     public function testCreateWithWrongThemeType()
     {
         $wrongThemeType = 'wrong_theme_type';
-        $themeMock = $this->getMockBuilder(Theme::class)
-            ->addMethods(['getType'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $themeMock = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getType', '__wakeup']
+        );
         $themeMock->expects($this->any())->method('getType')->willReturn($wrongThemeType);
 
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $themeDomainFactory = new Factory($objectManager);
 

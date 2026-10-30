@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class TopicConverterTest extends TestCase
     {
         $this->methodMapMock = $this->createMock(MethodsMap::class);
         $this->validatorMock = $this->createMock(Validator::class);
-        $this->communicationConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->communicationConfigMock = $this->createMock(ConfigInterface::class);
         $wildcardPatternMap = include __DIR__ . '/../../../../_files/wildcard_pattern_map.php';
         $topicsMap = include __DIR__ . '/../../../../_files/topic_definitions_map.php';
         $this->validatorMock->expects($this->any())

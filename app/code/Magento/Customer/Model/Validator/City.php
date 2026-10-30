@@ -1,61 +1,89 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Model\Validator;
 
-use Magento\Customer\Model\Customer;
-use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Phrase;
 
 /**
- * Customer city fields validator.
+ * Customer city field validator.
  */
-class City extends AbstractValidator
+class City extends AbstractAddressFieldValidator
 {
+    /** Matches customer_address_entity.city varchar(255) and quote_address.city varchar(255). */
+    private const MAX_CITY_LENGTH = 255;
+
     /**
      * Allowed characters:
      *
      * \p{L}: Unicode letters.
      * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ': Apostrophe mark.
+     * \d: Digits (0-9).
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * -: Hyphen.
+     * _: Underscore.
+     * ', ’: Apostrophes (straight and typographical).
+     * .: Period/full stop.
+     * ,: Comma.
+     * &: Ampersand.
+     * (): Parentheses.
      */
-    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\s\-\']{1,100})/u';
+    private const PATTERN_CITY_CHARSET = "/^[\p{L}\p{M}\d\s\-_'\u{2019}\.,&\(\)]+\$/u";
 
     /**
-     * Validate city fields.
-     *
-     * @param Customer $customer
-     * @return bool
+     * @inheritdoc
      */
-    public function isValid($customer)
+    public function getFieldKey(): string
     {
-        if (!$this->isValidCity($customer->getCity())) {
-            parent::_addMessages([[
-                'city' => "Invalid City. Please use A-Z, a-z, 0-9, -, ', spaces"
-            ]]);
-        }
-
-        return count($this->_messages) == 0;
+        return 'city';
     }
 
     /**
-     * Check if city field is valid.
-     *
-     * @param string|null $cityValue
-     * @return bool
+     * @inheritdoc
      */
-    private function isValidCity($cityValue)
+    public function getMaxLength(): int
     {
-        if ($cityValue != null) {
-            if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] == $cityValue;
-            }
-        }
+        return self::MAX_CITY_LENGTH;
+    }
 
-        return true;
+    /**
+     * @inheritdoc
+     */
+    public function getCharsetPattern(): string
+    {
+        return self::PATTERN_CITY_CHARSET;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLengthErrorMessage(): Phrase
+    {
+        return __(
+            'Invalid City. The city name is too long. Enter no more than %1 characters.',
+            self::MAX_CITY_LENGTH
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCharsetErrorMessage(): Phrase
+    {
+        return __(
+            "Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )"
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFieldValues(mixed $value): array
+    {
+        return [(string)$value->getCity()];
     }
 }

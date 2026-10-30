@@ -1,30 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Checks;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Payment\Model\Checks\ZeroTotal;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ZeroTotalTest extends TestCase
 {
+    use MockCreationTrait;
     /**
-     * @dataProvider paymentMethodDataProvider
      * @param string $code
      * @param int $total
      * @param bool $expectation
      */
+    #[DataProvider('paymentMethodDataProvider')]
     public function testIsApplicable($code, $total, $expectation)
     {
-        $paymentMethod = $this->getMockBuilder(MethodInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $paymentMethod = $this->createMock(MethodInterface::class);
 
         if (!$total) {
             $paymentMethod->expects($this->once())
@@ -32,11 +33,10 @@ class ZeroTotalTest extends TestCase
                 ->willReturn($code);
         }
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getBaseGrandTotal'])
-            ->onlyMethods(['__wakeup'])
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getBaseGrandTotal', '__wakeup']
+        );
 
         $quote->expects($this->once())
             ->method('getBaseGrandTotal')

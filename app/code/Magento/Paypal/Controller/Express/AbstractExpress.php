@@ -91,7 +91,7 @@ abstract class AbstractExpress extends AppAction implements
     protected $_paypalSession;
 
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $_urlHelper;
 
@@ -151,7 +151,7 @@ abstract class AbstractExpress extends AppAction implements
     protected function _initCheckout(?CartInterface $quoteObject = null)
     {
         $quote = $quoteObject ? $quoteObject : $this->_getQuote();
-        if ($quote->getId()) {
+        if ($quote->getId() && $this->isQuoteAllowedForUser($quote)) {
             $this->_getCheckoutSession()->setPayPalQuoteId($quote->getId());
         }
         if (!$quote->hasItems() || $quote->getHasError()) {
@@ -257,6 +257,22 @@ abstract class AbstractExpress extends AppAction implements
             }
         }
         return $this->_quote;
+    }
+
+    /**
+     * Checks if the quote is allowed for the current user.
+     *
+     * @param CartInterface $quote
+     * @return bool
+     */
+    private function isQuoteAllowedForUser(CartInterface $quote): bool
+    {
+        if ((int)$quote->getId() === (int)$this->_getCheckoutSession()->getQuoteId()) {
+            return true;
+        }
+
+        return $this->_customerSession->isLoggedIn()
+            && (int)$quote->getCustomerId() === (int)$this->_customerSession->getCustomerId();
     }
 
     /**

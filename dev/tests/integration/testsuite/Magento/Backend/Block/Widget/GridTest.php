@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @magentoAppArea adminhtml
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GridTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ColumnSet
      */
@@ -48,14 +50,10 @@ class GridTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['getChildName', 'getBlock', 'createBlock', 'renameElement', 'unsetChild', 'setChild'])
-            ->addMethods(['helper'])
-            ->getMock();
+        $this->layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getChildName', 'getBlock', 'createBlock', 'renameElement', 'unsetChild', 'setChild', 'helper']
+        );
 
         $this->columnSetMock = $this->getColumnSetMock();
 

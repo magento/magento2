@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,17 +22,23 @@ interface SearchDataInterface
     public function getItems();
 
     /**
+     * Check is need to show number of results
+     *
      * @return bool
      */
     public function isShowResultsCount();
 
     /**
+     * Retrieve link
+     *
      * @param string $queryText
      * @return string
      */
     public function getLink($queryText);
 
     /**
+     * Retrieve title
+     *
      * @return string
      */
     public function getTitle();

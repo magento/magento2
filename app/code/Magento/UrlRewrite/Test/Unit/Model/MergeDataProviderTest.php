@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\UrlRewrite\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\MergeDataProvider;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,9 +40,9 @@ class MergeDataProviderTest extends TestCase
      * @param array $urlRewriteMockArray
      * @param array $expectedData
      * @param int $arrayCount
-     * @dataProvider mergeDataProvider
      * @return void
      */
+    #[DataProvider('mergeDataProvider')]
     public function testMerge($urlRewriteMockArray, $expectedData, $arrayCount)
     {
         $urlRewriteMockArrayFinal = [];
@@ -49,8 +50,7 @@ class MergeDataProviderTest extends TestCase
             foreach ($urlRewriteMockArray as $key => $value) {
                 $urlRewriteMockArrayFinal[$key] = $value($this);
             }
-        }
-        else {
+        } else {
             $urlRewriteMockArrayFinal = $urlRewriteMockArray;
         }
 
@@ -60,8 +60,7 @@ class MergeDataProviderTest extends TestCase
             foreach ($expectedData as $key => $value) {
                 $expectedDataFinal[$key] = $value($this);
             }
-        }
-        else {
+        } else {
             $expectedDataFinal = $expectedData;
         }
 
@@ -80,7 +79,8 @@ class MergeDataProviderTest extends TestCase
         $this->assertEmpty($this->urlRewritesSet->getData());
     }
 
-    protected function getMockForUrlRewrite($requestPathForMock, $storeIdForMock) {
+    protected function getMockForUrlRewrite($requestPathForMock, $storeIdForMock)
+    {
         $urlRewriteMock = $this->createMock(UrlRewrite::class);
         if ($requestPathForMock!=null && $storeIdForMock!=null) {
             $urlRewriteMock->expects($this->any())

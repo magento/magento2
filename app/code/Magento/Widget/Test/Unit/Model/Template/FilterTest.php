@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Widget\Test\Unit\Model\Template;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\UrlInterface;
@@ -17,11 +18,15 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Model\ResourceModel\Widget;
 use Magento\Widget\Model\Template\Filter;
+use Magento\Widget\Model\Widget as WidgetModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Filter
      */
@@ -48,7 +53,7 @@ class FilterTest extends TestCase
     protected $widgetResourceMock;
 
     /**
-     * @var \Magento\Widget\Model\Widget|MockObject
+     * @var WidgetModel|MockObject
      */
     protected $widgetMock;
 
@@ -64,10 +69,10 @@ class FilterTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeMock = $this->createMock(Store::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->widgetResourceMock = $this->createMock(Widget::class);
-        $this->widgetMock = $this->createMock(\Magento\Widget\Model\Widget::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->widgetMock = $this->createMock(WidgetModel::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $objects = [
             [
@@ -103,8 +108,8 @@ class FilterTest extends TestCase
      * @param \Closure|null $widgetBlock
      * @param string $expectedResult
      * @return void
-     * @dataProvider generateWidgetDataProvider
      */
+    #[DataProvider('generateWidgetDataProvider')]
     public function testGenerateWidget(
         $construction,
         $name,
@@ -134,8 +139,8 @@ class FilterTest extends TestCase
      * @param \Closure|null $widgetBlock
      * @param string $expectedResult
      * @return void
-     * @dataProvider generateWidgetDataProvider
      */
+    #[DataProvider('generateWidgetDataProvider')]
     public function testWidgetDirective(
         $construction,
         $name,
@@ -270,9 +275,10 @@ class FilterTest extends TestCase
     protected function getBlockMock($returnedResult = '')
     {
         /** @var BlockInterface|MockObject $blockMock */
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->addMethods(['toHtml'])
-            ->getMockForAbstractClass();
+        $blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['toHtml', 'addData', 'setData']
+        );
         $blockMock->expects($this->any())
             ->method('toHtml')
             ->willReturn($returnedResult);

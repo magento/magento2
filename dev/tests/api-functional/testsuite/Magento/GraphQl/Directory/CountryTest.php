@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,6 +91,17 @@ class CountryTest extends GraphQlAbstract
         $this->expectExceptionMessage('GraphQL response contains errors: The country isn\'t available.');
 
         $this->graphQlQuery($this->getQuery('DE'));
+    }
+
+    /**
+     * Test that getCountryInfo throws exception for obsolete country
+     */
+    public function testGetObsoleteDECountryNotFoundException()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The country isn\'t available.');
+
+        $this->graphQlQuery($this->getQuery('AN'));
     }
 
     public function testMissedInputParameterException()

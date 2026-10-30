@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->helperMock = $this->createPartialMock(Data::class, ['isDevAllowed']);
         $this->model = new Config(
             $this->scopeConfigMock,
@@ -46,7 +46,7 @@ class ConfigTest extends TestCase
     {
         $store = 'some store';
         $result = 'result';
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->expects(
             $this->once()
         )->method(

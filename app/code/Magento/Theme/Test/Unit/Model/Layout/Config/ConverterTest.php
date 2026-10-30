@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Theme\Model\Layout\Config\Converter
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Test\Unit\Model\Layout\Config;
 

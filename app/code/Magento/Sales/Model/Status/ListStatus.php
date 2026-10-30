@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Status;
 
@@ -9,8 +9,6 @@ namespace Magento\Sales\Model\Status;
  * Service model for managing statuses information. Statuses are just records with code, message and any
  * additional data. The model helps to keep track and manipulate statuses, that different modules want to set
  * to owner object of this model.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class ListStatus
 {
@@ -89,8 +87,7 @@ class ListStatus
     }
 
     /**
-     * Removes items at mentioned index/indexes.
-     * Returns items removed.
+     * Removes items at mentioned index/indexes. Returns items removed.
      *
      * @param int|array $indexes
      * @return array

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,25 +75,14 @@ abstract class AbstractDataProviderTestCase extends TestCase
         ];
         $helper->prepareObjectManager($objects);
         $this->objectManager = new ObjectManager($this);
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->productLinkRepositoryMock = $this->getMockBuilder(ProductLinkRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->getMockForAbstractClass();
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productLinkRepositoryMock = $this->createMock(ProductLinkRepositoryInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->collectionMock = $this->createMock(Collection::class);
+        $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
 
-        $this->productRepositoryMock->expects($this->any())
-            ->method('getById')
-            ->willReturn($this->productMock);
+        $this->productRepositoryMock->method('getById')->willReturn($this->productMock);
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->collectionMock);

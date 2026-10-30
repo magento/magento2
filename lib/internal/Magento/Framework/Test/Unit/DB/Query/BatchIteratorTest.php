@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,7 +69,7 @@ class BatchIteratorTest extends TestCase
 
         $this->selectMock = $this->createMock(Select::class);
         $this->wrapperSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);

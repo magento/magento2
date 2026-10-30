@@ -68,7 +68,7 @@ class TSampleRepository implements TSampleRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @deprecated
      */
-    public function get(int $id) : \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+    public function get(int $id): \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
     {
         if (!$id) {
             throw new \Magento\Framework\Exception\InputException(
@@ -146,7 +146,7 @@ class TSampleRepository implements TSampleRepositoryInterface
      * @return bool
      * @deprecated
      */
-    public function delete(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity) : bool
+    public function delete(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity): bool
     {
         $this->tSampleInterfacePersistor->registerDeleted($entity);
         return $this->tSampleInterfacePersistor->doPersistEntity($entity);
@@ -186,7 +186,7 @@ class TSampleRepository implements TSampleRepositoryInterface
      * @return \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
      * @deprecated
      */
-    public function save(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity) : \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
+    public function save(\Magento\Framework\ObjectManager\Code\Generator\TSampleInterface $entity): \Magento\Framework\ObjectManager\Code\Generator\TSampleInterface
     {
         $this->tSampleInterfacePersistor->doPersistEntity($entity);
         return $entity;

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Adminhtml sales shipment comment view block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
@@ -18,8 +16,6 @@ namespace Magento\Shipping\Block\Adminhtml\View;
 class Comments extends \Magento\Backend\Block\Text\ListText
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;

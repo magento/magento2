@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,13 +16,18 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationPopupTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var AuthenticationPopup */
     private $model;
 
@@ -99,9 +104,8 @@ class AuthenticationPopupTest extends TestCase
      * @param string $forgotUrl
      * @param array $result
      * @throws Exception
-     *
-     * @dataProvider dataProviderGetConfig
      */
+    #[DataProvider('dataProviderGetConfig')]
     public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, $loginUrl, array $result)
     {
         $this->scopeConfigMock->expects($this->any())
@@ -109,19 +113,14 @@ class AuthenticationPopupTest extends TestCase
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
             ->willReturn($isAutocomplete);
 
-        /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseUrl'])
-            ->getMockForAbstractClass();
+        /** @var Store||\PHPUnit\Framework\MockObject\MockObject $storeMock */
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
+        $storeMock->method('getBaseUrl')->willReturn($baseUrl);
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->with(null)
             ->willReturn($storeMock);
-
-        $storeMock->expects($this->any())
-            ->method('getBaseUrl')
-            ->willReturn($baseUrl);
 
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')
@@ -208,9 +207,8 @@ class AuthenticationPopupTest extends TestCase
      * @param string $forgotUrl
      * @param array $result
      * @throws Exception
-     *
-     * @dataProvider dataProviderGetConfig
      */
+    #[DataProvider('dataProviderGetConfig')]
     public function testGetSerializedConfig(
         $isAutocomplete,
         $baseUrl,
@@ -224,19 +222,14 @@ class AuthenticationPopupTest extends TestCase
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
             ->willReturn($isAutocomplete);
 
-        /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseUrl'])
-            ->getMockForAbstractClass();
+        /** @var Store||\PHPUnit\Framework\MockObject\MockObject $storeMock */
+        $storeMock = $this->createPartialMock(Store::class, ['getBaseUrl']);
+        $storeMock->method('getBaseUrl')->willReturn($baseUrl);
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->with(null)
             ->willReturn($storeMock);
-
-        $storeMock->expects($this->any())
-            ->method('getBaseUrl')
-            ->willReturn($baseUrl);
 
         $this->urlBuilderMock->expects($this->any())
             ->method('getUrl')

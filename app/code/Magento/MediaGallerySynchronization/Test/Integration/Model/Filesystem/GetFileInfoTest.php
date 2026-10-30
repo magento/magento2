@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\MediaGallerySynchronization\Test\Integration\Model\Filesystem;
 use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for GetFileInfo
@@ -30,9 +31,9 @@ class GetFileInfoTest extends TestCase
     }
 
     /**
-     * @dataProvider filesProvider
      * @param string $file
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         string $file
     ): void {
@@ -61,10 +62,8 @@ class GetFileInfoTest extends TestCase
     public static function filesProvider(): array
     {
         return [
-            [
-                'magento.jpg',
-                'magento_2.jpg'
-            ]
+            ['magento.jpg'],
+            ['magento_2.jpg']
         ];
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,8 +14,8 @@ use Magento\Tax\Model\Calculation\AbstractCalculator;
 use Magento\Tax\Model\Calculation\CalculatorFactory;
 use Magento\Tax\Model\Calculation\RowBaseCalculator;
 use Magento\Tax\Model\Calculation\TotalBaseCalculator;
-
 use Magento\Tax\Model\Calculation\UnitBaseCalculator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,24 +36,22 @@ class CalculatorFactoryTest extends TestCase
     /**
      * @param string $type Type of calculator
      * @param int $storeId
-     * @param \Closure $billingAddress
-     * @param \Closure $shippingAddress
+     * @param \Closure|null $billingAddress
+     * @param \Closure|null $shippingAddress
      * @param null|int $customerTaxClassId
      * @param null|int $customerId
-     * @param AbstractCalculator $expectedInstanceType
-     *  expected type of calculator instance
-     *
-     * @dataProvider createDataProvider
+     * @param string $expectedInstanceType expected type of calculator instance
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate(
-        $type,
-        $storeId,
+        string $type,
+        int $storeId,
         $billingAddress,
         $shippingAddress,
-        $customerTaxClassId,
-        $customerId,
-        $expectedInstanceType
-    ) {
+        ?int $customerTaxClassId,
+        ?int $customerId,
+        string $expectedInstanceType
+    ): void {
         if ($billingAddress!=null) {
             $billingAddress = $billingAddress($this);
         }
@@ -63,7 +61,7 @@ class CalculatorFactoryTest extends TestCase
         $instanceMock = $this->getMockBuilder($expectedInstanceType)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())
@@ -125,10 +123,9 @@ class CalculatorFactoryTest extends TestCase
         $this->assertInstanceOf($expectedInstanceType, $calculator);
     }
 
-    protected function getMockForAddress() {
-        $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+    protected function getMockForAddress()
+    {
+        $address = $this->createMock(CustomerAddress::class);
 
         return $address;
     }

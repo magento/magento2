@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateGroupedProductWithUkTaxDisplayTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Admin configures UK tax for grouped products"/>
+            <title value="Create Grouped product with UK 20% tax"/>
+            <description value="Creates grouped product, configures UK tax, enables inclusive/exclusive price display, verifies storefront visibility."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6363"/>
+            <group value="GroupedProduct"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleOne">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleTwo">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">150.00</field>
+            </createData>
+            <!-- Step 1: Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 3: Create tax zone (add a new tax zone for the UK, all regions and zip codes, at a rate of 20%. ) -->
+            <createData entity="taxRateCustomRateUK" stepKey="createUkTaxRate">
+                <field key="rate">20.0000</field>
+                <field key="zip_is_range">0</field>
+                <field key="tax_postcode">*</field>
+                <field key="tax_region_id">0</field>
+            </createData>
+            <!-- Step 4: Create tax rule and assign UK. -->
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createUkTaxRule">
+                <argument name="taxRate" value="$$createUkTaxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <!-- Step 5: Set both options to "Including and Excluding Tax" under Store > Configuration > Sales > Tax > Price Display Settings -->
+            <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="setCatalogDisplayBoth"/>
+            <magentoCLI command="config:set {{CustomDisplayShippingPricesInCatalog.path}} {{CustomDisplayShippingPricesInCatalog.value}}" stepKey="setCatalogShippingBoth"/>
+            <magentoCLI command="config:set {{CustomCartDisplayPrice.path}} {{CustomCartDisplayPrice.value}}" stepKey="setCartPriceBoth"/>
+            <magentoCLI command="config:set {{CustomCartDisplaySubtotal.path}} {{CustomCartDisplaySubtotal.value}}" stepKey="setCartSubtotalBoth"/>
+            <magentoCLI command="config:set {{CustomCartDisplayShipping.path}} {{CustomCartDisplayShipping.value}}" stepKey="setCartShippingBoth"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="resetCatalogDisplay"/>
+            <magentoCLI command="config:set {{DefaultDisplayShippingPricesInCatalog.path}} {{DefaultDisplayShippingPricesInCatalog.value}}" stepKey="resetCatalogShipping"/>
+            <magentoCLI command="config:set {{DefaultCartDisplayPrice.path}} {{DefaultCartDisplayPrice.value}}" stepKey="resetCartPrice"/>
+            <magentoCLI command="config:set {{DefaultCartDisplaySubtotal.path}} {{DefaultCartDisplaySubtotal.value}}" stepKey="resetCartSubtotal"/>
+            <magentoCLI command="config:set {{DisplayShippingAmountConfigData.path}} {{DisplayShippingAmountConfigData.value}}" stepKey="resetCartShipping"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="openTaxRuleGrid"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteUkTaxRule">
+                <argument name="name" value="{{SimpleTaxRule.code}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createUkTaxRate" stepKey="deleteUkTaxRate"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteProducts"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 2: Create grouped product and assign simple products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="startGroupedProductCreation">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForGroupedForm"/>
+        <actionGroup ref="FillGroupedProductFormActionGroup" stepKey="fillGroupedBasics">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="waitForCategoryDropdown"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openCategoryDropdown"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToGroupedProduct">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="openAddProductsModal"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForProductsModal"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterFirstSimple">
+            <argument name="sku" value="$$createSimpleOne.sku$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectFirstSimple"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSecondSimple">
+            <argument name="sku" value="$$createSimpleTwo.sku$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="selectSecondSimple"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="addSelectedProducts"/>
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="setQtySimpleOne">
+            <argument name="productName" value="$$createSimpleOne.name$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="setQtySimpleTwo">
+            <argument name="productName" value="$$createSimpleTwo.name$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveGroupedProduct"/>
+        <!-- Step 7: Navigate to the category the grouped product belongs to on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontHome"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCategoryProductSection.ProductTitleByName(GroupedProduct.name)}}" userInput="{{GroupedProduct.name}}" stepKey="seeGroupedProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openGroupedProductPdp">
+            <argument name="productUrl" value="{{GroupedProduct.urlKey}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="waitForPdpLoad"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{GroupedProduct.name}}" stepKey="confirmPdpName"/>
+    </test>
+</tests>

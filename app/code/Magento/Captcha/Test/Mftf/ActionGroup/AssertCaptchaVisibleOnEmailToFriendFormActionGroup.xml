@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCaptchaVisibleOnEmailToFriendFormActionGroup">
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaField}}" stepKey="waitToSeeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaImg}}" stepKey="waitToSeeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButton"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaField}}" stepKey="waitToSeeCaptchaFieldAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaImg}}" stepKey="waitToSeeCaptchaImageAfterPageReload"/>
+        <waitForElementVisible selector="{{StorefrontEmailToFriendSection.captchaReload}}" stepKey="waitToSeeCaptchaReloadButtonAfterPageReload"/>
+    </actionGroup>
+</actionGroups>

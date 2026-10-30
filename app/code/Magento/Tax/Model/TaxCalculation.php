@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model;
@@ -168,9 +168,10 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
         $processedItems = [];
         /** @var QuoteDetailsItemInterface $item */
         foreach ($this->keyedItems as $item) {
-            if (isset($this->parentToChildren[$item->getCode()])) {
+            $itemCode = $item->getCode() ?? '';
+            if (isset($this->parentToChildren[$itemCode])) {
                 $processedChildren = [];
-                foreach ($this->parentToChildren[$item->getCode()] as $child) {
+                foreach ($this->parentToChildren[$itemCode] as $child) {
                     $processedItem = $this->processItem($child, $calculator, $round);
                     $taxDetailsData = $this->aggregateItemData($taxDetailsData, $processedItem);
                     $processedItems[$processedItem->getCode()] = $processedItem;
@@ -183,7 +184,8 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
                 $processedItem = $this->processItem($item, $calculator, $round);
                 $taxDetailsData = $this->aggregateItemData($taxDetailsData, $processedItem);
             }
-            $processedItems[$processedItem->getCode()] = $processedItem;
+            $processedItemCode = $processedItem->getCode() ?? '';
+            $processedItems[$processedItemCode] = $processedItem;
         }
 
         $taxDetailsDataObject = $this->taxDetailsDataObjectFactory->create();
@@ -257,9 +259,11 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
         $this->parentToChildren = [];
         foreach ($items as $item) {
             if ($item->getParentCode() === null) {
-                $this->keyedItems[$item->getCode()] = $item;
+                $itemCode = $item->getCode() ?? '';
+                $this->keyedItems[$itemCode] = $item;
             } else {
-                $this->parentToChildren[$item->getParentCode()][] = $item;
+                $parentCode = $item->getParentCode() ?? '';
+                $this->parentToChildren[$parentCode][] = $item;
             }
         }
     }

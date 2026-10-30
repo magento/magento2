@@ -108,9 +108,7 @@ class ComponentRegistrarFixture
         $componentAnnotations = array_unique(array_column($values, 'path'));
         $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
         $paths = $reflection->getProperty(self::PATHS_FIELD);
-        $paths->setAccessible(true);
         $this->origComponents = $paths->getValue();
-        $paths->setAccessible(false);
         foreach ($componentAnnotations as $fixturePath) {
             $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
             if (!file_exists($fixturesDir)) {
@@ -141,9 +139,7 @@ class ComponentRegistrarFixture
         if (null !== $this->origComponents) {
             $reflection = new ReflectionClass(self::REGISTRAR_CLASS);
             $paths = $reflection->getProperty(self::PATHS_FIELD);
-            $paths->setAccessible(true);
             $paths->setValue(null, $this->origComponents);
-            $paths->setAccessible(false);
             $this->origComponents = null;
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
@@ -84,8 +84,8 @@ class Discount extends AbstractTotal
                 continue;
             }
 
-            $orderItemDiscount = (double)$orderItem->getDiscountInvoiced();
-            $baseOrderItemDiscount = (double)$orderItem->getBaseDiscountInvoiced();
+            $orderItemDiscount = (float)$orderItem->getDiscountInvoiced();
+            $baseOrderItemDiscount = (float)$orderItem->getBaseDiscountInvoiced();
             $orderItemQty = $orderItem->getQtyInvoiced();
 
             if ($orderItemDiscount && $orderItemQty) {

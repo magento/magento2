@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Pricing\Price\Collection;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Framework\Pricing\PriceInfo\Base
@@ -49,9 +50,8 @@ class BaseTest extends TestCase
 
     /**
      * @param $entryParams
-     * @param $createCount
-     * @dataProvider providerGetPrice
-     */
+     * @param $createCount     */
+    #[DataProvider('providerGetPrice')]
     public function testGetPrice($entryParams, $createCount)
     {
         $priceCode = current(array_values(reset($entryParams)));

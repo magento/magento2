@@ -1,4 +1,3 @@
-# DirectoryGraphQl
+# Magento_DirectoryGraphQl module
 
-**DirectoryGraphQl** provides type and resolver information for the GraphQl module
-to generate directory information endpoints.
+This module provides type and resolver information for the GraphQl module to generate directory information endpoints.

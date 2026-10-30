@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Event\Test\Unit\Observer;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer\Regex;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RegexTest extends TestCase
 {
@@ -28,12 +29,11 @@ class RegexTest extends TestCase
         $this->regex = null;
     }
 
-    /**
-     * @dataProvider isValidForProvider
-     * @param string $pattern
+    /**     * @param string $pattern
      * @param string $name
      * @param bool $expectedResult
      */
+    #[DataProvider('isValidForProvider')]
     public function testIsValidFor($pattern, $name, $expectedResult)
     {
         $this->regex->setEventRegex($pattern);

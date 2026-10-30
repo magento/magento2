@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,9 +52,7 @@ class ReadHandlerTest extends TestCase
         $this->product = $this->createMock(Product::class);
 
         $this->attribute = $this->createMock(Attribute::class);
-        $this->attribute->expects($this->any())
-            ->method('getAttributeCode')
-            ->willReturn('media_gallery');
+        $this->attribute->method('getAttributeCode')->willReturn('media_gallery');
 
         $this->resourceModel = $this->createMock(Gallery::class);
 
@@ -143,7 +141,7 @@ class ReadHandlerTest extends TestCase
             ]
         ];
 
-        $this->product->expects($this->once())
+        $this->product->expects($this->any())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn($mediaData);
@@ -155,9 +153,7 @@ class ReadHandlerTest extends TestCase
             ->method('loadDataFromTableByValueId')
             ->willReturn($resourceEntryResult);
 
-        $this->mediaGalleryReadHandler->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attribute);
+        $this->mediaGalleryReadHandler->method('getAttribute')->willReturn($this->attribute);
 
         $this->subject->afterExecute(
             $this->mediaGalleryReadHandler,
@@ -192,9 +188,7 @@ class ReadHandlerTest extends TestCase
 
         $this->resourceModel->expects($this->never())->method('loadDataFromTableByValueId');
 
-        $this->mediaGalleryReadHandler->expects($this->any())
-            ->method('getAttribute')
-            ->willReturn($this->attribute);
+        $this->mediaGalleryReadHandler->method('getAttribute')->willReturn($this->attribute);
 
         $this->subject->afterExecute(
             $this->mediaGalleryReadHandler,

@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Customer edit block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
@@ -32,8 +31,6 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Catalog::catalog/product/edit.phtml';
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -294,6 +291,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Retrieve product header
      *
      * @deprecated 102.0.0
+     * @see nothing
      * @return string
      */
     public function getHeader()

@@ -1,4 +1,3 @@
-# StoreGraphQl
+# Magento_StoreGraphQl module
 
-**StoreGraphQl** provides type information for the GraphQl module
-to generate store fields information endpoints.
+This module provides type information for the GraphQL module to generate store fields information endpoints.

@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerFrontendUi\Controller\Login;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
@@ -17,9 +16,9 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 /**
  * Login as Customer storefront login action
@@ -35,18 +34,6 @@ class Index implements HttpGetActionInterface
      * @var RequestInterface
      */
     private $request;
-
-    /**
-     * @var CustomerRepositoryInterface
-     * @deprecated
-     */
-    private $customerRepository;
-
-    /**
-     * @var GetAuthenticationDataBySecretInterface
-     * @deprecated
-     */
-    private $getAuthenticationDataBySecret;
 
     /**
      * @var AuthenticateCustomerBySecretInterface
@@ -69,33 +56,36 @@ class Index implements HttpGetActionInterface
     private $customerSession;
 
     /**
+     * @var CheckoutSession
+     */
+    private $checkoutSession;
+
+    /**
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param AuthenticateCustomerBySecretInterface $authenticateCustomerBySecret
      * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
      * @param Session|null $customerSession
+     * @param CheckoutSession|null $checkoutSession
      */
     public function __construct(
         ResultFactory $resultFactory,
         RequestInterface $request,
-        CustomerRepositoryInterface $customerRepository,
-        GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
         AuthenticateCustomerBySecretInterface $authenticateCustomerBySecret,
         ManagerInterface $messageManager,
         LoggerInterface $logger,
-        ?Session $customerSession = null
+        ?Session $customerSession = null,
+        ?CheckoutSession $checkoutSession = null
     ) {
         $this->resultFactory = $resultFactory;
         $this->request = $request;
-        $this->customerRepository = $customerRepository;
-        $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->authenticateCustomerBySecret = $authenticateCustomerBySecret;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
         $this->customerSession = $customerSession ?? ObjectManager::getInstance()->get(Session::class);
+        $this->checkoutSession = $checkoutSession
+            ?? ObjectManager::getInstance()->get(CheckoutSession::class);
     }
 
     /**
@@ -109,6 +99,10 @@ class Index implements HttpGetActionInterface
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         $secret = $this->request->getParam('secret');
+        if ($this->checkoutSession->getQuoteId()) {
+            $this->checkoutSession->clearQuote();
+            $this->checkoutSession->clearStorage();
+        }
         try {
             $this->authenticateCustomerBySecret->execute($secret);
             $customer = $this->customerSession->getCustomer();

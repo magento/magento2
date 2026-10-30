@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\InstantPurchase\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AddressFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 
@@ -85,6 +86,11 @@ class InstantPurchaseOptionLoadingFactory
         $paymentToken = $this->paymentTokenManagement->getByPublicHash($paymentTokenPublicHash, $customerId);
         $shippingAddress = $this->getAddress($shippingAddressId);
         $billingAddress = $this->getAddress($billingAddressId);
+        if ((int)$shippingAddress->getCustomerId() !== $customerId ||
+            (int)$billingAddress->getCustomerId() !== $customerId) {
+            throw new NoSuchEntityException(__('Address not found.'));
+        }
+
         $shippingMethod = $this->shippingMethodFactory->create()
             ->setCarrierCode($carrierCode)
             ->setMethodCode($shippingMethodCode);

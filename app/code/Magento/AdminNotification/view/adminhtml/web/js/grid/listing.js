@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -11,7 +11,7 @@ define([
     'Magento_Ui/js/lib/spinner',
     'jquery'
 ], function (Listing, loader, $) {
-    'use strict';
+    'use strict'; // eslint-disable-line strict
 
     return Listing.extend({
         defaults: {

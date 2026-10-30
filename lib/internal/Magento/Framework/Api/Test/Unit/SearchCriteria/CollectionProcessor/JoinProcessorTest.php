@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,6 +82,7 @@ class JoinProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource'])
             ->getMock();
 
         $customJoinMock->expects($this->once())
@@ -120,6 +121,7 @@ class JoinProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource'])
             ->getMock();
 
         $model->process($searchCriteriaMock, $collectionMock);

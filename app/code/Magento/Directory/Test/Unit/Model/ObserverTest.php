@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,11 +81,11 @@ class ObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->importFactoryMock = $this->createMock(Factory::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->transportBuilderMock = $this->createMock(TransportBuilder::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->currencyFactoryMock = $this->createMock(CurrencyFactory::class);
-        $this->inlineTranslationMock = $this->getMockForAbstractClass(StateInterface::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Observer::class,
@@ -124,7 +124,7 @@ class ObserverTest extends TestCase
                     return self::STUB_SENDER;
                 }
             });
-        $import = $this->getMockForAbstractClass(ImportInterface::class);
+        $import = $this->createMock(ImportInterface::class);
         $import->expects($this->once())->method('fetchRates')
             ->willReturn([]);
         $import->expects($this->once())->method('getMessages')
@@ -153,7 +153,7 @@ class ObserverTest extends TestCase
             ->method('addTo')
             ->with(['test1@email.com', 'test2@email.com'])
             ->willReturnSelf();
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

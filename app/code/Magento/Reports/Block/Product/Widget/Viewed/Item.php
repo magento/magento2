@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Product\Widget\Viewed;
 
@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Product\Widget\Viewed;
  * Reports Recently Viewed Products Widget
  *
  * @deprecated 100.3.3
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @see nothing
  */
 class Item extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Widget\Block\BlockInterface
 {

@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * @magentoAppArea adminhtml
@@ -46,9 +49,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testGetResourceCollectionNameNormal
      * @param  string $normalCollection
      */
+    #[Depends('testGetResourceCollectionNameNormal')]
     public function testGetResourceCollectionNameWithFilter($normalCollection)
     {
         $block = $this->_createBlock('updated_at_order');
@@ -65,9 +68,9 @@ class GridTest extends \PHPUnit\Framework\TestCase
      * @param $to string
      * @param $expectedResult bool
      *
-     * @dataProvider getCountTotalsDataProvider
      * @magentoDataFixture Magento/Reports/_files/orders.php
      */
+    #[DataProvider('getCountTotalsDataProvider')]
     public function testGetCountTotals($from, $to, $expectedResult)
     {
         $block = $this->_createBlock();

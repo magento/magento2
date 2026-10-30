@@ -1,26 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Block\Adminhtml\Synonyms\Edit;
 
 use Magento\Search\Controller\RegistryConstants;
 
-/**
- * Class GenericButton
- */
 class GenericButton
 {
     /**
-     * Url Builder
+     * Service for generating URLs
      *
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * Registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */

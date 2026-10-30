@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\UrlRewrite as UrlRewriteModel;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite as UrlRewriteFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test the GraphQL endpoint's Route query to verify url route information is correctly returned.
@@ -342,10 +343,10 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_category.php
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
      *
-     * @dataProvider urlRewriteEntitiesDataProvider
      * @param string $requestPath
      * @throws AlreadyExistsException
      */
+    #[DataProvider('urlRewriteEntitiesDataProvider')]
     public function testUrlRewriteCleansCacheOnChange(string $requestPath)
     {
 
@@ -515,5 +516,28 @@ QUERY;
         $urlRewrite->load($urlRewriteService->getUrlRewriteId());
 
         return $urlRewrite;
+    }
+
+    #[
+        DataFixture(UrlRewriteFixture::class, ['request_path' => 'test-same-path', 'target_path' => 'test-same-path'])
+    ]
+    public function testCustomUrlRewriteRedirectToSameUrl(): void
+    {
+        $urlPath = 'test-same-path';
+        $query = <<<QUERY
+{
+  route(url:"{$urlPath}")
+  {
+   relative_url
+   type
+   redirect_code
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage(
+            "No such entity found with matching URL key: " . $urlPath
+        );
+        $this->graphQlQuery($query);
     }
 }

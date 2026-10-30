@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Console\QuestionPerformer;
@@ -53,7 +53,7 @@ class YesNo
      * @param OutputInterface $output An OutputInterface instance
      * @return bool
      */
-    public function execute(array $messages, InputInterface $input, OutputInterface $output)
+    public function execute(array $messages, InputInterface $input, OutputInterface $output): bool
     {
         if (!$input->isInteractive()) {
             return true;

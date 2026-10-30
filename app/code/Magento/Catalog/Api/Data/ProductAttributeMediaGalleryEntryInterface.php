@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Api\Data;

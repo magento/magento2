@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,9 +78,7 @@ class UpdateWishlistItem
 
             $wishlistItemToUpdate->setOptions($updatedOptions);
             $wishlistItemToUpdate->setQty($wishlistItemData->getQuantity());
-            if ($wishlistItemData->getDescription()) {
-                $wishlistItemToUpdate->setDescription($wishlistItemData->getDescription());
-            }
+            $wishlistItemToUpdate->setDescription($wishlistItemData->getDescription() ?: "");
 
             $this->wishlistResource->save($wishlist);
         }

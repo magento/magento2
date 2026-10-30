@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 // @codingStandardsIgnoreStart
@@ -69,7 +69,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
             /**
              * @var AutoloaderInterface|MockObject $autoloaderMock
              */
-            $autoloaderMock = $this->getMockForAbstractClass(AutoloaderInterface::class);
+            $autoloaderMock = $this->createMock(AutoloaderInterface::class);
             $autoloaderMock->expects($this->once())->method('findFile')->with($classOnDisc)->willReturn(true);
             AutoloaderRegistry::registerAutoloader($autoloaderMock);
             $this->assertTrue($this->model->isClassLoadable($classOnDisc));

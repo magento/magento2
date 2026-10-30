@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Captcha\Cron;
@@ -8,6 +8,7 @@ namespace Magento\Captcha\Cron;
 use Magento\Captcha\Cron\Magento\Framework\Filesystem\Io\File;
 use Magento\Captcha\Helper\Data;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Store\Model\StoreManager;
@@ -69,6 +70,7 @@ class DeleteExpiredImages
      * Delete Expired Captcha Images
      *
      * @return \Magento\Captcha\Cron\DeleteExpiredImages
+     * @throws FileSystemException
      */
     public function execute()
     {
@@ -87,17 +89,18 @@ class DeleteExpiredImages
      * @param \Magento\Store\Model\Website|null $website
      * @param \Magento\Store\Model\Store|null $store
      * @return void
+     * @throws FileSystemException
      */
     protected function _deleteExpiredImagesForWebsite(
         \Magento\Captcha\Helper\Data $helper,
         ?\Magento\Store\Model\Website $website = null,
         ?\Magento\Store\Model\Store $store = null
     ) {
-        $expire = time() - $helper->getConfig('timeout', $store) * 60;
+        $expire = time() - (int)$helper->getConfig('timeout', $store) * 60;
         $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
         foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
             if ($this->_mediaDirectory->isFile($filePath)
-                && $this->_fileInfo->getPathInfo($filePath, PATHINFO_EXTENSION) == 'png'
+                && $this->_fileInfo->getPathInfo($filePath)['extension'] === 'png'
                 && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
             ) {
                 $this->_mediaDirectory->delete($filePath);

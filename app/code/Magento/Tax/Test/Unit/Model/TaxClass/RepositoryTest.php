@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\Data\TaxClassSearchResultsInterface;
@@ -23,6 +24,7 @@ use Magento\Tax\Model\ResourceModel\TaxClass;
 use Magento\Tax\Model\ResourceModel\TaxClass\Collection;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory;
 use Magento\Tax\Model\TaxClass\Repository;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Repository */
     protected $model;
 
@@ -84,7 +88,7 @@ class RepositoryTest extends TestCase
             TaxClassSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultMock = $this->getMockForAbstractClass(TaxClassSearchResultsInterface::class);
+        $this->searchResultMock = $this->createMock(TaxClassSearchResultsInterface::class);
 
         $this->classModelRegistryMock = $this->createMock(ClassModelRegistry::class);
 
@@ -160,9 +164,9 @@ class RepositoryTest extends TestCase
     /**
      * @return void
      */
-    public function testGet()
+    public function testGet(): void
     {
-        $taxClass = $this->getMockForAbstractClass(TaxClassInterface::class);
+        $taxClass = $this->createMock(TaxClassInterface::class);
         $classId = 1;
         $this->classModelRegistryMock
             ->expects($this->once())
@@ -196,16 +200,15 @@ class RepositoryTest extends TestCase
     /**
      * @return void
      */
-    public function testGetList()
+    public function testGetList(): void
     {
-        $taxClassOne = $this->getMockForAbstractClass(TaxClassInterface::class);
-        $taxClassTwo = $this->getMockForAbstractClass(TaxClassInterface::class);
-        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
-        $collection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setItems'])
-            ->onlyMethods(['getSize', 'getItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $taxClassOne = $this->createMock(TaxClassInterface::class);
+        $taxClassTwo = $this->createMock(TaxClassInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $collection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setItems', 'getSize', 'getItems']
+        );
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
@@ -318,12 +321,8 @@ class RepositoryTest extends TestCase
         $this->model->save($taxClass);
     }
 
-    /**
-     * @param string $classType
-     * @return void
-     * @dataProvider validateTaxClassDataProvider
-     */
-    public function testSaveWithValidateTaxClassDataException($classType)
+    #[DataProvider('validateTaxClassDataProvider')]
+    public function testSaveWithValidateTaxClassDataException(string $classType): void
     {
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('One or more input exceptions have occurred.');

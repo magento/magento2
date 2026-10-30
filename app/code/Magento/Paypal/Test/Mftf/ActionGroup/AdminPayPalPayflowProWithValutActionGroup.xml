@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,7 +17,7 @@
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForPageLoad time="60" stepKey="waitForConfigPageLoad"/>
         <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
         <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
         <waitForElementVisible selector="{{PayPalPayflowProConfigSection.paymentGateway(countryCode)}}" stepKey="waitForPayPalPaymentsProConfigureBtn"/>
@@ -33,7 +33,7 @@
         <selectOption selector ="{{PayPalPayflowProConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
         <selectOption selector ="{{PayPalPayflowProConfigSection.enableVault(countryCode)}}" userInput="Yes" stepKey="enableSolutionValut"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
-        <waitForPageLoad stepKey="waitForSaving"/>
-        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+        <waitForPageLoad time="120" stepKey="waitForSaving"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." time="60" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

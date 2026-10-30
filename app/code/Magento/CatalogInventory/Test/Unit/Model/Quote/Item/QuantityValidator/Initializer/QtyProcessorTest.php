@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,9 +67,7 @@ class QtyProcessorTest extends TestCase
         $parentItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $itemMock->expects($this->any())
-            ->method('getParentItem')
-            ->willReturn($parentItemMock);
+        $itemMock->method('getParentItem')->willReturn($parentItemMock);
         $parentItemMock->expects($this->once())
             ->method('getQty')
             ->willReturn($qty);
@@ -93,9 +91,7 @@ class QtyProcessorTest extends TestCase
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($productMock);
+        $itemMock->method('getProduct')->willReturn($productMock);
         $this->quoteItemQtyList->expects($this->once())
             ->method('getQty')
             ->withAnyParameters()
@@ -120,12 +116,8 @@ class QtyProcessorTest extends TestCase
         $parentItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->itemMock->expects($this->any())
-            ->method('getParentItem')
-            ->willReturn($parentItemMock);
-        $this->itemMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($productMock);
+        $this->itemMock->method('getParentItem')->willReturn($parentItemMock);
+        $this->itemMock->method('getProduct')->willReturn($productMock);
         $this->quoteItemQtyList->expects($this->once())
             ->method('getQty')
             ->withAnyParameters()

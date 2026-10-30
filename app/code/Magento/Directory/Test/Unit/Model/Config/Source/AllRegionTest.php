@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,11 +11,16 @@ use Magento\Directory\Model\Config\Source\Allregion;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AllRegionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Directory\Model\Config\Source\AllRegion
      */
@@ -35,11 +40,10 @@ class AllRegionTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $countryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(['__wakeup', '__sleep'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $countryCollectionFactory = $this->createPartialMockWithReflection(
+            CollectionFactory::class,
+            ['__wakeup', '__sleep', 'create']
+        );
 
         $this->countryCollection = $this->getMockBuilder(
             Collection::class
@@ -53,12 +57,10 @@ class AllRegionTest extends TestCase
             ->method('load')
             ->willReturnSelf();
 
-        $regionCollectionFactory = $this->getMockBuilder(
-            \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->addMethods(['__wakeup', '__sleep'])
-            ->onlyMethods(['create'])
-            ->getMock();
+        $regionCollectionFactory = $this->createPartialMockWithReflection(
+            RegionCollectionFactory::class,
+            ['__wakeup', '__sleep', 'create']
+        );
         $this->regionCollection = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['load', 'getIterator', '__wakeup', '__sleep'])
@@ -80,23 +82,19 @@ class AllRegionTest extends TestCase
     }
 
     /**
-     * @dataProvider toOptionArrayDataProvider
      * @param bool $isMultiselect
      * @param array $countries
      * @param array $regions
      * @param array $expectedResult
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($isMultiselect, $countries, $regions, $expectedResult)
     {
         $newRegions = [];
-        foreach ($regions as $region)
-        {
-            if(is_callable($region))
-            {
+        foreach ($regions as $region) {
+            if (is_callable($region)) {
                 $newRegions[] = $region($this);
-            }
-            else
-            {
+            } else {
                 $newRegions[] = $region;
             }
         }
@@ -227,11 +225,10 @@ class AllRegionTest extends TestCase
      */
     protected function generateRegion($countryId, $id, $defaultName)
     {
-        $region = $this->getMockBuilder(Region::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCountryId','getDefaultName'])
-            ->onlyMethods(['getId', '__wakeup', '__sleep'])
-            ->getMock();
+        $region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getDefaultName', 'getId', '__wakeup', '__sleep']
+        );
         $region->expects($this->once())
             ->method('getCountryId')
             ->willReturn($countryId);

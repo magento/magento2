@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:ActionGroup/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSessionMaxSizeCliActionGroup">
+        <annotations>
+            <description>Set or restore max session size in admin</description>
+        </annotations>
+        <arguments>
+            <argument name="size" type="string" defaultValue="256000"/>
+        </arguments>
+        <magentoCLI command="config:set system/security/max_session_size_admin {{size}}" stepKey="setAdminSessionSize"/>
+    </actionGroup>
+</actionGroups>

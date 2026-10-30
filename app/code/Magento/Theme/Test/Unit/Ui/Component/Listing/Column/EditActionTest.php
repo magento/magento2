@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Ui\Component\Listing\Column\EditAction;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,19 +38,11 @@ class EditActionTest extends TestCase
 
     protected function setup(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(ContextInterface::class);
+        $processor = $this->createMock(Processor::class);
         $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(
-            UrlInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->component = new EditAction(
             $this->context,
             $this->uiComponentFactory,
@@ -66,9 +59,8 @@ class EditActionTest extends TestCase
      * @param array $dataSourceItem
      * @param string $scope
      * @param int $scopeId
-     *
-     * @dataProvider getPrepareDataSourceDataProvider
      */
+    #[DataProvider('getPrepareDataSourceDataProvider')]
     public function testPrepareDataSource($dataSourceItem, $scope, $scopeId)
     {
         $expectedDataSourceItem = [

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,12 +18,14 @@
         </arguments>
         <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForButtons"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeProductImageBeforeActions"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeProductImageBeforeActions"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForClickOnNextImageButton"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeExpectedImageOnPreview"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeExpectedImageOnPreview"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="waitForClickOnPrevImageButton"/>
         <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickOnPrevImageButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageSelectedInRibbonAfterSecondChange"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeMainProductImageAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageSelectedInRibbonAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeMainProductImageAfterSecondChange"/>
     </actionGroup>
 </actionGroups>

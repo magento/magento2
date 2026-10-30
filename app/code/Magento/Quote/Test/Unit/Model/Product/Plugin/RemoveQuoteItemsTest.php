@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class RemoveQuoteItemsTest extends TestCase
     public function testAfterDelete()
     {
         $productResourceMock = $this->createMock(Product::class);
-        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock = $this->createMock(ProductInterface::class);
 
         $this->quoteItemsCleanerMock->expects($this->once())->method('execute')->with($productMock);
         $result = $this->model->afterDelete($productResourceMock, $productResourceMock, $productMock);

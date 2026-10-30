@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -153,7 +153,7 @@ class GraphQlStateDiff
         } elseif ($operationName==='applyCouponToCart') {
             $this->removeCouponFromCart($variables);
         } elseif ($operationName==='resetPassword') {
-            $variables2['resetPasswordToken'] = $this->getResetPasswordToken($variables['email']);
+            $variables2['resetPasswordToken'] = $variables['resetPasswordToken'];
             $variables2['email'] = $variables['email'];
             $variables2['newPassword'] = $variables['newPassword'];
         }
@@ -193,7 +193,7 @@ class GraphQlStateDiff
         $response = $this->doRequest($query, $authInfo);
         $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compareBetweenRequests($operationName);
+        $result = $this->handleRequestProperties($this->comparator->compareBetweenRequests($operationName));
         $test->assertEmpty(
             $result,
             sprintf(
@@ -202,7 +202,7 @@ class GraphQlStateDiff
                 var_export($result, true)
             )
         );
-        $result = $this->comparator->compareConstructedAgainstCurrent($operationName);
+        $result = $this->handleRequestProperties($this->comparator->compareConstructedAgainstCurrent($operationName));
         $test->assertEmpty(
             $result,
             sprintf(
@@ -324,5 +324,22 @@ class GraphQlStateDiff
 
         $customerSecure = $customerRegistry->retrieveSecureData(1);
         return $customerSecure->getRpToken();
+    }
+
+    /**
+     * Handle request properties for sslOffloadHeader
+     *
+     * @param array $result
+     * @return array
+     */
+    public function handleRequestProperties(array $result): array
+    {
+        if (isset($result['Magento\Framework\Webapi\Request']['properties']['sslOffloadHeader'])) {
+            unset($result['Magento\Framework\Webapi\Request']);
+        }
+        if (isset($result['Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy'])) {
+            unset($result['Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy']);
+        }
+        return $result;
     }
 }

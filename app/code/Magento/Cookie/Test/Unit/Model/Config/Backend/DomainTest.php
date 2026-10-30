@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DomainTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractResource|MockObject
      */
@@ -49,15 +53,21 @@ class DomainTest extends TestCase
             ->method('getEventDispatcher')
             ->willReturn($eventDispatcherMock);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName', 'save'])
-            ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback', 'rollBack'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            [
+                '_construct',
+                'getConnection',
+                'beginTransaction',
+                'commit',
+                'addCommitCallback',
+                'rollBack',
+                'getIdFieldName',
+                'save'
+            ]
+        );
 
-        $this->validatorMock = $this->getMockBuilder(CookieDomainValidator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->validatorMock = $this->createMock(CookieDomainValidator::class);
 
         $helper = new ObjectManagerHelper($this);
         $this->domain = $helper->getObject(
@@ -72,13 +82,13 @@ class DomainTest extends TestCase
 
     /**
      * @covers \Magento\Cookie\Model\Config\Backend\Domain::beforeSave
-     * @dataProvider beforeSaveDataProvider
      *
      * @param string $value
      * @param bool $isValid
      * @param int $callNum
      * @param int $callGetMessages
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $isValid, $callNum, $callGetMessages = 0): void
     {
         $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();

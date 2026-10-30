@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Increment;
 
 use Magento\Eav\Model\Entity\Increment\NumericValue;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NumericTest extends TestCase
 {
@@ -26,8 +27,8 @@ class NumericTest extends TestCase
      * @param int $lastId
      * @param string $prefix
      * @param int|string $expectedResult
-     * @dataProvider getLastIdDataProvider
      */
+    #[DataProvider('getLastIdDataProvider')]
     public function testGetNextId($lastId, $prefix, $expectedResult)
     {
         $this->model->setLastId($lastId);

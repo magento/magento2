@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCategoryDisplaySettingsWithCustomValuesActionGroup"
+                 extends="AdminUpdateCategoryDisplaySettingsActionGroup">
+        <annotations>
+            <description>Update Category Display settings with custom values (unchecks Use Config first)</description>
+        </annotations>
+        <arguments>
+            <argument name="availableSortOptions" type="string" defaultValue="Product Name"/>
+            <argument name="defaultSortingOption" type="string" defaultValue="name"/>
+            <argument name="priceRange" type="string" defaultValue="5.5"/>
+        </arguments>
+        <!-- Override the checkbox behavior to uncheck instead of check -->
+        <remove keyForRemoval="enableTheAvailableProductList" />
+        <uncheckOption selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" after="selectDisplaySetting"
+                       stepKey="uncheckUseConfigForAvailableSort"/>
+        <remove keyForRemoval="enableTheDefaultProductList" />
+        <uncheckOption selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}"
+                       after="scrollToDefaultProductList" stepKey="uncheckUseConfigForDefaultSort"/>
+    </actionGroup>
+</actionGroups>

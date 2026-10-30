@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCartPriceRuleForLoggedInUserShouldNotAffectGuestTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Cart discounts meant for logged-in users are not applied to guest users"/>
+            <title value="User specific cart price rule is not applied to guest user"/>
+            <description value="This test case verifies the cart price rule created for logged-in user doesnt apply for guest user"/>
+            <testCaseId value="AC-13440"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Create product, customer -->
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProductWithPrice"/>
+            <createData entity="Simple_US_Customer_NY" stepKey="customer"/>
+            <!--Pre-condition 1:Login as customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$customer$"/>
+            </actionGroup>
+            <!-- Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Step 2:Enabled the persistent shopping cart feature -->
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <!--Step 3:Set cookie lifetime to 60 seconds -->
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage"/>
+            <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeField">
+                <argument name="cookieLifetime" value="60"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithString">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete product, cart price rule, customer -->
+            <deleteData stepKey="deleteProduct" createDataKey="initialSimpleProductWithPrice"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionAndFreeShippingApplied.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <!--Revert persistent configuration to default -->
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <!--Set cookie lifetime to default Value-->
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPageToReset"/>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeFieldWithNumber">
+                <argument name="cookieLifetime" value="3600"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButton">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1: Create cart price rule for logged-in user with 50% discount -->
+        <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="amOnCartPriceList"/>
+        <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="fillCartPriceRuleForm">
+            <argument name="name" value="{{CartPriceRuleConditionAndFreeShippingApplied.name}}"/>
+            <argument name="groups" value="General"/>
+        </actionGroup>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.coupon_type}}" stepKey="selectCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsHeader"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="createActiveCartPriceRuleFreeShippingActionsSection">
+            <argument name="freeShippingOption" value="{{CartPriceRuleConditionAndFreeShippingApplied.simple_free_shipping}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCartPriceRuleLabelsSectionActionGroup" stepKey="createActiveCartPriceRuleLabelsSection">
+            <argument name="rule" value="CartPriceRuleConditionAndFreeShippingApplied"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+        <!-- Go to product page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$initialSimpleProductWithPrice.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--Click on add product to Cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="clickOnAddToCartButton"/>
+        <!-- Navigate to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <!-- Step 4: Verify the cart price rule is applied, and the user got 50% discount on the product-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert">
+            <argument name="subtotal" value="$560.00"/>
+            <argument name="shipping" value="$0.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$280.00"/>
+        </actionGroup>
+        <!-- Step 5: Verify user will be log out according to the cookie lifetime -->
+        <wait time="60" stepKey="waitForCookieLifeTimeToComplete"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.customerLoginLink}}" stepKey="waitForSignInLink"/>
+        <!--Step 6: Verify cart is empty-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="seeCartEmpty"/>
+    </test>
+</tests>

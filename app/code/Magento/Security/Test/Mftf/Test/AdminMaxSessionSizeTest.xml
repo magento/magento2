@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMaxSessionSizeTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Validate max session size in admin."/>
+            <title value="To check max session size in admin."/>
+            <description value="Set admin max session size to 0 and verify admin and storefront logins."/>
+            <testCaseId value="AC-3093"/>
+            <severity value="MAJOR"/>
+            <group value="security"/>
+        </annotations>
+        <before>
+            <!-- Precondition 1: Create Customer and login to storefront-->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+                <argument name="Customer" value="$customer$"/>
+            </actionGroup>
+            <!-- Step 1,2: Set max session size in admin to 0 -->
+            <actionGroup ref="AdminSessionMaxSizeCliActionGroup" stepKey="setAdminMaxSessionSizeToZero">
+                <argument name="size" value="0"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Logout from storefront, delete customer, restore default max session size, select system value and logout from admin-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminSessionMaxSizeCliActionGroup" stepKey="restoreDefaultMaxSessionSize"/>
+            <actionGroup ref="AdminNavigateToConfigurationSystemSectionActionGroup" stepKey="navigateToSystem"/>
+            <waitForElementVisible selector="{{AdminSystemSecurityConfigSection.securityGroupHeader}}" stepKey="waitSecurityGroupHeader"/>
+            <click selector="{{AdminSystemSecurityConfigSection.securityGroupHeader}}" stepKey="expandSecurityGroup"/>
+            <waitForElementVisible selector="{{AdminSystemSecurityConfigSection.maxSessionSizeAdminInheritSystemValue}}" stepKey="waitToUseSystemValue"/>
+            <checkOption selector="{{AdminSystemSecurityConfigSection.maxSessionSizeAdminInheritSystemValue}}" stepKey="checkUseSystemValue"/>
+            <waitForElementVisible selector="{{AdminSystemSecurityConfigSection.securityGroupHeader}}" stepKey="waitSecurityGroupHeaderToClose"/>
+            <click selector="{{AdminSystemSecurityConfigSection.securityGroupHeader}}" stepKey="clickToSecurityGroupToClose"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 3: Logout and login to admin and verify User is able to login successfully -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+        <!-- Step 4: Logout and login to storefront and verify User is able to login successfully -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromTheStorefront"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="assertCustomerLoggedIn">
+            <argument name="customerFullName" value="$$customer.firstname$$ $$customer.lastname$$" />
+        </actionGroup>
+    </test>
+</tests>

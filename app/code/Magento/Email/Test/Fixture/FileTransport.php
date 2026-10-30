@@ -18,9 +18,8 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class FileTransport implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'directory' => DirectoryList::VAR_DIR,
-        'path' => 'mail/%uniqid%',
-        'data' => 'Bienvenue sur Le Site de Paris.'
+        'directory' => DirectoryList::TMP,
+        'path' => 'mail/%uniqid%'
     ];
 
     private const CONFIG_FILE = 'mail-transport-config.json';

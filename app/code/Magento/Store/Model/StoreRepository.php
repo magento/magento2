@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Model;
@@ -62,7 +62,8 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
      */
     public function get($code)
     {
-        if (isset($this->entities[$code])) {
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($code !== null && isset($this->entities[$code])) {
             return $this->entities[$code];
         }
 

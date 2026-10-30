@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Reports\Test\Unit\Observer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Reports\Model\Event;
 use Magento\Reports\Model\ReportStatus;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SendfriendProductObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer|MockObject
      */
@@ -77,13 +80,13 @@ class SendfriendProductObserverTest extends TestCase
      */
     public function testExecuteWhenReportIsEnabled()
     {
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
         $eventMock->expects($this->once())
             ->method('getProduct')
-            ->willReturn($this->getMockForAbstractClass(ProductInterface::class));
+            ->willReturn($this->createMock(ProductInterface::class));
         $this->reportStatusMock->expects($this->once())
             ->method('isReportEnabled')
             ->with(Event::EVENT_PRODUCT_SEND)

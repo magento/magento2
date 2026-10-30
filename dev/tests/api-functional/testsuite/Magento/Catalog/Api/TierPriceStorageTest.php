@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
@@ -113,6 +113,60 @@ class TierPriceStorageTest extends WebapiAbstract
         $this->assertEmpty($response);
         $this->assertTrue($this->isPriceCorrect($newPrice, $tierPrices));
         $this->assertTrue($this->isPriceCorrect($updatedPrice, $tierPrices));
+    }
+
+    /**
+     * Update a batch containing one existing and one non-existing SKU.
+     *
+     * The whole request must not fail: the valid SKU is updated, while the missing SKU is
+     * reported as an item-level error instead of aborting the entire batch.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store catalog/price/scope 0
+     */
+    public function testUpdateWithNonExistingSku()
+    {
+        $nonExistingSku = 'non_existing_sku_test';
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $validPrice = [
+            'price' => 31.99,
+            'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+            'website_id' => 0,
+            'sku' => self::SIMPLE_PRODUCT_SKU,
+            'customer_group' => self::CUSTOMER_GENERAL_GROUP_NAME,
+            'quantity' => 5
+        ];
+        $missingPrice = [
+            'price' => 54.49,
+            'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+            'website_id' => 0,
+            'sku' => $nonExistingSku,
+            'customer_group' => self::CUSTOMER_GENERAL_GROUP_NAME,
+            'quantity' => 5
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['prices' => [$validPrice, $missingPrice]]);
+
+        // The missing SKU is reported as an item-level error instead of failing the whole batch.
+        $this->assertNotEmpty($response);
+        $message = 'Invalid attribute SKU = %SKU. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals($nonExistingSku, $response[0]['parameters'][0]);
+
+        // The valid SKU is still updated despite the missing SKU in the same payload.
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $tierPrices = $productRepository->get(self::SIMPLE_PRODUCT_SKU)->getTierPrices();
+        $this->assertTrue($this->isPriceCorrect($validPrice, $tierPrices));
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Product\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use PHPUnit\Framework\TestCase;
 
@@ -24,12 +24,12 @@ class DiscountTest extends TestCase
     }
 
     /**
-     * @dataProvider priceDataProvider
      * @param $regularPrice
      * @param $finalPrice
      * @param $expectedAmountOff
      * @param $expectedPercentOff
      */
+    #[DataProvider('priceDataProvider')]
     public function testGetPriceDiscount($regularPrice, $finalPrice, $expectedAmountOff, $expectedPercentOff)
     {
         $discountResult = $this->discount->getDiscountByDifference($regularPrice, $finalPrice);

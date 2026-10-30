@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,17 +46,12 @@ class AbstractTotalsTest extends TestCase
         $this->_prepareFactoryMock();
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractTotals::class,
-            $arguments,
-            '',
-            true,
-            false,
-            true,
-            []
-        );
-        $this->_model->expects($this->any())->method('_countSum')->willReturn(2);
-        $this->_model->expects($this->any())->method('_countAverage')->willReturn(2);
+        $this->_model = $this->getMockBuilder(AbstractTotals::class)
+            ->setConstructorArgs($arguments)
+            ->onlyMethods(['_countSum', '_countAverage'])
+            ->getMock();
+        $this->_model->method('_countSum')->willReturn(2);
+        $this->_model->method('_countAverage')->willReturn(2);
 
         $this->_setUpColumns();
     }
@@ -122,9 +117,7 @@ class AbstractTotalsTest extends TestCase
             ['test1/test2', ['test1', 'test2', '/']],
             ['test1/0', ['test1', '0', '/']],
         ];
-        $this->_parserMock->expects(
-            $this->any()
-        )->method(
+        $this->_parserMock->method(
             'parseExpression'
         )->willReturnMap(
             $columnsValueMap
@@ -139,9 +132,7 @@ class AbstractTotalsTest extends TestCase
             ['test2', false],
             ['0', false],
         ];
-        $this->_parserMock->expects(
-            $this->any()
-        )->method(
+        $this->_parserMock->method(
             'isOperation'
         )->willReturnMap(
             $isOperationValueMap
@@ -180,7 +171,7 @@ class AbstractTotalsTest extends TestCase
             ],
             [[], new DataObject()],
         ];
-        $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
+        $this->_factoryMock->method('create')->willReturnMap($createValueMap);
     }
 
     public function testColumns()

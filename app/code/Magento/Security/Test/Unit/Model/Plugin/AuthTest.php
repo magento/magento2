@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\AdminSessionInfo;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\Plugin\Auth;
+use Magento\Backend\Model\Auth as BackendAuth;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +41,7 @@ class AuthTest extends TestCase
     protected $currentSession;
 
     /**
-     * @var \Magento\Backend\Model\Auth
+     * @var BackendAuth
      */
     protected $authMock;
 
@@ -62,25 +63,20 @@ class AuthTest extends TestCase
             ['processLogin', 'processLogout', 'getCurrentSession']
         );
 
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            ['addWarningMessage'],
-            '',
-            false
-        );
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->currentSession = $this->createPartialMock(
             AdminSessionInfo::class,
             ['isOtherSessionsTerminated']
         );
 
-        $this->authMock =  $this->createMock(\Magento\Backend\Model\Auth::class);
+        $this->authMock =  $this->createMock(BackendAuth::class);
 
         $this->model = $this->objectManager->getObject(
             Auth::class,
             [
                 'sessionsManager' => $this->sessionsManager,
-                'messageManager' =>$this->messageManager
+                'messageManager' => $this->messageManager
             ]
         );
     }

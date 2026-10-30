@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
 use Magento\Customer\Model\Config\Share;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog compare item resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -187,12 +185,16 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateCustomerFromVisitor($object)
     {
-        if (!$object->getCustomerId()) {
+        if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
+
+        $isGlobalScope = $this->share->isGlobalScope();
 
         // collect visitor compared items
         $select = $this->getConnection()->select()->from(
@@ -215,24 +217,27 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
         $customer = $this->getConnection()->fetchAll($select);
 
+        // Use composite key for non-global scope to keep store-scoped compare lists separate
         $products = [];
         $delete = [];
         $update = [];
         foreach ($visitor as $row) {
-            $products[$row['product_id']] = [
+            $key = $isGlobalScope ? (string)$row['product_id'] : $row['product_id'] . ':' . (int)$row['store_id'];
+            $products[$key] = [
                 'store_id' => $row['store_id'],
                 'customer_id' => $object->getCustomerId(),
                 'visitor_id' => $object->getVisitorId(),
                 'product_id' => $row['product_id'],
             ];
-            $update[$row[$this->getIdFieldName()]] = $row['product_id'];
+            $update[$row[$this->getIdFieldName()]] = $key;
         }
 
         foreach ($customer as $row) {
-            if (isset($products[$row['product_id']])) {
+            $key = $isGlobalScope ? (string)$row['product_id'] : $row['product_id'] . ':' . (int)$row['store_id'];
+            if (isset($products[$key])) {
                 $delete[] = $row[$this->getIdFieldName()];
             } else {
-                $products[$row['product_id']] = [
+                $products[$key] = [
                     'store_id' => $row['store_id'],
                     'customer_id' => $object->getCustomerId(),
                     'visitor_id' => $object->getVisitorId(),
@@ -248,8 +253,8 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
         }
         if ($update) {
-            foreach ($update as $itemId => $productId) {
-                $bind = $products[$productId];
+            foreach ($update as $itemId => $key) {
+                $bind = $products[$key];
                 $this->getConnection()->update(
                     $this->getMainTable(),
                     $bind,
@@ -258,6 +263,23 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * Assign customer to compare list items
+     *
+     * @param int $listId
+     * @param int $customerId
+     * @return $this
+     */
+    public function updateCustomerIdForListItems(int $listId, int $customerId)
+    {
+        $this->getConnection()->update(
+            $this->getMainTable(),
+            ['customer_id' => $customerId],
+            ['list_id = ?' => $listId]
+        );
         return $this;
     }
 

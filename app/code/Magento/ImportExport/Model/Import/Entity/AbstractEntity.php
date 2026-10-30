@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
@@ -37,7 +37,7 @@ abstract class AbstractEntity implements EntityInterface
 
     public const DB_MAX_VARCHAR_LENGTH = 256;
 
-    public const DB_MAX_TEXT_LENGTH = 65536;
+    public const DB_MAX_TEXT_LENGTH = 16_777_215;
 
     public const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
     public const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
@@ -660,7 +660,7 @@ abstract class AbstractEntity implements EntityInterface
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode] ?? '');
-                $valid = (double)$val == $val;
+                $valid = (float)$val == $val;
                 break;
             case 'select':
             case 'multiselect':

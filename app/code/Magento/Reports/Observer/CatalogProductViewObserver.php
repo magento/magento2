@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Observer;
 
@@ -11,6 +11,10 @@ use Magento\Reports\Model\Event;
 /**
  * Reports Event observer model
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @deprecated We cannot rely on the observer to count product page visits (GET requests)
+ * because the observer will not be called due fact that pages rely heavily on cache.
+ * Instead, a call from a product page should be made to a separate controller.
+ * @see \Magento\Reports\Controller\Report\Product\View
  */
 class CatalogProductViewObserver implements ObserverInterface
 {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -12,7 +12,7 @@
         <annotations>
             <description>Expand media gallery filter by clicking on button</description>
         </annotations>
-        
+        <waitForElementClickable selector="{{AdminEnhancedMediaGalleryFiltersSection.filtersButton}}" stepKey="waitForExpandFilter"/>
         <click selector="{{AdminEnhancedMediaGalleryFiltersSection.filtersButton}}" stepKey="expandFilter"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>

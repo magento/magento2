@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,13 +59,11 @@ class PreprocessorStrategyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->alternativeSourceMock = $this->getMockBuilder(AlternativeSourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->alternativeSourceMock = $this->createMock(AlternativeSourceInterface::class);
         $this->frontendCompilationMock = $this->getMockBuilder(FrontendCompilation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
@@ -30,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultSelectionPriceListProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundleSelectionFactory|MockObject
      */
@@ -97,41 +101,26 @@ class DefaultSelectionPriceListProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->selectionFactory = $this->getMockBuilder(BundleSelectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->catalogData = $this->getMockBuilder(CatalogData::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->selectionFactory = $this->createMock(BundleSelectionFactory::class);
+        $this->catalogData = $this->createMock(CatalogData::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->websiteRepository = $this->createMock(WebsiteRepositoryInterface::class);
 
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceType'])
-            ->onlyMethods(['getTypeInstance', 'isSalable'])
-            ->getMock();
-        $this->optionsCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->typeInstance = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectionCollection = $this->getMockBuilder(SelectionCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selection = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
-        $this->website = $this->getMockBuilder(WebsiteInterface::class)
-            ->getMockForAbstractClass();
+        /** @var Product */
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setTypeInstance', 'getTypeInstance', 'setPriceType', 'getPriceType',
+                'setIsSalable', 'getIsSalable', 'isSalable'
+            ]
+        );
+        $this->optionsCollection = $this->createMock(Collection::class);
+        $this->typeInstance = $this->createMock(Type::class);
+        $this->option = $this->createMock(Option::class);
+        $this->selectionCollection = $this->createMock(SelectionCollection::class);
+        $this->selection = $this->createMock(DataObject::class);
+        $this->store = $this->createMock(StoreInterface::class);
+        $this->website = $this->createMock(WebsiteInterface::class);
 
         $this->model = new DefaultSelectionPriceListProvider(
             $this->selectionFactory,
@@ -149,11 +138,8 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($this->typeInstance);
-        $this->product->expects($this->once())
-            ->method('getPriceType')->willReturn(Price::PRICE_TYPE_FIXED);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
+        $this->product->method('getPriceType')->willReturn(Price::PRICE_TYPE_FIXED);
         $this->optionsCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->option]));
@@ -189,9 +175,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $this->model->getPriceList($this->product, false, false);
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[DataProvider('dataProvider')]
     public function testGetPriceListForFixedPriceType($websiteId): void
     {
         $optionId = 1;
@@ -200,9 +184,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($this->typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
         $this->optionsCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->option]));
@@ -249,16 +231,12 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $option = $this->createMock(Option::class);
         $option->expects($this->once())->method('getRequired')
             ->willReturn(true);
-        $this->optionsCollection->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$option]));
+        $this->optionsCollection->method('getIterator')->willReturn(new \ArrayIterator([$option]));
         $this->typeInstance->expects($this->any())
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->expects($this->any())
-            ->method('getTypeInstance')
-            ->willReturn($this->typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
         $this->selectionCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($this->createMock(Product::class));
@@ -270,7 +248,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->with('has_stock_status_filter', true);
         $this->selectionCollection->expects($this->once())
             ->method('addQuantityFilter');
-        $this->product->expects($this->once())->method('isSalable')->willReturn(true);
+        $this->product->method('isSalable')->willReturn(true);
         $this->optionsCollection->expects($this->once())
             ->method('getSize')
             ->willReturn(1);

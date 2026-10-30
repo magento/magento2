@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,5 +19,14 @@
         <element name="dashboardTotals" type="text" selector="//*[@class='dashboard-totals-label' and contains(text(), '{{columnName}}')]/../*[@class='dashboard-totals-value']" parameterized="true"/>
         <element name="productInBestsellers" type="text" selector="#productsOrderedGrid_table td.col-product.col-name"/>
         <element name="dashboardButtonReloadData" type="button" selector=".action-primary[title='Reload Data'][type='submit']"/>
+        <element name="productTab" type="button" selector="//*[@class='data-grid-th  no-link col-name']" timeout="30"/>
+        <element name="priceTab" type="button" selector="//*[@class='data-grid-th  no-link col-price']" timeout="30"/>
+        <element name="viewsTab" type="button" selector="//*[@class='data-grid-th col-views no-link col-views']" timeout="30"/>
+        <element name="productName" type="text" selector="//td[contains(text(), '{{columnName}}')]" parameterized="true"/>
+        <element name="productPrice" type="input" selector="//td[contains(text(), '{{productName}}')]//ancestor::td/following-sibling::td[contains(@class,' col-price a-right ')]" parameterized="true"/>
+        <element name="productViews" type="input" selector="//td[contains(text(), '{{productName}}')]//ancestor::td/following-sibling::td[contains(@class,' col-views col-views last')]" parameterized="true"/>
+        <element name="mostViewProductsTab" type="button" selector="//*[contains(@class, 'ui-state-default ui-corner-top') and contains(@aria-labelledby, 'grid_tab_reviewed_products')]" timeout="30"/>
+        <element name="dashboardChart" type="text" selector="//*[@class='dashboard-diagram-disabled' and contains(text(), '{{columnName}}')]" parameterized="true"/>
     </section>
 </sections>
+

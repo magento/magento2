@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,9 +61,7 @@ class UpdateEntityRowTest extends TestCase
         $entityMetadataMock = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('describeTable')
             ->willReturn($describeTable);

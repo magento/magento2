@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,8 +37,8 @@ class OptionManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavOptionManagementMock = $this->getMockForAbstractClass(AttributeOptionManagementInterface::class);
-        $this->eavOptionUpdateMock = $this->getMockForAbstractClass(AttributeOptionUpdateInterface::class);
+        $this->eavOptionManagementMock = $this->createMock(AttributeOptionManagementInterface::class);
+        $this->eavOptionUpdateMock = $this->createMock(AttributeOptionUpdateInterface::class);
         $this->model = new OptionManagement(
             $this->eavOptionManagementMock,
             $this->eavOptionUpdateMock
@@ -64,7 +64,7 @@ class OptionManagementTest extends TestCase
     public function testAdd()
     {
         $attributeCode = 42;
-        $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+        $optionMock = $this->createMock(AttributeOptionInterface::class);
         $this->eavOptionManagementMock->expects($this->once())->method('add')->with(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,
@@ -108,7 +108,7 @@ class OptionManagementTest extends TestCase
     {
         $attributeCode = 'atrCde';
         $optionId = 10;
-        $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
+        $optionMock = $this->createMock(AttributeOptionInterface::class);
 
         $this->eavOptionUpdateMock->expects($this->once())
             ->method('update')

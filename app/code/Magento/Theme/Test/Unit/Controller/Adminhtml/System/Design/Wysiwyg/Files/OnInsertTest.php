@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,8 +36,8 @@ class OnInsertTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->view = $this->createMock(ViewInterface::class);
         $this->storageHelper = $this->createMock(Storage::class);
         $this->response = $this->createPartialMock(Http::class, ['setBody']);
 

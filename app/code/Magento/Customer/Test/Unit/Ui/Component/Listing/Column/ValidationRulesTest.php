@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
 use Magento\Framework\DataObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,9 +24,7 @@ class ValidationRulesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->validationRule = $this->createMock(ValidationRuleInterface::class);
 
         $this->validationRules = new ValidationRules();
     }
@@ -34,9 +33,8 @@ class ValidationRulesTest extends TestCase
      * Tests input validation rules
      *
      * @param String $validationRule - provided input validation rules
-     * @param String $validationClass - expected input validation class
-     * @dataProvider validationRulesDataProvider
-     */
+     * @param String $validationClass - expected input validation class */
+    #[DataProvider('validationRulesDataProvider')]
     public function testGetValidationRules(String $validationRule, String $validationClass): void
     {
         $expectsRules = [

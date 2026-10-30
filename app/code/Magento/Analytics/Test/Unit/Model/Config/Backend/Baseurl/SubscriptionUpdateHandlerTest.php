@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class SubscriptionUpdateHandlerTest extends TestCase
     {
         $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
@@ -73,7 +73,7 @@ class SubscriptionUpdateHandlerTest extends TestCase
 
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

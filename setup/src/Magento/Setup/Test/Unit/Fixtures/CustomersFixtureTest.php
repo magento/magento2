@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,10 +86,14 @@ class CustomersFixtureTest extends TestCase
             'some-key' => 'some value'
         ];
 
+        $callCount = 0;
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->onConsecutiveCalls($customersNumber, $customerConfig));
+            ->willReturnCallback(function() use (&$callCount, $customersNumber, $customerConfig) {
+                $callCount++;
+                return $callCount === 1 ? $customersNumber : $customerConfig;
+            });
 
         $customerDataGeneratorMock = $this->createMock(CustomerDataGenerator::class);
 

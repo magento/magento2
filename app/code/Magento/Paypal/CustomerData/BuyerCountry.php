@@ -13,14 +13,19 @@ namespace Magento\Paypal\CustomerData;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class BuyerCountry implements SectionSourceInterface
 {
     /**
      * @param CurrentCustomer $currentCustomer
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(private readonly CurrentCustomer $currentCustomer)
-    {
+    public function __construct(
+        private readonly CurrentCustomer $currentCustomer,
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**
@@ -43,10 +48,15 @@ class BuyerCountry implements SectionSourceInterface
                     }
                 }
             }
-        } catch (NoSuchEntityException $e) {
-            return [
-                'code' => null
-            ];
+        } catch (NoSuchEntityException $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            // ignore and fall back to store default country
+        }
+
+        // Fallback for guests or customers without default addresses:
+        // use the store's default country code so Pay Later messages can render.
+        if (!$country) {
+            $country = (string)$this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
+            $country = $country !== '' ? $country : null;
         }
 
         return [

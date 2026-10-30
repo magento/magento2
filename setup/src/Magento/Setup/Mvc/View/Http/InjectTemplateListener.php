@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Mvc\View\Http;
 
-use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\View\Http\InjectTemplateListener as LaminasInjectTemplateListener;
+use Magento\Framework\Setup\Mvc\MvcEvent;
 
 /**
- * InjectTemplateListener for HTTP request
+ * Native InjectTemplateListener for HTTP request (replaces Laminas dependency)
+ *
+ * @deprecated Web Setup support has been removed, this class is no longer in use.
+ * @see we don't use it anymore
  */
-class InjectTemplateListener extends LaminasInjectTemplateListener
+class InjectTemplateListener
 {
     /**
      * Determine the top-level namespace of the controller
@@ -20,7 +23,7 @@ class InjectTemplateListener extends LaminasInjectTemplateListener
      * @param  string $controller
      * @return string
      */
-    protected function deriveModuleNamespace($controller)
+    protected function deriveModuleNamespace($controller): string
     {
         if (!strstr($controller, '\\')) {
             return '';
@@ -38,7 +41,7 @@ class InjectTemplateListener extends LaminasInjectTemplateListener
      * @param string $namespace
      * @return string
      */
-    protected function deriveControllerSubNamespace($namespace)
+    protected function deriveControllerSubNamespace($namespace): string
     {
         if (!strstr($namespace, '\\')) {
             return '';
@@ -61,10 +64,14 @@ class InjectTemplateListener extends LaminasInjectTemplateListener
      *
      * @param  MvcEvent $e
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    // phpcs:disable
     public function injectTemplate(MvcEvent $e)
     {
-        $e->getRouteMatch()->setParam('action', null);
-        parent::injectTemplate($e);
+        // Native implementation - simplified for setup context
+        // In setup context, we don't need complex template injection
+        // This method exists for API compatibility
     }
+    // phpcs:disable
 }

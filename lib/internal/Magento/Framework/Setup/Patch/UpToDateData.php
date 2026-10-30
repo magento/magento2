@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,11 +10,12 @@ namespace Magento\Framework\Setup\Patch;
 
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
+use Magento\Framework\Setup\DetailProviderInterface;
 
 /**
  * Allows to validate if data patches is up to date or not
  */
-class UpToDateData implements UpToDateValidatorInterface
+class UpToDateData implements UpToDateValidatorInterface, DetailProviderInterface
 {
     /**
      * @var PatchHistory
@@ -56,6 +57,8 @@ class UpToDateData implements UpToDateValidatorInterface
     }
 
     /**
+     * Get not update data information
+     *
      * @return string
      */
     public function getNotUpToDateMessage() : string
@@ -64,6 +67,8 @@ class UpToDateData implements UpToDateValidatorInterface
     }
 
     /**
+     * Check module list update
+     *
      * @return bool
      */
     public function isUpToDate() : bool
@@ -78,5 +83,36 @@ class UpToDateData implements UpToDateValidatorInterface
         }
 
         return true;
+    }
+
+    /**
+     * Get detailed information about unapplied data patches
+     *
+     * @return array
+     */
+    public function getDetails(): array
+    {
+        $unappliedPatches = [];
+
+        foreach ($this->moduleList->getNames() as $moduleName) {
+            foreach ($this->patchReader->read($moduleName) as $patchName) {
+                if (!$this->patchBackwardCompatability->isSkipableByDataSetupVersion($patchName, $moduleName) &&
+                    !$this->patchHistory->isApplied($patchName)) {
+                    $unappliedPatches[] = [
+                        'patch' => $patchName,
+                        'module' => $moduleName
+                    ];
+                }
+            }
+        }
+
+        if (empty($unappliedPatches)) {
+            return [];
+        }
+
+        return [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'unapplied_patches' => $unappliedPatches
+        ];
     }
 }

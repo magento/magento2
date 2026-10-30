@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright 2012 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
 /**
  * New category creation form
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 

@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * Test for \Magento\Integration\Model\IntegrationService
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\IntegrationFactory;
@@ -18,13 +17,15 @@ use PHPUnit\Framework\TestCase;
 
 class IntegrationServiceTest extends TestCase
 {
-    const VALUE_INTEGRATION_ID = 1;
-    const VALUE_INTEGRATION_NAME = 'Integration Name';
-    const VALUE_INTEGRATION_ANOTHER_NAME = 'Another Integration Name';
-    const VALUE_INTEGRATION_EMAIL = 'test@magento.com';
-    const VALUE_INTEGRATION_SETUP_BACKEND = 0;
-    const VALUE_INTEGRATION_ENDPOINT = 'http://magento.ll/endpoint';
-    const VALUE_INTEGRATION_CONSUMER_ID = 1;
+    use MockCreationTrait;
+
+    private const VALUE_INTEGRATION_ID = 1;
+    private const VALUE_INTEGRATION_NAME = 'Integration Name';
+    private const VALUE_INTEGRATION_ANOTHER_NAME = 'Another Integration Name';
+    private const VALUE_INTEGRATION_EMAIL = 'test@magento.com';
+    private const VALUE_INTEGRATION_SETUP_BACKEND = 0;
+    private const VALUE_INTEGRATION_ENDPOINT = 'http://magento.ll/endpoint';
+    private const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
     /**
      * @var MockObject
@@ -60,11 +61,13 @@ class IntegrationServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->_integrationMock = $this->getMockBuilder(Integration::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getId', 'load', 'save', 'delete', '__wakeup'])
-            ->addMethods(['getName', 'getEmail', 'getEndpoint', 'loadByName'])
-            ->getMock();
+        $this->_integrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            [
+                'getData', 'getId', 'load', 'save', 'delete', '__wakeup',
+                'getName', 'getEmail', 'getEndpoint', 'loadByName'
+            ]
+        );
         $this->_integrationData = [
             Integration::ID => self::VALUE_INTEGRATION_ID,
             Integration::NAME => self::VALUE_INTEGRATION_NAME,
@@ -101,11 +104,13 @@ class IntegrationServiceTest extends TestCase
             $this->_integrationFactory,
             $oauthConsumerHelper
         );
-        $this->_emptyIntegrationMock = $this->getMockBuilder(Integration::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getId', 'load', 'save', 'delete', '__wakeup'])
-            ->addMethods(['getName', 'getEmail', 'getEndpoint', 'loadByName'])
-            ->getMock();
+        $this->_emptyIntegrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            [
+                'getData', 'getId', 'load', 'save', 'delete', '__wakeup',
+                'getName', 'getEmail', 'getEndpoint', 'loadByName'
+            ]
+        );
         $this->_emptyIntegrationMock->expects($this->any())->method('getId')->willReturn(null);
     }
 
@@ -224,9 +229,7 @@ class IntegrationServiceTest extends TestCase
             $this->any()
         )->method(
             'load'
-        )->will(
-            $this->onConsecutiveCalls($this->_integrationMock, $this->_emptyIntegrationMock)
-        );
+        )->willReturnOnConsecutiveCalls($this->_integrationMock, $this->_emptyIntegrationMock);
         $this->_integrationMock->expects($this->once())->method('save')->willReturnSelf();
         $this->_setValidIntegrationData();
         $integrationData = [
@@ -259,9 +262,7 @@ class IntegrationServiceTest extends TestCase
             $this->any()
         )->method(
             'load'
-        )->will(
-            $this->onConsecutiveCalls($this->_integrationMock, $this->_getAnotherIntegrationMock())
-        );
+        )->willReturnOnConsecutiveCalls($this->_integrationMock, $this->_getAnotherIntegrationMock());
         $this->_integrationMock->expects($this->never())->method('save')->willReturnSelf();
         $this->_setValidIntegrationData();
         $integrationData = [
@@ -501,10 +502,13 @@ class IntegrationServiceTest extends TestCase
         string $name = self::VALUE_INTEGRATION_NAME,
         int $integrationId = self::VALUE_INTEGRATION_ID
     ) {
-        $integrationMock = $this->getMockBuilder(Integration::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getId', 'load', 'save', 'delete', '__wakeup'])
-            ->addMethods(['getName', 'getEmail', 'getEndpoint', 'loadByName'])->getMock();
+        $integrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            [
+                'getData', 'getId', 'load', 'save', 'delete', '__wakeup',
+                'getName', 'getEmail', 'getEndpoint', 'loadByName'
+            ]
+        );
         $integrationMock->expects($this->any())->method('getId')->willReturn($integrationId);
         $integrationMock->expects($this->any())->method('getName')->willReturn($name);
         $integrationMock->expects(

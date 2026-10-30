@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,16 +33,21 @@ class GenericButtonTest extends TestCase
      */
     protected $registryMock;
 
+    /**
+     * @var MockObject
+     */
+    protected $contextMock;
+
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->registryMock = $this->createMock(Registry::class);
-        $contextMock = $this->createMock(Context::class);
+        $this->contextMock = $this->createMock(Context::class);
 
-        $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
+        $this->contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->model = new GenericButton(
-            $contextMock,
+            $this->contextMock,
             $this->registryMock
         );
     }

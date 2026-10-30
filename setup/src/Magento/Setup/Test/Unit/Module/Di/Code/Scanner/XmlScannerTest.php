@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,12 +52,14 @@ class XmlScannerTest extends TestCase
             $testDir . '/app/code/Magento/SomeModule/etc/di.xml',
             $testDir . '/app/code/Magento/SomeModule/view/frontend/default.xml',
         ];
-        require_once  __DIR__ . '/../../_files/app/code/Magento/SomeModule/Element.php';
-        require_once  __DIR__ . '/../../_files/app/code/Magento/SomeModule/NestedElement.php';
+
+        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Element.php';
+        require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/NestedElement.php';
     }
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCollectEntities(): void
     {
@@ -81,6 +83,7 @@ class XmlScannerTest extends TestCase
 
         $actual = $this->model->collectEntities($this->testFiles);
         $expected = [];
+
         $this->assertEquals($expected, $actual);
     }
 }

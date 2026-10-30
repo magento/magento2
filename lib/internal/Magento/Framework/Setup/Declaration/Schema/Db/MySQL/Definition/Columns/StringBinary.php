@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns;
 
@@ -93,8 +93,8 @@ class StringBinary implements DbDefinitionProcessorInterface
             return $data;
         }
 
-        $isHex = preg_match('`^0x([a-f0-9]+)$`i', $data['default'] ?? '', $hexMatches);
-
+        // Match 0x... or x... (MariaDB 11.8+ may use either format for binary defaults)
+        $isHex = preg_match('/^(?:0x|x)([a-f0-9]+)$/i', $data['default'] ?? '', $hexMatches);
         if ($this->isBinaryHex($matches['type'], (bool)$isHex)) {
             $data['default'] = hex2bin($hexMatches[1]);
         }

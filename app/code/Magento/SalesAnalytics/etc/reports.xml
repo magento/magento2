@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
@@ -23,6 +23,9 @@
             <attribute name="base_total_refunded"/>
             <attribute name="shipping_method"/>
             <attribute name="shipping_address_id"/>
+            <attribute name="customer_firstname"/>
+            <attribute name="customer_middlename"/>
+            <attribute name="customer_lastname"/>
             <attribute name="customer_email" function="sha1"/>
             <attribute name="base_total_online_refunded"/>
             <attribute name="base_total_offline_refunded"/>
@@ -47,6 +50,9 @@
         <source name="sales_order_address">
             <attribute name="entity_id"/>
             <attribute name="customer_id"/>
+            <attribute name="firstname"/>
+            <attribute name="middlename"/>
+            <attribute name="lastname"/>
             <attribute name="city"/>
             <attribute name="region"/>
             <attribute name="country_id"/>

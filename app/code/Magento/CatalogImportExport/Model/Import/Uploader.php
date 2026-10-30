@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
  * Import entity product model
@@ -20,6 +21,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
@@ -123,6 +125,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     private $targetDirectory;
 
     /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -132,6 +139,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param string|null $filePath
      * @param \Magento\Framework\Math\Random|null $random
      * @param TargetDirectory|null $targetDirectory
+     * @param DomainValidator|null $domainValidator
      * @throws FileSystemException
      * @throws LocalizedException
      */
@@ -144,7 +152,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         Filesystem\File\ReadFactory $readFactory,
         $filePath = null,
         ?\Magento\Framework\Math\Random $random = null,
-        ?TargetDirectory $targetDirectory = null
+        ?TargetDirectory $targetDirectory = null,
+        ?DomainValidator $domainValidator = null
     ) {
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;
@@ -158,6 +167,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         }
         $this->random = $random ?: ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
+        $this->domainValidator = $domainValidator ?: ObjectManager::getInstance()->get(DomainValidator::class);
     }
 
     /**
@@ -190,6 +200,17 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 
         if ($fileName && preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
             $url = str_replace($matches[0], '', $fileName);
+            $fullUrl = $matches[0] . $url;
+
+            if (!$this->domainValidator->isValid($fullUrl)) {
+                throw new LocalizedException(
+                    __(
+                        \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::
+                        ERROR_MEDIA_URL_NOT_ACCESSIBLE
+                    )
+                );
+            }
+
             $driver = ($matches[0] === $this->httpScheme) ? DriverPool::HTTP : DriverPool::HTTPS;
             $tmpFilePath = $this->downloadFileFromUrl($url, $driver);
         } else {

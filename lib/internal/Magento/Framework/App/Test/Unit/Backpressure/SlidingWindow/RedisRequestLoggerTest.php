@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Backpressure\SlidingWindow;
@@ -67,11 +66,16 @@ class RedisRequestLoggerTest extends TestCase
     {
         $expectedId = 'custompref_typeId_2_identity_400';
 
-        $this->redisClientMock->method('incrBy')
+        $this->redisClientMock->expects(self::once())
+            ->method('pipeline');
+        $this->redisClientMock->expects(self::once())
+            ->method('incrBy')
             ->with($expectedId, 1);
-        $this->redisClientMock->method('expireAt')
+        $this->redisClientMock->expects(self::once())
+            ->method('expireAt')
             ->with($expectedId, time() + 500);
-        $this->redisClientMock->method('exec')
+        $this->redisClientMock->expects(self::once())
+            ->method('exec')
             ->willReturn(['45']);
 
         self::assertEquals(
@@ -83,9 +87,10 @@ class RedisRequestLoggerTest extends TestCase
     public function testGetFor()
     {
         $expectedId = 'custompref_typeId_2_identity_600';
-        $this->redisClientMock->method('get')
-        ->with($expectedId)
-        ->willReturn('23');
+        $this->redisClientMock->expects(self::once())
+            ->method('get')
+            ->with($expectedId)
+            ->willReturn('23');
 
         self::assertEquals(23, $this->redisRequestLogger->getFor($this->contextMock, 600));
     }

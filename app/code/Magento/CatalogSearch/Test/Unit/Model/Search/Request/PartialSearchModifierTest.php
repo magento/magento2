@@ -1,15 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\Request;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Search\Request\PartialSearchModifier;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PartialSearchModifierTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Collection|MockObject
      */
@@ -35,10 +39,10 @@ class PartialSearchModifierTest extends TestCase
     {
         parent::setUp();
         $collectionFactory = $this->createMock(CollectionFactory::class);
-        $this->collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load', 'addFieldToFilter'])
-            ->getMock();
+        $this->collection = $this->createPartialMock(
+            Collection::class,
+            ['load', 'addFieldToFilter']
+        );
         $collectionFactory->method('create')
             ->willReturn($this->collection);
         $this->model = new PartialSearchModifier($collectionFactory);
@@ -50,18 +54,17 @@ class PartialSearchModifierTest extends TestCase
      * @param array $attributes
      * @param array $requests
      * @param array $expected
-     * @dataProvider modifyDataProvider
      */
+    #[DataProvider('modifyDataProvider')]
     public function testModify(array $attributes, array $requests, array $expected): void
     {
         $items = [];
         $searchWeight = 10;
         foreach ($attributes as $attribute) {
-            $item = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-                ->addMethods(['getSearchWeight'])
-                ->onlyMethods(['getAttributeCode'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $item = $this->createPartialMockWithReflection(
+                Attribute::class,
+                ['getSearchWeight', 'getAttributeCode']
+            );
             $item->method('getAttributeCode')
                 ->willReturn($attribute);
             $item->method('getSearchWeight')
@@ -69,7 +72,6 @@ class PartialSearchModifierTest extends TestCase
             $items[] = $item;
         }
         $reflectionProperty = new \ReflectionProperty($this->collection, '_items');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collection, $items);
         $this->assertEquals($expected, $this->model->modify($requests));
     }

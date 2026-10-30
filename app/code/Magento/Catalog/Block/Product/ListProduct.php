@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,7 @@ use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Helper\Output as OutputHelper;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 
 /**
  * Product list
@@ -80,6 +81,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     private ?array $specialPriceMap = null;
 
     /**
+     * @var CollectionFactory
+     */
+    private CollectionFactory $productCollectionFactory;
+
+    /**
      * @param Context $context
      * @param PostHelper $postDataHelper
      * @param Resolver $layerResolver
@@ -88,6 +94,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param array $data
      * @param OutputHelper|null $outputHelper
      * @param SpecialPriceBulkResolverInterface|null $specialPriceBulkResolver
+     * @param CollectionFactory|null $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -97,7 +104,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Data $urlHelper,
         array $data = [],
         ?OutputHelper $outputHelper = null,
-        ?SpecialPriceBulkResolverInterface $specialPriceBulkResolver = null
+        ?SpecialPriceBulkResolverInterface $specialPriceBulkResolver = null,
+        ?CollectionFactory $collectionFactory = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
@@ -106,6 +114,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->specialPriceBulkResolver = $specialPriceBulkResolver ??
             ObjectManager::getInstance()->get(SpecialPriceBulkResolverInterface::class);
         $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
+        $this->productCollectionFactory = $collectionFactory ??
+            ObjectManager::getInstance()->get(CollectionFactory::class);
         parent::__construct(
             $context,
             $data
@@ -208,14 +218,18 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $this->addToolbarBlock($collection);
 
         if (!$collection->isLoaded()) {
-            $collection->load();
-        }
-
-        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
-
-        if ($categoryId) {
-            foreach ($collection as $product) {
-                $product->setData('category_id', $categoryId);
+            try {
+                $products = $collection->getItems();
+                if ($categoryId = $this->getLayer()->getCurrentCategory()->getId()) {
+                    foreach ($products as $product) {
+                        $product->setData('category_id', $categoryId);
+                    }
+                }
+            } catch (\Throwable) {
+                $this->setData('has_error', true);
+                $collection = $this->productCollectionFactory->create();
+                $collection->addFieldToFilter('entity_id', ['in' => []]);
+                $this->_productCollection = $collection;
             }
         }
 

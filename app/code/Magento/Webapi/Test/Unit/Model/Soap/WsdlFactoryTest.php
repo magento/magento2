@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Test \Magento\Webapi\Model\Soap\WsdlFactory
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
 
@@ -23,7 +21,7 @@ class WsdlFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_soapWsdlFactory = new WsdlFactory($this->_objectManagerMock);
         parent::setUp();
     }

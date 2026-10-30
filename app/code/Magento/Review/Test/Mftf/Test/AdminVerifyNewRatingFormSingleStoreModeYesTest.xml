@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,8 +19,10 @@
             <group value="review"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enabledSingleStoreMode"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStoresPage"/>
+            <actionGroup ref="AdminDeleteMultipleStoreViewsActionGroup" stepKey="deleteAllNonDefaultStoreViews"/>
+            <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enabledSingleStoreMode"/>
         </before>
         <after>
             <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>

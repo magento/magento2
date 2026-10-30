@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,10 +57,8 @@ class SimpleCollectorTest extends TestCase
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
 
         $this->model = new SimpleCollector(
             $this->questionFactoryMock,

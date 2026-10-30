@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2016 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Cms\Ui\Component;
@@ -16,10 +16,25 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 use Magento\Ui\Component\Container;
 
 /**
- * DataProvider for cms ui.
+ * DataProvider for cms blocks and pages listing ui components.
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
+    /**
+     * Authorization resource for CMS Save
+     */
+    private const CMS_SAVE_RESOURCE = 'Magento_Cms::save';
+
+    /**
+     * Authorization resource for CMS save design resource
+     */
+    private const CMS_SAVE_DESIGN_RESOURCE = 'Magento_Cms::save_design';
+
+    /**
+     * Constant for CMS listing data source name
+     */
+    private const CMS_LISTING_DATA_SOURCE = 'cms_page_listing_data_source';
+
     /**
      * @var AuthorizationInterface
      */
@@ -107,38 +122,41 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     {
         $metadata = [];
 
-        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
-            $metadata = [
-                'cms_page_columns' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'editorConfig' => [
-                                    'enabled' => false
-                                ],
-                                'componentType' => Container::NAME
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-        }
+        if ($this->name === self::CMS_LISTING_DATA_SOURCE) {
 
-        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save_design')) {
-
-            foreach ($this->pageLayoutColumns as $column) {
-                $metadata['cms_page_columns']['children'][$column] = [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'editor' => [
-                                    'editorType' => false
-                                ],
-                                'componentType' => Container::NAME
+            if (!$this->getAuthorizationInstance()->isAllowed(self::CMS_SAVE_RESOURCE)) {
+                $metadata = [
+                    'cms_page_columns' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'editorConfig' => [
+                                        'enabled' => false
+                                    ],
+                                    'componentType' => Container::NAME
+                                ]
                             ]
                         ]
                     ]
                 ];
+            }
+
+            if (!$this->getAuthorizationInstance()->isAllowed(self::CMS_SAVE_DESIGN_RESOURCE)) {
+
+                foreach ($this->pageLayoutColumns as $column) {
+                    $metadata['cms_page_columns']['children'][$column] = [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'editor' => [
+                                        'editorType' => false
+                                    ],
+                                    'componentType' => Container::NAME
+                                ]
+                            ]
+                        ]
+                    ];
+                }
             }
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config;
 
@@ -17,6 +17,13 @@ interface PublisherConfigItemInterface
      * @return string
      */
     public function getTopic();
+
+    /**
+     * Get queue name.
+     *
+     * @return string
+     */
+    public function getQueue();
 
     /**
      * Check if connection disabled.

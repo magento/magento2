@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FactoryTest extends TestCase
 {
@@ -67,7 +68,7 @@ class FactoryTest extends TestCase
             ]
         );
 
-        $definitionsMock = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitionsMock = $this->createMock(DefinitionInterface::class);
         $definitionsMock->expects($this->once())->method('getParameters')->willReturn(
             [
                 [
@@ -137,9 +138,8 @@ class FactoryTest extends TestCase
 
     /**
      * @param        string $startingClass
-     * @param        string $terminationClass
-     * @dataProvider circularDataProvider
-     */
+     * @param        string $terminationClass     */
+    #[DataProvider('circularDataProvider')]
     public function testCircular($startingClass, $terminationClass)
     {
         $this->expectException('\LogicException');
@@ -168,7 +168,7 @@ class FactoryTest extends TestCase
     public function testCreateUsingReflection()
     {
         $type = Polymorphous::class;
-        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitions = $this->createMock(DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [
@@ -208,9 +208,8 @@ class FactoryTest extends TestCase
      *
      * @param        $createArgs
      * @param        $expectedArg0
-     * @param        $expectedArg1
-     * @dataProvider testCreateUsingVariadicDataProvider
-     */
+     * @param        $expectedArg1     */
+    #[DataProvider('createUsingVariadicDataProvider')]
     public function testCreateUsingVariadic(
         $createArgs,
         $expectedArg0,
@@ -239,7 +238,7 @@ class FactoryTest extends TestCase
         }
 
         $type = Variadic::class;
-        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitions = $this->createMock(DefinitionInterface::class);
 
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [
@@ -268,7 +267,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public static function testCreateUsingVariadicDataProvider()
+    public static function createUsingVariadicDataProvider()
     {
         $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
         $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();
@@ -347,9 +346,8 @@ class FactoryTest extends TestCase
      * @param        $createArgs
      * @param        $expectedFooValue
      * @param        $expectedArg0
-     * @param        $expectedArg1
-     * @dataProvider testCreateUsingSemiVariadicDataProvider
-     */
+     * @param        $expectedArg1     */
+    #[DataProvider('createUsingSemiVariadicDataProvider')]
     public function testCreateUsingSemiVariadic(
         $createArgs,
         $expectedFooValue,
@@ -379,7 +377,7 @@ class FactoryTest extends TestCase
         }
 
         $type = SemiVariadic::class;
-        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitions = $this->createMock(DefinitionInterface::class);
 
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [
@@ -416,7 +414,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public static function testCreateUsingSemiVariadicDataProvider()
+    public static function createUsingSemiVariadicDataProvider()
     {
         $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
         $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class CompositeInstallConfig implements InstallConfigInterface
             $searchEngine = $this->scopeConfig->getValue('catalog/search/engine');
         }
 
-        if (isset($this->installConfigList[$searchEngine]) && !empty($inputOptions)) {
+        if ($searchEngine !== null && isset($this->installConfigList[$searchEngine]) && !empty($inputOptions)) {
             $installConfig = $this->installConfigList[$searchEngine];
             $installConfig->configure($inputOptions);
 

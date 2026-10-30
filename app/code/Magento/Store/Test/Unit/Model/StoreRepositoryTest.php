@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,6 @@ class StoreRepositoryTest extends TestCase
     {
         $repositoryReflection = new \ReflectionClass($this->storeRepository);
         $deploymentProperty = $repositoryReflection->getProperty('appConfig');
-        $deploymentProperty->setAccessible(true);
         $deploymentProperty->setValue($this->storeRepository, $this->appConfigMock);
     }
 
@@ -165,14 +164,14 @@ class StoreRepositoryTest extends TestCase
      */
     public function testGetList(): void
     {
-        $storeMock1 = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock1 = $this->createMock(StoreInterface::class);
         $storeMock1->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code');
         $storeMock1->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $storeMock2 = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock2 = $this->createMock(StoreInterface::class);
         $storeMock2->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code_2');

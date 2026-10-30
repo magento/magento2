@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit;
 
@@ -24,9 +24,9 @@ class ValidatorTest extends TestCase
     public function testValidate()
     {
         $className = 'Same\Class\Name';
-        $validator1 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validator1 = $this->createMock(ValidatorInterface::class);
         $validator1->expects($this->once())->method('validate')->with($className);
-        $validator2 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validator2 = $this->createMock(ValidatorInterface::class);
         $validator2->expects($this->once())->method('validate')->with($className);
 
         $this->model->add($validator1);

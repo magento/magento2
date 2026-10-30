@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
@@ -28,6 +28,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -121,8 +122,8 @@ class ConfigurableTest extends TestCase
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
-     * @dataProvider configurableImportDataProvider
      */
+    #[DataProvider('configurableImportDataProvider')]
     public function testConfigurableImport($pathToFile, $productName, $optionSkuList)
     {
         $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);

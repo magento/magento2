@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class ProcessShoppingCartPlugin
         AuthenticateCustomerBySecretInterface $subject,
         string $secret
     ) {
-        if (!$this->customerSession->getId()) {
+        if (!$this->customerSession->getId() && $this->checkoutSession->getQuote()->getId()) {
             $quote = $this->checkoutSession->getQuote();
             /* Remove items from guest cart */
             $quote->removeAllItems();

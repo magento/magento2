@@ -158,7 +158,7 @@ class AwsS3Factory implements DriverFactoryInterface
                 'cache' => $cache
             ]
         );
-        $objectUrl = rtrim($client->getObjectUrl($config['bucket'], './'), '/') . trim($prefix, '\\/') . '/';
+        $objectUrl = rtrim($client->getObjectUrl($config['bucket'], trim($prefix, '\\/') ?: '/'), '/') . '/';
         return $this->objectManager->create(
             AwsS3::class,
             [

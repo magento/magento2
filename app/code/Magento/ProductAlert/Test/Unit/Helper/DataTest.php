@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,10 +68,10 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->encoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->encoderMock = $this->createMock(EncoderInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
         $this->contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
         $this->contextMock->expects($this->once())->method('getUrlEncoder')->willReturn($this->encoderMock);
         $this->contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
@@ -79,7 +79,7 @@ class DataTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $productMock = $this->createMock(Product::class);
-        $productMock->expects($this->any())->method('getId')->willReturn(1);
+        $productMock->method('getId')->willReturn(1);
 
         $this->helper = $this->objectManagerHelper->getObject(
             HelperData::class,
@@ -101,7 +101,7 @@ class DataTest extends TestCase
         $uenc = strtr(base64_encode($currentUrl), '+/=', '-_,');
         $expected = 'http://www.example.com/roductalert/add/stock/product_id/1/uenc/' . $uenc;
 
-        $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->willReturn($currentUrl);
+        $this->urlBuilderMock->method('getCurrentUrl')->willReturn($currentUrl);
         $this->encoderMock->expects($this->any())->method('encode')
             ->with($currentUrl)
             ->willReturn($uenc);

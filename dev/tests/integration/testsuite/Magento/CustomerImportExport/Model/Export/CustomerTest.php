@@ -18,6 +18,7 @@ use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for customer export model.
@@ -260,7 +261,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private function getAttributeValueById(string $attributeCode, $valueId)
     {
-        if (isset($this->attributeValues[$attributeCode])
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($valueId !== null
+            && isset($this->attributeValues[$attributeCode])
             && isset($this->attributeValues[$attributeCode][$valueId])
         ) {
             return $this->attributeValues[$attributeCode][$valueId];
@@ -346,11 +349,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Test for method filterEntityCollection()
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
-     * @dataProvider filterDataProvider
      * @param string $locale
      * @param int $count
      * @param array $filter
      */
+    #[DataProvider('filterDataProvider')]
     public function testFilterEntityCollection(string $locale, int $count, array $filter)
     {
         $localeResolver = $this->objectManager->get(LocaleResolver::class);

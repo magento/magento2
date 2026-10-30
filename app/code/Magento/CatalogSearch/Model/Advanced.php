@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model;
 
@@ -43,7 +43,6 @@ use Magento\Framework\App\ObjectManager;
  * @method string getUpdatedAt()
  * @method \Magento\CatalogSearch\Model\Advanced setUpdatedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -61,7 +60,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     protected $_productCollection;
 
     /**
-     * @deprecated 101.0.2
+     * @deprecated 101.0.2 No longer used internally; constructor argument retained for backward compatibility.
+     * @see \Magento\Catalog\Model\Config
      * @var Config
      */
     protected $_catalogConfig;
@@ -402,14 +402,14 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 $value[$key] = $attribute->getSource()->getOptionText($val);
 
                 if (is_array($value[$key])) {
-                    $value[$key] = $value[$key]['label'];
+                    $value[$key] = $value[$key]['label'] ?? '';
                 }
             }
             $value = implode(', ', $value);
         } elseif ($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect') {
             $value = $attribute->getSource()->getOptionText($value);
             if (is_array($value)) {
-                $value = $value['label'];
+                $value = $value['label'] ?? '';
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
             if (is_numeric($value)) {

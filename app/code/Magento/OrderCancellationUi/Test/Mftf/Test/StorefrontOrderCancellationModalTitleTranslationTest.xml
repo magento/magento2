@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontOrderCancellationModalTitleTranslationTest">
+        <annotations>
+            <features value="Order Cancellation"/>
+            <stories value="Order cancellation modal title is translatable across store views."/>
+            <title value="Order cancellation modal title translation on different store views."/>
+            <description value="Verify order cancellation modal title is translated when switching store view to another locale."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15625"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Deploy French static content -->
+            <magentoCLI command="setup:static-content:deploy fr_FR -f" stepKey="deployFrenchStaticContent"/>
+            <!-- Enable order cancellation -->
+            <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="enableSalesCancellation"/>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create store view with French locale -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFrenchStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <!-- Set French locale for the new store view -->
+            <magentoCLI command="config:set --scope=stores --scope-code={{NewStoreViewData.code}} general/locale/code fr_FR" stepKey="setFrenchLocale"/>
+            <!-- Create category and product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Clear relevant caches after locale change -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup> 
+            <!-- Create order via API -->
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+        </before>
+        <after>
+            <!-- Disable order cancellation -->
+            <magentoCLI command="config:set sales/cancellation/enabled 0" stepKey="disableSalesCancellation"/>
+            <!-- Delete created entities -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete store view -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteFrenchStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 1: Log in as a customer on the storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step 2: Go to my account > my orders -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="navigateToOrderHistoryPage"/>
+        <!-- Step 3: Click cancel on an order that is cancellable -->
+        <waitForElementClickable selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="waitForCancelLinkVisible"/>
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModal"/>
+        <!-- Step 4: Verify that the modal appears with a translatable title (English) -->
+        <waitForElementVisible selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="waitForModalTitleVisible"/>
+        <grabTextFrom selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="grabModalTitleEnglish"/>
+        <assertEquals message="Modal title should be 'Cancel Order' in English locale" stepKey="assertModalTitleEnglish">
+            <expectedResult type="string">{{OrderCancellationModalTitleEnglish.title}}</expectedResult>
+            <actualResult type="variable">grabModalTitleEnglish</actualResult>
+        </assertEquals>
+        <!-- Close the modal -->
+        <click selector="{{CustomerOrderCancellationSection.closeModalButton}}" stepKey="closeModal"/>
+        <waitForElementNotVisible selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="waitForModalClosed"/>
+        <!-- Step 5: Change the store view to French locale -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToFrenchStoreView">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <!-- Navigate back to order history after store view switch -->
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="navigateToOrderHistoryPageFrench"/>
+        <!-- Click cancel to open modal again -->
+        <waitForElementClickable selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="waitForCancelLinkVisibleFrench"/>
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="clickOnLinkToOpenModalFrench"/>
+        <!-- Verify that the modal title is correctly translated to French -->
+        <waitForElementVisible selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="waitForModalTitleVisibleFrench"/>
+        <grabTextFrom selector="{{StorefrontInstantPurchasePopupSection.modalTitle}}" stepKey="grabModalTitleFrench"/>
+        <assertEquals message="Modal title should be translated to French in French locale" stepKey="assertModalTitleFrench">
+            <expectedResult type="string">{{OrderCancellationModalTitleFrench.title}}</expectedResult>
+            <actualResult type="variable">grabModalTitleFrench</actualResult>
+        </assertEquals>
+    </test>
+</tests>

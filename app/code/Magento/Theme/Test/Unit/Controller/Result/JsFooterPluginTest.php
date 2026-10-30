@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,13 +15,14 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Controller\Result\JsFooterPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Magento\Theme\Test\Unit\Controller\Result\JsFooterPlugin.
  */
 class JsFooterPluginTest extends TestCase
 {
-    const STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
+    private const STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
     /** @var JsFooterPlugin */
     private $plugin;
@@ -40,10 +41,7 @@ class JsFooterPluginTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->httpMock = $this->createMock(Http::class);
         $this->layoutMock = $this->createMock(Layout::class);
@@ -97,8 +95,8 @@ class JsFooterPluginTest extends TestCase
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider renderResultDataProvider
      */
+    #[DataProvider('renderResultDataProvider')]
     public function testAfterRenderResult($content, $isSetFlag, $result): void
     {
         // Given (context)
@@ -137,8 +135,8 @@ class JsFooterPluginTest extends TestCase
      *
      * @param string $content
      * @return void
-     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
+    #[DataProvider('ifGetContentIsNotAStringDataProvider')]
     public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
         $this->scopeConfigMock->method('isSetFlag')

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStoreViewSwitchWithoutCacheCleanTest">
+        <annotations>
+            <features value="Store"/>
+            <stories value="Store View Switching"/>
+            <title value="Store view switch works immediately without cache clean"/>
+            <description value="Verify that switching between store views on storefront works immediately without requiring cache flush"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-15223"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create custom store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete custom store view -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Navigate to storefront home page (default store view) -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
+        <!-- Step 2: Verify we're on default store view -->
+        <!-- Step 3: Switch to custom store view from frontend header -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <!-- Step 4: Verify store view switched IMMEDIATELY without cache clean -->
+        <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewName}}" stepKey="waitForCustomStoreName"/>
+        <waitForText selector="{{StorefrontHeaderSection.storeViewName}}" userInput="{{customStoreEN.name}}" stepKey="seeCustomStoreName"/>
+        <!-- Step 5: Switch back to default store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchBackToDefaultStore">
+            <argument name="storeView" value="_defaultStore"/>
+        </actionGroup>
+        <!-- Step 6: Verify switch back worked immediately -->
+        <waitForText selector="{{StorefrontHeaderSection.storeViewName}}" userInput="{{_defaultStore.name}}" stepKey="seeDefaultStoreNameAgain"/>
+    </test>
+</tests>

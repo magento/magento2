@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Api;
@@ -11,9 +11,12 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Link;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * API tests for Magento\Downloadable\Model\LinkRepository.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class LinkRepositoryTest extends WebapiAbstract
 {
@@ -561,8 +564,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidLinkPrice
      */
+    #[DataProvider('getInvalidLinkPrice')]
     public function testCreateThrowsExceptionIfLinkPriceIsInvalid($linkPrice)
     {
         $this->expectException(\Exception::class);
@@ -599,8 +602,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testCreateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -636,8 +639,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidNumberOfDownloads
      */
+    #[DataProvider('getInvalidNumberOfDownloads')]
     public function testCreateThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
         $this->expectException(\Exception::class);
@@ -749,11 +752,6 @@ class LinkRepositoryTest extends WebapiAbstract
      */
     public function testUpdateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/1';
         $requestData = [
             'isGlobalScopeContent' => true,
@@ -769,7 +767,20 @@ class LinkRepositoryTest extends WebapiAbstract
                 'sample_type' => 'url',
             ],
         ];
-        $this->_webApiCall($this->updateServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->updateServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -805,8 +816,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidLinkPrice
      */
+    #[DataProvider('getInvalidLinkPrice')]
     public function testUpdateThrowsExceptionIfLinkPriceIsInvalid($linkPrice)
     {
         $this->expectException(\Exception::class);
@@ -835,8 +846,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidSortOrder
      */
+    #[DataProvider('getInvalidSortOrder')]
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $this->expectException(\Exception::class);
@@ -864,8 +875,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @dataProvider getInvalidNumberOfDownloads
      */
+    #[DataProvider('getInvalidNumberOfDownloads')]
     public function testUpdateThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
         $this->expectException(\Exception::class);
@@ -909,8 +920,8 @@ class LinkRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getListForAbsentProductProvider
      */
+    #[DataProvider('getListForAbsentProductProvider')]
     public function testGetList($urlTail, $method, $expectations)
     {
         $sku = 'downloadable-product';
@@ -981,9 +992,10 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider getListForAbsentProductProvider()
+     * Test get list for absent product
      */
-    public function testGetListForAbsentProduct($urlTail, $method)
+    #[DataProvider('getListForAbsentProductProvider')]
+    public function testGetListForAbsentProduct($urlTail, $method, $expectations = null)
     {
         $sku = 'absent-product' . time();
 
@@ -1001,21 +1013,22 @@ class LinkRepositoryTest extends WebapiAbstract
 
         $requestData = ['sku' => $sku];
 
-        $expectedMessage = "The product that was requested doesn't exist. Verify the product and try again.";
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
             $this->assertEquals($expectedMessage, $e->getMessage());
         } catch (\Exception $e) {
-            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
         }
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider getListForAbsentProductProvider
      */
-    public function testGetListForSimpleProduct($urlTail, $method)
+    #[DataProvider('getListForAbsentProductProvider')]
+    public function testGetListForSimpleProduct($urlTail, $method, $expectations = null)
     {
         $sku = 'simple';
 
@@ -1070,11 +1083,6 @@ class LinkRepositoryTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links';
         $requestData = [
             'isGlobalScopeContent' => false,
@@ -1091,6 +1099,15 @@ class LinkRepositoryTest extends WebapiAbstract
                 'link_url' => 'http://example.com/',
             ],
         ];
-        $this->_webApiCall($this->createServiceInfo, $requestData);
+
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->_webApiCall($this->createServiceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 }

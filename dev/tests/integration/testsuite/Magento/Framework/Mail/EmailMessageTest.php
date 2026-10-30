@@ -11,6 +11,7 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -113,12 +114,12 @@ class EmailMessageTest extends TestCase
     /**
      * Tests Email Message with Addresses
      *
-     * @dataProvider getEmailMessageDataProvider
      * @param $content
      * @param $type
      * @return void
      * @throws MailException
      */
+    #[DataProvider('getEmailMessageDataProvider')]
     public function testEmailMessage($content, $type): void
     {
         $mimePart = $this->mimePartFactory->create(

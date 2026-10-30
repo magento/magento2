@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectAllValueOfTwoAttributesPageActionGroup">
+        <annotations>
+            <description>Select values of each attribute to include in the product.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel1" type="string" defaultValue="{{colorProductAttribute.default_label}}"/>
+            <argument name="attributeLabel2" type="string" defaultValue="{{sizeAttribute.default_label}}"/>
+            <argument name="quantity" type="string" defaultValue="100"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNext" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSelectOptions"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attributeLabel1)}}" stepKey="waitForSelectAllColor" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attributeLabel1)}}" stepKey="selectAllSwatchAttributeOptions"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attributeLabel2)}}" stepKey="waitForSelectAllSize" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(attributeLabel2)}}" stepKey="selectAllSwatchAttributeOptions1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextAgain" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToApplyQuantity"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForQtyField" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="{{quantity}}" stepKey="enterAttributeQuantity"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextAgain2" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextAgain3" />
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+    </actionGroup>
+</actionGroups>

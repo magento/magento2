@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
 
@@ -18,10 +18,12 @@ use Magento\Catalog\Model\Product;
  * Catalog Inventory Stock Model for adminhtml area
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  *
  * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @see Nothing
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
@@ -77,7 +79,9 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
             $resourceCollection,
             $data
         );
-
+        if (!empty($data)) {
+            $this->setOrigData();
+        }
         $this->groupManagement = $groupManagement;
     }
 
@@ -115,6 +119,8 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
     }
 
     /**
+     * Check if model is used in admin area
+     *
      * @return bool
      */
     public function hasAdminArea()
@@ -123,6 +129,8 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
     }
 
     /**
+     * Flg to show default notification message
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -142,5 +150,16 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
         }
 
         return $tags;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterLoad()
+    {
+        parent::afterLoad();
+        $this->setOrigData();
+
+        return $this;
     }
 }

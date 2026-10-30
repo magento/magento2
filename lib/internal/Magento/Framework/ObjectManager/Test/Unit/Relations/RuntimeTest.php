@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Test\Di\ChildInterface;
 use Magento\Test\Di\DiInterface;
 use Magento\Test\Di\DiParent;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/../_files/Child.php';
 
@@ -30,9 +31,8 @@ class RuntimeTest extends TestCase
 
     /**
      * @param $type
-     * @param $parents
-     * @dataProvider getParentsDataProvider
-     */
+     * @param $parents     */
+    #[DataProvider('getParentsDataProvider')]
     public function testGetParents($type, $parents)
     {
         $this->assertEquals($parents, $this->model->getParents($type));

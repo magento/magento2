@@ -1,23 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\OfflinePayments\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
 use Magento\OfflinePayments\Model\InstructionsConfigProvider;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\Method\AbstractMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class InstructionsConfigProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InstructionsConfigProvider
      */
@@ -40,16 +44,14 @@ class InstructionsConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->methodOneMock = $this->getMockBuilder(AbstractMethod::class)
-            ->addMethods(['getInstructions'])
-            ->onlyMethods(['isAvailable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->methodTwoMock = $this->getMockBuilder(AbstractMethod::class)
-            ->addMethods(['getInstructions'])
-            ->onlyMethods(['isAvailable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->methodOneMock = $this->createPartialMockWithReflection(
+            AbstractMethod::class,
+            ['getInstructions', 'isAvailable']
+        );
+        $this->methodTwoMock = $this->createPartialMockWithReflection(
+            AbstractMethod::class,
+            ['getInstructions', 'isAvailable']
+        );
 
         /** @var PaymentHelper|MockObject $paymentHelperMock */
         $paymentHelperMock = $this->createMock(PaymentHelper::class);
@@ -77,8 +79,8 @@ class InstructionsConfigProviderTest extends TestCase
      * @param bool $isTwoAvailable
      * @param string $instructionsTwo
      * @param array $result
-     * @dataProvider dataProviderGetConfig
      */
+    #[DataProvider('dataProviderGetConfig')]
     public function testGetConfig($isOneAvailable, $instructionsOne, $isTwoAvailable, $instructionsTwo, $result)
     {
         $this->methodOneMock->expects($this->once())

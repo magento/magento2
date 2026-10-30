@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Model\Config\Source;
 
@@ -45,11 +45,14 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray($isActiveOnlyFlag = false)
     {
         $methods = [['value' => '', 'label' => '']];
-        $carriers = $this->_shippingConfig->getAllCarriers();
+        
+        if ($isActiveOnlyFlag) {
+            $carriers = $this->_shippingConfig->getActiveCarriers();
+        } else {
+            $carriers = $this->_shippingConfig->getAllCarriers();
+        }
+        
         foreach ($carriers as $carrierCode => $carrierModel) {
-            if (!$carrierModel->isActive() && (bool)$isActiveOnlyFlag === true) {
-                continue;
-            }
             $carrierMethods = $carrierModel->getAllowedMethods();
             if (!$carrierMethods) {
                 continue;

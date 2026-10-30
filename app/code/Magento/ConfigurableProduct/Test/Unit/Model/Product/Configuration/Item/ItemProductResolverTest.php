@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Configuration\Item;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
@@ -39,35 +40,25 @@ class ItemProductResolverTest extends TestCase
     {
         parent::setUp();
 
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->parentProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->parentProduct = $this->createMock(Product::class);
         $this->parentProduct
             ->method('getSku')
             ->willReturn('parent_product');
 
-        $this->childProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->childProduct = $this->createMock(Product::class);
         $this->childProduct
             ->method('getSku')
             ->willReturn('child_product');
 
-        $this->option = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->option = $this->createMock(Option::class);
 
         $this->option
             ->method('getProduct')
             ->willReturn($this->childProduct);
 
-        $this->item = $this->getMockBuilder(ItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->item = $this->createMock(ItemInterface::class);
 
         $this->item
             ->expects($this->once())
@@ -99,11 +90,11 @@ class ItemProductResolverTest extends TestCase
     /**
      * Tests child product from configurable product
      *
-     * @dataProvider provideScopeConfig
      * @param string $expectedSku
      * @param string $scopeValue
      * @param string | null $thumbnail
      */
+    #[DataProvider('provideScopeConfig')]
     public function testGetFinalProductChild($expectedSku, $scopeValue, $thumbnail): void
     {
         $this->item->expects($this->once())

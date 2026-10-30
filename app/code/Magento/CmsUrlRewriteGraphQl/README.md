@@ -1,4 +1,3 @@
-# CmsUrlRewriteGraphQl
+# Magento_CmsUrlRewriteGraphQl module
 
-**CmsUrlRewriteGraphQl** provides type information for the GraphQl module
-to generate url rewrite fields for cms information endpoints.
+This module provides type information for the GraphQl module to generate URL rewrite fields for CMS information endpoints.

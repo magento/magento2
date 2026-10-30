@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class BatchSizeManagementTest extends TestCase
         $this->rowSizeEstimatorMock = $this->createMock(
             IndexTableRowSizeEstimatorInterface::class
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock, $this->loggerMock);
     }
 
@@ -55,7 +55,7 @@ class BatchSizeManagementTest extends TestCase
         $innodbPollSize = 100;
 
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
-        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
 
         $this->loggerMock->expects($this->once())
             ->method('warning')

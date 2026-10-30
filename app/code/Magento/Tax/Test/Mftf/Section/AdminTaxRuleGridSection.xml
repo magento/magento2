@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,5 +16,6 @@
         <element name="nthRow" type="block" selector="tr[data-role='row']:nth-of-type({{var}})" parameterized="true" timeout="30"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="emptyText" type="text" selector="td.empty-text"/>
+        <element name="allRows" type="block" selector="//table[@id='taxRuleGrid_table']//tbody//tr//td[@data-column='code']"/>
     </section>
 </sections>

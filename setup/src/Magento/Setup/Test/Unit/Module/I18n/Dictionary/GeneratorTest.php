@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class GeneratorTest extends TestCase
     {
         $this->parserMock = $this->createMock(Parser::class);
         $this->contextualParserMock = $this->createMock(Contextual::class);
-        $this->writerMock = $this->getMockForAbstractClass(WriterInterface::class);
+        $this->writerMock = $this->createMock(WriterInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
         $this->factoryMock->expects($this->any())
             ->method('createDictionaryWriter')
@@ -102,7 +102,6 @@ class GeneratorTest extends TestCase
             ->willReturn($optionResolver);
         $this->generator->generate('', $outputFilename);
         $property = new \ReflectionProperty($this->generator, 'writer');
-        $property->setAccessible(true);
         $this->assertNull($property->getValue($this->generator));
     }
 

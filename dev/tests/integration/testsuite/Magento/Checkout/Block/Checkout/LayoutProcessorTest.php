@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Checkout\Block\Checkout;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LayoutProcessorTest extends TestCase
@@ -21,8 +22,8 @@ class LayoutProcessorTest extends TestCase
      * @param bool $isCountryValueExpected
      * @magentoConfigFixture default_store checkout/options/display_billing_address_on 1
      * @magentoDataFixture Magento/Backend/_files/allowed_countries_fr.php
-     * @dataProvider defaultCountryDataProvider
      */
+    #[DataProvider('defaultCountryDataProvider')]
     public function testShippingAddressCountryId(string $defaultCountryId, bool $isCountryValueExpected): void
     {
         /** @var MutableScopeConfigInterface $mutableConfig */

@@ -1,9 +1,7 @@
 <?php
 /**
- * Default implementation of product review service provider
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product\ReviewRenderer;
 

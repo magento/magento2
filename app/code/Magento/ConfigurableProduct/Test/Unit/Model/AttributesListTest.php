@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,12 @@ use Magento\ConfigurableProduct\Model\AttributesList;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AttributesListTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AttributesList
      */
@@ -45,11 +48,13 @@ class AttributesListTest extends TestCase
         );
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getFrontendLabel'])
-            ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMock = $this->createPartialMockWithReflection(
+            Attribute::class,
+            ['getId', 'getAttributeCode', 'getFrontendLabel', 'getSource']
+        );
+        $this->attributeMock->method('getId')->willReturn('id');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getFrontendLabel')->willReturn('label');
         $this->collectionMock
             ->expects($this->once())
             ->method('getItems')
@@ -77,13 +82,9 @@ class AttributesListTest extends TestCase
             ->method('addFieldToFilter')
             ->with('main_table.attribute_id', $ids);
 
-        $this->attributeMock->expects($this->once())->method('getId')->willReturn('id');
-        $this->attributeMock->expects($this->once())->method('getFrontendLabel')->willReturn('label');
-        $this->attributeMock->expects($this->once())->method('getAttributeCode')->willReturn('code');
-
         $source = $this->createMock(AbstractSource::class);
         $source->expects($this->once())->method('getAllOptions')->with(false)->willReturn(['options']);
-        $this->attributeMock->expects($this->once())->method('getSource')->willReturn($source);
+        $this->attributeMock->method('getSource')->willReturn($source);
 
         $this->assertEquals($result, $this->attributeListModel->getAttributes($ids));
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,22 +64,12 @@ class ImportTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->rowParserMock = $this->getMockBuilder(RowParser::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->columnResolverFactoryMock = $this->getMockBuilder(ColumnResolverFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataHashGeneratorMock = $this->getMockBuilder(DataHashGenerator::class)
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->rowParserMock = $this->createMock(RowParser::class);
+        $this->columnResolverFactoryMock = $this->createPartialMock(ColumnResolverFactory::class, ['create']);
+        $this->dataHashGeneratorMock = $this->createMock(DataHashGenerator::class);
         $this->dataHashGeneratorMock->expects($this->any())
             ->method('getHash')
             ->willReturnCallback(
@@ -233,9 +223,7 @@ class ImportTest extends TestCase
      */
     private function createFileMock(array $lines): MockObject
     {
-        $file = $this->getMockBuilder(ReadInterface::class)
-            ->onlyMethods(['readCsv'])
-            ->getMockForAbstractClass();
+        $file = $this->createMock(ReadInterface::class);
         $willReturnArgs = [];
 
         foreach ($lines as $line) {

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
@@ -18,5 +18,10 @@
     </broker>
     <broker topic="overlapping.topic.declaration" exchange="overlappingDeprecatedExchange">
         <queue consumer="overlappingConsumerDeclaration" name="consumer.config.queue" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="222" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
+    </broker>
+
+    <!-- Stomp brokers -->
+    <broker topic="stomp.topic.declaration">
+        <queue consumer="stompConsumerDeclaration" name="stomp.consumer.config.queue" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="222" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
     </broker>
 </config>

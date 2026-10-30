@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,16 +49,20 @@ class MediaGallery implements ResolverInterface
         $product = $value['model'];
 
         $mediaGalleryEntries = [];
-        foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
-            $mediaGalleryEntries[$key] = $entry->getData();
-            if ($mediaGalleryEntries[$key]['label'] === null) {
-                $mediaGalleryEntries[$key]['label'] = $product->getName();
+        foreach ($product->getMediaGalleryEntries() ?? [] as $entry) {
+            if ($entry->isDisabled()) {
+                continue;
             }
-            $mediaGalleryEntries[$key]['model'] = $product;
+            $entryData = $entry->getData();
+            if ($entryData['label'] === null) {
+                $entryData['label'] = $product->getName();
+            }
+            $entryData['model'] = $product;
             if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
-                $mediaGalleryEntries[$key]['video_content']
+                $entryData['video_content']
                     = $entry->getExtensionAttributes()->getVideoContent()->getData();
             }
+            $mediaGalleryEntries[] = $entryData;
         }
         return $mediaGalleryEntries;
     }

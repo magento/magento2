@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\ResourceModel;
 
@@ -11,7 +11,6 @@ use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 /**
  * Core Resource Resource Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,22 +76,17 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class
         );
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->coreResourceMock = $this->createMock(ResourceConnection::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
-        $this->resourceMock = $this->getMockForAbstractClass(
+        $this->resourceMock = $this->createPartialMock(
             AbstractDb::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup', 'getConnection', 'getMainTable', 'getTable']
+            ['__wakeup', 'getConnection', 'getMainTable', 'getTable', '_construct']
         );
         $this->selectMock = $this->createMock(Select::class);
 

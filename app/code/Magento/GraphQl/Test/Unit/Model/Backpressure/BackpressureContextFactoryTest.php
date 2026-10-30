@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\GraphQl\Model\Backpressure\BackpressureContextFactory;
 use Magento\GraphQl\Model\Backpressure\GraphQlContext;
 use Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -99,8 +100,8 @@ class BackpressureContextFactoryTest extends TestCase
      * @param int $identityType
      * @param string $identity
      * @return void
-     * @dataProvider getIdentityCases
      */
+    #[DataProvider('getIdentityCases')]
     public function testCreateForIdentity(int $identityType, string $identity): void
     {
         $this->requestTypeExtractor->method('extract')->willReturn($typeId = 'test');

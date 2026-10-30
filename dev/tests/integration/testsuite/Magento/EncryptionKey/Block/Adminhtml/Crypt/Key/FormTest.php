@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
@@ -30,7 +30,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\EncryptionKey\Block\Adminhtml\Crypt\Key\Form::class,
             '_prepareForm'
         );
-        $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();

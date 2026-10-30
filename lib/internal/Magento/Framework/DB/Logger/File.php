@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Logger;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
@@ -32,21 +33,26 @@ class File extends LoggerAbstract
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
+     * @param bool $logIndexCheck
+     * @param QueryAnalyzerInterface|null $queryAnalyzer
+     * @throws FileSystemException
      */
     public function __construct(
         Filesystem $filesystem,
         $debugFile = 'debug/db.log',
         $logAllQueries = false,
         $logQueryTime = 0.05,
-        $logCallStack = false
+        $logCallStack = false,
+        $logIndexCheck = false,
+        ?QueryAnalyzerInterface $queryAnalyzer = null,
     ) {
-        parent::__construct($logAllQueries, $logQueryTime, $logCallStack);
+        parent::__construct($logAllQueries, $logQueryTime, $logCallStack, $logIndexCheck, $queryAnalyzer);
         $this->dir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->debugFile = $debugFile;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function log($str)
     {
@@ -60,7 +66,7 @@ class File extends LoggerAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function logStats($type, $sql, $bind = [], $result = null)
     {
@@ -71,7 +77,7 @@ class File extends LoggerAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function critical(\Exception $e)
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
 use Magento\Framework\Mview\View\ChangelogInterface;
@@ -73,10 +74,28 @@ class SubscriptionTest extends TestCase
     private $defaultProcessor;
 
     /**
+     * @var LockManagerInterface|MockObject
+     */
+    private $lockManagerMock;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|null
+     */
+    private $originalObjectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
+        // The ObjectManager is a static singleton; save and restore whatever was there
+        // before this test, since nothing resets it automatically between tests.
+        try {
+            $this->originalObjectManager = ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->originalObjectManager = null;
+        }
+
         $this->tableName = 'test_table';
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
@@ -89,29 +108,15 @@ class SubscriptionTest extends TestCase
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        ObjectManager::getInstance()->expects($this->any())
+        $objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerMock->expects($this->any())
             ->method('get')
             ->with(DefaultProcessor::class)
             ->willReturn($this->defaultProcessor);
+        ObjectManager::setInstance($objectManagerMock);
         $this->triggerFactoryMock = $this->createMock(TriggerFactory::class);
-        $this->viewCollectionMock = $this->getMockForAbstractClass(
-            CollectionInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->viewMock = $this->getMockForAbstractClass(
-            ViewInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->viewCollectionMock = $this->createMock(CollectionInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $this->viewMock->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -131,6 +136,7 @@ class SubscriptionTest extends TestCase
         $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
         $statementPostprocessorMock->method('process')
             ->willReturnArgument(2);
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -141,8 +147,20 @@ class SubscriptionTest extends TestCase
             [],
             [],
             $mviewConfigMock,
-            $statementPostprocessorMock
+            $statementPostprocessorMock,
+            $this->lockManagerMock
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        if ($this->originalObjectManager) {
+            ObjectManager::setInstance($this->originalObjectManager);
+        }
+        parent::tearDown();
     }
 
     /**
@@ -211,15 +229,7 @@ class SubscriptionTest extends TestCase
                 }
             );
 
-        $changelogMock = $this->getMockForAbstractClass(
-            ChangelogInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $changelogMock = $this->createMock(ChangelogInterface::class);
         $changelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('test_view_cl');
@@ -235,15 +245,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
-            ChangelogInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $otherChangelogMock = $this->createMock(ChangelogInterface::class);
         $otherChangelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('other_test_view_cl');
@@ -251,15 +253,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
-            ViewInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $otherViewMock = $this->createMock(ViewInterface::class);
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn('other_id');
@@ -291,6 +285,14 @@ class SubscriptionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
+
+        $this->lockManagerMock->expects($this->exactly(3))
+            ->method('lock')
+            ->with('triggerName')
+            ->willReturn(true);
+        $this->lockManagerMock->expects($this->exactly(3))
+            ->method('unlock')
+            ->with('triggerName');
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getSubscriptions')
@@ -330,15 +332,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
-            ChangelogInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $otherChangelogMock = $this->createMock(ChangelogInterface::class);
         $otherChangelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('other_test_view_cl');
@@ -346,15 +340,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
-            ViewInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $otherViewMock = $this->createMock(ViewInterface::class);
         $otherViewMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('other_id');
@@ -392,7 +378,91 @@ class SubscriptionTest extends TestCase
             ->method('createTrigger')
             ->with($triggerMock);
 
+        $this->lockManagerMock->expects($this->exactly(3))
+            ->method('lock')
+            ->with('triggerName')
+            ->willReturn(true);
+        $this->lockManagerMock->expects($this->exactly(3))
+            ->method('unlock')
+            ->with('triggerName');
+
         $this->model->remove();
+    }
+
+    /**
+     * saveTrigger() must serialize the drop/create pair behind a lock keyed by
+     * the trigger name, since the same trigger can be shared by multiple
+     * subscribed indexers and rebuilt concurrently by separate processes.
+     *
+     * @return void
+     */
+    public function testSaveTriggerLocksAroundDropAndCreate(): void
+    {
+        $triggerMock = $this->createMock(Trigger::class);
+        $triggerMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('triggerName');
+
+        $callOrder = [];
+        $this->lockManagerMock->expects($this->once())
+            ->method('lock')
+            ->with('triggerName')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'lock';
+                return true;
+            });
+        $this->connectionMock->expects($this->once())
+            ->method('dropTrigger')
+            ->with('triggerName')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'dropTrigger';
+            });
+        $this->connectionMock->expects($this->once())
+            ->method('createTrigger')
+            ->with($triggerMock)
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'createTrigger';
+            });
+        $this->lockManagerMock->expects($this->once())
+            ->method('unlock')
+            ->with('triggerName')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'unlock';
+                return true;
+            });
+
+        $this->model->saveTrigger($triggerMock);
+
+        $this->assertSame(['lock', 'dropTrigger', 'createTrigger', 'unlock'], $callOrder);
+    }
+
+    /**
+     * If the lock could not be acquired, saveTrigger() must not attempt to
+     * release a lock it never held.
+     *
+     * @return void
+     */
+    public function testSaveTriggerDoesNotUnlockWhenLockNotAcquired(): void
+    {
+        $triggerMock = $this->createMock(Trigger::class);
+        $triggerMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('triggerName');
+
+        $this->lockManagerMock->expects($this->once())
+            ->method('lock')
+            ->with('triggerName')
+            ->willReturn(false);
+        $this->lockManagerMock->expects($this->never())
+            ->method('unlock');
+        $this->connectionMock->expects($this->once())
+            ->method('dropTrigger')
+            ->with('triggerName');
+        $this->connectionMock->expects($this->once())
+            ->method('createTrigger')
+            ->with($triggerMock);
+
+        $this->model->saveTrigger($triggerMock);
     }
 
     /**
@@ -445,7 +515,7 @@ class SubscriptionTest extends TestCase
                 $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
             ]);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
+        $otherChangelogMock = $this->createMock(ChangelogInterface::class);
         $otherChangelogMock->expects($this->any())
             ->method('getViewId')
             ->willReturn($viewId);
@@ -476,11 +546,11 @@ class SubscriptionTest extends TestCase
             [],
             $ignoredData,
             $mviewConfigMock,
-            $statementPostprocessorMock
+            $statementPostprocessorMock,
+            $this->lockManagerMock
         );
 
         $method = new ReflectionMethod($model, 'buildStatement');
-        $method->setAccessible(true);
         $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);

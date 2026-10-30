@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -148,6 +149,33 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Run a GraphQL query that depends on schema fields dynamically generated from EAV attributes
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array|int|string|float|bool GraphQL call results
+     * @throws \Exception
+     */
+    protected function graphQlQueryWithSchemaCacheRetry(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ) {
+        try {
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        } catch (ResponseContainsErrorsException $e) {
+            $isSchemaCacheRace = preg_match('/is not defined by type|Cannot query field/', $e->getMessage());
+            if (!$isSchemaCacheRace || !$this->cleanCache()) {
+                throw $e;
+            }
+            return $this->graphQlQuery($query, $variables, $operationName, $headers);
+        }
+    }
+
+    /**
      * Return app cache setup.
      *
      * @return \Magento\Framework\App\Cache
@@ -215,9 +243,9 @@ abstract class GraphQlAbstract extends WebapiAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento cache:flush full_page", $out);
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager
+            ->get(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 }

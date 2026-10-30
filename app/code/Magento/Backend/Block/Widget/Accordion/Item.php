@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Accordion;
 
@@ -9,8 +9,6 @@ use Magento\Backend\Block\Widget\Accordion;
 
 /**
  * Accordion item
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends \Magento\Backend\Block\Widget
 {
@@ -20,6 +18,8 @@ class Item extends \Magento\Backend\Block\Widget
     protected $_accordion;
 
     /**
+     * Set accordion objet and return self
+     *
      * @param Accordion $accordion
      * @return $this
      */
@@ -30,6 +30,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the target for this item
+     *
      * @return string
      */
     public function getTarget()
@@ -38,6 +40,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the HTML title for this item
+     *
      * @return string
      */
     public function getTitle()
@@ -52,6 +56,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the HTML content for this item
+     *
      * @return null|string
      */
     public function getContent()
@@ -67,6 +73,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get the CSS class for this item
+     *
      * @return string
      */
     public function getClass()
@@ -79,6 +87,8 @@ class Item extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return formatted HTML
+     *
      * @return string
      */
     protected function _toHtml()

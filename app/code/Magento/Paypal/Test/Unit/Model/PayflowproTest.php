@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,7 +14,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -28,6 +30,7 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class PayflowproTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Payflowpro
      */
@@ -76,34 +81,24 @@ class PayflowproTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(PayflowConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->gatewayMock = $this->getMockBuilder(Gateway::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(PayflowConfig::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->gatewayMock = $this->createMock(Gateway::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $configFactoryMock = $this->getMockBuilder(ConfigInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $configFactoryMock = $this->createPartialMock(
+            ConfigInterfaceFactory::class,
+            ['create']
+        );
         $configFactoryMock->method('create')
             ->willReturn($this->configMock);
 
-        $client = $this->getMockBuilder(LaminasClient::class)
-            ->getMock();
+        $client = $this->createMock(LaminasClient::class);
 
-        $clientFactory = $this->getMockBuilder(LaminasClientFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $clientFactory = $this->createMock(LaminasClientFactory::class);
         $clientFactory->method('create')->willReturn($client);
 
-        $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
         $this->helper = new ObjectManager($this);
         $objects = [
@@ -132,15 +127,13 @@ class PayflowproTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider canVoidDataProvider
      * @covers \Magento\Paypal\Model\Payflowpro::canVoid
      */
+    #[DataProvider('canVoidDataProvider')]
     public function testCanVoid($message, $amountPaid, $expected): void
     {
         /** @var Payment|MockObject $payment */
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createMock(Payment::class);
         $payment->method('getAmountPaid')->willReturn($amountPaid);
         $this->payflowpro->setInfoInstance($payment);
 
@@ -190,11 +183,10 @@ class PayflowproTest extends TestCase
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
             ->willReturn('BNCODE');
-        $payment = $this->getMockBuilder(Info::class)
-            ->addMethods(['setTransactionId'])
-            ->onlyMethods(['__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payment = $this->createPartialMockWithReflection(
+            Info::class,
+            ['setTransactionId']
+        );
         $payment->expects($this->once())->method('setTransactionId')->willReturnSelf();
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
@@ -204,8 +196,8 @@ class PayflowproTest extends TestCase
      * @param DataObject $paymentExpected
      *
      * @return void
-     * @dataProvider setTransStatusDataProvider
      */
+    #[DataProvider('setTransStatusDataProvider')]
     public function testSetTransStatus($response, $paymentExpected): void
     {
         $payment = $this->helper->getObject(Info::class);
@@ -257,8 +249,8 @@ class PayflowproTest extends TestCase
      * @param bool $result
      *
      * @return void
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsActive(array $expectsMethods, $result): void
     {
         $storeId = 15;
@@ -350,23 +342,16 @@ class PayflowproTest extends TestCase
      * @param float $expectedResult
      *
      * @return void
-     * @dataProvider dataProviderCaptureAmountRounding
      */
+    #[DataProvider('dataProviderCaptureAmountRounding')]
     public function testCaptureAmountRounding($amount, $setAmount, $expectedResult): void
     {
         $paymentMock = $this->getPaymentMock();
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createMock(Order::class);
 
-        $infoInstanceMock = $this->getMockForAbstractClass(
-            InfoInterface::class,
-            [],
-            '',
-            false,
-            false,
-            false,
-            ['getAmountAuthorized','hasAmountPaid']
+        $infoInstanceMock = $this->createPartialMockWithReflection(
+            Info::class,
+            ['getAmountAuthorized', 'hasAmountPaid']
         );
 
         $infoInstanceMock->expects($this->once())
@@ -481,16 +466,17 @@ class PayflowproTest extends TestCase
      */
     protected function initStoreMock(): void
     {
-        $storeId = 27;
-        $storeMock = $this->getMockBuilder(Store::class)->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->getMock();
-        $this->storeManagerMock->expects(static::once())
+        $this->storeManagerMock->expects(static::any())
             ->method('getStore')
-            ->willReturn($storeMock);
-        $storeMock->expects(static::once())
-            ->method('getId')
-            ->willReturn($storeId);
+            ->willReturnCallback(
+                function ($storeId) {
+                    $storeMock = $this->createPartialMock(Store::class, ['getId']);
+                    $storeMock->expects(static::once())
+                        ->method('getId')
+                        ->willReturn($storeId === null ? 1 : $storeId);
+                    return $storeMock;
+                }
+            );
     }
 
     /**
@@ -539,20 +525,18 @@ class PayflowproTest extends TestCase
      */
     protected function getPaymentMock(): MockObject
     {
-        $paymentMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAdditionalInformation'])
-            ->addMethods(
-                [
-                    'getParentTransactionId',
-                    'getOrder',
-                    'getCcNumber',
-                    'getCcExpMonth',
-                    'getCcExpYear',
-                    'getCcCid'
-                ]
-            )
-            ->getMock();
+        $paymentMock = $this->createPartialMockWithReflection(
+            Info::class,
+            [
+                'getAdditionalInformation',
+                'getParentTransactionId',
+                'getOrder',
+                'getCcNumber',
+                'getCcExpMonth',
+                'getCcExpYear',
+                'getCcCid'
+            ]
+        );
 
         $cardData = [
             'number' => 4111111111111111,
@@ -587,18 +571,16 @@ class PayflowproTest extends TestCase
             'id' => 4,
             'increment_id' => '0000004'
         ];
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getBaseCurrencyCode',
-                    'getIncrementId',
-                    'getId',
-                    'getBillingAddress',
-                    'getShippingAddress'
-                ]
-            )
-            ->getMock();
+        $orderMock = $this->createPartialMock(
+            Order::class,
+            [
+                'getBaseCurrencyCode',
+                'getIncrementId',
+                'getId',
+                'getBillingAddress',
+                'getShippingAddress'
+            ]
+        );
 
         $orderMock->expects(static::once())
             ->method('getId')
@@ -622,7 +604,7 @@ class PayflowproTest extends TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -644,7 +626,7 @@ class PayflowproTest extends TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->getMockForAbstractClass(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -673,10 +655,10 @@ class PayflowproTest extends TestCase
         $expectedData = new DataObject($data);
         $actualData = new DataObject();
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getIncrementId', 'getId'])
-            ->getMock();
+        $orderMock = $this->createPartialMock(
+            Order::class,
+            ['getIncrementId', 'getId']
+        );
         $orderMock->expects(static::once())
             ->method('getId')
             ->willReturn($orderData['id']);
@@ -703,7 +685,7 @@ class PayflowproTest extends TestCase
         ];
         $dataObject = new DataObject($data);
 
-        $infoInstance = $this->getMockForAbstractClass(InfoInterface::class);
+        $infoInstance = $this->createMock(InfoInterface::class);
         $this->payflowpro->setData('info_instance', $infoInstance);
 
         $this->eventManager->expects(static::exactly(2))
@@ -719,8 +701,8 @@ class PayflowproTest extends TestCase
      * @param DataObject $expectedResponse
      *
      * @return void
-     * @dataProvider dataProviderMapGatewayResponse
      */
+    #[DataProvider('dataProviderMapGatewayResponse')]
     public function testMapGatewayResponse($postData, $expectedResponse): void
     {
         self::assertEquals(
@@ -805,5 +787,21 @@ class PayflowproTest extends TestCase
                 ])
             ]
         ];
+    }
+
+    public function testSetStore(): void
+    {
+        $storeId = 2;
+        $this->initStoreMock();
+        $this->configMock->expects($this->exactly(2))
+            ->method('setStoreId');
+        $this->configMock->expects(new MethodInvokedAtIndex(0))
+            ->method('setStoreId')
+            ->with(1);
+        $this->configMock->expects(new MethodInvokedAtIndex(1))
+            ->method('setStoreId')
+            ->with($storeId);
+        $this->payflowpro->getConfig();
+        $this->payflowpro->setStore($storeId);
     }
 }

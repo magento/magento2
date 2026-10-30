@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
@@ -56,7 +58,7 @@ class UnitBaseCalculator extends AbstractCalculator
 
         // Calculate $priceInclTax
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
-        $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
+        $priceInclTax = $item->getUnitPrice();
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
             $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate, $round);
         }

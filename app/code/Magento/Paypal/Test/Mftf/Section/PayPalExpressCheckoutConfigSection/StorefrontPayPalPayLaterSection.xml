@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontPayPalPayLaterSection">
-        <element name="payPalPayLaterMessage" type="text" selector="//p[contains(@class,'PayLater')]/span[1]" />
+        <element name="payPalPayLaterMessage" type="text" selector="//button[@role='checkbox' and @data-dd-action-name='Pay in 4']//div[contains(@class, 'grid-area:description')]"/>
     </section>
 </sections>

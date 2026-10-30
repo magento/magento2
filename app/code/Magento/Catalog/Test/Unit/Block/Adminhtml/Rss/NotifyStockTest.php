@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Rss;
 use Magento\Backend\Block\Context;
 use Magento\Catalog\Block\Adminhtml\Rss\NotifyStock;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Rss\Product\NotifyStock as RssNotifyStock;
 use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
@@ -34,7 +35,7 @@ class NotifyStockTest extends TestCase
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\NotifyStock|MockObject
+     * @var RssNotifyStock|MockObject
      */
     protected $rssModel;
 
@@ -68,12 +69,12 @@ class NotifyStockTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rssModel = $this->getMockBuilder(\Magento\Catalog\Model\Rss\Product\NotifyStock::class)
-            ->onlyMethods(['getProductsCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->rssModel = $this->createPartialMock(
+            RssNotifyStock::class,
+            ['getProductsCollection']
+        );
+        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             NotifyStock::class,
@@ -89,13 +90,10 @@ class NotifyStockTest extends TestCase
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
             ->willReturn('http://magento.com/rss/feeds/index/type/notifystock');
-        $item = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['__sleep', 'getId', 'getQty', 'getName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMock(Product::class, ['__sleep', 'getId', 'getQty', 'getName']);
         $item->expects($this->once())->method('getId')->willReturn(1);
         $item->expects($this->once())->method('getQty')->willReturn(1);
-        $item->expects($this->any())->method('getName')->willReturn('Low Stock Product');
+        $item->method('getName')->willReturn('Low Stock Product');
 
         $this->rssModel->expects($this->once())->method('getProductsCollection')
             ->willReturn([$item]);

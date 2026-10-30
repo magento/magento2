@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,11 +38,9 @@ class PaymentDataObjectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
 
-        $this->paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMockForAbstractClass();
+        $this->paymentMock = $this->createMock(InfoInterface::class);
 
         $this->model = new PaymentDataObject($this->orderMock, $this->paymentMock);
     }

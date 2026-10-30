@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -49,7 +49,8 @@ define([
         try {
             injector.remove();
             injector.clean();
-        } catch (e) {}
+        } catch (e) { // eslint-disable-line no-unused-vars
+        }
     });
 
     describe('Magento_Checkout/js/model/payment-service', function () {
@@ -67,7 +68,7 @@ define([
         });
     });
 
-    describe('Magento_Checkout/js/model/payment-service', function () {
+    describe('Magento_Checkout/js/model/payment-service vault methods', function () {
         beforeEach(function (done) {
             injector.mock(mocksPaymentMethodVault);
             // eslint-disable-next-line max-nested-callbacks

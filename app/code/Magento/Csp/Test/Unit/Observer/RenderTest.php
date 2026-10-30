@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -38,7 +38,7 @@ class RenderTest extends TestCase
         $eventObserverMock = $this->createMock(Observer::class);
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
 
-        $cspRendererMock = $this->getMockForAbstractClass(CspRendererInterface::class);
+        $cspRendererMock = $this->createMock(CspRendererInterface::class);
         $cspRendererMock->expects($this->once())->method('render');
 
         $objectManagerHelper = new ObjectManager($this);

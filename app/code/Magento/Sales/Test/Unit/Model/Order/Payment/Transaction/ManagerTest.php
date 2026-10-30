@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Manager;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ManagerTest extends TestCase
 {
@@ -41,11 +42,11 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider getAuthorizationDataProvider
      * @param $parentTransactionId
      * @param $paymentId
      * @param $orderId
      */
+    #[DataProvider('getAuthorizationDataProvider')]
     public function testGetAuthorizationTransaction($parentTransactionId, $paymentId, $orderId)
     {
         $transaction = $this->createMock(Transaction::class);
@@ -69,11 +70,11 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider isTransactionExistsDataProvider
      * @param string|null $transactionId
      * @param bool $isRepositoryReturnTransaction
      * @param bool $expectedResult
      */
+    #[DataProvider('isTransactionExistsDataProvider')]
     public function testIsTransactionExists($transactionId, $isRepositoryReturnTransaction, $expectedResult)
     {
         $paymentId = 1;
@@ -91,13 +92,13 @@ class ManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider generateTransactionIdDataProvider
      * @param string|null $transactionId
      * @param string|null $parentTransactionId
      * @param string|null $transactionBasedTxnId
      * @param string $type
      * @param string|null $expectedResult
      */
+    #[DataProvider('generateTransactionIdDataProvider')]
     public function testGenerateTransactionId(
         $transactionId,
         $parentTransactionId,
@@ -105,28 +106,28 @@ class ManagerTest extends TestCase
         $type,
         $expectedResult
     ) {
-        $transactionBasedOn = false;
+         $transactionBasedOn = false;
 
-        $payment = $this->createPartialMock(
-            Payment::class,
-            ["setParentTransactionId", "getParentTransactionId", "getTransactionId"]
-        );
-        $payment->expects($this->atLeastOnce())->method('getTransactionId')->willReturn($transactionId);
+         $payment = $this->createPartialMock(
+             Payment::class,
+             ["setParentTransactionId", "getParentTransactionId", "getTransactionId"]
+         );
+         $payment->expects($this->atLeastOnce())->method('getTransactionId')->willReturn($transactionId);
 
         if (!$parentTransactionId && !$transactionId && $transactionBasedTxnId) {
             $transactionBasedOn = $this->createMock(Transaction::class);
             $transactionBasedOn->expects($this->once())->method('getTxnId')->willReturn($transactionBasedTxnId);
             $payment->expects($this->once())->method("setParentTransactionId")->with($transactionBasedTxnId);
         }
-        $payment->expects($this->exactly(2))->method('getParentTransactionId')->willReturnOnConsecutiveCalls(
-            $parentTransactionId,
-            $transactionBasedOn ? $transactionBasedTxnId : $parentTransactionId
-        );
+         $payment->expects($this->exactly(2))->method('getParentTransactionId')->willReturnOnConsecutiveCalls(
+             $parentTransactionId,
+             $transactionBasedOn ? $transactionBasedTxnId : $parentTransactionId
+         );
 
-        $this->assertEquals(
-            $expectedResult,
-            $this->manager->generateTransactionId($payment, $type, $transactionBasedOn)
-        );
+         $this->assertEquals(
+             $expectedResult,
+             $this->manager->generateTransactionId($payment, $type, $transactionBasedOn)
+         );
     }
 
     /**

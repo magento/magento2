@@ -38,7 +38,7 @@
             <argument name="adapterOptions" xsi:type="array">
                 <item name="tinymce" xsi:type="array">
                     <item name="value" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter</item>
-                    <item name="label" xsi:type="string" translatable="true">TinyMCE 6</item>
+                    <item name="label" xsi:type="string" translatable="true">Hugerte</item>
                 </item>
             </argument>
         </arguments>
@@ -67,5 +67,11 @@
         <arguments>
             <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
+    </type>
+    <type name="Magento\Cms\Api\PageRepositoryInterface">
+        <plugin name="vendor_cmsvalidate_page_save" type="Magento\Cms\Plugin\PageRepositoryValidatePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Cms\Api\BlockRepositoryInterface">
+        <plugin name="vendor_cmsvalidate_block_save" type="Magento\Cms\Plugin\BlockRepositoryValidatePlugin" sortOrder="10"/>
     </type>
 </config>

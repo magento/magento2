@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -61,7 +61,10 @@ class TierPrice extends AbstractPrice
     public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
-            $this->customerGroups[$group->getCode()] = $group->getId();
+            $code = $group->getCode();
+            if ($code !== null) {
+                $this->customerGroups[$code] = $group->getId();
+            }
         }
         $this->context = $context;
     }

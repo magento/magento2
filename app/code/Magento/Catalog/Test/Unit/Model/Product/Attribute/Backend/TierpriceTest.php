@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TierpriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Tierprice|MockObject
      */
@@ -60,24 +63,38 @@ class TierpriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productAttributeBackendTierprice = $this
-            ->getMockBuilder(Tierprice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods(['isScopeGlobal'])
-            ->onlyMethods(['getName'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->localeFormat = $this->getMockBuilder(FormatInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productAttributeBackendTierprice = $this->createMock(Tierprice::class);
+        $this->attribute = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['setName', 'getName', 'setIsScopeGlobal', 'isScopeGlobal', '_construct']
+        );
+        $name = null;
+        $isScopeGlobal = null;
+        $this->attribute->method('setName')->willReturnCallback(
+            function ($value) use (&$name) {
+                $name = $value;
+                return $this->attribute;
+            }
+        );
+        $this->attribute->method('getName')->willReturnCallback(
+            function () use (&$name) {
+                return $name;
+            }
+        );
+        $this->attribute->method('setIsScopeGlobal')->willReturnCallback(
+            function ($value) use (&$isScopeGlobal) {
+                $isScopeGlobal = $value;
+                return $this->attribute;
+            }
+        );
+        $this->attribute->method('isScopeGlobal')->willReturnCallback(
+            function () use (&$isScopeGlobal) {
+                return $isScopeGlobal;
+            }
+        );
+        $this->localeFormat = $this->createMock(FormatInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->groupManagement = $this->createMock(GroupManagementInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->tierprice = $objectHelper->getObject(
@@ -114,10 +131,8 @@ class TierpriceTest extends TestCase
                 'price_qty' => 1,
             ]
         ];
-        $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
+        $object = $this->createMock(Product::class);
+        $this->attribute->setName($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->atLeastOnce())
             ->method('getNumber')
@@ -151,7 +166,7 @@ class TierpriceTest extends TestCase
             ]
         ];
         $object = $this->createMock(Product::class);
-        $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
+        $this->attribute->setName($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->once())->method('getNumber')->with(-10)->willReturnArgument(0);
         $this->assertTrue($this->tierprice->validate($object));
@@ -201,21 +216,17 @@ class TierpriceTest extends TestCase
                 'website_price' => 18,
             ],
         ];
-        $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $allCustomersGroup = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(Product::class);
+        $allCustomersGroup = $this->createMock(GroupInterface::class);
         $this->groupManagement
             ->expects($this->exactly(2))
             ->method('getAllCustomersGroup')
             ->willReturn($allCustomersGroup);
         $allCustomersGroup->expects($this->exactly(2))->method('getId')->willReturn($allCustomersGroupId);
         $object->expects($this->once())->method('getPrice')->willReturn($productPrice);
-        $this->attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
+        $this->attribute->setIsScopeGlobal(true);
         $object->expects($this->once())->method('getStoreId')->willReturn(null);
-        $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
+        $this->attribute->setName($attributeName);
         $object->expects($this->atLeastOnce())->method('setData')
             ->willReturnCallback(function ($arg1, $arg2) use ($attributeName, $finalTierPrices, $object) {
                 if ($arg1 === $attributeName && $arg2 === $finalTierPrices) {

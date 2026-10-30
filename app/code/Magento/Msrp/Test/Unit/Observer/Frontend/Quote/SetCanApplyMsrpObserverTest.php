@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Msrp\Test\Unit\Observer\Frontend\Quote;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Msrp\Model\Config;
 use Magento\Msrp\Model\Quote\Address\CanApplyMsrp;
 use Magento\Msrp\Model\Quote\Msrp;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class SetCanApplyMsrpObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SetCanApplyMsrpObserver
      */
@@ -49,13 +52,13 @@ class SetCanApplyMsrpObserverTest extends TestCase
         );
     }
 
-    public function testSetQuoteCanApplyMsrpIfMsrpCanApply()
+    public function testSetQuoteCanApplyMsrpIfMsrpCanApply(): void
     {
         $quoteId = 100;
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getQuote']
+        );
         $quoteMock = $this->createPartialMock(Quote::class, ['getAllAddresses', 'getId']);
         $observerMock = $this->createMock(Observer::class);
 
@@ -72,13 +75,13 @@ class SetCanApplyMsrpObserverTest extends TestCase
         $this->observer->execute($observerMock);
     }
 
-    public function setQuoteCanApplyMsrpDataProvider()
+    public function setQuoteCanApplyMsrpDataProvider(): void
     {
         $quoteId = 100;
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getQuote']
+        );
         $quoteMock = $this->createPartialMock(Quote::class, ['getAllAddresses', 'getId']);
         $observerMock = $this->createMock(Observer::class);
 
@@ -95,13 +98,13 @@ class SetCanApplyMsrpObserverTest extends TestCase
         $this->observer->execute($observerMock);
     }
 
-    public function testSetQuoteCanApplyMsrpIfMsrpDisabled()
+    public function testSetQuoteCanApplyMsrpIfMsrpDisabled(): void
     {
         $quoteId = 100;
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->addMethods(['getQuote'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getQuote']
+        );
         $quoteMock = $this->createPartialMock(Quote::class, ['getAllAddresses', 'getId']);
         $observerMock = $this->createMock(Observer::class);
 

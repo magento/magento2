@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,9 +19,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Add simple product with custom options to cart using the unified mutation for adding different product types
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 {
@@ -149,10 +152,9 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
      * @param string $sku
      * @param string $message
      *
-     * @dataProvider wrongSkuDataProvider
-     *
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
+    #[DataProvider('wrongSkuDataProvider')]
     public function testAddProductWithWrongSku(string $sku, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -200,11 +202,10 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
      * @param int $quantity
      * @param string $message
      *
-     * @dataProvider wrongQuantityDataProvider
-     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
+    #[DataProvider('wrongQuantityDataProvider')]
     public function testAddProductWithWrongQuantity(int $quantity, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -222,11 +223,11 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
-     * @dataProvider addProductNotAssignedToWebsiteDataProvider
      * @param string $cart
      * @param string $product
      * @param array $headerMap
      */
+    #[DataProvider('addProductNotAssignedToWebsiteDataProvider')]
     #[
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),

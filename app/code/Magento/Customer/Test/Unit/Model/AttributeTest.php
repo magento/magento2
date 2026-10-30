@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,8 +34,10 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Validator\UniversalFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -43,6 +45,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AttributeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Attribute
      */
@@ -160,64 +164,37 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->getMock();
-        $this->extensionAttributesFactory = $this->getMockBuilder(
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->extensionAttributesFactory = $this->createMock(
             ExtensionAttributesFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Helper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
+        $this->attributeValueFactoryMock = $this->createMock(AttributeValueFactory::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->typeFactoryMock = $this->createMock(TypeFactory::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->helperMock = $this->createMock(Helper::class);
+        $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
         $this->attributeOptionFactoryMock =
-            $this->getMockBuilder(AttributeOptionInterfaceFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->getMock();
-        $this->reservedAttributeListMock = $this->getMockBuilder(
+            $this->createMock(AttributeOptionInterfaceFactory::class);
+        $this->dataObjectProcessorMock = $this->createMock(DataObjectProcessor::class);
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
+        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $this->reservedAttributeListMock = $this->createMock(
             ReservedAttributeList::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->getMock();
+        );
+        $this->resolverMock = $this->createMock(ResolverInterface::class);
         $this->dateTimeFormatter = $this->createMock(
             DateTimeFormatterInterface::class
         );
 
-        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->addMethods(['getIdFieldName', 'saveInSetIncluding'])
-            ->onlyMethods(['_construct', 'getConnection'])
-            ->getMockForAbstractClass();
-        $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
-            ->getMock();
-        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractResource::class,
+            ['getIdFieldName', '_construct', 'getConnection', 'saveInSetIncluding']
+        );
+        $this->resourceMock->method('getIdFieldName')->willReturn('attribute_id');
+        $this->cacheManager = $this->createMock(CacheInterface::class);
+        $this->eventDispatcher = $this->createMock(ManagerInterface::class);
 
         $this->contextMock
             ->expects($this->any())
@@ -228,12 +205,8 @@ class AttributeTest extends TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
 
-        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attributeMetadataCacheMock = $this->getMockBuilder(AttributeMetadataCache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
+        $this->attributeMetadataCacheMock = $this->createMock(AttributeMetadataCache::class);
 
         $objects = [
             [
@@ -294,8 +267,7 @@ class AttributeTest extends TestCase
     public function testInvalidate()
     {
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock(IndexerInterface::class);
 
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
@@ -311,9 +283,8 @@ class AttributeTest extends TestCase
     /**
      * @param int $isSearchableInGrid
      * @param string $frontendInput
-     * @param bool $result
-     * @dataProvider dataProviderCanBeSearchableInGrid
-     */
+     * @param bool $result */
+    #[DataProvider('dataProviderCanBeSearchableInGrid')]
     public function testCanBeSearchableInGrid($isSearchableInGrid, $frontendInput, $result)
     {
         $this->attribute->setData('is_searchable_in_grid', $isSearchableInGrid);
@@ -347,9 +318,8 @@ class AttributeTest extends TestCase
     /**
      * @param int $isFilterableInGrid
      * @param string $frontendInput
-     * @param bool $result
-     * @dataProvider dataProviderCanBeFilterableInGrid
-     */
+     * @param bool $result */
+    #[DataProvider('dataProviderCanBeFilterableInGrid')]
     public function testCanBeFilterableInGrid($isFilterableInGrid, $frontendInput, $result)
     {
         $this->attribute->setData('is_filterable_in_grid', $isFilterableInGrid);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\PageCache\Model\App\Response;
@@ -43,8 +43,7 @@ class HttpPlugin
 
         $currentVary = $this->context->getVaryString();
         $varyCookie = $this->request->get(HttpResponse::COOKIE_VARY_STRING);
-        if ($currentVary !== $varyCookie) {
-            //prevent caching with the old vary cookie
+        if (isset($varyCookie) && ($currentVary !== $varyCookie)) {
             $subject->setNoCacheHeaders();
         }
         $subject->sendVary();

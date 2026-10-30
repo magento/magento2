@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
 {
-    const STUB_CATEGORY_ID = 333;
+    public const STUB_CATEGORY_ID = 333;
 
     /**
      * @var IndexerRegistry
@@ -64,9 +64,13 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     protected function tearDown(): void
     {
         parent::tearDown();
-        $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
-        $categoryFlatIndexer->invalidate();
-        $this->categoryFlatResource->getConnection()->dropTable($this->categoryFlatResource->getMainTable());
+        try {
+            $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
+            $categoryFlatIndexer->invalidate();
+            $this->categoryFlatResource->getConnection()->dropTable($this->categoryFlatResource->getMainTable());
+        } catch (\InvalidArgumentException $e) {
+            // Indexer doesn't exist, skip cleanup
+        }
     }
 
     /**

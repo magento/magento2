@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Relation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class RelationTest extends TestCase
 {
     /**
-     * @var AbstractModel|MockObject
+     * @var Address|MockObject
      */
     private $modelMock;
 
@@ -29,17 +29,15 @@ class RelationTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->modelMock = $this->getMockBuilder(AbstractModel::class)
-            ->addMethods(
-                [
-                    'getItemsCollection',
-                    'getShippingRatesCollection',
-                    'itemsCollectionWasSet',
-                    'shippingRatesCollectionWasSet'
-                ]
-            )
+        $this->modelMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->onlyMethods([
+                'getItemsCollection',
+                'getShippingRatesCollection',
+                'itemsCollectionWasSet',
+                'shippingRatesCollectionWasSet'
+            ])
+            ->getMock();
         $this->relation = $objectManager->getObject(Relation::class, []);
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Integration\Helper\Oauth\Data;
+use Magento\Integration\Model\ResourceModel\Oauth\Consumer as ConsumerResourceModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Model\Oauth\Consumer;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory;
@@ -30,6 +32,7 @@ use ReflectionProperty;
  */
 class ConsumerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Consumer
      */
@@ -86,15 +89,7 @@ class ConsumerTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['dispatch']
-        );
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
@@ -113,12 +108,10 @@ class ConsumerTest extends TestCase
             ->method('getConsumerExpirationPeriod')
             ->willReturn(Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT);
 
-        $this->resourceMock = $this->getMockBuilder(
-            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class
-        )->addMethods(['selectByCompositeKey', 'deleteOldEntries'])
-            ->onlyMethods(['getIdFieldName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            ConsumerResourceModel::class,
+            ['selectByCompositeKey', 'deleteOldEntries', 'getIdFieldName']
+        );
         $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->consumerModel = new Consumer(
             $this->contextMock,
@@ -233,7 +226,6 @@ class ConsumerTest extends TestCase
             ->willReturnOnConsecutiveCalls(time(), time() - 100);
 
         $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
         $this->consumerModel->setUpdatedAt((string) time());
@@ -253,7 +245,6 @@ class ConsumerTest extends TestCase
             ->willReturnOnConsecutiveCalls(time(), time() - 1000);
 
         $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
         $this->consumerModel->setUpdatedAt((string)time());

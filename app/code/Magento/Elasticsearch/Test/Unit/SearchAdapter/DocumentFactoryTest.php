@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class DocumentFactoryTest extends TestCase
     protected $entityMetadata;
 
     /**
-     * Instance name
+     * Fully qualified class name of the entity
      *
      * @var string
      */
@@ -56,7 +56,7 @@ class DocumentFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->instanceName = Document::class;
 

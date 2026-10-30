@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,11 +62,8 @@ class InlineEditTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false
+        $this->request = $this->createMock(
+            RequestInterface::class
         );
         $this->cmsBlock = $this->createMock(Block::class);
         $this->context = $helper->getObject(
@@ -75,11 +72,8 @@ class InlineEditTest extends TestCase
                 'request' => $this->request
             ]
         );
-        $this->blockRepository = $this->getMockForAbstractClass(
-            BlockRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->blockRepository = $this->createMock(
+            BlockRepositoryInterface::class
         );
         $this->resultJson = $this->createMock(Json::class);
         $this->jsonFactory = $this->createPartialMock(

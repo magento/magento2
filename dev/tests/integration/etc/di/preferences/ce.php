@@ -2,8 +2,8 @@
 /**
  * Preferences for classes like in di.xml (for integration tests)
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 use \Magento\Framework\App;
 use \Magento\Framework as MF;

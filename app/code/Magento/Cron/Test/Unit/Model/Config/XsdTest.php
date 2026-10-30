@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Cron\Test\Unit\Model\Config;
 
 use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\Dom\UrnResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XsdTest extends TestCase
@@ -29,8 +30,8 @@ class XsdTest extends TestCase
 
     /**
      * @param string $xmlFile
-     * @dataProvider validXmlFileDataProvider
      */
+    #[DataProvider('validXmlFileDataProvider')]
     public function testValidXmlFile($xmlFile)
     {
         $dom = new \DOMDocument();
@@ -52,8 +53,8 @@ class XsdTest extends TestCase
     /**
      * @param string $xmlFile
      * @param array $expectedErrors
-     * @dataProvider invalidXmlFileDataProvider
      */
+    #[DataProvider('invalidXmlFileDataProvider')]
     public function testInvalidXmlFile($xmlFile, $expectedErrors)
     {
         $dom = new \DOMDocument();

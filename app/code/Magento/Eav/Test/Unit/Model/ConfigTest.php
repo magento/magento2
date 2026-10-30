@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -80,23 +81,22 @@ class ConfigTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
 
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->onlyMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
-        $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->typeFactoryMock = $this->createPartialMock(
+            TypeFactory::class,
+            ['create']
+        );
+        $this->collectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->universalFactoryMock = $this->createPartialMock(
+            UniversalFactory::class,
+            ['create']
+        );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->typeMock = $this->createMock(Type::class);
 
@@ -116,20 +116,19 @@ class ConfigTest extends TestCase
             'attribute_code' => 'attribute_code_1',
             'attribute_id' => 1
         ];
-        $attributeCollectionMock = $this->getMockBuilder(
-            Collection::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'setEntityTypeFilter'])
-            ->getMock();
+        $attributeCollectionMock = $this->createPartialMock(
+            Collection::class,
+            ['getData', 'setEntityTypeFilter']
+        );
         $attributeCollectionMock->expects($this->any())
             ->method('setEntityTypeFilter')->willReturnSelf();
         $attributeCollectionMock->expects($this->any())
             ->method('getData')
             ->willReturn([$attributeData]);
-        $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['setData', 'loadByCode', 'toArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityAttributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['setData', 'loadByCode', 'toArray']
+        );
         $entityAttributeMock->expects($this->atLeastOnce())->method('setData')
             ->willReturnSelf();
         $entityAttributeMock->expects($this->atLeastOnce())->method('loadByCode')
@@ -158,10 +157,10 @@ class ConfigTest extends TestCase
             ->method('create')
             ->willReturn($collectionStub);
 
-        $entityType = $this->getMockBuilder(Type::class)
-            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createPartialMock(
+            Type::class,
+            ['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId']
+        );
         $entityType->method('getEntityTypeCode')
             ->willReturn('entity_type_code');
         $entityType->method('getId')
@@ -212,20 +211,20 @@ class ConfigTest extends TestCase
      * @param int $loadCalls
      * @param int $cachedValue
      * @param int $unserializeCalls
-     * @dataProvider getAttributeCacheDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGetAttributes($cacheEnabled)
+    #[DataProvider('getAttributeCacheDataProvider')]
+    public function testGetAttributes($cacheEnabled, $loadCalls, $cachedValue, $unserializeCalls)
     {
         $attributeData = [
             'attribute_code' => 'attribute_code_1',
             'attribute_id' => 1
         ];
-        $attributeCollectionMock = $this->getMockBuilder(
-            Collection::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'setEntityTypeFilter'])
-            ->getMock();
+        $attributeCollectionMock = $this->createPartialMock(
+            Collection::class,
+            ['getData', 'setEntityTypeFilter']
+        );
         $attributeCollectionMock
             ->expects($this->any())
             ->method('setEntityTypeFilter')->willReturnSelf();
@@ -233,10 +232,10 @@ class ConfigTest extends TestCase
             ->expects($this->any())
             ->method('getData')
             ->willReturn([$attributeData]);
-        $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->onlyMethods(['setData', 'setOrigData', 'load', 'toArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityAttributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['setData', 'setOrigData', 'load', 'toArray']
+        );
         $entityAttributeMock->method('setData')
             ->willReturnSelf();
         $entityAttributeMock->method('setOrigData')
@@ -274,10 +273,10 @@ class ConfigTest extends TestCase
             ->method('create')
             ->willReturn($collectionStub);
 
-        $entityType = $this->getMockBuilder(Type::class)
-            ->onlyMethods(['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityType = $this->createPartialMock(
+            Type::class,
+            ['getEntity', 'setData', 'getData', 'getEntityTypeCode', 'getId']
+        );
         $entityType->method('getEntityTypeCode')
             ->willReturn('entity_type_code');
         $entityType->method('getId')

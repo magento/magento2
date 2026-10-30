@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\Model\Session\Quote as SessionQuote;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,16 +36,18 @@ class TotalsTest extends TestCase
     protected $quoteMock;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|MockObject
+     * @var SessionQuote|MockObject
      */
     protected $sessionQuoteMock;
 
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        // Initialize ObjectManager to avoid "ObjectManager isn't initialized" errors
+        $this->objectManager->prepareObjectManager();
 
         $this->quoteMock = $this->createPartialMock(Quote::class, ['getCustomerNoteNotify']);
-        $this->sessionQuoteMock = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
+        $this->sessionQuoteMock = $this->createMock(SessionQuote::class);
 
         $this->sessionQuoteMock->expects($this->any())
             ->method('getQuote')
@@ -60,8 +64,8 @@ class TotalsTest extends TestCase
     /**
      * @param mixed $customerNoteNotify
      * @param bool $expectedResult
-     * @dataProvider getNoteNotifyDataProvider
      */
+    #[DataProvider('getNoteNotifyDataProvider')]
     public function testGetNoteNotify($customerNoteNotify, $expectedResult)
     {
         $this->quoteMock->expects($this->any())

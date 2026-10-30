@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class OrderProductAvailabilityCheckerTest extends TestCase
 {
+
     /**
      * @var OrderedProductAvailabilityCheckerInterface[]
      */
@@ -56,18 +57,12 @@ class OrderProductAvailabilityCheckerTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->orderItemInterfaceMock = $this->getMockBuilder(OrderItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->orderItemMock = $this->createMock(Item::class);
+        $this->orderItemInterfaceMock = $this->createMock(OrderItemInterface::class);
 
         $this->productTypeConfigurable = 'configurable';
         $this->productTypeSimple = 'simple';
-        $this->configurableCheckerMock = $this->getMockBuilder(ConfigurableChecker::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configurableCheckerMock = $this->createMock(ConfigurableChecker::class);
         $fakeClass = new \stdClass();
         $this->productAvailabilityChecks[$this->productTypeConfigurable] = $this->configurableCheckerMock;
         $this->productAvailabilityChecks[$this->productTypeSimple] = $fakeClass;

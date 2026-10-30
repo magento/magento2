@@ -88,10 +88,10 @@ class Relation implements RelationInterface
 
             $taxModel->save();
             $taxItems = [
-                ...$itemizedTaxesByTaxCode[$tax->getId()] ?? [],
-                ...$itemizedTaxesByTaxCode[$tax->getCode()] ?? []
+                ...$itemizedTaxesByTaxCode[$tax->getId() ?? ''] ?? [],
+                ...$itemizedTaxesByTaxCode[$tax->getCode() ?? ''] ?? []
             ];
-            unset($itemizedTaxesByTaxCode[$tax->getId()], $itemizedTaxesByTaxCode[$tax->getCode()]);
+            unset($itemizedTaxesByTaxCode[$tax->getId() ?? ''], $itemizedTaxesByTaxCode[$tax->getCode() ?? '']);
             foreach ($taxItems as $taxItem) {
                 /** @var Item $taxItemModel */
                 $taxItemModel = $taxItemCollection->getItemById($taxItem->getTaxItemId());

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,8 +53,8 @@ class DefaultItemTest extends TestCase
         $checkoutHelper = $this->getMockBuilder(Data::class)
             ->onlyMethods(['formatPrice'])->disableOriginalConstructor()
             ->getMock();
-        $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
-        $this->itemResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
+        $checkoutHelper->method('formatPrice')->willReturn(5);
+        $this->itemResolver = $this->createMock(ItemResolverInterface::class);
         $this->model = $objectManager->getObject(
             DefaultItem::class,
             [
@@ -75,24 +75,24 @@ class DefaultItemTest extends TestCase
             ->onlyMethods(['getUrlModel', 'isVisibleInSiteVisibility', 'getSku'])
             ->disableOriginalConstructor()
             ->getMock();
-        $product->expects($this->any())->method('getUrlModel')->willReturn($urlModel);
-        $product->expects($this->any())->method('isVisibleInSiteVisibility')->willReturn(true);
-        $product->expects($this->any())->method('getSku')->willReturn('simple');
+        $product->method('getUrlModel')->willReturn($urlModel);
+        $product->method('isVisibleInSiteVisibility')->willReturn(true);
+        $product->method('getSku')->willReturn('simple');
         /** @var Item $item */
         $item = $this->getMockBuilder(Item::class)
             ->onlyMethods(['getProductType', 'getProduct', 'getCalculationPrice'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->any())->method('getProduct')->willReturn($product);
-        $item->expects($this->any())->method('getProductType')->willReturn('simple');
-        $item->expects($this->any())->method('getCalculationPrice')->willReturn(5);
+        $item->method('getProduct')->willReturn($product);
+        $item->method('getProductType')->willReturn('simple');
+        $item->method('getCalculationPrice')->willReturn(5);
 
         $this->imageHelper->expects($this->any())->method('init')->with($product)->willReturnSelf();
-        $this->imageHelper->expects($this->any())->method('getUrl')->willReturn('url');
-        $this->imageHelper->expects($this->any())->method('getLabel')->willReturn('label');
-        $this->imageHelper->expects($this->any())->method('getWidth')->willReturn(100);
-        $this->imageHelper->expects($this->any())->method('getHeight')->willReturn(100);
-        $this->configurationPool->expects($this->any())->method('getByProductType')->willReturn($product);
+        $this->imageHelper->method('getUrl')->willReturn('url');
+        $this->imageHelper->method('getLabel')->willReturn('label');
+        $this->imageHelper->method('getWidth')->willReturn(100);
+        $this->imageHelper->method('getHeight')->willReturn(100);
+        $this->configurationPool->method('getByProductType')->willReturn($product);
 
         $this->itemResolver->expects($this->any())
             ->method('getFinalProduct')

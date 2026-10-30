@@ -56,12 +56,12 @@ class DownloadableProductCartItemPriceTest extends GraphQlAbstract
                 [
                     'title' => 'Example 1',
                     'price' => 0.00,
-                    'link_type' => 'file'
+                    'link_type' => 'url'
                 ],
                 [
                     'title' => 'Example 2',
                     'price' => 0.00,
-                    'link_type' => 'file'
+                    'link_type' => 'url'
                 ],
             ]
         ], as: 'product'),
@@ -158,12 +158,12 @@ class DownloadableProductCartItemPriceTest extends GraphQlAbstract
                 [
                     'title' => 'Example 1',
                     'price' => 10,
-                    'link_type' => 'file'
+                    'link_type' => 'url'
                 ],
                 [
                     'title' => 'Example 2',
                     'price' => 10,
-                    'link_type' => 'file'
+                    'link_type' => 'url'
                 ],
             ]
         ], as: 'product'),

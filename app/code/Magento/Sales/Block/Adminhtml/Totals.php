@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml;
 
@@ -71,7 +71,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         /**
          * Add discount
          */
-        if ((double)$order->getDiscountAmount() != 0) {
+        if ((float)$order->getDiscountAmount() != 0) {
             if ($order->getDiscountDescription()) {
                 $discountLabel = __('Discount (%1)', $order->getDiscountDescription());
             } else {

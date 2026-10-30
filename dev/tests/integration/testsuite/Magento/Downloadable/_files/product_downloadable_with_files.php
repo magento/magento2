@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var DomainManagerInterface $domainManager */
 $domainManager = $objectManager->get(DomainManagerInterface::class);
-$domainManager->addDomains(
+DownloadableDomains::addDomains(
+    $domainManager,
     [
         'example.com',
         'www.example.com',

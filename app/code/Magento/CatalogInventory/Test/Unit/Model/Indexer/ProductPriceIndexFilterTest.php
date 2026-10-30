@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class ProductPriceIndexFilterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
         $this->item = $this->createMock(Item::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->generator = $this->createMock(Generator::class);
@@ -77,7 +77,7 @@ class ProductPriceIndexFilterTest extends TestCase
     {
         $entityIds = [1, 2, 3];
         $indexTableStructure = $this->createMock(IndexTableStructure::class);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->createMock(Select::class);
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -101,10 +101,8 @@ class ProductPriceIndexFilterTest extends TestCase
             );
 
         $fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetchAll']);
-        $fetchStmtMock->expects($this->any())
-            ->method('fetchAll')
-            ->willReturn([['product_id' => 1]]);
-        $connectionMock->expects($this->any())->method('query')->willReturn($fetchStmtMock);
+        $fetchStmtMock->method('fetchAll')->willReturn([['product_id' => 1]]);
+        $connectionMock->method('query')->willReturn($fetchStmtMock);
         $this->productPriceIndexFilter->modifyPrice($indexTableStructure, $entityIds);
     }
 

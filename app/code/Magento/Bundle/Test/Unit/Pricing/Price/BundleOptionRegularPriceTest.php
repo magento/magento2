@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,9 +77,7 @@ class BundleOptionRegularPriceTest extends TestCase
     public function testGetOptions()
     {
         $collection = $this->createMock(Collection::class);
-        $this->bundleOptionsMock->expects($this->any())
-            ->method('getOptions')
-            ->willReturn($collection);
+        $this->bundleOptionsMock->method('getOptions')->willReturn($collection);
         $this->assertEquals($collection, $this->bundleOptionRegularPrice->getOptions());
     }
 
@@ -90,12 +88,10 @@ class BundleOptionRegularPriceTest extends TestCase
      */
     public function testGetOptionSelectionAmount()
     {
-        $selectionAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $selectionAmount = $this->createAmountInterfaceMock();
         $product = $this->createMock(Product::class);
         $selection = $this->createMock(Selection::class);
-        $this->bundleOptionsMock->expects($this->any())
-            ->method('getOptionSelectionAmount')
-            ->willReturn($selectionAmount)
+        $this->bundleOptionsMock->method('getOptionSelectionAmount')->willReturn($selectionAmount)
             ->with($product, $selection, true);
         $this->assertEquals($selectionAmount, $this->bundleOptionRegularPrice->getOptionSelectionAmount($selection));
     }
@@ -107,7 +103,7 @@ class BundleOptionRegularPriceTest extends TestCase
      */
     public function testGetAmount()
     {
-        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
+        $amountMock = $this->createAmountInterfaceMock();
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getOptionsAmount')
             ->with($this->saleableItemMock)
@@ -123,7 +119,26 @@ class BundleOptionRegularPriceTest extends TestCase
     public function testGetValue()
     {
         $value = 1.0;
-        $this->bundleOptionsMock->expects($this->any())->method('calculateOptions')->willReturn($value);
+        $this->bundleOptionsMock->method('calculateOptions')->willReturn($value);
         $this->assertEquals($value, $this->bundleOptionRegularPrice->getValue());
+    }
+
+    /**
+     * Create a mock that implements all AmountInterface abstract methods
+     *
+     * @return AmountInterface
+     */
+    private function createAmountInterfaceMock(): AmountInterface
+    {
+        $mock = $this->createMock(AmountInterface::class);
+        
+        // Mock all abstract methods with default values
+        $mock->method('__toString')->willReturn('0');
+        $mock->method('getAdjustmentAmount')->willReturn(0.0);
+        $mock->method('getTotalAdjustmentAmount')->willReturn(0.0);
+        $mock->method('getAdjustmentAmounts')->willReturn([]);
+        $mock->method('hasAdjustment')->willReturn(false);
+        
+        return $mock;
     }
 }

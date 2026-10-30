@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * EAV Entity Attribute Date Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -28,12 +27,14 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
     /**
      * Validate data
+     *
      * Return true or array of errors
      *
      * @param array|string $value
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function validateValue($value)
     {
@@ -43,6 +44,10 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
         if ($value === false) {
             // try to load original value and validate it
             $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
+        }
+
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
         }
 
         if ($attribute->getIsRequired() && empty($value)) {

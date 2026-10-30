@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -36,9 +36,11 @@
             <deleteData createDataKey="createSecondCmsBlock" stepKey="deleteSecondCmsBlock" />
             <deleteData createDataKey="createThirdCmsBlock" stepKey="deleteThirdCmsBlock" />
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsPagesGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCmsPagesGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCmsPagesGridToDefaultView"/>
             <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCmsBlockGrid"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsBlockGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCmsBlockGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCmsBlockGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Go to "Cms Pages Grid" page and filter by title-->

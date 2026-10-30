@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Backend\ViewModel\ChartsPeriod;
@@ -18,15 +18,16 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 $viewModel = $block->getViewModel();
 ?>
 <div class="dashboard-diagram">
-    <div class="dashboard-diagram-graph">
+    <div id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period_container"
+         class="dashboard-diagram-graph">
         <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"></canvas>
-        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-            'display:none',
-            '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period'
-        ) ?>
-        <div class="dashboard-diagram-nodata">
-            <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>
-        </div>
+    </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        'display:none',
+        '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period_container'
+    ) ?>
+    <div class="dashboard-diagram-nodata">
+        <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>
     </div>
     <script type="text/x-magento-init">
     {

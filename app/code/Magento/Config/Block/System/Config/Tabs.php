@@ -1,15 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * System configuration tabs block
  *
  * @method setTitle(string $title)
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config;
 
@@ -21,8 +19,6 @@ namespace Magento\Config\Block\System\Config;
 class Tabs extends \Magento\Backend\Block\Widget
 {
     /**
-     * Tabs
-     *
      * @var \Magento\Config\Model\Config\Structure\Element\Iterator
      */
     protected $_tabs;

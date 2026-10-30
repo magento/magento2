@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Request;
 use Magento\Webapi\Model\Soap\Server;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RequestTest extends TestCase
 {
@@ -30,11 +31,10 @@ class RequestTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @dataProvider providerTestGetRequestedServicesSuccess
-     * @param $requestParamServices
+    /**     * @param $requestParamServices
      * @param $expectedResult
      */
+    #[DataProvider('providerTestGetRequestedServicesSuccess')]
     public function testGetRequestedServicesSuccess($requestParamServices, $expectedResult)
     {
         $requestParams = [

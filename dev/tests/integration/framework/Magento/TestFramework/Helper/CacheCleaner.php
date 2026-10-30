@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Helper;
@@ -22,7 +22,7 @@ class CacheCleaner
     {
         $cachePool = self::getCachePool();
         foreach ($cacheTypes as $cacheType) {
-            $cachePool->get($cacheType)->getBackend()->clean();
+            $cachePool->get($cacheType)->clean();
         }
     }
 
@@ -33,7 +33,7 @@ class CacheCleaner
     {
         $cachePool = self::getCachePool();
         foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
+            $cacheType->clean();
         }
     }
 

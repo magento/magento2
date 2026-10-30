@@ -18,6 +18,7 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test price rendering according to is_product_list flag for Configurable product
@@ -136,9 +137,9 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
      * @param int|bool $count
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoAppArea frontend
-     * @dataProvider isProductListDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('isProductListDataProvider')]
     public function testRenderingAccordingToIsProductListFlag($flag, $count)
     {
         $this->finalPriceBox->setData('is_product_list', $flag);

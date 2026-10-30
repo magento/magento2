@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,7 @@ use Psr\Log\LoggerInterface;
  */
 class CreateLabelTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShipmentLoader|MockObject
      */
@@ -70,41 +72,36 @@ class CreateLabelTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup', 'load']
+        );
         $this->shipmentMock = $this->createPartialMock(
             Shipment::class,
             ['__wakeup', 'save']
         );
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getParam'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestMock = $this->createPartialMockWithReflection(
+            Http::class,
+            ['__wakeup', 'getParam']
+        );
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
             ['representJson', '__wakeup']
         );
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['addSuccess', 'addError'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->labelGenerator = $this->getMockBuilder(LabelGenerator::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createPartialMockWithReflection(
+            Manager::class,
+            ['__wakeup', 'addSuccess', 'addError']
+        );
+        $this->labelGenerator = $this->createPartialMockWithReflection(
+            LabelGenerator::class,
+            ['__wakeup', 'create']
+        );
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            ['__wakeup', 'getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager']
+        );
 
         $this->loadShipment();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
@@ -200,7 +197,7 @@ class CreateLabelTest extends TestCase
      */
     public function testExecuteSaveException(): void
     {
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

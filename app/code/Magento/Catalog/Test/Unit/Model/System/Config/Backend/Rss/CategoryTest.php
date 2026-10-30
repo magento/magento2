@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Backend\Rss;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\System\Config\Backend\Rss\Category;
@@ -62,12 +63,12 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @dataProvider afterSaveDataProvider
      * @param string $oldValue
      * @param string $newValue
      * @param bool $isUsedForSort
      * @param bool $isUpdateNeeded
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(string $oldValue, string $newValue, bool $isUsedForSort, bool $isUpdateNeeded): void
     {
         $this->configMock->expects($this->atLeastOnce())

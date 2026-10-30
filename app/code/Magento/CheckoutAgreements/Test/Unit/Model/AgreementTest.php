@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CheckoutAgreements\Model\Agreement;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\CheckoutAgreements\Model\Agreement::class)]
 class AgreementTest extends TestCase
 {
     /**
@@ -26,12 +29,11 @@ class AgreementTest extends TestCase
     }
 
     /**
-     * @covers \Magento\CheckoutAgreements\Model\Agreement::validateData
      *
-     * @dataProvider validateDataDataProvider
      * @param DataObject $inputData
      * @param array|bool $expectedResult
      */
+    #[DataProvider('validateDataDataProvider')]
     public function testValidateData($inputData, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->model->validateData($inputData));

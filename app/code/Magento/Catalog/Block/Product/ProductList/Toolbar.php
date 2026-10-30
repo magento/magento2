@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -274,7 +274,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         $orders = $this->getAvailableOrders();
         $defaultOrder = $this->getOrderField();
 
-        if (!isset($orders[$defaultOrder])) {
+        if ($defaultOrder === null || !isset($orders[$defaultOrder])) {
             $keys = array_keys($orders);
             $defaultOrder = $keys[0];
         }

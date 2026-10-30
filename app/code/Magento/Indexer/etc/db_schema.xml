@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -29,7 +29,7 @@
         <column xsi:type="varchar" name="mode" nullable="true" length="16" default="disabled" comment="View Mode"/>
         <column xsi:type="varchar" name="status" nullable="true" length="16" default="idle" comment="View Status"/>
         <column xsi:type="datetime" name="updated" on_update="false" nullable="true" comment="View updated time"/>
-        <column xsi:type="int" name="version_id" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="bigint" name="version_id" unsigned="true" nullable="true" identity="false"
                 comment="View Version ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="state_id"/>
@@ -40,5 +40,13 @@
         <index referenceId="MVIEW_STATE_MODE" indexType="btree">
             <column name="mode"/>
         </index>
+    </table>
+    <table name="indexer_no_ddl_state" resource="default" engine="innodb" comment="No DDL Reindex Active Table State">
+        <column xsi:type="varchar" name="indexer_id" nullable="false" length="255" comment="Indexer ID"/>
+        <column xsi:type="boolean" name="is_main_active" nullable="false" default="true"
+                comment="Whether the main (non-replica) table is currently active"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="indexer_id"/>
+        </constraint>
     </table>
 </schema>

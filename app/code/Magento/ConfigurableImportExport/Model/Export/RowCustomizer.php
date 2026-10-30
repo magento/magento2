@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,12 +23,12 @@ class RowCustomizer implements RowCustomizerInterface
     /**
      * Header column for Configurable Product variations
      */
-    const CONFIGURABLE_VARIATIONS_COLUMN = 'configurable_variations';
+    public const CONFIGURABLE_VARIATIONS_COLUMN = 'configurable_variations';
 
     /**
      * Header column for Configurable Product variation labels
      */
-    const CONFIGURABLE_VARIATIONS_LABELS_COLUMN = 'configurable_variation_labels';
+    public const CONFIGURABLE_VARIATIONS_LABELS_COLUMN = 'configurable_variation_labels';
 
     /**
      * @var array
@@ -65,6 +65,7 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
+        $this->configurableData = [];
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter('entity_id', ['in' => $productIds])
             ->addAttributeToFilter('type_id', ['eq' => ConfigurableProductType::TYPE_CODE]);

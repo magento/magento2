@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api;
 
 use Magento\TestModuleExtensionAttributes\Model\Data\FakeRegionFactory;
 use Magento\TestModuleExtensionAttributes\Api\Data\FakeRegionExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\Api\AbstractExtensibleObject
@@ -36,8 +37,8 @@ class AbstractExtensibleObjectTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $expectedDataBefore
      * @param array $expectedDataAfter
-     * @dataProvider extensionAttributesDataProvider
      */
+    #[DataProvider('extensionAttributesDataProvider')]
     public function testExtensionAttributes($expectedDataBefore, $expectedDataAfter)
     {
         /** @var \Magento\Framework\Api\ExtensionAttributesFactory $regionExtensionFactory */

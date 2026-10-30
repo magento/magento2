@@ -39,7 +39,12 @@
             <waitForPageLoad stepKey="waitToClickSave2"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
             <waitForPageLoad stepKey="waitForSave2"/>
+
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+
             <!-- Logout -->
+            <deleteData createDataKey="createCategory" stepKey="deletecreateCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

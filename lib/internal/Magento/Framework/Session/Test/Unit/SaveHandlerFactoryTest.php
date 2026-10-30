@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,12 @@ use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\Session\SaveHandler\Native;
 use Magento\Framework\Session\SaveHandlerFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SaveHandlerFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider createDataProvider
-     */
+    /**     */
+    #[DataProvider('createDataProvider')]
     public function testCreate($handlers, $saveClass, $saveMethod)
     {
         $saveHandler = $this->createMock($saveClass);

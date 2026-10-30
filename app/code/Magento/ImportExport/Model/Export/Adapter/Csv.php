@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Adapter;
 
@@ -39,6 +39,7 @@ class Csv extends AbstractAdapter
 
     /**
      * Object destructor
+     *
      * @since 100.3.5
      */
     public function __destruct()
@@ -55,6 +56,7 @@ class Csv extends AbstractAdapter
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
+            $this->_fileHandler = null;
             $this->resolveDestination();
         }
     }
@@ -142,5 +144,23 @@ class Csv extends AbstractAdapter
             $this->_enclosure
         );
         return $this;
+    }
+
+    /**
+     * Return CSV contents from destination.
+     *
+     * Ensure buffered writes are flushed before reading the file back.
+     *
+     * @return string
+     */
+    public function getContents()
+    {
+        if ($this->_fileHandler) {
+            $this->_fileHandler->flush();
+            $this->_fileHandler->close();
+            $this->_fileHandler = null;
+        }
+
+        return parent::getContents();
     }
 }

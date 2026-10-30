@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Model;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class WidgetTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,10 +38,9 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
      * @param string $type
      * @param string $expectedFile
      * @return string
-     *
-     * @dataProvider getPlaceholderImageUrlDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getPlaceholderImageUrlDataProvider')]
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

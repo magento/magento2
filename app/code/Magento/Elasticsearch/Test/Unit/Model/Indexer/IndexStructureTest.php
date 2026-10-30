@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,19 +49,9 @@ class IndexStructureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeResolver = $this->getMockForAbstractClass(
-            ScopeResolverInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
-        $this->scopeInterface = $this->getMockForAbstractClass(
-            ScopeInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->scopeInterface = $this->createMock(ScopeInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 

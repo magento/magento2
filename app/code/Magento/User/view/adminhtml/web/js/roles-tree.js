@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All rights reserved.
  */
 
 /**
@@ -97,9 +97,13 @@ define([
         _destroy: function () {
             this.element.jstree('destroy');
 
-            this.buttons.forEach(function (element) {
-                element.parentNode.removeChild(element);
-            });
+            if (this.buttons) {
+                this.buttons.forEach(function (element) {
+                    if (element && element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                });
+            }
         },
 
         /**

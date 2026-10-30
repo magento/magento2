@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,6 @@ namespace Magento\Shipping\Test\Unit\Block\Adminhtml\Order;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Model\Carrier\Freeshipping;
 use Magento\Shipping\Block\Adminhtml\Order\Tracking;
 use Magento\Shipping\Model\Config;
@@ -19,8 +18,6 @@ class TrackingTest extends TestCase
 {
     public function testLookup()
     {
-        $helper = new ObjectManager($this);
-
         $shipment = new DataObject(['store_id' => 1]);
 
         $registry = $this->createPartialMock(Registry::class, ['registry']);
@@ -60,11 +57,18 @@ class TrackingTest extends TestCase
             ['free' => $carrier]
         );
 
-        /** @var Tracking $model */
-        $model = $helper->getObject(
-            Tracking::class,
-            ['registry' => $registry, 'shippingConfig' => $config]
-        );
+        $model = $this->getMockBuilder(Tracking::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $reflection = new \ReflectionClass(Tracking::class);
+
+        $registryProperty = $reflection->getProperty('_coreRegistry');
+        $registryProperty->setValue($model, $registry);
+
+        $configProperty = $reflection->getProperty('_shippingConfig');
+        $configProperty->setValue($model, $config);
 
         $this->assertEquals(['custom' => 'Custom Value', 'free' => 'configdata'], $model->getCarriers());
     }

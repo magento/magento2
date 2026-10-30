@@ -1,38 +1,39 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class StockItemTest
+ * API tests for catalog inventory stock item endpoint.
  */
 class StockItemTest extends WebapiAbstract
 {
     /**
-     * Service name
+     * REST service name for catalog inventory stock item API.
      */
-    const SERVICE_NAME = 'catalogInventoryStockItemApi';
+    public const SERVICE_NAME = 'catalogInventoryStockItemApi';
 
     /**
-     * Service version
+     * REST API version identifier.
      */
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
-     * Resource path
+     * REST resource path for get stock items operation.
      */
-    const RESOURCE_GET_PATH = '/V1/stockItems';
+    public const RESOURCE_GET_PATH = '/V1/stockItems';
 
     /**
-     * Resource path
+     * REST resource path for put stock item operation.
      */
-    const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
+    public const RESOURCE_PUT_PATH = '/V1/products/:productSku/stockItems/:itemId';
 
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
@@ -75,8 +76,8 @@ class StockItemTest extends WebapiAbstract
      * @param array $expectedResult
      * @param array $fixtureData
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
-     * @dataProvider saveStockItemBySkuWithWrongInputDataProvider
      */
+    #[DataProvider('saveStockItemBySkuWithWrongInputDataProvider')]
     public function testStockItemPUTWithWrongInput($newData, $expectedResult, $fixtureData)
     {
         $stockItemOld = $this->getStockItemBySku($fixtureData);

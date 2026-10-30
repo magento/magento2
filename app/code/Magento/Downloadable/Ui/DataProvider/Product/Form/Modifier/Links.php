@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
@@ -93,11 +93,11 @@ class Links extends AbstractModifier
     public function modifyData(array $data)
     {
         $model = $this->locator->getProduct();
-
-        $data[$model->getId()][self::DATA_SOURCE_DEFAULT]['links_title'] = $this->linksData->getLinksTitle();
-        $data[$model->getId()][self::DATA_SOURCE_DEFAULT]['links_purchased_separately']
+        $modelId = $model->getId() ?? '';
+        $data[$modelId][self::DATA_SOURCE_DEFAULT]['links_title'] = $this->linksData->getLinksTitle();
+        $data[$modelId][self::DATA_SOURCE_DEFAULT]['links_purchased_separately']
             = $this->linksData->isProductLinksCanBePurchasedSeparately() ? '1' : '0';
-        $data[$model->getId()]['downloadable']['link'] = $this->linksData->getLinksData();
+        $data[$modelId]['downloadable']['link'] = $this->linksData->getLinksData();
 
         return $data;
     }

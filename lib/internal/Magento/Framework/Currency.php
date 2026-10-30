@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
@@ -24,8 +24,9 @@ class Currency extends CurrencyData implements CurrencyInterface
         $options = null,
         $locale = null
     ) {
-        $lowLevelFrontendCache = $appCache->getFrontend()->getLowLevelFrontend();
-        self::setCache($lowLevelFrontendCache);
+        $frontendCache = $appCache->getFrontend();
+        $lowLevelCache = $frontendCache->getLowLevelFrontend();
+        self::setCache($lowLevelCache);
         parent::__construct($options, $locale);
     }
 }

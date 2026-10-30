@@ -1,9 +1,7 @@
 <?php
 /**
- * Adminhtml block for fieldset of configurable product
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Composite\Fieldset;
 
@@ -101,7 +99,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * Returns additional values for js config, con be overridden by descendants
+     * Returns additional values for js config, can be overridden by descendants
      *
      * @return array
      */

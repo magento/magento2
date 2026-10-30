@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,7 @@ namespace Magento\Fedex\Test\Unit\Model\Source;
 use Magento\Fedex\Model\Carrier;
 use Magento\Fedex\Model\Source\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,12 +50,11 @@ class GenericTest extends TestCase
     /**
      * Test toOptionArray
      *
-     * @param string $code
      * @param array|false $methods
      * @param array $result
      * @return void
-     * @dataProvider toOptionArrayDataProvider
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($methods, $result): void
     {
         $this->shippingFedexMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,15 +10,16 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XssProtectionTest extends TestCase
 {
     /**
-     * @dataProvider userAgentDataProvider
      * @param string $userAgent
      * @param string $expectedHeader
      */
+    #[DataProvider('userAgentDataProvider')]
     public function testGetValue($userAgent, $expectedHeader)
     {
         $headerServiceMock = $this->getMockBuilder(Header::class)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,10 +61,10 @@ class UpdateCartCurrency
                 );
             }
             $cart->setStoreId($storeId);
-            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency());
-            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency());
+            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency()->getCode());
+            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency()->getCode());
         } elseif ($cart->getQuoteCurrencyCode() !== $currentCartCurrencyCode) {
-            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
+            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency()->getCode());
         } else {
             return $cart;
         }

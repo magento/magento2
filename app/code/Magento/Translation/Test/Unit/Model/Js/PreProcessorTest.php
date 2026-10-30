@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class PreProcessorTest extends TestCase
     {
         $this->configMock = $this->createMock(Config::class);
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->translateMock = $this->getMockForAbstractClass(TranslateInterface::class);
+        $this->translateMock = $this->createMock(TranslateInterface::class);
         $this->inputMock = $this->createMock(ArgvInput::class);
         $this->model = new PreProcessor(
             $this->configMock,

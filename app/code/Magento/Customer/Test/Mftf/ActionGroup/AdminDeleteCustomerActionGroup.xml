@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,6 +22,7 @@
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilters"/>
         <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{customerEmail}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilters"/>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="waitForCustomerRowVisible"/>
         <click stepKey="chooseCustomer" selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}"/>
         <click stepKey="openActions" selector="{{AdminCustomerGridMainActionsSection.actions}}"/>
         <waitForPageLoad stepKey="waitActions"/>
@@ -31,5 +32,9 @@
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomersGridIsLoaded"/>
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="waitForClearAllVisible"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearAllFilters"/>
+        <waitForPageLoad stepKey="waitForClearAllFiltersPageLoad"/>
     </actionGroup>
 </actionGroups>

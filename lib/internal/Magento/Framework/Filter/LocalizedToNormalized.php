@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Filter;
 
 use Exception;
@@ -17,9 +18,10 @@ class LocalizedToNormalized implements FilterInterface
      * @var array
      */
     protected $_options = [
-        'locale'      => null,
+        'locale' => null,
         'date_format' => null,
-        'precision'   => null
+        'precision' => null,
+        'decimal_style' => null
     ];
 
     /**
@@ -60,14 +62,25 @@ class LocalizedToNormalized implements FilterInterface
      *
      * Normalizes the given input
      *
-     * @param  string $value Value to normalized
+     * @param string $value Value to normalized
      * @return string|array The normalized value
      */
     public function filter($value)
     {
         if (is_numeric($value)) {
-            $numberParse = new NumberParse($this->_options['locale'], NumberFormatter::PATTERN_DECIMAL);
-            return (string) $numberParse->filter($value);
+
+            if (filter_var($value, FILTER_VALIDATE_INT) !== false) {
+                $value = (int)$value;
+            } elseif (filter_var($value, FILTER_VALIDATE_FLOAT) !== false) {
+                $value = (float)$value;
+            }
+            $numberParse = new NumberParse(
+                $this->_options['locale'],
+                empty($this->_options['decimal_style'])
+                    ? NumberFormatter::PATTERN_DECIMAL
+                    : $this->_options['decimal_style']
+            );
+            return (string)$numberParse->filter($value);
         } elseif ($this->_options['date_format'] === null && strpos($value, ':') !== false) {
             $formatter = new IntlDateFormatter(
                 $this->_options['locale'],
@@ -144,7 +157,7 @@ class LocalizedToNormalized implements FilterInterface
             $parse[$month] = 'M';
         }
         if ($year !== false) {
-            $parse[$year]  = 'y';
+            $parse[$year] = 'y';
         }
         preg_match_all('/\d+/u', $date, $splitted);
         $split = false;
@@ -184,7 +197,7 @@ class LocalizedToNormalized implements FilterInterface
                 }
                 if ($split === false) {
                     if (count($splitted[0]) > $cnt) {
-                        $result['year']   = $splitted[0][$cnt];
+                        $result['year'] = $splitted[0][$cnt];
                     }
                 } else {
                     $result['year'] = iconv_substr($splitted[0][0], $split, $length);
@@ -193,7 +206,6 @@ class LocalizedToNormalized implements FilterInterface
             }
             ++$cnt;
         }
-
         return $result;
     }
 }

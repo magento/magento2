@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -33,9 +33,8 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
-        $model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\AbstractEntity::class,
-            [
+        $model = $this->getMockBuilder(\Magento\ImportExport\Model\Import\AbstractEntity::class)
+            ->setConstructorArgs([
                 $objectManager->get(\Magento\Framework\Stdlib\StringUtils::class),
                 $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
                 $objectManager->get(\Magento\ImportExport\Model\ImportFactory::class),
@@ -44,13 +43,9 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
                 $objectManager->get(
                     \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface::class
                 )
-            ],
-            '',
-            true,
-            false,
-            true,
-            ['getMasterAttributeCode', 'validateRow', 'getEntityTypeCode']
-        );
+            ])
+            ->onlyMethods(['getMasterAttributeCode', 'validateRow', 'getEntityTypeCode', '_importData'])
+            ->getMock();
         $model->expects($this->any())->method('getMasterAttributeCode')->willReturn("email");
         $model->expects($this->any())->method('validateRow')->willReturn(true);
         $model->expects($this->any())->method('getEntityTypeCode')->willReturn('customer');
@@ -58,7 +53,6 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $model->setSource($source);
 
         $method = new \ReflectionMethod($model, '_saveValidatedBunches');
-        $method->setAccessible(true);
         $method->invoke($model);
 
         /** @var $dataSourceModel \Magento\ImportExport\Model\ResourceModel\Import\Data */

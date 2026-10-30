@@ -24,6 +24,7 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -108,13 +109,13 @@ class StaticResourceTest extends TestCase
     protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
-        $this->responseMock = $this->getMockForAbstractClass(FileInterface::class);
+        $this->responseMock = $this->createMock(FileInterface::class);
         $this->requestMock = $this->createMock(HttpRequest::class);
         $this->publisherMock = $this->createMock(Publisher::class);
         $this->assetRepoMock = $this->createMock(Repository::class);
         $this->moduleListMock = $this->createMock(ModuleList::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->configLoaderMock = $this->createMock(ConfigLoader::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->driverMock = $this->createMock(File::class);
@@ -154,7 +155,7 @@ class StaticResourceTest extends TestCase
         $this->objectManagerMock->expects($this->never())->method('configure');
         $this->requestMock->expects($this->never())->method('get');
         $this->moduleListMock->expects($this->never())->method('has');
-        $asset = $this->getMockForAbstractClass(LocalInterface::class);
+        $asset = $this->createMock(LocalInterface::class);
         $asset->expects($this->never())->method('getSourceFile');
         $this->assetRepoMock->expects($this->never())->method('createAsset');
         $this->publisherMock->expects($this->never())->method('publish');
@@ -162,18 +163,9 @@ class StaticResourceTest extends TestCase
         $this->object->launch();
     }
 
-    /**
-     * @param string $mode
-     * @param string $requestedPath
-     * @param string $requestedModule
-     * @param bool $moduleExists
-     * @param string $expectedFile
-     * @param array $expectedParams
-     * @param int $getConfigDataExpects
-     * @param int $staticContentOmDemandInProduction
-     *
-     * @dataProvider launchDataProvider
+        /**
      */
+    #[DataProvider('launchDataProvider')]
     public function testLaunch(
         $mode,
         $requestedPath,
@@ -209,7 +201,7 @@ class StaticResourceTest extends TestCase
             ->method('has')
             ->with($requestedModule)
             ->willReturn($moduleExists);
-        $asset = $this->getMockForAbstractClass(LocalInterface::class);
+        $asset = $this->createMock(LocalInterface::class);
         $asset->expects($this->once())
             ->method('getSourceFile')
             ->willReturn('resource/file.css');
@@ -385,8 +377,8 @@ class StaticResourceTest extends TestCase
 
     /**
      * @param array $themes
-     * @dataProvider themesDataProvider
      */
+    #[DataProvider('themesDataProvider')]
     public function testLaunchWithInvalidTheme(array $themes): void
     {
         $this->expectException('InvalidArgumentException');
@@ -412,8 +404,8 @@ class StaticResourceTest extends TestCase
 
     /**
      * @param array $themes
-     * @dataProvider themesDataProvider
      */
+    #[DataProvider('themesDataProvider')]
     public function testLaunchWithInvalidLocale(array $themes): void
     {
         $this->expectException('InvalidArgumentException');

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
@@ -15,7 +14,7 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache implements Ht
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::flush_cache_storage';
+    public const ADMIN_RESOURCE = 'Magento_Backend::flush_cache_storage';
 
     /**
      * Flush cache storage

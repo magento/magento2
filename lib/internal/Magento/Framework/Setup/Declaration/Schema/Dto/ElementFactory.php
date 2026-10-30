@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto;
 
@@ -22,6 +22,8 @@ class ElementFactory
      *
      * Where @key - is xsi:type of the object
      * Where @value - is instance class name
+     *
+     * @var array
      */
     private $typeFactories = [];
 
@@ -71,6 +73,25 @@ class ElementFactory
     }
 
     /**
+     * Remove empty comments from the schema declaration
+     *
+     * Empty comments are never persisted in the database, they always end up being read back as null
+     *
+     * @see \Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader::readColumns
+     *
+     * @param array $elementStructuralData
+     * @return array
+     */
+    private function removeEmptyComments(array $elementStructuralData):array
+    {
+        if (isset($elementStructuralData['comment']) && trim($elementStructuralData['comment']) === "") {
+            unset($elementStructuralData['comment']);
+        }
+
+        return $elementStructuralData;
+    }
+
+    /**
      * Instantiate different types of elements, depends on their xsi:type.
      *
      * @param  string $type
@@ -84,6 +105,7 @@ class ElementFactory
         }
 
         $elementStructuralData = $this->castGenericAttributes($elementStructuralData);
+        $elementStructuralData = $this->removeEmptyComments($elementStructuralData);
         $elementStructuralData['type'] = $type;
         return $this->typeFactories[$type]->create($elementStructuralData);
     }

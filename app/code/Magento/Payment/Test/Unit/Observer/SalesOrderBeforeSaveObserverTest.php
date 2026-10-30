@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\SalesOrderBeforeSaveObserver;
 use Magento\Sales\Model\Order;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class SalesOrderBeforeSaveObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var SalesOrderBeforeSaveObserver */
     protected $salesOrderBeforeSaveObserver;
 
@@ -40,10 +43,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
             []
         );
 
-        $this->observerMock = $this->getMockBuilder(
-            Observer::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['getEvent'])->getMock();
+        $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
     }
 
     public function testSalesOrderBeforeSaveMethodNotFree()
@@ -55,7 +55,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
             $neverInvokedMethods,
             ['hasForcedCanCreditMemo']
         );
-        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods,['hasForcedCanCreditMemo']));
+        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods, ['hasForcedCanCreditMemo']));
         $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
             $order
         );
@@ -67,22 +67,16 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
     {
         $this->_prepareEventMockWithMethods(['getOrder']);
         $neverInvokedMethods = ['isCanceled', 'getState'];
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                array_merge(['__wakeup', 'getPayment', 'canUnhold'], $neverInvokedMethods)
-            )
-            ->addMethods(['hasForcedCanCreditMemo'])->getMock();
-        $paymentMock = $this->getMockBuilder(
-            Payment::class
-        )->disableOriginalConstructor()->getMock();
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
+            array_merge(['__wakeup', 'getPayment', 'canUnhold', 'hasForcedCanCreditMemo'], $neverInvokedMethods)
+        );
+        $paymentMock = $this->createMock(Payment::class);
         $order->method('getPayment')->willReturn($paymentMock);
-        $methodInstance = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
         $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
-        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods,['hasForcedCanCreditMemo']));
+        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods, ['hasForcedCanCreditMemo']));
         $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
             $order
         );
@@ -95,22 +89,16 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         // check first canceled state
         $this->_prepareEventMockWithMethods(['getOrder']);
         $neverInvokedMethods = ['getState'];
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                array_merge(['__wakeup', 'getPayment', 'canUnhold', 'isCanceled'], $neverInvokedMethods)
-            )
-            ->addMethods(['hasForcedCanCreditMemo'])->getMock();
-        $paymentMock = $this->getMockBuilder(
-            Payment::class
-        )->disableOriginalConstructor()->getMock();
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
+            array_merge(['__wakeup', 'getPayment', 'canUnhold', 'isCanceled', 'hasForcedCanCreditMemo'], $neverInvokedMethods)
+        );
+        $paymentMock = $this->createMock(Payment::class);
         $order->method('getPayment')->willReturn($paymentMock);
-        $methodInstance = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
         $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
-        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods,['hasForcedCanCreditMemo']));
+        $this->_prepareNeverInvokedOrderMethods($order, array_merge($neverInvokedMethods, ['hasForcedCanCreditMemo']));
         $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
             $order
         );
@@ -126,19 +114,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         // check closed state at second
         $this->_prepareEventMockWithMethods(['getOrder']);
         $neverInvokedMethods = ['hasForcedCanCreditMemo'];
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                array_merge(['__wakeup', 'getPayment', 'isCanceled', 'canUnhold', 'getState'])
-            )
-            ->addMethods($neverInvokedMethods)->getMock();
-        $paymentMock = $this->getMockBuilder(
-            Payment::class
-        )->disableOriginalConstructor()->getMock();
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
+            array_merge(['__wakeup', 'getPayment', 'isCanceled', 'canUnhold', 'getState'], $neverInvokedMethods)
+        );
+        $paymentMock = $this->createMock(Payment::class);
         $order->method('getPayment')->willReturn($paymentMock);
-        $methodInstance = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
         $methodInstance->expects($this->once())->method('getCode')->willReturn('free');
         $this->_prepareNeverInvokedOrderMethods($order, $neverInvokedMethods);
@@ -187,11 +169,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
         $this->expectExceptionMessage('Please provide payment for the order.');
         $this->_prepareEventMockWithMethods(['getOrder']);
 
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                array_merge(['__wakeup', 'getPayment'])
-            )->getMock();
+        $order = $this->createPartialMock(Order::class, ['__wakeup', 'getPayment']);
 
         $this->eventMock->expects($this->once())->method('getOrder')->willReturn(
             $order
@@ -209,10 +187,7 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
      */
     private function _prepareEventMockWithMethods($methodsList)
     {
-        $this->eventMock = $this->getMockBuilder(
-            Event::class
-        )->disableOriginalConstructor()
-            ->addMethods($methodsList)->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(Event::class, $methodsList);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
@@ -225,19 +200,13 @@ class SalesOrderBeforeSaveObserverTest extends TestCase
      */
     private function _getPreparedOrderMethod($methodCode, $orderMethods = [], $addOrderMethods = [])
     {
-        $order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->addMethods($addOrderMethods)
-            ->onlyMethods(
-                array_merge(['__wakeup', 'getPayment'], $orderMethods)
-            )->getMock();
-        $paymentMock = $this->getMockBuilder(
-            Payment::class
-        )->disableOriginalConstructor()->getMock();
+        $order = $this->createPartialMockWithReflection(
+            Order::class,
+            array_merge(['__wakeup', 'getPayment'], $orderMethods, $addOrderMethods)
+        );
+        $paymentMock = $this->createMock(Payment::class);
         $order->method('getPayment')->willReturn($paymentMock);
-        $methodInstance = $this->getMockBuilder(
-            MethodInterface::class
-        )->getMockForAbstractClass();
+        $methodInstance = $this->createMock(MethodInterface::class);
         $paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInstance);
         $methodInstance->expects($this->once())->method('getCode')->willReturn($methodCode);
         return $order;

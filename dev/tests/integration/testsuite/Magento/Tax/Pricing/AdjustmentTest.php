@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Pricing;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AdjustmentTest extends \PHPUnit\Framework\TestCase
 {
@@ -31,8 +33,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      * @param bool $isShippingPriceExcludeTax
      * @param bool $expectedResult
      * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
-     * @dataProvider isIncludedInBasePricePriceIncludeTaxEnabledDataProvider
      */
+    #[DataProvider('isIncludedInBasePricePriceIncludeTaxEnabledDataProvider')]
     public function testIsIncludedInBasePricePriceIncludeTacEnabled($isShippingPriceExcludeTax, $expectedResult)
     {
         $this->isIncludedInBasePricePrice($isShippingPriceExcludeTax, $expectedResult);
@@ -42,8 +44,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      * @param bool $isShippingPriceExcludeTax
      * @param bool $expectedResult
      * @magentoConfigFixture current_store tax/calculation/price_includes_tax 0
-     * @dataProvider isIncludedInBasePricePriceIncludeTaxDisabledDataProvider
      */
+    #[DataProvider('isIncludedInBasePricePriceIncludeTaxDisabledDataProvider')]
     public function testIsIncludedInBasePricePriceIncludeTacDisabled($isShippingPriceExcludeTax, $expectedResult)
     {
         $this->isIncludedInBasePricePrice($isShippingPriceExcludeTax, $expectedResult);

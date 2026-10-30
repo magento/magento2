@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,11 +30,9 @@ class TMapTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->om = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->om = $this->createMock(ObjectManagerInterface::class);
 
-        $this->omConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->omConfig = $this->createMock(ConfigInterface::class);
     }
 
     public function testConstructor()

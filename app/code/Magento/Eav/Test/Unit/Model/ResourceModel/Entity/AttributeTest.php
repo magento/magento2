@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Attribute\Source\Layout;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -43,7 +44,7 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $eventManagerMock->expects($this->any())->method('dispatch');
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
     }
@@ -99,15 +100,13 @@ class AttributeTest extends TestCase
         )->method(
             'fetchRow'
         )->willReturnMap(
-
+            [
                 [
-                    [
-                        'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
-                        'WHERE (attribute_code="status") AND (entity_type_id="4")',
-                        $attributeData,
-                    ],
-                ]
-
+                    'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
+                    'WHERE (attribute_code="status") AND (entity_type_id="4")',
+                    $attributeData,
+                ],
+            ]
         );
         $connectionMock->expects(
             $this->once()
@@ -119,6 +118,76 @@ class AttributeTest extends TestCase
             ['attribute_id = ?' => null]
         );
         $connectionMock->expects($this->never())->method('delete');
+
+        $resourceModel->save($model);
+    }
+
+    /**
+     * Verify select option with multiple choice save one default value
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSaveSelectDefaultOptionAttribute()
+    {
+        list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
+
+        $originalData = [
+            'entity_type_id' => 4,
+            'attribute_code' => 'custom_layout',
+            'backend_model' => null,
+            'backend_type' => 'varchar',
+            'frontend_input' => 'select',
+            'frontend_label' => 'Test Dropdown',
+            'frontend_class' => null,
+            'source_model' => Layout::class,
+            'is_required' => 0,
+            'is_user_defined' => 1,
+            'is_unique' => 0,
+            'default_value' => "option_3",
+        ];
+
+        $attributeData = [
+            'id' => '999',
+            'attribute_id' => '123',
+            'entity_type_id' => 4,
+            'attribute_code' => 'custom_layout',
+            'backend_model' => null,
+            'backend_type' => 'varchar',
+            'frontend_input' => 'select',
+            'frontend_label' => 'Test Dropdown',
+            'frontend_class' => null,
+            'source_model' => Layout::class,
+            'is_required' => 0,
+            'is_user_defined' => 1,
+            'is_unique' => 0,
+            'default_value' => "option_3",
+            'default' => ['option_1'],
+            'sort_order' => 1,
+        ];
+
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var AbstractModel $model */
+        $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
+        $arguments['data'] = $attributeData;
+        $arguments['context'] = $this->contextMock;
+        $model = $this->getMockBuilder(AbstractModel::class)
+            ->onlyMethods(['save'])
+            ->setConstructorArgs($arguments)
+            ->getMock();
+        $model->setOption(
+            [
+                'delete' =>
+                    [
+                        'option_1' => ['choice_1', 'Frontend choice_1'],
+                        'option_2' => ['choice_2', 'Frontend choice_2'],
+                        'option_3' => ['choice_3', 'Frontend choice_3']
+                    ]
+            ]
+        );
+
+        $connectionMock->expects($this->any())
+            ->method('update')
+            ->with('eav_attribute', $this->logicalOr($originalData, ['default_value' => "option_1"]));
 
         $resourceModel->save($model);
     }
@@ -171,24 +240,22 @@ class AttributeTest extends TestCase
         )->method(
             'update'
         )->willReturnMap(
-
-                [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
-
+            [
+                ['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]
+            ]
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
         )->willReturnMap(
-
+            [
                 [
-                    [
-                        'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
-                        'WHERE (attribute_code="a_dropdown") AND (entity_type_id="4")',
-                        false,
-                    ],
-                ]
-
+                    'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
+                    'WHERE (attribute_code="a_dropdown") AND (entity_type_id="4")',
+                    false,
+                ],
+            ]
         );
         $connectionMock->expects(
             $this->once()
@@ -202,22 +269,20 @@ class AttributeTest extends TestCase
         )->method(
             'insert'
         )->willReturnMap(
-
+            [
+                ['eav_attribute', $attributeData, 1],
+                ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
                 [
-                    ['eav_attribute', $attributeData, 1],
-                    ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
-                    [
-                        'eav_attribute_option_value',
-                        ['option_id' => 123, 'store_id' => 0, 'value' => 'Backend Label'],
-                        1
-                    ],
-                    [
-                        'eav_attribute_option_value',
-                        ['option_id' => 123, 'store_id' => 1, 'value' => 'Frontend Label'],
-                        1
-                    ],
-                ]
-
+                    'eav_attribute_option_value',
+                    ['option_id' => 123, 'store_id' => 0, 'value' => 'Backend Label'],
+                    1
+                ],
+                [
+                    'eav_attribute_option_value',
+                    ['option_id' => 123, 'store_id' => 1, 'value' => 'Frontend Label'],
+                    1
+                ],
+            ]
         );
         $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 

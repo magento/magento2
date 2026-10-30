@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,9 +132,7 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->never())
             ->method('saveItemOptions');
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
@@ -153,9 +150,7 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->never())
             ->method('saveItemOptions');
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
@@ -173,9 +168,7 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->once())
             ->method('saveItemOptions');
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
@@ -193,9 +186,7 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->once())
             ->method('saveItemOptions');
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
         $optionMock = $this->createMock(Option::class);
         $this->quoteItemMock->expects($this->once())
             ->method('getOptions')
@@ -217,9 +208,7 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->once())
             ->method('saveItemOptions');
 
-        $this->resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
         $optionMock = $this->createMock(Option::class);
         $optionMock->method('getId')
             ->willReturn(1);

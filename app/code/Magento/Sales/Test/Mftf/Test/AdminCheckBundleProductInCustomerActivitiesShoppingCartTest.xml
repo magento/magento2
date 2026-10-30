@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckBundleProductInCustomerActivitiesShoppingCartTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin Check Bundle Product In Customer Activities Shopping Cart"/>
+            <title value="Admin check bundle product in customer activities shopping cart test"/>
+            <description value="Admin check bundle product in customer activities shopping cart"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-14596"/>
+            <useCaseId value="ACP2E-3872"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <comment userInput="Create the category" stepKey="createCategoryComment"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct"/>
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSecondProduct"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add Bundle Product to Cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontAddBundleProductToTheCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="$createSecondProduct.name$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Search and open customer -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToCustomerGridPage">
+            <argument name="menuUiId" value="magento-customer-customer"/>
+            <argument name="submenuUiId" value="magento-customer-customer-manage"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <comment userInput="Filter customer" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Click edit button" stepKey="clickEditButton"/>
+        <!-- Click create order -->
+        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+        <!-- Check bundle product in customer's activities in shopping cart section -->
+        <see selector="{{AdminCustomerActivitiesShoppingCartSection.productName}}" userInput="$$createBundleProduct.name$$" stepKey="seeProductName"/>
+        <see selector="{{AdminCustomerActivitiesShoppingCartSection.productQty}}" userInput="{{ApiSimpleSingleQty.quantity}}" stepKey="assertProductQty"/>
+    </test>
+</tests>

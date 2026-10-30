@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,11 +44,10 @@ class PoolTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->sorterMock = $this->getMockBuilder(
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->sorterMock = $this->createMock(
             SortInterface::class
-        )->getMockForAbstractClass();
+        );
     }
 
     /**
@@ -75,8 +74,7 @@ class PoolTest extends TestCase
     private function getPreprocessorMock($chainMock)
     {
         /** @var PreProcessorInterface|MockObject $preprocessorMock */
-        $preprocessorMock = $this->getMockBuilder(self::PREPROCESSOR_CLASS)
-            ->getMockForAbstractClass();
+        $preprocessorMock = $this->createMock(self::PREPROCESSOR_CLASS);
 
         $preprocessorMock->expects(self::once())
             ->method('process')

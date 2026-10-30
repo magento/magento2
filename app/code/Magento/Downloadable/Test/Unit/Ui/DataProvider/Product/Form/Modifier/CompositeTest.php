@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as CatalogType;
@@ -63,8 +64,8 @@ class CompositeTest extends TestCase
         $this->modifiers = ['someClass' => 'namespase\SomeClass'];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->modifierFactoryMock = $this->createMock(ModifierFactory::class);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
-        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->createMock(ProductInterface::class);
         $this->composite = $this->objectManagerHelper->getObject(
             Composite::class,
             [
@@ -100,8 +101,8 @@ class CompositeTest extends TestCase
     /**
      * @param string $typeId
      * @return void
-     * @dataProvider productTypesDataProvider
      */
+    #[DataProvider('productTypesDataProvider')]
     public function testModifyData($typeId)
     {
         $modifiedData = ['someData'];
@@ -116,8 +117,8 @@ class CompositeTest extends TestCase
     /**
      * @param string $typeId
      * @return void
-     * @dataProvider productTypesDataProvider
      */
+    #[DataProvider('productTypesDataProvider')]
     public function testModifyMeta($typeId)
     {
         $modifiedMeta = ['someMeta'];
@@ -160,9 +161,8 @@ class CompositeTest extends TestCase
      */
     protected function initModifiers()
     {
-        $this->modifierMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['modifyData', 'modifyMeta'])
-            ->getMock();
+        // Use ModifierInterface directly - no need for helper class
+        $this->modifierMock = $this->createMock(ModifierInterface::class);
         $this->modifierFactoryMock->expects($this->once())
             ->method('create')
             ->with('namespase\SomeClass')

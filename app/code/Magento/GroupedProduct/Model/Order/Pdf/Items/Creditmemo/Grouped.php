@@ -1,9 +1,7 @@
 <?php
 /**
- * Sales Order Creditmemo Pdf grouped items renderer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\Order\Pdf\Items\Creditmemo;
 

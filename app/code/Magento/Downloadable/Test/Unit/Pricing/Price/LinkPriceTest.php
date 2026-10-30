@@ -1,23 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\ResourceModel\Link as LinkResourceModel;
 use Magento\Downloadable\Pricing\Price\LinkPrice;
 use Magento\Framework\Pricing\Adjustment\Calculator;
 use Magento\Framework\Pricing\Amount\Base;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LinkPriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var LinkPrice
      */
@@ -53,12 +56,12 @@ class LinkPriceTest extends TestCase
         $this->saleableItemMock = $this->createMock(Product::class);
         $this->amountMock = $this->createMock(Base::class);
         $this->calculatorMock = $this->createMock(Calculator::class);
-        $this->linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)->addMethods(['getProduct'])
-            ->onlyMethods(['getPrice', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkMock = $this->createPartialMockWithReflection(
+            Link::class,
+            ['getProduct', 'getPrice', '__wakeup']
+        );
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->linkPrice = new LinkPrice(
             $this->saleableItemMock,

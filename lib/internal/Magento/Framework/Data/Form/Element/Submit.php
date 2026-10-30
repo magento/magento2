@@ -1,18 +1,17 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 
 /**
- * Form submit element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Form submit element
+ */
 class Submit extends AbstractElement
 {
     /**
@@ -33,6 +32,8 @@ class Submit extends AbstractElement
     }
 
     /**
+     * Get HTML
+     *
      * @return mixed
      */
     public function getHtml()

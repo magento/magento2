@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification
@@ -40,7 +41,7 @@ class MinificationTest extends TestCase
         $this->resolverMock = $this
             ->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->assetMinificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
@@ -59,9 +60,8 @@ class MinificationTest extends TestCase
      * @param string $expected
      * @param string $resolvedOriginal
      * @param string $resolvedAlternative
-     * @return void
-     * @dataProvider resolveDataProvider
-     */
+     * @return void     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve(
         $isEnabled,
         $requested,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,12 @@ namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\UpdateHandler;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var UpdateHandler
      */
@@ -52,17 +56,16 @@ class UpdateHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->sampleMock = $this->getMockBuilder(SampleInterface::class)
-            ->getMock();
+        $this->sampleRepositoryMock = $this->createMock(SampleRepositoryInterface::class);
+        $this->sampleMock = $this->createMock(SampleInterface::class);
         $this->productExtensionMock = $this->getProductExtensionMock();
         $this->productExtensionMock//->expects($this->once())
             ->method('getDownloadableProductSamples')
             ->willReturn([$this->sampleMock]);
-        $this->entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->addMethods(['getStoreId'])
-            ->getMockForAbstractClass();
+        $this->entityMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getStoreId', 'getTypeId', 'getExtensionAttributes', 'getSku']
+        );
 
         $this->model = new UpdateHandler(
             $this->sampleRepositoryMock
@@ -85,8 +88,7 @@ class UpdateHandlerTest extends TestCase
             ->willReturn(1);
 
         /** @var SampleInterface|MockObject $sampleToDeleteMock */
-        $sampleToDeleteMock = $this->getMockBuilder(SampleInterface::class)
-            ->getMock();
+        $sampleToDeleteMock = $this->createMock(SampleInterface::class);
         $sampleToDeleteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($sampleToDeleteId);
@@ -153,14 +155,9 @@ class UpdateHandlerTest extends TestCase
      */
     private function getProductExtensionMock(): MockObject
     {
-        $mockBuilder = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor();
-        try {
-            $mockBuilder->addMethods(['getDownloadableProductSamples']);
-        } catch (RuntimeException $e) {
-            // Product extension already generated.
-        }
-
-        return $mockBuilder->getMockForAbstractClass();
+        return $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            ['getDownloadableProductSamples', 'setDownloadableProductSamples']
+        );
     }
 }

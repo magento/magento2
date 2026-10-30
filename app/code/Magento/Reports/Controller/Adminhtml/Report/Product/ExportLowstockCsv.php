@@ -1,22 +1,23 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Reports\Controller\Adminhtml\Report\Product;
 
-class ExportLowstockCsv extends \Magento\Reports\Controller\Adminhtml\Report\Product
+class ExportLowstockCsv extends Product implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+    public const ADMIN_RESOURCE = 'Magento_Reports::lowstock';
 
     /**
      * Export low stock products report to CSV format

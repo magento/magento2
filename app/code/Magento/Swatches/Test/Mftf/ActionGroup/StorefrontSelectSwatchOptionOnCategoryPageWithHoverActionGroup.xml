@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Select a swatch option on category page with hover - handles overlapping swatches-->
+    <actionGroup name="StorefrontSelectSwatchOptionOnCategoryPageWithHoverActionGroup">
+        <annotations>
+            <description>Scrolls to and clicks a swatch option by label on the category page with hover behavior for overlapping swatch elements.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionLabel" type="string"/>
+        </arguments>
+        <scrollTo selector="{{StorefrontCategoryPageProductInfoSection.swatchOptionByLabel(optionLabel)}}" stepKey="scrollToSwatchOption"/>
+        <moveMouseOver selector="{{StorefrontCategoryPageProductInfoSection.swatchOptionByLabel(optionLabel)}}" stepKey="hoverOverSwatchOption"/>
+        <waitForElementClickable selector="{{StorefrontCategoryPageProductInfoSection.swatchOptionByLabel(optionLabel)}}" stepKey="waitForSwatchOptionClickable"/>
+        <click selector="{{StorefrontCategoryPageProductInfoSection.swatchOptionByLabel(optionLabel)}}" stepKey="clickSwatchOption"/>
+        <waitForPageLoad stepKey="waitAfterSwatchClick"/>
+    </actionGroup>
+</actionGroups>
+

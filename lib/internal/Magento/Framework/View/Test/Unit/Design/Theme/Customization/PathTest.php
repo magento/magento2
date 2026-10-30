@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,13 +45,13 @@ class PathTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->_theme = $this->createMock(ThemeInterface::class);
         /** @var Filesystem|MockObject $filesystem */
         $filesystem = $this->createMock(Filesystem::class);
         $this->_directory = $this->createMock(Read::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->_directory);
         $this->_directory->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->_model = new Path(

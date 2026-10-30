@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,11 +39,8 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->dataProviderMock = $this->getMockBuilder(ModifierInterface::class)
-            ->getMockForAbstractClass();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataProviderMock = $this->createMock(ModifierInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManager::class);
 
         $this->model = $this->objectManager->getObject(
             ModifierFactory::class,

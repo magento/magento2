@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -44,12 +44,9 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMock();
-        $this->schemaTypeMock = $this->getMockBuilder(SchemaTypeInterface::class)
-            ->getMock();
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMock();
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->schemaTypeMock = $this->createMock(SchemaTypeInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->index = (new ObjectManager($this))->getObject(
             Index::class,

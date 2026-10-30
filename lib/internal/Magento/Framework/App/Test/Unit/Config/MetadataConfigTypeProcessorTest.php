@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,9 +57,9 @@ class MetadataConfigTypeProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_backendModelMock= $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();

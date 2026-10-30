@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
@@ -24,7 +25,8 @@ $storeManager = $objectManager->get(StoreManagerInterface::class);
 $storeManager->setCurrentStore($storeManager->getStore('admin')->getId());
 
 $domainManager = $objectManager->get(DomainManagerInterface::class);
-$domainManager->addDomains(
+DownloadableDomains::addDomains(
+    $domainManager,
     [
         'example.com',
         'www.example.com',

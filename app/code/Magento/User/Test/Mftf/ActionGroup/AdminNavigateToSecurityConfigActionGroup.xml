@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminNavigateToSecurityConfigActionGroup">
+        <annotations>
+            <description>Navigate to System > Configuration > Advanced > Admin > Security and expand Security tab</description>
+        </annotations>
+        <amOnPage url="{{AdminSecurityConfigPage.url}}" stepKey="navigateToAdminSecurityConfig"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <conditionalClick selector="{{AdminSecurityConfigSection.securityTab}}" dependentSelector="{{AdminSecurityConfigSection.securityExpanded}}" visible="false" stepKey="expandSecurityTab"/>
+        <waitForElementVisible selector="{{AdminSecurityConfigSection.minimumPasswordLengthField}}" stepKey="waitForPasswordLengthField"/>
+    </actionGroup>
+
+</actionGroups>

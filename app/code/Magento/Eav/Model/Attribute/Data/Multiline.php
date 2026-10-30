@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * EAV Entity Attribute Multiply line Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
 {
@@ -38,12 +37,19 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
      *
      * @param array|string $value
      * @return bool|array
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
         $errors = [];
         $lines = $this->processValue($value);
         $attribute = $this->getAttribute();
+
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($lines)) {
+            return true;
+        }
 
         if ($attribute->getIsRequired() && empty($lines)) {
             $attributeLabel = __($attribute->getStoreLabel());

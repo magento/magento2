@@ -1,0 +1,88 @@
+{
+  "plannedShippingDateAndTime": "2025-04-01T00:00:00GMT+00:00",
+  "pickup": {
+    "isRequested": false
+  },
+  "productCode": "P",
+  "accounts": [
+    {
+      "typeCode": "shipper",
+      "number": "998765432"
+    }
+  ],
+  "valueAddedServices": [
+    {
+      "serviceCode": "II",
+      "value": 10
+    }
+  ],
+  "customerDetails": {
+    "shipperDetails": {
+      "postalAddress": {
+        "postalCode": "90034",
+        "cityName": "los angeles",
+        "countryCode": "US",
+        "addressLine1": "los angeles"
+      },
+      "contactInformation": {
+        "phone": "1234567890",
+        "companyName": "demo store",
+        "fullName": "admin admin"
+      }
+    },
+    "receiverDetails": {
+      "postalAddress": {
+        "cityName": "quebec",
+        "countryCode": "CA",
+        "postalCode": "G1A 0A8",
+        "addressLine1": "quebec"
+      },
+      "contactInformation": {
+        "phone": "1234567890",
+        "companyName": "store new",
+        "fullName": "John Doe"
+      }
+    }
+  },
+  "content": {
+    "packages": [
+      {
+        "weight": 220,
+        "dimensions": {
+          "width": 2,
+          "height": 2,
+          "length": 2
+        },
+        "description": "item_name"
+      }
+    ],
+    "description": "Shipment",
+    "incoterm": "DAP",
+    "unitOfMeasurement": "imperial",
+    "isCustomsDeclarable": true,
+    "declaredValue": "10.00",
+    "declaredValueCurrency": "USD",
+    "exportDeclaration": {
+      "lineItems": [
+        {
+          "number": "item1",
+          "description": "item_name",
+          "price": 100,
+          "quantity": {
+            "value": 1,
+            "unitOfMeasurement": "PCS"
+          },
+          "weight": {
+            "netValue": 100,
+            "grossValue": 100
+          },
+          "manufacturerCountry": "US"
+        }
+      ],
+      "invoice": {
+        "number": "123",
+        "date": "2025-04-01"
+      }
+    }
+  }
+}

@@ -50,30 +50,6 @@
 
         <!-- Go to 'print order' page by grabbed order id and assert browser does not redirect to order history page -->
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
-        <comment userInput="BIC workaround" stepKey="waitForPrintWindowToOpen"/>
-
-        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
-            <argument name="expectedUrl">sales/order/print/order_id/{$grabOrderIdFromURL}</argument>
-            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
-        </helper>
-
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToPrintPage"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkPrintPage"/>
-
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="openNewTab"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTabToOpen" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchForward"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTab3HTML" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="duplicatePrintPage"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForDuplicatePrintWindowToOpen" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToDuplicatePrintPage"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkDuplicatePrintPage"/>
-
-        <!-- Log out of customer 1's account -->
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="openNewTab2"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTabToOpen1" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchForward2"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTab2HTML" />
 
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
@@ -88,18 +64,6 @@
             <argument name="Category" value="$createCategory$"/>
         </actionGroup>
 
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen2" />
-        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered2">
-            <argument name="expectedUrl">sales/order/print/order_id/</argument>
-            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
-        </helper>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToPrintPage2"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkPrintPage2"/>
-
-        <openNewTab stepKey="openNewTab3"/>
-        <waitForPageLoad stepKey="waitForNewTabToOpen2" />
-        <switchToNextTab stepKey="switchForward4"/>
-        <waitForElement selector="body" stepKey="waitForNewTabHTML" />
 
         <!-- Assert trying to load 'print order' page as customer 2 with the the order id created by customer 1 will redirect to 'order history' page -->
         <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage2"/>

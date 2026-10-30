@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class Option
             'code' => 'bundle_selection_attributes',
             'value'=> $this->serializer->serialize(
                 [
-                    'price' => $this->priceCurrency->convert($price, $product->getStore()),
+                    'price' => $this->priceCurrency->convertAndRound($price, $product->getStore()),
                     'qty' => $qty,
                     'option_label' => $bundleOption->getTitle(),
                     'option_id' => $bundleOption->getId(),

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -371,8 +372,8 @@ class DataObjectHelperTest extends TestCase
      * @param array $data2
      *
      * @return void
-     * @dataProvider dataProviderForTestMergeDataObjects
      */
+    #[DataProvider('dataProviderForTestMergeDataObjects')]
     public function testMergeDataObjects($data1, $data2): void
     {
         /** @var Address $addressDataObject */

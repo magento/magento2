@@ -2,8 +2,8 @@
 /**
  * Customer address fixture with postcode 36104
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Customer\Model\Address $customerAddress */

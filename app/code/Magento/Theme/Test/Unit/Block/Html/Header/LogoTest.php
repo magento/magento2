@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,9 +26,9 @@ class LogoTest extends TestCase
     {
         $filesystem = $this->createMock(Filesystem::class);
         $mediaDirectory = $this->createMock(Read::class);
-        $logoPathResolver = $this->getMockForAbstractClass(LogoPathResolverInterface::class);
+        $logoPathResolver = $this->createMock(LogoPathResolverInterface::class);
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
 
         $logoPathResolver->expects($this->once())->method('getPath')->willReturn('logo/default/image.gif');
         $urlBuilder->expects(
@@ -62,7 +62,7 @@ class LogoTest extends TestCase
      */
     public function testGetLogoHeight()
     {
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
 
         $objectManager = new ObjectManager($this);
@@ -79,7 +79,7 @@ class LogoTest extends TestCase
      */
     public function testGetLogoWidth()
     {
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->expects($this->once())->method('getValue')->willReturn('170');
 
         $objectManager = new ObjectManager($this);

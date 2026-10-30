@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,12 +18,14 @@ use Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider;
 use Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Test for Graphql Resolver-level cache key provider.
  * @magentoAppArea graphql
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AllowMockObjectsWithoutExpectations]
 class ProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
 
@@ -52,6 +52,7 @@ class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {
+        $entityTypeId = (string)$entityTypeId;
         if (isset($this->additionalAttributeTables[$entityTypeId])) {
             return $this->additionalAttributeTables[$entityTypeId];
         }

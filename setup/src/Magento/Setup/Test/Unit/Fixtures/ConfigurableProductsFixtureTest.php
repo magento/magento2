@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Api\AttributeSetRepositoryInterface;
 use Magento\Catalog\Api\ProductAttributeOptionManagementInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import;
 use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigurableProductsFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|FixtureModel
      */
@@ -49,11 +52,10 @@ class ConfigurableProductsFixtureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getValue', 'getObjectManager'])
-            ->addMethods(['createAttributeSet'])
-            ->getMock();
+        $this->fixtureModelMock = $this->createPartialMockWithReflection(
+            FixtureModel::class,
+            ['getValue', 'getObjectManager', 'createAttributeSet']
+        );
 
         $this->attributeSetsFixtureMock = $this->getMockBuilder(AttributeSetFixture::class)
             ->disableOriginalConstructor()
@@ -95,11 +97,11 @@ class ConfigurableProductsFixtureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $attributeSetRepositoryMock = $this->getMockForAbstractClass(
+        $attributeSetRepositoryMock = $this->createMock(
             AttributeSetRepositoryInterface::class
         );
 
-        $productAttributeOptionManagementInterface = $this->getMockForAbstractClass(
+        $productAttributeOptionManagementInterface = $this->createMock(
             ProductAttributeOptionManagementInterface::class
         );
 

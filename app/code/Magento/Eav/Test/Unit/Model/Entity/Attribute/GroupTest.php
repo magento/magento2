@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class GroupTest extends TestCase
 {
@@ -37,12 +38,10 @@ class GroupTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(AttributeGroupResourceModel::class);
-        $translitFilter = $this->getMockBuilder(Translit::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translitFilter = $this->createMock(Translit::class);
         $translitFilter->expects($this->atLeastOnce())->method('filter')->willReturnArgument(0);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $constructorArguments = [
@@ -59,10 +58,10 @@ class GroupTest extends TestCase
     }
 
     /**
-     * @dataProvider attributeGroupCodeDataProvider
      * @param string $groupName
      * @param string $groupCode
      */
+    #[DataProvider('attributeGroupCodeDataProvider')]
     public function testBeforeSaveGeneratesGroupCodeBasedOnGroupName($groupName, $groupCode)
     {
         $this->model->setAttributeGroupName($groupName);

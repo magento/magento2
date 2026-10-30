@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\I18n;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Context;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ContextTest extends TestCase
@@ -33,8 +34,8 @@ class ContextTest extends TestCase
      * @param array $context
      * @param string $path
      * @param array $pathValues
-     * @dataProvider dataProviderContextByPath
      */
+    #[DataProvider('dataProviderContextByPath')]
     public function testGetContextByPath($context, $path, $pathValues)
     {
         $this->componentRegistrar->expects($this->any())
@@ -95,8 +96,8 @@ class ContextTest extends TestCase
      * @param string $path
      * @param array $context
      * @param array $registrar
-     * @dataProvider dataProviderPathToLocaleDirectoryByContext
      */
+    #[DataProvider('dataProviderPathToLocaleDirectoryByContext')]
     public function testBuildPathToLocaleDirectoryByContext($path, $context, $registrar)
     {
         $paths = [];

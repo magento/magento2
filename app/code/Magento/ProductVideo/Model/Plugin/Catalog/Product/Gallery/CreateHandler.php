@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery;
 
+use Magento\Catalog\Model\Product;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use Magento\Store\Model\Store;
 
 /**
  * Plugin for catalog product gallery create/update handlers.
@@ -16,22 +18,25 @@ class CreateHandler extends AbstractHandler
     /**
      * Key to store additional data from other stores
      */
-    const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
+    public const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
 
     /**
      * Execute before Plugin
      *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param array $arguments
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
-        \Magento\Catalog\Model\Product $product,
+        Product $product,
         array $arguments = []
     ) {
+        if (!$this->hasDataChanges($product, $mediaGalleryCreateHandler->getAttribute()->getAttributeCode())) {
+            return;
+        }
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $mediaGalleryCreateHandler->getAttribute();
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
@@ -49,13 +54,17 @@ class CreateHandler extends AbstractHandler
      * Execute plugin
      *
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param Product $product
+     * @return Product
      */
     public function afterExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
-        \Magento\Catalog\Model\Product $product
+        Product $product
     ) {
+        if (!$this->hasDataChanges($product, $mediaGalleryCreateHandler->getAttribute()->getAttributeCode())) {
+            return $product;
+        }
+        
         $mediaCollection = $this->getMediaEntriesDataCollection(
             $product,
             $mediaGalleryCreateHandler->getAttribute()
@@ -65,11 +74,15 @@ class CreateHandler extends AbstractHandler
             if ($product->getIsDuplicate() === true) {
                 $mediaCollection = $this->makeAllNewVideos($product->getId(), $mediaCollection);
             }
+            $storeId = (int)$product->getStoreId();
+            if ($storeId !== Store::DEFAULT_STORE_ID) {
+                $mediaCollection = $this->prepareUseDefault($mediaCollection);
+            }
             $newVideoCollection = $this->collectNewVideos($mediaCollection);
             $this->saveVideoData($newVideoCollection, 0);
 
             $videoDataCollection = $this->collectVideoData($mediaCollection);
-            $this->saveVideoData($videoDataCollection, $product->getStoreId());
+            $this->saveVideoData($videoDataCollection, $storeId);
             $this->saveAdditionalStoreData($videoDataCollection);
         }
 
@@ -200,6 +213,28 @@ class CreateHandler extends AbstractHandler
         }
 
         return $videoDataCollection;
+    }
+
+    /**
+     * Sets default values for fields marked to use default
+     *
+     * @param array $mediaCollection
+     * @return array
+     */
+    private function prepareUseDefault(array $mediaCollection): array
+    {
+        foreach ($mediaCollection as &$item) {
+            if ($this->isVideoItem($item)) {
+                foreach (['video_title', 'video_description'] as $field) {
+                    $useDefaultKey = $field . '_use_default';
+                    if (isset($item[$useDefaultKey]) && $item[$useDefaultKey]) {
+                        $item[$field] = null;
+                    }
+                }
+            }
+        }
+
+        return $mediaCollection;
     }
 
     /**
@@ -335,5 +370,20 @@ class CreateHandler extends AbstractHandler
             }
         }
         return $mediaCollection;
+    }
+
+    /**
+     * Checks whether media gallery data changed
+     *
+     * @param Product $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function hasDataChanges(Product $product, string $attributeCode): bool
+    {
+        $value = $product->getData($attributeCode);
+        $oldValue = $product->getOrigData($attributeCode);
+
+        return $value !== $oldValue;
     }
 }

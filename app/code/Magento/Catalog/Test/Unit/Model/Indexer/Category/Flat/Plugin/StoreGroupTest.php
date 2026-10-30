@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,15 +50,7 @@ class StoreGroupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getState']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
         $this->subjectMock = $this->createMock(Group::class);
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ContentAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Backend::content_anchor</data>
+        <data key="resourceTitle">Content</data>
+    </entity>
+    <entity name="CategoriesAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Catalog::categories_anchor</data>
+        <data key="resourceTitle">Categories</data>
+    </entity>
+    <entity name="SalesRuleAclResource" type="acl_resource">
+        <data key="resourceId">Magento_SalesRule::quote_anchor</data>
+        <data key="resourceTitle">Cart Price Rules</data>
+    </entity>
+    <entity name="CatalogAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Catalog::catalog_anchor</data>
+        <data key="resourceTitle">Catalog</data>
+    </entity>
+    <entity name="SalesAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Sales::sales_anchor</data>
+        <data key="resourceTitle">Sales</data>
+    </entity>
+    <entity name="CustomersAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Customer::customer_anchor</data>
+        <data key="resourceTitle">Customers</data>
+    </entity>
+    <entity name="MarketingAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Backend::marketing_anchor</data>
+        <data key="resourceTitle">Marketing</data>
+    </entity>
+    <entity name="ReportsAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Reports::report_anchor</data>
+        <data key="resourceTitle">Reports</data>
+    </entity>
+    <entity name="StoresAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Backend::stores_anchor</data>
+        <data key="resourceTitle">Stores</data>
+    </entity>
+    <entity name="SystemAclResource" type="acl_resource">
+        <data key="resourceId">Magento_Backend::system_anchor</data>
+        <data key="resourceTitle">System</data>
+    </entity>
+</entities>

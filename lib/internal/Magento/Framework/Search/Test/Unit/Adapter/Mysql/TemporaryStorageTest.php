@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,9 +48,7 @@ class TemporaryStorageTest extends TestCase
     {
         $this->tableName = 'some_table_name';
 
-        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->adapter = $this->createMock(AdapterInterface::class);
 
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()

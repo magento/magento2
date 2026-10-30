@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model\Plugin;
 
@@ -49,6 +49,8 @@ class BaseUrlConfigPlugin
     }
 
     /**
+     * Check is need to apply the plugin logic
+     *
      * @param Value $result
      * @return bool
      */

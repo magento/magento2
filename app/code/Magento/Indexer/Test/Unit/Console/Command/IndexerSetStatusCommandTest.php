@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\ResourceModel\Indexer\State as StateResourceModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class IndexerSetStatusCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -158,10 +159,9 @@ class IndexerSetStatusCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @param string $previousStatus
      * @param string $newStatus
-     *
-     * @dataProvider executeWithIndexDataProvider
      * @throws \Exception
      */
+    #[DataProvider('executeWithIndexDataProvider')]
     public function testExecuteWithIndex(string $previousStatus, string $newStatus)
     {
         $this->configureAdminArea();

@@ -2,8 +2,8 @@
 /**
  * "dropdown" fixture of product EAV attribute.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Eav\Model\Entity\Type $entityType */

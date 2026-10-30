@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,9 @@ class PayflowadvancedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->model = (new ObjectManager($this))->getObject(Payflowadvanced::class);
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+        $this->model = $objectManager->getObject(Payflowadvanced::class);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,8 +47,8 @@ class CheckIsAvailableMessagesInQueueTest extends TestCase
         $connectionName = 'test';
         $queueName = 'test';
 
-        $queue = $this->getMockForAbstractClass(QueueInterface::class);
-        $message = $this->getMockForAbstractClass(EnvelopeInterface::class);
+        $queue = $this->createMock(QueueInterface::class);
+        $message = $this->createMock(EnvelopeInterface::class);
         $this->queueRepository->expects($this->once())
             ->method('get')
             ->with($connectionName, $queueName)
@@ -67,7 +67,7 @@ class CheckIsAvailableMessagesInQueueTest extends TestCase
         $connectionName = 'test';
         $queueName = 'test';
 
-        $queue = $this->getMockForAbstractClass(QueueInterface::class);
+        $queue = $this->createMock(QueueInterface::class);
         $this->queueRepository->expects($this->once())
             ->method('get')
             ->with($connectionName, $queueName)
@@ -83,7 +83,7 @@ class CheckIsAvailableMessagesInQueueTest extends TestCase
         $connectionName = 'test';
         $queueName = 'test';
 
-        $queue = $this->getMockForAbstractClass(CountableQueueInterface::class);
+        $queue = $this->createMock(CountableQueueInterface::class);
         $this->queueRepository->expects($this->once())
             ->method('get')
             ->with($connectionName, $queueName)
@@ -101,7 +101,7 @@ class CheckIsAvailableMessagesInQueueTest extends TestCase
         $connectionName = 'test';
         $queueName = 'test';
 
-        $queue = $this->getMockForAbstractClass(CountableQueueInterface::class);
+        $queue = $this->createMock(CountableQueueInterface::class);
         $this->queueRepository->expects($this->once())
             ->method('get')
             ->with($connectionName, $queueName)

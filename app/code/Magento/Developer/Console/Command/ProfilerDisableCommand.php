@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Console\Command;
@@ -57,7 +57,7 @@ class ProfilerDisableCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->filesystem->rm(BP . '/' . self::PROFILER_FLAG_FILE);
         if (!$this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {

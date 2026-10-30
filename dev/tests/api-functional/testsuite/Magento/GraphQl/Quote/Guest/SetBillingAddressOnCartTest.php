@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -427,7 +427,8 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
+            'The billing address must contain either "customer_address_id", '
+            . '"customer_address_uid", "address", or "same_as_shipping".'
         );
         $this->graphQlMutation($query);
     }

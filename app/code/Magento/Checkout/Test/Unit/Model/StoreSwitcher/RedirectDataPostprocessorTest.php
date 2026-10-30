@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RedirectDataPostprocessorTest extends TestCase
 {
@@ -85,11 +86,11 @@ class RedirectDataPostprocessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processDataProvider
      * @param array $mock
      * @param array $data
      * @param bool $isQuoteSet
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(array $mock, array $data, bool $isQuoteSet): void
     {
         $this->customerSession->method('isLoggedIn')

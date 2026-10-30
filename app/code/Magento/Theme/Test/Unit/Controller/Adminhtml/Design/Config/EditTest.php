@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,12 +68,9 @@ class EditTest extends TestCase
         $this->initContext();
         $resultPageFactory = $this->initResultPage();
 
-        $this->scopeValidator = $this->getMockBuilder(ScopeValidatorInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeValidator = $this->createMock(ScopeValidatorInterface::class);
 
-        $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->scopeResolverPool = $this->createMock(ScopeResolverPool::class);
 
         $this->controller = new Edit(
             $this->context,
@@ -85,20 +82,14 @@ class EditTest extends TestCase
 
     protected function initContext()
     {
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirect = $this->createMock(Redirect::class);
 
         $resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
@@ -117,13 +108,9 @@ class EditTest extends TestCase
      */
     protected function initResultPage()
     {
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPage = $this->createMock(Page::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resultPageFactory = $this->createMock(PageFactory::class);
         $resultPageFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultPage);
@@ -148,29 +135,23 @@ class EditTest extends TestCase
             ->with($scope, $scopeId)
             ->willReturn(true);
 
-        $pageTitle = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageTitle = $this->createMock(Title::class);
         $pageTitle->expects($this->once())
             ->method('prepend')
             ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageConfig = $this->createMock(Config::class);
         $pageConfig->expects($this->once())
             ->method('getTitle')
             ->willReturn($pageTitle);
 
-        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scopeObject = $this->createMock(ScopeInterface::class);
         $scopeObject->expects($this->once())
             ->method('getName')
             ->willReturn($scopeName);
 
-        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->getMockForAbstractClass();
+        $scopeResolver = $this->createMock(ScopeResolverInterface::class);
         $scopeResolver->expects($this->once())
             ->method('getScope')
             ->with($scopeId)
@@ -210,17 +191,13 @@ class EditTest extends TestCase
             ->with($scope, $scopeId)
             ->willReturn(true);
 
-        $pageTitle = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageTitle = $this->createMock(Title::class);
         $pageTitle->expects($this->once())
             ->method('prepend')
             ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageConfig = $this->createMock(Config::class);
         $pageConfig->expects($this->once())
             ->method('getTitle')
             ->willReturn($pageTitle);

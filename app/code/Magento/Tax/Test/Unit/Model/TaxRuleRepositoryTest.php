@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rule;
 use Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection;
 use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 use Magento\Tax\Model\TaxRuleRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -92,7 +93,7 @@ class TaxRuleRepositoryTest extends TestCase
             TaxRuleSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRuleSearchResultsInterface::class);
+        $this->searchResultsMock = $this->createMock(TaxRuleSearchResultsInterface::class);
         $this->ruleFactory = $this->createMock(RuleFactory::class);
         $this->collectionFactory = $this->createPartialMock(
             CollectionFactory::class,
@@ -117,14 +118,14 @@ class TaxRuleRepositoryTest extends TestCase
         );
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
         $this->assertEquals($rule, $this->model->get(10));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
@@ -133,7 +134,7 @@ class TaxRuleRepositoryTest extends TestCase
         $this->assertTrue($this->model->delete($rule));
     }
 
-    public function testDeleteById()
+    public function testDeleteById(): void
     {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
@@ -144,7 +145,7 @@ class TaxRuleRepositoryTest extends TestCase
         $this->assertTrue($this->model->deleteById(10));
     }
 
-    public function testSave()
+    public function testSave(): void
     {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
@@ -155,18 +156,12 @@ class TaxRuleRepositoryTest extends TestCase
         $this->assertEquals($rule, $this->model->save($rule));
     }
 
-    /**
-     * @dataProvider saveExceptionsDataProvider
-     * @param $exceptionObject
-     * @param $exceptionName
-     * @param $exceptionMessage
-     * @throws \Exception
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
-    {
+    #[DataProvider('saveExceptionsDataProvider')]
+    public function testSaveWithExceptions(
+        \Exception $exceptionObject,
+        string $exceptionName,
+        string $exceptionMessage
+    ): void {
         $rule = $this->createMock(\Magento\Tax\Model\Calculation\Rule::class);
         $rule->expects($this->once())->method('getId')->willReturn(10);
 
@@ -199,7 +194,7 @@ class TaxRuleRepositoryTest extends TestCase
         ];
     }
 
-    public function testGetList()
+    public function testGetList(): void
     {
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $collectionMock =

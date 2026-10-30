@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\BasePriceInterface;
 use Magento\Catalog\Api\Data\BasePriceInterfaceFactory;
 use Magento\Catalog\Api\Data\PriceUpdateResultInterface;
@@ -18,11 +19,16 @@ use Magento\Catalog\Model\Product\Price\PricePersistenceFactory;
 use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\Result;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class BasePriceStorageTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PricePersistenceFactory|MockObject
      */
@@ -88,41 +96,21 @@ class BasePriceStorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->pricePersistenceFactory = $this->getMockBuilder(
-            PricePersistenceFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->basePriceInterfaceFactory = $this->getMockBuilder(
-            BasePriceInterfaceFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->basePriceInterface = $this->getMockBuilder(BasePriceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeRepository = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->invalidSkuProcessor = $this
-            ->getMockBuilder(InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->validationResult = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productAttributeRepository = $this
-            ->getMockBuilder(ProductAttributeRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pricePersistenceFactory = $this->createPartialMock(
+            PricePersistenceFactory::class,
+            ['create']
+        );
+        $this->pricePersistence = $this->createMock(PricePersistence::class);
+        $this->basePriceInterfaceFactory = $this->createPartialMock(
+            BasePriceInterfaceFactory::class,
+            ['create']
+        );
+        $this->basePriceInterface = $this->createMock(BasePriceInterface::class);
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
+        $this->storeRepository = $this->createMock(StoreRepositoryInterface::class);
+        $this->invalidSkuProcessor = $this->createMock(InvalidSkuProcessor::class);
+        $this->validationResult = $this->createMock(Result::class);
+        $this->productAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -215,24 +203,40 @@ class BasePriceStorageTest extends TestCase
      * @param bool $isScopeGlobal
      * @param array $formattedPrices
      * @return void
-     * @dataProvider updateProvider
      */
+    #[DataProvider('updateProvider')]
     public function testUpdate(bool $isScopeWebsite, bool $isScopeGlobal, array $formattedPrices)
     {
-        $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->addMethods([
-                'getStoreIds',
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $website->method('getStoreIds')->willReturn([1 => 1, 2 => 2]);
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods([
-                'getWebsite',
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $store->method('getWebsite')->willReturn($website);
+        /** @var WebsiteInterface $website */
+        $website = $this->createPartialMockWithReflection(Website::class, ['setStoreIds', 'getStoreIds']);
+        $storeIds = null;
+        $website->method('setStoreIds')->willReturnCallback(
+            function ($ids) use (&$storeIds, $website) {
+                $storeIds = $ids;
+                return $website;
+            }
+        );
+        $website->method('getStoreIds')->willReturnCallback(
+            function () use (&$storeIds) {
+                return $storeIds;
+            }
+        );
+        $website->setStoreIds([1 => 1, 2 => 2]);
+        /** @var StoreInterface $store */
+        $store = $this->createPartialMockWithReflection(Store::class, ['setWebsite', 'getWebsite']);
+        $websiteObj = null;
+        $store->method('setWebsite')->willReturnCallback(
+            function ($web) use (&$websiteObj, $store) {
+                $websiteObj = $web;
+                return $store;
+            }
+        );
+        $store->method('getWebsite')->willReturnCallback(
+            function () use (&$websiteObj) {
+                return $websiteObj;
+            }
+        );
+        $store->setWebsite($website);
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' => [
@@ -248,7 +252,7 @@ class BasePriceStorageTest extends TestCase
             ->willReturn([]);
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getPrice')->willReturn(15);
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);
-        $this->validationResult->expects($this->any())->method('getFailedRowIds')->willReturn([]);
+        $this->validationResult->method('getFailedRowIds')->willReturn([]);
         $this->productIdLocator
             ->expects($this->any())
             ->method('retrieveProductIdsBySkus')->with([$sku])
@@ -261,16 +265,18 @@ class BasePriceStorageTest extends TestCase
         $this->pricePersistence->expects($this->atLeastOnce())->method('getEntityLinkField')->willReturn('row_id');
         $this->storeRepository->expects($this->any())->method('getById')->with(1)->willReturn($store);
         $this->pricePersistence->expects($this->any())->method('update')->with($formattedPrices);
-        $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
-        $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->addMethods([
-                'isScopeWebsite',
-                'isScopeGlobal'
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->validationResult->method('getFailedItems')->willReturn([]);
+        /** @var ProductAttributeInterface $attribute */
+        $attribute = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            ['setIsScopeWebsite', 'isScopeWebsite', 'setIsScopeGlobal', 'isScopeGlobal', '_construct']
+        );
+        $attribute->method('setIsScopeWebsite')->willReturnSelf();
         $attribute->method('isScopeWebsite')->willReturn($isScopeWebsite);
+        $attribute->method('setIsScopeGlobal')->willReturnSelf();
         $attribute->method('isScopeGlobal')->willReturn($isScopeGlobal);
+        $attribute->setIsScopeWebsite($isScopeWebsite);
+        $attribute->setIsScopeGlobal($isScopeGlobal);
         $this->productAttributeRepository
             ->method('get')
             ->willReturn($attribute);
@@ -298,9 +304,7 @@ class BasePriceStorageTest extends TestCase
             ->method('retrieveInvalidSkuList')
             ->with([null], ['simple', 'virtual', 'bundle', 'downloadable'], 1)
             ->willReturn([]);
-        $priceUpdateResult = $this->getMockBuilder(PriceUpdateResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $priceUpdateResult = $this->createMock(PriceUpdateResultInterface::class);
         $this->validationResult->expects($this->atLeastOnce())
             ->method('addFailedItem')
             ->willReturnCallback(function ($arg1, $arg2, $arg3) {
@@ -387,5 +391,27 @@ class BasePriceStorageTest extends TestCase
                     ]
                 ]
             ];
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update('invalid_string');
     }
 }

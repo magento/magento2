@@ -1,20 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote\Address;
 
 /**
  * Quote addresses collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Collection
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_quote_address_collection';
@@ -40,8 +36,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
-     * Setting filter on quote_id field but if quote_id is 0
-     * we should exclude loading junk data from DB
+     * Setting filter on quote_id field but if quote_id is 0 we should exclude loading junk data from DB
      *
      * @param int $quoteId
      * @return $this

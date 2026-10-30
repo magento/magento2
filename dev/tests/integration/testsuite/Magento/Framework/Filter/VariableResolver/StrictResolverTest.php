@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StrictResolverTest extends TestCase
 {
@@ -32,9 +34,7 @@ class StrictResolverTest extends TestCase
         $this->filter = $objectManager->get(Template::class);
     }
 
-    /**
-     * @dataProvider useCasesProvider
-     */
+    #[DataProvider('useCasesProvider')]
     public function testResolve($value, array $variables, $expected)
     {
         if(str_contains($value, 'foo.email.getUrl'))

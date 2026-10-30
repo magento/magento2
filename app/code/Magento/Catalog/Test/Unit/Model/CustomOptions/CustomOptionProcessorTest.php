@@ -1,33 +1,40 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use Magento\Catalog\Api\Data\CustomOptionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
+use Magento\Catalog\Model\Product\Option\Type\File\ImageContentProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
 use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Quote\Model\Quote\ProductOption;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(CustomOptionProcessor::class)]
 class CustomOptionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Factory|MockObject
      */
@@ -71,54 +78,31 @@ class CustomOptionProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectFactory = $this->getMockBuilder(Factory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productOptionFactory = $this->getMockBuilder(ProductOptionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->extensionFactory = $this->getMockBuilder(ProductOptionExtensionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customOptionFactory = $this->getMockBuilder(
-            CustomOptionFactory::class
-        )
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cartItem = $this->getMockBuilder(CartItemInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOptionByCode'])
-            ->onlyMethods(['getProductOption', 'setProductOption'])
-            ->getMockForAbstractClass();
-        $this->extensibleAttribute = $this->getMockBuilder(
-            ProductOptionExtensionInterface::class
-        )
-            ->disableOriginalConstructor()
-            ->addMethods(['setCustomOptions', 'getCustomOptions'])
-            ->getMockForAbstractClass();
-        $this->productOption = $this->getMockBuilder(ProductOption::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customOption = $this->getMockBuilder(CustomOptionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->buyRequest = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->onlyMethods(['unserialize'])
-            ->getMockForAbstractClass();
+        $this->objectFactory = $this->createPartialMock(Factory::class, ['create']);
+        $this->productOptionFactory = $this->createPartialMock(ProductOptionFactory::class, ['create']);
+        $this->extensionFactory = $this->createPartialMock(ProductOptionExtensionFactory::class, ['create']);
+        $this->customOptionFactory = $this->createPartialMock(CustomOptionFactory::class, ['create']);
+        $this->cartItem = $this->createPartialMock(
+            Item::class,
+            ['getOptionByCode', 'getProductOption', 'setProductOption']
+        );
+        $this->extensibleAttribute = $this->createPartialMockWithReflection(
+            ProductOptionExtensionInterface::class,
+            $this->getProductOptionExtensionMethods()
+        );
+        $this->productOption = $this->createMock(ProductOption::class);
+        $this->customOption = $this->createMock(CustomOptionInterface::class);
+        $this->buyRequest = $this->createMock(DataObject::class);
+        $this->serializer = $this->createMock(Json::class);
 
         $this->processor = new CustomOptionProcessor(
             $this->objectFactory,
             $this->productOptionFactory,
             $this->extensionFactory,
             $this->customOptionFactory,
-            $this->serializer
+            $this->serializer,
+            $this->createMock(ProductRepositoryInterface::class),
+            $this->createMock(ImageContentProcessor::class)
         );
     }
 
@@ -129,16 +113,12 @@ class CustomOptionProcessorTest extends TestCase
         $this->objectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->buyRequest);
-        $this->cartItem->expects($this->any())
-            ->method('getProductOption')
-            ->willReturn($this->productOption);
-        $this->productOption->expects($this->any())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->extensibleAttribute);
+        $this->cartItem->method('getProductOption')->willReturn($this->productOption);
+        $this->productOption->method('getExtensionAttributes')->willReturn($this->extensibleAttribute);
         $this->extensibleAttribute->expects($this->atLeastOnce())
             ->method('getCustomOptions')
             ->willReturn([$this->customOption]);
-        $this->customOption->expects($this->once())
+        $this->customOption->expects($this->any())
             ->method('getOptionId')
             ->willReturn($optionId);
         $this->customOption->expects($this->once())
@@ -148,25 +128,16 @@ class CustomOptionProcessorTest extends TestCase
         $this->assertSame($this->buyRequest, $this->processor->convertToBuyRequest($this->cartItem));
     }
 
-    /**
-     * @covers \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::getOptions()
-     */
     public function testProcessCustomOptions()
     {
         $optionId = 23;
-        $quoteItemOption = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteItemOption = $this->createMock(Option::class);
         $this->cartItem->expects($this->atLeastOnce())
             ->method('getOptionByCode')
             ->with('info_buyRequest')
             ->willReturn($quoteItemOption);
-        $quoteItemOption->expects($this->any())
-            ->method('getValue')
-            ->willReturn('{"options":{"' . $optionId . '":["5","6"]}}');
-        $this->serializer->expects($this->any())
-            ->method('unserialize')
-            ->willReturn(json_decode($quoteItemOption->getValue(), true));
+        $quoteItemOption->method('getValue')->willReturn('{"options":{"' . $optionId . '":["5","6"]}}');
+        $this->serializer->method('unserialize')->willReturn(json_decode($quoteItemOption->getValue(), true));
         $this->customOptionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->customOption);
@@ -199,5 +170,23 @@ class CustomOptionProcessorTest extends TestCase
             ->with($this->productOption);
 
         $this->assertSame($this->cartItem, $this->processor->processOptions($this->cartItem));
+    }
+
+    private function getProductOptionExtensionMethods(): array
+    {
+        return [
+            'getCustomOptions',
+            'setCustomOptions',
+            'getBundleOptions',
+            'setBundleOptions',
+            'getConfigurableItemOptions',
+            'setConfigurableItemOptions',
+            'getDownloadableOption',
+            'setDownloadableOption',
+            'getGiftcardItemOption',
+            'setGiftcardItemOption',
+            'getGroupedOptions',
+            'setGroupedOptions',
+        ];
     }
 }

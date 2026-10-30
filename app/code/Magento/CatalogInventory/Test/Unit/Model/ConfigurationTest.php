@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,16 +47,16 @@ class ConfigurationTest extends TestCase
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->minSaleQtyHelperMock = $this->getMockBuilder(Minsaleqty::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->model = new Configuration(
             $this->configMock,
             $this->scopeConfigMock,
@@ -75,9 +75,7 @@ class ConfigurationTest extends TestCase
         $filter = 3;
         $configData = [1 => ['is_qty' => 1], 2 => ['is_qty' => 2], 3 => ['is_qty' => 3]];
 
-        $this->configMock->expects($this->any())
-            ->method('getAll')
-            ->willReturn($configData);
+        $this->configMock->method('getAll')->willReturn($configData);
         $this->assertEquals([3 => '3'], $this->model->getIsQtyTypeIds($filter));
     }
 
@@ -86,9 +84,7 @@ class ConfigurationTest extends TestCase
         $configData = [1 => ['is_qty' => 1], 2 => ['is_qty' => 2], 3 => ['is_qty' => 3]];
         $productTypeId = 1;
 
-        $this->configMock->expects($this->any())
-            ->method('getAll')
-            ->willReturn($configData);
+        $this->configMock->method('getAll')->willReturn($configData);
         $this->assertEquals($productTypeId, $this->model->isQty($productTypeId));
     }
 

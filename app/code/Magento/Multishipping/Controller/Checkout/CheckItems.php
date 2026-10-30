@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -152,7 +152,7 @@ class CheckItems extends Checkout
                 if (!isset($itemsInfo[$quoteItemId])) {
                     $itemsInfo[$quoteItemId] = 0;
                 }
-                $itemsInfo[$quoteItemId] += (double)$data['qty'];
+                $itemsInfo[$quoteItemId] += (float)$data['qty'];
             }
         }
 

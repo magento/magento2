@@ -84,15 +84,9 @@ class FileTest extends TestCase
         ];
         $objectManager->prepareObjectManager($objects);
 
-        $this->factoryMock = $this->getMockBuilder(Factory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->factoryCollectionMock = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->factoryCollectionMock = $this->createMock(CollectionFactory::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
         $this->file = $objectManager->getObject(
             File::class,
             [

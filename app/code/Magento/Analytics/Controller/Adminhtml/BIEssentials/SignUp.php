@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Controller\Adminhtml\BIEssentials;
 
@@ -30,7 +30,7 @@ class SignUp extends Action implements HttpGetActionInterface
     /**
      * @inheritdoc
      */
-    const ADMIN_RESOURCE = 'Magento_Analytics::bi_essentials';
+    public const ADMIN_RESOURCE = 'Magento_Analytics::bi_essentials';
 
     /**
      * @param Context $context

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Weee;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -95,10 +96,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceExcludeTaxAndIncludeFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceExcludeTaxAndIncludeFPTOnlySettingsProvider')]
     public function testCatalogPriceExcludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -152,10 +153,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceExcludeTaxAndIncludeFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceExcludeTaxAndIncludeFPTWithDescriptionSettingsProvider')]
     public function testCatalogPriceExcludeTaxAndIncludeFPTWithDescription(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -209,10 +210,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnlySettingsProvider')]
     public function testCatalogPriceExcludeTaxCatalogDisplayIncludeTaxAndIncludeFPTOnly(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -276,10 +277,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescriptionSettingsProvider')]
     public function testCatalogPriceExclTaxCatalogDisplayInclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -343,10 +344,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescriptionSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescriptionSettingsProvider')]
     public function testCatalogPriceInclTaxCatalogDisplayExclTaxAndInclFPTWithDescription(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -401,10 +402,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnlySettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnlySettingsProvider')]
     public function testCatalogPriceInclTaxCatalogDisplayInclTaxAndInclFPTOnly(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -460,10 +461,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPTSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPTSettingsProvider')]
     public function testCatalogPriceIncTaxCatalogDisplayInclTaxInclFPTWithDescrWithTaxAppliedOnFPT(
         array $weeTaxSettings
     ) {
@@ -536,10 +537,10 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_two_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      */
+    #[DataProvider('catalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTsSettingsProvider')]
     public function testCatalogPriceInclTaxCatalogDisplayIncludeTaxAndMuyltipleFPTs(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);
@@ -620,9 +621,9 @@ class ProductPriceWithFPTTest extends GraphQlAbstract
      * @param array $weeTaxSettings
      * @return void
      *
-     * @dataProvider catalogPriceDisabledFPTSettingsProvider
      * @magentoApiDataFixture Magento/Weee/_files/product_with_fpt.php
      */
+    #[DataProvider('catalogPriceDisabledFPTSettingsProvider')]
     public function testCatalogPriceDisableFPT(array $weeTaxSettings)
     {
         $this->writeConfig($weeTaxSettings);

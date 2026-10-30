@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,12 +30,7 @@ class ValueCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fallbackResolver = $this->getMockForAbstractClass(
-            ScopeFallbackResolverInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->fallbackResolver = $this->createMock(ScopeFallbackResolverInterface::class);
         $this->appConfig = $this->createMock(Config::class);
         $this->valueProcessor = $this->getMockBuilder(ValueProcessor::class)
             ->disableOriginalConstructor()

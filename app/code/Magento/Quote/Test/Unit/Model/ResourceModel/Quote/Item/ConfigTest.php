@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote\Item;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Quote\Model\Config;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +20,7 @@ class ConfigTest extends TestCase
     private $config;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $configMock;
 
@@ -28,7 +29,7 @@ class ConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->configMock->method('getValue')->willReturn('1');
         $this->config = new Config($this->configMock);
     }
@@ -55,7 +56,7 @@ class ConfigTest extends TestCase
      */
     private function setUpForDisabled()
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->configMock->method('getValue')->willReturn('0');
         $this->config = new Config($this->configMock);
     }

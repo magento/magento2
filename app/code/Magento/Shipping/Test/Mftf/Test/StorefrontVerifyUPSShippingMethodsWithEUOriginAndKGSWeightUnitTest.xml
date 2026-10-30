@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyUPSShippingMethodsWithEUOriginAndKGSWeightUnitTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="UPS REST Shipping with EU Origin Configuration"/>
+            <title value="UPS REST shipping methods display correctly with EU origin, KGS weight unit and UK store configuration"/>
+            <description value="Verify UPS shipping methods display at checkout with EU origin, KGS weight and UK store configuration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-11909"/>
+            <group value="shipping"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Deploy static content for en_GB locale before changing locale -->
+            <magentoCLI command="setup:static-content:deploy -f en_GB" stepKey="deployStaticContentGB"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Step 1: Navigate to shipping method configuration and enable UPS -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+            <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPSShippingMethod"/>
+            <!-- Step 2: Set UPS origin, weight, negotiated rates, include taxes via CLI -->
+            <magentoCLI command="config:set {{AdminUPSOriginShipmentEUConfigData.path}} '{{AdminUPSOriginShipmentEUConfigData.value}}'" stepKey="setUpsOriginShipment"/>
+            <magentoCLI command="config:set {{AdminUPSWeightUnitKGSConfigData.path}} {{AdminUPSWeightUnitKGSConfigData.value}}" stepKey="setUpsWeightUnit"/>
+            <magentoCLI command="config:set {{AdminUPSNegotiatedActiveConfigData.path}} {{AdminUPSNegotiatedActiveConfigData.value}}" stepKey="setUpsNegotiatedRate"/>
+            <magentoCLI command="config:set {{AdminUPSIncludeTaxesConfigData.path}} {{AdminUPSIncludeTaxesConfigData.value}}" stepKey="setUpsIncludeTaxes"/>
+            <!-- Step 3: Set shipping settings origin to UK -->
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} GB" stepKey="setShippingOriginCountry"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} London" stepKey="setShippingOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} 'E1 6AN'" stepKey="setShippingOriginZipCode"/>
+            <!-- Step 4: Set currency to British Pound -->
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} USD,GBP" stepKey="setAllowedCurrencyGBP"/>
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} GBP" stepKey="setCurrencyBaseGBP"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} GBP" stepKey="setCurrencyDefaultGBP"/>
+            <!-- Step 5: Set store information to UK -->
+            <magentoCLI command="config:set {{GeneralLocalCodeConfigsForUS.path}} en_GB" stepKey="setLocaleToGB"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} GB" stepKey="setStoreInformationCountry"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} London" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} 'E1 7AA'" stepKey="setStoreInformationPostcode"/>
+            <!-- Step 6:  Clear cache -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created product and customer -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Reset UPS shipping method configuration -->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForDisablingUPS"/>
+            <actionGroup ref="AdminDisableUPSActionGroup" stepKey="disableUPSShippingMethod"/>
+            <!-- Reset shipping origin configuration -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetShippingOriginConfig"/>
+            <!-- Reset currency configuration -->
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="resetCurrencyBaseUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetCurrencyDefaultUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyUSD"/>
+            <!-- Reset store information -->
+            <magentoCLI command="config:set {{GeneralLocalCodeConfigsForUS.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="resetLocaleToUS"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} US" stepKey="resetStoreInformationCountry"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} ''" stepKey="resetStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} ''" stepKey="resetStoreInformationPostcode"/>
+            <!-- Clear cache after reset -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterReset">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 7: Login to storefront and add product to cart -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Step 8: Click on proceed to checkout and verify UPS shipping methods are displayed -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(UPSShippingMethodLabels.carrierTitle)}}" stepKey="verifyUPSShippingMethodIsDisplayed"/>
+        <!-- Step 9: Select UPS shipping method -->
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(UPSShippingMethodLabels.expressMethodTitle)}}" stepKey="selectUPSShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <!-- Step 10: Click on next and go to billing information -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <!-- Step 11: Place order -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+    </test>
+</tests>

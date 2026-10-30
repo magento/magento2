@@ -219,7 +219,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(

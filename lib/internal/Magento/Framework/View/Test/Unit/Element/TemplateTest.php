@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,12 +26,14 @@ use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Template
      */
@@ -89,12 +91,11 @@ class TemplateTest extends TestCase
             ->with(DirectoryList::ROOT, DriverPool::FILE)
             ->willReturn($this->rootDirMock);
 
-        $this->templateEngine = $this->getMockBuilder(TemplateEnginePool::class)
-            ->addMethods(['render'])
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->templateEngine = $this->createPartialMockWithReflection(
+            TemplateEnginePool::class,
+            ['render', 'get']
+        );
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
         $this->appState = $this->createPartialMock(State::class, ['getAreaCode', 'getMode']);
@@ -107,7 +108,8 @@ class TemplateTest extends TestCase
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn('storeCode');
-        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');
@@ -130,7 +132,7 @@ class TemplateTest extends TestCase
 
     public function testGetTemplateFile()
     {
-        $params = ['module' => 'Fixture_Module', 'area' => 'frontend'];
+        $params = ['module' => 'Fixture_Module', 'area' => 'frontend', 'store_id' => 1];
         $this->resolver->expects($this->once())->method('getTemplateFileName')->with('template.phtml', $params);
         $this->block->getTemplateFile();
     }

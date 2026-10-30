@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Validator\TypeDuplication;
 use Magento\Framework\Exception\ValidatorException;
 
@@ -30,9 +31,8 @@ class TypeDuplicationTest extends TestCase
     }
 
     /**
-     * @param $className
-     * @dataProvider validClassesDataProvider
-     */
+     * @param $className     */
+    #[DataProvider('validClassesDataProvider')]
     public function testValidClasses($className)
     {
         $this->assertTrue($this->_validator->validate($className));

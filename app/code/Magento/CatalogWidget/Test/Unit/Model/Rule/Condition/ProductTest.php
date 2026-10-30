@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogWidget\Test\Unit\Model\Rule\Condition;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product;
@@ -53,24 +54,19 @@ class ProductTest extends TestCase
 
         $eavConfig = $this->createMock(Config::class);
         $this->attributeMock = $this->createMock(Attribute::class);
-        $eavConfig->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
+        $eavConfig->method('getAttribute')->willReturn($this->attributeMock);
         $ruleMock = $this->createMock(Rule::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager->method('getStore')->willReturn($storeMock);
         $storeMock->method('getId')
             ->willReturn(1);
         $this->productResource = $this->createMock(Product::class);
         $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
         $this->productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->onlyMethods(['_connect'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(Mysql::class);
         $this->productResource->method('getConnection')->willReturn($connection);
-        $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productCategoryList = $this->createMock(ProductCategoryList::class);
 
         $this->model = $objectManagerHelper->getObject(
             ProductWidget::class,
@@ -98,7 +94,7 @@ class ProductTest extends TestCase
         $selectMock = $this->createMock(Select::class);
         $collectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('join')->willReturnSelf();
-        $this->attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
+        $this->attributeMock->method('getAttributeCode')->willReturn('code');
         $this->attributeMock->expects($this->once())->method('isStatic')->willReturn(false);
         $this->attributeMock->expects($this->once())->method('getBackend')->willReturn(true);
         $this->attributeMock->expects($this->once())->method('isScopeGlobal')->willReturn(true);
@@ -128,11 +124,11 @@ class ProductTest extends TestCase
     /**
      * Test getMappedSqlField method for price attribute.
      *
-     * @dataProvider getMappedSqlFieldPriceDataProvider
      * @param bool $isScopeGlobal
      * @param bool $isUsingPriceIndex
      * @param string $expectedMappedField
      */
+    #[DataProvider('getMappedSqlFieldPriceDataProvider')]
     public function testGetMappedSqlFieldPrice(
         bool $isScopeGlobal,
         bool $isUsingPriceIndex,
@@ -204,8 +200,8 @@ class ProductTest extends TestCase
      * @param array $attributeConfig
      * @param array $attributeValues
      * @param mixed $expected
-     * @dataProvider getBindArgumentValueDataProvider
      */
+    #[DataProvider('getBindArgumentValueDataProvider')]
     public function testGetBindArgumentValue(
         array $conditionArray,
         array $attributeConfig,

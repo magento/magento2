@@ -1,18 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Customer\Block\Widget\Name;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
-if (!$block->getButtonLockManager()) {
-    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-    $block->setButtonLockManager(
-        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
-    );
-}
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
@@ -123,7 +119,7 @@ if (!$block->getButtonLockManager()) {
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>"
-                <?php if ($block->getButtonLockManager()->isDisabled('customer_edit_form_submit')): ?>
+                <?php if ($buttonLockManager?->isDisabled('customer_edit_form_submit')): ?>
                     disabled="disabled"
                 <?php endif; ?>>
             <span><?= $escaper->escapeHtml(__('Save')) ?></span>

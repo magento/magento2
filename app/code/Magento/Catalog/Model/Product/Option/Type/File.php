@@ -1,18 +1,32 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Helper\Product\Validator\ProductOptionValidator;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile;
+use Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo;
+use Magento\Catalog\Model\Product\Option\UrlBuilder;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\Exception;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Quote\Model\Quote\Item\OptionFactory;
 
 /**
  * Catalog product option file type
@@ -21,7 +35,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
+class File extends DefaultType
 {
     /**
      * Url for custom option download controller
@@ -35,36 +49,36 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_formattedOptionValue = null;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      * @deprecated 101.1.0
      * @see $mediaDirectory
      */
     protected $_rootDirectory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
     /**
      * Url
      *
-     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @var UrlBuilder
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\OptionFactory
+     * @var OptionFactory
      */
     protected $_itemOptionFactory;
 
@@ -94,39 +108,46 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $productHelper;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param File\ValidatorInfo $validatorInfo
-     * @param File\ValidatorFile $validatorFile
-     * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
-     * @param \Magento\Framework\Escaper $escaper
+     * @var ProductOptionValidator $productOptionValidator
+     */
+    private $productOptionValidator;
+
+    /**
+     * @param Session $checkoutSession
+     * @param ScopeConfigInterface $scopeConfig
+     * @param OptionFactory $itemOptionFactory
+     * @param Database $coreFileStorageDatabase
+     * @param ValidatorInfo $validatorInfo
+     * @param ValidatorFile $validatorFile
+     * @param UrlBuilder $urlBuilder
+     * @param Escaper $escaper
      * @param array $data
      * @param Filesystem $filesystem
      * @param Json|null $serializer
      * @param ProductHelper|null $productHelper
+     * @param ProductOptionValidator|null $productOptionValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo $validatorInfo,
-        \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,
-        \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
-        \Magento\Framework\Escaper $escaper,
+        Session $checkoutSession,
+        ScopeConfigInterface $scopeConfig,
+        OptionFactory $itemOptionFactory,
+        Database $coreFileStorageDatabase,
+        ValidatorInfo $validatorInfo,
+        ValidatorFile $validatorFile,
+        UrlBuilder $urlBuilder,
+        Escaper $escaper,
         array $data = [],
         ?Filesystem $filesystem = null,
         ?Json $serializer = null,
-        ?ProductHelper $productHelper = null
+        ?ProductHelper $productHelper = null,
+        ?ProductOptionValidator $productOptionValidator = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
         $this->_escaper = $escaper;
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
-        $this->filesystem = $filesystem ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Filesystem::class);
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
         /** The _rootDirectory is deprecated. The field is initialized for backward compatibility */
         $this->_rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
@@ -134,6 +155,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->validatorFile = $validatorFile;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->productHelper = $productHelper ?: ObjectManager::getInstance()->get(ProductHelper::class);
+        $this->productOptionValidator = $productOptionValidator ??
+            ObjectManager::getInstance()->get(ProductOptionValidator::class);
+
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -169,7 +193,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Returns additional params for processing options
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _getProcessingParams()
     {
@@ -179,10 +203,10 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
          * Notice check for params to be \Magento\Framework\DataObject - by using object we protect from
          * params being forged and contain data from user frontend input
          */
-        if ($params instanceof \Magento\Framework\DataObject) {
+        if ($params instanceof DataObject) {
             return $params;
         }
-        return new \Magento\Framework\DataObject();
+        return new DataObject();
     }
 
     /**
@@ -271,7 +295,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $this->setUserValue($value);
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
-                case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
+                case AbstractType::PROCESS_MODE_FULL:
                     throw new LocalizedException(
                         __(
                             "The product's required option(s) weren't entered. "
@@ -282,7 +306,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                     $this->setUserValue(null);
                     break;
             }
-        } catch (\Magento\Framework\Validator\Exception $e) {
+        } catch (Exception $e) {
             $this->setUserValue(null);
         } catch (LocalizedException $e) {
             $this->setIsValid(false);
@@ -505,6 +529,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if (!$this->mediaDirectory->isFile($quotePath) || !$this->mediaDirectory->isReadable($quotePath)) {
                 return $this;
             }
+
+            $this->productOptionValidator->validateOptionsFilePath([$quotePath, $orderPath]);
 
             if ($this->_coreFileStorageDatabase->checkDbUsage()) {
                 $this->_coreFileStorageDatabase->copyFile(

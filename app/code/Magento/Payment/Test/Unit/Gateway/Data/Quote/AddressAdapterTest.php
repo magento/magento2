@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Payment\Test\Unit\Gateway\Data\Quote;
 
 use Magento\Payment\Gateway\Data\Quote\AddressAdapter;
 use Magento\Quote\Api\Data\AddressInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,8 +25,7 @@ class AddressAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteAddressMock = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
+        $this->quoteAddressMock = $this->createMock(AddressInterface::class);
 
         $this->model = new AddressAdapter($this->quoteAddressMock);
     }
@@ -47,8 +47,8 @@ class AddressAdapterTest extends TestCase
     /**
      * @param $street array|null
      * @param $expected string
-     * @dataProvider streetLine1DataProvider
      */
+    #[DataProvider('streetLine1DataProvider')]
     public function testStreetLine1($street, $expected)
     {
         $this->quoteAddressMock->expects($this->once())->method('getStreet')->willReturn($street);
@@ -69,8 +69,8 @@ class AddressAdapterTest extends TestCase
     /**
      * @param $street array|null
      * @param $expected string
-     * @dataProvider streetLine2DataProvider
      */
+    #[DataProvider('streetLine2DataProvider')]
     public function testStreetLine2($street, $expected)
     {
         $this->quoteAddressMock->expects($this->once())->method('getStreet')->willReturn($street);

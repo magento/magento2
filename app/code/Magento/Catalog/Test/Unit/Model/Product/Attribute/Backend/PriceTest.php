@@ -1,18 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Locale\Format;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Price
      */
@@ -42,12 +46,8 @@ class PriceTest extends TestCase
     {
         $objectHelper = new ObjectManager($this);
         $localeFormat = $objectHelper->getObject(Format::class);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->currencyFactory = $this->createPartialMock(CurrencyFactory::class, ['create']);
         $this->model = $objectHelper->getObject(
             Price::class,
             [
@@ -56,19 +56,60 @@ class PriceTest extends TestCase
                 'currencyFactory' => $this->currencyFactory
             ]
         );
-        $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->addMethods(['isScopeWebsite', 'getIsGlobal'])
-            ->onlyMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->attribute = $this->createPartialMockWithReflection(
+            AbstractAttribute::class,
+            [
+                'setAttributeCode',
+                'getAttributeCode',
+                'setIsScopeWebsite',
+                'isScopeWebsite',
+                'setIsGlobal',
+                'getIsGlobal',
+                '_construct'
+            ]
+        );
+        $attributeCode = null;
+        $isGlobal = null;
+        $this->attribute->method('setAttributeCode')->willReturnCallback(
+            function ($code) use (&$attributeCode) {
+                $attributeCode = $code;
+                return $this->attribute;
+            }
+        );
+        $this->attribute->method('getAttributeCode')->willReturnCallback(
+            function () use (&$attributeCode) {
+                return $attributeCode;
+            }
+        );
+        $this->attribute->method('setIsScopeWebsite')->willReturnCallback(
+            function ($scope) use (&$isGlobal) {
+                $isGlobal = $scope;
+                return $this->attribute;
+            }
+        );
+        $this->attribute->method('isScopeWebsite')->willReturnCallback(
+            function () use (&$isGlobal) {
+                return $isGlobal == ScopedAttributeInterface::SCOPE_WEBSITE;
+            }
+        );
+        $this->attribute->method('setIsGlobal')->willReturnCallback(
+            function ($global) use (&$isGlobal) {
+                $isGlobal = $global;
+                return $this->attribute;
+            }
+        );
+        $this->attribute->method('getIsGlobal')->willReturnCallback(
+            function () use (&$isGlobal) {
+                return $isGlobal;
+            }
+        );
         $this->model->setAttribute($this->attribute);
     }
 
     /**
      * Tests for the cases that expect to pass validation
-     *
-     * @dataProvider dataProviderValidate
      */
+    #[DataProvider('dataProviderValidate')]
     public function testValidate($value)
     {
         $object = $this->createMock(Product::class);
@@ -95,9 +136,8 @@ class PriceTest extends TestCase
 
     /**
      * Tests for the cases that expect to fail validation
-     *
-     * @dataProvider dataProviderValidateForFailure
      */
+    #[DataProvider('dataProviderValidateForFailure')]
     public function testValidateForFailure($value)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -132,17 +172,14 @@ class PriceTest extends TestCase
         $attributeCode = 'price';
         $defaultStoreId = 0;
         $allStoreIds = [1, 2, 3];
-        $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $object = $this->createMock(Product::class);
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn($newPrice);
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
-        $object->expects($this->any())->method('getStoreId')->willReturn($defaultStoreId);
+        $object->method('getStoreId')->willReturn($defaultStoreId);
         $object->expects($this->never())->method('getStoreIds');
         $object->expects($this->never())->method('getWebsiteStoreIds');
-        $this->attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $this->attribute->expects($this->any())->method('isScopeWebsite')
-            ->willReturn(ScopedAttributeInterface::SCOPE_WEBSITE);
+        $this->attribute->setAttributeCode($attributeCode);
+        $this->attribute->setIsScopeWebsite(ScopedAttributeInterface::SCOPE_WEBSITE);
         $this->storeManager->expects($this->never())->method('getStore');
 
         $object->expects($this->any())->method('addAttributeUpdate')
@@ -162,14 +199,11 @@ class PriceTest extends TestCase
     {
         $attributeCode = 'price';
 
-        $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $object = $this->createMock(Product::class);
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn('7.77');
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
-        $this->attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $this->attribute->expects($this->any())->method('getIsGlobal')
-            ->willReturn(ScopedAttributeInterface::SCOPE_WEBSITE);
+        $this->attribute->setAttributeCode($attributeCode);
+        $this->attribute->setIsGlobal(ScopedAttributeInterface::SCOPE_WEBSITE);
 
         $object->expects($this->never())->method('addAttributeUpdate');
         $this->assertEquals($this->model, $this->model->afterSave($object));
@@ -179,14 +213,11 @@ class PriceTest extends TestCase
     {
         $attributeCode = 'price';
 
-        $object = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $object = $this->createMock(Product::class);
         $object->expects($this->any())->method('getData')->with($attributeCode)->willReturn('9.99');
         $object->expects($this->any())->method('getOrigData')->with($attributeCode)->willReturn('7.77');
-        $this->attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
-        $this->attribute->expects($this->any())->method('getIsGlobal')
-            ->willReturn(ScopedAttributeInterface::SCOPE_GLOBAL);
+        $this->attribute->setAttributeCode($attributeCode);
+        $this->attribute->setIsGlobal(ScopedAttributeInterface::SCOPE_GLOBAL);
 
         $object->expects($this->never())->method('addAttributeUpdate');
         $this->assertEquals($this->model, $this->model->afterSave($object));

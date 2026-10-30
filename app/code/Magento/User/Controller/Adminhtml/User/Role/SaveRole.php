@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Controller\Adminhtml\User\Role;
@@ -110,7 +109,13 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
             $this->processCurrentUsers($role, $roleUsers);
 
             $role->save();
-            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
+            $roleData = [
+                'role_id' => $role->getId(),
+                'resources' => $resource,
+                'role_assigned_users' => $roleUsers,
+                'role_unassigned_users' => array_diff($oldRoleUsers, $roleUsers)
+            ];
+            $this->_rulesFactory->create()->setData($roleData)->saveRel();
 
             $this->messageManager->addSuccessMessage(__('You saved the role.'));
         } catch (UserLockedException $e) {
@@ -219,7 +224,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
         if ($user->roleUserExists() === true) {
             return false;
         } else {
-            $user->save();
+            $user->setSkipRoleResourceValidation(true)->save();
             return true;
         }
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
@@ -109,7 +109,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('No such entity with');
+        $this->expectExceptionMessageMatches('/No such entity with|Could not find a cart with ID/');
 
         $cartId = 9999;
 

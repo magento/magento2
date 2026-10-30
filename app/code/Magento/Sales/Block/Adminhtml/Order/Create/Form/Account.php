@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
@@ -29,22 +29,17 @@ use Magento\Store\Model\ScopeInterface;
  * Create order account form
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Account extends AbstractForm
 {
     /**
-     * Metadata form factory
-     *
      * @var MetadataFormFactory
      */
     protected $_metadataFormFactory;
 
     /**
-     * Customer repository
-     *
      * @var CustomerRepositoryInterface
      */
     protected $customerRepository;
@@ -99,8 +94,6 @@ class Account extends AbstractForm
     }
 
     /**
-     * Group Management
-     *
      * @var GroupManagementInterface
      */
     private $groupManagement;

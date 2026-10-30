@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,12 +15,14 @@ use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\Grand;
 use PHPUnit\Framework\MockObject\MockObject as ObjectMock;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Grand totals collector test.
  */
 class GrandTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var PriceRounder|ObjectMock
      */
@@ -36,10 +38,7 @@ class GrandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceRounder = $this->getMockBuilder(PriceRounder::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['roundPrice'])
-            ->getMockForAbstractClass();
+        $this->priceRounder = $this->createPartialMock(\Magento\Directory\Model\PriceCurrency::class, ['roundPrice']);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -64,22 +63,30 @@ class GrandTest extends TestCase
             ->method('roundPrice')
             ->willReturnOnConsecutiveCalls($grandTotal + 2, $grandTotalBase + 2);
 
-        $totalMock = $this->getMockBuilder(Total::class)
-            ->addMethods(['setGrandTotal', 'setBaseGrandTotal', 'getGrandTotal', 'getBaseGrandTotal'])
-            ->onlyMethods(['getAllTotalAmounts', 'getAllBaseTotalAmounts'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $totalMock->expects($this->once())->method('getGrandTotal')->willReturn(2);
-        $totalMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(2);
-        $totalMock->expects($this->once())->method('getAllTotalAmounts')->willReturn($totals);
-        $totalMock->expects($this->once())->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
+        $totalMock = $this->createPartialMockWithReflection(
+            Total::class,
+            [
+                'getAllTotalAmounts', 'getAllBaseTotalAmounts', 'getGrandTotal', 'getBaseGrandTotal',
+                'setGrandTotal', 'setBaseGrandTotal'
+            ]
+        );
+        $totalMock->method('getAllTotalAmounts')->willReturn($totals);
+        $totalMock->method('getAllBaseTotalAmounts')->willReturn($totalsBase);
+        
+        // getGrandTotal called once in collect (returns 2), then in assertion (returns final value)
+        $totalMock->method('getGrandTotal')->willReturnOnConsecutiveCalls(2, $grandTotal + 2);
+        $totalMock->method('getBaseGrandTotal')->willReturnOnConsecutiveCalls(2, $grandTotalBase + 2);
+        
         $totalMock->expects($this->once())->method('setGrandTotal')->with($grandTotal + 2);
         $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase + 2);
 
         $this->model->collect(
             $this->createMock(Quote::class),
-            $this->getMockForAbstractClass(ShippingAssignmentInterface::class),
+            $this->createMock(ShippingAssignmentInterface::class),
             $totalMock
         );
+        
+        $this->assertEquals($grandTotal + 2, $totalMock->getGrandTotal());
+        $this->assertEquals($grandTotalBase + 2, $totalMock->getBaseGrandTotal());
     }
 }

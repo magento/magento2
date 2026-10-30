@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,9 +27,7 @@ class StateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->item = $this->createMock(Item::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(State::class);

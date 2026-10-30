@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -169,6 +169,23 @@ define([
          * Bind all
          */
         bindAll: function () {
+            var formSelector = '#attributes-edit-form',
+                instance = this;
+
+            $(document).on('move.tabs', function (event) {
+                if (!$(event.target).closest(formSelector).length) {
+                    return;
+                }
+
+                if (instance.hasWeightSwitcher()) {
+                    instance.switchWeight();
+                }
+
+                if (instance.hasWeightChangeToggle()) {
+                    instance.toggleSwitcher();
+                }
+            });
+
             this.$weightSwitcher().find('input').on('change', this.switchWeight.bind(this));
         }
     };

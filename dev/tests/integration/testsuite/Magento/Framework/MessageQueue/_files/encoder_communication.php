@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 return [
@@ -29,6 +29,11 @@ return [
         'product.created' => [
             'request_type' => 'object_interface',
             'request' => \Magento\Catalog\Api\Data\ProductInterface::class,
+            'response' => null,
+        ],
+        'readonly.message.created' => [
+            'request_type' => 'object_interface',
+            'request' => \Magento\Framework\MessageQueue\ReadonlyMessage::class,
             'response' => null,
         ],
     ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -86,13 +86,11 @@ class FullTest extends TestCase
         $this->eavDecimalFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
         $this->eavSourceFactory = $this->createPartialMock(SourceFactory::class, ['create']);
         $this->metadataPool = $this->createMock(MetadataPool::class);
-        $this->batchProvider = $this->getMockForAbstractClass(BatchProviderInterface::class);
+        $this->batchProvider = $this->createMock(BatchProviderInterface::class);
         $this->batchQueryGenerator = $this->createMock(Generator::class);
         $this->batchSizeCalculator = $this->createMock(BatchSizeCalculator::class);
         $this->activeTableSwitcher = $this->createMock(ActiveTableSwitcher::class);
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -118,17 +116,12 @@ class FullTest extends TestCase
         $this->scopeConfig->expects($this->once())->method('getValue')->willReturn(1);
 
         $ids = [1, 2, 3];
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $connectionMock->expects($this->atLeastOnce())->method('describeTable')->willReturn(['id' => []]);
-        $eavSource = $this->getMockBuilder(Source::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavSource = $this->createMock(Source::class);
 
-        $eavDecimal = $this->getMockBuilder(Decimal::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eavDecimal = $this->createMock(Decimal::class);
 
         $eavSource->expects($this->once())->method('getRelationsByChild')->with($ids)->willReturn([]);
         $eavSource->expects($this->never())->method('getRelationsByParent')->with($ids)->willReturn([]);
@@ -147,8 +140,7 @@ class FullTest extends TestCase
 
         $this->eavSourceFactory->expects($this->once())->method('create')->willReturn($eavDecimal);
 
-        $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
 
         $this->metadataPool->expects($this->atLeastOnce())
             ->method('getMetadata')
@@ -168,9 +160,7 @@ class FullTest extends TestCase
         $this->batchQueryGenerator->method('generate')
             ->willReturn([$batchQuery]);
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
 
         $connectionMock->method('select')->willReturn($selectMock);
         $selectMock->expects($this->atLeastOnce())->method('distinct')->willReturnSelf();

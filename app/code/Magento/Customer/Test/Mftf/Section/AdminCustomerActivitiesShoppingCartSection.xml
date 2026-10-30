@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -11,6 +11,7 @@
     <section name="AdminCustomerActivitiesShoppingCartSection">
         <element name="productName" type="text" selector="//div[@id='sidebar_data_cart']//td[@class='col-item']"/>
         <element name="productPrice" type="text" selector="//div[@id='sidebar_data_cart']//td[@class='col-price']"/>
+        <element name="productQty" type="text" selector="//div[@id='sidebar_data_cart']//td[@class='col-qty']"/>
         <element name="addToOrder" type="checkbox" selector="//input[contains(@id, 'sidebar-add_cart_item')]"/>
     </section>
 </sections>

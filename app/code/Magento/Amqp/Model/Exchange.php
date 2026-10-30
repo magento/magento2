@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Amqp\Model;
 
@@ -14,6 +14,7 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
  * {@inheritdoc}
  *
  * @deprecated 100.2.0
+ * @see Magento\Framework\MessageQueue
  */
 class Exchange extends \Magento\Framework\Amqp\Exchange
 {
@@ -48,6 +49,7 @@ class Exchange extends \Magento\Framework\Amqp\Exchange
      * @return PublisherConfig
      *
      * @deprecated 100.2.0
+     * @see it's a private method, not used anymore
      */
     private function getPublisherConfig()
     {
@@ -60,6 +62,7 @@ class Exchange extends \Magento\Framework\Amqp\Exchange
      * @return ResponseQueueNameBuilder
      *
      * @deprecated 100.2.0
+     * @see it's a private method, not used anymore
      */
     private function getResponseQueueNameBuilder()
     {

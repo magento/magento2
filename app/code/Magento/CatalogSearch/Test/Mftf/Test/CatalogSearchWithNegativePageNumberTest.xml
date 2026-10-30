@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogSearchWithNegativePageNumberTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Catalog Search Results"/>
+            <title value="Pagination should reset on Storefront when negative page number requested"/>
+            <description value="Pagination should reset on Storefront when negative page number requested"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value=""/>
+            <useCaseId value=""/>
+            <group value="CatalogSearch"/>
+            <group value="SearchEngine"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteProductTwo"/>
+        </after>
+
+        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="visitSearchResults">
+            <argument name="phrase" value="simple"/>
+            <argument name="pageNumber" value="-1"/>
+        </actionGroup>
+
+        <!-- Validate that "no products found" error message is not present -->
+        <actionGroup ref="StorefrontDontSeeNoProductsFoundActionGroup" stepKey="dontSeeNoProdsFoundMessage"/>
+        <!-- Verify the products are visible on the Category Page -->
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductOneOnGrid">
+            <argument name="productName" value="$$createSimpleProductOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductTwoOnGrid">
+            <argument name="productName" value="$$createSimpleProductTwo.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

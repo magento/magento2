@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,11 +97,13 @@ class Attribute implements LayerBuilderInterface
                 $attribute['attribute_code'] ?? $bucketName,
                 isset($attribute['position']) ? $attribute['position'] : null
             );
-            $optionLabels = $attribute['attribute_type'] === 'boolean'
+            $optionLabels = ($attribute['attribute_type'] ?? null) === 'boolean'
                 ? $this->YesNo->toArray()
                 : $attribute['options'] ?? [];
             $result[$bucketName]['options'] = $this->getSortedOptions($bucket, $optionLabels);
-            if (self::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS === $attribute['is_filterable']) {
+            if (isset($attribute['is_filterable']) &&
+                self::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS === $attribute['is_filterable']
+            ) {
                 $result[$bucketName]['options'] = array_filter(
                     $result[$bucketName]['options'],
                     fn ($option) => $option['count']

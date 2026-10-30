@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
 use Magento\Framework\Data\Argument\Interpreter\Number;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NumberTest extends TestCase
 {
@@ -23,9 +24,8 @@ class NumberTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider evaluateExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateExceptionDataProvider')]
     public function testEvaluateException($input)
     {
         $this->expectException('InvalidArgumentException');
@@ -44,9 +44,8 @@ class NumberTest extends TestCase
     /**
      * @param array $input
      * @param bool $expected
-     *
-     * @dataProvider evaluateDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateDataProvider')]
     public function testEvaluate($input, $expected)
     {
         $actual = $this->_model->evaluate(['value' => $input]);

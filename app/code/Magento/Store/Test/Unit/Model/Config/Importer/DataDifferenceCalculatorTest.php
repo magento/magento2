@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,7 @@ class DataDifferenceCalculatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->runtimeConfigSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->runtimeConfigSourceMock = $this->createMock(ConfigSourceInterface::class);
 
         $this->model = new DataDifferenceCalculator(
             $this->runtimeConfigSourceMock

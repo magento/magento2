@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\PageCache\Test\Unit\Model\System\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\System\Config\Backend\AccessList;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AccessListTest extends TestCase
@@ -26,7 +27,7 @@ class AccessListTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $configMock = $this->getMockForAbstractClass(
+        $configMock = $this->createMock(
             ScopeConfigInterface::class
         );
         $configMock->expects($this->any())
@@ -48,18 +49,20 @@ class AccessListTest extends TestCase
     public static function getValidValues(): array
     {
         return [
+            ['', 'localhost'],
             ['localhost', 'localhost'],
             [null, 'localhost'],
             ['127.0.0.1', '127.0.0.1'],
             ['127.0.0.1, localhost, ::2', '127.0.0.1, localhost, ::2'],
+            ['172.16.0.1/24, 2001:0db8:/32', '172.16.0.1/24, 2001:0db8:/32'],
         ];
     }
 
     /**
      * @param mixed $value
      * @param mixed $expectedValue
-     * @dataProvider getValidValues
      */
+    #[DataProvider('getValidValues')]
     public function testBeforeSave($value, $expectedValue)
     {
         $this->accessList->setValue($value);
@@ -73,16 +76,18 @@ class AccessListTest extends TestCase
     public static function getInvalidValues(): array
     {
         return [
+            [123],
             ['\\bull val\\'],
             ['{*I am not an IP*}'],
             ['{*I am not an IP*}, 127.0.0.1'],
+            ['172.16.0.1/33'],
         ];
     }
 
     /**
      * @param mixed $value
-     * @dataProvider getInvalidValues
      */
+    #[DataProvider('getInvalidValues')]
     public function testBeforeSaveInvalid($value)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

@@ -60,7 +60,7 @@ class I18nCollectPhrasesCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $directory = $input->getArgument(self::INPUT_KEY_DIRECTORY);
         if ($input->getOption(self::INPUT_KEY_MAGENTO)) {

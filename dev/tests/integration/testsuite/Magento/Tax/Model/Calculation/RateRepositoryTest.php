@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -12,6 +12,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -259,9 +260,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param string $errorMessages
      * @throws \Magento\Framework\Exception\InputException
      *
-     * @dataProvider createDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('createDataProvider')]
     public function testSaveThrowsExceptionIfGivenDataIsInvalid($dataArray, $errorMessages)
     {
         $this->expectException(\Magento\Framework\Exception\InputException::class);
@@ -567,9 +568,9 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param $expectedRateCodes
      *
      * @magentoDbIsolation enabled
-     * @dataProvider searchTaxRatesDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[DataProvider('searchTaxRatesDataProvider')]
     public function testGetList($filters, $filterGroup, $expectedRateCodes)
     {
         $taxRates = $this->taxRateFixtureFactory->createTaxRates(

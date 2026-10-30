@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,7 +112,6 @@ class ImageFactoryTest extends TestCase
         }
         file_put_contents($imagePath, stream_get_contents($memory, -1, 0));
         fclose($memory);
-        imagedestroy($image);
         // phpcs:enable
 
         return $imagePath;

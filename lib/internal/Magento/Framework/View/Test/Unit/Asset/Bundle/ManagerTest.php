@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,14 +51,12 @@ class ManagerTest extends TestCase
         $this->bundle = $this->getMockBuilder(Bundle::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->bundleConfig = $this->createMock(ConfigInterface::class);
         $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->asset = $this->getMockForAbstractClass(
+        $this->asset = $this->createMock(
             LocalInterface::class,
             [],
             '',
@@ -92,9 +90,7 @@ class ManagerTest extends TestCase
 
     public function testAddAssetWithExcludedFile()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,9 +138,7 @@ class ManagerTest extends TestCase
 
     public function testAddAssetWithExcludedDirectory()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -196,10 +190,7 @@ class ManagerTest extends TestCase
 
     public function testAddAsset()
     {
-        $dirRead = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAbsolutePath'])
-            ->getMockForAbstractClass();
+        $dirRead = $this->createMock(ReadInterface::class);
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();

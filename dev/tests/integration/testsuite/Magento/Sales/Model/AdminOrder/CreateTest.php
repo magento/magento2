@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -98,7 +99,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         /** @var $orderCreate \Magento\Sales\Model\AdminOrder\Create */
-        $order->setReordered(true);
         $orderCreate = $this->model->initFromOrder($order);
 
         $quoteItems = $orderCreate->getQuote()->getItemsCollection();
@@ -478,10 +478,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider
      * @param string $customerEmailFirstAttempt
      * @param string $customerEmailSecondAttempt
      */
+    #[DataProvider('createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider')]
     public function testCreateOrderNewCustomerWithFailedFirstPlaceOrderAction(
         $customerEmailFirstAttempt,
         $customerEmailSecondAttempt
@@ -512,7 +512,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         );
 
         // Emulates failing place order action
-        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
         $orderManagement->method('place')
             ->willThrowException(new \Exception('Can\'t place order'));
         $this->objectManager->addSharedInstance($orderManagement, OrderManagementInterface::class);
@@ -546,7 +546,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @case #2 Changed after failed first place order action.
      * @return array
      */
-    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider(): array
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
@@ -699,7 +699,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** @var SessionQuote $session */
         $session = $this->objectManager->create(SessionQuote::class);
         $session->setCustomerId($fixtureCustomerId);
-        $session->setTransferredItems(['cart' => [124]]);
+
         /** @var $quoteFixture Quote */
         $quoteFixture = $this->objectManager->create(Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
@@ -707,6 +707,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $customerQuote = $this->model->getCustomerCart();
         $item = $customerQuote->getAllVisibleItems()[0];
+        $session->setTransferredItems(['cart' => [$item->getId()]]);
 
         $this->model->moveQuoteItem($item, 'cart', 3);
         self::assertEquals(4, $item->getQty(), 'Number of Qty isn\'t correct for Quote item.');
@@ -731,7 +732,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
         self::assertInstanceOf(Quote::class, $customerQuote);
-        self::assertEmpty($customerQuote->getData());
+        // Verify it's a new cart: no saved entity_id and no items
+        self::assertNull($customerQuote->getId(), 'New cart should not have an entity ID');
+        self::assertEmpty($customerQuote->getAllItems(), 'New cart should have no items');
     }
 
     /**

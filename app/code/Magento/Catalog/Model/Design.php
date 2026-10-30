@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
@@ -131,6 +131,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
     /**
      * Get custom layout settings
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param Category|Product $object
      * @return DataObject
      */
@@ -140,7 +141,7 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $currentCategory = $object->getCategory();
             if (!$currentCategory) {
                 $lastId = $this->catalogSession->getLastVisitedCategoryId();
-                if ($object->canBeShowInCategory($lastId)) {
+                if ($lastId && $object->canBeShowInCategory($lastId)) {
                     $categoryId = $lastId;
                     try {
                         $currentCategory = $this->categoryRepository->get($categoryId);

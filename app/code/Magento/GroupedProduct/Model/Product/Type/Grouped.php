@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
@@ -352,13 +352,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             return __('Please specify the quantity of product(s).')->render();
         }
         foreach ($associatedProducts as $subProduct) {
-            if (isset($productsInfo[$subProduct->getId()])) {
+            $subProductId = $subProduct->getId() ?? '';
+            if (isset($productsInfo[$subProductId])) {
                 continue;
             }
             if ($isStrictProcessMode && !$subProduct->getQty() && $subProduct->isSalable()) {
                 return __('Please specify the quantity of product(s).')->render();
             }
-            $productsInfo[$subProduct->getId()] = $this->getSubProductQtyInfo($buyRequest, $subProduct);
+            $productsInfo[$subProductId] = $this->getSubProductQtyInfo($buyRequest, $subProduct);
         }
         return $productsInfo;
     }
@@ -403,10 +404,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
             ? $this->getAssociatedProducts($product)
-            : false;
+            : [];
 
         foreach ($associatedProducts as $subProduct) {
-            $qty = $productsInfo[$subProduct->getId()];
+            $subProductId = $subProduct->getId() ?? '';
+            $qty = $productsInfo[$subProductId];
             if (!is_numeric($qty) || empty($qty)) {
                 continue;
             }

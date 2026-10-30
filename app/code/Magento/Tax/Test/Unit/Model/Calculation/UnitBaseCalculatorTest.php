@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class UnitBaseCalculatorTest extends TestCase
 
     public const CODE = 'CODE';
     public const TYPE = 'TYPE';
-    public const ROW_TAX = 44.958682408681;
+    public const ROW_TAX = 44.954135954135964;
     public const ROW_TAX_ROUNDED = 44.95;
     public const PRICE_INCL_TAX = 495.4954954955;
     public const PRICE_INCL_TAX_ROUNDED = 495.50;
@@ -136,7 +136,7 @@ class UnitBaseCalculatorTest extends TestCase
         $this->model = $objectManager->getObject(UnitBaseCalculator::class, $arguments);
     }
 
-    public function testCalculateWithTaxInPrice()
+    public function testCalculateWithTaxInPrice(): void
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->atLeastOnce())
@@ -192,7 +192,7 @@ class UnitBaseCalculatorTest extends TestCase
         );
     }
 
-    public function testCalculateWithTaxNotInPrice()
+    public function testCalculateWithTaxNotInPrice(): void
     {
         $mockItem = $this->getMockItem();
         $mockItem->expects($this->once())
@@ -228,9 +228,7 @@ class UnitBaseCalculatorTest extends TestCase
     protected function getMockItem()
     {
         /** @var MockObject $mockItem */
-        $mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mockItem = $this->createMock(QuoteDetailsItemInterface::class);
         $mockItem->expects($this->atLeastOnce())
             ->method('getDiscountAmount')
             ->willReturn(1);

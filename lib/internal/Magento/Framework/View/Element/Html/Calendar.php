@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Html;
 
@@ -74,7 +74,11 @@ class Calendar extends \Magento\Framework\View\Element\Template
             [
                 'wide' => $this->encoder->encode(array_values(iterator_to_array($daysData['format']['wide']))),
                 'abbreviated' => $this->encoder->encode(
-                    array_values(iterator_to_array($daysData['format']['abbreviated']))
+                    array_values(
+                        iterator_to_array(
+                            $daysData['format']['abbreviated'] ?? $daysData['format']['wide']
+                        )
+                    )
                 ),
             ]
         );

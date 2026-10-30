@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Msrp\Helper\Data as MsrpHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
@@ -30,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SpecialTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var \Magento\Catalog\Block\Rss\Product\Special
      */
@@ -61,7 +64,7 @@ class SpecialTest extends TestCase
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\Special|MockObject
+     * @var Special|MockObject
      */
     protected $rssModel;
 
@@ -95,7 +98,7 @@ class SpecialTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->request
             ->method('getParam')
             ->willReturnCallback(fn($param) => match ([$param]) {
@@ -103,31 +106,26 @@ class SpecialTest extends TestCase
                 ['cid'] => null
             });
 
-        $this->httpContext = $this->getMockBuilder(Context::class)
-            ->onlyMethods(['getValue'])->disableOriginalConstructor()
-            ->getMock();
-        $this->httpContext->expects($this->any())->method('getValue')->willReturn(1);
+        $this->httpContext = $this->createPartialMock(Context::class, ['getValue']);
+        $this->httpContext->method('getValue')->willReturn(1);
 
         $this->imageHelper = $this->createMock(Image::class);
         $this->outputHelper = $this->createPartialMock(Output::class, ['productAttribute']);
         $this->msrpHelper = $this->createPartialMock(MsrpHelper::class, ['canApplyMsrp']);
-        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $this->rssModel = $this->createMock(Special::class);
-        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $store = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getId', 'getFrontendName'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->any())->method('getId')->willReturn(1);
-        $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createPartialMock(Store::class, ['getId', 'getFrontendName']);
+        $store->method('getId')->willReturn(1);
+        $store->method('getFrontendName')->willReturn('Store 1');
+        $this->storeManager->method('getStore')->willReturn($store);
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->scopeConfig->expects($this->any())->method('getValue')->willReturn('en_US');
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig->method('getValue')->willReturn('en_US');
 
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
@@ -197,34 +195,17 @@ class SpecialTest extends TestCase
     }
 
     /**
-     * @return MockObject
+     * @return Product
      */
-    protected function getItemMock(): MockObject
+    protected function getItemMock(): Product
     {
-        $item = $this->getMockBuilder(Product::class)
-            ->onlyMethods(
-                [
-                    '__sleep',
-                    'getName',
-                    'getProductUrl',
-                    'getSpecialToDate',
-                    'getSpecialPrice',
-                    'getFinalPrice',
-                    'getPrice'
-                ]
-            )
-            ->addMethods(
-                [
-                    'getDescription',
-                    'getAllowedInRss',
-                    'getAllowedPriceInRss',
-                    'getUseSpecial'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getPrice', 'getFinalPrice', 'getProductUrl', 'getSpecialPrice', 'getSpecialToDate',
+             'getName', 'getDescription', 'getAllowedInRss', 'getAllowedPriceInRss', 'getUseSpecial']
+        );
         $item->expects($this->once())->method('getAllowedInRss')->willReturn(true);
-        $item->expects($this->any())->method('getSpecialToDate')->willReturn(date('Y-m-d'));
+        $item->method('getSpecialToDate')->willReturn(date('Y-m-d'));
         $item->expects($this->exactly(2))->method('getFinalPrice')->willReturn(10);
         $item->expects($this->once())->method('getSpecialPrice')->willReturn(15);
         $item->expects($this->exactly(2))->method('getAllowedPriceInRss')->willReturn(true);

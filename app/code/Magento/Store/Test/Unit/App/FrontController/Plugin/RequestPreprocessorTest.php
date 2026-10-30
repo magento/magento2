@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class RequestPreprocessorTest extends TestCase
         };
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
         $this->_urlMock = $this->createMock(Url::class);
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
 
         $this->baseUrlChecker = $this->createMock(BaseUrlChecker::class);
@@ -93,7 +93,6 @@ class RequestPreprocessorTest extends TestCase
         $modelProperty = (new \ReflectionClass(get_class($this->_model)))
             ->getProperty('baseUrlChecker');
 
-        $modelProperty->setAccessible(true);
         $modelProperty->setValue($this->_model, $this->baseUrlChecker);
     }
 

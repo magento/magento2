@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,8 +20,12 @@ use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AreBundleOptionsSalableTest extends TestCase
 {
     /**
@@ -65,13 +69,13 @@ class AreBundleOptionsSalableTest extends TestCase
         ),
     ]
     /**
-     * @dataProvider executeDataProvider
      * @param string $storeCodeForChange
      * @param array $disabledChildren
      * @param string $storeCodeForCheck
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         string $storeCodeForChange,
         array $disabledChildren,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,7 +56,7 @@ class StateTest extends TestCase
     protected function setUp(): void
     {
         $this->_contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->_contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
         $this->_registryMock = $this->createMock(Registry::class);
         $this->_resourceMock = $this->createMock(\Magento\Indexer\Model\ResourceModel\Indexer\State::class);
@@ -150,8 +151,8 @@ class StateTest extends TestCase
      * @param string $setStatus
      * @param string $getStatus
      * @param bool $isLocked
-     * @dataProvider executeProvider
      */
+    #[DataProvider('executeProvider')]
     public function testSetterAndGetterWithApplicationLock($setStatus, $getStatus, $lock, $isLocked)
     {
         $this->configReaderMock->expects($this->any())->method('get')->willReturn(true);

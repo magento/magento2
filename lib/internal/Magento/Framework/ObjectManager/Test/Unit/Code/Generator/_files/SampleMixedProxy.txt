@@ -99,7 +99,7 @@ class SampleMixed_Proxy extends SampleMixed implements \Magento\Framework\Object
     /**
      * {@inheritdoc}
      */
-    public function setMixed(mixed $mixed = null) : void
+    public function setMixed(mixed $mixed = null): void
     {
         $this->_getSubject()->setMixed($mixed);
     }
@@ -107,7 +107,7 @@ class SampleMixed_Proxy extends SampleMixed implements \Magento\Framework\Object
     /**
      * {@inheritdoc}
      */
-    public function getMixed() : mixed
+    public function getMixed(): mixed
     {
         return $this->_getSubject()->getMixed();
     }

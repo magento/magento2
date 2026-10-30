@@ -49,12 +49,19 @@
         <element name="specificEntitySelectContainer" type="select" selector="select[name='widget_instance[0][anchor_categories][block]']"/>
         <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
         <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
+        <element name="specificConfigurableProductsRadio" type="input" selector="//input[@type='radio' and @value='specific' and contains(@name, '[configurable_products][for]')]"/>
+        <element name="configurableProductsContainer" type="select" selector="//select[contains(@name, '[configurable_products][block]')]"/>
+        <element name="configurableProductsChooser" type="button" selector="//div[contains(@id, 'configurable_products_ids')]//a[@class='widget-option-chooser']"/>
+        <element name="chooserProductIdFilter" type="input" selector="//input[@name='entity_id' and contains(@id, 'filter_entity_id')]"/>
+        <element name="chooserSearchButton" type="button" selector="//button[@title='Search' and @data-action='grid-filter-apply']"/>
+        <element name="chooserProductCheckboxById" type="checkbox" selector="//input[@type='checkbox' and @name='in_products' and @id='id_{{productId}}']" parameterized="true"/>
         <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
         <element name="expandJsTree" type="button" selector="//*[@class='chooser']/div/ul/li/i[@role='presentation']"/>
         <element name="jsTreeAnchorCheckbox" type="select" selector="//*[@class='chooser']/div/ul[@role='presentation']/li/ul[@role='group']/li/a/i[@class='jstree-icon jstree-checkbox']"/>
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>
         <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
+        <element name="numberOfProductsPerPage" type="input" selector="[name='parameters[products_per_page]']"/>
         <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
         <element name="template" type="select" selector="[name='parameters[template]']"/>
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
@@ -69,4 +76,3 @@
         <element name="conditions" type="button" selector="//label[@class='label admin__field-label']//span[text()='Conditions']"/>
     </section>
 </sections>
-

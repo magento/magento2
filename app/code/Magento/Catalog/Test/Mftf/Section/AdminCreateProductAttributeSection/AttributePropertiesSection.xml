@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -13,6 +13,7 @@
         <element name="InputType" type="select" selector="#frontend_input"/>
         <element name="ValueRequired" type="select" selector="#is_required"/>
         <element name="UpdateProductPreviewImage" type="select" selector="[name='update_product_preview_image']"/>
+        <element name="UseProductImageForSwatch" type="select" selector="#use_product_image_for_swatch"/>
         <element name="AdvancedProperties" type="button" selector="#advanced_fieldset-wrapper"/>
         <element name="DefaultValue" type="input" selector="#default_value_text"/>
         <element name="Scope" type="select" selector="#is_global"/>

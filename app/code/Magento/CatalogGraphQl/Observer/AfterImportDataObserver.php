@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Observer;
 
 use Magento\Catalog\Model\ProductRepository;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Event\Observer;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 
@@ -91,7 +92,7 @@ class AfterImportDataObserver implements ObserverInterface
         }, $productIdsToInvalidate);
 
         $this->graphQlResolverCache->clean(
-            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
             $tags
         );
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,8 +13,10 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -43,14 +45,8 @@ class PositionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->coreRegistry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['registry'])
-            ->getMock();
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
+        $this->coreRegistry = $this->createPartialMock(Registry::class, ['registry']);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -64,26 +60,20 @@ class PositionTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $attributeCode
      * @param $context
      * @param $fromRegistry
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName($attributeCode, $context, $fromRegistry, $expected)
     {
-        $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAttributeCode'])
-            ->getMock();
+        $attributeMock = $this->createPartialMock(AttributeAdapter::class, ['getAttributeCode']);
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRootCategoryId'])
-            ->getMockForAbstractClass();
+        $store = $this->createPartialMock(Store::class, ['getRootCategoryId']);
         $store->expects($this->any())
             ->method('getRootCategoryId')
             ->willReturn(2);
@@ -92,10 +82,7 @@ class PositionTest extends TestCase
             ->willReturn($store);
         $category = null;
         if ($fromRegistry) {
-            $category = $this->getMockBuilder(CategoryInterface::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['getId'])
-                ->getMockForAbstractClass();
+            $category = $this->createMock(CategoryInterface::class);
             $category->expects($this->any())
                 ->method('getId')
                 ->willReturn(1);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class UploadTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        if (file_exists($this->fileToRemove)) {
+        if ($this->fileToRemove !== null && file_exists($this->fileToRemove)) {
             unlink($this->fileToRemove);
         }
 

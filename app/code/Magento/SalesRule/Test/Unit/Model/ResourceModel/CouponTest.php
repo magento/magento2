@@ -13,6 +13,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\SalesRule\Model\ResourceModel\Coupon;
 use Magento\SalesRule\Model\Rule;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,13 +70,13 @@ class CouponTest extends TestCase
     }
 
     /**
-     * @dataProvider updateSpecificCouponsDataProvider
      * @param array $origData
      * @param array $data
      * @param array|null $update
      * @return void
      * @throws Exception
      */
+    #[DataProvider('updateSpecificCouponsDataProvider')]
     public function testUpdateSpecificCoupons(array $origData, array $data, ?array $update = null): void
     {
         /** @var Rule|MockObject $abstractModel */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,11 +85,16 @@ class AttributeSetsFixtureTest extends TestCase
             ['product_attribute_sets_attributes_values', 3, 3],
         ];
 
-        $closure = function () {
-        };
         $this->patternMock->expects($this->once())
             ->method('generateAttributeSet')
-            ->with(AttributeSetsFixture::PRODUCT_SET_NAME . 1, 2, 3, $closure)
+            ->with(
+                AttributeSetsFixture::PRODUCT_SET_NAME . 1,
+                2,
+                3,
+                $this->callback(function ($arg) {
+                    return is_callable($arg);
+                })
+            )
             ->willReturn(['some-data']);
         $this->attributeSetsFixtureMock->expects($this->once())
             ->method('createAttributeSet')

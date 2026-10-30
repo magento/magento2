@@ -82,3 +82,6 @@ Cancel,Cancel
                     customer data to generate our dynamic reports.</p><p>To opt in later: You can always turn on Advanced
                     Reporting in you Admin Panel.</p>"
 "In order to personalize your Advanced Reporting experience, please select your industry.","In order to personalize your Advanced Reporting experience, please select your industry."
+"The data is invalid. Use a valid cipher method and try again.","The data is invalid. Use a valid cipher method and try again."
+"The data is invalid. Enter the data as a string and try again.","The data is invalid. Enter the data as a string and try again."
+"The data could not be encrypted. Try again.","The data could not be encrypted. Try again."

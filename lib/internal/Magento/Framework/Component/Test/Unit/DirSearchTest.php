@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,11 +40,11 @@ class DirSearchTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registrar = $this->getMockForAbstractClass(
+        $this->registrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->readFactory = $this->createMock(ReadFactory::class);
-        $this->dir = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->dir = $this->createMock(ReadInterface::class);
         $this->dir->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnArgument(0);

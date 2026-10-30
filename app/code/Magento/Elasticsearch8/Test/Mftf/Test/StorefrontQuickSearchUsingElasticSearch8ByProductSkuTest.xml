@@ -42,7 +42,7 @@
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
-            <argument name="phrase" value="24 MB04"/>
+            <argument name="phrase" value="24 MB0"/>
         </actionGroup>
 
         <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>

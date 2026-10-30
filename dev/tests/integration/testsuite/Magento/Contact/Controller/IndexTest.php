@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Contact\Controller;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Contact index controller test
@@ -41,9 +42,8 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @param array $params For Request.
      * @param string $expectedMessage Expected response.
-     *
-     * @dataProvider dataInvalidPostAction
      */
+    #[DataProvider('dataInvalidPostAction')]
     public function testInvalidPostAction($params, $expectedMessage)
     {
         $this->getRequest()->setPostValue($params)->setMethod(HttpRequest::METHOD_POST);
@@ -63,31 +63,31 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         return [
             'missing_comment' => [
-                'params' => [
+                [  // $params
                     'name' => 'customer name',
                     'comment' => '',
                     'email' => 'user@example.com',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "Enter the comment and try again.",
+                "Enter the comment and try again.",  // $expectedMessage
             ],
             'missing_name' => [
-                'params' => [
+                [  // $params
                     'name' => '',
                     'comment' => 'customer comment',
                     'email' => 'user@example.com',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "Enter the Name and try again.",
+                "Enter the Name and try again.",  // $expectedMessage
             ],
             'invalid_email' => [
-                'params' => [
+                [  // $params
                     'name' => 'customer name',
                     'comment' => 'customer comment',
                     'email' => 'invalidemail',
                     'hideit' => '',
                 ],
-                'expectedMessage' => "The email address is invalid. Verify the email address and try again.",
+                "The email address is invalid. Verify the email address and try again.",  // $expectedMessage
             ],
         ];
     }

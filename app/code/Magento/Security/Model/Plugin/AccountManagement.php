@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,8 @@ class AccountManagement
     ) {
         if ($this->scope->getCurrentScope() == Area::AREA_FRONTEND
             || $this->passwordRequestEvent == PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST
-            || ($this->scope->getCurrentScope() == Area::AREA_WEBAPI_REST
+            || (($this->scope->getCurrentScope() == Area::AREA_WEBAPI_REST
+                    || $this->scope->getCurrentScope() == Area::AREA_GRAPHQL)
             && $this->passwordRequestEvent == PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST)) {
             $this->securityManager->performSecurityCheck(
                 $this->passwordRequestEvent,

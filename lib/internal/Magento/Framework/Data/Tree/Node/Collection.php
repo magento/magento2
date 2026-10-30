@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Tree\Node;
 
@@ -120,7 +120,8 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
             $node->setTree($this->_container->getTree());
         }
 
-        $this->_nodes[$node->getId()] = $node;
+        $nodeId = $node->getId() ?? '';
+        $this->_nodes[$nodeId] = $node;
 
         return $node;
     }
@@ -133,8 +134,9 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function delete($node)
     {
-        if (isset($this->_nodes[$node->getId()])) {
-            unset($this->_nodes[$node->getId()]);
+        $nodeId = $node->getId() ?? '';
+        if (isset($this->_nodes[$nodeId])) {
+            unset($this->_nodes[$nodeId]);
         }
         return $this;
     }
@@ -175,6 +177,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     public function searchById($nodeId)
     {
+        $nodeId = $nodeId ?? '';
         if (isset($this->_nodes[$nodeId])) {
             return $this->_nodes[$nodeId];
         }

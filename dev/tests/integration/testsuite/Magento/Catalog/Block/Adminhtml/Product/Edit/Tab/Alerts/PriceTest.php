@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check price alert grid
@@ -32,8 +33,6 @@ class PriceTest extends AbstractAlertTest
     }
 
     /**
-     * @dataProvider alertsDataProvider
-     *
      * @magentoDbIsolation disabled
      *
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
@@ -44,6 +43,7 @@ class PriceTest extends AbstractAlertTest
      * @param string|null $storeCode
      * @return void
      */
+    #[DataProvider('alertsDataProvider')]
     public function testGridCollectionWithStoreId(string $sku, string $expectedEmail, ?string $storeCode = null): void
     {
         $this->prepareRequest($sku, $storeCode);
@@ -71,11 +71,10 @@ class PriceTest extends AbstractAlertTest
     }
 
     /**
-     * @dataProvider storeProvider
-     *
      * @param string|null $storeCode
      * @return void
      */
+    #[DataProvider('storeProvider')]
     public function testGetGridUrl(?string $storeCode): void
     {
         $this->prepareRequest(null, $storeCode);

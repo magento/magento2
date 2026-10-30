@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Message\Test\Unit;
 use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Phrase;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * \Magento\Framework\Message\AbstractMessage test case
@@ -28,9 +29,8 @@ class AbstractMessageTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Message\AbstractMessage::getText
-     * @covers \Magento\Framework\Message\AbstractMessage::setText
-     * @dataProvider setTextGetTextProvider
-     */
+     * @covers \Magento\Framework\Message\AbstractMessage::setText     */
+    #[DataProvider('setTextGetTextProvider')]
     public function testSetTextGetText($text, $resultText)
     {
         $this->model->setText($text);
@@ -47,9 +47,8 @@ class AbstractMessageTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Message\AbstractMessage::getIdentifier
-     * @covers \Magento\Framework\Message\AbstractMessage::setIdentifier
-     * @dataProvider setIdentifierGetIdentifierProvider
-     */
+     * @covers \Magento\Framework\Message\AbstractMessage::setIdentifier     */
+    #[DataProvider('setIdentifierGetIdentifierProvider')]
     public function testSetIdentifierGetIdentifier($identifier)
     {
         $this->model->setIdentifier($identifier);

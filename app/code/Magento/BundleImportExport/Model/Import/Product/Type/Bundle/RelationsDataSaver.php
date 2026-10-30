@@ -106,6 +106,23 @@ class RelationsDataSaver
     }
 
     /**
+     * Saves bundle selection prices per website
+     *
+     * @param array $values
+     * @return void
+     */
+    public function saveSelectionPrices(array $values): void
+    {
+        if (!empty($values)) {
+            $this->resource->getConnection()->insertOnDuplicate(
+                $this->resource->getTableName('catalog_product_bundle_selection_price'),
+                $values,
+                ['selection_price_type', 'selection_price_value']
+            );
+        }
+    }
+
+    /**
      * Saves given parent/child relations.
      *
      * @param int $parentId

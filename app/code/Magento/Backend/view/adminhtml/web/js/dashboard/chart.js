@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /*global FORM_KEY*/
@@ -51,21 +51,27 @@ define([
          * @public
          */
         refreshChartData: function () {
-            var data = {
-                'form_key': FORM_KEY
-            };
+            const data = {};
 
             if (this.options.periodSelect) {
                 this.period = data.period = $(this.options.periodSelect).val();
             }
 
-            $.ajax({
+            this._request(data).done(this.updateChart.bind(this));
+        },
+
+        /**
+         * @param {Object} data
+         * @returns {jqXHR}
+         * @private
+         */
+        _request: function (data) {
+            return $.ajax({
                 url: this.options.updateUrl,
                 showLoader: true,
-                data: data,
+                data: $.extend({form_key: FORM_KEY}, data),
                 dataType: 'json',
-                type: 'POST',
-                success: this.updateChart.bind(this)
+                type: 'POST'
             });
         },
 
@@ -74,9 +80,10 @@ define([
          * @param {Object} response
          */
         updateChart: function (response) {
-            $(this.element).toggle(response.data.length > 0);
-            $(this.element).next('.dashboard-diagram-nodata').toggle(response.data.length === 0);
-
+            $(this.element).parent()
+                .toggle(response.data.length > 0)
+                .next('.dashboard-diagram-nodata')
+                .toggle(response.data.length === 0);
             this.chart.options.scales.xAxis.time.unit = this.options.periodUnits[this.period] ?
                 this.options.periodUnits[this.period] : 'hour';
             this.chart.data.datasets[0].data = response.data;

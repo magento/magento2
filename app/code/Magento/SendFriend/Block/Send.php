@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SendFriend\Block;
 
@@ -12,21 +12,16 @@ use Magento\Customer\Model\Context;
  * Email to a Friend Block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Send extends \Magento\Framework\View\Element\Template
 {
     /**
-     * SendFriend data
-     *
      * @var \Magento\SendFriend\Helper\Data
      */
     protected $_sendfriendData = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -245,5 +240,6 @@ class Send extends \Magento\Framework\View\Element\Template
                 ]
             );
         }
+        return $this;
     }
 }

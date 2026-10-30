@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -28,6 +28,7 @@
             </createData>
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
             <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortByOrder.path}} {{DefaultStoreFrontProductsSortByOrder.value}}" stepKey="setDefaultSortByOrderValue"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

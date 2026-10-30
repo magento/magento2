@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,9 +34,7 @@ class PathValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->structureMock = $this->createMock(Structure::class);
 
         $this->model = new PathValidator(
             $this->structureMock

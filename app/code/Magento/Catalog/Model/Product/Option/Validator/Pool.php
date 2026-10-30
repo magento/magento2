@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
@@ -31,6 +31,9 @@ class Pool
      */
     public function get($type)
     {
+        if ($type === null) {
+            return $this->validators['default'];
+        }
         return $this->validators[$type] ?? $this->validators['default'];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -111,9 +111,7 @@ class AddTest extends TestCase
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getmock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);

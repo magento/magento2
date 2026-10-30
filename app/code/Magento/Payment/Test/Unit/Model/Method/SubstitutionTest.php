@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,9 +32,7 @@ class SubstitutionTest extends TestCase
 
     public function testGetTitle()
     {
-        $infoMock = $this->getMockBuilder(
-            Info::class
-        )->disableOriginalConstructor()->getMock();
+        $infoMock = $this->createMock(Info::class);
 
         $this->model->setInfoInstance($infoMock);
         $expectedResult = 'StringTitle';

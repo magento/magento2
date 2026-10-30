@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
  * EAV attribute resource collection
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -502,14 +501,15 @@ class Collection extends AbstractCollection
     /**
      * Join table to collection select
      *
-     * @param string $table
-     * @param string $cond
-     * @param string $cols
+     * @param string|array $table Table name or alias => table
+     * @param string $cond Join condition
+     * @param string|array<string> $cols Columns to select
      * @return $this
      * @since 100.1.0
      */
     public function joinLeft($table, $cond, $cols = '*')
     {
+        $alias = null; // prevent undefined variable notice
         if (is_array($table)) {
             foreach ($table as $k => $v) {
                 $alias = $k;

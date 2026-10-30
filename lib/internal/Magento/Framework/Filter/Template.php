@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filter;
@@ -18,6 +18,7 @@ use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Filter\Template\SignatureProvider;
 use Magento\Framework\Filter\Template\FilteringDepthMeter;
+use Magento\Framework\Filter\Template\DeferredDirectiveRegistry;
 
 /**
  * Template constructions filter
@@ -102,6 +103,8 @@ class Template implements FilterInterface
 
     /**
      * @var SignatureProvider|null
+     * @deprecated Signature-based deferral was superseded by out-of-band deferral via DeferredDirectiveRegistry.
+     * @see DeferredDirectiveRegistry
      */
     private $signatureProvider;
 
@@ -111,12 +114,18 @@ class Template implements FilterInterface
     private $filteringDepthMeter;
 
     /**
+     * @var DeferredDirectiveRegistry|null
+     */
+    private $deferredDirectiveRegistry;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
      * @param SignatureProvider|null $signatureProvider
      * @param FilteringDepthMeter|null $filteringDepthMeter
+     * @param DeferredDirectiveRegistry|null $deferredDirectiveRegistry
      */
     public function __construct(
         StringUtils $string,
@@ -124,7 +133,8 @@ class Template implements FilterInterface
         $directiveProcessors = [],
         ?VariableResolverInterface $variableResolver = null,
         ?SignatureProvider $signatureProvider = null,
-        ?FilteringDepthMeter $filteringDepthMeter = null
+        ?FilteringDepthMeter $filteringDepthMeter = null,
+        ?DeferredDirectiveRegistry $deferredDirectiveRegistry = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
@@ -137,6 +147,9 @@ class Template implements FilterInterface
 
         $this->filteringDepthMeter = $filteringDepthMeter ?? ObjectManager::getInstance()
                 ->get(FilteringDepthMeter::class);
+
+        $this->deferredDirectiveRegistry = $deferredDirectiveRegistry ?? ObjectManager::getInstance()
+                ->get(DeferredDirectiveRegistry::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -204,35 +217,11 @@ class Template implements FilterInterface
         $this->filteringDepthMeter->descend();
 
         // Processing of template directives.
-        $templateDirectivesResults = array_unique(
-            $this->processDirectives($value),
-            SORT_REGULAR
-        );
+        $value = $this->resolveDirectives($value);
 
-        $value = $this->applyDirectivesResults($value, $templateDirectivesResults);
-
-        // Processing of deferred directives received from child templates
-        // or nested directives.
-        $deferredDirectivesResults = array_unique(
-            $this->processDirectives($value, true),
-            SORT_REGULAR
-        );
-
-        $value = $this->applyDirectivesResults($value, $deferredDirectivesResults);
-
-        if ($this->filteringDepthMeter->showMark() > 1) {
-            // Signing own deferred directives (if any).
-            $signature = $this->signatureProvider->get();
-
-            foreach ($templateDirectivesResults as $result) {
-                if ($result['directive'] === $result['output']) {
-                    $value = str_replace(
-                        $result['output'],
-                        $signature . $result['output'] . $signature,
-                        $value
-                    );
-                }
-            }
+        // At the root template, resolve directives that child templates deferred to it.
+        if ($this->filteringDepthMeter->showMark() === 1) {
+            $value = $this->resolveDeferredDirectives($value);
         }
 
         $value = $this->afterFilter($value);
@@ -243,17 +232,50 @@ class Template implements FilterInterface
     }
 
     /**
-     * Processes template directives and returns an array that contains results produced by each directive.
+     * Defers a directive to the root template and returns the placeholder that represents it.
+     *
+     * @param string $directive
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function deferToParent(string $directive): string
+    {
+        return $this->deferredDirectiveRegistry->defer($directive);
+    }
+
+    /**
+     * Resolves directives that child templates deferred to the root template.
      *
      * @param string $value
-     * @param bool $isSigned
+     * @return string
+     * @throws \Exception
+     */
+    private function resolveDeferredDirectives(string $value): string
+    {
+        foreach ($this->deferredDirectiveRegistry->getAll() as $placeholder => $directive) {
+            if (strpos($value, $placeholder) === false) {
+                continue;
+            }
+
+            $value = str_replace($placeholder, $this->resolveDirectives($directive), $value);
+        }
+
+        $this->deferredDirectiveRegistry->clear();
+
+        return $value;
+    }
+
+    /**
+     * Processes directives and applies the results produced by each directive to the given value.
      *
-     * @return array
+     * @param string $value
+     *
+     * @return string
      *
      * @throws InvalidArgumentException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function processDirectives($value, $isSigned = false): array
+    private function resolveDirectives(string $value): string
     {
         $results = [];
 
@@ -265,10 +287,6 @@ class Template implements FilterInterface
             }
 
             $pattern = $directiveProcessor->getRegularExpression();
-
-            if ($isSigned) {
-                $pattern = $this->embedSignatureIntoPattern($pattern);
-            }
 
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
@@ -290,7 +308,7 @@ class Template implements FilterInterface
             }
         }
 
-        return $results;
+        return $this->applyDirectivesResults($value, array_unique($results, SORT_REGULAR));
     }
 
     /**
@@ -326,38 +344,6 @@ class Template implements FilterInterface
         }
 
         return $value;
-    }
-
-    /**
-     * Modifies given regular expression pattern to be able to recognize signed directives.
-     *
-     * @param string $pattern
-     *
-     * @return string
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function embedSignatureIntoPattern(string $pattern): string
-    {
-        $signature = $this->signatureProvider->get();
-
-        $closingDelimiters = [
-            '(' => ')',
-            '{' => '}',
-            '[' => ']',
-            '<' => '>'
-        ];
-
-        $closingDelimiter = $openingDelimiter = substr(trim($pattern), 0, 1);
-
-        if (array_key_exists($openingDelimiter, $closingDelimiters)) {
-            $closingDelimiter = $closingDelimiters[$openingDelimiter];
-        }
-
-        $pattern = substr_replace($pattern, $signature, strpos($pattern, $openingDelimiter) + 1, 0);
-        $pattern = substr_replace($pattern, $signature, strrpos($pattern, $closingDelimiter), 0);
-
-        return $pattern;
     }
 
     /**

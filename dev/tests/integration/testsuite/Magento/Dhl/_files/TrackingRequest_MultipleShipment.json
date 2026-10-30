@@ -1,0 +1,11 @@
+{
+  "url": "https://express.api.dhl.com/mydhlapi/test/tracking?shipmentTrackingNumber=2725476530,5539315121",
+  "params": {
+    "shipmentTrackingNumber": ["2725476530", "5539315121"]
+  },
+  "headers": {
+    "Authorization": "Basic Y3VzdG9tZXJLZXk6Q3VzdG9tZXJTZWNyZXQ=",
+    "Content-Type": "application/json",
+    "x-version": "2.12.0"
+  }
+}

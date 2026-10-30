@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer;
 use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 use Magento\Framework\Pricing\Price\Factory as PriceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,12 +50,12 @@ class ProductRuleIndexerTest extends TestCase
     }
 
     /**
-     * @dataProvider productsDataProvider
      * @param string $reindexSku
      * @param array $expectedPrices
      * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('productsDataProvider')]
     public function testExecute(string $reindexSku, array $expectedPrices): void
     {
         $product = $this->productRepository->get($reindexSku);
@@ -64,13 +65,13 @@ class ProductRuleIndexerTest extends TestCase
     }
 
     /**
-     * @dataProvider productsDataProvider
      * @param string $reindexSku
      * @param array $expectedPrices
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('productsDataProvider')]
     public function testExecuteRow(string $reindexSku, array $expectedPrices): void
     {
         $product = $this->productRepository->get($reindexSku);
@@ -80,13 +81,13 @@ class ProductRuleIndexerTest extends TestCase
     }
 
     /**
-     * @dataProvider productsDataProvider
      * @param string $reindexSku
      * @param array $expectedPrices
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('productsDataProvider')]
     public function testExecuteList(string $reindexSku, array $expectedPrices): void
     {
         $product = $this->productRepository->get($reindexSku);

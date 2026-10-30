@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Webapi\Controller\Rest\RequestValidator;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RequestValidatorTest extends TestCase
@@ -82,8 +83,8 @@ class RequestValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->requestValidator =
@@ -109,9 +110,8 @@ class RequestValidatorTest extends TestCase
 
     /**
      * Test Secure Request and Secure route combinations
-     *
-     * @dataProvider dataProviderSecureRequestSecureRoute
      */
+    #[DataProvider('dataProviderSecureRequestSecureRoute')]
     public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
     {
         $this->routeMock->expects($this->any())->method('isSecure')->willReturn($isSecureRoute);

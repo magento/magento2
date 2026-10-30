@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,8 @@ class TemplateTest extends TestCase
     public function testGetCacheKeyInfo()
     {
         $helper = new ObjectManager($this);
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($storeMock);

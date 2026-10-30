@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class Locator
         );
 
         $result = array_intersect(array_keys($this->customStrategies), $classHierarchy);
-
-        return $this->customStrategies[array_shift($result)] ?? null;
+        $key = array_shift($result) ?? '';
+        return $this->customStrategies[$key] ?? null;
     }
 }

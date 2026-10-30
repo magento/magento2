@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -260,9 +260,9 @@
                 <item name="analytics/general/token" xsi:type="string">1</item>
             </argument>
             <argument name="environment" xsi:type="array">
-                <item name="crontab/default/jobs/analytics_collect_data/schedule/cron_expr" xsi:type="string">1</item>
-                <item name="crontab/default/jobs/analytics_update/schedule/cron_expr" xsi:type="string">1</item>
-                <item name="crontab/default/jobs/analytics_subscribe/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/analytics/jobs/analytics_collect_data/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/analytics/jobs/analytics_update/schedule/cron_expr" xsi:type="string">1</item>
+                <item name="crontab/analytics/jobs/analytics_subscribe/schedule/cron_expr" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

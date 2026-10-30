@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -121,6 +121,8 @@ class AreaList implements ResetAfterRequestInterface
      */
     public function getArea($code)
     {
+        // PHP 8.5 Compatibility: Ensure $code is not null before using as array offset
+        $code = $code ?? '';
         if (!isset($this->_areaInstances[$code])) {
             $this->_areaInstances[$code] = $this->objectManager->create(
                 \Magento\Framework\App\AreaInterface::class,

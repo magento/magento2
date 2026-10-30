@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductAttributeAdminValuesUsedInsteadOfDefaultValueTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Product attribute admin values should be used in backend"/>
+            <title value="Product attribute admin values should be used instead of default store view values in backend"/>
+            <description value="Verify that product attribute admin values should be used in cart price rule instead of default store view values in backend"/>
+            <testCaseId value="AC-13048"/>
+            <severity value="MINOR"/>
+            <group value="backend"/>
+        </annotations>
+        <before>
+            <createData entity="productAttributeMultiselectTwoOptions" stepKey="createColourProductAttribute"/>
+        </before>
+        <after>
+            <!-- Delete cart price rule -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CustomSalesRuleWithNoCouponCode.name}}"/>
+            </actionGroup>
+            <!-- Delete attribute -->
+            <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="openAttributeFromGrid">
+                <argument name="ProductAttribute" value="$$createColourProductAttribute$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!--Step-1 Set Admin value & Default store view value in product attribute & Save the product  -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="openAttributeFromGrid">
+            <argument name="ProductAttribute" value="$$createColourProductAttribute$$"/>
+        </actionGroup>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="$$createColourProductAttribute.attribute_code$$" stepKey="fillDefaultLabel"/>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createColourOptionWhichAsDifferentValuesInAdminAndDefaultStoreView">
+            <argument name="adminName" value="{{productAttributeColour.black}}"/>
+            <argument name="frontName" value="{{productAttributeColour.gold}}"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveMultiSelectAttribute"/>
+        <!-- Product Attribute added to default Attribute set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createColourProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!--Step 2: Create cart price rule with custom condition and verify admin value is displayed under product attribute combination -->
+        <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCreatedCartPriceRule">
+            <argument name="ruleName" value="CustomSalesRuleWithNoCouponCode.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateCustomConditionWithMultipleSelectInCartPriceRuleActionGroup" stepKey="createProductAttributeCombinationCondition">
+            <argument name="productAttribute" value="$$createColourProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <waitForText selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" userInput="{{productAttributeColour.black}}" stepKey="verifyAdminValueIsVisibleInTheConditionInsteadOfDefaultStoreViewValue"/>
+        <dontSee selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" userInput="{{productAttributeColour.gold}}" stepKey="verifyDefaultStoreViewValueIsNotVisible"/>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="saveAndAssertCartPriceRuleSuccessSaveMessage"/>
+    </test>
+</tests>

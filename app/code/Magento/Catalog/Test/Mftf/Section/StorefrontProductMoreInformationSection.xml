@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductMoreInformationSection">
         <element name="moreInformation" type="button" selector="#tab-label-additional-title" timeout="30"/>
+        <element name="additionalDetails" type="button" selector="//div[@id='additional']"/>
         <element name="moreInformationTextArea" type="textarea" selector="#additional"/>
         <element name="moreInformationSpecs" type="text" selector="#product-attribute-specs-table"/>
         <element name="customAttributeLabel" type="text" selector="//th[./following-sibling::td[@data-th='{{attributeCode}}']]" parameterized="true" />

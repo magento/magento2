@@ -54,10 +54,8 @@ class RuleTest extends TestCase implements TestProvidesServiceInterface
         $context->expects($this->once())->method('getResources')->willReturn($this->resource);
 
         $associatedEntitiesMap = $this->createPartialMock(DataObject::class, ['getData']);
-        $associatedEntitiesMap->expects($this->any())
-            ->method('getData')
-            ->willReturn(
-                [
+        $associatedEntitiesMap->method('getData')->willReturn(
+            [
                     'website' => [
                         'associations_table' => 'catalogrule_website',
                         'rule_id_field' => 'rule_id',
@@ -69,7 +67,7 @@ class RuleTest extends TestCase implements TestProvidesServiceInterface
                         'entity_id_field' => 'customer_group_id'
                     ],
                 ]
-            );
+        );
 
         $this->model = new Rule(
             $context,

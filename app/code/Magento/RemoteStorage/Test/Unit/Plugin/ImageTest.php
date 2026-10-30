@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\RemoteStorage\Test\Unit\Plugin;
@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\RemoteStorage\Model\Config;
 use Magento\RemoteStorage\Plugin\Image;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -48,25 +49,21 @@ class ImageTest extends TestCase
     protected function setUp(): void
     {
         /** @var Filesystem|MockObject $filesystem */
-        $filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
-        $this->ioFile = $this->getMockBuilder(File::class)->disableOriginalConstructor()->getMock();
+        $filesystem = $this->createMock(Filesystem::class);
+        $this->ioFile = $this->createMock(File::class);
         /** @var TargetDirectory|MockObject $targetDirectory */
-        $targetDirectory = $this->getMockBuilder(TargetDirectory::class)->disableOriginalConstructor()->getMock();
+        $targetDirectory = $this->createMock(TargetDirectory::class);
         /** @var Config|MockObject $config */
-        $config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $config = $this->createMock(Config::class);
         $config->expects(self::atLeastOnce())->method('isEnabled')->willReturn(true);
-        $this->tmpDirectoryWrite = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->targetDirectoryWrite = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->tmpDirectoryWrite = $this->createMock(WriteInterface::class);
+        $this->targetDirectoryWrite = $this->createMock(WriteInterface::class);
         $filesystem->expects(self::atLeastOnce())->method('getDirectoryWrite')->with(DirectoryList::TMP)
             ->willReturn($this->tmpDirectoryWrite);
         $targetDirectory->expects(self::atLeastOnce())->method('getDirectoryWrite')->with(DirectoryList::ROOT)
             ->willReturn($this->targetDirectoryWrite);
         /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $logger = $this->createMock(LoggerInterface::class);
         $this->plugin = new Image(
             $filesystem,
             $this->ioFile,
@@ -77,7 +74,6 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @dataProvider aroundSaveDataProvider
      * @param string $destination
      * @param string $newDestination
      * @param string|null $newName
@@ -85,6 +81,7 @@ class ImageTest extends TestCase
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
+    #[DataProvider('aroundSaveDataProvider')]
     public function testAroundSaveWithNewName(
         string $destination,
         string $newDestination,
@@ -93,23 +90,17 @@ class ImageTest extends TestCase
     ): void {
         $tmpDestination = '/tmp/' . $destination;
         /** @var AbstractAdapter $subject */
-        $subject = $this->getMockBuilder(AbstractAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subject = $this->createMock(AbstractAdapter::class);
         $proceed = function () {
         };
-        $targetDriver = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $targetDriver = $this->createMock(DriverInterface::class);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getRelativePath')
             ->willReturn($destination . $oldName);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getDriver')
             ->willReturn($targetDriver);
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')
             ->willReturn($tmpDestination);
-        $driver = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $driver = $this->createMock(DriverInterface::class);
         $actualName = $newName ?? $oldName;
         $driver->expects(self::atLeastOnce())->method('rename')
             ->with($tmpDestination . $actualName, $newDestination, $driver);
@@ -152,23 +143,17 @@ class ImageTest extends TestCase
     public function testBeforeOpen(): void
     {
         /** @var AbstractAdapter $subject */
-        $subject = $this->getMockBuilder(AbstractAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subject = $this->createMock(AbstractAdapter::class);
         $filename = '/path/file_name.file';
         $absolutePath = 'absolute' . $filename;
         $tmpAbsolutePath = '/var/www/magento2/tmp';
         $tmpFilePath = $tmpAbsolutePath . 'file_name.file';
         $content = 'Just a test';
 
-        $targetDriver = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $targetDriver = $this->createMock(DriverInterface::class);
         $targetDriver->expects(self::atLeastOnce())->method('fileGetContents')->with($filename)
             ->willReturn($content);
-        $tmpDriver = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tmpDriver = $this->createMock(DriverInterface::class);
         $tmpDriver->expects(self::atLeastOnce())->method('filePutContents')->with($tmpFilePath, $content)
             ->willReturn(true);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')->with($filename)

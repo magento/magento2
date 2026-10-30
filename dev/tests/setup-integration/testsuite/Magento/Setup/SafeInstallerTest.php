@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup;
@@ -59,6 +59,7 @@ class SafeInstallerTest extends SetupTestCase
         $testTableData = $this->getData();
         $row = reset($testTableData);
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule4']);
+        $this->resourceConnection = Bootstrap::getObjectManager()->create(ResourceConnection::class);
         $adapter = $this->resourceConnection->getConnection();
         $testTableName = $this->resourceConnection->getTableName('test_table');
         $adapter->insertArray(

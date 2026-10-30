@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class FactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Factory($this->_objectManager);
     }
 
@@ -42,9 +42,7 @@ class FactoryTest extends TestCase
         )->with(
             Collection::class,
             []
-        )->will(
-            $this->onConsecutiveCalls($objectOne, $objectTwo)
-        );
+        )->willReturnOnConsecutiveCalls($objectOne, $objectTwo);
         $this->assertSame($objectOne, $this->_model->create());
         $this->assertSame($objectTwo, $this->_model->create());
     }

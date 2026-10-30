@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,10 +42,7 @@ class GalleryTest extends TestCase
             ['media_type' => 'type', 'video_url' => 'url', 'file' => 'image.jpg']
         );
 
-        $dataCollection = $this->getMockBuilder(DataCollection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getItems'])
-            ->getMock();
+        $dataCollection = $this->createPartialMock(DataCollection::class, ['getItems']);
         $galleryMock->expects(($this->any()))->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $productMock->expects($this->once())->method('getTypeInstance')->willReturn($configurableTypeMock);
@@ -74,9 +71,7 @@ class GalleryTest extends TestCase
      */
     private function createJsonMock()
     {
-        return $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Json::class);
     }
 
     /**
@@ -84,9 +79,7 @@ class GalleryTest extends TestCase
      */
     private function createProductMock()
     {
-        return $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Product::class);
     }
 
     /**
@@ -94,9 +87,7 @@ class GalleryTest extends TestCase
      */
     private function createGalleryMock()
     {
-        return $this->getMockBuilder(\Magento\Catalog\Block\Product\View\Gallery::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Magento\Catalog\Block\Product\View\Gallery::class);
     }
 
     /**
@@ -104,8 +95,6 @@ class GalleryTest extends TestCase
      */
     private function createConfigurableTypeMock()
     {
-        return $this->getMockBuilder(Configurable::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Configurable::class);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
@@ -15,7 +15,7 @@ class Compiled extends AbstractFactory
     protected $config;
 
     /**
-     * Global arguments
+     * Global arguments list
      *
      * @var array
      */
@@ -94,7 +94,6 @@ class Compiled extends AbstractFactory
                     }
                 }
             }
-            $args = array_values($args);
         } else {
             // Case 3: arguments retrieved in runtime
             $parameters = $this->getDefinitions()->getParameters($type) ?: [];

@@ -10,10 +10,12 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\SalesRule\Observer\ProcessOrderCreationDataObserver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessOrderCreationDataObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Observer
      */
@@ -63,23 +67,28 @@ class ProcessOrderCreationDataObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->observerMock = $this->createMock(Observer::class);
+        
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->onlyMethods(['isVirtual', 'getShippingAddress'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRequest', 'getOrderCreateModel', 'getShippingMethod'])
-            ->getMock();
-        $this->shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['setShippingMethod'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getRequest', 'getOrderCreateModel', 'getShippingMethod']
+        );
+        
+        $this->shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setShippingMethod']
+        );
+        
         $this->orderCreateModelMock = $this->getMockBuilder(Create::class)
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->model = new ProcessOrderCreationDataObserver();
     }
 
@@ -90,8 +99,8 @@ class ProcessOrderCreationDataObserverTest extends TestCase
      * @param array $requestArr
      * @param string|null $quoteShippingMethod
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         bool $isVirtualQuote,
         array $requestArr,

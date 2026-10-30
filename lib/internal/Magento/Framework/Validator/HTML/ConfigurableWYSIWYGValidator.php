@@ -19,14 +19,31 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
      * @var string
      */
     private static string $xssFiltrationPattern =
-        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script)|(alert\())|'
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script\b)|(alert\())|'
         . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
         . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
 
     /**
+     * Pattern to detect malformed or unsupported markup syntax.
+     *
      * @var string
      */
-    private static string $contentFiltrationPattern = "/(<body)/i";
+    private static string $contentFiltrationPattern =
+        '#<!---?>'
+        . '|<\s*<[a-zA-Z]'
+        . '|\x00'
+        . '|<\w+[^>]*/[^\s/>]+/[^>]*='
+        . '|<\w+/[^\s>]*on\w+\s*='
+        . '|<\w+[^>]*//[^>]*='
+        . '|(?<body><body)'
+        . '#i';
+
+    /**
+     * Pattern matching a start tag together with its complete quoted attribute values
+     *
+     * @var string
+     */
+    private static string $startTagPattern = '/<\w+(?:"[^"]*"|\'[^\']*\'|[^>"\'])*>/';
 
     /**
      * @var string[]
@@ -91,6 +108,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         if (mb_strlen($content) === 0) {
             return;
         }
+
         $dom = $this->loadHtml($content);
         $xpath = new \DOMXPath($dom);
 
@@ -251,14 +269,49 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
             }
         );
         $matches = [];
-        preg_match_all(self::$contentFiltrationPattern, $content, $matches);
-        $loaded = !(count($matches[0]) > 1) && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
+
+        preg_match_all(self::$contentFiltrationPattern, $this->maskQuotedAttributeValues($content), $matches);
+        $bodyMatchCount = count(array_filter($matches['body'] ?? []));
+        $otherMatchCount = count($matches[0]) - $bodyMatchCount;
+
+        $loaded = $bodyMatchCount <= 1
+            && $otherMatchCount === 0
+            && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
+
         restore_error_handler();
         if (!$loaded) {
             throw new ValidationException(__('Invalid HTML content provided'));
         }
 
         return $dom;
+    }
+
+    /**
+     * Blank quoted attribute values that occur inside a start tag before malformed-syntax detection.
+     *
+     * Only values bound to an attribute within a start tag are masked, so quote characters appearing in
+     * regular text are left intact. Any nested tag-open sequences (e.g. "<body", "<img") within a masked
+     * value are preserved so the content check still evaluates them.
+     *
+     * @param string $content
+     * @return string
+     */
+    private function maskQuotedAttributeValues(string $content): string
+    {
+        return (string) preg_replace_callback(
+            self::$startTagPattern,
+            function (array $startTag): string {
+                return (string) preg_replace_callback(
+                    '/"[^"]*"|\'[^\']*\'/',
+                    function (array $value): string {
+                        preg_match_all('/<\w+/', $value[0], $preservedTags);
+                        return '"' . implode('', $preservedTags[0]) . '"';
+                    },
+                    $startTag[0]
+                );
+            },
+            $content
+        );
     }
 
     /**

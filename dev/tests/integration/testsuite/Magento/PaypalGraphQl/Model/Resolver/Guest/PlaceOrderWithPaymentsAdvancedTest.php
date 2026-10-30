@@ -137,11 +137,11 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
                             'BUTTONSOURCE' => $button,
                             'tender' => 'C',
                         ],
-                        $this->returnSelf()
+                        $this->paymentRequest
                     ]
                 ],
-                ['USER1', 1, $this->returnSelf()],
-                ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
+                ['USER1', 1, $this->paymentRequest],
+                ['USER2', 'USER2SilentPostHash', $this->paymentRequest]
             );
 
         $responseData = $this->setPaymentMethodAndPlaceOrder($cartId, $paymentMethod);
@@ -208,7 +208,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedErrorCode = 'UNDEFINED';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->paymentRequest->method('setData')
             ->with(

@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Variable\Test\Unit\Model\ResourceModel\Variable;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
 use PHPUnit\Framework\TestCase;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Test Collection::addValuesToResult() build correct query.
      *
@@ -45,10 +48,7 @@ class CollectionTest extends TestCase
                 $this->identicalTo(['value_table.plain_value', 'value_table.html_value'])
             )->willReturnSelf();
 
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['select', 'prepareSqlCondition', 'quoteIdentifier'])
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->any())
             ->method('select')
             ->willReturn($select);
@@ -63,10 +63,10 @@ class CollectionTest extends TestCase
                 $this->identicalTo(['eq' => 0])
             )->willReturn('testResultCondition');
 
-        $resource = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['getTable', 'getMainTable', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resource = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getTable', 'getMainTable', 'getConnection', '_construct']
+        );
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connection);

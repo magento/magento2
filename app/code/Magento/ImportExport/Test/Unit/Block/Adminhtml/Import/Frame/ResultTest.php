@@ -1,18 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Import\Frame;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Escaper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
-use Magento\Backend\Block\Template\Context;
-use Magento\Framework\Json\EncoderInterface;
 
 /**
  * Unit test for Magento\ImportExport\Block\Adminhtml\Import\Frame\Result
@@ -48,10 +49,11 @@ class ResultTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $this->contextMock = $this->createMock(Context::class);
-        $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->encoderMock = $this->createMock(EncoderInterface::class);
 
         $this->escaperMock = $this->createPartialMock(Escaper::class, ['escapeHtml']);
         $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 use Magento\TestFramework\Helper\Xpath;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to check that simple product custom option renders as expected.
@@ -63,11 +64,11 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from text group(field, area) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider renderCustomOptionsFromTextGroupProvider
      * @param array $optionData
      * @param array $checkArray
      * @return void
      */
+    #[DataProvider('renderCustomOptionsFromTextGroupProvider')]
     public function testRenderCustomOptionsFromTextGroup(array $optionData, array $checkArray): void
     {
         $this->assertTextOptionRenderingOnProduct('simple', $optionData, $checkArray);
@@ -244,12 +245,12 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
      * Check that options from select group(drop-down, radio buttons, checkbox, multiple select) render as expected.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @dataProvider renderCustomOptionsFromSelectGroupProvider
      * @param array $optionData
      * @param array $optionValueData
      * @param array $checkArray
      * @return void
      */
+    #[DataProvider('renderCustomOptionsFromSelectGroupProvider')]
     public function testRenderCustomOptionsFromSelectGroup(
         array $optionData,
         array $optionValueData,

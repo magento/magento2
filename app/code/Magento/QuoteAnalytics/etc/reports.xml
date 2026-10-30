@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
@@ -10,6 +10,9 @@
         <source name="quote">
             <attribute name="entity_id"/>
             <attribute name="customer_id"/>
+            <attribute name="customer_firstname"/>
+            <attribute name="customer_middlename"/>
+            <attribute name="customer_lastname"/>
             <attribute name="store_id"/>
             <attribute name="created_at"/>
             <attribute name="converted_at"/>

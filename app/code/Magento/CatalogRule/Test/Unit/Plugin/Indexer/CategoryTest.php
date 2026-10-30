@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,16 @@ namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
+use Magento\CatalogRule\Plugin\Indexer\Category as CategoryPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProductRuleProcessor|MockObject
      */
@@ -27,7 +31,7 @@ class CategoryTest extends TestCase
     protected $subject;
 
     /**
-     * @var \Magento\CatalogRule\Plugin\Indexer\Category
+     * @var CategoryPlugin
      */
     protected $plugin;
 
@@ -36,14 +40,13 @@ class CategoryTest extends TestCase
         $this->productRuleProcessor = $this->createMock(
             ProductRuleProcessor::class
         );
-        $this->subject = $this->getMockBuilder(Category::class)
-            ->addMethods(['getChangedProductIds'])
-            ->onlyMethods(['__wakeUp'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subject = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getChangedProductIds', '__wakeUp']
+        );
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            \Magento\CatalogRule\Plugin\Indexer\Category::class,
+            CategoryPlugin::class,
             [
                 'productRuleProcessor' => $this->productRuleProcessor,
             ]

@@ -150,6 +150,11 @@ class ProductList
         $defaultLimit = $this->scopeConfig->getValue($xmlConfigPath, ScopeInterface::SCOPE_STORE);
 
         $availableLimits = $this->getAvailableLimit($viewMode);
-        return (int)($availableLimits[$defaultLimit] ?? current($availableLimits));
+        
+        if ($defaultLimit !== null && isset($availableLimits[$defaultLimit])) {
+            return (int)$availableLimits[$defaultLimit];
+        }
+        
+        return (int)current($availableLimits);
     }
 }

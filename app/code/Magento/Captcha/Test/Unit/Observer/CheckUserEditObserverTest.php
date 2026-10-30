@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Event\Observer;
@@ -65,18 +66,16 @@ class CheckUserEditObserverTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
 
         $this->customerSessionMock = $this->createPartialMock(
             Session::class,
             ['getCustomerId', 'getCustomer', 'logout', 'start']
         );
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->observer = $objectManager->getObject(
@@ -119,7 +118,7 @@ class CheckUserEditObserverTest extends TestCase
             ->willReturn($captcha);
 
         $response = $this->createMock(Http::class);
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $request = $this->createMock(RequestHttp::class);
         $request->expects($this->any())
             ->method('getPost')
             ->with(Data::INPUT_NAME_FIELD_VALUE, null)

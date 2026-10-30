@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateAttributeUsedInProductListingActionGroup">
+        <annotations>
+            <description>Set used in product listing for a product attribute on the admin attribute edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="usedInProductListing" type="string" defaultValue="Yes"/>
+        </arguments>
+        <waitForElementClickable selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="waitToNavigateToStorefrontPropertiesTab"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="navigateToStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitForUseInProductListing"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="{{usedInProductListing}}" stepKey="setUsedInProductListing"/>
+    </actionGroup>
+</actionGroups>

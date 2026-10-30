@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\App\PageCachePlugin;
 use Magento\PageCache\Model\Cache\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PageCachePluginTest extends TestCase
@@ -19,7 +20,7 @@ class PageCachePluginTest extends TestCase
     /** @var PageCachePlugin */
     private $plugin;
 
-    /** @var MockObject|Cache*/
+    /** @var MockObject|Cache */
     private $subjectMock;
 
     protected function setUp(): void
@@ -52,10 +53,10 @@ class PageCachePluginTest extends TestCase
     }
 
     /**
-     * @dataProvider afterSaveDataProvider
-     * @param string $dataw
+     * @param string $data
      * @param string $initResult
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSaveDecompression($data, $initResult)
     {
         $this->assertSame($data, $this->plugin->afterLoad($this->subjectMock, $initResult));

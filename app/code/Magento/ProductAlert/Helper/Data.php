@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ProductAlert\Helper;
 
@@ -9,8 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * ProductAlert data helper
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  *
  * @api
  * @since 100.0.2
@@ -25,8 +23,6 @@ class Data extends \Magento\Framework\Url\Helper\Data
     protected $_product = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -85,6 +81,8 @@ class Data extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Get store
+     *
      * @return Store
      */
     public function getStore()
@@ -93,6 +91,8 @@ class Data extends \Magento\Framework\Url\Helper\Data
     }
 
     /**
+     * Get Save Url
+     *
      * @param string $type
      * @return string
      */
@@ -110,8 +110,12 @@ class Data extends \Magento\Framework\Url\Helper\Data
     /**
      * Create block instance
      *
-     * @param string|\Magento\Framework\View\Element\AbstractBlock $block
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @template T of \Magento\Framework\View\Element\AbstractBlock
+     *
+     * @param class-string<T>|T $block
+     *
+     * @return T
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createBlock($block)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,14 @@ use Magento\AdminNotification\Model\Inbox;
 use Magento\AdminNotification\Model\InboxFactory;
 use Magento\AdminNotification\Model\NotificationService;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NotificationServiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Retrieve instance of notification service model
      *
@@ -30,15 +33,11 @@ class NotificationServiceTest extends TestCase
         /**
          * @var MockObject|InboxFactory $notificationFactory
          */
-        $notificationFactory = $this->createPartialMock(
-            InboxFactory::class,
-            ['create']
+        $notificationFactory = $this->createMock(InboxFactory::class);
+        $notification = $this->createPartialMockWithReflection(
+            Inbox::class,
+            ['load', 'getId', 'save', 'setData', 'setIsRead']
         );
-        $notification = $this->getMockBuilder(Inbox::class)
-            ->addMethods(['setIsRead'])
-            ->onlyMethods(['load', 'getId', 'save', 'setData', '__sleep', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $notification->expects($this->once())->method('load')->with($notificationId)->willReturnSelf();
         $notification->expects($this->once())->method('getId')->willReturn($notificationId);
 

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
@@ -15,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\CollectionFactory;
 use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -25,6 +27,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -36,13 +39,15 @@ use Psr\Log\LoggerInterface;
  */
 class SessionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
     protected $helper;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $session;
 
@@ -67,8 +72,8 @@ class SessionTest extends TestCase
      * @param \Closure $orderMock
      *
      * @return void
-     * @dataProvider getLastRealOrderDataProvider
      */
+    #[DataProvider('getLastRealOrderDataProvider')]
     public function testGetLastRealOrder($orderId, $incrementId, \Closure $orderMock): void
     {
         $orderMock = $orderMock($this);
@@ -82,16 +87,13 @@ class SessionTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $quoteRepository = $this->createMock(CartRepositoryInterface::class);
 
-        $appState = $this->getMockBuilder(State::class)
-            ->addMethods(['isInstalled'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $appState->expects($this->any())->method('isInstalled')->willReturn(true);
+        $appState = $this->createPartialMockWithReflection(State::class, ['isInstalled']);
+        $appState->method('isInstalled')->willReturn(true);
 
         $request = $this->createMock(Http::class);
-        $request->expects($this->any())->method('getHttpHost')->willReturn([]);
+        $request->method('getHttpHost')->willReturn([]);
 
         $constructArguments = $this->helper->getConstructArguments(
             Session::class,
@@ -132,7 +134,7 @@ class SessionTest extends TestCase
      */
     protected function _getOrderMock($incrementId, $orderId): MockObject
     {
-        /** @var MockObject|\Magento\Sales\Model\Order $order */
+        /** @var MockObject|Order $order */
         $order = $this->getMockBuilder(Order::class)->disableOriginalConstructor()
             ->onlyMethods(['getIncrementId', 'loadByIncrementId', '__sleep'])->getMock();
 
@@ -148,8 +150,8 @@ class SessionTest extends TestCase
      * @param string $paramToClear
      *
      * @return void
-     * @dataProvider clearHelperDataDataProvider
      */
+    #[DataProvider('clearHelperDataDataProvider')]
     public function testClearHelperData(string $paramToClear): void
     {
         $storage = new Storage('default', [$paramToClear => 'test_data']);
@@ -178,8 +180,8 @@ class SessionTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider restoreQuoteDataProvider
      */
+    #[DataProvider('restoreQuoteDataProvider')]
     public function testRestoreQuote(bool $hasOrderId, bool $hasQuoteId): void
     {
         $order = $this->createPartialMock(
@@ -189,14 +191,12 @@ class SessionTest extends TestCase
         $order->expects($this->once())->method('getId')->willReturn($hasOrderId ? 'order id' : null);
         $orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
         $orderFactory->expects($this->once())->method('create')->willReturn($order);
-        $quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->onlyMethods(['save'])
-            ->getMockForAbstractClass();
+        $quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $storage = new Storage();
         $store = $this->createMock(Store::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
+        $eventManager = $this->createMock(ManagerInterface::class);
 
         /** @var Session $session */
         $session = $this->helper->getObject(
@@ -223,11 +223,7 @@ class SessionTest extends TestCase
             );
             if ($hasQuoteId) {
                 $quoteRepository->expects($this->once())->method('get')->with($quoteId)->willReturn($quote);
-                $quote->expects(
-                    $this->any()
-                )->method(
-                    'getId'
-                )->willReturn(
+                $quote->method('getId')->willReturn(
                     $anotherQuoteId
                 );
                 $eventManager->expects(
@@ -307,14 +303,10 @@ class SessionTest extends TestCase
         $store = $this->getMockBuilder(Store::class)->disableOriginalConstructor()
             ->onlyMethods(['getWebsiteId'])
             ->getMock();
-        $store->expects($this->any())
-            ->method('getWebsiteId')
-            ->willReturn($websiteId);
+        $store->method('getWebsiteId')->willReturn($websiteId);
 
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -328,17 +320,14 @@ class SessionTest extends TestCase
             ->onlyMethods(['setData', 'getData'])
             ->getMock();
 
-        $storage->expects($this->any())
-            ->method('getData')
-            ->willReturn($replaceQuoteId);
+        $storage->method('getData')->willReturn($replaceQuoteId);
         $storage->expects($this->any())
             ->method('setData');
 
-        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getMaskedId', 'setQuoteId'])
-            ->onlyMethods(['load', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['getMaskedId', 'setQuoteId', 'load', 'save']
+        );
         $quoteIdMaskMock->expects($this->once())->method('load')->with($replaceQuoteId, 'quote_id')->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn(null);
         $quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($replaceQuoteId)->willReturnSelf();
@@ -430,12 +419,12 @@ class SessionTest extends TestCase
      */
     public function testGetQuote(): void
     {
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $quoteRepository = $this->createMock(CartRepositoryInterface::class);
         $quoteFactory = $this->createMock(QuoteFactory::class);
         $quote = $this->createMock(Quote::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $loggerMethods = get_class_methods(LoggerInterface::class);
 
         $quoteFactory->expects($this->once())
@@ -448,9 +437,7 @@ class SessionTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getWebsiteId'])
             ->getMock();
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($store);
+        $storeManager->method('getStore')->willReturn($store);
         $storage = $this->getMockBuilder(Storage::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['setData', 'getData'])
@@ -516,5 +503,73 @@ class SessionTest extends TestCase
             ]
         ];
         $this->assertEquals($expectedResult, $session->getSteps());
+    }
+
+    /**
+     * Test clearQuote() method dispatches event when quote exists
+     *
+     * @return void
+     * @throws Exception
+     * @throws \ReflectionException
+     */
+    public function testClearQuote(): void
+    {
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()->getMock();
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with('checkout_quote_destroy', ['quote' => $quote]);
+        $session = $this->getSessionObject($eventManager);
+        $reflection = new \ReflectionClass($session);
+        $quoteProperty = $reflection->getProperty('_quote');
+        $quoteProperty->setValue($session, $quote);
+        $session->setQuoteId(123);
+        $result = $session->clearQuote();
+        $this->assertInstanceOf(Session::class, $result);
+        $this->assertFalse($session->hasQuote());
+        $this->assertNull($session->getQuoteId());
+    }
+
+    /**
+     * Test clearQuote() when quote is already null - event should not be dispatched
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testClearQuoteNoDispatch(): void
+    {
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager->expects($this->never())->method('dispatch');
+        $session = $this->getSessionObject($eventManager);
+        $result = $session->clearQuote();
+        $this->assertInstanceOf(Session::class, $result);
+        $this->assertFalse($session->hasQuote());
+        $this->assertNull($session->getQuoteId());
+    }
+
+    /**
+     * @param MockObject|ManagerInterface $eventManager
+     *
+     * @return object
+     * @throws Exception
+     */
+    private function getSessionObject(MockObject|ManagerInterface $eventManager): object
+    {
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getWebsiteId'])
+            ->getMock();
+        $store->expects($this->any())->method('getWebsiteId')->willReturn(1);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $storage = new Storage();
+        return $this->helper->getObject(
+            Session::class,
+            [
+                'eventManager' => $eventManager,
+                'storeManager' => $storeManager,
+                'storage' => $storage
+            ]
+        );
     }
 }

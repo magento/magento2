@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,12 +16,15 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Template Filter test.
  */
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Template
      */
@@ -104,9 +107,10 @@ class TemplateTest extends TestCase
             ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['afterFilterCallbackMethod'])
-            ->getMock();
+        $callbackObject = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['afterFilterCallbackMethod']
+        );
 
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')
@@ -136,9 +140,10 @@ class TemplateTest extends TestCase
             ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['afterFilterCallbackMethod'])
-            ->getMock();
+        $callbackObject = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['afterFilterCallbackMethod']
+        );
 
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')

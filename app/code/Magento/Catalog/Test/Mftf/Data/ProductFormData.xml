@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,5 +11,8 @@
     <entity name="ProductFormMessages" type="message">
         <data key="remove_image_notice">The image cannot be removed as it has been assigned to the other image role</data>
         <data key="save_success">You saved the product.</data>
+    </entity>
+    <entity name="ProductWarningMessage" type="message">
+        <data key="require_Message">This is a required field.</data>
     </entity>
 </entities>

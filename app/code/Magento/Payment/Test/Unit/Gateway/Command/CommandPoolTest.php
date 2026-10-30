@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,15 +18,9 @@ class CommandPoolTest extends TestCase
 {
     public function testGet()
     {
-        $commandI = $this->getMockBuilder(CommandInterface::class)
-            ->getMockForAbstractClass();
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $tMap = $this->getMockBuilder(TMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $commandI = $this->createMock(CommandInterface::class);
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
 
         $tMapFactory->expects(static::once())
             ->method('create')
@@ -55,13 +49,8 @@ class CommandPoolTest extends TestCase
     {
         $this->expectException(NotFoundException::class);
 
-        $tMapFactory = $this->getMockBuilder(TMapFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $tMap = $this->getMockBuilder(TMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tMapFactory = $this->createPartialMock(TMapFactory::class, ['create']);
+        $tMap = $this->createMock(TMap::class);
 
         $tMapFactory->expects(static::once())
             ->method('create')

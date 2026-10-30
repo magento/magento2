@@ -1,0 +1,413 @@
+# Copyright 2025 Adobe
+# All Rights Reserved.
+
+automations:
+
+  ############################################################################################################
+  # PR Automation                                                                                            #
+  ############################################################################################################
+  # 1. Whenever a pull request is labeled with the "Project: Community Picked" label:
+  #   a. it must be assigned to the "Community Dashboard" project
+  #   b. it must be removed from the "Pull Requests Dashboard" project
+  - trigger: pull_request.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Project: Community Picked']
+      - ['projects#number', 'in', 23]
+    actions:
+      - addToProject: [22] #['Community Dashboard']
+      - moveTo: [22, '${projectsByNumber.23.column.name}']
+      - removeFromProject: [23] #['Pull Requests Dashboard']
+
+  # 2. Whenever a pull request is labeled with the "Priority: XX" label and has no "Project: Community Picked" label assigned:
+  #   a. it must be assigned to the "Pull Requests Dashboard" project
+  #   b. it must be removed from the "Community Dashboard" project (if assigned to it)
+  #   c. it must be labeled with the "Progress: pending review" label
+  #   d. it must be moved to the "Pending review" column on the "Pull Requests Dashboard" project
+  - trigger: pull_request.labeled
+    conditions:
+      - ['modifiedLabel.name', 'includes', 'Priority:']
+      - ['labels#name', 'ne', 'Project: Community Picked']
+    actions:
+      - addToProject: [23] #['Pull Requests Dashboard']
+      - moveTo: [23, 'Pending Review'] #['Pull Requests Dashboard', 'Pending Review']
+      - removeFromProject: [22] #['Community Dashboard']
+      - addLabels: ['Progress: pending review']
+
+  # 3. Whenever a review was requested for a pull request and its not in Changes Requested
+  #   a. it must be labeled with the "Progress: review" label
+  #   b. it must remove the "Progress: needs update" label
+  #   c. it must be moved to the "Review in Progress" column
+  - trigger: pull_request.review_requested
+    conditions:
+    actions:
+      - addLabels: ['Progress: review']
+      - removeLabels: ['Progress: needs update', 'Progress: pending review']
+      - moveTo: [23, 'Review in Progress'] #['Pull Requests Dashboard', 'Review in Progress']
+      - moveTo: [22, 'Review in Progress'] #['Community Dashboard', 'Review in Progress']
+
+  # 4. Whenever a pull request is labeled with the "Progress: needs update" label and the reviewer adds comment/s:
+  #   a. it must be moved to the "Changes Requested" column
+  - trigger: pull_request.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Progress: needs update']
+    actions:
+      - removeLabels: [ 'Progress: review' ]
+      - moveTo: [23, 'Changes Requested'] #['Pull Requests Dashboard', 'Changes Requested']
+      - moveTo: [22, 'Changes Requested'] #['Community Dashboard', 'Changes Requested']
+
+  # 5. Whenever a label "Progress: needs update" is removed from a pull request:
+  #   a. it must be labeled with "Progress: review"
+  #   b. it must be moved to the "Review in Progress" column
+  - trigger: pull_request.unlabeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Progress: needs update']
+    actions:
+      - addLabels: ['Progress: review']
+      - removeLabels: ['Progress: pending review']
+      - moveTo: [23, 'Review in Progress'] #['Pull Requests Dashboard', 'Review in Progress']
+      - moveTo: [22, 'Review in Progress'] #['Community Dashboard', 'Review in Progress']
+
+  # 6. Whenever a pull request is approved:
+  #   a. the below labels must be removed from a pull request: "Progress: review", "Progress: needs update"
+  #   b. it must be moved to the "Ready for Testing" column
+  - trigger: pull_request_review.submitted
+    conditions:
+      - ['review', 'eq', 'approved']
+    actions:
+      - removeLabels: ['Progress: review']
+      - moveTo: [23, 'Ready for Testing'] #['Pull Requests Dashboard', 'Ready for Testing']
+      - moveTo: [22, 'Ready for Testing'] #['Community Dashboard', 'Ready for Testing']
+
+  # 7. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Pending review" column:
+  #   a. it must be labeled with the "Progress: pending review" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Pending Review']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: pending review']
+      - removeLabels: ['Progress: needs update']
+
+  # 8. Whenever a pull request is in the "Ready for Testing" column and gets assigned to anyone:
+  #   a. it must be labeled with the "Progress: testing in progress" label
+  #   b. it must remove the "Progress: ready for testing" label
+  #   c. it must be moved to the "Testing in Progress" column
+  - trigger: pull_request.assigned
+    conditions:
+      - ['projects#column.name', 'in', 'Ready for Testing']
+    actions:
+      - addLabels: ['Progress: testing in progress']
+      - removeLabels: ['Progress: ready for testing']
+      - moveTo: [23, 'Testing in Progress'] #['Pull Requests Dashboard', 'Testing in Progress']
+      - moveTo: [22, 'Testing in Progress'] #['Community Dashboard', 'Testing in Progress']
+
+
+
+  # 9. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Review in Progress" column:
+  #   a. it must be labeled with the "Progress: review" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Review in Progress']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: review']
+      - removeLabels: ['Progress: needs update']
+
+  # 10. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Changes Requested" column:
+  #   a. it must be labeled with the "Progress: needs updates" label
+  #   b. it must remove the "Progress: review" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Changes Requested']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: needs update']
+      - removeLabels: ['Progress: review']
+
+  # 11. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "On Hold" column:
+  #   a. it must be labeled with the "Progress: On Hold" label
+  #   b. it must remove the "Progress: review", "Progress: needs update","Progress: testing in progress", "Progress: extended testing" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'On Hold']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: On Hold']
+      - removeLabels: ['Progress: review', 'Progress: needs update', 'Progress: testing in progress', 'Progress: extended testing' ]
+
+  # 12. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Ready for Testing" column:
+  #   a. it must be labeled with the "Progress: ready for testing" label
+  #   b. it must remove the "Progress: review" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Ready for Testing']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: ready for testing']
+      - removeLabels: ['Progress: review', 'Progress: needs update']
+
+  # 13. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Extended Testing" column:
+  #   a. it must be labeled with the "Progress: extended testing" label
+  #   b. it must remove the "Progress: testing in progress" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Extended Testing (optional)']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: extended testing']
+      - removeLabels: ['Progress: testing in progress', 'Progress: pending approval']
+
+  # 14. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "To Approve" column:
+  #   a. it must be labeled with the "Progress: to approve" label
+  #   b. it must remove the "Progress: extended testing" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'To Approve']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: to approve']
+      - removeLabels: ['Progress: extended testing']
+
+  # 15. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Pending Approval" column:
+  #   a. it must be labeled with the "Progress: pending approval" label
+  #   b. it must remove the "Progress: to approve" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Pending Approval']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - addLabels: ['Progress: pending approval']
+      - removeLabels: ['Progress: to approve']
+
+  # 16. Whenever a pull request belongs to the "Community Dashboard" or "Pull Requests Dashboard" and is moved to the "Merge in Progress" column:
+  #   a. it must remove the "Progress: extended testing" label
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Merge in Progress']
+      - [
+        ['projects#number', 'in', 22],
+        ['projects#number', 'in', 23]
+      ]
+    actions:
+      - removeLabels: ['Progress: extended testing']
+
+  # 17. Whenever a pull request is merged:
+  #   a. it must be moved to the "Recently Merged" column
+  - trigger: pull_request.closed
+    conditions:
+      - ['merged', 'eq', true]
+    actions:
+      - moveTo: [23, 'Recently Merged'] #['Pull Requests Dashboard', 'Recently Merged']
+      - moveTo: [22, 'Recently Merged'] #['Community Dashboard', 'Recently Merged']
+
+  # 18. Whenever a pull request is closed:
+  #   a. it must be removed from the "Pull Requests Dashboard" project
+  #   b. it must be removed from the "Community Dashboard" project
+  - trigger: pull_request.closed
+    conditions:
+      - ['merged', 'ne', true]
+    actions:
+      - removeFromProject: [23] #['Pull Requests Dashboard']
+      - removeFromProject: [22] #['Community Dashboard']
+
+
+  ############################################################################################################
+  # Issues Automation                                                                                        #
+  ############################################################################################################
+  # 1. Whenever a new issue is created and has no priority label on it (e.g., P1, P2, etc.):
+  #   a. it must be added to the "Issues Confirmation and Triage Board" project
+  #   b. it must be moved to the "Ready for confirmation" column on the board
+  #   c. it must be labeled with the "Issue: ready for confirmation" label
+  #   d. the below labels must be removed from the issue:
+  #     - "feature request"
+  - trigger: issues.opened
+    conditions:
+      - ['labels#name', 'notIncludes', 'Priority']
+    actions:
+      - addToProject: [18] #['Issues Confirmation and Triage Board']
+      - addLabels: ['Issue: ready for confirmation']
+      - moveTo: [18, 'Ready for Confirmation'] #['Issues Confirmation and Triage Board', 'Ready for Confirmation']
+      - removeLabels: ['feature request']
+
+  # 2. Whenever an issue is labeled with the "Issue: Needs Update" label:
+  #   a. it must be moved to the "Needs Update" column on the board
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: Confirmed"
+  #     - "Issue: On Hold"
+  #     - "Reproduced on 2.4.x"
+  - trigger: issues.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Issue: needs update']
+    actions:
+      - moveTo: [18, 'Needs Update'] #['Issues Confirmation and Triage Board', 'Needs Update']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: Confirmed', 'Issue: On Hold', 'Reproduced on 2.4.x']
+
+  - trigger: issues.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Issue: ready for confirmation']
+    actions:
+      - moveTo: [18, 'Ready for Confirmation'] #['Issues Confirmation and Triage Board', 'Needs Update']
+      - removeLabels: ['Issue: Needs Update', 'Issue: Confirmed', 'Issue: On Hold', 'Reproduced on 2.4.x']
+
+  # 3. Whenever an issue is moved to the "Needs Update" column on the board:
+  #   a. it must be labeled with "Issue: Needs Update" label
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: Confirmed"
+  #     - "Issue: On Hold"
+  #     - "Reproduced on 2.4.x"
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Needs Update']
+    actions:
+      - addLabels: ['Issue: Needs Update']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: Confirmed', 'Issue: On Hold', 'Reproduced on 2.4.x']
+
+  # 4. Whenever an issue is labeled with the "feature request" label:
+  #   a. it must be removed from the "Issues Confirmation and Triage Board" project
+  #   b. it must be added to the "feature requests Backlog" project
+  #   c. it must be moved to the "Ready for Grooming" column of the "feature requests Backlog" project
+  #   d. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: Confirmed"
+  #     - "Issue: On Hold"
+  #     - "Reproduced on 2.4.x"
+  - trigger: issues.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'feature request']
+    actions:
+      - removeFromProject: [18] #['Issues Confirmation and Triage Board']
+      - addToProject: [20] #['Feature Requests Backlog']
+      - moveTo: [18, 'Ready for Grooming'] #['Feature Requests Backlog', 'Ready for Grooming']
+      - addLabels: ['Progress: ready for grooming']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: Confirmed', 'Issue: On Hold', 'Reproduced on 2.4.x']
+
+  # 5. Whenever an issue is labeled with the "Issue: On Hold" label:
+  #   a. it must be moved to the "On Hold" column on the board
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: Confirmed"
+  #     - "Issue: Needs Update"
+  #     - "Reproduced on 2.4.x"
+  - trigger: issues.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Issue: On Hold']
+    actions:
+      - moveTo: [18, 'On Hold'] #['Issues Confirmation and Triage Board', 'On Hold']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: Confirmed', 'Issue: needs update', 'Reproduced on 2.4.x']
+
+  # 6. Whenever an issue is moved to the "On Hold" column on the board:
+  #   a. it must be labeled with "Issue: On Hold" label
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: Confirmed"
+  #     - "Issue: Needs Update"
+  #     - "Reproduced on 2.4.x"
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'On Hold']
+      - ['projects#number', 'in', 18]
+    actions:
+      - addLabels: ['Issue: On Hold']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: Confirmed', 'Issue: Needs Update', 'Reproduced on 2.4.x']
+
+  # 7. Whenever an issue is labeled with the "Issue: Confirmed" label:
+  #   a. it must be moved to the "Confirmed" column on the board
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: On Hold"
+  #     - "Issue: Needs Update"
+  - trigger: issues.labeled
+    conditions:
+      - ['modifiedLabel.name', 'eq', 'Issue: Confirmed']
+    actions:
+      - moveTo: [18, 'Confirmed'] #['Issues Confirmation and Triage Board', 'Confirmed']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: On Hold', 'Issue: Needs Update']
+
+  # 8. Whenever an issue is moved to the "Confirmed" column on the board:
+  #   a. it must be labeled with "Issue: Confirmed" label
+  #   b. the below labels must be removed from the issue:
+  #     - "Issue: ready for confirmation"
+  #     - "Issue: On Hold"
+  #     - "Issue: Needs Update"
+  - trigger: projects_v2_item.edited
+    conditions:
+      - ['movedToColumn.name', 'eq', 'Confirmed']
+    actions:
+      - addLabels: ['Issue: Confirmed']
+      - removeLabels: ['Issue: ready for confirmation', 'Issue: On Hold', 'Issue: Needs Update']
+
+  # 9. Whenever an issue is labeled with "Priority: P0", "Priority: P1", or "Priority: P2" label:
+  #   a. it must be removed from the "Issues Confirmation and Triage Board" project
+  #   b. it must be added to the "High Priority Backlog" project
+  #   c. it must be moved to the "Ready for Development" column of the "High Priority Backlog" project
+  - trigger: issues.labeled
+    conditions:
+      - [
+        ['modifiedLabel.name', 'eq', 'Priority: P0'],
+        ['modifiedLabel.name', 'eq', 'Priority: P1'],
+        ['modifiedLabel.name', 'eq', 'Priority: P2']
+      ]
+    actions:
+      - removeFromProject: [18] #['Issues Confirmation and Triage Board']
+      - addToProject: [21] #['High Priority Backlog']
+      - moveTo: [21, 'Ready for Development'] #['High Priority Backlog', 'Ready for Development']
+
+  # 10. Whenever an issue is labeled with "Priority: P3" or "Priority: P4" label:
+  #   a. it must be removed from the "Issues Confirmation and Triage Board" project
+  #   b. it must be added to the "Low Priority Backlog" project
+  #   c. it must be moved to the "Ready for Development" column of the "Low Priority Backlog" project
+  - trigger: issues.labeled
+    conditions:
+      - [
+        ['modifiedLabel.name', 'eq', 'Priority: P3'],
+        ['modifiedLabel.name', 'eq', 'Priority: P4']
+      ]
+    actions:
+      - removeFromProject: [18] #['Issues Confirmation and Triage Board']
+      - addToProject: [19] #['Low Priority Backlog']
+      - moveTo: [19, 'Ready for Development'] #['Low Priority Backlog', 'Ready for Development']
+
+  - trigger: issues.labeled
+    conditions:
+      - [
+        ['modifiedLabel.name', 'eq', 'Priority: P0'],
+        ['modifiedLabel.name', 'eq', 'Priority: P1'],
+        ['modifiedLabel.name', 'eq', 'Priority: P2'],
+        ['modifiedLabel.name', 'eq', 'Priority: P3'],
+        ['modifiedLabel.name', 'eq', 'Priority: P4']
+      ]
+    actions:
+      - addLabelsToRelated: ['${modifiedLabel.name}']
+
+  - trigger: issues.closed
+    actions:
+      - removeFromProject: [18] 
+      - removeFromProject: [21]
+      - removeFromProject: [20]
+      - removeFromProject: [19]

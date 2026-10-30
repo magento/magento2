@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Controller\Index;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
@@ -17,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Index
      */
@@ -32,11 +35,10 @@ class IndexTest extends TestCase
      */
     public function testExecute()
     {
-        $pageMock = $this->getMockBuilder(Page::class)
-            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
-            ->onlyMethods(['getConfig'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['setActiveMenu', 'addBreadcrumb', 'getConfig']
+        );
         $pageMock->expects($this->once())
             ->method('setActiveMenu');
         $pageMock->expects($this->once())

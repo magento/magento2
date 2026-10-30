@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,8 +39,8 @@ class InlineTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->translator = $this->getMockForAbstractClass(TranslateInterface::class);
-        $this->provider = $this->getMockForAbstractClass(ProviderInterface::class);
+        $this->translator = $this->createMock(TranslateInterface::class);
+        $this->provider = $this->createMock(ProviderInterface::class);
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -61,7 +61,7 @@ class InlineTest extends TestCase
             ->method('getTheme')
             ->willReturn($theme);
 
-        $inlineTranslate = $this->getMockForAbstractClass(InlineInterface::class);
+        $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
             ->willReturn(true);
@@ -77,7 +77,7 @@ class InlineTest extends TestCase
     {
         $text = 'test';
 
-        $inlineTranslate = $this->getMockForAbstractClass(InlineInterface::class);
+        $inlineTranslate = $this->createMock(InlineInterface::class);
         $inlineTranslate->expects($this->once())
             ->method('isAllowed')
             ->willReturn(false);

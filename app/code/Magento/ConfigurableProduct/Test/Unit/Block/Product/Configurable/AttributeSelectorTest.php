@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class AttributeSelectorTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->attributeSelector = $helper->getObject(
             AttributeSelector::class,
             ['urlBuilder' => $this->urlBuilder]

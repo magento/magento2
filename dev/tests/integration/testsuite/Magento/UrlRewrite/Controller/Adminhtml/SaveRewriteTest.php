@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * @magentoAppArea adminhtml
  */
-class SaveRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class SaveRewriteTest extends AbstractBackendController
 {
     /**
      * Test create url rewrite with invalid target path
@@ -34,12 +38,12 @@ class SaveRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         $this->dispatch('backend/admin/url_rewrite/save');
 
         $this->assertSessionMessages(
-            $this->containsEqual(__(sprintf(
-                'URL key "%s" matches a reserved endpoint name (%s). Use another URL key.',
+            $this->containsEqual(__(
+                'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
                 $requestPath,
                 $reservedWords
-            ))),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            )),
+            MessageInterface::TYPE_ERROR
         );
     }
 }

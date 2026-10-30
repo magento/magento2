@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
 use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -163,10 +164,10 @@ class ViewTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
-     * @dataProvider productVisibilityDataProvider
      * @param int $visibility
      * @return void
      */
+    #[DataProvider('productVisibilityDataProvider')]
     public function testProductVisibility(int $visibility): void
     {
         $product = $this->updateProductVisibility('simple2', $visibility);
@@ -406,9 +407,7 @@ class ViewTest extends AbstractController
      */
     private function setupLoggerMock(): MockObject
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
         $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
         return $logger;

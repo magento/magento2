@@ -21,7 +21,7 @@ class CommandLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
     }
 
     /**

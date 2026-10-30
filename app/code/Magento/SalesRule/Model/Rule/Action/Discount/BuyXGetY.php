@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,16 @@ class BuyXGetY extends AbstractDiscount
         $itemOriginalPrice = $this->validator->getItemOriginalPrice($item);
         $baseItemOriginalPrice = $this->validator->getItemBaseOriginalPrice($item);
 
+        // Use effective per-item price after previously applied discounts
+        $itemQtyTotal = $item->getQty();
+        $perItemPrevDiscount = (float) $item->getDiscountAmount() / $itemQtyTotal;
+        $perItemBasePrevDiscount = (float) $item->getBaseDiscountAmount() / $itemQtyTotal;
+
+        $effectiveItemPrice = max(0, $itemPrice - $perItemPrevDiscount);
+        $effectiveBaseItemPrice = max(0, $baseItemPrice - $perItemBasePrevDiscount);
+        $effectiveItemOriginalPrice = max(0, $itemOriginalPrice - $perItemPrevDiscount);
+        $effectiveBaseItemOriginalPrice = max(0, $baseItemOriginalPrice - $perItemBasePrevDiscount);
+
         $x = $rule->getDiscountStep();
         $y = $rule->getDiscountAmount();
         if (!$x || $y > $x) {
@@ -44,10 +54,10 @@ class BuyXGetY extends AbstractDiscount
             $discountQty += $freeQty - $x;
         }
 
-        $discountData->setAmount($discountQty * $itemPrice);
-        $discountData->setBaseAmount($discountQty * $baseItemPrice);
-        $discountData->setOriginalAmount($discountQty * $itemOriginalPrice);
-        $discountData->setBaseOriginalAmount($discountQty * $baseItemOriginalPrice);
+        $discountData->setAmount($discountQty * $effectiveItemPrice);
+        $discountData->setBaseAmount($discountQty * $effectiveBaseItemPrice);
+        $discountData->setOriginalAmount($discountQty * $effectiveItemOriginalPrice);
+        $discountData->setBaseOriginalAmount($discountQty * $effectiveBaseItemOriginalPrice);
 
         return $discountData;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,7 @@ class ThemeTest extends TestCase
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->themeDirectoryMock);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->themeFileCollector = new Theme(
@@ -169,7 +169,7 @@ class ThemeTest extends TestCase
         // Verifies Magento_Customer was correctly produced from directory path
         $this->fileFactoryMock->expects($this->any())
             ->method('create')
-            ->with($this->isType('string'), null, $this->themeMock)
+            ->with($this->callback('is_string'), null, $this->themeMock)
             ->willReturn($fileMock);
 
         // Only two files should be in array, which were returned from search

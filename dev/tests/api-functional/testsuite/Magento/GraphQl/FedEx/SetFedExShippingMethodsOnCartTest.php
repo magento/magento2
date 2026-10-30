@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\FedEx;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -25,7 +26,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * | FEDEX_2_DAY            | 2 Day
  * | FIRST_OVERNIGHT        | First Overnight
  * | INTERNATIONAL_ECONOMY  |International Economy
- * | INTERNATIONAL_PRIORITY | International Priority
+ * | FEDEX_INTERNATIONAL_PRIORITY | International Priority
  */
 class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
 {
@@ -69,11 +70,10 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
      * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
      * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
-     *
-     * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethods')]
     public function testSetFedExShippingMethod(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -128,11 +128,10 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
      * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
      * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
-     *
-     * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
      * @param string $methodLabel
      */
+    #[DataProvider('dataProviderShippingMethodsBasedOnCanadaAddress')]
     public function testSetFedExShippingMethodBasedOnCanadaAddress(string $methodCode, string $methodLabel)
     {
         $quoteReservedId = 'test_quote';
@@ -170,7 +169,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
         return [
            'Ground' => ['FEDEX_GROUND', 'Ground'],
            'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
-           'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
+           'International Priority' => ['FEDEX_INTERNATIONAL_PRIORITY', 'International Priority'],
         ];
     }
 

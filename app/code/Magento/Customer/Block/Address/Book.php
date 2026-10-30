@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Address;
 
@@ -228,7 +228,17 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getAddressById($addressId)
     {
         try {
-            return $this->addressRepository->getById($addressId);
+            $customer = $this->getCustomer();
+            if ($customer === null) {
+                return null;
+            }
+
+            $address = $this->addressRepository->getById($addressId);
+            if ((int) $address->getCustomerId() === (int) $customer->getId()) {
+                return $address;
+            }
+
+            return null;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }

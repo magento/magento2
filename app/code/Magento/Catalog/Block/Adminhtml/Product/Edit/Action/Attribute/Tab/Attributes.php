@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
 /**
  * Adminhtml catalog product edit action attributes update tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 

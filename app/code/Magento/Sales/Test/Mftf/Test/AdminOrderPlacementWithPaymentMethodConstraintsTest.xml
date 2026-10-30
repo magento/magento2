@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderPlacementWithPaymentMethodConstraintsTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin Order Management"/>
+            <title value="Admin cannot handle order placement when payment methods are not available"/>
+            <description value="Verify admin order creation behavior when payment methods are disabled or not available due to order total constraints"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-13220"/>
+            <group value="payment"/>
+            <group value="sales"/>
+            <group value="order_management"/>
+        </annotations>
+        <before>
+            <!-- Precondition 1: Create product -->
+            <createData entity="SimpleProduct_25" stepKey="simpleProduct">
+                <field key="price">10</field>
+            </createData>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <!-- Step 1&2: Disable payment method one of "Check/Money Order" and  "Zero Subtotal Checkout" -->
+            <actionGroup ref="CliDisableCheckMoneyOrderPaymentMethodActionGroup" stepKey="disableCheckMoneyOrderValue"/>
+            <magentoCLI command="config:set {{DisableZeroSubtotalCheckoutConfigData.path}} {{DisableZeroSubtotalCheckoutConfigData.value}}" stepKey="disabledZeroSubtotalCheckoutOrderValue"/>
+            <!-- Step 3: Enable CashOnDelivery  -->
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="enableCashOnDeliveryPaymentMethod"/>
+            <!-- Step 4: Set the Maximum Order Total and Maximum Order Total CashOnDelivery -->
+            <magentoCLI command="config:set {{cashOnDeliveryMaximumOrderTotalOrderPayment.path}} {{cashOnDeliveryMaximumOrderTotalOrderPayment.value}}" stepKey="cashOnDeliveryMaximumOrderTotalConfigData"/>
+            <magentoCLI command="config:set {{cashOnDeliveryMinimumOrderTotalOrderPayment.path}} {{cashOnDeliveryMinimumOrderTotalOrderPayment.value}}" stepKey="cashOnDeliveryMinimumOrderTotalOrderPayment"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Clean up created data -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteCustomer"/>
+            <!-- Restore original payment method configurations -->
+            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <magentoCLI command="config:set {{disabledCashOnDeliveryPayment.label}} {{disabledCashOnDeliveryPayment.value}}" stepKey="restoreCOD"/>
+            <!-- Clear cache and logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 5: Create an new order from admin -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!-- Step 6: Add products to cart below 100$ and check COD available -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.verifyCashOnDelivery}}" stepKey="verifyCashOnDeliveryPaymentMethodIsAvaiable"/>
+        <!-- Step 7: Add more products or increase quantity more than 100$ and check COD is not available -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductAgainByChangingQuantity">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="11"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{AdminOrderFormPaymentSection.verifyCashOnDelivery}}" stepKey="verifyCashOnDeliveryPaymentMethodNotAvaiable"/>
+        <!-- Step 8: Submit order when no payment methods visible and verify error message -->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <waitForText selector="{{AdminOrderFormPaymentSection.paymentErrorMessage}}" userInput="{{AdminPaymentErrorMessage.error_Message}}" stepKey="verifyOrderDonotPlacedAndSeeErrorMessage"/>
+    </test>
+</tests>

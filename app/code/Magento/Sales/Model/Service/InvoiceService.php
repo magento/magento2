@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 
 /**
- * Class InvoiceService
+ * Service for creating and managing invoices
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -153,14 +153,16 @@ class InvoiceService implements InvoiceManagementInterface
         $totalQty = 0;
         $invoice = $this->orderConverter->toInvoice($order);
         $preparedItemsQty = $this->prepareItemsQty($order, $orderItemsQtyToInvoice);
+        $originalEntityType = $order->getEntityType() ?? null;
 
         foreach ($order->getAllItems() as $orderItem) {
             if (!$this->canInvoiceItem($orderItem, $preparedItemsQty)) {
                 continue;
             }
 
-            if (isset($preparedItemsQty[$orderItem->getId()])) {
-                $qty = $preparedItemsQty[$orderItem->getId()];
+            $orderItemId = $orderItem->getId();
+            if ($orderItemId !== null && isset($preparedItemsQty[$orderItemId])) {
+                $qty = $preparedItemsQty[$orderItemId];
             } elseif ($orderItem->isDummy()) {
                 $qty = $orderItem->getQtyOrdered() ? $orderItem->getQtyOrdered() : 1;
             } elseif (empty($orderItemsQtyToInvoice)) {
@@ -177,6 +179,9 @@ class InvoiceService implements InvoiceManagementInterface
 
         $invoice->setTotalQty($totalQty);
         $invoice->collectTotals();
+        if ($originalEntityType) {
+            $order->setHistoryEntityName($originalEntityType);
+        }
         $order->getInvoiceCollection()->addItem($invoice);
 
         return $invoice;
@@ -194,14 +199,15 @@ class InvoiceService implements InvoiceManagementInterface
         array $orderItemsQtyToInvoice
     ): array {
         foreach ($order->getAllItems() as $orderItem) {
-            if (isset($orderItemsQtyToInvoice[$orderItem->getId()])) {
+            $orderItemId = $orderItem->getId();
+            if ($orderItemId !== null && isset($orderItemsQtyToInvoice[$orderItemId])) {
                 if ($orderItem->getHasChildren()) {
                     $orderItemsQtyToInvoice = $this->setChildItemsQtyToInvoice($orderItem, $orderItemsQtyToInvoice);
                 }
             } else {
-                if (isset($orderItemsQtyToInvoice[$orderItem->getParentItemId()])) {
-                    $orderItemsQtyToInvoice[$orderItem->getId()] =
-                        $orderItemsQtyToInvoice[$orderItem->getParentItemId()];
+                $parentItemId = $orderItem->getParentItemId();
+                if ($orderItemId !== null && $parentItemId !== null && isset($orderItemsQtyToInvoice[$parentItemId])) {
+                    $orderItemsQtyToInvoice[$orderItemId] = $orderItemsQtyToInvoice[$parentItemId];
                 }
             }
         }
@@ -275,6 +281,7 @@ class InvoiceService implements InvoiceManagementInterface
         } else {
             return $item->getQtyToInvoice() > 0;
         }
+        return false;
     }
 
     /**
@@ -287,7 +294,7 @@ class InvoiceService implements InvoiceManagementInterface
      */
     private function setInvoiceItemQuantity(InvoiceItemInterface $item, float $qty): InvoiceManagementInterface
     {
-        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (double) $qty : (int) $qty;
+        $qty = ($item->getOrderItem()->getIsQtyDecimal()) ? (float) $qty : (int) $qty;
         $qty = $qty > 0 ? $qty : 0;
 
         /**

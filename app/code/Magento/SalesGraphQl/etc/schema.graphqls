@@ -3,7 +3,7 @@
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
-    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and billing last name.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrder(input: GuestOrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and billing last name.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
     guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
@@ -170,6 +170,7 @@ type OrderTotal @doc(description: "Contains details about the sales total amount
     shipping_handling: ShippingHandling @doc(description: "Details about the shipping and handling costs for the order.")
     subtotal_incl_tax: Money! @doc(description: "The subtotal of the order, including taxes.")
     subtotal_excl_tax: Money! @doc(description: "The subtotal of the order, excluding taxes.")
+    grand_total_excl_tax: Money! @doc(description: "The grand total of the order, excluding taxes.")
 }
 
 type Invoice @doc(description: "Contains invoice details.") {
@@ -309,7 +310,14 @@ input OrderTokenInput @doc(description: "Input to retrieve an order based on tok
     token: String! @doc(description: "Order token.")
 }
 
-input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
+input OrderInformationInput @deprecated(reason: "Use `GuestOrderInformationInput` instead of OrderInformationInput.") @doc(description: "Input to retrieve an order based on details.") {
+    number: String! @doc(description: "Order number.")
+    email: String! @doc(description: "Order billing address email.")
+    lastname: String! @doc(description: "Order billing address lastname.")
+    postcode: String @deprecated(reason: "Use lastname instead of postcode") @doc(description: "Order billing address postcode")
+}
+
+input GuestOrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
     number: String! @doc(description: "Order number.")
     email: String! @doc(description: "Order billing address email.")
     lastname: String! @doc(description: "Order billing address lastname.")

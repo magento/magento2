@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class DirectorTest extends TestCase
     protected function setUp(): void
     {
         $this->builderMock = $this->createMock(Builder::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->commandMock = $this->createPartialMock(
             AbstractCommand::class,
             ['getId', '_execute', 'execute', 'chain']

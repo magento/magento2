@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Sales\Test\Unit\Model\Order\Email\Stub\TransportInterfaceMock;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SenderBuilderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SenderBuilder
      */
@@ -50,26 +53,18 @@ class SenderBuilderTest extends TestCase
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId']
         );
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStoreId'])
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getStoreId', 'getId']
+        );
 
-        $this->identityContainerMock = $this->getMockBuilder(ShipmentIdentity::class)
-            ->addMethods(['getTemplateOptions'])
-            ->onlyMethods(
-                [
-                    'getEmailIdentity',
-                    'getCustomerEmail',
-                    'getCustomerName',
-                    'getEmailCopyTo',
-                    'getCopyMethod',
-                    'getStore'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->identityContainerMock = $this->createPartialMockWithReflection(
+            ShipmentIdentity::class,
+            [
+                'getTemplateOptions', 'getEmailIdentity', 'getCustomerEmail', 'getCustomerName',
+                'getEmailCopyTo', 'getCopyMethod', 'getStore'
+            ]
+        );
 
         $this->transportBuilder = $this->createPartialMock(
             TransportBuilder::class,

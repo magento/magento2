@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
@@ -15,6 +16,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 
 /**
  * End to checkout tests for guest
@@ -83,6 +87,32 @@ class CheckoutEndToEndTest extends GraphQlAbstract
         $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
         $this->setPaymentMethod($cartId, $paymentMethod);
 
+        $this->placeOrder($cartId);
+    }
+
+    /**
+     * Test checkout workflow with null second street in shipping address
+     * Validates that null values in street array are properly filtered and don't cause errors
+     */
+    #[
+        Config("checkout/options/guest_checkout", "1", "store", "default"),
+        DataFixture(
+            ProductFixture::class,
+            ['price' => 1, 'name' => 'simple1', 'sku' => 'simple1'],
+            'simple1'
+        )
+    ]
+    public function testCheckoutWithNullSecondStreetInShippingAddress()
+    {
+        $cartId = $this->createEmptyCart();
+        $this->setGuestEmailOnCart($cartId);
+        $this->addProductToCart($cartId, 1, $this->findProduct());
+
+        $shippingMethod = $this->setAndVerifyShippingAddressWithNullSecondStreet($cartId);
+
+        $this->setBillingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
         $this->placeOrder($cartId);
     }
 
@@ -395,6 +425,92 @@ QUERY;
         self::assertArrayHasKey('order', $response['placeOrder']);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
         self::assertNotEmpty($response['placeOrder']['order']['order_number']);
+    }
+
+    /**
+     * Set shipping address with null second street in address
+     *
+     * @param string $cartId
+     * @return array
+     */
+    private function setAndVerifyShippingAddressWithNullSecondStreet(string $cartId): array
+    {
+        $query = <<<QUERY
+            mutation {
+              setShippingAddressesOnCart(
+                input: {
+                  cart_id: "$cartId"
+                  shipping_addresses: [
+                    {
+                      address: {
+                        firstname: "B"
+                        lastname: "C"
+                        street: ["Lorem ipsum dolor sit ame", null]
+                        city: "PARIS"
+                        postcode: "56590"
+                        country_code: "FR"
+                        telephone: "0601020304"
+                        save_in_address_book: false
+                      }
+                    }
+                  ]
+                }
+              ) {
+                cart {
+                  shipping_addresses {
+                    firstname
+                    lastname
+                    company
+                    street
+                    city
+                    postcode
+                    country {
+                      code
+                      label
+                    }
+                    telephone
+                    available_shipping_methods {
+                      carrier_code
+                      method_code
+                      amount {
+                        value
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            QUERY;
+
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('setShippingAddressesOnCart', $response);
+        $this->assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $this->assertArrayHasKey('shipping_addresses', $response['setShippingAddressesOnCart']['cart']);
+        $this->assertCount(1, $response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+
+        $this->assertEquals('B', $shippingAddress['firstname']);
+        $this->assertEquals('C', $shippingAddress['lastname']);
+        $this->assertNull($shippingAddress['company']);
+        $this->assertEquals(['Lorem ipsum dolor sit ame'], $shippingAddress['street']);
+        $this->assertEquals('PARIS', $shippingAddress['city']);
+        $this->assertEquals('56590', $shippingAddress['postcode']);
+        $this->assertEquals('FR', $shippingAddress['country']['code']);
+        $this->assertEquals('FR', $shippingAddress['country']['label']);
+        $this->assertEquals('0601020304', $shippingAddress['telephone']);
+
+        $this->assertArrayHasKey('available_shipping_methods', $shippingAddress);
+        $this->assertGreaterThan(0, count($shippingAddress['available_shipping_methods']));
+
+        $availableShippingMethod = current($shippingAddress['available_shipping_methods']);
+        $this->assertArrayHasKey('carrier_code', $availableShippingMethod);
+        $this->assertNotEmpty($availableShippingMethod['carrier_code']);
+        $this->assertArrayHasKey('method_code', $availableShippingMethod);
+        $this->assertNotEmpty($availableShippingMethod['method_code']);
+
+        return $availableShippingMethod;
     }
 
     protected function tearDown(): void

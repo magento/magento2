@@ -1,33 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
+
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Vat;
 
 class VatValidator
 {
     /**
-     * Customer address
-     *
-     * @var \Magento\Customer\Helper\Address
+     * @var Address
      */
     protected $customerAddress;
 
     /**
-     * Customer VAT
-     *
-     * @var \Magento\Customer\Model\Vat
+     * @var Vat
      */
     protected $customerVat;
 
     /**
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Customer\Model\Vat $customerVat
+     * @param Address $customerAddress
+     * @param Vat $customerVat
      */
     public function __construct(
-        \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Customer\Model\Vat $customerVat
+        Address $customerAddress,
+        Vat $customerVat
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddress = $customerAddress;

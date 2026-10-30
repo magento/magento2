@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,10 +22,13 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Sales\Model\Order\Invoice\Sender\EmailSender;
+use Magento\Sales\Model\Order\Invoice as InvoiceModel;
 use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -35,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class EmailSenderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var EmailSender
      */
@@ -127,14 +132,9 @@ class EmailSenderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
 
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId']);
 
         $this->storeMock->expects($this->any())
             ->method('getStoreId')
@@ -144,32 +144,22 @@ class EmailSenderTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->senderMock = $this->getMockBuilder(Sender::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['send', 'sendCopyTo'])
-            ->getMock();
+        $this->senderMock = $this->createPartialMockWithReflection(Sender::class, ['send', 'sendCopyTo']);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setEmailSent', 'getId'])
-            ->addMethods(['setSendEmail'])
-            ->getMock();
+        $this->invoiceMock = $this->createPartialMockWithReflection(
+            InvoiceModel::class,
+            ['setEmailSent', 'getId', 'setSendEmail']
+        );
 
-        $this->commentMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->commentMock = $this->createMock(InvoiceCommentCreationInterface::class);
 
         $this->commentMock->expects($this->any())
             ->method('getComment')
             ->willReturn('Comment text');
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressMock = $this->createMock(Address::class);
 
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
@@ -179,53 +169,37 @@ class EmailSenderTest extends TestCase
             ->method('getShippingAddress')
             ->willReturn($this->addressMock);
 
-        $this->globalConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->globalConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->paymentInfoMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentInfoMock = $this->createMock(Info::class);
 
         $this->orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($this->paymentInfoMock);
 
-        $this->paymentHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentHelperMock = $this->createMock(Data::class);
 
         $this->paymentHelperMock->expects($this->any())
             ->method('getInfoBlockHtml')
             ->with($this->paymentInfoMock, 1)
             ->willReturn('Payment Info Block');
 
-        $this->invoiceResourceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->invoiceResourceMock = $this->createMock(Invoice::class);
 
-        $this->addressRendererMock = $this->getMockBuilder(Renderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->addressRendererMock = $this->createMock(Renderer::class);
 
         $this->addressRendererMock->expects($this->any())
             ->method('format')
             ->with($this->addressMock, 'html')
             ->willReturn('Formatted address');
 
-        $this->templateContainerMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->templateContainerMock = $this->createMock(Template::class);
 
-        $this->identityContainerMock = $this->getMockBuilder(
+        $this->identityContainerMock = $this->createMock(
             InvoiceIdentity::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -257,15 +231,15 @@ class EmailSenderTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider sendDataProvider
      */
+    #[DataProvider('sendDataProvider')]
     public function testSend(
         int $configValue,
         bool $forceSyncMode,
         bool $isComment,
         bool $emailSendingResult
     ): void {
-        $this->globalConfigMock->expects($this->once())
+         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
             ->willReturn($configValue);
@@ -274,85 +248,85 @@ class EmailSenderTest extends TestCase
             $this->commentMock = null;
         }
 
-        $this->invoiceMock->expects($this->once())
+         $this->invoiceMock->expects($this->once())
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
-        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
-        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
-        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
-        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
+         $this->orderMock->method('getCustomerName')->willReturn('Customer name');
+         $this->orderMock->method('getIsNotVirtual')->willReturn(true);
+         $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
+         $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
 
         if (!$configValue || $forceSyncMode) {
             $transport = [
-                'order' => $this->orderMock,
-                'order_id' => 1,
-                'invoice' => $this->invoiceMock,
-                'invoice_id' => 1,
-                'comment' => $isComment ? 'Comment text' : '',
-                'billing' => $this->addressMock,
-                'payment_html' => 'Payment Info Block',
-                'store' => $this->storeMock,
-                'formattedShippingAddress' => 'Formatted address',
-                'formattedBillingAddress' => 'Formatted address',
-                'order_data' => [
-                    'customer_name' => 'Customer name',
-                    'is_not_virtual' => true,
-                    'email_customer_note' => null,
-                    'frontend_status_label' => 'Pending'
-                ]
+               'order' => $this->orderMock,
+               'order_id' => 1,
+               'invoice' => $this->invoiceMock,
+               'invoice_id' => 1,
+               'comment' => $isComment ? 'Comment text' : '',
+               'billing' => $this->addressMock,
+               'payment_html' => 'Payment Info Block',
+               'store' => $this->storeMock,
+               'formattedShippingAddress' => 'Formatted address',
+               'formattedBillingAddress' => 'Formatted address',
+               'order_data' => [
+                   'customer_name' => 'Customer name',
+                   'is_not_virtual' => true,
+                   'email_customer_note' => null,
+                   'frontend_status_label' => 'Pending'
+               ]
             ];
             $transport = new DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
-                ->method('dispatch')
-                ->with(
-                    'email_invoice_set_template_vars_before',
-                    [
-                        'sender' => $this->subject,
-                        'transport' => $transport->getData(),
-                        'transportObject' => $transport
-                    ]
-                );
+               ->method('dispatch')
+               ->with(
+                   'email_invoice_set_template_vars_before',
+                   [
+                       'sender' => $this->subject,
+                       'transport' => $transport->getData(),
+                       'transportObject' => $transport
+                   ]
+               );
 
             $this->templateContainerMock->expects($this->once())
-                ->method('setTemplateVars')
-                ->with($transport->getData());
+               ->method('setTemplateVars')
+               ->with($transport->getData());
 
             $this->identityContainerMock->expects($this->exactly(2))
-                ->method('isEnabled')
-                ->willReturn($emailSendingResult);
+               ->method('isEnabled')
+               ->willReturn($emailSendingResult);
 
             $this->orderMock->expects($this->once())
-                ->method('getId')
-                ->willReturn(1);
+               ->method('getId')
+               ->willReturn(1);
 
             $this->invoiceMock->expects($this->once())
-                ->method('getId')
-                ->willReturn(1);
+               ->method('getId')
+               ->willReturn(1);
 
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())
-                    ->method('getCopyMethod')
-                    ->willReturn('copy');
+                   ->method('getCopyMethod')
+                   ->willReturn('copy');
 
                 $this->senderBuilderFactoryMock->expects($this->once())
-                    ->method('create')
-                    ->willReturn($this->senderMock);
+                   ->method('create')
+                   ->willReturn($this->senderMock);
 
                 $this->senderMock->expects($this->once())
-                    ->method('send');
+                   ->method('send');
 
                 $this->senderMock->expects($this->once())
-                    ->method('sendCopyTo');
+                   ->method('sendCopyTo');
 
                 $this->invoiceMock->expects($this->once())
-                    ->method('setEmailSent')
-                    ->with(true);
+                   ->method('setEmailSent')
+                   ->with(true);
 
                 $this->invoiceResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->invoiceMock, ['send_email', 'email_sent']);
+                   ->method('saveAttribute')
+                   ->with($this->invoiceMock, ['send_email', 'email_sent']);
 
                 $this->assertTrue(
                     $this->subject->send(
@@ -364,8 +338,8 @@ class EmailSenderTest extends TestCase
                 );
             } else {
                 $this->invoiceResourceMock->expects($this->once())
-                    ->method('saveAttribute')
-                    ->with($this->invoiceMock, 'send_email');
+                   ->method('saveAttribute')
+                   ->with($this->invoiceMock, 'send_email');
 
                 $this->assertFalse(
                     $this->subject->send(
@@ -378,18 +352,18 @@ class EmailSenderTest extends TestCase
             }
         } else {
             $this->invoiceMock->expects($this->once())
-                ->method('setEmailSent')
-                ->with(null);
+               ->method('setEmailSent')
+               ->with(null);
 
             $this->invoiceResourceMock
-                ->method('saveAttribute')
-                ->willReturnCallback(function ($arg1, $arg2) {
-                    if ($arg1 == $this->invoiceMock &&
-                        $arg2 == 'email_sent' ||
-                        $arg2 == 'send_email') {
-                        return null;
-                    }
-                });
+               ->method('saveAttribute')
+               ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == $this->invoiceMock &&
+                       $arg2 == 'email_sent' ||
+                       $arg2 == 'send_email') {
+                    return null;
+                }
+               });
 
             $this->assertFalse(
                 $this->subject->send(

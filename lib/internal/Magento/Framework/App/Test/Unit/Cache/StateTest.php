@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,13 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class StateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject
      */
@@ -29,21 +32,15 @@ class StateTest extends TestCase
     protected function setUp(): void
     {
         $this->config = $this->createMock(DeploymentConfig::class);
-        $this->writer =
-            $this->getMockBuilder(Writer::class)
-                ->addMethods(['update'])
-                ->onlyMethods(['saveConfig'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->writer = $this->createPartialMockWithReflection(
+            Writer::class,
+            ['update', 'saveConfig']
+        );
     }
 
-    /**
-     * @param string $cacheType
-     * @param array $config
-     * @param bool $banAll
-     * @param bool $expectedIsEnabled
-     * @dataProvider isEnabledDataProvider
+    /**     * @param bool $expectedIsEnabled
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($cacheType, $config, $banAll, $expectedIsEnabled)
     {
         $model = new State($this->config, $this->writer, $banAll);

@@ -11,6 +11,8 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\ImageFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
 
 /**
  * @magentoDataFixture Magento/Framework/Image/_files/image_fixture.php
@@ -149,9 +151,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks if all dependencies are loaded
      * @param string $adapterType
-     *
-     * @dataProvider adaptersDataProvider
      */
+    #[DataProvider('adaptersDataProvider')]
     public function testCheckDependencies($adapterType)
     {
         $this->_getAdapter($adapterType);
@@ -168,10 +169,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $image
      * @param string $adapterType
-     *
-     * @depends testCheckDependencies
-     * @dataProvider openDataProvider
      */
+    #[Depends('testCheckDependencies')]
+    #[DataProvider('openDataProvider')]
     public function testOpen($image, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -197,8 +197,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $adapterType
-     * @dataProvider adaptersDataProvider
      */
+    #[DataProvider('adaptersDataProvider')]
     public function testGetImage($adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -209,10 +209,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $image
      * @param string $adapterType
-     *
-     * @dataProvider openDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
+    #[DataProvider('openDataProvider')]
     public function testImageSize($image, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -234,10 +233,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param string $adapterType
      *
      * @throws \Magento\Framework\Exception\FileSystemException
-     *
-     * @dataProvider saveDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
+    #[DataProvider('saveDataProvider')]
     public function testSave($image, $tmpDir, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -275,14 +273,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array|null $expectedDims (width, height)
      * @param string|null $expectedException
      * @param string $adapterType
-     *
-     * @dataProvider resizeDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
     #[
         DataFixture(ImageFixture::class, ['width' => 1024, 'height' => 768], as: 'image1'),
         DataFixture(ImageFixture::class, ['width' => 1712, 'height' => 2], as: 'image2'),
         DataFixture(ImageFixture::class, ['width' => 2, 'height' => 1712], as: 'image3'),
+        DataProvider('resizeDataProvider')
     ]
     public function testResize(
         string $image,
@@ -334,9 +331,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $pixel
      * @param string $adapterType
      *
-     * @dataProvider rotateDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
+    #[DataProvider('rotateDataProvider')]
     public function testRotate($image, $angle, $pixel, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -402,11 +399,10 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $comparePoint1
      * @param array $comparePoint2
      * @param string $adapterType
-     *
-     * @dataProvider imageWatermarkWithAlphaTransparencyDataProvider
-     * @depends testOpen
-     * @depends testImageSize
      */
+    #[Depends('testOpen')]
+    #[Depends('testImageSize')]
+    #[DataProvider('imageWatermarkWithAlphaTransparencyDataProvider')]
     public function testWatermarkWithAlphaTransparency(
         $image,
         $watermark,
@@ -496,10 +492,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param int $colorX
      * @param int $colorY
      * @param string $adapterType
-     *
-     * @dataProvider imageWatermarkPositionDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
+    #[DataProvider('imageWatermarkPositionDataProvider')]
     public function testWatermarkPosition(
         $image,
         $watermark,
@@ -650,9 +645,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param int $bottom
      * @param string $adapterType
      *
-     * @dataProvider cropDataProvider
-     * @depends testOpen
      */
+    #[Depends('testOpen')]
+    #[DataProvider('cropDataProvider')]
     public function testCrop($image, $left, $top, $right, $bottom, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -682,14 +677,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider createPngFromStringDataProvider
-     *
      * @param array $pixel1
      * @param array $expectedColor1
      * @param array $pixel2
      * @param array $expectedColor2
      * @param string $adapterType
      */
+    #[DataProvider('createPngFromStringDataProvider')]
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
@@ -720,30 +714,30 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 ['x' => 5, 'y' => 8],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['red' => 0, 'green' => 0, 'blue' => 0],
                 ['x' => 0, 'y' => 11],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
             [
                 ['x' => 5, 'y' => 12],
-                'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['red' => 0, 'green' => 0, 'blue' => 0],
                 ['x' => 0, 'y' => 20],
-                'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
                 ['x' => 1, 'y' => 11],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['red' => 255, 'green' => 255, 'blue' => 255],
                 ['x' => 5, 'y' => 11],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
             [
                 ['x' => 1, 'y' => 20],
-                'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
+                ['red' => 255, 'green' => 255, 'blue' => 255],
                 ['x' => 5, 'y' => 16],
-                'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
+                ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ]
         ];
@@ -756,11 +750,11 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider testValidateUploadFileExceptionDataProvider
      * @param string $fileName
      * @param string $expectedErrorMsg
      * @param bool $useFixture
      */
+    #[DataProvider('imageValidateUploadFileExceptionDataProvider')]
     public function testValidateUploadFileException($fileName, $expectedErrorMsg, $useFixture)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -779,7 +773,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function testValidateUploadFileExceptionDataProvider()
+    public static function imageValidateUploadFileExceptionDataProvider()
     {
         return [
             'image_notfound' => [

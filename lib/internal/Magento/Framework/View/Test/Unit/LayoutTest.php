@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
 use Exception;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\State;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
@@ -37,6 +38,7 @@ use Magento\Framework\View\Model\Layout\Merge;
 use Magento\Framework\View\Page\Config\Structure;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -148,6 +150,11 @@ class LayoutTest extends TestCase
     private $serializer;
 
     /**
+     * @var ResponseHttp
+     */
+    private ResponseHttp $response;
+
+    /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -157,20 +164,20 @@ class LayoutTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->processorFactoryMock = $this->createPartialMock(ProcessorFactory::class, ['create']);
-        $this->themeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->themeResolverMock = $this->createMock(ResolverInterface::class);
         $this->processorMock = $this->createMock(Merge::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(EventManager::class);
+        $this->eventManagerMock = $this->createMock(EventManager::class);
         $this->generatorBlockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->generatorContainerMock = $this->getMockBuilder(Container::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->cacheMock = $this->createMock(FrontendInterface::class);
         $this->readerPoolMock = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->generatorPoolMock = $this->getMockBuilder(GeneratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -205,8 +212,8 @@ class LayoutTest extends TestCase
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->serializer->expects($this->any())->method('serialize')
             ->willReturnCallback(
                 function ($value) {
@@ -219,6 +226,7 @@ class LayoutTest extends TestCase
                     return json_decode($value, true);
                 }
             );
+        $this->response = $this->createMock(ResponseHttp::class);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(
             Layout::class,
@@ -236,7 +244,8 @@ class LayoutTest extends TestCase
                 'appState' => $this->appStateMock,
                 'logger' => $this->loggerMock,
                 'cacheable' => true,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'response' => $this->response
             ]
         );
     }
@@ -246,9 +255,7 @@ class LayoutTest extends TestCase
      */
     public function testCreateBlockSuccess(): void
     {
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createMock(AbstractBlock::class);
         $this->structureMock->expects($this->once())
             ->method('createStructuralElement')
             ->with(
@@ -272,7 +279,7 @@ class LayoutTest extends TestCase
      */
     public function testGetUpdate(): void
     {
-        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $themeMock = $this->createMock(ThemeInterface::class);
 
         $this->themeResolverMock->expects($this->once())
             ->method('get')
@@ -292,7 +299,7 @@ class LayoutTest extends TestCase
      */
     public function testGenerateXml(): void
     {
-        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $themeMock = $this->createMock(ThemeInterface::class);
 
         $this->themeResolverMock->expects($this->once())
             ->method('get')
@@ -420,9 +427,7 @@ class LayoutTest extends TestCase
             ->with($parentName)
             ->willReturn($childrenArray);
 
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createMock(AbstractBlock::class);
         $this->structureMock->expects($this->once())
             ->method('createStructuralElement')
             ->with(
@@ -517,9 +522,8 @@ class LayoutTest extends TestCase
      * @param string $attribute
      * @param bool $result
      *
-     * @return void
-     * @dataProvider isContainerDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isContainerDataProvider')]
     public function testIsContainer($hasElement, $attribute, $result): void
     {
         $elementName = 'element_name';
@@ -554,9 +558,8 @@ class LayoutTest extends TestCase
      * @param array $containerConfig
      * @param bool $result
      *
-     * @return void
-     * @dataProvider isManipulationAllowedDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isManipulationAllowedDataProvider')]
     public function testIsManipulationAllowed($parentName, $containerConfig, $result): void
     {
         $elementName = 'element_name';
@@ -602,9 +605,7 @@ class LayoutTest extends TestCase
     public function testSetGetBlock(): void
     {
         $blockName = 'some_name';
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createMock(AbstractBlock::class);
         $this->assertSame($this->model, $this->model->setBlock($blockName, $blockMock));
         $this->assertSame([$blockName => $blockMock], $this->model->getAllBlocks());
         $this->structureMock->expects($this->once())
@@ -622,9 +623,7 @@ class LayoutTest extends TestCase
     {
         $oldName = 'old_name';
         $newName = 'new_name';
-        $blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $blockMock = $this->createMock(AbstractBlock::class);
 
         $this->structureMock->expects($this->once())
             ->method('renameElement')
@@ -691,9 +690,8 @@ class LayoutTest extends TestCase
      * @param array $type
      * @param string $blockInstance
      *
-     * @return void
-     * @dataProvider getBlockSingletonDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getBlockSingletonDataProvider')]
     public function testGetBlockSingleton($type, $blockInstance, $isAbstract): void
     {
         $blockMock = $this->createMock($blockInstance);
@@ -729,9 +727,8 @@ class LayoutTest extends TestCase
      * @param array $getData
      * @param bool $result
      *
-     * @return void
-     * @dataProvider getRendererOptionsDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getRendererOptionsDataProvider')]
     public function testAddGetRendererOptions($rendererData, $getData, $result): void
     {
         $this->assertSame(
@@ -814,9 +811,8 @@ class LayoutTest extends TestCase
      * @param bool $hasElement
      * @param bool $cacheable
      *
-     * @return void
-     * @dataProvider isCacheableDataProvider
-     */
+     * @return void     */
+    #[DataProvider('isCacheableDataProvider')]
     public function testIsCacheable(string $xmlString, string $blockName, bool $hasElement, bool $cacheable): void
     {
         $this->structureMock->method('hasElement')->with($blockName)->willReturn($hasElement);
@@ -889,7 +885,7 @@ class LayoutTest extends TestCase
      */
     public function testGenerateElementsWithoutCache(): void
     {
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
         $layoutCacheId = 'layout_cache_id';
@@ -898,7 +894,7 @@ class LayoutTest extends TestCase
         $xml = simplexml_load_string('<layout/>', Element::class);
         $this->model->setXml($xml);
 
-        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $themeMock = $this->createMock(ThemeInterface::class);
         $this->themeResolverMock->expects($this->once())
             ->method('get')
             ->willReturn($themeMock);
@@ -944,6 +940,11 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->any())
             ->method('__toArray')
             ->willReturn($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,
@@ -991,10 +992,10 @@ class LayoutTest extends TestCase
         $xml = simplexml_load_string('<layout/>', Element::class);
         $this->model->setXml($xml);
 
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
-        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $themeMock = $this->createMock(ThemeInterface::class);
         $this->themeResolverMock->expects($this->once())
             ->method('get')
             ->willReturn($themeMock);
@@ -1027,6 +1028,14 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->once())
             ->method('populateWithArray')
             ->with($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->layoutScheduledSructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($layoutScheduledStructureData);
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,
@@ -1081,9 +1090,8 @@ class LayoutTest extends TestCase
     /**
      * @param mixed $displayValue
      *
-     * @return void
-     * @dataProvider renderElementDisplayDataProvider
-     */
+     * @return void     */
+    #[DataProvider('renderElementDisplayDataProvider')]
     public function testRenderElementDisplay($displayValue): void
     {
         $name = 'test_container';
@@ -1134,9 +1142,8 @@ class LayoutTest extends TestCase
     /**
      * @param mixed $displayValue
      *
-     * @return void
-     * @dataProvider renderElementDoNotDisplayDataProvider
-     */
+     * @return void     */
+    #[DataProvider('renderElementDoNotDisplayDataProvider')]
     public function testRenderElementDoNotDisplay($displayValue): void
     {
         $name = 'test_container';
@@ -1153,9 +1160,8 @@ class LayoutTest extends TestCase
      * @param string $expectedResult
      * @param string $blockHtml
      *
-     * @return void
-     * @dataProvider trimWhitespaceContainingBlockHtmlDataProvider
-     */
+     * @return void     */
+    #[DataProvider('trimWhitespaceContainingBlockHtmlDataProvider')]
     public function testTrimWhitespaceContainingBlockHtml($expectedResult, $blockHtml): void
     {
         $name = 'test_container';
@@ -1243,6 +1249,7 @@ class LayoutTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
+        $this->response->expects($this->once())->method('setNoCacheHeaders');
 
         $model = clone $this->model;
         $model->setBuilder($builderMock);

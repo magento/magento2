@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
@@ -47,7 +47,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             \Magento\ImportExport\Block\Adminhtml\Import\Edit\Form::class,
             '_prepareForm'
         );
-        $prepareForm->setAccessible(true);
         $prepareForm->invoke($formBlock);
 
         // check form

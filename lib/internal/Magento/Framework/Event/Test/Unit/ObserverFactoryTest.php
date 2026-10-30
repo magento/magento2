@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,8 +37,7 @@ class ObserverFactoryTest extends TestCase
     public function testGet()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMockBuilder('Observer')
-            ->getMock();
+        $observerMock = $this->createMock(\stdClass::class);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
@@ -51,8 +50,7 @@ class ObserverFactoryTest extends TestCase
     public function testCreate()
     {
         $className = 'Magento\Class';
-        $observerMock =  $this->getMockBuilder('Observer')
-            ->getMock();
+        $observerMock = $this->createMock(\stdClass::class);
         $arguments = ['arg1', 'arg2'];
 
         $this->objectManagerMock->expects($this->once())

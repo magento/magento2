@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
@@ -37,7 +34,7 @@
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <!--Set default merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
@@ -52,7 +49,7 @@
         </actionGroup>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
             <argument name="payerName" value="{{Payer.firstName}}"/>
         </actionGroup>
 

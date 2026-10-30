@@ -1,9 +1,7 @@
 <?php
 /**
- * Critical notification window
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Block;
 
@@ -18,11 +16,9 @@ class Window extends \Magento\Backend\Block\Template
     /**
      * XML path of Severity icons url
      */
-    const XML_SEVERITY_ICONS_URL_PATH = 'system/adminnotification/severity_icons_url';
+    public const XML_SEVERITY_ICONS_URL_PATH = 'system/adminnotification/severity_icons_url';
 
     /**
-     * Severity icons url
-     *
      * @var string
      */
     protected $_severityIconsUrl;

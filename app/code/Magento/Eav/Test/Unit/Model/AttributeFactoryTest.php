@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Eav\Test\Unit\Model;
 
 use Magento\Eav\Model\AttributeFactory;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AttributeFactoryTest extends TestCase
@@ -31,7 +32,7 @@ class AttributeFactoryTest extends TestCase
     protected function setUp(): void
     {
         /** @var ObjectManagerInterface $objectManagerMock */
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects(
             $this->any()
         )->method(

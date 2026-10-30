@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -24,6 +24,7 @@ use Magento\JwtUserToken\Model\Data\JwtUserContext;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\User\Model\User as UserModel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Integration\Api\Data\UserTokenParametersInterface;
 use Magento\Integration\Api\Data\UserTokenParametersInterfaceFactory;
@@ -84,8 +85,8 @@ class ReaderTest extends TestCase
      * @return void
      * @throws \Throwable
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider getJwtCases
      */
+    #[DataProvider('getJwtCases')]
     public function testIssueForCustomer(string $jwtAlg, string $jweAlg): void
     {
         $this->config->setValue('webapi/jwtauth/jwt_alg', $jwtAlg);

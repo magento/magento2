@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\OfflineShipping\Model\Config\Backend;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Backend model for shipping table rates CSV importing
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Tablerate extends \Magento\Framework\App\Config\Value
 {
@@ -44,6 +42,8 @@ class Tablerate extends \Magento\Framework\App\Config\Value
     }
 
     /**
+     * After save
+     *
      * @return $this
      */
     public function afterSave()

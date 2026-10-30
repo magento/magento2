@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,8 +41,8 @@ class ThemeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->ruleMock = $this->getMockForAbstractClass(RuleInterface::class);
-        $this->componentRegistrarMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->ruleMock = $this->createMock(RuleInterface::class);
+        $this->componentRegistrarMock = $this->createMock(ComponentRegistrarInterface::class);
         $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,12 +63,12 @@ class ThemeTest extends TestCase
 
     public function testGetPatternDirs()
     {
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
         $parentTheme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/parent_theme');
         $parentTheme->expects($this->never())->method('getArea');
         $parentTheme->expects($this->never())->method('getCode');
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/current_theme');
         $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
         $theme->expects($this->once())->method('getArea')->willReturn('frontend');

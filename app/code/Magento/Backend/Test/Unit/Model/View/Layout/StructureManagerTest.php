@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,12 +34,8 @@ class StructureManagerTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->structureMock = $this->createMock(Structure::class);
+        $this->scheduledStructureMock = $this->createMock(ScheduledStructure::class);
         $this->structureManager = $objectManager->getObject(StructureManager::class);
     }
 

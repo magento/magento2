@@ -69,6 +69,10 @@ class Position implements ExpressionBuilderInterface
             $fieldName = $this->fieldNameResolver->getFieldName($attribute);
         }
 
+        if ($fieldName !== '_script') {
+            $sortParams['unmapped_type'] = 'integer';
+        }
+
         return [$fieldName => $sortParams];
     }
 

@@ -23,6 +23,7 @@ use Magento\CatalogWidget\Model\Rule\Condition\Combine as CombineCondition;
 use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductCondition;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,9 +56,9 @@ class BuilderTest extends TestCase
      * @param string $expectedOrder
      * @return void
      * @throws LocalizedException|\PHPUnit\Framework\MockObject\Exception
-     * @dataProvider attachConditionToCollectionDataProvider
      */
     #[
+        DataProvider('attachConditionToCollectionDataProvider'),
         DataFixture(
             MultiselectAttribute::class,
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,10 +48,10 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheStateMock = $this->createMock(StateInterface::class);
         $this->attributeResourceMock = $this->createMock(AttributeResource::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->attributeResourcePlugin = $objectManager->getObject(
             AttributeResourcePlugin::class,
             [

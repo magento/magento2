@@ -109,7 +109,7 @@ class CronCommand extends Command
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->get('cron/enabled', 1)) {
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');

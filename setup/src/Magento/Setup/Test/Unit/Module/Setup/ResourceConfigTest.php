@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,13 +10,14 @@ namespace Magento\Setup\Test\Unit\Module\Setup;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Setup\Module\Setup\ResourceConfig;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ResourceConfigTest extends TestCase
 {
     /**
-     * @dataProvider getConnectionNameDataProvider
      * @param string $resourceName
      */
+    #[DataProvider('getConnectionNameDataProvider')]
     public function testGetConnectionName($resourceName)
     {
         $connectionName = ResourceConnection::DEFAULT_CONNECTION;

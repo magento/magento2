@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
@@ -123,13 +123,11 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function getTotalAmount($item)
     {
         $storeId = $item->getStoreId();
-        $total =  $this->displaySalesPricesInclTax($storeId) ? $item->getPriceInclTax()
-            : $item->getPrice();
-
-        $totalAmount = $this->displaySalesPricesInclTax($storeId)
-            ? $total - $item->getDiscountAmount() - $item->getTaxAmount()
-            : $total - $item->getDiscountAmount();
-
+        if ($this->displaySalesPricesInclTax($storeId)) {
+            $totalAmount = $item->getRowTotalInclTax() - $item->getDiscountAmount() - $item->getTaxAmount();
+        } else {
+            $totalAmount = $item->getRowTotal() - $item->getDiscountAmount();
+        }
         return $totalAmount;
     }
 
@@ -142,13 +140,12 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function getBaseTotalAmount($item)
     {
         $storeId = $item->getStoreId();
-        $baseTotal =  $this->displaySalesPricesInclTax($storeId) ? $item->getBasePriceInclTax()
-            : $item->getBasePrice();
-
-        $baseTotalAmount = $this->displaySalesPricesInclTax($storeId)
-            ? $baseTotal - $item->getBaseDiscountAmount() - $item->getBaseTaxAmount()
-            : $baseTotal - $item->getBaseDiscountAmount();
-
+        if ($this->displaySalesPricesInclTax($storeId)) {
+            $baseTotalAmount = $item->getBaseRowTotalInclTax()
+                - $item->getBaseDiscountAmount() - $item->getBaseTaxAmount();
+        } else {
+            $baseTotalAmount = $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
+        }
         return $baseTotalAmount;
     }
 

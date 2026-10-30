@@ -1,9 +1,7 @@
 <?php
 /**
- * Router for Magento web API.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Controller\Rest;
 
