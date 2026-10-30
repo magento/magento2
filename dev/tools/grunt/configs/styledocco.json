@@ -3,7 +3,10 @@
     "options": {
       "name": "Magento UI Library",
       "verbose": true,
-      "include": ["<%= path.doc %>/docs.css"]
+      "include": [
+        "<%= path.doc %>/docs.css",
+        "<%= path.doc %>/source/js/popup.js"
+      ]
     },
     "files": {
       "<%= path.doc %>": "<%= path.doc %>/source"
