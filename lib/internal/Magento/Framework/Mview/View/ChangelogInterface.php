@@ -80,4 +80,13 @@ interface ChangelogInterface
      * @return string
      */
     public function getViewId();
+
+    /**
+     * Get count of distinct pending entity ids in changelog between two version ids
+     *
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @return int
+     */
+    public function getPendingCount(int $fromVersionId, int $toVersionId): int;
 }
