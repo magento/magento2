@@ -391,6 +391,27 @@ class RendererTest extends TestCase
     }
 
     /**
+     * @param int|string $qtyOrdered
+     */
+    #[DataProvider('zeroQtyOrderedDataProvider')]
+    public function testGetBaseUnitDisplayPriceExclTaxWithZeroQtyOrdered($qtyOrdered): void
+    {
+        $baseRowTotal = 100;
+
+        $this->weeeHelper->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->willReturn($qtyOrdered);
+        $this->item->expects($this->once())
+            ->method('getBaseRowTotal')
+            ->willReturn($baseRowTotal);
+
+        $this->assertSame((float) $baseRowTotal, $this->renderer->getBaseUnitDisplayPriceExclTax());
+    }
+
+    /**
      * @param int $price
      * @param int $weeeTax
      * @param bool $weeeEnabled
@@ -722,6 +743,38 @@ class RendererTest extends TestCase
             ->willReturn(1);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
+    }
+
+    /**
+     * @param int|string $qtyOrdered
+     */
+    #[DataProvider('zeroQtyOrderedDataProvider')]
+    public function testGetBaseFinalUnitDisplayPriceExclTaxWithZeroQtyOrdered($qtyOrdered): void
+    {
+        $baseRowTotal = 100;
+
+        $this->weeeHelper->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->willReturn($qtyOrdered);
+        $this->item->expects($this->once())
+            ->method('getBaseRowTotal')
+            ->willReturn($baseRowTotal);
+
+        $this->assertSame((float) $baseRowTotal, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
+    }
+
+    /**
+     * @return array
+     */
+    public static function zeroQtyOrderedDataProvider(): array
+    {
+        return [
+            'integer zero' => [0],
+            'numeric string zero' => ['0.0000'],
+        ];
     }
 
     /**
