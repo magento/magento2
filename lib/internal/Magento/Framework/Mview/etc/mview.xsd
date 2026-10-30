@@ -101,22 +101,22 @@
     <xs:simpleType name="entityColumnType">
         <xs:annotation>
             <xs:documentation>
-                Entity column can contain only [a-z_].
+                Entity column can contain only [a-z0-9_].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z_]+" />
+            <xs:pattern value="[a-z0-9_]+" />
         </xs:restriction>
     </xs:simpleType>
 
     <xs:simpleType name="tableNameType">
         <xs:annotation>
             <xs:documentation>
-                Table name can contain only [a-z_].
+                Table name can contain only [a-z0-9_].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-z_]+" />
+            <xs:pattern value="[a-z0-9_]+" />
         </xs:restriction>
     </xs:simpleType>
 
