@@ -349,7 +349,8 @@ class QueueTest extends TestCase
             $this->setPrivateProperty($queue, 'inProgress', [
                 'path' => $this->createPackageMock('path', Package::STATE_COMPLETED)
             ]);
-            $this->setPrivateProperty($queue, 'logDelay', 10);
+            // Never logged before, so the next check is due.
+            $this->setPrivateProperty($queue, 'lastStatusLog', 0);
             $this->logger->expects($this->once())->method('info')->with('.');
         }
 
@@ -373,22 +374,44 @@ class QueueTest extends TestCase
     }
 
     /**
-     * Test refreshStatus increments logDelay when less than 10.
+     * Test refreshStatus stays quiet until the log interval has elapsed.
      *
      * @return void
      * @covers ::refreshStatus
      */
-    public function testRefreshStatusIncrementsLogDelay(): void
+    public function testRefreshStatusIsQuietWithinTheLogInterval(): void
     {
         $queue = $this->createQueue();
-        $this->setPrivateProperty($queue, 'logDelay', 5);
+        $loggedAt = time();
+        $this->setPrivateProperty($queue, 'lastStatusLog', $loggedAt);
 
         $this->logger->expects($this->never())->method('info');
 
         $this->invokeMethod($queue, 'refreshStatus');
 
-        $logDelay = $this->getPrivateProperty($queue, 'logDelay');
-        $this->assertSame(6, $logDelay);
+        $this->assertSame(
+            $loggedAt,
+            $this->getPrivateProperty($queue, 'lastStatusLog'),
+            'the last log time should be untouched when nothing was logged'
+        );
+    }
+
+    /**
+     * Test refreshStatus logs once the interval has elapsed, whatever the poll interval is.
+     *
+     * @return void
+     * @covers ::refreshStatus
+     */
+    public function testRefreshStatusLogsOnceTheIntervalHasElapsed(): void
+    {
+        $queue = $this->createQueue();
+        $this->setPrivateProperty($queue, 'lastStatusLog', 0);
+
+        $this->logger->expects($this->once())->method('info')->with('.');
+
+        $this->invokeMethod($queue, 'refreshStatus');
+
+        $this->assertGreaterThan(0, $this->getPrivateProperty($queue, 'lastStatusLog'));
     }
 
     /**
