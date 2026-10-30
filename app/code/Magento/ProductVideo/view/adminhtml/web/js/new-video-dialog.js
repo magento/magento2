@@ -245,6 +245,8 @@ define([
 
         _gallery: null,
 
+        _previewRequestId: 0,
+
         /**
          * Bind events
          * @private
@@ -386,7 +388,8 @@ define([
          */
         _loadRemotePreview: function (sourceUrl) {
             var url = this.options.saveRemoteVideoUrl,
-                self = this;
+                self = this,
+                previewRequestId = ++this._previewRequestId;
 
             this._getPreviewImage().attr('src', sourceUrl).hide();
             this._blockActionButtons(true, true);
@@ -395,6 +398,10 @@ define([
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
+                    if (previewRequestId !== this._previewRequestId) {
+                        return;
+                    }
+
                     this._tempPreviewImageData = result;
                     this._getPreviewImage().attr('src', sourceUrl).show();
                     this._blockActionButtons(false, true);
@@ -721,6 +728,7 @@ define([
                     modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
+                        widget._videoUrlWidget.trigger('cancelled_video_information');
                         widget._blockActionButtons(true);
 
                         modal.find('.video-delete-button').hide();
@@ -1116,12 +1124,14 @@ define([
 
             this._isEditPage = true;
             this.imageData = null;
+            this._previewRequestId++;
 
             if (this._previewImage) {
                 this._previewImage.remove();
                 this._previewImage = null;
             }
             this._tempPreviewImageData = null;
+            this._videoUrlWidget.trigger('cancelled_video_information');
             this.element.trigger('reset');
             newVideoForm = this.element.find(this._videoFormSelector);
 
