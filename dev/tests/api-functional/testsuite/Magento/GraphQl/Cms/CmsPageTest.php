@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Cms;
 
 use Magento\Cms\Model\GetPageByIdentifier;
+use Magento\Cms\Test\Fixture\Page as PageFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -73,6 +76,26 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
         $this->assertEquals($cmsPageIdentifier, $response['cmsPage']['identifier']);
+    }
+
+    #[DataFixture(PageFixture::class, as: 'page')]
+    public function testGetCmsPageRedirectCode(): void
+    {
+        $page = DataFixtureStorageManager::getStorage()->get('page');
+
+        $byIdentifier = $this->graphQlQuery(
+            sprintf('{ cmsPage(identifier: "%s") { identifier redirect_code } }', $page->getIdentifier())
+        );
+        $this->assertSame(
+            ['identifier' => $page->getIdentifier(), 'redirect_code' => 0],
+            $byIdentifier['cmsPage']
+        );
+
+        $byId = $this->graphQlQuery(sprintf('{ cmsPage(id: %d) { identifier redirect_code } }', $page->getId()));
+        $this->assertSame(
+            ['identifier' => $page->getIdentifier(), 'redirect_code' => 0],
+            $byId['cmsPage']
+        );
     }
 
     /**
