@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2014 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 -->
@@ -55,6 +55,7 @@
         <xs:attribute name="instance" type="xs:string" use="optional" />
         <xs:attribute name="disabled" type="xs:boolean" use="optional" />
         <xs:attribute name="shared" type="xs:boolean" use="optional" />
+        <xs:attribute name="ifconfig" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:simpleType name="eventName">
