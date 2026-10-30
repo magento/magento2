@@ -156,7 +156,7 @@ class ObjectManagerFactory
         $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
         $lockManager = new FileLock(
             $fileDriver,
-            $this->directoryList->getRoot()
+            $this->directoryList->getPath(AppDirectoryList::VAR_DIR)
         );
         $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory, $lockManager);
         $generatedFiles->cleanGeneratedFiles();
