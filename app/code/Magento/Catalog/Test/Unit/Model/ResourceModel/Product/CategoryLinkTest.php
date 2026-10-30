@@ -102,6 +102,66 @@ class CategoryLinkTest extends TestCase
         );
     }
 
+    public function testGetCategoryLinksDoesNotFetchAgainForSameRequest(): void
+    {
+        $this->prepareAdapter();
+        $this->prepareMetadata();
+        $product = $this->createMock(ProductInterface::class);
+        $product->method('getId')->willReturn(1);
+        $categoryLinks = [
+            ['category_id' => 3, 'position' => 10],
+            ['category_id' => 4, 'position' => 20],
+        ];
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->dbSelectMock)
+            ->willReturn($categoryLinks);
+
+        $this->assertEquals($categoryLinks, $this->model->getCategoryLinks($product, [3, 4]));
+        $this->assertEquals($categoryLinks, $this->model->getCategoryLinks($product, [3, 4]));
+    }
+
+    public function testGetCategoryLinksFetchesAgainAfterResetCategoryLinksCache(): void
+    {
+        $this->prepareAdapter();
+        $this->prepareMetadata();
+        $product = $this->createMock(ProductInterface::class);
+        $product->method('getId')->willReturn(1);
+        $firstCategoryLinks = [
+            ['category_id' => 3, 'position' => 10],
+        ];
+        $secondCategoryLinks = [
+            ['category_id' => 4, 'position' => 20],
+        ];
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('fetchAll')
+            ->with($this->dbSelectMock)
+            ->willReturnOnConsecutiveCalls($firstCategoryLinks, $secondCategoryLinks);
+
+        $this->assertEquals($firstCategoryLinks, $this->model->getCategoryLinks($product, [3]));
+        $this->model->resetCategoryLinksCache();
+        $this->assertEquals($secondCategoryLinks, $this->model->getCategoryLinks($product, [3]));
+    }
+
+    public function testGetCategoryLinksUsesSameCacheKeyForDifferentCategoryIdOrder(): void
+    {
+        $this->prepareAdapter();
+        $this->prepareMetadata();
+        $product = $this->createMock(ProductInterface::class);
+        $product->method('getId')->willReturn(1);
+        $categoryLinks = [
+            ['category_id' => 3, 'position' => 10],
+            ['category_id' => 4, 'position' => 20],
+        ];
+        $this->connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($this->dbSelectMock)
+            ->willReturn($categoryLinks);
+
+        $this->assertEquals($categoryLinks, $this->model->getCategoryLinks($product, [3, 4]));
+        $this->assertEquals($categoryLinks, $this->model->getCategoryLinks($product, [4, 3]));
+    }
+
     /**
      * @param array $newCategoryLinks
      * @param array $dbCategoryLinks
