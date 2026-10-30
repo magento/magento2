@@ -23,6 +23,11 @@ class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache implements
      */
     public function execute()
     {
+        // Refresh registered cache types before clearing Magento-owned entries from all frontends.
+        foreach (array_keys($this->_cacheTypeList->getTypes()) as $type) {
+            $this->_cacheTypeList->cleanType($type);
+        }
+
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {
             $cacheFrontend->clean();
