@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Laminas\Uri\Uri;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
@@ -12,7 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\HTTP\ClientFactory;
+use Magento\Framework\HTTP\ClientInterface;
 use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
@@ -22,17 +24,15 @@ use Magento\Downloadable\Model\Url\DomainValidator;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class Uploader extends \Magento\MediaStorage\Model\File\Uploader
 {
-
-    /**
-     * HTTP scheme
-     * used to compare against the filename and select the proper DriverPool adapter
-     * @var string
-     */
-    private $httpScheme = 'http://';
+    private const CONNECT_TIMEOUT = 10;
+    private const LOW_SPEED_LIMIT = 1;
+    private const LOW_SPEED_TIME = 60;
+    private const MAX_REDIRECTS = 5;
 
     /**
      * Temp directory.
@@ -83,6 +83,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Instance of filesystem read factory.
      *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
+     * @deprecated Remote downloads use the HTTP client factory.
+     * @see \Magento\Framework\HTTP\ClientFactory
      */
     protected $_readFactory;
 
@@ -130,6 +132,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     private $domainValidator;
 
     /**
+     * @var ClientFactory
+     */
+    private $httpClientFactory;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
@@ -140,6 +147,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @param \Magento\Framework\Math\Random|null $random
      * @param TargetDirectory|null $targetDirectory
      * @param DomainValidator|null $domainValidator
+     * @param ClientFactory|null $httpClientFactory
      * @throws FileSystemException
      * @throws LocalizedException
      */
@@ -153,7 +161,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $filePath = null,
         ?\Magento\Framework\Math\Random $random = null,
         ?TargetDirectory $targetDirectory = null,
-        ?DomainValidator $domainValidator = null
+        ?DomainValidator $domainValidator = null,
+        ?ClientFactory $httpClientFactory = null
     ) {
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;
@@ -168,6 +177,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->random = $random ?: ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
         $this->domainValidator = $domainValidator ?: ObjectManager::getInstance()->get(DomainValidator::class);
+        $this->httpClientFactory = $httpClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
     }
 
     /**
@@ -211,8 +221,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
                 );
             }
 
-            $driver = ($matches[0] === $this->httpScheme) ? DriverPool::HTTP : DriverPool::HTTPS;
-            $tmpFilePath = $this->downloadFileFromUrl($url, $driver);
+            $tmpFilePath = $this->downloadFileFromUrl($fullUrl);
         } else {
             $tmpFilePath = $this->_directory->getRelativePath($this->getTempFilePath($fileName));
         }
@@ -241,13 +250,12 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * Writes a url-based file to the temp directory.
      *
      * @param string $url
-     * @param string $driver
      * @return string
      * @throws LocalizedException
      */
-    private function downloadFileFromUrl($url, $driver)
+    private function downloadFileFromUrl($url)
     {
-        $parsedUrlPath = parse_url($url, PHP_URL_PATH);
+        $parsedUrlPath = parse_url(preg_replace('/^https?:\/\//i', '', $url), PHP_URL_PATH);
 
         if (!$parsedUrlPath) {
             throw new LocalizedException(__('Could not parse resource url.'));
@@ -270,12 +278,113 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
                 __('Import images directory must be writable in order to process remote images.')
             );
         }
-        $this->_directory->writeFile(
-            $tmpFilePath,
-            $this->_readFactory->create($url, $driver)->readAll()
-        );
+        $this->_directory->writeFile($tmpFilePath, $this->getRemoteFileContents($url));
 
         return $tmpFilePath;
+    }
+
+    /**
+     * Fetch remote file contents through validated redirects.
+     *
+     * @param string $url
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getRemoteFileContents(string $url): string
+    {
+        $redirects = 0;
+        while (true) {
+            $client = $this->requestRemoteFile($url);
+            $status = $client->getStatus();
+            if ($status >= 200 && $status < 300) {
+                return $client->getBody();
+            }
+
+            $redirectUrl = $this->getRedirectUrl($client, $status, $url);
+            if ($redirectUrl === null || $redirects === self::MAX_REDIRECTS) {
+                throw $this->getHttpException($status, $url);
+            }
+            if (!$this->domainValidator->isValid($redirectUrl)) {
+                throw $this->getHttpException($status, $redirectUrl);
+            }
+            $url = $redirectUrl;
+            $redirects++;
+        }
+    }
+
+    /**
+     * Request a URL with connection and stalled-transfer limits.
+     *
+     * @param string $url
+     * @return ClientInterface
+     * @throws LocalizedException
+     */
+    private function requestRemoteFile(string $url): ClientInterface
+    {
+        try {
+            $client = $this->httpClientFactory->create();
+            $client->setTimeout(0);
+            $client->setOptions([
+                CURLOPT_FOLLOWLOCATION => false,
+                CURLOPT_CONNECTTIMEOUT => self::CONNECT_TIMEOUT,
+                CURLOPT_LOW_SPEED_LIMIT => self::LOW_SPEED_LIMIT,
+                CURLOPT_LOW_SPEED_TIME => self::LOW_SPEED_TIME
+            ]);
+            $client->get($url);
+        } catch (\Exception $exception) {
+            throw new LocalizedException(__('mediaUrlNotAvailable'), $exception);
+        }
+
+        return $client;
+    }
+
+    /**
+     * Resolve an HTTP redirect against the current URL.
+     *
+     * @param ClientInterface $client
+     * @param int $status
+     * @param string $url
+     * @return string|null
+     * @throws LocalizedException
+     */
+    private function getRedirectUrl(ClientInterface $client, int $status, string $url): ?string
+    {
+        if (!in_array($status, [301, 302, 303, 307, 308], true)) {
+            return null;
+        }
+        $headers = array_change_key_case((array)$client->getHeaders(), CASE_LOWER);
+        if (empty($headers['location'])) {
+            return null;
+        }
+
+        try {
+            $redirect = new Uri(trim($headers['location']));
+            $redirect->resolve($url);
+            $redirectUrl = $redirect->toString();
+        } catch (\Exception) {
+            throw $this->getHttpException($status, $url);
+        }
+        if (!in_array(strtolower($redirect->getScheme()), ['http', 'https'], true)) {
+            throw $this->getHttpException($status, $url);
+        }
+
+        return $redirectUrl;
+    }
+
+    /**
+     * Build a download error with query-free HTTP diagnostics.
+     *
+     * @param int $status
+     * @param string $url
+     * @return LocalizedException
+     */
+    private function getHttpException(int $status, string $url): LocalizedException
+    {
+        $safeUrl = preg_split('/[?#]/', $url, 2)[0];
+        return new LocalizedException(
+            __('mediaUrlNotAvailable'),
+            new \RuntimeException(sprintf('HTTP status %d for URL %s', $status, $safeUrl))
+        );
     }
 
     /**
