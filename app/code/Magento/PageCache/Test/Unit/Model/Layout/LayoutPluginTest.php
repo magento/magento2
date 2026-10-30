@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\Layout;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Layout\LayoutPlugin;
@@ -42,7 +42,7 @@ class LayoutPluginTest extends TestCase
     private $layoutMock;
 
     /**
-     * @var ScopeConfigInterface|MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
@@ -63,14 +63,11 @@ class LayoutPluginTest extends TestCase
         $preprocessor = $this->createMock(PageCacheTagsPreprocessorInterface::class);
         $preprocessor->method('process')->willReturnArgument(0);
 
-        $this->model = (new ObjectManagerHelper($this))->getObject(
-            LayoutPlugin::class,
-            [
-                'response' => $this->responseMock,
-                'config' => $this->configMock,
-                'maintenanceMode' => $this->maintenanceModeMock,
-                'pageCacheTagsPreprocessor' => $preprocessor
-            ]
+        $this->model = new LayoutPlugin(
+            $this->responseMock,
+            $this->configMock,
+            $this->maintenanceModeMock,
+            $preprocessor
         );
     }
 
@@ -145,6 +142,66 @@ class LayoutPluginTest extends TestCase
         }
         $output = $this->model->afterGetOutput($this->layoutMock, $html);
         $this->assertSame($output, $html);
+    }
+
+    #[DataProvider('blockCacheTagsDataProvider')]
+    public function testBlockCacheTags(
+        bool $hasIdentities,
+        array $cacheTags,
+        int $cacheType,
+        int $ttl,
+        string $expectedTags
+    ): void {
+        $block = $this->getMockBuilder($hasIdentities ? StubBlock::class : AbstractBlock::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods($hasIdentities ? ['getIdentities'] : [])
+            ->getMock();
+        $block->setData(['cache_tags' => $cacheTags, 'ttl' => $ttl]);
+        if ($hasIdentities) {
+            $block->method('getIdentities')->willReturn(['identity']);
+        }
+        $this->layoutMock->method('isCacheable')->willReturn(true);
+        $this->layoutMock->method('getAllBlocks')->willReturn([$block]);
+        $this->configMock->method('isEnabled')->willReturn(true);
+        $this->configMock->method('getType')->willReturn($cacheType);
+        $this->responseMock->expects($this->once())->method('setHeader')
+            ->with('X-Magento-Tags', $expectedTags);
+
+        $this->assertSame('html', $this->model->afterGetOutput($this->layoutMock, 'html'));
+    }
+
+    public static function blockCacheTagsDataProvider(): array
+    {
+        return [
+            'explicit tags only' => [false, ['explicit'], Config::BUILT_IN, 0, 'explicit'],
+            'identities only' => [true, [], Config::BUILT_IN, 0, 'identity'],
+            'unique merged tags' => [true, ['explicit', 'identity'], Config::BUILT_IN, 0, 'explicit,identity'],
+            'Varnish ESI tags' => [false, ['explicit'], Config::VARNISH, 100, ''],
+            'Varnish ESI tags and identities' => [true, ['explicit'], Config::VARNISH, 100, ''],
+            'Varnish zero TTL tags' => [false, ['explicit'], Config::VARNISH, 0, 'explicit'],
+            'Varnish negative TTL tags' => [false, ['explicit'], Config::VARNISH, -1, 'explicit'],
+            'Varnish zero TTL merged' => [true, ['explicit'], Config::VARNISH, 0, 'explicit,identity'],
+            'Varnish negative TTL merged' => [true, ['explicit'], Config::VARNISH, -1, 'explicit,identity'],
+            'Builtin positive TTL' => [true, ['explicit'], Config::BUILT_IN, 100, 'explicit,identity'],
+            'Builtin negative TTL' => [true, ['explicit'], Config::BUILT_IN, -1, 'explicit,identity'],
+        ];
+    }
+
+    #[DataProvider('cacheTypeDataProvider')]
+    public function testBlockWithoutDataObject(int $cacheType): void
+    {
+        $this->layoutMock->method('isCacheable')->willReturn(true);
+        $this->layoutMock->method('getAllBlocks')->willReturn([$this->createMock(BlockInterface::class)]);
+        $this->configMock->method('isEnabled')->willReturn(true);
+        $this->configMock->method('getType')->willReturn($cacheType);
+        $this->responseMock->expects($this->once())->method('setHeader')->with('X-Magento-Tags', '');
+
+        $this->assertSame('html', $this->model->afterGetOutput($this->layoutMock, 'html'));
+    }
+
+    public static function cacheTypeDataProvider(): array
+    {
+        return [[Config::BUILT_IN], [Config::VARNISH]];
     }
 
     /**
