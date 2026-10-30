@@ -7,9 +7,18 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Laminas\Validator\Regex;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\ResourceModel\Attribute as AttributeResource;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Validator\Attribute\Code;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filter\FilterManager;
 
 /**
  * Product attribute repository
@@ -18,76 +27,43 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInterface
 {
-    private const FILTERABLE_ALLOWED_INPUT_TYPES = ['date', 'datetime', 'text', 'textarea', 'texteditor'];
-
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute
-     */
-    protected $attributeResource;
-
-    /**
-     * @var \Magento\Eav\Model\AttributeRepository
-     */
-    protected $eavAttributeRepository;
-
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $eavConfig;
-
-    /**
-     * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory
+     * @var ValidatorFactory
+     * @deprecated
+     * @see $validatorFactory
      */
     protected $inputtypeValidatorFactory;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var FilterableAllowedInputTypes
      */
-    protected $productHelper;
+    private FilterableAllowedInputTypes $filterableAllowedInputTypes;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
-     */
-    protected $filterManager;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Eav\Model\Validator\Attribute\Code
-     */
-    protected $attributeCodeValidator;
-
-    /**
-     * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
+     * @param AttributeResource $attributeResource
+     * @param Product $productHelper
+     * @param FilterManager $filterManager
+     * @param AttributeRepositoryInterface $eavAttributeRepository
+     * @param Config $eavConfig
+     * @param ValidatorFactory $validatorFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Code $attributeCodeValidator
+     * @param FilterableAllowedInputTypes|null $filterableAllowedInputTypes
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
-        \Magento\Catalog\Helper\Product $productHelper,
-        \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
+        protected AttributeResource $attributeResource,
+        protected Product $productHelper,
+        protected FilterManager $filterManager,
+        protected AttributeRepositoryInterface $eavAttributeRepository,
+        protected Config $eavConfig,
+        protected ValidatorFactory $validatorFactory,
+        protected SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected Code $attributeCodeValidator,
+        ?FilterableAllowedInputTypes $filterableAllowedInputTypes = null
     ) {
-        $this->attributeResource = $attributeResource;
-        $this->productHelper = $productHelper;
-        $this->filterManager = $filterManager;
-        $this->eavAttributeRepository = $eavAttributeRepository;
-        $this->eavConfig = $eavConfig;
         $this->inputtypeValidatorFactory = $validatorFactory;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->attributeCodeValidator = $attributeCodeValidator;
+        $this->filterableAllowedInputTypes = $filterableAllowedInputTypes
+            ?? ObjectManager::getInstance()->get(FilterableAllowedInputTypes::class);
     }
 
     /**
@@ -120,7 +96,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
-        if (in_array($attribute->getFrontendInput(), self::FILTERABLE_ALLOWED_INPUT_TYPES)) {
+        if (!$this->filterableAllowedInputTypes->isAllowed($attribute->getFrontendInput())) {
             if ($attribute->getIsFilterable()) {
                 throw InputException::invalidFieldValue(
                     EavAttributeInterface::IS_FILTERABLE,
@@ -312,7 +288,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected function validateFrontendInput($frontendInput)
     {
         /** @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator $validator */
-        $validator = $this->inputtypeValidatorFactory->create();
+        $validator = $this->validatorFactory->create();
         if (!$validator->isValid($frontendInput)) {
             throw InputException::invalidFieldValue('frontend_input', $frontendInput);
         }
