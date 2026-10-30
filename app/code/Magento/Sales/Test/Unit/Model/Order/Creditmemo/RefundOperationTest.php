@@ -18,6 +18,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\RefundOperation;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -414,6 +415,58 @@ class RefundOperationTest extends TestCase
                 ->method($summands['creditmemo']['method'])
                 ->willReturn($summands['creditmemo']['amount']);
         }
+    }
+
+    /**
+     * A dynamic-price bundle counts as refunded only as far as all of its items are.
+     *
+     * @param array $childRefunded quantity refunded per child, after the credit memo lines are registered
+     * @param float $expected bundles refunded
+     * @return void
+     */
+    #[DataProvider('bundleQtyRefundedDataProvider')]
+    public function testBundleQtyRefundedFollowsCompleteBundles(array $childRefunded, float $expected): void
+    {
+        // Two bundles ordered and invoiced; per bundle, 1 x the first item and 2 x the second.
+        $children = [];
+        foreach ([2 => $childRefunded[0], 4 => $childRefunded[1]] as $ordered => $refunded) {
+            $child = $this->createPartialMock(OrderItem::class, ['getQtyOrdered', 'getQtyRefunded']);
+            $child->method('getQtyOrdered')->willReturn($ordered);
+            $child->method('getQtyRefunded')->willReturn($refunded);
+            $children[] = $child;
+        }
+        $bundle = $this->createPartialMock(
+            OrderItem::class,
+            ['isDummy', 'getProductType', 'getChildrenItems', 'getQtyOrdered', 'getQtyInvoiced', 'setQtyRefunded']
+        );
+        $bundle->method('isDummy')->willReturn(true);
+        $bundle->method('getProductType')->willReturn('bundle');
+        $bundle->method('getChildrenItems')->willReturn($children);
+        $bundle->method('getQtyOrdered')->willReturn(2);
+        $bundle->method('getQtyInvoiced')->willReturn(2);
+        $bundle->expects($this->once())->method('setQtyRefunded')->with($expected);
+
+        $simple = $this->createPartialMock(OrderItem::class, ['isDummy', 'setQtyRefunded']);
+        $simple->method('isDummy')->willReturn(false);
+        $simple->expects($this->never())->method('setQtyRefunded');
+
+        $this->orderMock->method('getItems')->willReturn([$bundle, $simple]);
+        $method = new \ReflectionMethod(RefundOperation::class, 'updateBundleItemsQtyRefunded');
+        $method->invoke($this->subject, $this->orderMock);
+    }
+
+    /**
+     * @return array
+     */
+    public static function bundleQtyRefundedDataProvider(): array
+    {
+        return [
+            'one item of a bundle is no bundle' => [[1, 0], 0.0],
+            'only part of the second item' => [[1, 1], 0.0],
+            'all items of one bundle' => [[1, 2], 1.0],
+            'all items of both bundles' => [[2, 4], 2.0],
+            'more of one item does not make a bundle' => [[2, 2], 1.0],
+        ];
     }
 
     /**
