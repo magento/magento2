@@ -74,8 +74,8 @@ class BulkNotificationManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIgnoredBulks()
     {
-        // 'bulk-uuid-5' and 'bulk-uuid-4' are marked as acknowledged in fixture. Fixture creates 5 bulks in total.
+        // 'bulk-uuid-5' and 'bulk-uuid-4' are marked as acknowledged in fixture. Fixture creates 7 admin bulks.
         $ignoredBulks = $this->model->getIgnoredBulksByUser(1);
-        $this->assertCount(3, $ignoredBulks);
+        $this->assertCount(5, $ignoredBulks);
     }
 }
