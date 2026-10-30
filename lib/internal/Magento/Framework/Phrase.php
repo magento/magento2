@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase\Renderer\Placeholder as RendererPlaceholder;
 use Magento\Framework\Phrase\RendererInterface;
 
@@ -66,11 +69,21 @@ class Phrase implements \JsonSerializable
      *
      * @param string $text
      * @param array $arguments
+     * @throws LocalizedException
      */
     public function __construct($text, array $arguments = [])
     {
         $this->text = (string)$text;
         $this->arguments = $arguments;
+
+        if ($this->text === '') {
+            $objectManager = ObjectManager::getInstance();
+            $appState = $objectManager->get(State::class);
+
+            if ($appState->getMode() === State::MODE_DEVELOPER) {
+                throw new LocalizedException(new self('Unable to translate empty string'));
+            }
+        }
     }
 
     /**

@@ -69,7 +69,6 @@ class Postcode extends Text
     public function validateValue($value)
     {
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         $countryId = $this->getExtractedData('country_id');
         if ($this->directoryHelper->isZipCodeOptional($countryId)) {
@@ -78,6 +77,9 @@ class Postcode extends Text
 
         $errors = [];
         if (empty($value) && $value !== '0') {
+            if ($label = $attribute->getStoreLabel()) {
+                $label = __($label);
+            }
             $errors[] = __('"%1" is a required value.', $label);
         }
 

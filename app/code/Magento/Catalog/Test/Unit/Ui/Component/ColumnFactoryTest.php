@@ -81,6 +81,9 @@ class ColumnFactoryTest extends TestCase
             ->with(FilterModifier::FILTER_MODIFIER, [])
             ->willReturn([]);
 
+        $this->attribute->method('getDefaultFrontendLabel')
+            ->willReturn('Unit test');
+
         $object = $this->columnFactory->create($this->attribute, $this->context);
         $this->assertEquals(
             $this->column,
@@ -102,7 +105,7 @@ class ColumnFactoryTest extends TestCase
         $componentFactoryArgument = [
             'data' => [
                 'config' => [
-                    'label' => __(null),
+                    'label' => __('Unit test'),
                     'dataType' => 'text',
                     'add_field' => true,
                     'visible' => null,
@@ -120,6 +123,8 @@ class ColumnFactoryTest extends TestCase
             ->willReturn(false);
         $this->attribute->method('getAttributeCode')
             ->willReturn('color');
+        $this->attribute->method('getDefaultFrontendLabel')
+            ->willReturn('Unit test');
 
         $this->uiComponentFactory->expects($this->once())
             ->method('create')
