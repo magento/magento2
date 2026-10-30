@@ -5,7 +5,8 @@
 
 define([
     'jquery',
-    'jquery-ui-modules/widget'
+    'jquery-ui-modules/widget',
+    'mage/cookies'
 ], function ($) {
     'use strict';
 
@@ -176,7 +177,7 @@ define([
                 }
                 formKey = document.createElement('input');
                 formKey.name = 'form_key';
-                formKey.value = this.options.formKey;
+                formKey.value = $.mage.cookies.get('form_key') || this.options.formKey;
                 form.appendChild(formKey);
 
                 paramData = $.param(paramData);
