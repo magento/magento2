@@ -255,7 +255,7 @@ class ConfigurableTest extends TestCase
         $this->configurable->getJsonSwatchConfig();
     }
 
-    private function prepareGetJsonSwatchConfig()
+    private function prepareGetJsonSwatchConfig($allowAttributesInvocation = null)
     {
         $product1 = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product1->expects($this->any())->method('isSaleable')->willReturn(true);
@@ -280,8 +280,39 @@ class ConfigurableTest extends TestCase
         $attribute1 = $this->createPartialMockWithReflection(Attribute::class, ['getProductAttribute']);
         $attribute1->method('getProductAttribute')->willReturn($productAttribute1);
 
-        $this->helper->expects($this->any())->method('getAllowAttributes')->with($this->product)
+        $this->helper->expects($allowAttributesInvocation ?? $this->any())->method('getAllowAttributes')
+            ->with($this->product)
             ->willReturn([$attribute1]);
+    }
+
+    /**
+     * @covers Magento\Swatches\Block\Product\Renderer\Configurable::getConfigurableOptionsIds
+     */
+    public function testGetJsonSwatchConfigResolvesAllowedAttributesOncePerProduct()
+    {
+        $products = [
+            1 => 'testA',
+            3 => 'testB'
+        ];
+        $this->prepareGetJsonSwatchConfig($this->once());
+        $this->configurable->setProduct($this->product);
+        $this->swatchHelper->expects($this->once())->method('getSwatchAttributesAsArray')
+            ->with($this->product)
+            ->willReturn(
+                [
+                    1 => [
+                        'options' => $products,
+                        'use_product_image_for_swatch' => true,
+                        'used_in_product_listing' => true,
+                        'attribute_code' => 'code',
+                    ],
+                ]
+            );
+        $this->swatchHelper->expects($this->once())->method('getSwatchesByOptionsId')
+            ->with([1, 3])
+            ->willReturn([3 => ['type' => null, 'value' => 'hello']]);
+        $this->jsonEncoder->expects($this->once())->method('encode');
+        $this->configurable->getJsonSwatchConfig();
     }
 
     public function testGetPricesJson()
