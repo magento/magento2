@@ -7,13 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MysqlMq\Test\Unit\Setup;
 
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
-use Magento\Framework\MessageQueue\Topology\ConfigInterface as TopologyConfigInterface;
+use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MysqlMq\Model\Queue\Synchronizer;
 use Magento\MysqlMq\Setup\Recurring;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,71 +18,27 @@ use PHPUnit\Framework\TestCase;
 class RecurringTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var Synchronizer|MockObject
      */
-    private $objectManager;
+    private $synchronizer;
 
     /**
      * @var Recurring
      */
     private $model;
 
-    /**
-     * @var \Magento\Framework\MessageQueue\ConfigInterface|MockObject
-     */
-    private $messageQueueConfig;
-
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
-        $this->messageQueueConfig = $this->createMock(TopologyConfigInterface::class);
-        $this->model = $this->objectManager->getObject(
-            Recurring::class,
-            [
-                'messageQueueConfig' => $this->messageQueueConfig,
-            ]
-        );
+        $this->synchronizer = $this->createMock(Synchronizer::class);
+        $this->model = new Recurring($this->createStub(MessageQueueConfig::class), $this->synchronizer);
     }
 
-    /**
-     * Test for install method
-     */
     public function testInstall()
     {
-        for ($i = 1; $i <= 3; $i++) {
-            $queue = $this->createMock(QueueConfigItemInterface::class);
-            $queue->expects($this->once())
-                ->method('getName')
-                ->willReturn('queue_name_' . $i);
-            $queues[] = $queue;
-        }
+        $setup = $this->createStub(SchemaSetupInterface::class);
+        $context = $this->createStub(ModuleContextInterface::class);
 
-        $dbQueues = [
-            'queue_name_1',
-            'queue_name_2',
-        ];
-        $queuesToInsert = [
-            2 => 'queue_name_3'
-        ];
-        $queueTableName = 'queue_table';
-
-        $setup = $this->createMock(SchemaSetupInterface::class);
-        $context = $this->createMock(ModuleContextInterface::class);
-
-        $setup->expects($this->once())->method('startSetup')->willReturnSelf();
-        $this->messageQueueConfig->expects($this->once())->method('getQueues')->willReturn($queues);
-        $connection = $this->createMock(AdapterInterface::class);
-        $setup->expects($this->once())->method('getConnection')->willReturn($connection);
-        $setup->expects($this->any())->method('getTable')->with('queue')->willReturn($queueTableName);
-        $select = $this->createMock(Select::class);
-        $connection->expects($this->once())->method('select')->willReturn($select);
-        $select->expects($this->once())->method('from')->with($queueTableName, 'name')->willReturnSelf();
-        $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($dbQueues);
-        $connection->expects($this->once())->method('insertArray')->with($queueTableName, ['name'], $queuesToInsert);
-        $setup->expects($this->once())->method('endSetup')->willReturnSelf();
+        $this->synchronizer->expects($this->once())->method('synchronize')->willReturn(['Created queue "q".']);
 
         $this->model->install($setup, $context);
     }
