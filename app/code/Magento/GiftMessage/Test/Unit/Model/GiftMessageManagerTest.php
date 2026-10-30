@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Address\Item as QuoteAddressItem;
 use Magento\Quote\Model\Quote\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class GiftMessageManagerTest extends TestCase
 {
@@ -56,6 +57,11 @@ class GiftMessageManagerTest extends TestCase
      * @var MockObject
      */
     protected $giftMessageMock;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
 
     protected function setUp(): void
     {
@@ -105,7 +111,8 @@ class GiftMessageManagerTest extends TestCase
             ]
         );
 
-        $this->model = new GiftMessageManager($this->messageFactoryMock);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->model = new GiftMessageManager($this->messageFactoryMock, $this->loggerMock);
     }
 
     public function testAddWhenGiftMessagesIsNoArray()
@@ -297,6 +304,41 @@ class GiftMessageManagerTest extends TestCase
         $this->quoteAddressItemMock->expects($this->once())
             ->method('save')
             ->willReturn($this->quoteAddressItemMock);
+
+        $this->model->add($giftMessages, $this->quoteMock);
+    }
+
+    public function testAddLogsExceptionWhenDeletingGiftMessageFails()
+    {
+        $giftMessages = ['quote' => [0 => ['from' => 'sender', 'to' => 'recipient', 'message' => ' ']]];
+        $exception = new \Exception('delete failed');
+
+        $this->messageFactoryMock->method('create')->willReturn($this->giftMessageMock);
+        $this->quoteMock->method('getGiftMessageId')->willReturn(null);
+        $this->giftMessageMock->method('getId')->willReturn(1);
+        $this->giftMessageMock->method('delete')->willThrowException($exception);
+        $this->loggerMock->expects($this->once())
+            ->method('error')
+            ->with('delete failed', ['exception' => $exception]);
+
+        $this->model->add($giftMessages, $this->quoteMock);
+    }
+
+    public function testAddLogsExceptionWhenSavingGiftMessageFails()
+    {
+        $giftMessages = ['quote' => [0 => ['from' => 'sender', 'to' => 'recipient', 'message' => 'message']]];
+        $exception = new \Exception('save failed');
+
+        $this->messageFactoryMock->method('create')->willReturn($this->giftMessageMock);
+        $this->quoteMock->method('getGiftMessageId')->willReturn(null);
+        $this->giftMessageMock->method('setSender')->willReturnSelf();
+        $this->giftMessageMock->method('setRecipient')->willReturnSelf();
+        $this->giftMessageMock->method('setMessage')->willReturnSelf();
+        $this->giftMessageMock->method('setCustomerId')->willReturnSelf();
+        $this->giftMessageMock->method('save')->willThrowException($exception);
+        $this->loggerMock->expects($this->once())
+            ->method('error')
+            ->with('save failed', ['exception' => $exception]);
 
         $this->model->add($giftMessages, $this->quoteMock);
     }
