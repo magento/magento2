@@ -13,9 +13,6 @@
                 <quantity_limit>250000</quantity_limit>
                 <format>1</format>
             </auto_generated_coupon_codes>
-            <graphql>
-                <share_applied_cart_rule>1</share_applied_cart_rule>
-            </graphql>
         </promo>
     </default>
 </config>
