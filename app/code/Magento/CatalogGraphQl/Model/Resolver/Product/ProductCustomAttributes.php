@@ -144,7 +144,7 @@ class ProductCustomAttributes implements ResolverInterface
             }
             $customAttributes[] = [
                 'attribute_code' => $attributeCode,
-                'value' => $attributeValue
+                'value' => (string)$attributeValue
             ];
         }
 
