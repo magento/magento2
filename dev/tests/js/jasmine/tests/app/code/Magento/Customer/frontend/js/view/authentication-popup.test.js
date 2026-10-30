@@ -4,7 +4,7 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
-define(['squire', 'ko'], function (Squire, ko) {
+define(['squire', 'ko', 'jquery'], function (Squire, ko, $) {
     'use strict';
 
     var injector = new Squire(),
@@ -34,6 +34,7 @@ define(['squire', 'ko'], function (Squire, ko) {
             customerLoginUrl:'customer_login_url'
         };
 
+        loginAction.and.returnValue($.Deferred().promise());
         injector.mock(mocks);
         injector.require(['Magento_Customer/js/view/authentication-popup'], function (Constr) {
             obj = new Constr({
@@ -125,6 +126,50 @@ define(['squire', 'ko'], function (Squire, ko) {
                     customerLoginUrl: 'customer_login_url'
                 });
             });
+        });
+    });
+
+    describe('login submissions', function () {
+        var request,
+            form;
+
+        beforeEach(function () {
+            request = $.Deferred();
+            form = $('<form><input name="username" value="customer@example.com"/></form>');
+            spyOn($.fn, 'validation').and.returnValue(true);
+            loginAction.calls.reset();
+            loginAction.and.returnValue(request.promise());
+        });
+
+        it('ignores repeated submissions while pending', function () {
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+
+            expect(loginAction.calls.count()).toBe(1);
+        });
+
+        it('allows retry after credential errors', function () {
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+            request.resolve({errors: true});
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+
+            expect(loginAction.calls.count()).toBe(2);
+        });
+
+        it('allows retry after a transport failure', function () {
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+            request.reject();
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+
+            expect(loginAction.calls.count()).toBe(2);
+        });
+
+        it('ignores submissions after success while navigation is pending', function () {
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+            request.resolve({errors: false});
+            obj.login(null, {currentTarget: form[0], stopPropagation: jasmine.createSpy()});
+
+            expect(loginAction.calls.count()).toBe(1);
         });
     });
 });

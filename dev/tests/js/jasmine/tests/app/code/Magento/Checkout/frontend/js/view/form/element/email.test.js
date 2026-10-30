@@ -31,7 +31,9 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                         'getCheckedEmailValue'
                     ]
                 ),
-                'Magento_Checkout/js/model/full-screen-loader': jasmine.createSpy(),
+                'Magento_Checkout/js/model/full-screen-loader': jasmine.createSpyObj(
+                    'fullScreenLoader', ['startLoader', 'stopLoader']
+                ),
                 'Magento_Checkout/js/view/shipping': jasmine.createSpy()
             },
             Component;
@@ -56,6 +58,52 @@ define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
                 injector.clean();
                 injector.remove();
             } catch (e) {}
+        });
+
+
+        describe('login submissions', function () {
+            var request,
+                form;
+
+            beforeEach(function () {
+                request = $.Deferred();
+                form = $('<form><input name="username" value="customer@example.com"/></form>');
+                spyOn($.fn, 'validation').and.returnValue(true);
+                mocks['Magento_Customer/js/action/login'].calls.reset();
+                mocks['Magento_Customer/js/action/login'].and.returnValue(request.promise());
+                Component.isPasswordVisible(true);
+            });
+
+            it('ignores repeated submissions while pending', function () {
+                Component.login(form[0]);
+                Component.login(form[0]);
+
+                expect(mocks['Magento_Customer/js/action/login'].calls.count()).toBe(1);
+            });
+
+            it('allows retry after credential errors', function () {
+                Component.login(form[0]);
+                request.resolve({errors: true});
+                Component.login(form[0]);
+
+                expect(mocks['Magento_Customer/js/action/login'].calls.count()).toBe(2);
+            });
+
+            it('allows retry after a transport failure', function () {
+                Component.login(form[0]);
+                request.reject();
+                Component.login(form[0]);
+
+                expect(mocks['Magento_Customer/js/action/login'].calls.count()).toBe(2);
+            });
+
+            it('ignores submissions after success while navigation is pending', function () {
+                Component.login(form[0]);
+                request.resolve({errors: false});
+                Component.login(form[0]);
+
+                expect(mocks['Magento_Customer/js/action/login'].calls.count()).toBe(1);
+            });
         });
 
         describe('"resolveInitialPasswordVisibility" method', function () {
