@@ -22,6 +22,10 @@
         <waitForElementVisible selector="{{PayPalPaymentSection.subtotal(subtotalAmount)}}" stepKey="assertSubtotal"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.shipping(shippingAmount)}}" stepKey="assertShipping"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.total(totalAmount)}}" stepKey="assertTotal"/>
+        <!-- The live PayPal sandbox can render the "Ship to Tab" summary with a
+             delay after the amount details are opened, so wait for it rather
+             than asserting its text immediately. -->
+        <waitForElementVisible selector="{{PayPalPaymentSection.shippingAddress}}" stepKey="waitForShippingAddressToBeVisible" time="30"/>
         <waitForText selector="{{PayPalPaymentSection.shippingAddress}}" userInput="{{shippingAddress}}" stepKey="assertShippingAddress"/>
     </actionGroup>
 </actionGroups>
