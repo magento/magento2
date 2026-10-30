@@ -48,10 +48,18 @@ class CustomerManagementPlugin
             ) {
                 $shippingAddressData = $shippingAddress->exportCustomerAddress();
                 $shippingAddressData->setCustomerId($quote->getCustomerId());
+                $customer = $quote->getCustomer();
+                if (!$customer->getDefaultShipping()) {
+                    $shippingAddressData->setIsDefaultShipping(true);
+                }
+                if (!$customer->getDefaultBilling()) {
+                    $shippingAddressData->setIsDefaultBilling(true);
+                }
                 $this->addressRepository->save($shippingAddressData);
                 $quote->addCustomerAddress($shippingAddressData);
                 $shippingAddress->setCustomerAddressData($shippingAddressData);
                 $shippingAddress->setCustomerAddressId($shippingAddressData->getId());
+                $quote->getBillingAddress()->setCustomerAddressId($shippingAddressData->getId());
             }
         } catch (Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
