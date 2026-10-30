@@ -430,11 +430,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
         foreach ($customAttributesValueArray as $key => $customAttribute) {
-            $this->runCustomAttributePreprocessors($key, $customAttribute);
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
+            $this->runCustomAttributePreprocessors(
+                $this->getCustomAttributeCode($customAttribute) ?? $key,
+                $customAttribute
+            );
+            [$customAttributeCode, $customAttributeValue] = $this->processCustomAttribute($customAttribute);
             $entityType = $this->serviceTypeToEntityTypeMap->getEntityType($dataObjectClassName);
             if ($entityType) {
                 $type = $this->customAttributeTypeLocator->getType(
@@ -480,8 +483,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     {
         if (!$this->attributesPreprocessorsMap) {
             foreach ($this->customAttributePreprocessors as $attributePreprocessor) {
-                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeKey) {
-                    $this->attributesPreprocessorsMap[$attributeKey][] = $attributePreprocessor;
+                foreach ($attributePreprocessor->getAffectedAttributes() as $attributeCode) {
+                    $this->attributesPreprocessorsMap[$attributeCode][] = $attributePreprocessor;
                 }
             }
         }
@@ -492,42 +495,52 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     /**
      * Prepare attribute value by loaded attribute preprocessors
      *
-     * @param mixed $key
-     * @param mixed $customAttribute
+     * @param mixed $attributeCode
+     * @param array $customAttribute
      */
-    private function runCustomAttributePreprocessors($key, &$customAttribute)
+    private function runCustomAttributePreprocessors($attributeCode, array &$customAttribute): void
     {
         $preprocessorsMap = $this->getAttributesPreprocessorsMap();
-        if ($key && is_array($customAttribute) && array_key_exists($key, $preprocessorsMap)) {
-            $preprocessorsList = $preprocessorsMap[$key];
+        $attributeCode = is_scalar($attributeCode) ? (string)$attributeCode : '';
+        if ($attributeCode !== '' && array_key_exists($attributeCode, $preprocessorsMap)) {
+            $preprocessorsList = $preprocessorsMap[$attributeCode];
             foreach ($preprocessorsList as $attributePreprocessor) {
-                if ($attributePreprocessor->shouldBeProcessed($key, $customAttribute)) {
-                    $attributePreprocessor->process($key, $customAttribute);
+                if ($attributePreprocessor->shouldBeProcessed($attributeCode, $customAttribute)) {
+                    $attributePreprocessor->process($attributeCode, $customAttribute);
                 }
             }
         }
     }
 
     /**
-     * Derive the custom attribute code and value.
+     * Get the custom attribute code from the attribute data, if it has one.
      *
-     * @param string[] $customAttribute
-     * @return string[]
-     * @throws SerializationException
+     * @param array $customAttribute
+     * @return mixed
      */
-    private function processCustomAttribute($customAttribute)
+    private function getCustomAttributeCode(array $customAttribute)
     {
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
         // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
         if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
-        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
-        } else {
-            $customAttributeCode = null;
+            return $customAttribute[AttributeValue::ATTRIBUTE_CODE];
         }
+
+        return $customAttribute[$camelCaseAttributeCodeKey] ?? null;
+    }
+
+    /**
+     * Derive the custom attribute code and value.
+     *
+     * @param array $customAttribute
+     * @return array
+     * @throws SerializationException
+     */
+    private function processCustomAttribute(array $customAttribute): array
+    {
+        $customAttributeCode = $this->getCustomAttributeCode($customAttribute);
 
         if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
