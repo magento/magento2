@@ -108,7 +108,7 @@ class BackendValidator implements ValidatorInterface
                     null
                 );
                 $secretKey = $this->backendUrl->getSecretKey();
-                $validSecretKey = ($secretKeyValue === $secretKey);
+                $validSecretKey = hash_equals((string)$secretKey, $secretKeyValue);
             }
             $valid = $validFormKey && $validSecretKey;
         }
