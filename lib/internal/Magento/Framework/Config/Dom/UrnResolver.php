@@ -7,6 +7,7 @@
 /**
  * Resolve URN path to a real schema path
  */
+
 namespace Magento\Framework\Config\Dom;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -66,24 +67,29 @@ class UrnResolver
     /**
      * Callback registered for libxml to resolve URN to the file path
      *
-     * @param string $public
-     * @param string $system
+     * @param string|null $public_id
+     * @param string $system_id
      * @param array $context
      * @return resource
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function registerEntityLoader($public, $system, $context)
+    public function registerEntityLoader(?string $public_id, string $system_id, array $context)
     {
-        if ($system && strpos($system, 'urn:') === 0) {
-            $filePath = $this->getRealPath($system);
+        if ($system_id && str_starts_with($system_id, 'urn:')) {
+            $filePath = $this->getRealPath($system_id);
+        } elseif (file_exists($system_id) || @get_headers($system_id)) {
+            $filePath = $system_id;
         } else {
-            if (file_exists($system)) {
-                $filePath = $system;
-            } else {
-                throw new LocalizedException(new Phrase("File '%system' cannot be found", ['system' => $system]));
-            }
+            throw new LocalizedException(new Phrase("File '%system' cannot be found", ['system' => $system_id]));
         }
-        return fopen($filePath, "r");
+
+        $resource = fopen($filePath, 'r');
+
+        if ($resource === false) {
+            throw new LocalizedException(new Phrase("File '%system' cannot be openend", ['system' => $system_id]));
+        }
+
+        return $resource;
     }
 }

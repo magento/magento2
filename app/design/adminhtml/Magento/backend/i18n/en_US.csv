@@ -88,6 +88,7 @@ dummy,dummy
 "Unsupported format of schema location: '%1'","Unsupported format of schema location: '%1'"
 "Could not locate schema: '%1' at '%2'","Could not locate schema: '%1' at '%2'"
 "File '%system' cannot be found","File '%system' cannot be found"
+"File '%system' cannot be openend","File '%system' cannot be openend"
 "Could not read config file","Could not read config file"
 .,.
 "%1 doesn't implement ThemeInterface","%1 doesn't implement ThemeInterface"
