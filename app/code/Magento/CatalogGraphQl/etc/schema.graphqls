@@ -126,6 +126,8 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     canonical_url: String @doc(description: "The relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Products' is enabled.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CanonicalUrl")
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of media gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
     custom_attributesV2(filters: AttributeFilterInput): ProductCustomAttributes @doc(description: "Product custom attributes.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductCustomAttributes")
+    has_options: Boolean @doc(description: "Indicates whether additional options have been created for the product.")
+    required_options: Boolean @doc(description: "Indicates whether the product has required options.")
 }
 
 interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains attributes specific to tangible products.") {
