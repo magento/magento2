@@ -70,6 +70,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'it_IT', /*Italian (Italy)*/
         'ja_JP', /*Japanese (Japan)*/
         'ka_GE', /*Georgian (Georgia)*/
+        'kk_KZ', /*Kazakh (Kazakhstan)*/
         'km_KH', /*Khmer (Cambodia)*/
         'ko_KR', /*Korean (South Korea)*/
         'lo_LA', /*Lao (Laos)*/
