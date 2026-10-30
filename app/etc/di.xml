@@ -318,11 +318,23 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Session\SaveHandlerInterface" type="Magento\Framework\Session\SaveHandler" />
+    <virtualType name="Magento\Framework\Session\SaveHandler\Valkey\Logger" type="Magento\Framework\Session\SaveHandler\Redis\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Framework\Session\SaveHandler\Valkey\Config</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\Session\SaveHandler\Valkey" type="Magento\Framework\Session\SaveHandler\Redis">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Framework\Session\SaveHandler\Valkey\Config</argument>
+            <argument name="logger" xsi:type="object">Magento\Framework\Session\SaveHandler\Valkey\Logger</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\Session\SaveHandlerFactory">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="db" xsi:type="string">Magento\Framework\Session\SaveHandler\DbTable</item>
                 <item name="redis" xsi:type="string">Magento\Framework\Session\SaveHandler\Redis</item>
+                <item name="valkey" xsi:type="string">Magento\Framework\Session\SaveHandler\Valkey</item>
             </argument>
         </arguments>
     </type>
