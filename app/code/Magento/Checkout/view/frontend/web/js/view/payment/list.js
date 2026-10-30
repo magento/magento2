@@ -108,7 +108,8 @@ define([
                 parent: '${ $.$data.parentName }',
                 name: '${ $.$data.name }',
                 displayArea: payment.displayArea,
-                component: payment.component
+                component: payment.component,
+                sortOrder: payment.sortOrder
             };
             rendererComponent = utils.template(rendererTemplate, templateData);
             utils.extend(rendererComponent, {
@@ -120,42 +121,76 @@ define([
         },
 
         /**
+         * Checks whether the given renderer applies to the given payment method code.
+         *
+         * @param {Object} renderer
+         * @param {String} method
+         * @returns {Boolean}
+         */
+        isRendererForMethod: function (renderer, method) {
+            if (renderer.hasOwnProperty('typeComparatorCallback') &&
+                typeof renderer.typeComparatorCallback == 'function'
+            ) {
+                return renderer.typeComparatorCallback(renderer.type, method);
+            }
+
+            return renderer.type === method;
+        },
+
+        /**
+         * Counts how many renderers apply to the given payment method code.
+         *
+         * @param {String} method
+         * @returns {Number}
+         */
+        countRenderersForMethod: function (method) {
+            return _.filter(rendererList(), function (renderer) {
+                return this.isRendererForMethod(renderer, method);
+            }, this).length;
+        },
+
+        /**
          * Create renderer.
          *
          * @param {Object} paymentMethodData
          */
         createRenderer: function (paymentMethodData) {
-            var isRendererForMethod = false,
-                currentGroup;
+            var currentGroup,
+                sortOrder = 0;
+
+            _.some(paymentMethods(), function (method) {
+                if (method.method === paymentMethodData.method) {
+                    return true;
+                }
+                sortOrder += this.countRenderersForMethod(method.method);
+
+                return false;
+            }, this);
 
             registry.get(this.configDefaultGroup.name, function (defaultGroup) {
                 _.each(rendererList(), function (renderer) {
-
-                    if (renderer.hasOwnProperty('typeComparatorCallback') &&
-                        typeof renderer.typeComparatorCallback == 'function'
-                    ) {
-                        isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
-                    } else {
-                        isRendererForMethod = renderer.type === paymentMethodData.method;
+                    if (!this.isRendererForMethod(renderer, paymentMethodData.method)) {
+                        return;
                     }
 
-                    if (isRendererForMethod) {
-                        currentGroup = renderer.group ? renderer.group : defaultGroup;
+                    currentGroup = renderer.group ? renderer.group : defaultGroup;
 
-                        this.collectPaymentGroups(currentGroup);
+                    this.collectPaymentGroups(currentGroup);
 
-                        layout([
-                            this.createComponent(
-                                {
-                                    config: renderer.config,
-                                    component: renderer.component,
-                                    name: renderer.type,
-                                    method: paymentMethodData.method,
-                                    item: paymentMethodData,
-                                    displayArea: currentGroup.displayArea
-                                }
-                            )]);
-                    }
+                    layout([
+                        this.createComponent(
+                            {
+                                config: renderer.config,
+                                component: renderer.component,
+                                name: renderer.type,
+                                method: paymentMethodData.method,
+                                item: paymentMethodData,
+                                displayArea: currentGroup.displayArea,
+                                sortOrder: sortOrder
+                            }
+                        )]);
+
+                    sortOrder++;
                 }.bind(this));
             }.bind(this));
         },
