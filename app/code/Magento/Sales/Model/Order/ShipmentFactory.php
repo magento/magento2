@@ -200,11 +200,53 @@ class ShipmentFactory
                     unset($shipmentItems[$key]);
                     continue;
                 }
+                $bundleQty = $this->getShippedBundleQty($shipmentItem, $childItems);
+                $shipmentItem->setQty($this->castQty($shipmentItem->getOrderItem(), $bundleQty));
             }
             $totalQty += $shipmentItem->getQty();
             $shipment->addItem($shipmentItem);
         }
         return $shipment->setTotalQty($totalQty);
+    }
+
+    /**
+     * Number of bundles a shipment of separately shipped children adds to the bundle's shipped quantity
+     *
+     * The bundle's shipped quantity becomes the number of whole bundles shipped (every shippable child has shipped
+     * its share), and at least 1 once any of its items has shipped, as before. Once no child has anything left to
+     * ship (the rest canceled or refunded), the bundle counts as fully shipped.
+     *
+     * @param \Magento\Sales\Model\Order\Shipment\Item $parentShipmentItem
+     * @param \Magento\Sales\Model\Order\Shipment\Item[] $childShipmentItems
+     * @return float
+     */
+    private function getShippedBundleQty($parentShipmentItem, array $childShipmentItems): float
+    {
+        $parent = $parentShipmentItem->getOrderItem();
+        $parentQtyOrdered = (float)$parent->getQtyOrdered();
+        if ($parentQtyOrdered <= 0) {
+            return 0;
+        }
+        $shippedQty = array_combine(
+            array_map(static fn ($item) => $item->getOrderItem()->getId(), $childShipmentItems),
+            array_map(static fn ($item) => (float)$item->getQty(), $childShipmentItems)
+        );
+        $complete = $parentQtyOrdered;
+        $anyShipped = false;
+        $allDone = true;
+        foreach ($parent->getChildrenItems() as $child) {
+            $qtyPerBundle = (float)$child->getQtyOrdered() / $parentQtyOrdered;
+            if ($child->getIsVirtual() || $qtyPerBundle <= 0) {
+                continue;
+            }
+            $childShipped = (float)$child->getQtyShipped() + ($shippedQty[$child->getId()] ?? 0);
+            $complete = min($complete, floor(round($childShipped / $qtyPerBundle, 4)));
+            $anyShipped = $anyShipped || $childShipped > 0;
+            $allDone = $allDone && $child->getSimpleQtyToShip() - ($shippedQty[$child->getId()] ?? 0) <= 0;
+        }
+        $shipped = $anyShipped ? max(1, $allDone ? $parentQtyOrdered : $complete) : 0;
+
+        return max(0, $shipped - (float)$parent->getQtyShipped());
     }
 
     /**
