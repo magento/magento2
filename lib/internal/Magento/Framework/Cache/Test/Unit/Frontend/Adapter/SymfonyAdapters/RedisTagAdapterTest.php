@@ -110,6 +110,97 @@ class RedisTagAdapterTest extends TestCase
     }
 
     /**
+     * Without scripts, deleting ids keeps the index of an id whose data still exists (#41529)
+     *
+     * Redis refuses EVAL/EVALSHA here (an ACL user without scripting), so pruneTagIndex() takes the pipelined
+     * fallback. "live" still has its data key (its delete failed, or it was saved again after the delete) and must
+     * keep its tag-set, reverse-index and all_ids membership; "gone" has no data key and is pruned as before.
+     *
+     * @param string $namespace
+     * @param string $dataKeyPrefix
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\TestWith(['', ''])]
+    #[\PHPUnit\Framework\Attributes\TestWith(['ns', 'ns:'])]
+    public function testDeleteByIdsWithoutScriptsKeepsIndexOfIdThatStillHasData(
+        string $namespace,
+        string $dataKeyPrefix
+    ): void {
+        $commands = [];
+        $pipeline = new class ($commands) {
+            /** @var array */
+            public array $results = [];
+
+            /** @var array */
+            private array $log;
+
+            public function __construct(array &$log)
+            {
+                $this->log = &$log;
+            }
+
+            public function __call($method, $args): static
+            {
+                $this->log[] = strtolower($method) . ' ' . implode(' ', $args);
+                return $this;
+            }
+
+            public function execute(): array
+            {
+                return array_shift($this->results) ?? [];
+            }
+        };
+        // Read pipeline: EXISTS and SMEMBERS per id, in order live, gone.
+        $pipeline->results = [[1, ['TAG'], 0, ['TAG']], []];
+
+        $redis = new class ($pipeline) extends OptimizedPredisClient {
+            /** @var object */
+            private object $pipe;
+
+            public function __construct(object $pipe)
+            {
+                $this->pipe = $pipe;
+                // Skip parent::__construct() - no Redis connection needed for unit tests.
+            }
+
+            public function pipeline(...$_arguments)
+            {
+                return $this->pipe;
+            }
+
+            public function __call($commandID, $_arguments)
+            {
+                if (in_array(strtolower((string)$commandID), ['eval', 'evalsha', 'script'], true)) {
+                    throw new \RuntimeException('NOPERM this user has no permissions to run scripts');
+                }
+
+                return null;
+            }
+        };
+
+        $adapter = $this->createAdapter($redis);
+        (new ReflectionProperty(RedisTagAdapter::class, 'namespace'))->setValue($adapter, $namespace);
+        $cachePool = $this->createMock(CacheItemPoolInterface::class);
+        $cachePool->method('deleteItems')->willReturn(false);
+        (new ReflectionProperty(RedisTagAdapter::class, 'cachePool'))->setValue($adapter, $cachePool);
+
+        $adapter->deleteByIds(['live', 'gone']);
+
+        $this->assertSame(
+            [
+                'exists ' . $dataKeyPrefix . 'live',
+                'smembers cache:id_tags:' . $namespace . 'live',
+                'exists ' . $dataKeyPrefix . 'gone',
+                'smembers cache:id_tags:' . $namespace . 'gone',
+                'srem cache:all_ids gone',
+                'srem cache:tags:' . $namespace . 'TAG gone',
+                'del cache:id_tags:' . $namespace . 'gone',
+            ],
+            $commands
+        );
+    }
+
+    /**
      * Create a RedisTagAdapter with an injected fake Redis client.
      *
      * ReflectionProperty::setValue() works on private properties without setAccessible()
