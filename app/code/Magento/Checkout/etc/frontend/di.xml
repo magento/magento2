@@ -7,6 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Session\SessionAccessModeResolver">
+        <arguments>
+            <argument name="readOnlyPaths" xsi:type="array">
+                <item name="checkout_cart_add" xsi:type="string">checkout/cart/add</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">

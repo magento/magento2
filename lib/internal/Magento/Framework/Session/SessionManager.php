@@ -83,6 +83,11 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     private $sessionStartChecker;
 
     /**
+     * Whether this request initially opened the session without a write lock.
+     */
+    private bool $readOnly = false;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
@@ -93,6 +98,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\State $appState
      * @param SessionStartChecker|null $sessionStartChecker
+     * @param SessionAccessModeResolver|null $sessionAccessModeResolver
      * @throws \Magento\Framework\Exception\SessionException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -107,7 +113,8 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\State $appState,
-        ?SessionStartChecker $sessionStartChecker = null
+        ?SessionStartChecker $sessionStartChecker = null,
+        ?SessionAccessModeResolver $sessionAccessModeResolver = null
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -121,6 +128,9 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
         $this->sessionStartChecker = $sessionStartChecker ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
             SessionStartChecker::class
         );
+        $sessionAccessModeResolver = $sessionAccessModeResolver
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(SessionAccessModeResolver::class);
+        $this->readOnly = $sessionAccessModeResolver->isReadOnly();
         $this->start();
     }
 
@@ -132,6 +142,26 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     public function writeClose()
     {
         session_write_close();
+    }
+
+    /**
+     * Promotes a read-only session to a writable session before it is mutated.
+     *
+     * @return void
+     */
+    public function startWriting(): void
+    {
+        if (!$this->readOnly || session_status() !== PHP_SESSION_ACTIVE) {
+            return;
+        }
+
+        session_write_close();
+        if ($this->saveHandler instanceof SessionAccessModeAwareInterface) {
+            $this->saveHandler->setReadOnly(false);
+        }
+        session_start();
+        Storage::refresh($_SESSION);
+        $this->readOnly = false;
     }
 
     /**
@@ -148,6 +178,9 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
             throw new \InvalidArgumentException(
                 sprintf('Invalid method %s::%s(%s)', get_class($this), $method, print_r($args, 1))
             );
+        }
+        if (in_array(substr($method, 0, 3), ['set', 'uns'], true)) {
+            $this->startWriting();
         }
         $return = call_user_func_array([$this->storage, $method], $args);
         return $return === $this->storage ? $this : $return;
@@ -178,6 +211,9 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
 
                 // Need to apply the config options so they can be ready by session_start
                 $this->initIniOptions();
+                if ($this->saveHandler instanceof SessionAccessModeAwareInterface) {
+                    $this->saveHandler->setReadOnly($this->readOnly);
+                }
                 $this->registerSaveHandler();
                 if (isset($_SESSION['new_session_id'])) {
                     // Not fully expired yet. Could be lost cookie by unstable network.
@@ -287,6 +323,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     {
         $data = $this->storage->getData($key);
         if ($clear && isset($data)) {
+            $this->startWriting();
             $this->storage->unsetData($key);
         }
         return $data;
@@ -357,6 +394,7 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      */
     public function clearStorage()
     {
+        $this->startWriting();
         $this->storage->unsetData();
         return $this;
     }
