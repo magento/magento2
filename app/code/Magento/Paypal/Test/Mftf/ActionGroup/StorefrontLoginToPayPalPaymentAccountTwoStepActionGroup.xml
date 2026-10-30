@@ -30,6 +30,7 @@
         <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginBtn"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad time="30" stepKey="wait"/>
+        <comment userInput="BIC workaround" stepKey="waitForPayPalReviewPage"/>
         <waitForPageLoad time="30" stepKey="waitForLoginToComplete"/>
     </actionGroup>
 </actionGroups>
