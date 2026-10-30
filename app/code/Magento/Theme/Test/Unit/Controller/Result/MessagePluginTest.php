@@ -508,4 +508,93 @@ class MessagePluginTest extends TestCase
 
         $this->model->afterRenderResult($resultMock, $resultMock);
     }
+
+    public function testSetCookieUsesConfiguredLifetimeAndDomain()
+    {
+        /** @var Redirect|MockObject $resultMock */
+        $resultMock = $this->createMock(Redirect::class);
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
+        $cookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($cookieMetadataMock);
+
+        /** @var MessageInterface|MockObject $messageMock */
+        $messageMock = $this->createMock(MessageInterface::class);
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$messageMock]);
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieLifetime')
+            ->willReturn(604800);
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookiePath')
+            ->willReturn('/');
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieDomain')
+            ->willReturn('example.com');
+
+        $cookieMetadataMock->expects($this->never())
+            ->method('setDurationOneYear');
+        $cookieMetadataMock->expects($this->once())
+            ->method('setDuration')
+            ->with(604800)
+            ->willReturn($cookieMetadataMock);
+        $cookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with('/')
+            ->willReturn($cookieMetadataMock);
+        $cookieMetadataMock->expects($this->once())
+            ->method('setDomain')
+            ->with('.example.com')
+            ->willReturn($cookieMetadataMock);
+
+        $this->model->afterRenderResult($resultMock, $resultMock);
+    }
+
+    public function testSetCookieWithZeroLifetimeAndNoDomainCreatesSessionCookie()
+    {
+        /** @var Redirect|MockObject $resultMock */
+        $resultMock = $this->createMock(Redirect::class);
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
+        $cookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($cookieMetadataMock);
+
+        /** @var MessageInterface|MockObject $messageMock */
+        $messageMock = $this->createMock(MessageInterface::class);
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$messageMock]);
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieLifetime')
+            ->willReturn(0);
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookieDomain')
+            ->willReturn('');
+
+        $cookieMetadataMock->expects($this->never())
+            ->method('setDuration');
+        $cookieMetadataMock->expects($this->never())
+            ->method('setDurationOneYear');
+        $cookieMetadataMock->expects($this->never())
+            ->method('setDomain');
+
+        $this->model->afterRenderResult($resultMock, $resultMock);
+    }
 }
