@@ -15,4 +15,6 @@ type CustomerDownloadableProduct @doc(description: "Contains details about a sin
     status: String @doc(description: "Indicates when the product becomes available for download. Options are `Pending` and `Invoiced`.")
     download_url: String @doc(description: "The fully qualified URL to the download file.")
     remaining_downloads: String @doc(description: "The remaining number of times the customer can download the product.")
+    product_name: String @doc(description: "The name of the downloadable product.")
+    link_title: String @doc(description: "The title of the purchased link.")
 }
