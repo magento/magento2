@@ -18,6 +18,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Tax\ItemsPreloader;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
@@ -77,6 +78,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
     private $extensionAttributesJoinProcessor;
 
     /**
+     * @var ItemsPreloader
+     */
+    private $taxItemsPreloader;
+
+    /**
      * Constructor
      *
      * @param Metadata $metadata
@@ -87,6 +93,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      * @param JsonSerializer|null $serializer
      * @param JoinProcessorInterface|null $extensionAttributesJoinProcessor
      * @param ShippingAssignmentBuilder|null $shippingAssignmentBuilder
+     * @param ItemsPreloader|null $taxItemsPreloader
      */
     public function __construct(
         Metadata $metadata,
@@ -96,7 +103,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         ?PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
         ?JsonSerializer $serializer = null,
         ?JoinProcessorInterface $extensionAttributesJoinProcessor = null,
-        ?ShippingAssignmentBuilder $shippingAssignmentBuilder = null
+        ?ShippingAssignmentBuilder $shippingAssignmentBuilder = null,
+        ?ItemsPreloader $taxItemsPreloader = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -112,6 +120,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
         $this->shippingAssignmentBuilder = $shippingAssignmentBuilder
             ?: ObjectManager::getInstance()->get(ShippingAssignmentBuilder::class);
+        $this->taxItemsPreloader = $taxItemsPreloader
+            ?: ObjectManager::getInstance()->get(ItemsPreloader::class);
     }
 
     /**
@@ -213,10 +223,20 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         $this->extensionAttributesJoinProcessor->process($searchResult);
         $this->collectionProcessor->process($searchCriteria, $searchResult);
         $searchResult->setSearchCriteria($searchCriteria);
-        foreach ($searchResult->getItems() as $order) {
-            $this->setShippingAssignments($order);
-            $this->setOrderTaxDetails($order);
-            $this->setPaymentAdditionalInfo($order);
+        $orders = $searchResult->getItems();
+        $orderIds = [];
+        foreach ($orders as $order) {
+            $orderIds[] = $order->getEntityId();
+        }
+        $this->taxItemsPreloader->preload($orderIds);
+        try {
+            foreach ($orders as $order) {
+                $this->setShippingAssignments($order);
+                $this->setOrderTaxDetails($order);
+                $this->setPaymentAdditionalInfo($order);
+            }
+        } finally {
+            $this->taxItemsPreloader->clear();
         }
         return $searchResult;
     }

@@ -27,6 +27,7 @@ use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\ResourceModel\Order as OrderResource;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Tax\ItemsPreloader;
 use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -81,6 +82,11 @@ class OrderRepositoryTest extends TestCase
     private $shippingAssignmentBuilder;
 
     /**
+     * @var ItemsPreloader|MockObject
+     */
+    private $taxItemsPreloader;
+
+    /**
      * @return MockObject
      */
     private function createOrderExtensionMock(): MockObject
@@ -117,6 +123,7 @@ class OrderRepositoryTest extends TestCase
             ['create']
         );
         $this->shippingAssignmentBuilder = $this->createMock(ShippingAssignmentBuilder::class);
+        $this->taxItemsPreloader = $this->createMock(ItemsPreloader::class);
         $this->orderRepository = $this->objectManager->getObject(
             OrderRepository::class,
             [
@@ -125,7 +132,8 @@ class OrderRepositoryTest extends TestCase
                 'collectionProcessor' => $this->collectionProcessor,
                 'orderTaxManagement' => $this->orderTaxManagementMock,
                 'paymentAdditionalInfoFactory' => $this->paymentAdditionalInfoFactory,
-                'shippingAssignmentBuilder' => $this->shippingAssignmentBuilder
+                'shippingAssignmentBuilder' => $this->shippingAssignmentBuilder,
+                'taxItemsPreloader' => $this->taxItemsPreloader
             ]
         );
     }
@@ -168,6 +176,8 @@ class OrderRepositoryTest extends TestCase
 
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$itemsMock]);
+        $this->taxItemsPreloader->expects($this->once())->method('preload')->with([1]);
+        $this->taxItemsPreloader->expects($this->once())->method('clear');
 
         $this->assertEquals($collectionMock, $this->orderRepository->getList($searchCriteriaMock));
     }
