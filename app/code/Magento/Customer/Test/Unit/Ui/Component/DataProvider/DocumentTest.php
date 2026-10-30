@@ -214,6 +214,79 @@ class DocumentTest extends TestCase
         $attribute = $this->document->getCustomAttribute('website_id');
         static::assertEquals('Main Website', $attribute->getValue());
     }
+    /**
+     * The admin website (id 0) is omitted from getWebsites() unless the default is requested, so a customer
+     * created in the admin must still resolve to a website name instead of an undefined array key.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testGetWebsiteAttributeForAdminWebsite()
+    {
+        $this->document->setData('website_id', 0);
+
+        $this->groupRepository->expects(static::never())
+            ->method('getById');
+
+        $this->customerMetadata->expects(static::never())
+            ->method('getAttributeMetadata');
+
+        $adminWebsite = $this->createMock(WebsiteInterface::class);
+        $mainWebsite = $this->createMock(WebsiteInterface::class);
+
+        $this->storeManager->expects(static::once())
+            ->method('getWebsites')
+            ->with(true)
+            ->willReturn([0 => $adminWebsite, 1 => $mainWebsite]);
+
+        $adminWebsite->expects(static::once())
+            ->method('getName')
+            ->willReturn('Admin');
+
+        $mainWebsite->expects(static::never())
+            ->method('getName');
+
+        $attribute = $this->document->getCustomAttribute('website_id');
+        static::assertEquals('Admin', $attribute->getValue());
+    }
+
+    /**
+     * A website id with no matching website, for example a NULL column or a website removed after the customer
+     * was created, resolves to an empty value rather than raising an undefined array key.
+     *
+     * @param int|null $websiteId
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    #[DataProvider('getUnknownWebsiteDataProvider')]
+    public function testGetWebsiteAttributeForUnknownWebsite($websiteId): void
+    {
+        $this->document->setData('website_id', $websiteId);
+
+        $website = $this->createMock(WebsiteInterface::class);
+
+        $this->storeManager->expects(static::once())
+            ->method('getWebsites')
+            ->with(true)
+            ->willReturn([0 => $website, 1 => $website]);
+
+        $website->expects(static::never())
+            ->method('getName');
+
+        $attribute = $this->document->getCustomAttribute('website_id');
+        static::assertEquals('', $attribute->getValue());
+    }
+
+    /**
+     * Data provider for testGetWebsiteAttributeForUnknownWebsite
+     *
+     * @return array
+     */
+    public static function getUnknownWebsiteDataProvider()
+    {
+        return [
+            'website that no longer exists' => [99],
+            'null website id' => [null],
+        ];
+    }
 
     /**
      * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
@@ -234,6 +307,41 @@ class DocumentTest extends TestCase
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
         static::assertEquals('Confirmed', (string)$value);
+    }
+
+    /**
+     * The website id is written into the document's data before the confirmation column is read, so a
+     * falsy but valid id such as the admin website's 0 must not fall through to the website label.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testConfirmationScopeUsesTheWebsiteIdForAdminWebsite()
+    {
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->method('getName')
+            ->willReturn('Admin');
+
+        $this->storeManager->method('getWebsites')
+            ->willReturn([0 => $website, 1 => $website]);
+
+        $capturedScopeCode = false;
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->willReturnCallback(
+                function ($path, $scopeType, $scopeCode) use (&$capturedScopeCode) {
+                    $capturedScopeCode = $scopeCode;
+                    return false;
+                }
+            );
+
+        $this->document->setData('website_id', 0);
+        $this->document->setData('confirmation', null);
+
+        // customer_listing renders website_id (sortOrder 110) before confirmation (sortOrder 130)
+        $this->document->getCustomAttribute('website_id');
+        $this->document->getCustomAttribute('confirmation');
+
+        static::assertSame(0, $capturedScopeCode);
     }
 
     /**
