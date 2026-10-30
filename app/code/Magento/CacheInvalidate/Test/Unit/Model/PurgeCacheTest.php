@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
-use Laminas\Http\Client\Adapter\Exception\RuntimeException;
-use Laminas\Http\Client\Adapter\Socket;
+use Laminas\Uri\Uri;
 use Laminas\Uri\UriFactory;
 use Magento\CacheInvalidate\Model\PurgeCache;
 use Magento\CacheInvalidate\Model\SocketFactory;
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class PurgeCacheTest extends TestCase
 {
@@ -27,9 +29,9 @@ class PurgeCacheTest extends TestCase
     protected $model;
 
     /**
-     * @var MockObject|Socket
+     * @var MockObject|CurlFactory
      */
-    protected $socketAdapterMock;
+    private $curlFactory;
 
     /**
      * @var MockObject|InvalidateLogger
@@ -47,14 +49,8 @@ class PurgeCacheTest extends TestCase
     protected function setUp(): void
     {
         $socketFactoryMock = $this->createMock(SocketFactory::class);
-        $this->socketAdapterMock = $this->createMock(Socket::class);
-        $this->socketAdapterMock->expects($this->once())
-            ->method('setOptions')
-            ->with(['timeout' => 10]);
-        $socketFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->socketAdapterMock);
-
+        $socketFactoryMock->expects($this->never())->method('create');
+        $this->curlFactory = $this->createMock(CurlFactory::class);
         $this->loggerMock = $this->createMock(InvalidateLogger::class);
         $this->cacheServer = $this->createMock(Server::class);
 
@@ -65,60 +61,40 @@ class PurgeCacheTest extends TestCase
                 'cacheServer' => $this->cacheServer,
                 'socketAdapterFactory' => $socketFactoryMock,
                 'logger' => $this->loggerMock,
-                'maxHeaderSize' => 256
+                'maxHeaderSize' => 256,
+                'curlFactory' => $this->curlFactory
             ]
         );
     }
 
     /**
-     * @param string[] $hosts
-     *
+     * @param array $hosts
      * @return void
      */
     #[DataProvider('sendPurgeRequestDataProvider')]
     public function testSendPurgeRequest(array $hosts): void
     {
         $uris = [];
-        /** @var array $host */
+        $clients = [];
         foreach ($hosts as $host) {
-            $port = $host['port'] ?? Server::DEFAULT_PORT;
-            $uris[] = UriFactory::factory('')->setHost($host['host'])
-                ->setPort($port)
-                ->setScheme('http');
+            $uri = $this->createUri($host['host'], $host['port'] ?? Server::DEFAULT_PORT);
+            $uris[] = $uri;
+            $clients[] = $this->createClient($uri, 'tags');
         }
-        $this->cacheServer->expects($this->once())
-            ->method('getUris')
-            ->willReturn($uris);
-        $connectWithArgs = $writeWithArgs = [];
-
-        foreach ($uris as $uri) {
-            $writeWithArgs[] = ['PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]];
-        }
-        $this->socketAdapterMock
-            ->method('connect')
-            ->willReturnCallback(function (...$connectWithArgs) {
-                return null;
-            });
-        $this->socketAdapterMock
-            ->method('write')
-            ->willReturnCallback(function (...$writeWithArgs) {
-                return null;
-            });
-        $this->socketAdapterMock
-            ->method('read');
-
-        $this->socketAdapterMock->expects($this->exactly(count($uris)))
-            ->method('close');
-
-        $this->loggerMock->expects($this->once())
-            ->method('execute');
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn($uris);
+        $this->curlFactory->expects($this->exactly(count($clients)))->method('create')->willReturn(...$clients);
+        $this->loggerMock->expects($this->never())->method('critical');
+        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->once())->method('execute')->with([
+            'servers' => $uris,
+            'formattedTagsChunk' => 'tags'
+        ]);
 
         $this->assertTrue($this->model->sendPurgeRequest(['tags']));
     }
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSendMultiPurgeRequest(): void
     {
@@ -129,58 +105,48 @@ class PurgeCacheTest extends TestCase
             '(^|,)cat_p_299(,|$)', '(^|,)cat_p_400(,|$)', '(^|,)cat_p_13038(,|$)', '(^|,)cat_p_162985(,|$)'
         ];
 
-        $tagsSplitA = array_slice($tags, 0, 12);
-        $tagsSplitB = array_slice($tags, 12, 4);
-
-        $uri =  UriFactory::factory('')->setHost('localhost')
-            ->setPort(80)
-            ->setScheme('http');
-
-        $this->cacheServer->expects($this->once())
-            ->method('getUris')
-            ->willReturn([$uri]);
-
-        $this->socketAdapterMock->expects($this->exactly(2))
-            ->method('connect')
-            ->with($uri->getHost(), $uri->getPort());
-
-        $this->socketAdapterMock->expects($this->exactly(2))
-            ->method('write')
-            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4) use ($uri, $tagsSplitA, $tagsSplitB) {
-                static $callCount = 0;
-                $callCount++;
-                switch ($callCount) {
-                    case 1:
-                        if ($arg1 === 'PURGE' &&
-                            $arg2 === $uri &&
-                            $arg3 === '1.1' &&
-                            is_array($arg4) &&
-                            isset($arg4['X-Magento-Tags-Pattern']) &&
-                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitA) &&
-                            isset($arg4['Host']) &&
-                            $arg4['Host'] === $uri->getHost()) {
-                             return null;
-                        }
-                        break;
-                    case 2:
-                        if ($arg1 === 'PURGE' &&
-                            $arg2 === $uri &&
-                            $arg3 === '1.1' &&
-                            is_array($arg4) &&
-                            isset($arg4['X-Magento-Tags-Pattern']) &&
-                            $arg4['X-Magento-Tags-Pattern'] === implode('|', $tagsSplitB) &&
-                            isset($arg4['Host']) &&
-                            $arg4['Host'] === $uri->getHost()) {
-                            return null;
-                        }
-                        break;
-                }
-            });
-
-        $this->socketAdapterMock->expects($this->exactly(2))
-            ->method('close');
+        $uri = $this->createUri('localhost', 80);
+        $firstChunk = implode('|', array_slice($tags, 0, 12));
+        $secondChunk = implode('|', array_slice($tags, 12, 4));
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn([$uri]);
+        $this->curlFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createClient($uri, $firstChunk),
+            $this->createClient($uri, $secondChunk)
+        );
+        $this->loggerMock->expects($this->exactly(2))->method('execute')->willReturnCallback(
+            function (array $context) use ($uri, $firstChunk, $secondChunk): void {
+                $this->assertSame([$uri], $context['servers']);
+                $this->assertContains($context['formattedTagsChunk'], [$firstChunk, $secondChunk]);
+            }
+        );
 
         $this->assertTrue($this->model->sendPurgeRequest($tags));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendPurgeRequestContinuesAfterFailedChunk(): void
+    {
+        $uri = $this->createUri('127.0.0.1', 8080);
+        $firstChunk = str_repeat('a', 256);
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn([$uri]);
+        $this->curlFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createClient($uri, $firstChunk, 'Timed out'),
+            $this->createClient($uri, 'remaining')
+        );
+        $this->loggerMock->expects($this->once())->method('critical')->with(
+            'No cache server(s) could be purged '
+            . 'Cache host: 127.0.0.1:8080resulted in error message: Timed out',
+            ['servers' => [$uri], 'formattedTagsChunk' => $firstChunk]
+        );
+        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->once())->method('execute')->with([
+            'servers' => [$uri],
+            'formattedTagsChunk' => 'remaining'
+        ]);
+
+        $this->assertFalse($this->model->sendPurgeRequest([$firstChunk, 'remaining']));
     }
 
     /**
@@ -207,20 +173,122 @@ class PurgeCacheTest extends TestCase
      */
     public function testSendPurgeRequestWithException(): void
     {
-        $uris[] = UriFactory::factory('')->setHost('127.0.0.1')
-            ->setPort(8080)
-            ->setScheme('http');
-
-        $this->cacheServer->expects($this->once())
-            ->method('getUris')
-            ->willReturn($uris);
-        $this->socketAdapterMock->method('connect')
-            ->willThrowException(new RuntimeException());
-        $this->loggerMock->expects($this->never())
-            ->method('execute');
-        $this->loggerMock->expects($this->once())
-            ->method('critical');
+        $uri = $this->createUri('127.0.0.1', 8080);
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn([$uri]);
+        $this->curlFactory->expects($this->once())->method('create')->willReturn(
+            $this->createClient($uri, 'tags', 'Connection failed')
+        );
+        $this->loggerMock->expects($this->never())->method('execute');
+        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->once())->method('critical')->with(
+            'No cache server(s) could be purged '
+            . 'Cache host: 127.0.0.1:8080resulted in error message: Connection failed',
+            ['servers' => [$uri], 'formattedTagsChunk' => 'tags']
+        );
 
         $this->assertFalse($this->model->sendPurgeRequest(['tags']));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendPurgeRequestWithPartialFailure(): void
+    {
+        $uris = [$this->createUri('127.0.0.1', 8080), $this->createUri('127.0.0.2', 1234)];
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn($uris);
+        $this->curlFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createClient($uris[0], 'tags', 'Connection failed'),
+            $this->createClient($uris[1], 'tags')
+        );
+        $context = ['servers' => $uris, 'formattedTagsChunk' => 'tags'];
+        $this->loggerMock->expects($this->never())->method('critical');
+        $this->loggerMock->expects($this->once())->method('warning')->with(
+            'Unresponsive cache server(s) hit'
+            . 'Cache host: 127.0.0.1:8080resulted in error message: Connection failed',
+            $context
+        );
+        $this->loggerMock->expects($this->once())->method('execute')->with($context);
+
+        $this->assertTrue($this->model->sendPurgeRequest(['tags']));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendPurgeRequestWithAllServersFailing(): void
+    {
+        $uris = [$this->createUri('127.0.0.1', 8080), $this->createUri('127.0.0.2', 1234)];
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn($uris);
+        $this->curlFactory->expects($this->exactly(2))->method('create')->willReturn(
+            $this->createClient($uris[0], 'tags', 'Connection failed'),
+            $this->createClient($uris[1], 'tags', 'Timed out')
+        );
+        $this->loggerMock->expects($this->never())->method('execute');
+        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->once())->method('critical')->with(
+            'No cache server(s) could be purged '
+            . 'Cache host: 127.0.0.1:8080resulted in error message: Connection failed '
+            . 'Cache host: 127.0.0.2:1234resulted in error message: Timed out',
+            ['servers' => $uris, 'formattedTagsChunk' => 'tags']
+        );
+
+        $this->assertFalse($this->model->sendPurgeRequest(['tags']));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendPurgeRequestIgnoresHttpErrorStatus(): void
+    {
+        $uri = $this->createUri('127.0.0.1', 8080);
+        $client = $this->createClient($uri, 'tags');
+        $client->expects($this->never())->method('getStatus');
+        $this->cacheServer->expects($this->once())->method('getUris')->willReturn([$uri]);
+        $this->curlFactory->expects($this->once())->method('create')->willReturn($client);
+        $this->loggerMock->expects($this->never())->method('critical');
+        $this->loggerMock->expects($this->never())->method('warning');
+        $this->loggerMock->expects($this->once())->method('execute');
+
+        $this->assertTrue($this->model->sendPurgeRequest('tags'));
+    }
+
+    /**
+     * @param string $host
+     * @param int $port
+     * @return Uri
+     */
+    private function createUri(string $host, int $port): Uri
+    {
+        return UriFactory::factory('')->setHost($host)->setPort($port)->setScheme('http')->setPath('/');
+    }
+
+    /**
+     * @param Uri $uri
+     * @param string $tags
+     * @param string|null $error
+     * @return Curl&MockObject
+     */
+    private function createClient(Uri $uri, string $tags, ?string $error = null): Curl
+    {
+        $client = $this->createMock(Curl::class);
+        $client->expects($this->once())->method('setTimeout')->with(10);
+        $client->expects($this->once())->method('setHeaders')->with([
+            'X-Magento-Tags-Pattern' => $tags,
+            'Host' => $uri->getHost()
+        ]);
+        $options = [CURLOPT_CUSTOMREQUEST => 'PURGE', CURLOPT_PROXY => ''];
+        $client->expects($this->exactly(2))->method('setOption')->willReturnCallback(
+            function ($option, $value) use (&$options): void {
+                $this->assertArrayHasKey($option, $options);
+                $this->assertSame($options[$option], $value);
+                unset($options[$option]);
+            }
+        );
+        $request = $client->expects($this->once())->method('get')->with((string)$uri);
+        if ($error !== null) {
+            $request->willThrowException(new RuntimeException($error));
+        }
+
+        return $client;
     }
 }
