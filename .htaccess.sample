@@ -50,14 +50,19 @@
     php_flag session.auto_start off
 
 ############################################
+## disable session upload progress, which Magento does not use
+
+    php_flag session.upload_progress.enabled off
+
+############################################
+## do not derive $argv from the query string
+
+    php_flag register_argc_argv off
+
+############################################
 ## enable resulting html compression
 
     #php_flag zlib.output_compression on
-
-###########################################
-## disable user agent verification to not break multiple image upload
-
-    php_flag suhosin.session.cryptua off
 
 <IfModule mod_security.c>
 ###########################################
@@ -302,6 +307,24 @@
         </IfVersion>
     </Files>
     <Files php.ini.sample>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files php-cli.ini.dist>
+        <IfVersion < 2.4>
+            order allow,deny
+            deny from all
+        </IfVersion>
+        <IfVersion >= 2.4>
+            Require all denied
+        </IfVersion>
+    </Files>
+    <Files php-fpm.ini.dist>
         <IfVersion < 2.4>
             order allow,deny
             deny from all
