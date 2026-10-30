@@ -16,6 +16,7 @@ use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
 use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\Plugin\FilterRenderer;
 use Magento\Swatches\Model\Plugin\FilterRenderer as FilterRendererPlugin;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +47,9 @@ class FilterRendererTest extends TestCase
 
     /** @var MockObject */
     protected $closureMock;
+
+    /** @var MockObject|ConfigurableViewModel */
+    private $configurableViewModelMock;
 
     protected function setUp(): void
     {
@@ -81,12 +85,15 @@ class FilterRendererTest extends TestCase
             return $this->filterMock;
         };
 
+        $this->configurableViewModelMock = $this->createMock(ConfigurableViewModel::class);
+
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
             FilterRendererPlugin::class,
             [
                 'layout' => $this->layoutMock,
-                'swatchHelper' => $this->swatchHelperMock
+                'swatchHelper' => $this->swatchHelperMock,
+                'configurableViewModel' => $this->configurableViewModelMock
             ]
         );
     }
@@ -105,6 +112,8 @@ class FilterRendererTest extends TestCase
         $this->blockMock->expects($this->once())->method('setSwatchFilter')->willReturnSelf();
 
         $this->plugin->aroundRender($this->filterRendererMock, $this->closureMock, $this->filterMock);
+
+        $this->assertSame($this->configurableViewModelMock, $this->blockMock->getData('configurable_view_model'));
     }
 
     public function testAroundRenderFalse()

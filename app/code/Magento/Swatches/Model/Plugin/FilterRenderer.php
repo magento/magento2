@@ -5,9 +5,9 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
-/**
- * Class FilterRenderer
- */
+use Magento\Framework\App\ObjectManager;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
+
 class FilterRenderer
 {
     /**
@@ -28,18 +28,29 @@ class FilterRenderer
     protected $swatchHelper;
 
     /**
+     * @var ConfigurableViewModel
+     */
+    private $configurableViewModel;
+
+    /**
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param ConfigurableViewModel|null $configurableViewModel
      */
     public function __construct(
         \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Swatches\Helper\Data $swatchHelper
+        \Magento\Swatches\Helper\Data $swatchHelper,
+        ?ConfigurableViewModel $configurableViewModel = null
     ) {
         $this->layout = $layout;
         $this->swatchHelper = $swatchHelper;
+        $this->configurableViewModel = $configurableViewModel
+            ?? ObjectManager::getInstance()->get(ConfigurableViewModel::class);
     }
 
     /**
+     * Render swatch filters with the swatch block
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param \Magento\LayeredNavigation\Block\Navigation\FilterRenderer $subject
      * @param \Closure $proceed
@@ -57,6 +68,7 @@ class FilterRenderer
                 return $this->layout
                     ->createBlock($this->block)
                     ->setSwatchFilter($filter)
+                    ->setData('configurable_view_model', $this->configurableViewModel)
                     ->toHtml();
             }
         }
