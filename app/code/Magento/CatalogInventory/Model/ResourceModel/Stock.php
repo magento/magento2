@@ -83,7 +83,8 @@ class Stock extends AbstractDb implements QtyCounterInterface
 
     /**
      * @var StoreManagerInterface
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Not used anymore
+     * @see Nothing
      */
     protected $storeManager;
 
@@ -142,6 +143,8 @@ class Stock extends AbstractDb implements QtyCounterInterface
         foreach ($this->getConnection()->query($preSelect)->fetchAll() as $item) {
             $itemIds[] = (int)$item['item_id'];
         }
+        //InnoDB grants row locks in index order; ascending item_id makes that order equal for every transaction
+        sort($itemIds);
 
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
             ->where('item_id IN (?)', $itemIds, \Zend_Db::INT_TYPE)
@@ -178,18 +181,32 @@ class Stock extends AbstractDb implements QtyCounterInterface
         }
 
         $connection = $this->getConnection();
+        $itemTable = $this->getTable('cataloginventory_stock_item');
+
+        $itemsQty = [];
+        $preSelect = $connection->select()->from($itemTable, ['item_id', 'product_id'])
+            ->where('website_id = ?', $websiteId)
+            ->where('product_id IN(?)', array_keys($items), \Zend_Db::INT_TYPE);
+        foreach ($connection->fetchAll($preSelect) as $item) {
+            $itemsQty[(int)$item['item_id']] = $items[$item['product_id']];
+        }
+        if (empty($itemsQty)) {
+            return;
+        }
+        ksort($itemsQty);
+
         $conditions = [];
-        foreach ($items as $productId => $qty) {
-            $case = $connection->quoteInto('?', $productId);
+        foreach ($itemsQty as $itemId => $qty) {
+            $case = $connection->quoteInto('?', $itemId);
             $result = $connection->quoteInto("qty{$operator}?", $qty);
             $conditions[$case] = $result;
         }
 
-        $value = $connection->getCaseSql('product_id', $conditions, 'qty');
-        $where = ['product_id IN (?)' => array_keys($items), 'website_id = ?' => $websiteId];
+        $value = $connection->getCaseSql('item_id', $conditions, 'qty');
+        $where = ['item_id IN (?)' => array_keys($itemsQty)];
 
         $connection->beginTransaction();
-        $connection->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
+        $connection->update($itemTable, ['qty' => $value], $where);
         $connection->commit();
     }
 
