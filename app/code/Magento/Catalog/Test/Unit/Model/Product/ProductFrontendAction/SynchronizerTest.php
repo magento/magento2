@@ -96,7 +96,9 @@ class SynchronizerTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * Checks that only the newest actions are persisted when the configured lifetime truncates the payload.
+     *
+     * @return void
      */
     public function testFilterProductActions(): void
     {
@@ -125,9 +127,7 @@ class SynchronizerTest extends TestCase
             ->method('get')
             ->with('recently_compared_product')
             ->willReturn($frontendConfiguration);
-        $action1 = $this->createMock(ProductFrontendActionInterface::class);
-        $action2 = $this->createMock(ProductFrontendActionInterface::class);
-
+        $action = $this->createMock(ProductFrontendActionInterface::class);
         $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
         $collection = $this->createMock(Collection::class);
         $this->sessionMock->method('getCustomerId')->willReturn(1);
@@ -145,7 +145,7 @@ class SynchronizerTest extends TestCase
             ->willReturnCallback(function ($arg1, $arg2) use ($typeId) {
                 if ($arg1 == 'type_id' && $arg2 == $typeId) {
                     return null;
-                } elseif ($arg1 == 'product_id' && $arg2 == [1, 2]) {
+                } elseif ($arg1 == 'product_id' && $arg2 == [3, 2]) {
                     return null;
                 }
             });
@@ -156,22 +156,29 @@ class SynchronizerTest extends TestCase
         $this->entityManagerMock->expects($this->once())
             ->method('delete')
             ->with($frontendAction);
+        $persistedActions = [];
         $this->productFrontendActionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->willReturnCallback(function ($args) use ($action1, $action2) {
-                if ($args['data']['added_at'] === 12) {
-                    return $action1;
-                } elseif ($args['data']['added_at'] === 13) {
-                    return $action2;
-                }
+            ->willReturnCallback(function ($args) use (&$persistedActions, $action) {
+                $persistedActions[] = [
+                    'added_at' => $args['data']['added_at'],
+                    'product_id' => $args['data']['product_id'],
+                ];
+
+                return $action;
             });
         $this->entityManagerMock->expects($this->exactly(2))
             ->method('save')
-            ->willReturnCallback(function ($arg) use ($action1, $action2) {
-                if ($arg == $action1 || $arg == $action2) {
-                    return null;
-                }
-            });
-        $this->model->syncActions($productsData, 'recently_compared_product');
+            ->with($action);
+        $this->model->syncActions($productsData, $typeId);
+
+        $this->assertSame(
+            [
+                ['added_at' => 14, 'product_id' => 3],
+                ['added_at' => 13, 'product_id' => '2'],
+            ],
+            $persistedActions,
+            'Only the newest actions must be persisted, in descending order.'
+        );
     }
 }
