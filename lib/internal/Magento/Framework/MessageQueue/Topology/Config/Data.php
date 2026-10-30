@@ -13,7 +13,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 class Data extends \Magento\Framework\Config\Data
 {
     /**
-     * {@inheritdoc}
+     * @param ReaderInterface $reader
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param string $cacheId
+     * @param SerializerInterface|null $serializer
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         ReaderInterface $reader,
@@ -22,5 +26,31 @@ class Data extends \Magento\Framework\Config\Data
         ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
+    }
+
+    /**
+     * Get queues declared explicitly in topology config.
+     *
+     * @return array
+     */
+    public function getQueues(): array
+    {
+        return array_filter(
+            $this->get(),
+            static fn (array $item): bool => ($item['type'] ?? null) === 'queue'
+        );
+    }
+
+    /**
+     * Get exchanges declared in topology config.
+     *
+     * @return array
+     */
+    public function getExchanges(): array
+    {
+        return array_filter(
+            $this->get(),
+            static fn (array $item): bool => ($item['type'] ?? null) !== 'queue'
+        );
     }
 }
