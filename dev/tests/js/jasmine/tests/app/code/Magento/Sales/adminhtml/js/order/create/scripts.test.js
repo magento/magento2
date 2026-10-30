@@ -248,6 +248,112 @@ define([
             });
         });
 
+        describe('loadShippingRates()', function () {
+            var addressForm;
+
+            /**
+             * Add a saved address selector and the address fields container, as the address form renders them.
+             *
+             * @param {String} type - billing or shipping
+             * @param {String} selected - the selected saved address id ('' is "Add New Address")
+             */
+            function addAddressForm(type, selected) {
+                addressForm = $(
+                    '<div>' +
+                        '<select id="order-' + type + '_address_customer_address_id"' +
+                            ' name="order[' + type + '_address][customer_address_id]">' +
+                            '<option value="">Add New Address</option>' +
+                            '<option value="2">1 Oak St, Portland</option>' +
+                        '</select>' +
+                        '<div id="order-' + type + '_address_fields">' +
+                            '<input name="order[' + type + '_address][region_id]" value="23"/>' +
+                        '</div>' +
+                    '</div>'
+                ).appendTo(document.body);
+                addressForm.find('select').val(selected);
+            }
+
+            afterEach(function () {
+                if (addressForm) {
+                    addressForm.remove();
+                    addressForm = undefined;
+                }
+            });
+
+            it('sends the saved address selection with the edited shipping address (#41624)', function () {
+                init();
+                addAddressForm('shipping', '');
+                order.shippingAsBilling = false;
+                order.shippingAddressContainer = 'order-shipping_address_fields';
+                spyOn(order, 'loadArea');
+
+                order.loadShippingRates();
+
+                expect(order.loadArea).toHaveBeenCalledWith(['shipping_method', 'totals'], true, {
+                    'order[shipping_address][region_id]': '23',
+                    'order[shipping_address][customer_address_id]': '',
+                    'collect_shipping_rates': 1
+                });
+            });
+
+            it('sends the billing address selection when shipping is the same as billing', function () {
+                init();
+                addAddressForm('billing', '2');
+                order.shippingAsBilling = true;
+                order.billingAddressContainer = 'order-billing_address_fields';
+                spyOn(order, 'loadArea');
+
+                order.loadShippingRates();
+
+                expect(order.loadArea).toHaveBeenCalledWith(['shipping_method', 'totals'], true, {
+                    'order[billing_address][region_id]': '23',
+                    'order[billing_address][customer_address_id]': '2',
+                    'collect_shipping_rates': 1
+                });
+            });
+
+            it('reads the billing address selection, not the shipping one, when shipping is the same as billing',
+                function () {
+                    var shippingForm;
+
+                    init();
+                    addAddressForm('shipping', '');
+                    shippingForm = addressForm;
+                    addAddressForm('billing', '2');
+                    order.shippingAsBilling = true;
+                    order.billingAddressContainer = 'order-billing_address_fields';
+                    spyOn(order, 'loadArea');
+
+                    order.loadShippingRates();
+                    shippingForm.remove();
+
+                    expect(order.loadArea.calls.mostRecent().args[2]).toEqual({
+                        'order[billing_address][region_id]': '23',
+                        'order[billing_address][customer_address_id]': '2',
+                        'collect_shipping_rates': 1
+                    });
+                });
+
+            it('sends no saved address selection when the customer has no saved addresses', function () {
+                init();
+                addressForm = $(
+                    '<div id="order-shipping_address_fields">' +
+                        '<input name="order[shipping_address][region_id]" value="23"/>' +
+                    '</div>'
+                ).appendTo(document.body);
+                order.shippingAsBilling = false;
+                order.shippingAddressContainer = 'order-shipping_address_fields';
+                spyOn(order, 'loadArea');
+
+                order.loadShippingRates();
+
+                expect(order.loadArea).toHaveBeenCalledWith(['shipping_method', 'totals'], true, {
+                    'order[shipping_address][region_id]': '23',
+                    'collect_shipping_rates': 1
+                });
+            });
+        });
+
         it('test that setStoreId calls loadArea with a callback', function () {
             init();
             spyOn(order, 'loadArea').and.callFake(function () {
