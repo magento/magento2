@@ -13,6 +13,9 @@ use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Cache identity provider for attributes form query
+ *
+ * @deprecated GraphQL resolver cache identity belongs to Magento_EavGraphQl; the cache tag constant stays here
+ * @see \Magento\EavGraphQl\Model\Cache\AttributesFormIdentity
  */
 class AttributesFormIdentity implements IdentityInterface
 {

@@ -12,7 +12,7 @@ type Query {
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput!
     @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm")
     @doc(description: "Retrieve EAV attributes associated to a frontend form. Use countries query provided by DirectoryGraphQl module to retrieve region_id and country_id attribute options.")
-    @cache(cacheIdentity: "Magento\\Eav\\Model\\Cache\\AttributesFormIdentity")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Cache\\AttributesFormIdentity")
     attributesList(
         entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")
         filters: AttributeFilterInput @doc(description: "Identifies which filter inputs to search for and return.")
