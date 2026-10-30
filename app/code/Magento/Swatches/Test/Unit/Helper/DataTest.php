@@ -665,6 +665,71 @@ class DataTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetSwatchAttributesAsArrayMemoizesAttributeOptionsPerStore(): void
+    {
+        $storeOneOptions = [
+            ['value' => 45, 'label' => 'green'],
+            ['value' => 46, 'label' => 'yellow']
+        ];
+        $storeTwoOptions = [
+            ['value' => 45, 'label' => 'grun'],
+            ['value' => 46, 'label' => 'gelb']
+        ];
+        $attributeData = ['attribute_id' => 52];
+        $expectedStoreOne = [
+            52 => [
+                'attribute_id' => 52,
+                'options' => [
+                    45 => 'green',
+                    46 => 'yellow'
+                ]
+            ]
+        ];
+        $expectedStoreTwo = [
+            52 => [
+                'attribute_id' => 52,
+                'options' => [
+                    45 => 'grun',
+                    46 => 'gelb'
+                ]
+            ]
+        ];
+
+        $this->swatchAttributesProvider
+            ->method('provide')
+            ->with($this->productMock)
+            ->willReturn([$this->attributeMock]);
+
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getId')->willReturnOnConsecutiveCalls(1, 1, 2);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+
+        $this->attributeMock->method('getData')->with('')->willReturn($attributeData);
+
+        $sourceMock = $this->createMock(AbstractSource::class);
+        $sourceMock->expects($this->exactly(2))
+            ->method('getAllOptions')
+            ->with(false)
+            ->willReturnOnConsecutiveCalls($storeOneOptions, $storeTwoOptions);
+        $this->attributeMock->method('getSource')->willReturn($sourceMock);
+
+        $this->assertEquals(
+            $expectedStoreOne,
+            $this->swatchHelperObject->getSwatchAttributesAsArray($this->productMock)
+        );
+        $this->assertEquals(
+            $expectedStoreOne,
+            $this->swatchHelperObject->getSwatchAttributesAsArray($this->productMock)
+        );
+        $this->assertEquals(
+            $expectedStoreTwo,
+            $this->swatchHelperObject->getSwatchAttributesAsArray($this->productMock)
+        );
+    }
+
+    /**
      * @return array
      */
     public static function dataForGettingSwatchAsArray(): array
