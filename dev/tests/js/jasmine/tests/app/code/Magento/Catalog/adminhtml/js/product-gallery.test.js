@@ -129,5 +129,66 @@ define([
                 expect($(galleryEl).find('[data-role=image]:nth-child(4) .position').val()).toBe('6');
             });
         });
+        describe('_removeItem()', function () {
+            function addRoleInputs(values) {
+                $.each(values, function (code, value) {
+                    $('<input type="hidden" class="image-' + code + '"/>').val(value).appendTo(galleryEl);
+                });
+            }
+
+            function removeImage(index) {
+                var imageData = $(galleryEl).find('[data-role=image]').eq(index).data('imageData');
+
+                $(galleryEl).trigger('removeItem', imageData);
+            }
+
+            it('check that only the roles of the removed image are reset', function () {
+                addRoleInputs({
+                    'image': '/e/a/earth.jpg',
+                    'small_image': '/m/a/mars.jpg',
+                    'thumbnail': '/e/a/earth.jpg'
+                });
+                init({
+                    types: {
+                        'image': {code: 'image', label: 'Base', name: 'product[image]', value: '/e/a/earth.jpg'},
+                        'small_image': {
+                            code: 'small_image',
+                            label: 'Small',
+                            name: 'product[small_image]',
+                            value: '/m/a/mars.jpg'
+                        },
+                        'thumbnail': {
+                            code: 'thumbnail',
+                            label: 'Thumbnail',
+                            name: 'product[thumbnail]',
+                            value: '/e/a/earth.jpg'
+                        }
+                    }
+                });
+
+                removeImage(0);
+
+                expect($(galleryEl).find('.image-image').val()).toBe('no_selection');
+                expect($(galleryEl).find('.image-thumbnail').val()).toBe('no_selection');
+                expect($(galleryEl).find('.image-small_image').val()).toBe('/m/a/mars.jpg');
+                expect($(galleryEl).data('mageProductGallery').options.types.image.value).toBe('no_selection');
+                expect($(galleryEl).data('mageProductGallery').options.types.small_image.value)
+                    .toBe('/m/a/mars.jpg');
+            });
+            it('check that roles of other images are kept when an image without roles is removed', function () {
+                addRoleInputs({
+                    'image': '/e/a/earth.jpg',
+                    'small_image': '/e/a/earth.jpg',
+                    'thumbnail': '/m/a/mars.jpg'
+                });
+                init();
+
+                removeImage(2);
+
+                expect($(galleryEl).find('.image-image').val()).toBe('/e/a/earth.jpg');
+                expect($(galleryEl).find('.image-small_image').val()).toBe('/e/a/earth.jpg');
+                expect($(galleryEl).find('.image-thumbnail').val()).toBe('/m/a/mars.jpg');
+            });
+        });
     });
 });
