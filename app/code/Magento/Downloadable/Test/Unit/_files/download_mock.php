@@ -26,11 +26,9 @@ function mime_content_type()
 }
 
 /**
- * Override standard function
- *
- * @return array
+ * @return int
  */
-function get_headers()
+function connection_aborted()
 {
-    return DownloadTest::$headers;
+    return DownloadTest::$connectionAborted;
 }
