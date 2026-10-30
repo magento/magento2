@@ -27,6 +27,7 @@
         <click selector="{{PayPalPaymentSection.email}}" stepKey="refocusEmailField"/>
         <clearField selector="{{PayPalPaymentSection.email}}" stepKey="clearEmailFieldAgain"/>
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="refillEmail"/>
+        <waitForPageLoad time="30" stepKey="waitForPayPalEmailStepToSettleAfterRefill"/>
         <conditionalClick selector="{{PayPalPaymentSection.nextButton}}" dependentSelector="{{PayPalPaymentSection.nextButton}}" visible="true" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForNextPageLoadAgain" time="30"/>
         <conditionalClick selector="{{PayPalPaymentSection.nextButton}}" dependentSelector="{{PayPalPaymentSection.nextButton}}" visible="true" stepKey="clickNextAgainIfStillOnEmailStep"/>
