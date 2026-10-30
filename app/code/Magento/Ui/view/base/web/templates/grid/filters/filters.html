@@ -19,8 +19,10 @@
         <legend class="admin__filters-legend">
             <span translate="'Advanced filter'"></span>
         </legend>
-        <fieldset class="admin__form-field" outereach="getRanges()" visible="$parent.isFilterVisible($data)" render=""></fieldset>
-        <div class="admin__form-field" outereach="getPlain()" visible="$parent.isFilterVisible($data)" render=""></div>
+        <each args="elems">
+            <fieldset class="admin__form-field" if="$data.isRange" visible="$parent.isFilterVisible($data)" render=""></fieldset>
+            <div class="admin__form-field" ifnot="$data.isRange" visible="$parent.isFilterVisible($data)" render=""></div>
+        </each>
     </fieldset>
 
     <div class="admin__data-grid-filters-footer">
