@@ -19,7 +19,8 @@ define([
     'Magento_Ui/js/model/messageList',
     'mage/translate',
     'Magento_Checkout/js/model/billing-address-postcode-validator',
-    'Magento_Checkout/js/model/address-converter'
+    'Magento_Checkout/js/model/address-converter',
+    'Magento_Checkout/js/model/rejected-billing-addresses'
 ],
 function (
     ko,
@@ -37,7 +38,8 @@ function (
     globalMessageList,
     $t,
     billingAddressPostcodeValidator,
-    addressConverter
+    addressConverter,
+    rejectedBillingAddresses
 ) {
     'use strict';
 
@@ -141,7 +143,7 @@ function (
          * Update address action
          */
         updateAddress: function () {
-            var addressData, newBillingAddress, needsToUpdateAddress;
+            var addressData, newBillingAddress, needsToUpdateAddress, request;
 
             needsToUpdateAddress = true;
             addressUpdated = true;
@@ -173,7 +175,52 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            this.updateAddresses(needsToUpdateAddress);
+            request = this.updateAddresses(needsToUpdateAddress);
+
+            if (request && quote.billingAddress()) {
+                request.fail(this.onBillingAddressRejected.bind(this, quote.billingAddress()));
+            }
+        },
+
+        /**
+         * Reopen the billing address form when the server rejects the address
+         *
+         * A rejected address would otherwise stay selected and be sent again with the shipping information, which then
+         * fails with the billing error while the billing form is out of reach on the shipping step. A rejected saved
+         * address is also no longer picked as the default billing address in this checkout.
+         * Only a rejection (400) is handled: a request that failed for another reason (no connection, an expired
+         * session or cart, a server error) keeps the address.
+         *
+         * @param {Object} address - the rejected address
+         * @param {Object} response
+         */
+        onBillingAddressRejected: function (address, response) {
+            if (!response || response.status !== 400) {
+                return;
+            }
+            rejectedBillingAddresses.add(address);
+
+            if (address.customerAddressId) {
+                globalMessageList.addErrorMessage({
+                    message: $t(
+                        'Correct this address in your address book, or choose or enter another billing address.'
+                    )
+                });
+            }
+
+            if (quote.billingAddress() !== address) {
+                return;
+            }
+
+            if (lastSelectedBillingAddress === address) {
+                lastSelectedBillingAddress = null;
+            }
+            quote.billingAddress(null);
+            // Keep the address accepted before an edit selected, so Cancel and a page reload return to it.
+            checkoutData.setSelectedBillingAddress(
+                lastSelectedBillingAddress ? lastSelectedBillingAddress.getKey() : null
+            );
+            this.isAddressDetailsVisible(false);
         },
 
         /**
@@ -247,15 +294,20 @@ function (
          * Trigger action to update shipping and billing addresses
          *
          * @param {Boolean} force
+         * @return {Object|undefined} the billing address request, when one is sent
          */
         updateAddresses: function (force) {
+            var request;
+
             force = !(typeof force === 'undefined' || force !== true);
 
             if (force
                 || window.checkoutConfig.reloadOnBillingAddress
                 || !window.checkoutConfig.displayBillingOnPaymentMethod) {
-                setBillingAddressAction(globalMessageList);
+                request = setBillingAddressAction(globalMessageList);
             }
+
+            return request;
         },
 
         /**

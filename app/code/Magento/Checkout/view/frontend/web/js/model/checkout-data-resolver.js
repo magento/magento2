@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/model/address-converter',
     'Magento_Checkout/js/action/select-billing-address',
     'Magento_Checkout/js/action/create-billing-address',
-    'underscore'
+    'underscore',
+    'Magento_Checkout/js/model/rejected-billing-addresses'
 ], function (
     addressList,
     quote,
@@ -31,7 +32,8 @@ define([
     addressConverter,
     selectBillingAddress,
     createBillingAddress,
-    _
+    _,
+    rejectedBillingAddresses
 ) {
     'use strict';
 
@@ -227,7 +229,7 @@ define([
 
             if (quote.isVirtual() || !quote.billingAddress()) {
                 isBillingAddressInitialized = addressList.some(function (addrs) {
-                    if (addrs.isDefaultBilling()) {
+                    if (addrs.isDefaultBilling() && !rejectedBillingAddresses.has(addrs)) {
                         selectBillingAddress(addrs);
 
                         return true;
