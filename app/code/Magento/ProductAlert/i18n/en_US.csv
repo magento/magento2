@@ -36,3 +36,17 @@ Frequency,Frequency
 "Error Email Template","Error Email Template"
 "Notify me when the price drops","Notify me when the price drops"
 "Notify me when this product is in stock","Notify me when this product is in stock"
+"My Product Alerts","My Product Alerts"
+"You have no price alert subscriptions.","You have no price alert subscriptions."
+"You have no stock alert subscriptions.","You have no stock alert subscriptions."
+"Price Alerts","Price Alerts"
+"Stock Alerts","Stock Alerts"
+"Subscribed Price","Subscribed Price"
+Unsubscribe,Unsubscribe
+"Product #%1","Product #%1"
+"Product alerts are currently unavailable.","Product alerts are currently unavailable."
+Back,Back
+"Product Name","Product Name"
+Created,Created
+Action,Action
+"The alert subscription couldn't update at this time. Please try again later.","The alert subscription couldn't update at this time. Please try again later."

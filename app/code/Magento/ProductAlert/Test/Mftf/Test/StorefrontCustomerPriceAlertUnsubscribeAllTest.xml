@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerPriceAlertUnsubscribeAllTest">
+        <annotations>
+            <features value="ProductAlert"/>
+            <stories value="Customer product alerts account page"/>
+            <title value="Customer can unsubscribe from all price alerts on My Product Alerts"/>
+            <description value="Subscribe to price alerts on two products, use Unsubscribe from all price alerts, verify list is empty"/>
+            <severity value="MAJOR"/>
+            <group value="product_alert"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set catalog/productalert/allow_price 1" stepKey="enablePriceAlert"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 0" stepKey="disableStockAlert"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set catalog/productalert/allow_price 0" stepKey="restorePriceAlert"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 0" stepKey="restoreStockAlert"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct1">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSubscribeProductPriceAlertActionGroup" stepKey="subscribePrice1"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2">
+            <argument name="productUrl" value="$$createProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSubscribeProductPriceAlertActionGroup" stepKey="subscribePrice2"/>
+        <actionGroup ref="StorefrontOpenCustomerProductAlertsPageActionGroup" stepKey="openProductAlertsPage"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.pageTitle}}" userInput="My Product Alerts" stepKey="seeTitle"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.priceAlertsTable}}" stepKey="seePriceTable"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.priceAlertsTable}}" userInput="$$createProduct1.name$$" stepKey="seeProduct1InList"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.priceAlertsTable}}" userInput="$$createProduct2.name$$" stepKey="seeProduct2InList"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.priceUnsubscribeAllLink}}" stepKey="seeUnsubscribeAllLink"/>
+        <actionGroup ref="StorefrontUnsubscribeAllPriceAlertsActionGroup" stepKey="unsubscribeAllPrice"/>
+        <see userInput="You will no longer receive price alerts for this product." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="StorefrontOpenCustomerProductAlertsPageActionGroup" stepKey="reopenProductAlertsPage"/>
+        <dontSeeElement selector="{{StorefrontCustomerProductAlertsSection.priceAlertsTable}}" stepKey="tableGoneAfterUnsubscribeAll"/>
+        <dontSeeElement selector="{{StorefrontCustomerProductAlertsSection.priceUnsubscribeAllLink}}" stepKey="unsubscribeAllLinkGone"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.emptyMessage}}" userInput="You have no price alert subscriptions." stepKey="seeEmptyPriceMessage"/>
+    </test>
+</tests>
