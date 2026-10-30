@@ -27,6 +27,7 @@ use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order as OrderResource;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as OrderInvoiceCollection;
@@ -1188,18 +1189,60 @@ class OrderTest extends TestCase
         }
     }
 
-    public function testLoadByIncrementIdAndStoreId()
+    /**
+     * @param mixed $incrementId
+     * @param string|null $expectedIncrementId
+     */
+    #[DataProvider('incrementIdProvider')]
+    public function testLoadByIncrementId($incrementId, ?string $expectedIncrementId): void
     {
-        $incrementId = '000000001';
+        $resource = $this->createMock(OrderResource::class);
+        $order = (new ObjectManager($this))->getObject(Order::class, ['resource' => $resource]);
+        $resource->expects($this->once())
+            ->method('load')
+            ->with($order, $this->identicalTo($expectedIncrementId), 'increment_id')
+            ->willReturnSelf();
+
+        $this->assertSame($order, $order->loadByIncrementId($incrementId));
+    }
+
+    /**
+     * @param mixed $incrementId
+     * @param string|null $expectedIncrementId
+     */
+    #[DataProvider('incrementIdProvider')]
+    public function testLoadByIncrementIdAndStoreId($incrementId, ?string $expectedIncrementId): void
+    {
         $storeId = '2';
+        $filters = [];
         $this->salesOrderCollectionFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->salesOrderCollectionMock);
-        $this->salesOrderCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $this->salesOrderCollectionMock->expects($this->exactly(2))
+            ->method('addFieldToFilter')
+            ->willReturnCallback(function ($field, $condition) use (&$filters) {
+                $filters[$field] = $condition;
+                return $this->salesOrderCollectionMock;
+            });
         $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
+
         $this->assertSame($this->order, $this->order->loadByIncrementIdAndStoreId($incrementId, $storeId));
+        $this->assertSame(['increment_id' => $expectedIncrementId, 'store_id' => $storeId], $filters);
+    }
+
+    /**
+     * @return array
+     */
+    public static function incrementIdProvider(): array
+    {
+        return [
+            'integer' => [100000001, '100000001'],
+            'zero-padded string' => ['000000001', '000000001'],
+            'alphanumeric string' => ['ORD-0001', 'ORD-0001'],
+            'null' => [null, null],
+        ];
     }
 
     public function testSetPaymentWithId()
