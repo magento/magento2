@@ -221,7 +221,7 @@ class IndexTest extends TestCase
     }
 
     /**
-     * Missing or non-string secret must reach authentication as an empty string and end in a redirect
+     * Missing, empty or non-string secret must redirect without authenticating or touching the quote
      */
     #[DataProvider('invalidSecretDataProvider')]
     public function testExecuteWithInvalidSecretParam(mixed $secretParam): void
@@ -230,18 +230,15 @@ class IndexTest extends TestCase
             ->method('getParam')
             ->with('secret')
             ->willReturn($secretParam);
-        $this->checkoutSessionMock->expects($this->once())->method('getQuoteId')->willReturn(null);
-        $this->authenticateCustomerBySecretMock->expects($this->once())
-            ->method('execute')
-            ->with('')
-            ->willThrowException(new LocalizedException(__('Login was not successful.')));
+        $this->checkoutSessionMock->expects($this->never())->method('getQuoteId');
+        $this->checkoutSessionMock->expects($this->never())->method('clearQuote');
+        $this->authenticateCustomerBySecretMock->expects($this->never())->method('execute');
         $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with('Login was not successful.');
         $this->loggerMock->expects($this->never())->method('error');
-        $this->customerSessionMock->expects($this->never())->method('getCustomer');
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($this->redirectMock);
-        $this->redirectMock->expects($this->once())->method('setPath')->with('/');
+        $this->redirectMock->expects($this->once())->method('setPath')->with('/')->willReturnSelf();
         $this->assertSame($this->redirectMock, $this->controller->execute());
     }
 
@@ -249,6 +246,7 @@ class IndexTest extends TestCase
     {
         return [
             'missing' => [null],
+            'empty' => [''],
             'array' => [['x']],
         ];
     }
