@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
@@ -115,6 +116,11 @@ class CategoryTest extends TestCase
     private $productIndexer;
 
     /**
+     * @var IndexerInterface|MockObject
+     */
+    private $productCategoryIndexer;
+
+    /**
      * @var CategoryUrlPathGenerator|MockObject
      */
     private $categoryUrlPathGenerator;
@@ -180,6 +186,7 @@ class CategoryTest extends TestCase
         $this->flatState = $this->createMock(State::class);
         $this->flatIndexer = $this->createMock(IndexerInterface::class);
         $this->productIndexer = $this->createMock(IndexerInterface::class);
+        $this->productCategoryIndexer = $this->createMock(IndexerInterface::class);
         $this->categoryUrlPathGenerator = $this->createMock(
             CategoryUrlPathGenerator::class
         );
@@ -397,18 +404,21 @@ class CategoryTest extends TestCase
             ->willReturn($flatScheduled);
         $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexList')->with(['123']);
 
-        $this->productIndexer->expects($this->exactly(1))
+        $this->productIndexer->expects($this->never())->method('reindexList');
+
+        $this->productCategoryIndexer->expects($this->exactly(1))
             ->method('isScheduled')
             ->willReturn($productScheduled);
-        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
+        $this->productCategoryIndexer->expects($this->exactly($expectedProductReindexCall))
             ->method('reindexList')
-            ->with($pathIds);
+            ->with($affectedProductIds);
 
         $this->indexerRegistry
             ->method('get')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 [State::INDEXER_ID] => $this->flatIndexer,
-                [Product::INDEXER_ID] => $this->productIndexer
+                [Product::INDEXER_ID] => $this->productIndexer,
+                [ProductCategoryIndexer::INDEXER_ID] => $this->productCategoryIndexer
             });
         $this->category->reindex();
     }
@@ -419,15 +429,16 @@ class CategoryTest extends TestCase
     public static function reindexFlatDisabledTestDataProvider(): array
     {
         return [
-            [false, null, null, null, null, null, 0],
-            [true, null, null, null, null, null,  0],
-            [false, [], null, null, null, null, 0],
-            [false, ["1", "2"], null, null, null, null, 1],
-            [false, null, 1, null, null, null, 1],
-            [false, ["1", "2"], 0, 1, null, null,  1],
-            [false, null, 1, 1, null, null, 0],
-            [false, ["1", "2"], null, null, 0, 1,  1],
-            [false, ["1", "2"], null, null, 1, 0,  1]
+            'nothing changed' => [false, null, null, null, null, null, 0, 0],
+            'nothing changed, scheduled' => [true, null, null, null, null, null, 0, 0],
+            'empty affected products' => [false, [], null, null, null, null, 0, 0],
+            'only products changed' => [false, ["1", "2"], null, null, null, null, 0, 1],
+            'only products changed, scheduled' => [true, ["1", "2"], null, null, null, null, 0, 0],
+            'anchor removed' => [false, null, 1, null, null, null, 1, 0],
+            'anchor changed with products' => [false, ["1", "2"], 0, 1, null, null, 1, 0],
+            'anchor untouched' => [false, null, 1, 1, null, null, 0, 0],
+            'activated with products' => [false, ["1", "2"], null, null, 0, 1, 1, 0],
+            'deactivated with products' => [false, ["1", "2"], null, null, 1, 0, 1, 0]
         ];
     }
 
@@ -436,6 +447,9 @@ class CategoryTest extends TestCase
      * @param array $affectedIds
      * @param int|string $isAnchorOrig
      * @param int|string $isAnchor
+     * @param int|string $isActiveOrig
+     * @param int|string $isActive
+     * @param int $expectedPathReindexCall
      * @param int $expectedProductReindexCall
      *
      * @return void
@@ -448,6 +462,7 @@ class CategoryTest extends TestCase
         $isAnchor,
         $isActiveOrig,
         $isActive,
+        $expectedPathReindexCall,
         $expectedProductReindexCall
     ): void {
         $this->category->setAffectedProductIds($affectedIds);
@@ -467,14 +482,23 @@ class CategoryTest extends TestCase
         $this->productIndexer
             ->method('isScheduled')
             ->willReturn($productScheduled);
-        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
+        $this->productIndexer->expects($this->exactly($expectedPathReindexCall))
             ->method('reindexList')
             ->with($pathIds);
 
+        $this->productCategoryIndexer
+            ->method('isScheduled')
+            ->willReturn($productScheduled);
+        $this->productCategoryIndexer->expects($this->exactly($expectedProductReindexCall))
+            ->method('reindexList')
+            ->with($affectedIds);
+
         $this->indexerRegistry
             ->method('get')
-            ->with(Product::INDEXER_ID)
-            ->willReturn($this->productIndexer);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Product::INDEXER_ID] => $this->productIndexer,
+                [ProductCategoryIndexer::INDEXER_ID] => $this->productCategoryIndexer
+            });
 
         $this->category->reindex();
     }
