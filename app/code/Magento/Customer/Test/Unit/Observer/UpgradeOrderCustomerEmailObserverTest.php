@@ -9,25 +9,19 @@ namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Observer\UpgradeOrderCustomerEmailObserver;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * For testing upgrade order customer email
  */
 class UpgradeOrderCustomerEmailObserverTest extends TestCase
 {
-    use MockCreationTrait;
-
+    private const CUSTOMER_ID = 42;
     private const NEW_CUSTOMER_EMAIL = "test@test.com";
     private const ORIGINAL_CUSTOMER_EMAIL = "origtest@test.com";
 
@@ -37,189 +31,100 @@ class UpgradeOrderCustomerEmailObserverTest extends TestCase
     private $orderCustomerEmailObserver;
 
     /**
-     * @var Observer|MockObject
+     * @var AdapterInterface|MockObject
      */
-    private $observerMock;
-
-    /**
-     * @var OrderRepositoryInterface|MockObject
-     */
-    private $orderRepositoryMock;
-
-    /**
-     * @var SearchCriteriaBuilder|MockObject
-     */
-    private $searchCriteriaBuilderMock;
-
-    /**
-     * @var Event|MockObject
-     */
-    private $eventMock;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
+    private $connectionMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceConnection = $this->createStub(ResourceConnection::class);
+        $resourceConnection->method('getConnection')
+            ->willReturnMap([['sales', $this->connectionMock]]);
+        $resourceConnection->method('getTableName')
+            ->willReturnCallback(fn (string $table) => 'prefix_' . $table);
 
-        $this->eventMock = $this->createPartialMockWithReflection(
-            Event::class,
-            ['getCustomerDataObject', 'getOrigCustomerDataObject']
-        );
+        $this->orderCustomerEmailObserver = new UpgradeOrderCustomerEmailObserver($resourceConnection);
+    }
 
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+    /**
+     * Verifying that the order email is not updated when there is no original customer
+     */
+    public function testUpgradeOrderCustomerEmailWhenOriginalCustomerIsMissing(): void
+    {
+        $this->connectionMock->expects($this->never())->method('update');
 
-        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->orderCustomerEmailObserver = $this->objectManagerHelper->getObject(
-            UpgradeOrderCustomerEmailObserver::class,
-            [
-                'orderRepository' => $this->orderRepositoryMock,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-            ]
+        $this->orderCustomerEmailObserver->execute(
+            $this->createObserver($this->createCustomer(self::NEW_CUSTOMER_EMAIL), null)
         );
     }
 
     /**
      * Verifying that the order email is not updated when the customer email is not updated
-     *
      */
     public function testUpgradeOrderCustomerEmailWhenMailIsNotChanged(): void
     {
-        $customer = $this->createCustomerMock();
-        $originalCustomer = $this->createCustomerMock();
+        $this->connectionMock->expects($this->never())->method('update');
 
-        $this->setCustomerToEventMock($customer);
-        $this->setOriginalCustomerToEventMock($originalCustomer);
-
-        $this->setCustomerEmail($originalCustomer, self::ORIGINAL_CUSTOMER_EMAIL);
-        $this->setCustomerEmail($customer, self::ORIGINAL_CUSTOMER_EMAIL);
-
-        $this->whenOrderRepositoryGetListIsNotCalled();
-
-        $this->orderCustomerEmailObserver->execute($this->observerMock);
+        $this->orderCustomerEmailObserver->execute(
+            $this->createObserver(
+                $this->createCustomer(self::ORIGINAL_CUSTOMER_EMAIL),
+                $this->createCustomer(self::ORIGINAL_CUSTOMER_EMAIL)
+            )
+        );
     }
 
     /**
-     * Verifying that the order email is updated after the customer updates their email
-     *
+     * Verifying that the order and order grid emails are updated after the customer updates their email
      */
     public function testUpgradeOrderCustomerEmail(): void
     {
-        $customer = $this->createCustomerMock();
-        $originalCustomer = $this->createCustomerMock();
-        $orderCollectionMock = $this->createOrderMock();
+        $expectedTables = ['prefix_sales_order', 'prefix_sales_order_grid'];
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('update')
+            ->willReturnCallback(
+                function (string $table, array $bind, array $where) use (&$expectedTables) {
+                    $this->assertSame(array_shift($expectedTables), $table);
+                    $this->assertSame(['customer_email' => self::NEW_CUSTOMER_EMAIL], $bind);
+                    $this->assertSame(
+                        [
+                            'customer_id = ?' => self::CUSTOMER_ID,
+                            'customer_email = ?' => self::ORIGINAL_CUSTOMER_EMAIL,
+                        ],
+                        $where
+                    );
+                    return 1;
+                }
+            );
 
-        $this->setCustomerToEventMock($customer);
-        $this->setOriginalCustomerToEventMock($originalCustomer);
-
-        $this->setCustomerEmail($originalCustomer, self::ORIGINAL_CUSTOMER_EMAIL);
-        $this->setCustomerEmail($customer, self::NEW_CUSTOMER_EMAIL);
-
-        $this->whenOrderRepositoryGetListIsCalled($orderCollectionMock);
-
-        $this->whenOrderCollectionSetDataToAllIsCalled($orderCollectionMock);
-
-        $this->whenOrderCollectionSaveIsCalled($orderCollectionMock);
-
-        $this->orderCustomerEmailObserver->execute($this->observerMock);
+        $this->orderCustomerEmailObserver->execute(
+            $this->createObserver(
+                $this->createCustomer(self::NEW_CUSTOMER_EMAIL),
+                $this->createCustomer(self::ORIGINAL_CUSTOMER_EMAIL)
+            )
+        );
     }
 
-    private function createCustomerMock(): MockObject
+    private function createCustomer(string $email): CustomerInterface
     {
-        $customer = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $customer = $this->createStub(CustomerInterface::class);
+        $customer->method('getId')->willReturn((string) self::CUSTOMER_ID);
+        $customer->method('getEmail')->willReturn($email);
 
         return $customer;
     }
 
-    private function createOrderMock(): MockObject
+    private function createObserver(CustomerInterface $customer, ?CustomerInterface $originalCustomer): Observer
     {
-        $orderCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $orderCollectionMock;
-    }
-
-    private function setCustomerToEventMock(MockObject $customer): void
-    {
-        $this->eventMock->expects($this->once())
-            ->method('getCustomerDataObject')
-            ->willReturn($customer);
-    }
-
-    private function setOriginalCustomerToEventMock(MockObject $originalCustomer): void
-    {
-        $this->eventMock->expects($this->once())
-            ->method('getOrigCustomerDataObject')
-            ->willReturn($originalCustomer);
-    }
-
-    private function setCustomerEmail(MockObject $originalCustomer, string $email): void
-    {
-        $originalCustomer->expects($this->atLeastOnce())
-            ->method('getEmail')
-            ->willReturn($email);
-    }
-
-    private function whenOrderRepositoryGetListIsCalled(MockObject $orderCollectionMock): void
-    {
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('create')
-            ->willReturn($searchCriteriaMock);
-
-        $this->searchCriteriaBuilderMock->expects($this->atLeastOnce())
-            ->method('addFilter')
-            ->willReturn($this->searchCriteriaBuilderMock);
-
-        $this->orderRepositoryMock->expects($this->once())
-            ->method('getList')
-            ->with($searchCriteriaMock)
-            ->willReturn($orderCollectionMock);
-    }
-
-    private function whenOrderCollectionSetDataToAllIsCalled(MockObject $orderCollectionMock): void
-    {
-        $orderCollectionMock->expects($this->once())
-            ->method('setDataToAll')
-            ->with(OrderInterface::CUSTOMER_EMAIL, self::NEW_CUSTOMER_EMAIL);
-    }
-
-    private function whenOrderCollectionSaveIsCalled(MockObject $orderCollectionMock): void
-    {
-        $orderCollectionMock->expects($this->once())
-            ->method('save');
-    }
-
-    private function whenOrderRepositoryGetListIsNotCalled(): void
-    {
-        $this->searchCriteriaBuilderMock->expects($this->never())
-            ->method('addFilter');
-        $this->searchCriteriaBuilderMock->expects($this->never())
-            ->method('create');
-
-        $this->orderRepositoryMock->expects($this->never())
-            ->method('getList');
+        return new Observer([
+            'event' => new Event([
+                'customer_data_object' => $customer,
+                'orig_customer_data_object' => $originalCustomer,
+            ]),
+        ]);
     }
 }
