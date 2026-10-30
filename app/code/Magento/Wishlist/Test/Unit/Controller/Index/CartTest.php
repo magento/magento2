@@ -413,6 +413,26 @@ class CartTest extends TestCase
     /**
      * @return void
      */
+    public function testExecuteRedirectsToWishlistWhenRefererIsConfigurePageWithQty(): void
+    {
+        $this->prepareExecuteWithQuantityArray(false, 'configure_url' . 'qty/1/');
+
+        $this->formKeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with('index_url')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+    }
+
+    /**
+     * @return void
+     */
     public function testExecuteWithQuantityArrayAjax(): void
     {
         $refererUrl = $this->prepareExecuteWithQuantityArray(true);
@@ -432,11 +452,12 @@ class CartTest extends TestCase
 
     /**
      * @param bool $isAjax
+     * @param string $refererUrl
      *
      * @return string
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function prepareExecuteWithQuantityArray($isAjax = false): string
+    protected function prepareExecuteWithQuantityArray($isAjax = false, string $refererUrl = 'referer_url'): string
     {
         $itemId = 2;
         $wishlistId = 1;
@@ -447,7 +468,6 @@ class CartTest extends TestCase
         $configureUrl = 'configure_url';
         $options = [5 => 'option'];
         $params = ['item' => $itemId, 'qty' => $qty];
-        $refererUrl = 'referer_url';
 
         $itemMock = $this->createPartialMockWithReflection(
             Item::class,
