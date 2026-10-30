@@ -86,6 +86,9 @@ class SearchCriteriaBuilder
             ]
         )->resolve();
         foreach ($args as $argumentName => $argument) {
+            if ($argument === null) {
+                continue;
+            }
             if ($this->argumentApplierPool->hasApplier($argumentName)) {
                 $argumentApplier = $this->argumentApplierPool->getApplier($argumentName);
                 $argumentApplier->applyArgument($searchCriteria, 'products', $argumentName, $argument);
