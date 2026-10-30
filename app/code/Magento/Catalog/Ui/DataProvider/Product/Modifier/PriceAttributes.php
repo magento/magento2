@@ -75,13 +75,15 @@ class PriceAttributes implements ModifierInterface
             if (!isset($item[ProductInterface::TYPE_ID])
                 || !in_array($item[ProductInterface::TYPE_ID], $this->excludeProductTypes, true)
             ) {
+                $store = $this->storeManager->getStore($item['store_id'] ?? null);
                 foreach ($this->priceAttributeList as $priceAttribute) {
                     if (isset($item[$priceAttribute])) {
                         $item[$priceAttribute] = $this->priceCurrency->format(
                             sprintf("%F", $item[$priceAttribute]),
                             false,
                             PriceCurrencyInterface::DEFAULT_PRECISION,
-                            $this->storeManager->getStore($item['store_id'] ?? null)
+                            $store,
+                            $store->getBaseCurrency()
                         );
                     }
                 }
