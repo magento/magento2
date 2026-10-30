@@ -3,6 +3,7 @@
  * Copyright 2019 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App;
@@ -19,6 +20,8 @@ use Magento\Framework\Exception\State\InitException;
 
 /**
  * Handler of HTTP web application exception
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ExceptionHandler implements ExceptionHandlerInterface
 {
@@ -108,6 +111,27 @@ class ExceptionHandler implements ExceptionHandlerInterface
     }
 
     /**
+     * Retrieves the location of an exception as a formatted string.
+     *
+     * This method extracts the file path and line number from the given exception
+     * and formats them into a string representing the exception's location.
+     * The format of the returned string is determined by the `normalizeCodeLocation` method.
+     *
+     * Example Output:
+     * "app/code/Vendor/Module/SomeClass.php:123"
+     *
+     * @param \Throwable $exception The throwable from which to extract the file and line information.
+     * @return string A formatted string representing the exception's file path and line number.
+     */
+    private function getExceptionLocation(\Throwable $exception): string
+    {
+        return Debug::normalizeCodeLocation([
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine()
+        ]);
+    }
+
+    /**
      * Build content based on an exception
      *
      * @param \Exception $exception
@@ -115,7 +139,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
      */
     private function buildContentFromException(\Exception $exception): string
     {
-        /** @var \Exception[] $exceptions */
+        /** @var \Throwable[] $exceptions */
         $exceptions = [];
 
         do {
@@ -126,19 +150,21 @@ class ExceptionHandler implements ExceptionHandlerInterface
 
         foreach ($exceptions as $index => $exception) {
             $buffer .= sprintf(
-                "Exception #%d (%s): %s\n",
+                "Exception #%d (%s): \"%s\" thrown at [%s]\n",
                 $index,
                 get_class($exception),
-                $exception->getMessage()
+                $exception->getMessage(),
+                $this->getExceptionLocation($exception)
             );
         }
 
         foreach ($exceptions as $index => $exception) {
             $buffer .= sprintf(
-                "\nException #%d (%s): %s\n%s\n",
+                "\nException #%d (%s): \"%s\" thrown at [%s]\n%s\n",
                 $index,
                 get_class($exception),
                 $exception->getMessage(),
+                $this->getExceptionLocation($exception),
                 Debug::trace(
                     $exception->getTrace(),
                     true,
