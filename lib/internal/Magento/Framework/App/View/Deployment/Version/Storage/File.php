@@ -36,18 +36,18 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load()
     {
         if ($this->directory->isReadable($this->fileName)) {
-            return $this->directory->readFile($this->fileName);
+            return trim((string) $this->directory->readFile($this->fileName));
         }
         return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save($data)
     {
