@@ -80,7 +80,7 @@ class ImageResizeAfterProductSave implements ObserverInterface
             return;
         }
 
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
         if ($this->state->isAreaCodeEmulated()) {
@@ -94,7 +94,14 @@ class ImageResizeAfterProductSave implements ObserverInterface
         } else {
             $new = $product->getData('media_gallery');
             $original = $product->getOrigData('media_gallery');
-            $mediaGallery = !empty($new['images']) ? array_column($new['images'], 'file') : [];
+            $mediaGallery = !empty($new['images'])
+                ? array_column(
+                    array_filter($new['images'], function ($image) {
+                        return empty($image['removed']);
+                    }),
+                    'file'
+                )
+                : [];
             $mediaOriginalGallery = !empty($original['images']) ? array_column($original['images'], 'file') : [];
 
             foreach (array_diff($mediaGallery, $mediaOriginalGallery) as $image) {
