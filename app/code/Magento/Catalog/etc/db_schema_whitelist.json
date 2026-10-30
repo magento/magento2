@@ -471,7 +471,8 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID": true,
-            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID": true
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ENTITY_ID": true,
+            "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE": true
         },
         "constraint": {
             "PRIMARY": true,
