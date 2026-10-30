@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Feed factory
+ * Creates a feed of the requested format from the given feed data
  */
 class FeedFactory implements FeedFactoryInterface
 {
@@ -46,7 +46,11 @@ class FeedFactory implements FeedFactoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param array $data
+     * @param string $format
+     * @return FeedInterface
      */
     public function create(array $data, string $format = FeedFactoryInterface::FORMAT_RSS) : FeedInterface
     {
@@ -68,7 +72,10 @@ class FeedFactory implements FeedFactoryInterface
                 ['data' => $data]
             );
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                'Unable to create a feed of the {feedFormat} format',
+                ['feedFormat' => $format, 'exception' => $e]
+            );
             throw new \Magento\Framework\Exception\RuntimeException(
                 new \Magento\Framework\Phrase('There has been an error with import'),
                 $e

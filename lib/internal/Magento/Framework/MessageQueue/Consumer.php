@@ -224,6 +224,7 @@ class Consumer implements ConsumerInterface
         return function (EnvelopeInterface $message) use ($queue) {
             /** @var LockInterface $lock */
             $lock = null;
+            $topicName = null;
             try {
                 $topicName = $message->getProperties()['topic_name'];
                 $topicConfig = $this->communicationConfig->getTopic($topicName);
@@ -256,7 +257,10 @@ class Consumer implements ConsumerInterface
                 }
             } catch (NotFoundException $exception) {
                 $queue->acknowledge($message);
-                $this->logger->warning($exception->getMessage());
+                $this->logger->warning(
+                    'Message of the {topicName} topic was acknowledged without being processed',
+                    ['topicName' => $topicName, 'exception' => $exception]
+                );
             } catch (Exception $exception) {
                 $queue->reject($message, false, $exception->getMessage());
                 if ($lock) {

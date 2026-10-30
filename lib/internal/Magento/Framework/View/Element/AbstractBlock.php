@@ -793,7 +793,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $params = array_merge(['_secure' => $this->getRequest()->isSecure()], $params);
             return $this->_assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_logger->critical($e);
+            $this->_logger->critical(
+                'Unable to resolve the URL of the {fileId} view file',
+                ['fileId' => $fileId, 'exception' => $e]
+            );
             return $this->_getNotFoundUrl();
         }
     }

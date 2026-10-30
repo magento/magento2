@@ -1248,7 +1248,10 @@ class LayoutTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception);
+            ->with(
+                'Unable to render the {elementName} layout element',
+                ['elementName' => 'test_container', 'exception' => $exception]
+            );
         $this->response->expects($this->once())->method('setNoCacheHeaders');
 
         $model = clone $this->model;

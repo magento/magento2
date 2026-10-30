@@ -43,7 +43,7 @@ class ExecuteCommitCallbacks
                 try {
                     call_user_func($callback);
                 } catch (\Throwable $e) {
-                    $this->logger->critical($e);
+                    $this->logger->critical('Transaction commit callback failed', ['exception' => $e]);
                 }
             }
         }
