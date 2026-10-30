@@ -114,4 +114,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\QuoteBundleOptions\Model\Cart\BuyRequest\BundleDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

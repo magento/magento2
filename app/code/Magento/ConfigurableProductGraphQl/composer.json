@@ -13,6 +13,9 @@
         "magento/module-catalog-inventory": "*",
         "magento/framework": "*"
     },
+    "suggest": {
+        "magento/module-quote-configurable-options": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
