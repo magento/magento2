@@ -35,6 +35,6 @@ class SetLoggedAsCustomerAdminId implements SetLoggedAsCustomerAdminIdInterface
      */
     public function execute(int $adminId): void
     {
-        $this->session->setLoggedAsCustomerAdmindId($adminId);
+        $this->session->setLoggedAsCustomerAdminId($adminId);
     }
 }
