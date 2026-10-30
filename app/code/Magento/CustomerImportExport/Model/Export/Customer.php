@@ -160,8 +160,8 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     public function exportItem($item)
     {
         $row = $this->_addAttributeValuesToRow($item);
-        $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
-        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
+        $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()] ?? '';
+        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()] ?? '';
 
         if (isset($row[self::COLUMN_CREATED_AT])) {
             $row[self::COLUMN_CREATED_AT] = $this->_localeDate
