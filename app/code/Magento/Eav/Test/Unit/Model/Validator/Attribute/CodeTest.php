@@ -31,6 +31,24 @@ class CodeTest extends TestCase
     }
 
     /**
+     * A validator instance is shared, so messages of an invalid code must not affect the next code.
+     *
+     * @throws ValidateException
+     */
+    public function testIsValidAfterInvalidCode(): void
+    {
+        $validator = new Code();
+        $this->assertFalse($validator->isValid('1attribute_code'));
+        $this->assertCount(1, $validator->getMessages());
+
+        $this->assertTrue($validator->isValid('attribute_code'));
+        $this->assertSame([], $validator->getMessages());
+
+        $this->assertFalse($validator->isValid('attribute.code'));
+        $this->assertCount(1, $validator->getMessages());
+    }
+
+    /**
      * Data provider for testIsValid
      *
      * @return array
