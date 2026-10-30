@@ -91,8 +91,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
             $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
             $creditmemo = $this->creditmemoLoader->load();
-            $this->adjustCreditMemoItemQuantities($creditmemo);
             if ($creditmemo) {
+                $this->adjustCreditMemoItemQuantities($creditmemo);
                 if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('The credit memo\'s total must be positive.')
