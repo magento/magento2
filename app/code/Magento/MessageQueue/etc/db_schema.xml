@@ -20,6 +20,9 @@
         <constraint xsi:type="unique" referenceId="QUEUE_LOCK_MESSAGE_CODE">
             <column name="message_code"/>
         </constraint>
+        <index referenceId="QUEUE_LOCK_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
     </table>
     <table name="queue_poison_pill" resource="default" engine="innodb" comment="Sequence table for poison pill versions">
         <column xsi:type="varchar" name="version" length="255" nullable="false" comment="Poison Pill version."/>
