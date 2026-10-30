@@ -3,11 +3,18 @@
  * Copyright 2018 Adobe
  * All Rights Reserved.
  */
+
+/** @var \Magento\Persistent\Block\Header\Additional $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$persistentConfig = /* @noEscape */ $block->getConfig();
+$notYouLink = $escaper->escapeJs($block->getLinkAttributes());
+$scriptString = <<<script
+    window.persistent = {$persistentConfig};
+    window.notYouLink = '{$notYouLink}';
+script;
 ?>
-<script type="application/javascript">
-    window.persistent = <?=/* @noEscape */ $block->getConfig()?>;
-    window.notYouLink = '<?=/* @noEscape */ $block->getLinkAttributes()?>';
-</script>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <script type="text/x-magento-init">
     {
         "li.greet.welcome > span.not-logged-in": {

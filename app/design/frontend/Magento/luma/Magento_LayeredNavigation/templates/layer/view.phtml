@@ -9,10 +9,12 @@
  * Category layered navigation
  *
  * @var $block \Magento\LayeredNavigation\Block\Navigation
+ * @var $escaper \Magento\Framework\Escaper
+ * @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer
  */
 ?>
 
-<?php if ($block->canShowBlock()) : ?>
+<?php if ($block->canShowBlock()): ?>
     <div class="block filter" id="layered-filter-block" data-mage-init='
     {
         "collapsible":
@@ -29,23 +31,25 @@
     }'>
         <?php $filtered = count($block->getLayer()->getState()->getFilters()) ?>
         <div class="block-title filter-title" data-count="<?= /* @noEscape */ $filtered ?>">
-            <strong data-role="title"><?= $block->escapeHtml(__('Shop By')); ?></strong>
+            <strong data-role="title"><?= $escaper->escapeHtml(__('Shop By')); ?></strong>
         </div>
         <div class="block-content filter-content">
             <?= $block->getChildHtml('state') ?>
 
-            <?php if ($block->getLayer()->getState()->getFilters()) : ?>
+            <?php if ($block->getLayer()->getState()->getFilters()): ?>
                 <div class="block-actions filter-actions">
-                    <a href="<?= $block->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear">
-                        <span><?= $block->escapeHtml(__('Clear All')) ?></span>
+                    <a href="<?= $escaper->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear">
+                        <span><?= $escaper->escapeHtml(__('Clear All')) ?></span>
                     </a>
                 </div>
             <?php endif; ?>
             <?php $wrapOptions = false; ?>
-            <?php foreach ($block->getFilters() as $filter) : ?>
-                <?php if ($filter->getItemsCount()) : ?>
-                    <?php if (!$wrapOptions) : ?>
-                        <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+            <?php foreach ($block->getFilters() as $filter): ?>
+                <?php if ($filter->getItemsCount()): ?>
+                    <?php if (!$wrapOptions): ?>
+                        <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?=
+                        $escaper->escapeHtml(__('Shopping Options'))
+                        ?></strong>
                         <div class="filter-options" id="narrow-by-list" data-role="content" data-mage-init='
                         {
                             "accordion":
@@ -59,21 +63,27 @@
                         <?php $wrapOptions = true;
                         endif; ?>
                     <div data-role="collapsible" class="filter-options-item">
-                        <div data-role="title" class="filter-options-title"><?= $block->escapeHtml(__($filter->getName())) ?></div>
-                        <div data-role="content" class="filter-options-content"><?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?></div>
+                        <div data-role="title"
+                             class="filter-options-title"><?= $escaper->escapeHtml(__($filter->getName())) ?></div>
+                        <div data-role="content"
+                             class="filter-options-content"><?=
+                                /* @noEscape */ $block->getChildBlock('renderer')->render($filter)
+                                ?></div>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
-            <?php if ($wrapOptions) : ?>
+            <?php if ($wrapOptions): ?>
                 </div>
-            <?php else : ?>
-                <script>
+            <?php else: ?>
+                <?php $scriptString = <<<script
                     require([
                         'jquery'
                     ], function ($) {
                         $('#layered-filter-block').addClass('filter-no-options');
                     });
-                </script>
+                script;
+                ?>
+                <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
             <?php endif; ?>
         </div>
     </div>
