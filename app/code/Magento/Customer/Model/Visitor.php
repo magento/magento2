@@ -140,12 +140,20 @@ class Visitor extends AbstractModel
     protected function _construct()
     {
         $this->_init(ResourceModel\Visitor::class);
-        $userAgent = $this->httpHeader->getHttpUserAgent();
-        if ($this->ignoredUserAgents) {
-            if (in_array($userAgent, $this->ignoredUserAgents)) {
-                $this->skipRequestLogging = true;
-            }
+        if ($this->isIgnoredUserAgent()) {
+            $this->skipRequestLogging = true;
         }
+    }
+
+    /**
+     * Check if the current request comes from a user agent configured to be ignored
+     *
+     * @return bool
+     */
+    public function isIgnoredUserAgent(): bool
+    {
+        return !empty($this->ignoredUserAgents)
+            && in_array($this->httpHeader->getHttpUserAgent(), $this->ignoredUserAgents);
     }
 
     /**
