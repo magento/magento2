@@ -364,10 +364,6 @@ class Dom
         $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            return [];
-        }
-
         if (!self::$urnResolver) {
             self::$urnResolver = new UrnResolver();
         }
