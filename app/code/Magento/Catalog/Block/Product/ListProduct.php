@@ -20,6 +20,7 @@ use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\Element;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -86,6 +87,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     private CollectionFactory $productCollectionFactory;
 
     /**
+     * @var ResponseHttp
+     */
+    private ResponseHttp $response;
+
+    /**
      * @param Context $context
      * @param PostHelper $postDataHelper
      * @param Resolver $layerResolver
@@ -95,6 +101,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param OutputHelper|null $outputHelper
      * @param SpecialPriceBulkResolverInterface|null $specialPriceBulkResolver
      * @param CollectionFactory|null $collectionFactory
+     * @param ResponseHttp|null $response
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -105,7 +113,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         array $data = [],
         ?OutputHelper $outputHelper = null,
         ?SpecialPriceBulkResolverInterface $specialPriceBulkResolver = null,
-        ?CollectionFactory $collectionFactory = null
+        ?CollectionFactory $collectionFactory = null,
+        ?ResponseHttp $response = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
@@ -116,6 +125,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         $this->productCollectionFactory = $collectionFactory ??
             ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->response = $response ?? ObjectManager::getInstance()->get(ResponseHttp::class);
         parent::__construct(
             $context,
             $data
@@ -225,7 +235,8 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                         $product->setData('category_id', $categoryId);
                     }
                 }
-            } catch (\Throwable) {
+            } catch (\Exception) {
+                $this->response->setNoCacheHeaders();
                 $this->setData('has_error', true);
                 $collection = $this->productCollectionFactory->create();
                 $collection->addFieldToFilter('entity_id', ['in' => []]);
