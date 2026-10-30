@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
+use Magento\Backend\Model\Cache\WarmupRunner;
 use Magento\Framework\Event\ManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -19,9 +20,13 @@ abstract class AbstractCacheManageCommandTestCase extends AbstractCacheCommandTe
     /** @var  ManagerInterface|MockObject */
     protected $eventManagerMock;
 
+    /** @var WarmupRunner|MockObject */
+    protected $warmupRunnerMock;
+
     protected function setUp(): void
     {
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->warmupRunnerMock = $this->createMock(WarmupRunner::class);
         parent::setUp();
     }
 
@@ -57,6 +62,7 @@ abstract class AbstractCacheManageCommandTestCase extends AbstractCacheCommandTe
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The following requested cache types are not supported:');
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->warmupRunnerMock->expects($this->never())->method('run');
         $param = ['types' => ['A', 'D']];
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
