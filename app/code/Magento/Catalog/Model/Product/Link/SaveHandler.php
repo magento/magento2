@@ -59,13 +59,6 @@ class SaveHandler
      */
     public function execute($entityType, $entity)
     {
-        $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
-        if ($this->linkResource->hasProductLinks($link)) {
-            foreach ($this->productLinkRepository->getList($entity) as $link) {
-                $this->productLinkRepository->delete($link);
-            }
-        }
-
         // Build links per type
         /** @var ProductLinkInterface[][] $linksByType */
         $linksByType = [];
@@ -88,6 +81,22 @@ class SaveHandler
         // Flatten multi-dimensional linksByType in ProductLinks
         /** @var ProductLinkInterface[] $productLinks */
         $productLinks = array_reduce($linksByType, 'array_merge', []);
+
+        // Existing links that are kept are updated in place by the repository, so only delete the removed ones
+        $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
+        if ($this->linkResource->hasProductLinks($link)) {
+            $keptLinks = [];
+            foreach ($productLinks as $productLink) {
+                if ((string)$productLink->getSku() === (string)$entity->getSku()) {
+                    $keptLinks[$productLink->getLinkType()][$productLink->getLinkedProductSku()] = true;
+                }
+            }
+            foreach ($this->productLinkRepository->getList($entity) as $existingLink) {
+                if (!isset($keptLinks[$existingLink->getLinkType()][$existingLink->getLinkedProductSku()])) {
+                    $this->productLinkRepository->delete($existingLink);
+                }
+            }
+        }
 
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {

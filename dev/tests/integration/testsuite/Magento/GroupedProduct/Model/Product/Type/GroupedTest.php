@@ -5,6 +5,7 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
@@ -12,6 +13,9 @@ use Magento\Catalog\Test\Fixture\Virtual as VirtualProductFixture;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\GroupedProduct\Test\Fixture\Product as GroupedProductFixture;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -82,6 +86,248 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->assertProductInfo($associatedProducts[0]);
         $this->assertProductInfo($associatedProducts[1]);
+    }
+
+    #[
+        AppArea('frontend'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product', 'name' => 'Virtual Product', 'price' => 10],
+            'p2'
+        ),
+        DataFixture(
+            GroupedProductFixture::class,
+            ['sku' => 'gr1', 'product_links' => ['$p1$', ['sku' => '$p2.sku$', 'qty' => 2]]],
+            'gr1'
+        ),
+    ]
+    public function testSaveWithChangedQtyKeepsLinkRowsAndUpdatesQty(): void
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $linkIdsBefore = $this->getGroupedLinkIds('gr1');
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $links = $product->getProductLinks();
+        foreach ($links as $link) {
+            if ($link->getLinkedProductSku() === 'virtual-product') {
+                $link->getExtensionAttributes()->setQty(5);
+            }
+        }
+        $product->setProductLinks($links);
+        $productRepository->save($product);
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $qtyBySku = [];
+        foreach ($product->getTypeInstance()->getAssociatedProducts($product) as $associatedProduct) {
+            $qtyBySku[$associatedProduct->getSku()] = (float)$associatedProduct->getQty();
+        }
+
+        $this->assertEquals(['simple' => 1.0, 'virtual-product' => 5.0], $qtyBySku);
+        $this->assertCount(2, $linkIdsBefore);
+        $this->assertSame($linkIdsBefore, $this->getGroupedLinkIds('gr1'));
+    }
+
+    #[
+        AppArea('frontend'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product', 'name' => 'Virtual Product', 'price' => 10],
+            'p2'
+        ),
+        DataFixture(
+            GroupedProductFixture::class,
+            ['sku' => 'gr1', 'product_links' => [['sku' => '$p1.sku$', 'qty' => 3], ['sku' => '$p2.sku$', 'qty' => 2]]],
+            'gr1'
+        ),
+    ]
+    public function testSaveWithOneChildRemovedKeepsTheOtherChild(): void
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $linkIdsBefore = $this->getGroupedLinkIds('gr1');
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $links = array_filter(
+            $product->getProductLinks(),
+            fn ($link) => $link->getLinkedProductSku() === 'simple'
+        );
+        $product->setProductLinks(array_values($links));
+        $productRepository->save($product);
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $qtyBySku = [];
+        foreach ($product->getTypeInstance()->getAssociatedProducts($product) as $associatedProduct) {
+            $qtyBySku[$associatedProduct->getSku()] = (float)$associatedProduct->getQty();
+        }
+
+        $this->assertEquals(['simple' => 3.0], $qtyBySku);
+        $this->assertCount(2, $linkIdsBefore);
+        $this->assertSame(array_slice($linkIdsBefore, 0, 1, true), $this->getGroupedLinkIds('gr1'));
+    }
+
+    #[
+        AppArea('frontend'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product', 'name' => 'Virtual Product', 'price' => 10],
+            'p2'
+        ),
+        DataFixture(
+            GroupedProductFixture::class,
+            [
+                'sku' => 'gr1',
+                'product_links' => [['sku' => '$p1.sku$', 'qty' => 3], ['sku' => '$p2.sku$', 'qty' => 2.5]],
+            ],
+            'gr1'
+        ),
+    ]
+    public function testSaveWithoutChangesWritesNoLinkRows(): void
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $product->setName('Grouped Product Renamed');
+        $writesWithoutLinks = $this->getLinkTableWrites(function () use ($productRepository, $product) {
+            $productRepository->save($product);
+        });
+
+        $product = $productRepository->get('gr1', false, null, true);
+        $product->setProductLinks($product->getProductLinks());
+        $writesWithSameLinks = $this->getLinkTableWrites(function () use ($productRepository, $product) {
+            $productRepository->save($product);
+        });
+
+        $this->assertSame([], $writesWithoutLinks);
+        $this->assertSame([], $writesWithSameLinks);
+        $this->assertEquals(['simple' => 3.0, 'virtual-product' => 2.5], $this->getStoredQtyBySku('gr1'));
+    }
+
+    #[
+        AppArea('frontend'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Product', 'price' => 10], 'p1'),
+        DataFixture(
+            VirtualProductFixture::class,
+            ['sku' => 'virtual-product', 'name' => 'Virtual Product', 'price' => 10],
+            'p2'
+        ),
+        DataFixture(
+            GroupedProductFixture::class,
+            ['sku' => 'gr1', 'product_links' => [['sku' => '$p1.sku$', 'qty' => 3], ['sku' => '$p2.sku$', 'qty' => 2]]],
+            'gr1'
+        ),
+    ]
+    public function testSaveWithQtyOmittedDeletesStoredQty(): void
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get('gr1', false, null, true);
+        $links = $product->getProductLinks();
+        foreach ($links as $link) {
+            if ($link->getLinkedProductSku() === 'virtual-product') {
+                $link->getExtensionAttributes()->setQty(null);
+            }
+        }
+        $product->setProductLinks($links);
+        $writes = $this->getLinkTableWrites(function () use ($productRepository, $product) {
+            $productRepository->save($product);
+        });
+
+        $this->assertSame(['DELETE catalog_product_link_attribute_decimal'], $writes);
+        $this->assertEquals(['simple' => 3.0], $this->getStoredQtyBySku('gr1'));
+    }
+
+    /**
+     * Get the stored grouped qty of each linked product
+     *
+     * @param string $sku
+     * @return array
+     */
+    private function getStoredQtyBySku(string $sku): array
+    {
+        $product = $this->objectManager->create(ProductRepositoryInterface::class)->get($sku, false, null, true);
+        $linkField = $this->objectManager->get(MetadataPool::class)
+            ->getMetadata(ProductInterface::class)
+            ->getLinkField();
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $select = $connection->select()
+            ->from(['l' => $resource->getTableName('catalog_product_link')], [])
+            ->join(
+                ['p' => $resource->getTableName('catalog_product_entity')],
+                'p.entity_id = l.linked_product_id',
+                ['sku']
+            )
+            ->join(
+                ['a' => $resource->getTableName('catalog_product_link_attribute')],
+                "a.link_type_id = l.link_type_id AND a.product_link_attribute_code = 'qty'",
+                []
+            )
+            ->join(
+                ['v' => $resource->getTableName('catalog_product_link_attribute_decimal')],
+                'v.link_id = l.link_id AND v.product_link_attribute_id = a.product_link_attribute_id',
+                ['value']
+            )
+            ->where('l.product_id = ?', $product->getData($linkField))
+            ->where('l.link_type_id = ?', Link::LINK_TYPE_GROUPED)
+            ->order('p.sku');
+
+        return array_map('floatval', $connection->fetchPairs($select));
+    }
+
+    /**
+     * Run an action and return the writes it made to the product link tables, as "<VERB> <table>"
+     *
+     * @param callable $action
+     * @return string[]
+     */
+    private function getLinkTableWrites(callable $action): array
+    {
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $profiler = $resource->getConnection()->getProfiler();
+        $profiler->clear();
+        $profiler->setEnabled(true);
+        try {
+            $action();
+        } finally {
+            $profiler->setEnabled(false);
+        }
+
+        $prefix = substr($resource->getTableName('catalog_product_link'), 0, -strlen('catalog_product_link'));
+        $pattern = '/^\s*(INSERT|UPDATE|DELETE)\s+(?:IGNORE\s+)?(?:INTO\s+|FROM\s+)?`?'
+            . preg_quote($prefix, '/') . '(catalog_product_link\w*)`?/i';
+        $writes = [];
+        foreach ($profiler->getQueryProfiles() ?: [] as $queryProfile) {
+            if (preg_match($pattern, $queryProfile->getQuery(), $match)) {
+                $writes[] = strtoupper($match[1]) . ' ' . $match[2];
+            }
+        }
+        $profiler->clear();
+
+        return $writes;
+    }
+
+    /**
+     * Get the stored grouped link ids of a product, keyed by linked product id
+     *
+     * @param string $sku
+     * @return array
+     */
+    private function getGroupedLinkIds(string $sku): array
+    {
+        $product = $this->objectManager->create(ProductRepositoryInterface::class)->get($sku, false, null, true);
+        $linkField = $this->objectManager->get(MetadataPool::class)
+            ->getMetadata(ProductInterface::class)
+            ->getLinkField();
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $select = $connection->select()
+            ->from($resource->getTableName('catalog_product_link'), ['linked_product_id', 'link_id'])
+            ->where('product_id = ?', $product->getData($linkField))
+            ->where('link_type_id = ?', Link::LINK_TYPE_GROUPED)
+            ->order('linked_product_id');
+
+        return array_map('intval', $connection->fetchPairs($select));
     }
 
     /**
