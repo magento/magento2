@@ -368,6 +368,33 @@ class ProductRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Updating child links without sending configurable_product_options must keep unique variations.
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testUpdateConfigurableProductLinksWithoutSendingOptions()
+    {
+        $productId1 = 10;
+        $productId2 = 20;
+
+        $response = $this->createConfigurableProduct();
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
+            $productId1,
+            $productId2,
+        ];
+        $response = $this->saveProduct($response);
+
+        $this->assertEquals(
+            [$productId1, $productId2],
+            $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links']
+        );
+        $this->assertNotEmpty(
+            $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
     public function testUpdateConfigurableProductLinksWithNonExistingProduct()
