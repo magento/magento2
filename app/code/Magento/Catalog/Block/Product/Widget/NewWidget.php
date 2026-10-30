@@ -5,7 +5,11 @@
  */
 namespace Magento\Catalog\Block\Product\Widget;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 
 /**
  * New products widget
@@ -52,6 +56,11 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
     private $serializer;
 
     /**
+     * @var UrlHelper
+     */
+    private $urlHelper;
+
+    /**
      * NewWidget constructor.
      *
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -60,6 +69,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param UrlHelper|null $urlHelper
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -67,7 +77,8 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UrlHelper $urlHelper = null
     ) {
         parent::__construct(
             $context,
@@ -76,8 +87,27 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
             $httpContext,
             $data
         );
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->urlHelper = $urlHelper ?: ObjectManager::getInstance()->get(UrlHelper::class);
+    }
+
+    /**
+     * Get post parameters for add to cart form.
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getAddToCartPostParams(Product $product)
+    {
+        $url = $this->getAddToCartUrl($product, ['_escape' => false]);
+        return [
+            'action' => $url,
+            'data' => [
+                'product' => (int) $product->getEntityId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlHelper->getEncodedUrl($url),
+            ],
+        ];
     }
 
     /**
