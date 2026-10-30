@@ -61,6 +61,8 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="payment_payflowpro_cc_vault_active" xsi:type="string">payment/payflowpro_cc_vault/active</item>
+                <item name="paypal_express_active" xsi:type="string">payment/paypal_express/active</item>
+                <item name="paypal_express_visible_on_cart" xsi:type="string">payment/paypal_express/visible_on_cart</item>
             </argument>
         </arguments>
     </type>
