@@ -405,6 +405,9 @@ class Helper
                 if (CustomOptions::FIELD_TITLE_NAME === $fieldName) {
                     $option[CustomOptions::FIELD_IS_USE_DEFAULT] = $overwrite;
                 }
+                if (CustomOptions::FIELD_PRICE_NAME === $fieldName) {
+                    $option[CustomOptions::FIELD_IS_USE_DEFAULT_PRICE] = $overwrite;
+                }
             }
         }
 
