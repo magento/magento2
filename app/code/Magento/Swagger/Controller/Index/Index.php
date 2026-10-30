@@ -20,21 +20,6 @@ use Magento\Swagger\Model\Config;
 class Index extends Action implements HttpGetActionInterface
 {
     /**
-     * @var PageConfig
-     */
-    private $pageConfig;
-
-    /**
-     * @var PageFactory
-     */
-    private $pageFactory;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param Context $context
      * @param PageConfig $pageConfig
      * @param PageFactory $pageFactory
@@ -42,13 +27,11 @@ class Index extends Action implements HttpGetActionInterface
      */
     public function __construct(
         Context $context,
-        PageConfig $pageConfig,
-        PageFactory $pageFactory,
-        ?Config $config = null
+        private readonly PageConfig $pageConfig,
+        private readonly PageFactory $pageFactory,
+        private ?Config $config = null
     ) {
         parent::__construct($context);
-        $this->pageConfig = $pageConfig;
-        $this->pageFactory = $pageFactory;
         $this->config = $config ?? ObjectManager::getInstance()
                 ->get(Config::class);
     }
