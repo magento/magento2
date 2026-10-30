@@ -2174,7 +2174,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * Test that updating product image with same image name will result in incremented image name
+     * Test that re-saving a product with identical media gallery content does not duplicate images.
+     *
+     * Re-submitting the same base64 images (without value_id) must update the existing gallery
+     * entries in place and keep their file names and roles, instead of creating incremented
+     * duplicates. Covers the regression reported in magento/magento2#39349.
      */
     public function testUpdateProductWithMediaGallery(): void
     {
@@ -2203,8 +2207,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
         $this->saveProduct($productData, 'all');
         $imageRolesPerStore = $this->getProductStoreImageRoles($sku, [$defaultScope], $imageRoles);
-        $img1 = substr_replace($img1, '_1', -4, 0);
-        $img2 = substr_replace($img2, '_1', -4, 0);
+        // Re-saving identical content must reuse the existing files instead of creating duplicates.
         $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
         $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
         $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
