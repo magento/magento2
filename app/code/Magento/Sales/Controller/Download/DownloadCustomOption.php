@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Encryption\Helper\Security;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
@@ -104,7 +105,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
 
         try {
             $info = $this->serializer->unserialize($option->getValue());
-            if ($this->getRequest()->getParam('key') != $info['secret_key']) {
+            $secretKey = (string)$this->getRequest()->getParam('key');
+            if (!Security::compareStrings((string)($info['secret_key'] ?? ''), $secretKey)) {
                 return $resultForward->forward('noroute');
             }
             return $this->download->createResponse($info);
