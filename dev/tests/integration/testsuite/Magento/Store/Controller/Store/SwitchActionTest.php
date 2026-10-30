@@ -13,6 +13,7 @@ use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Encryption\UrlCoder;
 use Magento\Framework\Interception\InterceptorInterface;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -21,6 +22,9 @@ use Magento\Store\Model\StoreSwitcher\ContextInterfaceFactory;
 use Magento\Store\Model\StoreSwitcher\RedirectDataGenerator;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -160,6 +164,47 @@ class SwitchActionTest extends AbstractController
         );
         $this->dispatch('stores/store/switch');
         $this->assertRedirect($this->equalTo('http://localhost/index.php/'));
+    }
+
+    #[
+        DataFixture(StoreFixture::class, as: 'store2'),
+    ]
+    public function testReusedSwitchLinkDoesNotReportError(): void
+    {
+        $data = ['key1' => 'value1'];
+        $this->preprocessorMock->method('process')
+            ->willReturn($data);
+        $this->postprocessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->isInstanceOf(ContextInterface::class), $data);
+        $fromStore = $this->storeManager->getStore('default');
+        $targetStore = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage()->get('store2');
+        $redirectData = $this->redirectDataGenerator->generate(
+            $this->contextFactory->create(
+                [
+                    'fromStore' => $fromStore,
+                    'targetStore' => $targetStore,
+                    'redirectUrl' => '/',
+                ]
+            )
+        );
+        $params = [
+            '___from_store' => $fromStore->getCode(),
+            StoreManagerInterface::PARAM_NAME => $targetStore->getCode(),
+            ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode('/'),
+            'data' => $redirectData->getData(),
+            'time_stamp' => $redirectData->getTimestamp(),
+            'signature' => $redirectData->getSignature(),
+        ];
+
+        $this->getRequest()->setParams($params);
+        $this->dispatch('stores/store/switch');
+        $this->resetRequest();
+        $this->getRequest()->setParams($params);
+        $this->dispatch('stores/store/switch');
+
+        $this->assertRedirect();
+        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
     }
 
     /**
