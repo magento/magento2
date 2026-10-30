@@ -27,15 +27,26 @@ class Placeholder implements PlaceholderInterface
     protected $urlPlaceholder;
 
     /**
+     * @var bool
+     */
+    private $resolveUrlPlaceholder;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string[] $urlPaths
      * @param string $urlPlaceholder
+     * @param bool $resolveUrlPlaceholder
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
-    {
+    public function __construct(
+        \Magento\Framework\App\RequestInterface $request,
+        $urlPaths,
+        $urlPlaceholder,
+        $resolveUrlPlaceholder = true
+    ) {
         $this->request        = $request;
         $this->urlPaths       = $urlPaths;
         $this->urlPlaceholder = $urlPlaceholder;
+        $this->resolveUrlPlaceholder = (bool)$resolveUrlPlaceholder;
     }
 
     /**
@@ -95,6 +106,7 @@ class Placeholder implements PlaceholderInterface
     {
         $placeholder = $this->_getPlaceholder($value);
         if ($placeholder) {
+            $originalValue = $value;
             $url = false;
             if ($placeholder == 'unsecure_base_url') {
                 $url = $this->_getValue($this->urlPaths['unsecureBaseUrl'], $data);
@@ -105,15 +117,34 @@ class Placeholder implements PlaceholderInterface
             if ($url) {
                 $value = str_replace('{{' . $placeholder . '}}', $url, $value);
             } elseif (strpos($value, (string)$this->urlPlaceholder) !== false) {
-                $distroBaseUrl = $this->request->getDistroBaseUrl();
-
-                $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
+                $value = $this->resolveUrlPlaceholder
+                    ? str_replace($this->urlPlaceholder, $this->request->getDistroBaseUrl(), $value)
+                    : $this->replaceBaseUrlPlaceholders($value, $data);
             }
 
-            if (null !== $this->_getPlaceholder($value)) {
+            if ($value !== $originalValue && null !== $this->_getPlaceholder($value)) {
                 $value = $this->_processPlaceholders($value, $data);
             }
         }
+        return $value;
+    }
+
+    /**
+     * Replace {{unsecure_base_url}} and {{secure_base_url}} with the configured base URLs
+     *
+     * @param string $value
+     * @param array $data
+     * @return string
+     */
+    private function replaceBaseUrlPlaceholders(string $value, array $data): string
+    {
+        foreach (['unsecure_base_url' => 'unsecureBaseUrl', 'secure_base_url' => 'secureBaseUrl'] as $name => $path) {
+            $url = str_contains($value, '{{' . $name . '}}') ? $this->_getValue($this->urlPaths[$path], $data) : null;
+            if ($url) {
+                $value = str_replace('{{' . $name . '}}', $url, $value);
+            }
+        }
+
         return $value;
     }
 
