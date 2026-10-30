@@ -77,9 +77,9 @@ class SimplePolicyHeaderRendererTest extends TestCase
             'default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;',
             $header->getFieldValue()
         );
-        $this->assertNotEmpty($reportToHeader = $this->response->getHeader('Report-To'));
-        $this->assertNotEmpty($reportData = json_decode("[{$reportToHeader->getFieldValue()}]", true));
-        $this->assertEquals('report-endpoint', $reportData[0]['group']);
+        $this->assertNotEmpty($endpointsHeader = $this->response->getHeader('Reporting-Endpoints'));
+        $this->assertEquals('report-endpoint="/csp-reports/"', $endpointsHeader->getFieldValue());
+        $this->assertEmpty($this->response->getHeader('Report-To'));
     }
 
     /**
@@ -175,8 +175,42 @@ class SimplePolicyHeaderRendererTest extends TestCase
             'default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;',
             $header->getFieldValue()
         );
-        $this->assertNotEmpty($reportToHeader = $this->response->getHeader('Report-To'));
-        $this->assertNotEmpty($reportData = json_decode("[{$reportToHeader->getFieldValue()}]", true));
-        $this->assertEquals('report-endpoint', $reportData[0]['group']);
+        $this->assertNotEmpty($endpointsHeader = $this->response->getHeader('Reporting-Endpoints'));
+        $this->assertEquals('report-endpoint="/csp-reports/"', $endpointsHeader->getFieldValue());
+        $this->assertEmpty($this->response->getHeader('Report-To'));
+    }
+
+    /**
+     * Test that reporting directives and the endpoint registration are emitted once for several policies.
+     *
+     * @magentoAppArea frontend
+     * @magentoConfigFixture default_store csp/mode/storefront/report_only 1
+     * @magentoConfigFixture default_store csp/mode/storefront/report_uri https://reports.example.com/csp
+     *
+     * @return void
+     */
+    public function testRenderMultiplePoliciesWithReportingMode(): void
+    {
+        $this->renderer->render(
+            new FetchPolicy('default-src', false, ['https://magento.com'], [], true),
+            $this->response
+        );
+        $this->renderer->render(
+            new FetchPolicy('script-src', false, ['https://cdn.example.com'], [], true),
+            $this->response
+        );
+
+        $this->assertNotEmpty($header = $this->response->getHeader('Content-Security-Policy-Report-Only'));
+        $this->assertEquals(
+            'script-src https://cdn.example.com \'self\';'
+            . ' default-src https://magento.com \'self\';'
+            . ' report-uri https://reports.example.com/csp; report-to report-endpoint;',
+            $header->getFieldValue()
+        );
+        $this->assertEquals(
+            'report-endpoint="https://reports.example.com/csp"',
+            $this->response->getHeader('Reporting-Endpoints')->getFieldValue()
+        );
+        $this->assertEmpty($this->response->getHeader('Report-To'));
     }
 }
