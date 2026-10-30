@@ -46,6 +46,7 @@
         <xs:attribute name="http-equiv" type="xs:string"/>
         <xs:attribute name="name" type="xs:string"/>
         <xs:attribute name="scheme" type="xs:string"/>
+        <xs:attribute name="translate" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="scriptType">

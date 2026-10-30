@@ -12,6 +12,9 @@ use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
 use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class HeadTest extends TestCase
@@ -59,38 +62,81 @@ class HeadTest extends TestCase
             ->method('removeAssets')
             ->with('path/remove/file.css')
             ->willReturn($structureMock);
+        $expectedAssets = [
+            'path/file-3.css' => ['src' => 'path/file-3.css', 'media' => 'all', 'content_type' => 'css'],
+            'path/file.js' => ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js'],
+            'http://url.com' => ['src' => 'http://url.com', 'src_type' => 'url'],
+            'path/file-1.css' => [
+                'src' => 'path/file-1.css',
+                'media' => 'all',
+                'content_type' => 'css',
+                'order' => 10
+            ],
+            'path/file-2.css' => [
+                'src' => 'path/file-2.css',
+                'media' => 'all',
+                'content_type' => 'css',
+                'order' => 30
+            ],
+        ];
         $structureMock
             ->method('addAssets')
-            ->willReturnCallback(function ($arg1, $arg2) use ($structureMock) {
-                if ($arg1 == 'path/file-3.css' &&
-                    $arg2 == ['src' => 'path/file-3.css', 'media' => 'all', 'content_type' => 'css']) {
-                    return $structureMock;
-                } elseif ($arg1 == 'path/file.js' &&
-                    $arg2 == ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js']) {
-                    return $structureMock;
-                } elseif ($arg1 == 'http://url.com' &&
-                    $arg2 == ['src' => 'http://url.com', 'src_type' => 'url']) {
-                    return $structureMock;
-                } elseif ($arg1 == 'path/file-1.css' &&
-                    $arg2 == ['src' => 'path/file-1.css', 'media' => 'all', 'content_type' => 'css', 'order' => 10]) {
-                    return $structureMock;
-                } elseif ($arg1 == 'path/file-2.css' &&
-                    $arg2 == ['src' => 'path/file-2.css', 'media' => 'all', 'content_type' => 'css', 'order' => 30]) {
-                    return $structureMock;
-                }
-            });
+            ->willReturnCallback(
+                fn ($name, $attributes) => ($expectedAssets[$name] ?? null) == $attributes ? $structureMock : null
+            );
+        $expectedMetadata = [
+            'meta_name' => 'meta_content',
+            'og:video:secure_url' => 'https://secure.example.com/movie.swf',
+            'og:locale:alternate' => 'uk_UA',
+        ];
         $structureMock
             ->method('setMetaData')
-            ->willReturnCallback(function ($arg1, $arg2) use ($structureMock) {
-                if ($arg1 == 'meta_name' && $arg2 == 'meta_content') {
-                    return $structureMock;
-                } elseif ($arg1 == 'og:video:secure_url' && $arg2 == 'https://secure.example.com/movie.swf') {
-                    return $structureMock;
-                } elseif ($arg1 == 'og:locale:alternate' && $arg2 == 'uk_UA') {
-                    return $structureMock;
-                }
-            });
+            ->willReturnCallback(
+                fn ($name, $content) => ($expectedMetadata[$name] ?? null) == $content ? $structureMock : null
+            );
 
         $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));
+    }
+
+    /**
+     * @param string $translate
+     * @param string $expected
+     * @return void
+     */
+    #[DataProvider('metaTranslationProvider')]
+    public function testInterpretTranslatesMetaContent(string $translate, string $expected): void
+    {
+        $readerContextMock = $this->createMock(Context::class);
+        $structure = new Structure();
+        $readerContextMock->method('getPageConfigStructure')->willReturn($structure);
+        $xml = '<page><head><meta name="description" content="my english content"' . $translate . '/></head></page>';
+        $element = new Element($xml);
+
+        $renderer = $this->createMock(RendererInterface::class);
+        $renderer->method('render')->willReturnCallback(
+            fn (array $source) => 'TRANSLATED<' . implode('', $source) . '>'
+        );
+        $previousRenderer = Phrase::getRenderer();
+        Phrase::setRenderer($renderer);
+        try {
+            $this->model->interpret($readerContextMock, $element->children()[0]);
+        } finally {
+            Phrase::setRenderer($previousRenderer);
+        }
+
+        $this->assertSame(['description' => $expected], $structure->getMetadata());
+    }
+
+    /**
+     * @return array
+     */
+    public static function metaTranslationProvider(): array
+    {
+        return [
+            'translate content' => [' translate="content"', 'TRANSLATED<my english content>'],
+            'translate true' => [' translate="true"', 'TRANSLATED<my english content>'],
+            'no translate attribute' => ['', 'my english content'],
+            'translate false' => [' translate="false"', 'my english content'],
+        ];
     }
 }
