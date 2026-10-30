@@ -7,7 +7,6 @@
 /**
  * Catalog Template Filter Model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        Needs to be reimplemented to get rid of the copypasted methods
  */
 namespace Magento\Catalog\Model\Template;
@@ -38,8 +37,6 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_assetRepo;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
