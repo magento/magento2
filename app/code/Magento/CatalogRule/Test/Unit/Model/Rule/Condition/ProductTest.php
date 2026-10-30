@@ -199,13 +199,18 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Missing attribute values must match negative operators and "is undefined".
+     *
+     * @param string $operator
+     * @param bool $expected
      * @return void
      */
-    public function testValidateWithNoValue(): void
+    #[DataProvider('validateWithNoValueDataProvider')]
+    public function testValidateWithNoValue(string $operator, bool $expected): void
     {
         $this->product->setData('attribute', 'color');
         $this->product->setData('value_parsed', '1');
-        $this->product->setData('operator', '!=');
+        $this->product->setData('operator', $operator);
 
         $this->productModel->expects($this->atLeastOnce())
             ->method('getData')
@@ -217,7 +222,25 @@ class ProductTest extends TestCase
         $this->productModel->expects($this->any())
             ->method('getStoreId')
             ->willReturn('1');
-        $this->assertFalse($this->product->validate($this->productModel));
+        $this->assertSame($expected, $this->product->validate($this->productModel));
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function validateWithNoValueDataProvider(): array
+    {
+        return [
+            'is not' => ['!=', true],
+            'does not contain' => ['!{}', true],
+            'is not one of' => ['!()', true],
+            'is undefined' => ['<=>', true],
+            'is' => ['==', false],
+            'contains' => ['{}', false],
+            'is one of' => ['()', false],
+            'greater than' => ['>', false],
+            'less than' => ['<', false],
+        ];
     }
 
     /**

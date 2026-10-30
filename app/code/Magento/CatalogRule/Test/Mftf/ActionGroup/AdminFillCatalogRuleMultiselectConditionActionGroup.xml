@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCatalogRuleMultiselectConditionActionGroup">
+        <annotations>
+            <description>
+                Add a multiselect product attribute condition on Catalog Price Rule Conditions tab.
+                Default operator label is "contains"; select another operator and option value as needed.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="condition" type="string"/>
+            <argument name="conditionOperator" type="string" defaultValue="does not contain"/>
+            <argument name="conditionValue" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTab}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" visible="false" stepKey="openConditionsTab"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForAddConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" stepKey="waitForConditionSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="{{condition}}" stepKey="selectAttributeCondition"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.condition('contains')}}" stepKey="waitForDefaultOperator"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('contains')}}" stepKey="clickDefaultOperator"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" stepKey="waitForOperatorSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" userInput="{{conditionOperator}}" stepKey="selectConditionOperator"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeOperatorSelect"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" stepKey="clickValueEllipsis"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" stepKey="waitForValueInput"/>
+        <!-- Multiselect/select value chooser auto-applies on option select (no rule-param-apply control). -->
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" userInput="{{conditionValue}}" stepKey="selectConditionValue"/>
+        <waitForPageLoad stepKey="waitAfterSelectConditionValue"/>
+    </actionGroup>
+</actionGroups>
