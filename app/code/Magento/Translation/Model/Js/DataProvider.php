@@ -96,7 +96,9 @@ class DataProvider implements DataProviderInterface
             $this->filesUtility->getJsFiles('base', $themePath),
             $this->filesUtility->getJsFiles($areaCode, $themePath),
             $this->filesUtility->getStaticHtmlFiles('base', $themePath),
-            $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath)
+            $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath),
+            $this->filesUtility->getPhtmlFilesByArea('base', $themePath),
+            $this->filesUtility->getPhtmlFilesByArea($areaCode, $themePath)
         );
 
         $dictionary = [];
