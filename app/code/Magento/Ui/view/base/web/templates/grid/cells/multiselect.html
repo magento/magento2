@@ -5,10 +5,17 @@
  */
 -->
 <!-- ko if: $row() -->
-<label class="data-grid-checkbox-cell-inner">
+<label class="data-grid-checkbox-cell-inner" data-bind="event: {
+    mousedown: function (data, event) {
+        return !event.shiftKey;
+    }
+}">
     <input class="admin__control-checkbox" type="checkbox" data-action="select-row"
         data-bind="
             staticChecked: $col.selected,
+            click: function (data, event) {
+                return $col.onRowCheckboxClick($row()[$col.indexField], event);
+            },
             disable: $col.disabled.indexOf($row()[$col.indexField]) != -1 ,
             checkedValue: $row()[$col.indexField],
             attr: {
