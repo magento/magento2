@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\ErrorHandler;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\Exception\ErrorHandlerException;
 use PHPUnit\Framework\TestCase;
 
 class ErrorHandlerTest extends TestCase
@@ -50,10 +51,10 @@ class ErrorHandlerTest extends TestCase
     {
         $errorStr = 'test_string';
         $errorFile = 'test_file';
-        $errorLine = 'test_error_line';
+        $errorLine = 1;
 
         $expectedExceptionMessage = sprintf('%s: %s in %s on line %s', $errorPhrase, $errorStr, $errorFile, $errorLine);
-        $this->expectException('Exception');
+        $this->expectException(ErrorHandlerException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
         $this->object->handler($errorNo, $errorStr, $errorFile, $errorLine);
