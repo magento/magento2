@@ -412,6 +412,14 @@ class TypeProcessor
     }
 
     /**
+     * Tests if its a `\BackedEnum`
+     */
+    public function isTypeBackedEnum(string $type): bool
+    {
+        return $type && is_a($type, \BackedEnum::class, true);
+    }
+
+    /**
      * Check if given type is valid to use as an argument type declaration
      *
      * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
