@@ -8,6 +8,7 @@ namespace Magento\Customer\Controller;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
@@ -193,7 +194,12 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringContains('customer/address/index'));
         $this->assertSessionMessages(
-            $this->equalTo(['We can\'t delete the address right now.']),
+            $this->equalTo(
+                [
+                    Bootstrap::getObjectManager()->get(Escaper::class)
+                        ->escapeHtml('We can\'t delete the address right now.')
+                ]
+            ),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

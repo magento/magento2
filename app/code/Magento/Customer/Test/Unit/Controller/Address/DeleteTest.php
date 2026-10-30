@@ -21,6 +21,7 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -208,6 +209,41 @@ class DeleteTest extends TestCase
         $this->messageManager->expects($this->once())
             ->method('addException')
             ->with($exception, __('We can\'t delete the address right now.'));
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/index')
+            ->willReturnSelf();
+        $this->assertSame($this->resultRedirect, $this->model->execute());
+    }
+
+    public function testExecuteWithMissingAddressAddsErrorWithoutLoggingException(): void
+    {
+        $addressId = 999;
+
+        $this->resultRedirectFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('id', false)
+            ->willReturn($addressId);
+        $this->validatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+        $this->addressRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($addressId)
+            ->willThrowException(NoSuchEntityException::singleField('addressId', $addressId));
+        $this->addressRepositoryMock->expects($this->never())
+            ->method('deleteById');
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__('We can\'t delete the address right now.'));
+        $this->messageManager->expects($this->never())
+            ->method('addException');
+        $this->messageManager->expects($this->never())
+            ->method('addExceptionMessage');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
             ->with('*/*/index')
