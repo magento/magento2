@@ -3,6 +3,8 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin;
 
 use Closure;
@@ -44,6 +46,12 @@ class Configurable
             $product->setTypeId(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
             return;
         }
+        
+        // Preserve configurable type if product is already configurable, even when attributes are empty
+        if ($product->getTypeId() === \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+            return;
+        }
+        
         $proceed($product);
     }
 }
