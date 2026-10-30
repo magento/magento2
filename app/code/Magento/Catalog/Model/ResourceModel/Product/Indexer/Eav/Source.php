@@ -265,7 +265,7 @@ class Source extends AbstractEav
                 []
             )->joinLeft(
                 ['d2s' => $this->getTable('catalog_product_entity_int')],
-                "d2s.store_id != 0 AND d2s.attribute_id = d2d.attribute_id AND " .
+                "d2s.store_id = wd.store_id AND d2s.attribute_id = d2d.attribute_id AND " .
                 "d2s.{$productIdField} = d2d.{$productIdField}",
                 []
             )
