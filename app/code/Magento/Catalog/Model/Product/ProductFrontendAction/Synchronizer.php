@@ -29,10 +29,10 @@ class Synchronizer
      * Considered that for some action, customer should spent some time (e.g. products comparing or product page visit)
      * This constant used in order to track and filter suspicious actions, that happens frequently than expected
      */
-    const TIME_TO_DO_ONE_ACTION = 1;
+    public const TIME_TO_DO_ONE_ACTION = 1;
 
     /** Flag, which says, can we synchronize product actions with backend or not */
-    const ALLOW_SYNC_WITH_BACKEND_PATH = "catalog/recently_products/synchronize_with_backend";
+    public const ALLOW_SYNC_WITH_BACKEND_PATH = "catalog/recently_products/synchronize_with_backend";
 
     /**
      * @var Session
@@ -181,7 +181,18 @@ class Synchronizer
 
         if ($productIds) {
             $collection->addFieldToFilter('product_id', $productIds);
-
+            $collection->includeExistingProducts($productIds);
+            $existingProductIds = array_fill_keys(
+                $collection->getColumnValues('existing_product_id'),
+                true
+            );
+            $productsData = array_filter(
+                $productsData,
+                static fn (array $productData): bool => isset($existingProductIds[$productData['product_id']])
+            );
+            if (!$productsData) {
+                return;
+            }
             /**
              * Note that collection is also filtered by visitor id and customer id
              * This collection shouldn't be flushed when visitor has products and then login
@@ -191,7 +202,9 @@ class Synchronizer
              * @var ProductFrontendActionInterface $item
              */
             foreach ($collection as $item) {
-                $this->entityManager->delete($item);
+                if ($item->getActionId()) {
+                    $this->entityManager->delete($item);
+                }
             }
             foreach ($productsData as $productData) {
                 /** @var ProductFrontendActionInterface $action */
