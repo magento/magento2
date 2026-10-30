@@ -476,7 +476,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function getStoreLabels()
     {
-        if (!$this->getData('store_labels')) {
+        if ($this->getData('store_labels') === null) {
             $storeLabel = $this->getResource()->getStoreLabelsByAttributeId($this->getId());
             $this->setData('store_labels', $storeLabel);
         }
@@ -491,13 +491,20 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function getStoreLabel($storeId = null)
     {
-        if ($this->hasData('store_label')) {
+        if ($storeId === null && $this->hasData('store_label')) {
             return $this->getData('store_label');
         }
-        $store = $this->_storeManager->getStore($storeId);
+        if ($storeId === null || !is_numeric($storeId)) {
+            $storeId = $this->_storeManager->getStore($storeId)->getId();
+        }
+        if ($this->hasData('store_label')
+            && (int)$storeId === (int)$this->_storeManager->getStore()->getId()
+        ) {
+            return $this->getData('store_label');
+        }
         $labels = $this->getStoreLabels();
-        if (isset($labels[$store->getId()])) {
-            return $labels[$store->getId()];
+        if (isset($labels[$storeId])) {
+            return $labels[$storeId];
         } else {
             return $this->getFrontendLabel();
         }
