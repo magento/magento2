@@ -287,7 +287,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         $result = __('YouTube and Vimeo supported.');
         if ($this->mediaHelper->getYouTubeApiKey() === null) {
             $result = __(
-                'Vimeo supported.<br />'
+                'Vimeo supported.<br>'
                 . 'To add YouTube video, please <a href="%1">enter YouTube API Key</a> first.',
                 $this->getConfigApiKeyUrl()
             );
