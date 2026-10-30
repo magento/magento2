@@ -62,6 +62,10 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolderForStep4">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
+        <!-- Guarantee the async bookmark auto-restore (updateSelectedDirectory) has settled into the SELECTED
+             state before the next deselect click, so that click deterministically takes the deselect branch
+             in directoryTree.js's setActiveNodeFilter() instead of racing it. -->
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="waitForDeleteFolderButtonEnabledBeforeUnselect"/>
 
         <!-- Step4.1 Delete Folder is diabled by default for no selected folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
@@ -79,7 +83,7 @@
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <dontSeeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNotDisabledAnymore"/>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowEnabled"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="DeleteFolderButtonIsNowEnabled"/>
 
         <!-- Step4.3 Delete Folder is disabled post selecting folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
@@ -102,14 +106,16 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderAgain">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <click selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="ClickOnDeleteFolderButtonForSelectedFolder"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="waitForDeleteButtonActiveBeforeFirstDeleteClick"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="ClickOnDeleteFolderButtonForSelectedFolder"/>
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadOnClickFolderDelete"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageTitle}}" stepKey="verifyTheDeleteFolderMessageTitle"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageContent(AdminMediaGalleryFolderData.name)}}" stepKey="verifyTheDeleteFolderMessageContent"/>
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFolderDelete"/>
         <click selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="clickCancelDeleteButton"/>
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostCancelFolderDelete"/>
-        <click selector="{{AdminMediaGalleryFolderSection.activeDeleteFolderButton}}" stepKey="AgainClickOnDeleteFolderButtonForSelectedFolder"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="waitForDeleteButtonActiveBeforeSecondDeleteClick"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="AgainClickOnDeleteFolderButtonForSelectedFolder"/>
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFolderDeleteAgain"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageTitle}}" stepKey="reverifyTheDeleteFolderMessageTitle"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteMessageContent(AdminMediaGalleryFolderData.name)}}" stepKey="reverifyTheDeleteFolderMessageContent"/>
@@ -117,4 +123,3 @@
         <waitForPageLoad stepKey="waitForMediaGalleryPageLoadPostFinalFolderDelete"/>
     </test>
 </tests>
-
