@@ -13,7 +13,8 @@ namespace Magento\Config\Model\Config\Backend;
  * @since 100.0.2
  */
 class Encrypted extends \Magento\Framework\App\Config\Value implements
-    \Magento\Framework\App\Config\Data\ProcessorInterface
+    \Magento\Framework\App\Config\Data\ProcessorInterface,
+    \Magento\Framework\App\Config\Data\EnvironmentValueProcessorInterface
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -109,5 +110,26 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements
     public function processValue($value)
     {
         return $this->_encryptor->decrypt($value);
+    }
+
+    /**
+     * Decrypt shaped environment values, falling back to the original value on failure or an empty result.
+     *
+     * @param string|null $value
+     * @return string|null
+     */
+    public function processEnvironmentValue($value)
+    {
+        if ($value !== null && preg_match('/^\d+:\d+:[A-Za-z0-9+\/]+={0,2}\z/', (string)$value) === 1) {
+            try {
+                $decrypted = $this->_encryptor->decrypt($value);
+                if ($decrypted !== '' && $decrypted !== null) {
+                    return $decrypted;
+                }
+            } catch (\Throwable $e) {
+                return $value;
+            }
+        }
+        return $value;
     }
 }
