@@ -21,6 +21,17 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
+ *
+ * @method int|null getLastOrderId()
+ * @method self setLastOrderId(int|null $orderId)
+ * @method mixed getLastRealOrderId()
+ * @method self setLastRealOrderId(mixed $orderId)
+ * @method string|null getLastOrderStatus()
+ * @method self setLastOrderStatus(string|null $status)
+ * @method int|null getLastQuoteId()
+ * @method self setLastQuoteId(int|null $quoteId)
+ * @method int|null getLastSuccessQuoteId()
+ * @method self setLastSuccessQuoteId(int|null $quoteId)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
