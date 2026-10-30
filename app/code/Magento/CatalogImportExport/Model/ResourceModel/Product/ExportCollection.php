@@ -13,6 +13,33 @@ namespace Magento\CatalogImportExport\Model\ResourceModel\Product;
 class ExportCollection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
+     * Read filtered link-to-entity identities without changing the later hydration lifecycle.
+     *
+     * @param int $limit
+     * @param array $queriedSelectors Previously queried SQL and binding fingerprints
+     * @return array<int, int>
+     */
+    public function getExportCandidateIdentities(int $limit, array &$queriedSelectors = []): array
+    {
+        $candidates = clone $this;
+        $candidates->_renderFilters();
+        $linkField = $candidates->getEntity()->getLinkField();
+        $select = $candidates->_getClearSelect();
+        $select->distinct(true)
+            ->columns(['e.' . $linkField, 'e.' . $this->getEntity()->getIdFieldName()])
+            ->order('e.' . $linkField . ' ASC')
+            ->limit($limit);
+
+        $key = hash('sha256', (string)$select . "\0" . var_export($candidates->_bindParams, true));
+        if (isset($queriedSelectors[$key])) {
+            return [];
+        }
+        $identities = $this->getConnection()->fetchPairs($select, $candidates->_bindParams);
+        $queriedSelectors[$key] = true;
+        return array_map('intval', $identities);
+    }
+
+    /**
      * Load entities with streamed DB cursor.
      *
      * @param bool $printQuery
