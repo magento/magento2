@@ -109,9 +109,6 @@ class Copier
         $productData = $this->removeStockItem($productData);
         $duplicate->setData($productData);
         $duplicate->setOptions([]);
-        $duplicate->setMetaTitle(null);
-        $duplicate->setMetaKeyword(null);
-        $duplicate->setMetaDescription(null);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
         $duplicate->setStatus(Status::STATUS_DISABLED);
