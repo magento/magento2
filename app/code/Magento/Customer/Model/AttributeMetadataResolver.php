@@ -87,6 +87,11 @@ class AttributeMetadataResolver
     private ?AttributeWebsiteRequired $attributeWebsiteRequired;
 
     /**
+     * @var Options
+     */
+    private ?Options $options;
+
+    /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
      * @param FileUploaderDataResolver $fileUploaderDataResolver
@@ -94,6 +99,7 @@ class AttributeMetadataResolver
      * @param ShareConfig $shareConfig
      * @param GroupManagement|null $groupManagement
      * @param AttributeWebsiteRequired|null $attributeWebsiteRequired
+     * @param Options|null $options
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
@@ -102,7 +108,8 @@ class AttributeMetadataResolver
         ContextInterface $context,
         ShareConfig $shareConfig,
         ?GroupManagement $groupManagement = null,
-        ?AttributeWebsiteRequired $attributeWebsiteRequired = null
+        ?AttributeWebsiteRequired $attributeWebsiteRequired = null,
+        ?Options $options = null
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
@@ -112,6 +119,7 @@ class AttributeMetadataResolver
         $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
         $this->attributeWebsiteRequired = $attributeWebsiteRequired ??
             ObjectManager::getInstance()->get(AttributeWebsiteRequired::class);
+        $this->options = $options;
     }
 
     /**
@@ -129,7 +137,8 @@ class AttributeMetadataResolver
         bool $allowToShowHiddenAttributes
     ): array {
         $meta = $this->modifyBooleanAttributeMeta($attribute);
-        $this->modifyGroupAttributeMeta($attribute);
+        $attributeCode = $attribute->getAttributeCode();
+        $this->modifyGroupAttributeMeta($attribute, $attributeCode);
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
@@ -146,7 +155,7 @@ class AttributeMetadataResolver
         }
 
         if ($attribute->usesSource()) {
-            if ($attribute->getAttributeCode() === AddressInterface::COUNTRY_ID) {
+            if ($attributeCode === AddressInterface::COUNTRY_ID) {
                 $meta['arguments']['data']['config']['options'] = $this->countryWithWebsiteSource
                     ->getAllOptions();
             } else {
@@ -160,6 +169,8 @@ class AttributeMetadataResolver
                 $meta['arguments']['data']['config']['options'] = $options;
             }
         }
+
+        $this->applyNameOptionsMeta($attributeCode, $meta);
 
         $rules = $this->eavValidationRules->build($attribute, $meta['arguments']['data']['config']);
         if (!empty($rules)) {
@@ -178,6 +189,41 @@ class AttributeMetadataResolver
             $meta['arguments']['data']['config']
         );
         return $meta;
+    }
+
+    /**
+     * Render name prefix and suffix as a dropdown when the options are configured
+     *
+     * @param string|null $attributeCode
+     * @param array $meta
+     * @return void
+     */
+    private function applyNameOptionsMeta(?string $attributeCode, array &$meta): void
+    {
+        if ($attributeCode !== 'prefix' && $attributeCode !== 'suffix') {
+            return;
+        }
+        $this->options ??= ObjectManager::getInstance()->get(Options::class);
+        $values = $attributeCode === 'prefix'
+            ? $this->options->getNamePrefixOptions()
+            : $this->options->getNameSuffixOptions();
+        if (empty($values)) {
+            return;
+        }
+
+        $options = [];
+        foreach ($values as $value) {
+            $options[] = [
+                'value' => trim((string)$value),
+                'label' => (string)$value,
+                '__disableTmpl' => ['label' => true]
+            ];
+        }
+        $config = &$meta['arguments']['data']['config'];
+        $config['formElement'] = 'select';
+        $config['component'] = 'Magento_Ui/js/form/element/select';
+        $config['elementTmpl'] = 'ui/form/element/select';
+        $config['options'] = $options;
     }
 
     /**
@@ -220,11 +266,12 @@ class AttributeMetadataResolver
      * Modify group attribute meta data
      *
      * @param AttributeInterface $attribute
+     * @param string|null $attributeCode
      * @return void
      */
-    private function modifyGroupAttributeMeta(AttributeInterface $attribute): void
+    private function modifyGroupAttributeMeta(AttributeInterface $attribute, ?string $attributeCode): void
     {
-        if ($attribute->getAttributeCode() === 'group_id') {
+        if ($attributeCode === 'group_id') {
             $defaultGroup = $this->groupManagement->getDefaultGroup();
             $defaultGroupId = $defaultGroup->getId();
             $attribute->setDataUsingMethod(self::$metaProperties['default'], $defaultGroupId);
