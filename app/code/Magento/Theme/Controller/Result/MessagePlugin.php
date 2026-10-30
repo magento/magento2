@@ -102,14 +102,20 @@ class MessagePlugin
     ) {
         if (!($subject instanceof Json)) {
             $newMessages = [];
-            foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
+            $messageItems = $this->messageManager->getMessages(true)->getItems();
+            foreach ($messageItems as $message) {
                 $newMessages[] = [
                     'type' => $message->getType(),
                     'text' => $this->interpretationStrategy->interpret($message),
                 ];
             }
             if (!empty($newMessages)) {
-                $this->setMessages($this->getCookiesMessages(), $newMessages);
+                try {
+                    $this->setMessages($this->getCookiesMessages(), $newMessages);
+                } catch (CookieSizeLimitReachedException $e) {
+                    // The "messages" customer data section delivers session messages on the next section load.
+                    $this->messageManager->addMessages($messageItems);
+                }
             }
         }
         return $result;
