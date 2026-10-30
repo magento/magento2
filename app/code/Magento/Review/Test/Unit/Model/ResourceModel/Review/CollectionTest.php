@@ -199,6 +199,27 @@ class CollectionTest extends TestCase
     /**
      * @return void
      */
+    public function testAddRateVotesWithEmptyCollection(): void
+    {
+        $voteFactoryMock = $this->createMock(\Magento\Review\Model\Rating\Option\VoteFactory::class);
+        $voteFactoryMock->expects($this->never())->method('create');
+        $model = $this->objectManager->getObject(
+            Collection::class,
+            [
+                'storeManager' => $this->storeManagerMock,
+                'resource' => $this->resourceMock,
+                'voteFactory' => $voteFactoryMock,
+            ]
+        );
+        $reflection = new \ReflectionProperty($model, '_isCollectionLoaded');
+        $reflection->setValue($model, true);
+
+        $this->assertSame($model, $model->addRateVotes());
+    }
+
+    /**
+     * @return void
+     */
     public function testAddReviewsTotalCount(): void
     {
         $this->selectMock->expects($this->once())
