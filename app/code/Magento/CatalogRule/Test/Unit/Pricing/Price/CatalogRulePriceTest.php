@@ -146,6 +146,50 @@ class CatalogRulePriceTest extends TestCase
         $this->assertEquals($convertedPrice, $this->object->getValue());
     }
 
+    public function testGetValueUsesWebsiteOfProductStore()
+    {
+        $productStoreId = 7;
+        $productWebsiteId = 2;
+        $productId = 4;
+        $customerGroupId = 3;
+        $date = new \DateTime();
+        $catalogRulePrice = 25.0;
+
+        $productStore = $this->createMock(StoreInterface::class);
+        $productStore->method('getId')->willReturn($productStoreId);
+        $productStore->method('getWebsiteId')->willReturn($productWebsiteId);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($productStoreId)
+            ->willReturn($productStore);
+        $this->saleableItemMock->method('getStoreId')->willReturn($productStoreId);
+        $this->saleableItemMock->method('getId')->willReturn($productId);
+        $this->dataTimeMock->expects($this->once())
+            ->method('scopeDate')
+            ->with($productStoreId)
+            ->willReturn($date);
+        $this->customerSessionMock->method('getCustomerGroupId')->willReturn($customerGroupId);
+        $this->catalogRuleResourceMock->expects($this->once())
+            ->method('getRulePrice')
+            ->with($date, $productWebsiteId, $customerGroupId, $productId)
+            ->willReturn($catalogRulePrice);
+        $this->priceCurrencyMock->method('convertAndRound')->willReturnArgument(0);
+
+        $object = new CatalogRulePrice(
+            $this->saleableItemMock,
+            1,
+            $this->calculator,
+            $this->priceCurrencyMock,
+            $this->dataTimeMock,
+            $storeManager,
+            $this->customerSessionMock,
+            $this->catalogRuleResourceMock
+        );
+
+        $this->assertEquals($catalogRulePrice, $object->getValue());
+    }
+
     public function testGetValueFromData()
     {
         $catalogRulePrice = 7.1;

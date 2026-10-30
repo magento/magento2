@@ -86,9 +86,10 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                 $value = $this->product->getData(self::PRICE_CODE);
                 $this->value = $value ? (float)$value : false;
             } else {
+                $store = $this->storeManager->getStore($this->product->getStoreId() ?: null);
                 $this->value = $this->ruleResource->getRulePrice(
-                    $this->dateTime->scopeDate($this->storeManager->getStore()->getId()),
-                    $this->storeManager->getStore()->getWebsiteId(),
+                    $this->dateTime->scopeDate($store->getId()),
+                    $store->getWebsiteId(),
                     $this->customerSession->getCustomerGroupId(),
                     $this->product->getId()
                 );
