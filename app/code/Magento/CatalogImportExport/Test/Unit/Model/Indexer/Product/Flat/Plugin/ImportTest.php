@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Flat\Plugi
 
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Catalog\Model\Indexer\Product\Flat\State;
+use Magento\Catalog\Model\Product;
 use Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import as ImportExportImport;
@@ -59,6 +60,7 @@ class ImportTest extends TestCase
 
     public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledDisabled()
     {
+        $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
         $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->once())->method('markIndexerAsInvalid');
@@ -68,6 +70,7 @@ class ImportTest extends TestCase
 
     public function testAfterImportSourceWithFlatDisabledAndIndexerScheduledDisabled()
     {
+        $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
         $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(false);
         $this->processorMock->expects($this->never())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
@@ -77,8 +80,19 @@ class ImportTest extends TestCase
 
     public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledEnabled()
     {
+        $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
         $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(true);
+        $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
+        $someData = [1, 2, 3];
+        $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
+    }
+
+    public function testAfterImportSourceWithNonProductEntityDoesNotInvalidateIndexer()
+    {
+        $this->subjectMock->method('getEntity')->willReturn('customer');
+        $this->flatStateMock->expects($this->never())->method('isFlatEnabled');
+        $this->processorMock->expects($this->never())->method('isIndexerScheduled');
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
         $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
