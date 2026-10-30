@@ -256,7 +256,6 @@ class Sitemap extends BaseSitemap
     {
         $batchProductFactory = $this->batchProductFactory;
         $itemFactory = $this->sitemapItemFactory;
-        $configReader = $this->productConfigReader;
 
         $batchProductResource = $batchProductFactory->create();
         $productCollection = $batchProductResource->getCollection($this->getStoreId());
@@ -266,20 +265,30 @@ class Sitemap extends BaseSitemap
         }
 
         foreach ($productCollection as $product) {
-            $sitemapItem = $itemFactory->create(
-                [
-                'url' => $product->getUrl(),
-                'updatedAt' => $product->getUpdatedAt(),
-                'images' => $product->getImages(),
-                'priority' => $configReader->getPriority($this->getStoreId()),
-                'changeFrequency' => $configReader->getChangeFrequency($this->getStoreId()),
-                ]
-            );
+            $sitemapItem = $itemFactory->create($this->buildProductItemData($product, $this->getStoreId()));
 
             $this->processSitemapItem($sitemapItem);
 
             unset($sitemapItem, $product);
         }
+    }
+
+    /**
+     * Get constructor arguments for the streamed product sitemap item factory.
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @param int $storeId
+     * @return array
+     */
+    public function buildProductItemData($item, $storeId)
+    {
+        return [
+            'url' => $item->getUrl(),
+            'updatedAt' => $item->getUpdatedAt(),
+            'images' => $item->getImages(),
+            'priority' => $this->productConfigReader->getPriority($storeId),
+            'changeFrequency' => $this->productConfigReader->getChangeFrequency($storeId),
+        ];
     }
 
     /**

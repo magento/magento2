@@ -17,6 +17,41 @@ use PHPUnit\Framework\TestCase;
 
 class StoreUrlTest extends TestCase
 {
+    public function testGetItemData(): void
+    {
+        $resolver = new StoreUrlItemResolver($this->getConfigReaderMock(), $this->getItemFactoryMock());
+
+        self::assertSame([
+            'url' => '',
+            'priority' => '1.0',
+            'changeFrequency' => 'daily',
+        ], $resolver->getItemData(1));
+    }
+
+    public function testGetItemsUsesOverriddenItemData(): void
+    {
+        $resolver = new class (
+            $this->getConfigReaderMock(),
+            $this->getItemFactoryMock()
+        ) extends StoreUrlItemResolver {
+            public function getItemData($storeId)
+            {
+                $data = parent::getItemData($storeId);
+                $data['priority'] = '0.3';
+                return $data;
+            }
+        };
+
+        $items = $resolver->getItems(1);
+
+        self::assertCount(1, $items);
+        self::assertSame('', $items[0]->getUrl());
+        self::assertSame('0.3', $items[0]->getPriority());
+        self::assertSame('daily', $items[0]->getChangeFrequency());
+        self::assertNull($items[0]->getUpdatedAt());
+        self::assertNull($items[0]->getImages());
+    }
+
     /**
      * test for getItems method
      */
@@ -39,7 +74,10 @@ class StoreUrlTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
+        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
         $itemFactoryMock->expects($this->any())
             ->method('create')
