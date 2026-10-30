@@ -166,6 +166,33 @@ class TransportBuilderTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetTransportPassesTemplateStoreToTransportFactory(): void
+    {
+        $template = $this->createMock(TemplateInterface::class);
+        $template->method('setVars')->willReturnSelf();
+        $template->method('setOptions')->willReturnSelf();
+        $template->method('getSubject')->willReturn('Email Subject');
+        $template->method('getType')->willReturn(TemplateTypesInterface::TYPE_TEXT);
+        $template->method('processTemplate')->willReturn('Body');
+        $this->templateFactoryMock->method('get')->willReturn($template);
+        $this->mimePartFactoryMock->method('create')->willReturn($this->createMock(MimePartInterface::class));
+        $this->emailMessageInterfaceFactoryMock->method('create')
+            ->willReturn($this->createMock(EmailMessageInterface::class));
+
+        $this->mailTransportFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->callback(fn(array $arguments) => ($arguments['storeId'] ?? null) === 3))
+            ->willReturn($this->createMock(TransportInterface::class));
+
+        $this->builder->setTemplateIdentifier('identifier')
+            ->setTemplateVars([])
+            ->setTemplateOptions(['area' => 'frontend', 'store' => 3])
+            ->getTransport();
+    }
+
+    /**
      * Test get transport with exception.
      *
      * @return void
