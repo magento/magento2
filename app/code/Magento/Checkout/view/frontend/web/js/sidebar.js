@@ -133,6 +133,18 @@ define([
             };
 
             this._on(this.element, events);
+            this._on(window, {
+
+                /**
+                 * Re-enable the checkout button when the page is restored from the BFCache,
+                 * as it is disabled on click to prevent double-submission during redirect.
+                 */
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        $(this.options.button.checkout).prop('disabled', false);
+                    }
+                }
+            });
             this._calcHeight();
         },
 
