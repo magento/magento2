@@ -13,4 +13,7 @@
     <event name="customer_customer_authenticated">
         <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
+    <event name="customer_email_changed">
+        <observer name="customer_email_changed_observer" instance="Magento\Customer\Observer\CustomerEmailChangedObserver" />
+    </event>
 </config>
