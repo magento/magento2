@@ -85,7 +85,14 @@ class AjaxLogin
         $loginParams = [];
         $content = $request->getContent();
         if ($content) {
-            $loginParams = $this->serializer->unserialize($content);
+            try {
+                $loginParams = $this->serializer->unserialize($content);
+            } catch (\InvalidArgumentException) {
+                return $proceed();
+            }
+            if (!is_array($loginParams)) {
+                return $proceed();
+            }
         }
         $username = $loginParams['username'] ?? null;
         $captchaString = $loginParams[$captchaInputName] ?? null;
