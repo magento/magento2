@@ -660,7 +660,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStatus()
     {
         $status = $this->_getData(self::STATUS);
-        return $status !== null ? $status : Status::STATUS_ENABLED;
+        return $status !== null ? (int)$status : Status::STATUS_ENABLED;
     }
 
     /**
