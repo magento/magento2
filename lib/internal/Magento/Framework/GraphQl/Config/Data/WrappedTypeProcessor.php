@@ -95,10 +95,8 @@ class WrappedTypeProcessor
     private function processIsList(FieldInterface $field, ?TypeInterface $object = null) : TypeInterface
     {
         if ($field->isList()) {
-            if ($field instanceof \Magento\Framework\GraphQl\Config\Element\Argument) {
-                if ($field->areItemsRequired()) {
-                    $object = $this->typeFactory->createNonNull($object);
-                }
+            if ($field->areItemsRequired()) {
+                $object = $this->typeFactory->createNonNull($object);
             }
             return $this->typeFactory->createList($object);
         }
@@ -136,10 +134,8 @@ class WrappedTypeProcessor
     ) : \GraphQL\Type\Definition\Type {
         $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         if ($field->isList()) {
-            if ($field instanceof \Magento\Framework\GraphQl\Config\Element\Argument) {
-                if ($field->areItemsRequired()) {
-                    $object = $this->scalarTypes->createNonNull($object);
-                }
+            if ($field->areItemsRequired()) {
+                $object = $this->scalarTypes->createNonNull($object);
             }
             return $this->scalarTypes->createList($object);
         }
