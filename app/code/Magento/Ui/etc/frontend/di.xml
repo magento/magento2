@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!--
+        The layout generator is built on every request and would build UiComponentFactory with it, which loads and
+        evaluates every etc/definition.xml. Only a uiComponent layout element needs the factory, so defer it.
+    -->
+    <type name="Magento\Framework\View\Layout\Generator\UiComponent">
+        <arguments>
+            <argument name="uiComponentFactory" xsi:type="object">Magento\Framework\View\Element\UiComponentFactory\Proxy</argument>
+        </arguments>
+    </type>
+</config>
