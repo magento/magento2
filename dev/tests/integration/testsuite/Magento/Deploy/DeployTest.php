@@ -8,6 +8,9 @@ namespace Magento\Deploy;
 use Magento\Deploy\Package\Processor\PreProcessor\Less;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Deploy\Strategy\DeployStrategyFactory;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -17,6 +20,10 @@ use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Config\View;
 use Magento\Deploy\Config\BundleConfig;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\View\Asset\Minification;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -155,6 +162,288 @@ class DeployTest extends \PHPUnit\Framework\TestCase
             $this->assertExcluded($theme, $this->config->getExcludedFiles());
             $this->assertExcluded($theme, $this->config->getExcludedDir());
         }
+    }
+
+    /**
+     * Quick strategy may copy files from a parent package, so its output must match the standard strategy
+     *
+     * Vendor/child overrides a LESS source, an image and a JS file for fr_FR and, differently, for de_DE. The
+     * collector creates both of those packages before the requested locales are added, so one of them is the base
+     * locale package the other locales copy from and the other is a variant carrying overrides the base lacks.
+     *
+     * @magentoDataFixture Magento/Deploy/_files/theme.php
+     * @param string[] $themes
+     * @param string[] $locales
+     * @param bool $noParent
+     * @param bool $minify
+     * @return void
+     */
+    #[DataProvider('quickDeployDataProvider')]
+    public function testQuickDeployMatchesStandardDeploy(
+        array $themes,
+        array $locales,
+        bool $noParent,
+        bool $minify
+    ): void {
+        $options = array_replace(
+            $this->options,
+            [
+                Options::THEME => $themes,
+                Options::LANGUAGE => $locales,
+                Options::NO_PARENT => $noParent,
+            ]
+        );
+
+        if ($minify) {
+            $this->setMinification(true);
+        }
+        try {
+            $quickOutput = $this->deployVendorThemes($options, DeployStrategyFactory::DEPLOY_STRATEGY_QUICK, $minify);
+            $standardOutput = $this->deployVendorThemes(
+                $options,
+                DeployStrategyFactory::DEPLOY_STRATEGY_STANDARD,
+                $minify
+            );
+        } finally {
+            if ($minify) {
+                $this->setMinification(false);
+                Bootstrap::getInstance()->reinitialize();
+            }
+        }
+
+        $this->assertSame(
+            $standardOutput,
+            $quickOutput,
+            "Quick deploy output differs from standard deploy output in:\n"
+            . implode("\n", $this->getDifferentPaths($standardOutput, $quickOutput))
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function quickDeployDataProvider(): array
+    {
+        $vendorThemes = ['Vendor/parent', 'Vendor/child'];
+        $locales = ['en_US', 'fr_FR', 'de_DE'];
+
+        return [
+            'en_US first' => [$vendorThemes, $locales, false, false],
+            'reversed locales' => [$vendorThemes, array_reverse($locales), false, false],
+            'child theme only, no parent' => [['Vendor/child'], $locales, true, false],
+            'css and js minified' => [$vendorThemes, $locales, false, true],
+        ];
+    }
+
+    /**
+     * Enable or remove CSS and JS minification in the default scope
+     *
+     * The application must be reinitialized afterwards: the configuration is read once per object manager.
+     *
+     * @param bool $enabled
+     * @return void
+     */
+    private function setMinification(bool $enabled): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $configWriter = $objectManager->get(WriterInterface::class);
+        foreach (['css', 'js'] as $contentType) {
+            $path = sprintf(Minification::XML_PATH_MINIFICATION_ENABLED, $contentType);
+            if ($enabled) {
+                $configWriter->save($path, '1');
+            } else {
+                $configWriter->delete($path);
+            }
+        }
+        $objectManager->get(CacheInterface::class)->clean([Config::CACHE_TAG]);
+    }
+
+    /**
+     * Deploy from a clean state, check Vendor theme content and return sha256 of every file of the requested themes
+     *
+     * With --no-parent the standard strategy still writes RequireJS config, translation dictionaries and bundles for
+     * the ancestor themes, the quick strategy does not, so only the requested themes are compared.
+     *
+     * @param array $options
+     * @param string $strategy
+     * @param bool $minify
+     * @return array
+     */
+    private function deployVendorThemes(array $options, string $strategy, bool $minify): array
+    {
+        // Run each deployment as in its own process: packages, pre-processors, SRI hashes and globbed file lists are
+        // all kept in memory by a previous deployment
+        Bootstrap::getInstance()->reinitialize();
+        Glob::clearCache();
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(State::class)->setMode(State::MODE_PRODUCTION);
+        $this->filesystem = $objectManager->get(Filesystem::class);
+        $this->staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        $this->filesystem->getDirectoryWrite(DirectoryList::PUB)->delete(DirectoryList::STATIC_VIEW);
+        $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->delete(DirectoryList::TMP_MATERIALIZATION_DIR);
+
+        $minification = $objectManager->get(Minification::class);
+        foreach (['css', 'js'] as $contentType) {
+            $this->assertSame(
+                $minify,
+                $minification->isEnabled($contentType),
+                "{$strategy}: {$contentType} minification state is not the requested one"
+            );
+        }
+
+        $objectManager->create(DeployStaticContent::class, ['logger' => $objectManager->get(LoggerInterface::class)])
+            ->deploy(array_replace($options, [Options::STRATEGY => $strategy]));
+
+        $this->assertVendorThemesContent($strategy, $options, $minification);
+        $this->assertExcludedFromMinificationDeployed($strategy, $options, $minification);
+
+        $hashes = [];
+        foreach ($options[Options::THEME] as $theme) {
+            /** @var \SplFileInfo $file */
+            foreach ($this->getDirectoryIterator('frontend/' . $theme) as $file) {
+                if ($file->isFile()) {
+                    $hashes[$this->staticDir->getRelativePath($file->getPathname())] = hash_file(
+                        'sha256',
+                        $file->getPathname()
+                    );
+                }
+            }
+        }
+        ksort($hashes);
+        $this->assertNotEmpty($hashes, "No files deployed to frontend/Vendor with the {$strategy} strategy");
+
+        return $hashes;
+    }
+
+    /**
+     * Assert each Vendor package holds its own locale specific content
+     *
+     * @param string $strategy
+     * @param array $options
+     * @param Minification $minification
+     * @return void
+     */
+    private function assertVendorThemesContent(string $strategy, array $options, Minification $minification): void
+    {
+        $markers = ['fr_FR' => 'fr-only-class-for-easy-find', 'de_DE' => 'de-only-class-for-easy-find'];
+        $childMarkers = array_merge(['super-test-class-for-easy-find'], array_values($markers));
+        foreach ($options[Options::LANGUAGE] as $locale) {
+            $packagePath = 'frontend/Vendor/child/' . $locale . '/';
+            $stylesPath = $minification->addMinifiedSign($packagePath . 'css/styles-m.css');
+            $styles = $this->staticDir->readFile($stylesPath);
+            $this->assertStringContainsString(
+                'super-test-class-for-easy-find',
+                $styles,
+                "{$strategy}: {$stylesPath} misses the child theme style"
+            );
+            foreach ($markers as $markerLocale => $marker) {
+                $message = "{$strategy}: {$stylesPath} has the wrong {$markerLocale} override state";
+                if ($markerLocale === $locale) {
+                    $this->assertStringContainsString($marker, $styles, $message);
+                } else {
+                    $this->assertStringNotContainsString($marker, $styles, $message);
+                }
+            }
+            $this->assertChildLocaleFiles($strategy, $packagePath, $locale, isset($markers[$locale]), $minification);
+
+            $parentStylesPath = $minification->addMinifiedSign(
+                'frontend/Vendor/parent/' . $locale . '/css/styles-m.css'
+            );
+            if ($options[Options::NO_PARENT]) {
+                $this->assertFileDoesNotExist(
+                    $this->staticDir->getAbsolutePath($parentStylesPath),
+                    "{$strategy}: {$parentStylesPath} is deployed although --no-parent is set"
+                );
+                continue;
+            }
+            $parentStyles = $this->staticDir->readFile($parentStylesPath);
+            foreach ($childMarkers as $marker) {
+                $this->assertStringNotContainsString(
+                    $marker,
+                    $parentStyles,
+                    "{$strategy}: {$parentStylesPath} has the child theme style {$marker}"
+                );
+            }
+        }
+    }
+
+    /**
+     * Assert the child theme image and JS file of a locale are deployed from the locale override or the theme
+     *
+     * @param string $strategy
+     * @param string $packagePath
+     * @param string $locale
+     * @param bool $hasOverrides
+     * @param Minification $minification
+     * @return void
+     */
+    private function assertChildLocaleFiles(
+        string $strategy,
+        string $packagePath,
+        string $locale,
+        bool $hasOverrides,
+        Minification $minification
+    ): void {
+        $sourceDir = __DIR__ . '/_files/Vendor/child/web/' . ($hasOverrides ? 'i18n/' . $locale . '/' : '');
+        $jsMarker = $hasOverrides ? $locale : 'default';
+        foreach (['images/test-logo.svg', 'js/test-marker.js'] as $filePath) {
+            $deployedPath = $minification->addMinifiedSign($packagePath . $filePath);
+            $content = $this->staticDir->readFile($deployedPath);
+            $message = "{$strategy}: {$deployedPath} is not deployed from {$sourceDir}{$filePath}";
+            if ($deployedPath === $packagePath . $filePath) {
+                $this->assertSame(file_get_contents($sourceDir . $filePath), $content, $message);
+            } else {
+                $this->assertMatchesRegularExpression(
+                    '/vendorChildTestMarker\s*=\s*["\']' . $jsMarker . '["\']/',
+                    $content,
+                    $message
+                );
+            }
+        }
+    }
+
+    /**
+     * Assert library files excluded from minification keep their own name in every requested package
+     *
+     * HugeRTE ships both "x.js" and "x.min.js"; when minification is enabled the deployed name of "x.js" must still
+     * be resolved from the full deployed path, which matches the "/hugerte/" exclude.
+     *
+     * @param string $strategy
+     * @param array $options
+     * @param Minification $minification
+     * @return void
+     */
+    private function assertExcludedFromMinificationDeployed(
+        string $strategy,
+        array $options,
+        Minification $minification
+    ): void {
+        foreach ($options[Options::THEME] as $theme) {
+            foreach ($options[Options::LANGUAGE] as $locale) {
+                foreach (['hugerte/hugerte.js', 'hugerte/skins/ui/hugerte-5/content.css'] as $filePath) {
+                    $path = "frontend/{$theme}/{$locale}/{$filePath}";
+                    $this->assertSame($path, $minification->addMinifiedSign($path), "{$path} is not excluded");
+                    $this->assertFileExists(
+                        $this->staticDir->getAbsolutePath($path),
+                        "{$strategy}: {$path} is not deployed"
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Return paths which exist in only one of the given maps or have a different hash
+     *
+     * @param array $expected
+     * @param array $actual
+     * @return string[]
+     */
+    private function getDifferentPaths(array $expected, array $actual): array
+    {
+        $paths = array_keys(array_diff_assoc($expected, $actual) + array_diff_assoc($actual, $expected));
+        sort($paths);
+        return $paths;
     }
 
     /**
