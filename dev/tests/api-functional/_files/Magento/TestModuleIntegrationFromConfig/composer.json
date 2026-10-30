@@ -1,9 +1,6 @@
 {
     "name": "magento/module-test-module-integration-from-config",
     "description": "test integration create from config",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~7.4.0||~8.0.0",
         "magento/framework": "*",
