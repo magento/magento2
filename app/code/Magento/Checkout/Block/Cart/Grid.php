@@ -121,35 +121,11 @@ class Grid extends \Magento\Checkout\Block\Cart
             $pager = $this->getLayout()->createBlock(Pager::class);
             $pager->setAvailableLimit([$availableLimit => $availableLimit])->setCollection($itemsCollection);
             $this->setChild('pager', $pager);
-            $this->updateCollectionWithQuoteItems($itemsCollection);
             $itemsCollection->load();
             $this->assignChildItems($itemsCollection);
             $this->prepareItemUrls();
         }
         return $this;
-    }
-
-    private function updateCollectionWithQuoteItems(
-        Collection $itemsCollection
-    ) {
-        foreach ($itemsCollection->getItems() as $key => $collectionItem) {
-            $quote      = $this->getQuote();
-            $quoteItems = $quote->getItems();
-            foreach ($quoteItems as $quoteItem) {
-                if ($quoteItem->getSku() === $collectionItem->getSku()) {
-                    $itemsCollection->removeItemByKey($key);
-                    try {
-                        $itemsCollection->addItem($quoteItem);
-                    } catch (\Exception $e) {
-                        // No action, item id removed
-                    }
-
-                    break;
-                }
-            }
-        }
-
-        return $itemsCollection;
     }
 
     /**
