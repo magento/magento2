@@ -1,0 +1,11 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
+ /* @noEscape */ $block->getSerializedConfig(), false); ?>
