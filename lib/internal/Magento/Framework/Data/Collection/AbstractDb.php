@@ -434,10 +434,28 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         if ($this->_totalRecords === null) {
             $sql = $this->getSelectCountSql();
+            if ($sql->getPart(Select::HAVING)) {
+                $sql = $this->getHavingAwareCountSelect();
+            }
             $this->_totalRecords = $this->_totalRecords ?? $this->getConnection()->fetchOne($sql, $this->_bindParams);
         }
 
         return (int)$this->_totalRecords;
+    }
+
+    /**
+     * Count the rows of the grouped select, so HAVING may use column aliases and aggregates
+     *
+     * @return Select
+     */
+    private function getHavingAwareCountSelect(): Select
+    {
+        $innerSelect = clone $this->getSelect();
+        $innerSelect->reset(Select::ORDER);
+        $innerSelect->reset(Select::LIMIT_COUNT);
+        $innerSelect->reset(Select::LIMIT_OFFSET);
+
+        return $this->getConnection()->select()->from(['count_source' => $innerSelect], 'COUNT(*)');
     }
 
     /**
