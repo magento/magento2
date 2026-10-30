@@ -330,6 +330,83 @@ define([
                 expect(model.validate()).toEqual(expected);
             });
         });
+        describe('setValidation method', function () {
+            beforeEach(function () {
+                model.validation = {};
+                model.required(false);
+                spyOn(model, 'validate');
+            });
+
+            it('enables required with the rule name and a boolean', function () {
+                model.setValidation('required-entry', true);
+
+                expect(model.validation['required-entry']).toBe(true);
+                expect(model.required()).toBe(true);
+                expect(model.validate).toHaveBeenCalledTimes(1);
+            });
+
+            it('disables required with the rule name and a boolean', function () {
+                model.setValidation('required-entry', true);
+                model.setValidation('required-entry', false);
+
+                expect(model.validation['required-entry']).toBe(false);
+                expect(model.required()).toBe(false);
+                expect(model.validate).toHaveBeenCalledTimes(2);
+            });
+
+            it('enables required with an object of rules', function () {
+                model.setValidation({
+                    'required-entry': true
+                });
+
+                expect(model.validation['required-entry']).toBe(true);
+                expect(model.required()).toBe(true);
+                expect(model.validate).toHaveBeenCalledTimes(1);
+            });
+
+            it('disables required with an object of rules', function () {
+                model.setValidation({
+                    'required-entry': true
+                });
+                model.setValidation({
+                    'required-entry': false
+                });
+
+                expect(model.validation['required-entry']).toBe(false);
+                expect(model.required()).toBe(false);
+                expect(model.validate).toHaveBeenCalledTimes(2);
+            });
+
+            it('keeps required and does not validate when the rules are unchanged', function () {
+                model.setValidation('required-entry', true);
+                model.validate.calls.reset();
+                model.setValidation('required-entry', true);
+
+                expect(model.required()).toBe(true);
+                expect(model.validate).not.toHaveBeenCalled();
+            });
+
+            it('keeps required state when an unrelated rule changes', function () {
+                model.setValidation('required-entry', true);
+                model.setValidation('validate-number', true);
+
+                expect(model.validation).toEqual({
+                    'required-entry': true,
+                    'validate-number': true
+                });
+                expect(model.required()).toBe(true);
+
+                model.setValidation({
+                    'validate-number': false
+                });
+
+                expect(model.required()).toBe(true);
+            });
+
+            it('returns the element for chaining', function () {
+                expect(model.setValidation('required-entry', true)).toBe(model);
+            });
+        });
         describe('onUpdate method', function () {
             it('check for method call', function () {
                 spyOn(model, 'bubble');
