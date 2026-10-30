@@ -139,9 +139,14 @@ class Image extends File
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
 
+        $temporaryFile = $value['tmp_name'];
+        if (!$this->ioFileSystem->fileExists($temporaryFile)) {
+            $temporaryFile = $this->mediaEntityTmpReadDirectory->getAbsolutePath($temporaryFile);
+        }
+
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $imageProp = getimagesize($value['tmp_name']);
+            $imageProp = getimagesize($temporaryFile);
         } catch (\Throwable $e) {
             $imageProp = false;
         }
