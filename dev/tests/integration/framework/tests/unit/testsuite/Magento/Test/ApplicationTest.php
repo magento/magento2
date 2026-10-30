@@ -10,6 +10,8 @@ use DomainException;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Cache\Manager as CacheManager;
+use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State;
 use Magento\Framework\Autoload\ClassLoaderWrapper;
@@ -188,45 +190,78 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 false,
                 true
             );
-        $withArgs = [];
-        // Add expected shell execution calls
-        foreach ($expectedShellExecutionCalls as $expectedShellExecutionArguments) {
-            $withArgs[] = $expectedShellExecutionArguments;
-        }
-
         if ($isExceptionExpected) {
             $this->expectException(DomainException::class);
             $this->expectExceptionMessage('"command" must be present in post install setup command arrays');
-        } else {
-            $withArgs[] = [
-                PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-                [BP . '/bin/magento', $this->getInitParamsQuery($tmpDir)]
-            ];
         }
+        $shellCall = 0;
         $this->shell
+            ->expects($this->exactly(count($expectedShellExecutionCalls)))
             ->method('execute')
-            ->willReturnCallback(function (...$withArgs) {
-                if (!empty($withArgs)) {
-                    return null;
-                }
+            ->willReturnCallback(function (...$args) use ($expectedShellExecutionCalls, &$shellCall) {
+                $this->assertSame($expectedShellExecutionCalls[$shellCall++], $args);
+                return '';
             });
+
+        $cacheManager = $this->createCacheManagerMock($isExceptionExpected);
 
         $this->objectManager->expects($this->any())
             ->method('configure')
             ->willReturnSelf();
         TestFrameworkBootstrap::setObjectManager($this->objectManager);
 
-        $this->_factory->expects($this->any())
+        $this->_factory->expects($isExceptionExpected ? $this->never() : $this->once())
             ->method('restore')
             ->willReturn($this->objectManager);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturnCallback(fn($param) => match ([$param]) {
                 [\Magento\Indexer\Model\Indexer\Collection::class] => $this->collectionMock,
+                [CacheManager::class] => $cacheManager,
                 default => ''
             });
 
         $subject->install(false);
+    }
+
+    /**
+     * Create cache expectations for installation, including cache state reload ordering.
+     *
+     * @param bool $isExceptionExpected
+     * @return CacheManager
+     */
+    private function createCacheManagerMock(bool $isExceptionExpected): CacheManager
+    {
+        $enabledCaches = ['config', 'layout', 'translate', 'compiled_config', 'eav'];
+        $disabledCaches = ['block_html', 'full_page', 'custom_cache'];
+        $cacheManager = $this->createMock(CacheManager::class);
+        $cacheManager->expects($isExceptionExpected ? $this->never() : $this->once())
+            ->method('getAvailableTypes')
+            ->willReturn(array_merge($enabledCaches, $disabledCaches));
+        $cacheCall = 0;
+        $setEnabled = function (array $types, bool $enabled) use ($enabledCaches, $disabledCaches, &$cacheCall) {
+            $this->assertSame($cacheCall === 1, $enabled);
+            $this->assertSame($cacheCall++ === 0 ? $disabledCaches : $enabledCaches, array_values($types));
+            return $types;
+        };
+        $cacheManager->expects($isExceptionExpected ? $this->never() : $this->exactly(2))
+            ->method('setEnabled')
+            ->willReturnCallback($setEnabled);
+        $cacheManager->expects($isExceptionExpected ? $this->never() : $this->once())
+            ->method('clean')
+            ->with($enabledCaches)
+            ->willReturnCallback(function () use (&$cacheCall) {
+                $this->assertSame(2, $cacheCall);
+                $cacheCall++;
+            });
+        $this->objectManager->expects($isExceptionExpected ? $this->never() : $this->once())
+            ->method('removeSharedInstance')
+            ->with(CacheStateInterface::class, true)
+            ->willReturnCallback(function () use (&$cacheCall) {
+                $this->assertSame(3, $cacheCall);
+            });
+
+        return $cacheManager;
     }
 
     /**
