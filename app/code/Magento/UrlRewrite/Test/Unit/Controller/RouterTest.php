@@ -303,12 +303,58 @@ class RouterTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testMatchWithCustomRedirectToBaseUrl()
+    {
+        $queryParams = [];
+        $redirectType = 301;
+        $requestPath = 'some-test1';
+        $targetPath = '/';
+        $redirectUrl = 'redirect-url';
+        $this->storeManager->method('getStore')
+            ->willReturn($this->store);
+        $this->request->method('getPathInfo')
+            ->willReturn($requestPath);
+        $this->request->method('getRequestString')
+            ->willReturn($requestPath);
+        $urlRewrite = $this->createMock(UrlRewrite::class);
+        $urlRewrite->method('getEntityType')->willReturn('custom');
+        $urlRewrite->method('getRedirectType')->willReturn($redirectType);
+        $urlRewrite->method('getRequestPath')->willReturn($requestPath);
+        $urlRewrite->method('getTargetPath')->willReturn($targetPath);
+        $this->urlFinder->method('findOneByData')->willReturn($urlRewrite);
+        $this->response->expects($this->once())
+            ->method('setRedirect')
+            ->with($redirectUrl, $redirectType);
+        $this->request->expects($this->once())
+            ->method('getParams')
+            ->willReturn($queryParams);
+        $this->url->expects($this->once())
+            ->method('getUrl')
+            ->with(
+                '',
+                ['_direct' => '', '_query' => $queryParams]
+            )
+            ->willReturn($redirectUrl);
+        $this->request->expects($this->once())
+            ->method('setDispatched')
+            ->with(true);
+        $this->actionFactory->expects($this->once())
+            ->method('create')
+            ->with(Redirect::class);
+
+        $this->router->match($this->request);
+    }
+
+    /**
      * @param string $requestPath
      * @param string $targetPath
+     * @param string $directPath
      * @param bool $shouldRedirect
      */
     #[DataProvider('customInternalRedirectDataProvider')]
-    public function testMatchWithCustomInternalRedirect($requestPath, $targetPath, $shouldRedirect)
+    public function testMatchWithCustomInternalRedirect($requestPath, $targetPath, $directPath, $shouldRedirect)
     {
         $queryParams = [];
         $redirectType = 'redirect-code';
@@ -334,7 +380,7 @@ class RouterTest extends TestCase
                 ->method('getUrl')
                 ->with(
                     '',
-                    ['_direct' => $targetPath, '_query' => $queryParams]
+                    ['_direct' => $directPath, '_query' => $queryParams]
                 )
                 ->willReturn('a');
             $this->request->expects($this->once())
@@ -358,8 +404,9 @@ class RouterTest extends TestCase
     public static function customInternalRedirectDataProvider()
     {
         return [
-            ['request-path', 'target-path', true],
-            ['/', '/', false],
+            'relative target' => ['request-path', 'target-path', 'target-path', true],
+            'target with leading slash' => ['request-path', '/customer/account/', 'customer/account/', true],
+            'same request and target' => ['/', '/', '', false],
         ];
     }
 
