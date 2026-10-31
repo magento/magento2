@@ -16,6 +16,7 @@
 ) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
     @fontValue: (unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio);
 }
+
 .lib-font-size-value(
     @_value
 ) when (@font-size-unit-convert = false) {
@@ -315,7 +316,9 @@
 
 @urls-resolved: false;
 
-.lib-url(@_path) {
+.lib-url(
+    @_path
+) {
     @url: "@{baseDir}@{_path}";
 }
 
@@ -412,64 +415,52 @@
 .lib-vendor-prefix-display(
     @_value: flex
 ) {
-    display: ~"-webkit-@{_value}";
-    display: ~"-ms-@{_value}box";
     display: @_value;
 }
 
 .lib-vendor-prefix-flex-grow(
     @_value: 0
 ) {
-    -webkit-flex-grow: @_value;
-            flex-grow: @_value;
+    flex-grow: @_value;
 }
 
-.lib-vendor-prefix-flex-shrink (
+.lib-vendor-prefix-flex-shrink(
     @_value: 1
 ) {
-    -webkit-flex-shrink: @_value;
-            flex-shrink: @_value;
+    flex-shrink: @_value;
 }
 
-.lib-vendor-prefix-flex-basis (
+.lib-vendor-prefix-flex-basis(
     @_value: auto
 ) {
-    -webkit-flex-basis: @_value;
-            flex-basis: @_value;
+    flex-basis: @_value;
 }
 
-.lib-vendor-prefix-flex-wrap (
+.lib-vendor-prefix-flex-wrap(
     @_value: wrap
 ) {
-    -webkit-flex-wrap: @_value;
-            flex-wrap: @_value;
+    flex-wrap: @_value;
 }
 
-.lib-vendor-prefix-flex-direction (
+.lib-vendor-prefix-flex-direction(
     @_value: column
 ) {
-    -webkit-flex-direction: @_value;
-        -ms-flex-direction: @_value;
-            flex-direction: @_value;
+    flex-direction: @_value;
 }
 
-.lib-vendor-prefix-order (
+.lib-vendor-prefix-order(
     @_value: 0
 ) {
-    -ms-flex-order: @_value;
-     -webkit-order: @_value;
-             order: @_value;
+    order: @_value;
 }
 
-.lib-vendor-box-align (
+.lib-vendor-box-align(
     @_value: stretch
 ) {
-    -webkit-align-items: @_value;
-        -ms-align-items: @_value;
-            align-items: @_value;
+    align-items: @_value;
 }
 
-.lib-vendor-prefix-appearance (
+.lib-vendor-prefix-appearance(
     @value: none
 ) {
     -webkit-appearance: @value;
@@ -477,12 +468,10 @@
     appearance: @value;
 }
 
-.lib-vendor-prefix-column-count (
+.lib-vendor-prefix-column-count(
     @_value
 ) {
-    -webkit-column-count: @_value;
-       -moz-column-count: @_value;
-            column-count: @_value;
+    column-count: @_value;
 }
 
 //
