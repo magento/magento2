@@ -20,8 +20,10 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+
 
 /**
  * @see CartItemPrices
