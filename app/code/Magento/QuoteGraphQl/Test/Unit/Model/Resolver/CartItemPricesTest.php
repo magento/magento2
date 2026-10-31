@@ -29,6 +29,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CartItemPricesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartItemPrices
      */
