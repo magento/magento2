@@ -67,16 +67,13 @@ class GridTest extends TestCase
         //refresh data without cached updated_at
         $this->lastUpdateTimeCache->remove($constructorArgs['gridTableName']);
         $this->assertEmpty($this->lastUpdateTimeCache->get($constructorArgs['gridTableName']));
-        sleep(1);
-        $stamp = $this->formatUtcDateTime();
+        $stamp = '2026-01-01 12:00:00';
         $data['created_at'] = $data['updated_at'] = $stamp;
         $connection->update(
             $constructorArgs['mainTableName'],
             $data,
             sprintf('%s = %d', $orderIdField, $order->getEntityId())
         );
-        // Age past UTC(now-1s) cutoff used inside refreshBySchedule / getIdsWithCutoff.
-        sleep(2);
         $indexerProjection = $this->fetchGridIndexerProjection(
             $grid,
             $constructorArgs['mainTableName'],
@@ -84,29 +81,23 @@ class GridTest extends TestCase
             (int)$order->getEntityId()
         );
         $this->assertNotEmpty($indexerProjection);
-        $cutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-            ->sub(new \DateInterval('PT1S'))
-            ->format('Y-m-d H:i:s');
         $grid->refreshBySchedule();
 
         $select = $connection->select()
             ->from($constructorArgs['gridTableName'], ['created_at', 'updated_at'])
             ->where($orderIdField, $order->getEntityId());
         $gridData = $connection->fetchRow($select);
-        $this->assertGridTimestampsRoughlyMatch($cutoff, $indexerProjection, $gridData);
+        $this->assertGridTimestampsMatch($indexerProjection, $gridData);
 
         //refresh data with cached updated_at
         $this->assertNotEmpty($this->lastUpdateTimeCache->get($constructorArgs['gridTableName']));
-        sleep(1);
-        $stamp = $this->formatUtcDateTime();
+        $stamp = '2026-01-01 12:00:10';
         $data['created_at'] = $data['updated_at'] = $stamp;
         $connection->update(
             $constructorArgs['mainTableName'],
             $data,
             sprintf('%s = %d', $orderIdField, $order->getEntityId())
         );
-        // Age past UTC(now-1s) cutoff used inside refreshBySchedule / getIdsWithCutoff.
-        sleep(2);
         $indexerProjection = $this->fetchGridIndexerProjection(
             $grid,
             $constructorArgs['mainTableName'],
@@ -114,30 +105,23 @@ class GridTest extends TestCase
             (int)$order->getEntityId()
         );
         $this->assertNotEmpty($indexerProjection);
-        $cutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-            ->sub(new \DateInterval('PT1S'))
-            ->format('Y-m-d H:i:s');
         $grid->refreshBySchedule();
 
         $select = $connection->select()
             ->from($constructorArgs['gridTableName'], ['created_at', 'updated_at'])
             ->where($orderIdField, $order->getEntityId());
         $gridData = $connection->fetchRow($select);
-        $this->assertGridTimestampsRoughlyMatch($cutoff, $indexerProjection, $gridData);
+        $this->assertGridTimestampsMatch($indexerProjection, $gridData);
     }
 
     /**
-     * Grid stamps updated_at with UTC(now - 1s) computed inside refresh; tests compute cutoff outside first,
-     * so clocks can disagree by one second. created_at mirrors main via indexer SELECT but TIMESTAMP storage
-     * can shift reads by one second vs PHP-format expectations.
+     * Grid timestamps must preserve the fetched source projection.
      *
-     * @param string $approxCutoffUtc
      * @param array $indexerProjection
      * @param mixed $gridData
      * @return void
      */
-    private function assertGridTimestampsRoughlyMatch(
-        string $approxCutoffUtc,
+    private function assertGridTimestampsMatch(
         array $indexerProjection,
         mixed $gridData
     ): void {
@@ -145,24 +129,12 @@ class GridTest extends TestCase
         $this->assertArrayHasKey('created_at', $gridData);
         $this->assertArrayHasKey('updated_at', $gridData);
 
-        $slackSeconds = 2.0;
-
-        $this->assertEqualsWithDelta(
-            strtotime($approxCutoffUtc),
-            strtotime((string)$gridData['updated_at']),
-            $slackSeconds,
-            'Grid updated_at should reflect UTC cutoff (± slack across refresh boundary).'
-        );
-        $this->assertEqualsWithDelta(
-            strtotime((string)$indexerProjection['created_at']),
-            strtotime((string)$gridData['created_at']),
-            $slackSeconds,
-            'Grid created_at should mirror indexer projection within TIMESTAMP slack.'
-        );
+        $this->assertSame($indexerProjection['updated_at'], $gridData['updated_at']);
+        $this->assertSame($indexerProjection['created_at'], $gridData['created_at']);
     }
 
     /**
-     * Timestamps Grid::refreshBySchedule pulls from main (same SELECT as indexer, before cutoff overwrite).
+     * Timestamps Grid::refreshBySchedule pulls from main.
      *
      * @param Grid $grid
      * @param string $mainTableName
@@ -185,16 +157,6 @@ class GridTest extends TestCase
         );
 
         return \is_array($row) ? $row : [];
-    }
-
-    /**
-     * Same clock basis as \Magento\Sales\Model\ResourceModel\Grid::refreshBySchedule (UTC).
-     *
-     * @return string
-     */
-    private function formatUtcDateTime(): string
-    {
-        return (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format('Y-m-d H:i:s');
     }
 
     /**

@@ -27,6 +27,7 @@ use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Model\OrderRepository;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -161,6 +162,44 @@ class DownloadableProductPurchaseTest extends TestCase
         $order = $this->placeOrderWithDownloadableProduct();
         $this->verifyOrderConfirmationEmailSent($order);
         $this->verifyDownloadableLinksStatus($order);
+    }
+
+    #[
+        Config(
+            Item::XML_PATH_ORDER_ITEM_STATUS,
+            \Magento\Sales\Model\Order\Item::STATUS_PENDING,
+            'store',
+            'default'
+        ),
+        Config('catalog/downloadable/disable_guest_checkout', 0, 'store', 'default'),
+        Config('payment/checkmo/active', 1, 'store', 'default'),
+        DataFixture(DownloadableProductFixture::class, [
+            'price' => 10,
+            'links_purchased_separately' => 0,
+            'downloadable_product_links' => [['link_type' => 'url']]
+        ], as: 'product'),
+        DataFixture(GuestCart::class, [], as: 'quote'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(AddProductToCartFixture::class, [
+            'cart_id' => '$quote.id$',
+            'product_id' => '$product.id$'
+        ]),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$'])
+    ]
+    public function testDownloadableLinksAvailableAfterOrderPlacedWithPendingConfiguration(): void
+    {
+        $order = $this->placeOrderWithDownloadableProduct();
+
+        $this->assertNotEmpty($order->getEntityId());
+        $this->assertCount(1, $order->getItems());
+        foreach ($order->getItems() as $item) {
+            $links = $this->getDownloadablePurchasedLinks((int) $item->getItemId());
+            $this->assertCount(1, $links);
+            foreach ($links as $link) {
+                $this->assertSame(Item::LINK_STATUS_AVAILABLE, $link->getStatus());
+            }
+        }
     }
 
     /**
