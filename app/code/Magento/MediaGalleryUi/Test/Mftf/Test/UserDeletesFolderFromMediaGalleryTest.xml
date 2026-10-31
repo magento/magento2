@@ -69,7 +69,10 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForSearchResult" time="10"/>
         <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny"/>
-        <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsDisabled"/>
+        <!-- Retry deselection only while the button is enabled: lazy filterChips resolution can abort it (ACP2E-4605). -->
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryUnselectIfDeleteButtonStillActive"/>
+        <waitForPageLoad stepKey="waitForRetryUnselect"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsDisabled"/>
 
         <!-- Step4.2 Delete Folder is enabled post selecting folder -->
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderToVerifyDeleteFolderStatus">
