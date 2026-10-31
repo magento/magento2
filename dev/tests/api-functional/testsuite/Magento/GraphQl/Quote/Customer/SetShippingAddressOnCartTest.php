@@ -12,6 +12,8 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\CustomerWithAddresses;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -20,6 +22,7 @@ use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Quote\Test\Fixture\QuoteIdMask;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -2204,5 +2207,102 @@ QUERY;
 
         $this->expectExceptionMessage('"postcode" is required. Enter and try again.');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap($customerData->getEmail()));
+    }
+
+    #[
+        DataFixture(GuestCart::class, as: 'cart'),
+        DataProvider('telephoneInputDataProvider')
+    ]
+    public function testSetShippingAddressWithOptionalTelephone(string $telephoneInput): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $eavConfig = $objectManager->get(EavConfig::class);
+        $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
+        $attribute = $eavConfig->getAttribute('customer_address', 'telephone');
+        $isRequired = $attribute->getIsRequired();
+
+        try {
+            $attribute->setIsRequired(false);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+
+            $response = $this->graphQlMutation($this->getShippingAddressTelephoneMutation($telephoneInput));
+
+            $addresses = $response['setShippingAddressesOnCart']['cart']['shipping_addresses'];
+            self::assertCount(1, $addresses);
+            self::assertEmpty($addresses[0]['telephone']);
+        } finally {
+            $attribute->setIsRequired($isRequired);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+        }
+    }
+
+    #[
+        DataFixture(GuestCart::class, as: 'cart'),
+        DataProvider('telephoneInputDataProvider')
+    ]
+    public function testSetShippingAddressWithRequiredTelephone(string $telephoneInput): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $eavConfig = $objectManager->get(EavConfig::class);
+        $attributeRepository = $objectManager->get(AttributeRepositoryInterface::class);
+        $attribute = $eavConfig->getAttribute('customer_address', 'telephone');
+        $isRequired = $attribute->getIsRequired();
+
+        try {
+            $attribute->setIsRequired(true);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+
+            $query = $this->getShippingAddressTelephoneMutation($telephoneInput);
+            $this->expectExceptionMessage('"telephone" is required. Enter and try again.');
+            $this->graphQlMutation($query);
+        } finally {
+            $attribute->setIsRequired($isRequired);
+            $attributeRepository->save($attribute);
+            $eavConfig->clear();
+        }
+    }
+
+    public static function telephoneInputDataProvider(): array
+    {
+        return [
+            'omitted' => [''],
+            'null' => ['telephone: null'],
+            'empty' => ['telephone: ""']
+        ];
+    }
+
+    private function getShippingAddressTelephoneMutation(string $telephoneInput): string
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$cart->getId());
+
+        return <<<QUERY
+mutation {
+  setShippingAddressesOnCart(input: {
+    cart_id: "$maskedQuoteId"
+    shipping_addresses: [{
+      address: {
+        firstname: "John"
+        lastname: "Doe"
+        street: ["Main Street 1"]
+        city: "Hamburg"
+        postcode: "20095"
+        country_code: "DE"
+        save_in_address_book: false
+        $telephoneInput
+      }
+    }]
+  }) {
+    cart {
+      shipping_addresses {
+        telephone
+      }
+    }
+  }
+}
+QUERY;
     }
 }

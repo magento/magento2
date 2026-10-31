@@ -250,7 +250,7 @@ jobs:
 
       - name: Resolve PHP version from repository composer.json
         id: php-version
-        if: env.HAS_PHP_OR_STATIC == 'true'
+        if: env.HAS_PHP_OR_STATIC == 'true' || env.HAS_JS == 'true'
         env:
           REPO_NAME: ${{ github.event.repository.name }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
@@ -258,12 +258,42 @@ jobs:
         run: python3 .github/scripts/resolve_magento_tool_constraints.py
 
       - name: Setup PHP
-        if: env.HAS_PHP_OR_STATIC == 'true'
+        if: env.HAS_PHP_OR_STATIC == 'true' || env.HAS_JS == 'true'
         uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
         with:
           php-version: ${{ steps.php-version.outputs.php_version }}
           tools: composer
           extensions: simplexml, dom
+        env:
+          update: 'true'
+
+      - name: Verify PHP security minimum
+        if: env.HAS_PHP_OR_STATIC == 'true' || env.HAS_JS == 'true'
+        env:
+          EXPECTED_PHP_BRANCH: ${{ steps.php-version.outputs.php_version }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          import subprocess
+          import sys
+
+          minimum_patches = {"8.2": 35, "8.3": 36, "8.4": 27, "8.5": 12}
+          output = subprocess.check_output(["php", "-n", "-v"], text=True)
+          match = re.match(r"PHP (8\.\d+)\.(\d+)(?:\s|$)", output)
+          if match is None:
+              sys.exit("::error::Could not verify a stable PHP version.")
+          branch, patch = match.groups()
+          expected = os.environ["EXPECTED_PHP_BRANCH"]
+          if branch != expected:
+              sys.exit(f"::error::Expected PHP {expected}, found PHP {branch}.{patch}.")
+          minimum = minimum_patches.get(branch)
+          if minimum is None:
+              sys.exit(f"::error::PHP {branch} has no approved security minimum.")
+          if int(patch) < minimum:
+              sys.exit(f"::error::PHP {branch}.{patch} is below the required minimum {branch}.{minimum}.")
+          print(f"PHP {branch}.{patch} meets the required minimum {branch}.{minimum}.")
+          PY
 
       - name: Setup Node.js
         if: env.HAS_JS == 'true'
@@ -1138,4 +1168,3 @@ jobs:
             } else {
               core.info(`All linked PRs are green:\n${logReport}`);
             }
-
