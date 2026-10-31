@@ -30,7 +30,9 @@
         <element name="subtotal" type="text" selector="//span[text()='Subtotal']/following-sibling::span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
         <element name="shipping" type="text" selector="//span[text()='Shipping']/following-sibling::span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
         <element name="total" type="text" selector="//span[text()='Total']/following-sibling::span[contains(text(),'{{total}}')]" parameterized="true"/>
-        <element name="shippingAddress" type="text" selector="//button[@data-dd-action-name='Ship to Tab']//div[contains(@class, 'items-end')]//span[contains(@class, 'text-caption')]"/>
+        <!-- PayPal's sandbox UI no longer tags the "Ship to" row with
+             data-dd-action-name; it now exposes a stable data-testid instead. -->
+        <element name="shippingAddress" type="text" selector="//div[@data-testid='ship-to-address']//span[contains(@class, 'text-caption')]"/>
         <element name="close" type="button" selector="//button[@aria-label='Close']"/>
         <element name="paypalPopupButton1" type="button" selector="//button[normalize-space(.)='Pay with Debit or Credit Card']"/>
         <element name="paypalPopupButton2" type="button" selector="//button[normalize-space(.)='Create an Account']"/>
