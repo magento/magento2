@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReviewCorrectBackButtonTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review By Customers"/>
+            <title value="Admin review correct back button test"/>
+            <description value="Verify 'Back' button redirects on correct page if Customer page opened from Review page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-36271"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create Review on Storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
+
+        <!-- Grab Review's id -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
+        <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabReviewId"/>
+
+        <!-- Check if "Back" button works correctly if Customer page opened from Review page -->
+        <actionGroup ref="AdminOpenCustomerPageFromReviewActionGroup" stepKey="openCustomerPageFromReview"/>
+        <actionGroup ref="AdminClickBackButtonActionGroup" stepKey="clickBackToEditReviewPage">
+            <argument name="expectedPageUrl" value="{{AdminEditReviewPage.url('$grabReviewId')}}"/>
+        </actionGroup>
+
+        <!-- Check if "Back" button works correctly if Customer page opened not from Review page -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickBackButtonActionGroup" stepKey="clickBackToCustomerIndexPage">
+            <argument name="expectedPageUrl" value="{{AdminCustomerPage.url}}"/>
+        </actionGroup>
+    </test>
+</tests>
