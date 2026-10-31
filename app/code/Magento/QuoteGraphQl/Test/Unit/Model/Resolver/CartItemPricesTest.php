@@ -24,7 +24,6 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-
 /**
  * @see CartItemPrices
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
