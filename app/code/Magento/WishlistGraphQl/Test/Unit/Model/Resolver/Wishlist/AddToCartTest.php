@@ -7,30 +7,33 @@ declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Test\Unit\Model\Resolver\Wishlist;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
-use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\Quote\Model\Cart\AddProductsToCart as AddProductsToCartService;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
+use Magento\Quote\Model\Cart\Data\CartItemFactory;
 use Magento\Quote\Model\Cart\Data\Error;
-use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
-use Magento\WishlistGraphQl\Model\CartItems\CartItemsRequestBuilder;
-use Magento\WishlistGraphQl\Model\Resolver\Wishlist\AddToCart;
+use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemsCollection;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
-use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
+use Magento\WishlistGraphQl\Model\CartItems\CartItemsRequestBuilder;
+use Magento\WishlistGraphQl\Model\Resolver\Wishlist\AddToCart;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,6 +46,8 @@ use PHPUnit\Framework\TestCase;
 class AddToCartTest extends TestCase
 {
     use MockCreationTrait;
+
+    private ObjectManagerInterface $originalObjectManager;
 
     /**
      * @var AddToCart
@@ -95,6 +100,11 @@ class AddToCartTest extends TestCase
     private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId;
 
     /**
+     * @var CartItemFactory|MockObject
+     */
+    private CartItemFactory $cartItemFactory;
+
+    /**
      * @var Field|MockObject
      */
     private Field $field;
@@ -124,6 +134,7 @@ class AddToCartTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->originalObjectManager = ObjectManager::getInstance();
         $this->wishlistResource = $this->createMock(WishlistResourceModel::class);
         $this->wishlistFactory = $this->createMock(WishlistFactory::class);
         $this->wishlistConfig = $this->createMock(WishlistConfig::class);
@@ -133,6 +144,7 @@ class AddToCartTest extends TestCase
         $this->cartItemsRequestBuilder = $this->createMock(CartItemsRequestBuilder::class);
         $this->cartRepository = $this->createMock(CartRepositoryInterface::class);
         $this->maskedQuoteIdToQuoteId = $this->createMock(MaskedQuoteIdToQuoteIdInterface::class);
+        $this->cartItemFactory = $this->createMock(CartItemFactory::class);
 
         $this->field = $this->createMock(Field::class);
         $this->context = $this->createMock(ContextInterface::class);
@@ -149,8 +161,51 @@ class AddToCartTest extends TestCase
             $this->addProductsToCartService,
             $this->cartItemsRequestBuilder,
             $this->cartRepository,
+            $this->maskedQuoteIdToQuoteId,
+            $this->cartItemFactory
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        ObjectManager::setInstance($this->originalObjectManager);
+        parent::tearDown();
+    }
+
+    public function testFactoryIsResolvedForLegacyConstructorCall(): void
+    {
+        $cartItemFactory = $this->createMock(CartItemFactory::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager->expects($this->once())
+            ->method('get')
+            ->with(CartItemFactory::class)
+            ->willReturn($cartItemFactory);
+        ObjectManager::setInstance($objectManager);
+
+        $resolver = new AddToCart(
+            $this->wishlistResource,
+            $this->wishlistFactory,
+            $this->wishlistConfig,
+            $this->wishlistDataMapper,
+            $this->createEmptyCartForCustomer,
+            $this->addProductsToCartService,
+            $this->cartItemsRequestBuilder,
+            $this->cartRepository,
             $this->maskedQuoteIdToQuoteId
         );
+
+        $this->assertSame($cartItemFactory, $this->getCartItemFactory($resolver));
+    }
+
+    public function testUsesInjectedFactory(): void
+    {
+        $this->assertSame($this->cartItemFactory, $this->getCartItemFactory($this->resolver));
+    }
+
+    private function getCartItemFactory(AddToCart $resolver): CartItemFactory
+    {
+        $property = new \ReflectionProperty(AddToCart::class, 'cartItemFactory');
+        return $property->getValue($resolver);
     }
 
     /**

@@ -7,6 +7,7 @@ declare (strict_types = 1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver\Wishlist;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -70,6 +71,11 @@ class AddToCart implements ResolverInterface
     private $cartItemsRequestBuilder;
 
     /**
+     * @var CartItemFactory
+     */
+    private $cartItemFactory;
+
+    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
@@ -89,6 +95,7 @@ class AddToCart implements ResolverInterface
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
+      * @param CartItemFactory|null $cartItemFactory
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
@@ -100,6 +107,7 @@ class AddToCart implements ResolverInterface
         CartItemsRequestBuilder $cartItemsRequestBuilder,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
+        ?CartItemFactory $cartItemFactory = null
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
@@ -110,6 +118,7 @@ class AddToCart implements ResolverInterface
         $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
+        $this->cartItemFactory = $cartItemFactory ?? ObjectManager::getInstance()->get(CartItemFactory::class);
     }
 
     /**
@@ -171,7 +180,7 @@ class AddToCart implements ResolverInterface
             $item->getProduct()->setDisableAddToCart($disableAddToCart);
 
             $cartItemData = $this->cartItemsRequestBuilder->build($item);
-            $cartItem = (new CartItemFactory())->create($cartItemData);
+            $cartItem = $this->cartItemFactory->create($cartItemData);
 
             /** @var AddProductsToCartOutput $addProductsToCartOutput */
             $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, [$cartItem]);
