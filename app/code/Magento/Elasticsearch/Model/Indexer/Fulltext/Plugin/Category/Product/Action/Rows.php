@@ -43,6 +43,13 @@ class Rows
     private $tableMaintainer;
 
     /**
+     * Products of the reindexed categories before the reindex, by reindex action object
+     *
+     * @var array
+     */
+    private $productIdsBeforeReindex = [];
+
+    /**
      * @param IndexerRegistry $indexerRegistry
      * @param StoreManagerInterface $storeManager
      * @param ResourceConnection $resource
@@ -61,6 +68,28 @@ class Rows
     }
 
     /**
+     * Remember the products of the categories before their index rows are rebuilt.
+     *
+     * A product that leaves a category, e.g. because the category is disabled, is no longer
+     * in the index after the reindex, but its search document still has to be updated.
+     *
+     * @param ActionRows $subject
+     * @param array $entityIds
+     * @param bool $useTempTable
+     * @return null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeExecute(ActionRows $subject, array $entityIds = [], $useTempTable = false)
+    {
+        if (!empty($entityIds)) {
+            $this->productIdsBeforeReindex[spl_object_id($subject)] = $this->getProductIds($entityIds, false);
+        }
+
+        return null;
+    }
+
+    /**
      * Reindex after catalog category product reindex.
      *
      * @param ActionRows $subject
@@ -68,8 +97,6 @@ class Rows
      * @param array $entityIds
      * @param bool $useTempTable
      * @return ActionRows
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         ActionRows $subject,
@@ -77,15 +104,13 @@ class Rows
         array $entityIds,
         bool $useTempTable = false
     ): ActionRows {
+        $productIdsBeforeReindex = $this->productIdsBeforeReindex[spl_object_id($subject)] ?? [];
+        unset($this->productIdsBeforeReindex[spl_object_id($subject)]);
+
         if (!empty($entityIds)) {
-            $productIds = [];
-
-            foreach ($this->storeManager->getStores() as $store) {
-                $indexTable = $this->getIndexTable((int) $store->getId(), $useTempTable);
-                $productIds[] = $this->getProductIdsFromIndex($indexTable, $entityIds);
-            }
-
-            $productIds = array_unique(array_merge([], ...$productIds));
+            $productIds = array_values(array_unique(
+                array_merge($productIdsBeforeReindex, $this->getProductIds($entityIds, $useTempTable))
+            ));
             if (!empty($productIds)) {
                 $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
                 if ($indexer->isScheduled()) {
@@ -99,6 +124,24 @@ class Rows
         }
 
         return $result;
+    }
+
+    /**
+     * Get products of the categories from the index tables of all stores.
+     *
+     * @param array $categoryIds
+     * @param bool $useTempTable
+     * @return array
+     */
+    private function getProductIds(array $categoryIds, bool $useTempTable): array
+    {
+        $productIds = [];
+        foreach ($this->storeManager->getStores() as $store) {
+            $indexTable = $this->getIndexTable((int) $store->getId(), $useTempTable);
+            $productIds[] = $this->getProductIdsFromIndex($indexTable, $categoryIds);
+        }
+
+        return array_unique(array_merge([], ...$productIds));
     }
 
     /**
