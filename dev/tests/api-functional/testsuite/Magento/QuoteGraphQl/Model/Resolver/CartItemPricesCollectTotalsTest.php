@@ -143,7 +143,11 @@ class CartItemPricesCollectTotalsTest extends GraphQlAbstract
         $prices = $response['cart']['items'][0]['prices'];
 
         $this->assertArrayHasKey('original_item_price', $prices);
-        $this->assertEqualsWithDelta(self::PRODUCT_PRICE, $prices['original_item_price']['value'], self::DISCOUNT_DELTA);
+        $this->assertEqualsWithDelta(
+            self::PRODUCT_PRICE,
+            $prices['original_item_price']['value'],
+            self::DISCOUNT_DELTA
+        );
     }
 
     /**
@@ -197,13 +201,20 @@ class CartItemPricesCollectTotalsTest extends GraphQlAbstract
     public function testPriceIncludingTaxFieldTriggersTotalsCollection(): void
     {
         $cartId   = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
-        $query    = $this->buildCartItemPricesQuery($cartId, ['price_including_tax']);
+        $query    = $this->buildCartItemPricesQuery(
+            $cartId,
+            ['price_including_tax']
+        );
         $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         $prices = $response['cart']['items'][0]['prices'];
 
         $this->assertArrayHasKey('price_including_tax', $prices);
-        $this->assertEqualsWithDelta(self::PRODUCT_PRICE, $prices['price_including_tax']['value'], self::DISCOUNT_DELTA);
+        $this->assertEqualsWithDelta(
+            self::PRODUCT_PRICE,
+            $prices['price_including_tax']['value'],
+            self::DISCOUNT_DELTA
+        );
     }
 
     /**
@@ -232,7 +243,11 @@ class CartItemPricesCollectTotalsTest extends GraphQlAbstract
         $prices = $response['cart']['items'][0]['prices'];
 
         $this->assertArrayHasKey('row_total_including_tax', $prices);
-        $this->assertEqualsWithDelta(self::PRODUCT_PRICE, $prices['row_total_including_tax']['value'], self::DISCOUNT_DELTA);
+        $this->assertEqualsWithDelta(
+            self::PRODUCT_PRICE,
+            $prices['row_total_including_tax']['value'],
+            self::DISCOUNT_DELTA
+        );
     }
 
     // =========================================================================
