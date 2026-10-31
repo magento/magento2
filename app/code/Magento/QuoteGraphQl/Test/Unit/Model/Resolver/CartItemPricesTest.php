@@ -107,24 +107,25 @@ class CartItemPricesTest extends TestCase
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode'])
-            ->getMock();
-        $this->itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods([
-                'getPriceInclTax', 'getRowTotal',
-                'getRowTotalInclTax', 'getDiscountAmount'
-            ])
-            ->onlyMethods([
-                'getCalculationPrice', 'getQuote', 'getExtensionAttributes',
-                'getProduct', 'getOriginalPrice'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->itemExtensionMock = $this->getMockBuilder(
-            ExtensionAttributesInterface::class
-        )->addMethods(['getDiscounts'])->getMockForAbstractClass();
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getQuoteCurrencyCode']);
+        $this->itemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getPriceInclTax',
+                'getRowTotal',
+                'getRowTotalInclTax',
+                'getDiscountAmount',
+                'getCalculationPrice',
+                'getQuote',
+                'getExtensionAttributes',
+                'getProduct',
+                'getOriginalPrice'
+            ]
+        );
+        $this->itemExtensionMock = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['getDiscounts']
+        );
 
         $this->cartItemPrices = new CartItemPrices(
             $this->totalsCollectorMock,
