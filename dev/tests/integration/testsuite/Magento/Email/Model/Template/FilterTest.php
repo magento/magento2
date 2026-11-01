@@ -358,6 +358,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
      * @param bool $productionMode
      * @param bool $plainTemplateMode
      * @param bool $isChildTemplateMode
+     * @param bool $expectedOutputIsRegex
      */
     #[DataProvider('inlinecssDirectiveDataProvider')]
     public function testInlinecssDirective(
@@ -365,7 +366,8 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $expectedOutput,
         $productionMode = false,
         $plainTemplateMode = false,
-        $isChildTemplateMode = false
+        $isChildTemplateMode = false,
+        $expectedOutputIsRegex = false
     ) {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
         $registration = $this->objectManager->get(
@@ -380,7 +382,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
         $appMode = $productionMode ? State::MODE_PRODUCTION : State::MODE_DEVELOPER;
         $this->objectManager->get(\Magento\Framework\App\State::class)->setMode($appMode);
 
-        $this->assertStringContainsString($expectedOutput, $this->model->filter($templateText));
+        $result = $this->model->filter($templateText);
+        if ($expectedOutputIsRegex) {
+            $this->assertMatchesRegularExpression($expectedOutput, $result);
+        } else {
+            $this->assertStringContainsString($expectedOutput, $result);
+        }
     }
 
     /**
@@ -411,11 +418,12 @@ class FilterTest extends \PHPUnit\Framework\TestCase
                 false,
                 true,
             ],
-            'Child template mode results in unmodified directive' => [
+            'Child template mode results in a deferred placeholder, not rendered or raw markup' => [
                 '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
-                '<html><p></p> {{inlinecss file="css/email-inline-1.css"}}</html>',
+                '/^<html><p><\/p> :deferred:[A-Za-z0-9]{64}:<\/html>$/',
                 false,
                 false,
+                true,
                 true,
             ],
             'Production mode - File with compilation error results in structurally unmodified markup' => [

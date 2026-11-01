@@ -17,6 +17,11 @@ use Magento\Framework\Filesystem;
 class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements HttpPostActionInterface
 {
     /**
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Backup::rollback';
+
+    /**
      * Rollback Action
      *
      * @return void|\Magento\Backend\App\Action
@@ -26,16 +31,13 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
      */
     public function execute()
     {
-        if (!$this->_objectManager->get(\Magento\Backup\Helper\Data::class)->isRollbackAllowed()) {
-            $this->_forward('denied');
-        }
-
         if (!$this->getRequest()->isAjax()) {
             return $this->_redirect('*/*/index');
         }
 
         $helper = $this->_objectManager->get(\Magento\Backup\Helper\Data::class);
         $response = new \Magento\Framework\DataObject();
+        $backupManager = null;
 
         try {
             /* @var $backup \Magento\Backup\Model\Backup */
@@ -142,7 +144,9 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
 
         if (!empty($errorMsg)) {
             $response->setError($errorMsg);
-            $backupManager->setErrorMessage($errorMsg);
+            if ($backupManager !== null) {
+                $backupManager->setErrorMessage($errorMsg);
+            }
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {

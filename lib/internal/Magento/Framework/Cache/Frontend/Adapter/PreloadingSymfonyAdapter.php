@@ -9,12 +9,11 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 
 /**
- * Preloading wrapper for Symfony cache adapter
+ * Preloads frequently accessed Symfony cache keys into local PHP memory to avoid Redis network roundtrips.
  *
- * Preloads frequently accessed cache keys into local PHP memory on initialization
- * to eliminate Redis network roundtrips for critical configuration data.
  */
 class PreloadingSymfonyAdapter implements FrontendInterface
 {
@@ -34,10 +33,8 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     private array $preloadKeys;
 
     /**
-     * Fast-path lookup: normalized identifier => cached value. Mirrors $localCache but keyed by the
-     * canonical id form (see normalizeIdentifier) so a preload key configured as "SYSTEM_DEFAULT:hash"
-     * is served for the runtime id the app actually loads ("system_default:hash"). $localCache stays
-     * keyed by the original preload key for stats/diagnostics.
+     * Provides fast-path lookup using canonical cache IDs, ensuring preload keys match runtime IDs
+     * while preserving original keys for diagnostics.
      *
      * @var array
      */
@@ -71,9 +68,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         string $idPrefix = ''
     ) {
         $this->adapter = $adapter;
-        // Normalize keys so both raw ("EAV_ENTITY_TYPES") and pre-prefixed ("069_EAV_ENTITY_TYPES")
-        // config values resolve to the id the app passes to load(). The adapter re-adds the prefix
-        // internally, so a pre-prefixed key would otherwise be double-prefixed and never hit.
+        // Normalizes raw and pre-prefixed keys to prevent double-prefixing and ensure cache lookup hits.
         $this->preloadKeys = ($idPrefix !== '')
             ? array_map(
                 static fn (string $key): string => str_starts_with($key, $idPrefix)
@@ -89,12 +84,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     }
 
     /**
-     * Normalize an identifier to the canonical form the Symfony adapter stores keys under.
-     *
-     * Mirrors Magento\Framework\Cache\Frontend\Adapter\Symfony::cleanIdentifier() so a preload key
-     * configured in any case/separator (e.g. "SYSTEM_DEFAULT:hash") resolves to the same local-cache
-     * slot as the runtime id the application loads (e.g. "system_default:hash"). Both clean to
-     * "SYSTEM_DEFAULT_HASH".
+     * Normalizes identifiers to a canonical form, ensuring preload keys match the corresponding runtime cache IDs.
      *
      * @param string $identifier
      * @return string
@@ -107,14 +97,9 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     }
 
     /**
-     * Preload all configured keys in a SINGLE batched round-trip, lazily on first use.
+     * Preload configured keys in one batched request via the adapter's MultiLoadInterface.
      *
-     * Matches the legacy Redis wrapper (Magento\Framework\Cache\Backend\Redis::load): fetch every hot
-     * key at once (one pipeline / getItems) rather than N sequential loads, and serve them from local
-     * memory afterwards. Falls back to per-key loads only if the underlying adapter cannot batch.
-     *
-     * NOTE: preload_keys must be the cache ids exactly as the application passes them to load() (the
-     * backend id_prefix is applied internally) — do NOT pre-prefix them, or lookups will miss.
+     * Adapters without it skip preload (load() still serves per key). Keys are runtime IDs, no id_prefix.
      *
      * @return void
      */
@@ -129,22 +114,12 @@ class PreloadingSymfonyAdapter implements FrontendInterface
             return;
         }
 
-        if (method_exists($this->adapter, 'loadMultiple')) {
+        if ($this->adapter instanceof MultiLoadInterface) {
             // one batched round-trip for all keys
             $this->localCache = $this->adapter->loadMultiple($this->preloadKeys);
-        } else {
-            // fallback: per-key (no batching available on the underlying adapter)
-            foreach ($this->preloadKeys as $key) {
-                $value = $this->adapter->load($key);
-                if ($value !== false) {
-                    $this->localCache[$key] = $value;
-                }
-            }
         }
 
-        // Build the normalized fast-path index so load() matches runtime ids regardless of
-        // case/separator (the miss confirmed by tracing: localCache was keyed "SYSTEM_DEFAULT:hash"
-        // but the app loads "system_default:hash").
+        // Builds a normalized fast-path index so preload keys match runtime IDs regardless of case or separators.
         $this->normalizedIndex = [];
         foreach ($this->localCache as $key => $value) {
             $this->normalizedIndex[$this->normalizeIdentifier((string)$key)] = $value;
@@ -160,10 +135,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     {
         $this->ensurePreloaded();
 
-        // Nothing preloaded (the common case: no preload_keys configured, or all preload misses) — an
-        // empty index can never hit, so skip the id normalization (strtoupper+str_replace+preg_replace)
-        // entirely and go straight to the backend. This keeps the regex off the hot path unless preload
-        // is actually in use.
+        // Skips identifier normalization when no preload entries exist, avoiding unnecessary work on the hot path.
         if ($this->normalizedIndex === []) {
             return $this->adapter->load($identifier);
         }
@@ -189,9 +161,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         // Write through to Redis
         $result = $this->adapter->save($data, $identifier, $tags, $lifeTime);
 
-        // If this id is a configured preload key (matched on the normalized form), keep the preload
-        // cache fresh so a subsequent load() in this request serves the new value from memory. Skip the
-        // normalization entirely when no preload keys are configured (nothing can match).
+        // Keeps preloaded cache values updated after saves when the ID matches a configured preload key.
         if ($result && $this->normalizedPreloadKeys !== []) {
             $normalized = $this->normalizeIdentifier((string)$identifier);
             if (in_array($normalized, $this->normalizedPreloadKeys, true)) {
@@ -251,6 +221,17 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     public function getBackend()
     {
         return $this->adapter->getBackend();
+    }
+
+    /**
+     * Delegate metadata lookup so backend operations such as touch() can preserve expiration.
+     *
+     * @param string $id
+     * @return array|false
+     */
+    public function getMetadatas($id)
+    {
+        return $this->adapter->getMetadatas($id);
     }
 
     /**

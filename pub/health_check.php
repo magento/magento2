@@ -65,7 +65,7 @@ if ($cacheConfigs) {
         try {
             /** @var \Magento\Framework\App\Cache\Frontend\Factory $cacheFrontendFactory */
             $cacheFrontendFactory = $objectManager->get(Magento\Framework\App\Cache\Frontend\Factory::class);
-            /** @var \Magento\Framework\Cache\Backend\BackendInterface $backend */
+            /** @var \Zend_Cache_Backend_Interface|\Magento\Framework\Cache\Backend\BackendInterface $backend */
             $backend = $cacheFrontendFactory->create($cacheConfig);
             $backend->test('test_cache_id');
         } catch (\Exception $e) {

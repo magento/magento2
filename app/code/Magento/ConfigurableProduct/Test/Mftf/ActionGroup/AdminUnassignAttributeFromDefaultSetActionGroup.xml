@@ -22,6 +22,11 @@
         <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
         <waitForPageLoad stepKey="waitForSelectCustomGroup"/>
         <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute(ProductAttributeCode)}}" selector2="{{AdminProductAttributeSetSection.attribute('manufacturer')}}" stepKey="unassignAttributeFromDefaultAttributeSet"/>
+        <waitForPageLoad stepKey="waitAfterUnassign"/>
+        <conditionalClick selector="{{AdminProductAttributeSetSection.modalOk}}" dependentSelector="{{AdminProductAttributeSetSection.modalOk}}" visible="true" stepKey="confirmUnassign"/>
+        <waitForElementClickable selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="waitForSaveDefaultAttributeSetBtnClickable"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSaveDefaultAttributeSet"/>
+        <conditionalClick selector="{{AdminProductAttributeSetSection.modalOk}}" dependentSelector="{{AdminProductAttributeSetSection.modalOk}}" visible="true" stepKey="confirmSaveAttributeSet"/>
+        <waitForPageLoad stepKey="waitForAttributeSetSaved"/>
     </actionGroup>
 </actionGroups>

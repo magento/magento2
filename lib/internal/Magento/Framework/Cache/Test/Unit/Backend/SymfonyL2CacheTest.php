@@ -11,7 +11,9 @@ use Magento\Framework\Cache\Backend\SymfonyL2Cache;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -205,6 +207,87 @@ class SymfonyL2CacheTest extends TestCase
     }
 
     /**
+     * Tags are sent to the remote (L2) tier only; the local (L1) tier is always saved without tags,
+     * so the L1 file adapter keeps no on-disk tag index (L2 stays authoritative for tags).
+     *
+     * @return void
+     */
+    public function testSaveDoesNotForwardTagsToLocalTier(): void
+    {
+        $this->cache = new SymfonyL2Cache(
+            $this->remoteCacheMock,
+            $this->localCacheMock,
+            ['use_stale_cache' => true]
+        );
+
+        $cacheId = 'test_id';
+        $cacheData = 'test_data';
+        $tags = ['tag1', 'tag2'];
+
+        // Remote receives the real tags (data first, then hash).
+        $this->remoteCacheMock->expects($this->exactly(2))
+            ->method('save')
+            ->willReturnMap([
+                [$cacheData, $cacheId, $tags, null, true],
+                [hash('sha256', $cacheData), $cacheId . ':hash', $tags, null, true]
+            ]);
+
+        // Local is saved with an empty tag list regardless of the tags passed to the L2 cache.
+        $this->localCacheMock->expects($this->once())
+            ->method('save')
+            ->with($cacheData, $cacheId, [], null);
+
+        $this->assertTrue($this->cache->save($cacheData, $cacheId, $tags));
+    }
+
+    /**
+     * Save guards the L2 data/hash pair and L1 update with a Redis-backed per-id lock.
+     *
+     * @return void
+     */
+    public function testSaveUsesPairLockWhenRedisAdapterAvailable(): void
+    {
+        $this->cache = new SymfonyL2Cache(
+            $this->remoteCacheMock,
+            $this->localCacheMock
+        );
+
+        $cacheId = 'test_id';
+        $cacheData = 'test_data';
+        $lockAdapter = $this->createMock(RedisTagAdapter::class);
+        $lowLevelFrontend = $this->createMock(LowLevelFrontendInterface::class);
+
+        $this->remoteCacheMock->method('getLowLevelFrontend')
+            ->willReturn($lowLevelFrontend);
+        $lowLevelFrontend->method('getTagAdapter')
+            ->willReturn($lockAdapter);
+
+        $lockAdapter->expects($this->once())
+            ->method('acquireLock')
+            ->with('pair::' . $cacheId, $this->isType('string'), 10)
+            ->willReturn(true);
+        $lockAdapter->expects($this->once())
+            ->method('releaseLock')
+            ->with('pair::' . $cacheId, $this->isType('string'))
+            ->willReturn(true);
+
+        $this->remoteCacheMock->method('load')
+            ->with($cacheId . ':hash')
+            ->willReturn(false);
+        $this->remoteCacheMock->expects($this->exactly(2))
+            ->method('save')
+            ->willReturnMap([
+                [$cacheData, $cacheId, [], null, true],
+                [hash('sha256', $cacheData), $cacheId . ':hash', [], null, true]
+            ]);
+        $this->localCacheMock->expects($this->once())
+            ->method('save')
+            ->with($cacheData, $cacheId, [], null);
+
+        $this->assertTrue($this->cache->save($cacheData, $cacheId));
+    }
+
+    /**
      * Test save when remote is unavailable and stale cache is enabled
      *
      * @return void
@@ -361,6 +444,47 @@ class SymfonyL2CacheTest extends TestCase
     }
 
     /**
+     * Remove guards the L2 data/hash pair and L1 update with a Redis-backed per-id lock.
+     *
+     * @return void
+     */
+    public function testRemoveUsesPairLockWhenRedisAdapterAvailable(): void
+    {
+        $this->cache = new SymfonyL2Cache(
+            $this->remoteCacheMock,
+            $this->localCacheMock,
+            ['use_stale_cache' => false]
+        );
+
+        $cacheId = 'test_id';
+        $lockAdapter = $this->createMock(RedisTagAdapter::class);
+        $lowLevelFrontend = $this->createMock(LowLevelFrontendInterface::class);
+
+        $this->remoteCacheMock->method('getLowLevelFrontend')
+            ->willReturn($lowLevelFrontend);
+        $lowLevelFrontend->method('getTagAdapter')
+            ->willReturn($lockAdapter);
+
+        $lockAdapter->expects($this->once())
+            ->method('acquireLock')
+            ->with('pair::' . $cacheId, $this->isType('string'), 10)
+            ->willReturn(true);
+        $lockAdapter->expects($this->once())
+            ->method('releaseLock')
+            ->with('pair::' . $cacheId, $this->isType('string'))
+            ->willReturn(true);
+
+        $this->remoteCacheMock->expects($this->exactly(2))
+            ->method('remove')
+            ->willReturn(true);
+        $this->localCacheMock->expects($this->exactly(2))
+            ->method('remove')
+            ->willReturn(true);
+
+        $this->assertTrue($this->cache->remove($cacheId));
+    }
+
+    /**
      * Test clean operation
      *
      * @return void
@@ -377,7 +501,7 @@ class SymfonyL2CacheTest extends TestCase
         $tags = ['tag1', 'tag2'];
 
         // Full flush clears the local (L1) backend directly (bypassing the tag-scoped local->clean(),
-        // which cannot reach an index_tags=false L1), so getBackend()->clear() is expected instead.
+        // which cannot reach a tag-less L1), so getBackend()->clear() is expected instead.
         $localBackendMock = $this->createMock(BackendWrapper::class);
         $this->localCacheMock->expects($this->once())
             ->method('getBackend')
