@@ -148,7 +148,6 @@ class AddToCartTest extends TestCase
         $this->cartRepository = $this->createMock(CartRepositoryInterface::class);
         $this->maskedQuoteIdToQuoteId = $this->createMock(MaskedQuoteIdToQuoteIdInterface::class);
         $this->cartItemFactory = $this->createMock(CartItemFactory::class);
-
         $this->field = $this->createMock(Field::class);
         $this->context = $this->createMock(ContextInterface::class);
         $this->info = $this->createMock(ResolveInfo::class);
