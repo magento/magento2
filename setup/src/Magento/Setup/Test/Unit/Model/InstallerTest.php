@@ -1667,7 +1667,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $this->object->resetInstallationDate();
+            $this->invokeResetInstallationDate();
         }
 
         /**
@@ -1690,7 +1690,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $this->object->resetInstallationDate();
+            $this->invokeResetInstallationDate();
         }
 
         /**
@@ -1709,7 +1709,18 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $this->object->resetInstallationDate();
+            $this->invokeResetInstallationDate();
+        }
+
+        /**
+         * Invoke private Installer::resetInstallationDate() method
+         *
+         * @return void
+         * @throws ReflectionException
+         */
+        private function invokeResetInstallationDate(): void
+        {
+            (new \ReflectionMethod($this->object, 'resetInstallationDate'))->invoke($this->object);
         }
 
         public function testUpdateModulesSequence()
