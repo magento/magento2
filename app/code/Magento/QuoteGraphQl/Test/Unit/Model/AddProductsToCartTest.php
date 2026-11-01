@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class AddProductsToCartTest extends TestCase
 {
+    /**
+     * @var ObjectManagerInterface
+     */
     private ObjectManagerInterface $originalObjectManager;
 
     protected function setUp(): void

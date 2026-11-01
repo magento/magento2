@@ -47,6 +47,9 @@ class AddToCartTest extends TestCase
 {
     use MockCreationTrait;
 
+    /**
+     * @var ObjectManagerInterface
+     */
     private ObjectManagerInterface $originalObjectManager;
 
     /**

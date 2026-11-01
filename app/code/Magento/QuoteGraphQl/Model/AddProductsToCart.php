@@ -20,6 +20,9 @@ use Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface;
 
 class AddProductsToCart
 {
+    /**
+     * @var CartItemFactory
+     */
     private CartItemFactory $cartItemFactory;
 
     /**
@@ -27,7 +30,7 @@ class AddProductsToCart
      * @param AddProductsToCartService $addProductsToCartService
      * @param ScopeConfigInterface $scopeConfig
      * @param PrecursorInterface $cartItemPrecursor
-    * @param CartItemFactory|null $cartItemFactory
+        * @param CartItemFactory|null $cartItemFactory
      */
     public function __construct(
         private readonly GetCartForUser $getCartForUser,

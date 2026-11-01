@@ -95,7 +95,8 @@ class AddToCart implements ResolverInterface
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
-      * @param CartItemFactory|null $cartItemFactory
+     * @param CartItemFactory|null $cartItemFactory
+    * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
