@@ -18,12 +18,14 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\Type;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Interception\PluginList;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AllowMockObjectsWithoutExpectations]
 class CacheTest extends TestCase
 {
     /**
@@ -122,7 +124,7 @@ class CacheTest extends TestCase
      */
     public function testCachingNotSkippedWhenKeysOk(): void
     {
-        // Allow at most 1 warning - may occur due to test environment specifics  
+        // Allow at most 1 warning - may occur due to test environment specifics
         $this->loggerMock->expects($this->atMost(1))
             ->method('warning');
 

@@ -14,6 +14,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PricePro
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -43,16 +44,23 @@ class PriceRange implements ResolverInterface
     private PriceRangeDataProvider $priceRangeDataProvider;
 
     /**
+     * @var ValueFactory
+     */
+    private ValueFactory $valueFactory;
+
+    /**
      * @param PriceProviderPool $priceProviderPool
      * @param Discount $discount
      * @param ProductDataProvider|null $productDataProvider
      * @param PriceRangeDataProvider|null $priceRangeDataProvider
+     * @param ValueFactory|null $valueFactory
      */
     public function __construct(
         PriceProviderPool $priceProviderPool,
         Discount $discount,
         ?ProductDataProvider $productDataProvider = null,
-        ?PriceRangeDataProvider $priceRangeDataProvider = null
+        ?PriceRangeDataProvider $priceRangeDataProvider = null,
+        ?ValueFactory $valueFactory = null
     ) {
         $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
@@ -60,6 +68,8 @@ class PriceRange implements ResolverInterface
             ?? ObjectManager::getInstance()->get(ProductDataProvider::class);
         $this->priceRangeDataProvider = $priceRangeDataProvider
             ?? ObjectManager::getInstance()->get(PriceRangeDataProvider::class);
+        $this->valueFactory = $valueFactory
+            ?? ObjectManager::getInstance()->get(ValueFactory::class);
     }
 
     /**
@@ -73,9 +83,14 @@ class PriceRange implements ResolverInterface
         ?array $args = null
     ) {
         $this->productDataProvider->addProductSku($value['sku']);
-        $productData = $this->productDataProvider->getProductBySku($value['sku'], $context);
-        $value['model'] = $productData['model'];
-
-        return $this->priceRangeDataProvider->prepare($context, $info, $value);
+        $result = function () use ($value, $context, $info) {
+            $productData = $this->productDataProvider->getProductBySku($value['sku'], $context);
+            if (!isset($productData['model'])) {
+                return null;
+            }
+            $value['model'] = $productData['model'];
+            return $this->priceRangeDataProvider->prepare($context, $info, $value);
+        };
+        return $this->valueFactory->create($result);
     }
 }

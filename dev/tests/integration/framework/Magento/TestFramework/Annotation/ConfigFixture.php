@@ -167,9 +167,9 @@ class ConfigFixture
         );
         foreach ($testAnnotations as $configPathAndValue) {
             if (preg_match('/^[^\/]+?(?=_store\s)/', $configPathAndValue, $matches)) {
-                $this->setStoreConfigValue($matches ?? [], $configPathAndValue);
+                $this->setStoreConfigValue($matches, $configPathAndValue);
             } elseif (preg_match('/^[^\/]+?(?=_website\s)/', $configPathAndValue, $matches)) {
-                $this->setWebsiteConfigValue($matches ?? [], $configPathAndValue);
+                $this->setWebsiteConfigValue($matches, $configPathAndValue);
             } else {
                 $this->setGlobalConfigValue($configPathAndValue);
             }
@@ -272,16 +272,6 @@ class ConfigFixture
      */
     public function startTest(TestCase $test)
     {
-        if ($eventObj = Magento::getCurrentEventObject()) {
-            $testData = $eventObj->test()->testData();
-
-            if ($testData->hasDataFromDataProvider()) {
-                $dataFromDataProvider = $testData->dataFromDataProvider();
-                $dataSetName = $dataFromDataProvider->dataSetName();
-                $test->setData($dataSetName, ['']);
-            }
-        }
-
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
     }

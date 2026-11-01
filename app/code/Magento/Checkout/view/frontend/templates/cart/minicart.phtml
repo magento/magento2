@@ -6,12 +6,16 @@
 
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$dataBlockName = $block->getData('data_block_name') ?: 'minicart';
+$scopeName = $block->getData('scope') ?: 'minicart_content';
 ?>
 
-<div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>"
-       data-bind="scope: 'minicart_content'">
-        <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+<div data-block="<?= $escaper->escapeHtmlAttr($dataBlockName) ?>" class="minicart-wrapper">
+    <a class="action showcart" href="<?= $escaper->escapeUrl($block->getShoppingCartUrl()) ?>"
+       data-bind="scope: '<?= $escaper->escapeHtml($scopeName) ?>'">
+        <span class="text"><?= $escaper->escapeHtml(__('My Cart')) ?></span>
         <span class="counter qty empty"
               data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
                blockLoader: isLoading">
@@ -32,15 +36,16 @@
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
-                "appendTo":"[data-block=minicart]",
-                "triggerTarget":".showcart",
+                "appendTo":"[data-block=<?= $escaper->escapeHtmlAttr($dataBlockName) ?>]",
+                "triggerTarget":"[data-block=<?= $escaper->escapeHtmlAttr($dataBlockName) ?>] .showcart",
                 "timeout": "2000",
                 "closeOnMouseLeave": false,
                 "closeOnEscape": true,
                 "triggerClass":"active",
                 "parentClass":"active",
                 "buttons":[]}}'>
-            <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+            <div id="<?= $escaper->escapeHtmlAttr($dataBlockName) ?>-content-wrapper"
+                 data-bind="scope: '<?= $escaper->escapeHtml($scopeName) ?>'">
                 <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
@@ -48,7 +53,7 @@
     <?php else: ?>
         <?php $scriptString = <<<script
             require(['jquery'], function ($) {
-                $('a.action.showcart').on('click', function() {
+                $('[data-block="{$escaper->escapeJs($dataBlockName)}"] a.action.showcart').on('click', function() {
                     $(document.body).trigger('processStart');
                 });
             });
@@ -60,12 +65,12 @@ script;
      /* @noEscape */ $block->getSerializedConfig(), false); ?>
     <script type="text/x-magento-init">
     {
-        "[data-block='minicart']": {
+        "[data-block='<?= $escaper->escapeJs($dataBlockName) ?>']": {
             "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
         },
         "*": {
-            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
-                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+            "Magento_Ui/js/block-loader": "<?= $escaper->escapeJs(
+                $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
             ) ?>"
         }
     }

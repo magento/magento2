@@ -223,6 +223,8 @@ class CollectionTest extends TestCase
             ->with($this->stringContains('temp_category_descendants_'));
         $this->select->method('from')->willReturnSelf();
         $this->select->method('where')->willReturnSelf();
+        $this->select->method('order')->willReturnSelf();
+        $this->select->method('limit')->willReturnSelf();
         $this->connection->method('select')->willReturn($this->select);
         $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
         $this->connection->method('query')->with('INSERT QUERY')->willReturnSelf();

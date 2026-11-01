@@ -53,9 +53,13 @@
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardData">
             <argument name="cardData" value="VisaDefaultCard"/>
         </actionGroup>
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!-- Inlined so the Place Order wait can be widened for slow Payflow Pro Sale authorization -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonForPayflowProCheckout"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderForPayflowProCheckout"/>
+        <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPageForPayflowProCheckout"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." time="120" stepKey="seeSuccessMessage"/>
         <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartAfterPlacingAnOrder"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderNumber}"/>

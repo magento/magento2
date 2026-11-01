@@ -55,6 +55,9 @@
             <argument name="productName" value="$createSimpleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage" after="clickProceedToCheckout"/>
+        <!-- Retry Place Order once after an occasional Payflow Pro sandbox 'Transaction has been declined' response -->
+        <waitForLoadingMaskToDisappear stepKey="waitForPayflowProDeclineOrRedirect" after="waitForPayflowProOrderPlaced"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.placeOrder}}" dependentSelector="{{CheckoutPaymentSection.errormessage}}" visible="true" stepKey="retryPlaceOrderIfPayflowProDeclined" after="waitForPayflowProDeclineOrRedirect"/>
         <!--Click on invoice button and update qty and then submit invoice-->
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton" after="openOrder"/>
         <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity" after="clickInvoiceButton">

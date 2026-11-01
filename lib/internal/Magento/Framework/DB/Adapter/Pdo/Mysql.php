@@ -523,7 +523,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         if (strpos($this->_config['host'], '/') !== false) {
             $this->_config['unix_socket'] = $this->_config['host'];
-            unset($this->_config['host']);
+            // Keep a host in the config: mysqlnd routes "localhost" through
+            // unix_socket, and unsetting the key made every reconnect on the
+            // same adapter throw "No host configured to connect".
+            $this->_config['host'] = 'localhost';
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }
@@ -983,7 +986,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         foreach ($parts as $i => $part) {
             // strings
-            if (($part === "'" || $part === '"') && ($i === 0 || $parts[$i-1] !== '\\')) {
+            if (($part === "'" || $part === '"') && $this->countPrecedingBackslashes($parts, $i) % 2 === 0) {
                 if ($q === false) {
                     $q = $part;
                 } elseif ($q === $part) {
@@ -1020,6 +1023,25 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
 
         return $stmts;
+    }
+
+    /**
+     * Count consecutive backslash delimiters immediately preceding the given position.
+     *
+     * A quote delimiter is escaped only when preceded by an odd number of backslashes.
+     *
+     * @param string[] $parts
+     * @param int $index
+     * @return int
+     */
+    private function countPrecedingBackslashes(array $parts, int $index): int
+    {
+        $count = 0;
+        for ($position = $index - 1; $position >= 0 && $parts[$position] === '\\'; $position--) {
+            $count++;
+        }
+
+        return $count;
     }
 
     /**
