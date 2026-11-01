@@ -23,6 +23,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="configurable_product_preload_lowest_price_options"
+                type="Magento\ConfigurableProduct\Plugin\Catalog\Block\Product\PreloadLowestPriceOptions"/>
+    </type>
     <type name="Magento\CatalogWidget\Block\Product\ProductsList">
         <plugin name="configurable_product_widget_product_list" type="Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product\ProductsListPlugin" sortOrder="2"/>
     </type>
