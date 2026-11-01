@@ -14,16 +14,28 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 class WysiwygConfigDataProcessor implements WysiwygConfigDataProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * Build WYSIWYG config data for a product attribute.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     * @return array
      */
     public function process(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
-        return [
+        $wysiwygConfigData = [
             'add_variables' => false,
             'add_widgets' => false,
             'add_directives' => true,
             'use_container' => true,
             'container_class' => 'hor-scroll',
         ];
+
+        if ((string)$attribute->getBackendType() === 'text' && (string)$attribute->getBackendTable() !== '') {
+            $wysiwygConfigData['utf8mb4Target'] = [
+                'table' => (string)$attribute->getBackendTable(),
+                'column' => 'value',
+            ];
+        }
+
+        return $wysiwygConfigData;
     }
 }

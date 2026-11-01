@@ -12,6 +12,7 @@ define([
     describe('Testing addToWishlist widget', function () {
         var wdContainer,
             wishlistWidget,
+            qtyInput,
             eventMock = {
                 preventDefault: jasmine.createSpy(),
                 stopPropagation: jasmine.createSpy()
@@ -20,12 +21,15 @@ define([
         beforeEach(function () {
             wdContainer = $('<input type="hidden" class="bundle-option-11  product bundle option" \n' +
                 'name="bundle_option[11]" value="15" aria-required="true"/>');
+            qtyInput = $('<input type="number" class="input-text qty" name="qty" value="1"/>');
+            $('body').append(qtyInput);
             wishlistWidget = new Widget();
             $.fn.validation = {};
         });
 
         afterEach(function () {
             $(wdContainer).remove();
+            qtyInput.remove();
         });
 
         it('widget extends jQuery object', function () {

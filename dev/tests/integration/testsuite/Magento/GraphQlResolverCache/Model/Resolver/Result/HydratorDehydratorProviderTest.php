@@ -12,8 +12,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class HydratorDehydratorProviderTest extends TestCase
 {
     /**
@@ -77,6 +79,7 @@ class HydratorDehydratorProviderTest extends TestCase
      */
     public function testHydratorChainProvider()
     {
+        // The derived mock class is part of the provider configuration lookup.
         $resolver = $this->getMockBuilder(StoreConfigResolver::class)
             ->disableOriginalConstructor()
             ->setMockClassName('StoreConfigResolverDerivedMock')
@@ -169,7 +172,7 @@ class HydratorDehydratorProviderTest extends TestCase
      */
     public function testHydratorDoesNotExist()
     {
-        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver = $this->createStub(ResolverInterface::class);
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
     }
 
@@ -183,9 +186,7 @@ class HydratorDehydratorProviderTest extends TestCase
         $this->expectExceptionMessage('Hydrator TestResolverModelDehydrator configured for resolver '
             . 'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver must implement '
             . 'Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface.');
-        $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $testModelDehydrator = $this->createStub(DehydratorInterface::class);
         $this->objectManager->addSharedInstance($testModelDehydrator, 'TestResolverModelDehydrator');
 
         $this->provider = $this->objectManager->create(
@@ -201,7 +202,7 @@ class HydratorDehydratorProviderTest extends TestCase
                 ]
             ]
         );
-        $resolver = $this->createMock(StoreConfigResolver::class);
+        $resolver = $this->createStub(StoreConfigResolver::class);
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
     }
 
@@ -215,9 +216,7 @@ class HydratorDehydratorProviderTest extends TestCase
         $this->expectExceptionMessage('Dehydrator TestResolverModelHydrator configured for resolver '
             . 'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver must implement '
             . 'Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface.');
-        $hydrator = $this->getMockBuilder(HydratorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $hydrator = $this->createStub(HydratorInterface::class);
         $this->objectManager->addSharedInstance($hydrator, 'TestResolverModelHydrator');
 
         $this->provider = $this->objectManager->create(
@@ -233,7 +232,7 @@ class HydratorDehydratorProviderTest extends TestCase
                 ]
             ]
         );
-        $resolver = $this->createMock(StoreConfigResolver::class);
+        $resolver = $this->createStub(StoreConfigResolver::class);
         $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 
@@ -244,7 +243,7 @@ class HydratorDehydratorProviderTest extends TestCase
      */
     public function testDehydratorDoesNotExist()
     {
-        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver = $this->createStub(ResolverInterface::class);
         $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 }

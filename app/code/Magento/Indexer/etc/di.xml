@@ -14,6 +14,7 @@
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
     <preference for="Magento\Framework\Indexer\DeferredCacheCleanerInterface" type="Magento\Indexer\Model\Indexer\DeferredCacheCleaner" />
+    <preference for="Magento\Framework\Indexer\NoDdlModeInterface" type="Magento\Indexer\Model\NoDdlMode" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
@@ -64,6 +65,7 @@
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
                 <item name="set-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand</item>
                 <item name="show-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand</item>
+                <item name="set-no-ddl-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand\Proxy</item>
             </argument>
         </arguments>
     </type>

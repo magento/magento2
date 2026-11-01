@@ -45,6 +45,11 @@ class SqlVersionProvider
 
     public const MARIA_DB_11_4_VERSION = '11.4.';
 
+    public const MARIA_DB_11_8_VERSION = '11.8.';
+
+    public const MARIA_DB_12_2_VERSION = '12.2.';
+
+    public const MARIA_DB_12_3_VERSION = '12.3.';
     public const MARIA_DB = "mariadb";
 
     /**#@-*/
@@ -169,13 +174,15 @@ class SqlVersionProvider
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
         $isMariaDB1011 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_11_VERSION);
         $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
+        $isMariaDB118 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_8_VERSION);
+        $isMariaDB122 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_12_2_VERSION);
+        $isMariaDB123 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_12_3_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
             if ($isMariaDB104) {
                 return SqlVersionProvider::MARIA_DB_10_4_27_VERSION;
-            } elseif ($isMariaDB106) {
-                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
-            } elseif ($isMariaDB114) {
+            } elseif ($isMariaDB106 || $isMariaDB114 || $isMariaDB118
+                || $isMariaDB122 || $isMariaDB123) {
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             } elseif ($isMariaDB1011) {
                 return SqlVersionProvider::MARIA_DB_10_11_VERSION;

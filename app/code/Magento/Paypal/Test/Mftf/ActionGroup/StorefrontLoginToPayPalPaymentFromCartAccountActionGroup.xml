@@ -11,7 +11,6 @@
         <arguments>
             <argument name="payerName" defaultValue="MPI" type="string"/>
         </arguments>
-        <seeElement selector="{{PayPalCheckoutAsGuestSection.CreditDebitBtn}}" stepKey="assertCheckoutAsGuest" before="waitForLoginForm"/>
-        <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.userName}}" stepKey="seePayerName" after="assertCheckoutAsGuest"/>
+        <waitForText userInput="{{payerName}}" selector="{{PayPalPaymentSection.userName}}" stepKey="seePayerName" before="waitForLoginForm"/>
     </actionGroup>
 </actionGroups>

@@ -471,3 +471,5 @@ Pagination,Pagination
 "URL key "%1" matches a reserved endpoint name (%2). Use another URL key.","URL key "%1" matches a reserved endpoint name (%2). Use another URL key."
 "Minimum Admin Password Length","Minimum Admin Password Length"
 "Minimum number of characters required for admin user passwords. Values below 7 are not allowed.","Minimum number of characters required for admin user passwords. Values below 7 are not allowed."
+"When disabled, each script is loaded separately.","When disabled, each script is loaded separately."
+"Enabling JavaScript Merging is not recommended. With HTTP/2 and later, browsers can request many files in parallel over one connection, so merging no longer provides any benefits.","Enabling JavaScript Merging is not recommended. With HTTP/2 and later, browsers can request many files in parallel over one connection, so merging no longer provides any benefits."

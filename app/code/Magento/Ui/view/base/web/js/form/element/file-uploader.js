@@ -174,10 +174,17 @@ define([
          */
         replaceInputTypeFile: function (fileInput) {
             let fileId = fileInput.id, fileName = fileInput.name,
-                spanElement = '<span id=\'' + fileId + '\'></span>';
+                spanElement = '<span id=\'' + fileId + '\'></span>',
+                self = this;
 
             $(fileInput).closest('.file-uploader-area').attr('upload-area-id', fileName);
             $(fileInput).replaceWith(spanElement);
+            $('#' + fileId).closest('.file-uploader-area').find('.file-uploader-button').first()
+                .off('click.mageFileUploader')
+                .on('click.mageFileUploader', function (e) {
+                    e.preventDefault();
+                    self.triggerFileBrowser($(this).closest('.file-uploader-area'));
+                });
         },
 
         /**
@@ -186,15 +193,21 @@ define([
          * @param {jQuery} $area
          */
         triggerFileBrowser: function ($area) {
-            const $browseBtn = $area.find('.uppy-Dashboard-browse').first();
+            let $browseBtn = $area.find('.uppy-Dashboard-browse').first(),
+                $dashboard,
+                $fileInput;
+
+            if (!$browseBtn.length) {
+                $browseBtn = $area.closest('[data-role=drop-zone]').find('.uppy-Dashboard-browse').first();
+            }
 
             if ($browseBtn.length > 0) {
                 $browseBtn[0].click();
                 return;
             }
 
-            let $dashboard = $area.find('.uppy-Dashboard-inner'),
-                $fileInput = $dashboard.find('input[type="file"]:visible').first();
+            $dashboard = $area.find('.uppy-Dashboard-inner');
+            $fileInput = $dashboard.find('input[type="file"]:visible').first();
 
             if ($fileInput.length > 0) {
                 $fileInput[0].click();
@@ -216,10 +229,6 @@ define([
                 $dropZone = $area.closest('[data-role=drop-zone]');
             }
 
-            $area.off('click.fileUploader').on('click.fileUploader', '.file-uploader-button:first', function (e) {
-                e.preventDefault();
-                self.triggerFileBrowser($area);
-            });
             $dropZone.off('click.fileUploader').on('click.fileUploader', '.file-uploader-placeholder', function (e) {
                 e.preventDefault();
                 self.triggerFileBrowser($area);

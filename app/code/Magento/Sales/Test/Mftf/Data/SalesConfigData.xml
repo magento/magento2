@@ -40,4 +40,12 @@
         <data key="path">sales/minimum_order/amount</data>
         <data key="value">0</data>
     </entity>
+    <entity name="SetMaximumNumberOfCouponsPerOrder1ConfigData">
+        <data key="path">sales/multicoupon/maximum_number_of_coupons_per_order</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SetMaximumNumberOfCouponsPerOrder10ConfigData">
+        <data key="path">sales/multicoupon/maximum_number_of_coupons_per_order</data>
+        <data key="value">10</data>
+    </entity>
 </entities>

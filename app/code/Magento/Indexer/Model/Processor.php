@@ -93,9 +93,7 @@ class Processor
             $indexer->load($indexerId);
             $indexerConfig = $this->config->getIndexer($indexerId);
 
-            if ($indexer->isInvalid() && !$indexer->isSuspended()
-                && !$this->isSharedIndexSuspended($indexerConfig['shared_index'])
-            ) {
+            if ($this->isEligibleForReindex($indexer, $indexerConfig)) {
                 // Skip indexers having shared index that was already complete
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
@@ -109,6 +107,41 @@ class Processor
                 }
             }
         }
+    }
+
+    /**
+     * Returns true when an indexer is invalid and none of its blocking conditions apply.
+     *
+     * @param IndexerInterface $indexer
+     * @param array $indexerConfig
+     * @return bool
+     */
+    private function isEligibleForReindex(IndexerInterface $indexer, array $indexerConfig): bool
+    {
+        return $indexer->isInvalid()
+            && !$indexer->isSuspended()
+            && !$this->isSharedIndexSuspended($indexerConfig['shared_index'])
+            && !$this->hasPendingDependencies($indexerConfig['dependencies'] ?? []);
+    }
+
+    /**
+     * Returns true if any declared dependency indexer is still in Invalid state.
+     * When true the dependent indexer should be skipped; it will be retried on the
+     * next cron cycle after all dependencies have finished rebuilding.
+     *
+     * @param array $dependencyIds
+     * @return bool
+     */
+    private function hasPendingDependencies(array $dependencyIds): bool
+    {
+        foreach ($dependencyIds as $depId) {
+            $dep = $this->indexerFactory->create();
+            $dep->load($depId);
+            if ($dep->isInvalid()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

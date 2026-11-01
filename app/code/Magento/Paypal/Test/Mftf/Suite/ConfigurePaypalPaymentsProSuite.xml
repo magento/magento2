@@ -14,6 +14,10 @@
             <actionGroup ref="AdminConfigurePayPalPaymentsProActionGroup" stepKey="configPayPalPaymentsPro">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
+            <!-- Clean config cache so the payment method is active on storefront -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterConfig">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Cleanup Paypal configurations -->

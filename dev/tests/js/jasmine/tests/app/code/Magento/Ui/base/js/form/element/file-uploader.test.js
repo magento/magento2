@@ -421,9 +421,13 @@ define([
                 $dropZone.append($placeholder);
                 $('body').append($dropZone);
 
-                spyOn(component, 'initUploader');
+                spyOn(component, 'initUploader').and.callFake(function (inp) {
+                    component.replaceInputTypeFile(inp);
+                });
                 spyOn(component, 'bindFileBrowserTriggers').and.callThrough();
                 spyOn(component, 'triggerFileBrowser');
+
+                $fileUploaderArea.prepend(input);
 
                 component.onElementRender(input);
 

@@ -83,6 +83,10 @@ class FileUploader
      */
     public function validate()
     {
+        if (!\in_array($this->attributeMetadata->getFrontendInput(), ['file', 'image'])) {
+            return [__('Attribute input type is not valid for file uploading.')];
+        }
+
         $formElement = $this->elementFactory->create(
             $this->attributeMetadata,
             null,

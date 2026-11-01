@@ -31,11 +31,14 @@
             <createData entity="SubCategoryWithParent" stepKey="createCategoryE">
                 <requiredEntity createDataKey="createCategoryD"/>
             </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
+            <actionGroup ref="AdminResetFilterInCategoryGridActionGroup" stepKey="resetCategoryGridFiltersAfterTest"/>
             <!-- Delete all products via API -->
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!--add product A to anchor category A and do storefront validation for product qty and visibility-->
@@ -58,7 +61,6 @@
         </actionGroup>
 
         <!--disable anchor category B and add product B to it and do storefront validation for product qty and visibility in category A and category B-->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageFirstTime"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersFirstTime"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItemFirstTime">

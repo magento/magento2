@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Grid;
-use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderWithCutoffInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +29,7 @@ class GridTest extends TestCase
     private $grid;
 
     /**
-     * @var NotSyncedDataProviderInterface|MockObject
+     * @var NotSyncedDataProviderWithCutoffInterface|MockObject
      */
     private $notSyncedDataProvider;
 
@@ -68,7 +68,7 @@ class GridTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderInterface::class);
+        $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderWithCutoffInterface::class);
         $this->connection = $this->createMock(ConnectionAdapterInterface::class);
         $this->lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
 
@@ -113,8 +113,14 @@ class GridTest extends TestCase
         $fetchResult[50]['updated_at'] = '2021-02-03 01:02:03';
         $fetchResult[150]['updated_at'] = '2021-03-04 01:02:03';
 
+        $cutoffMatcher = static function ($cutoff): bool {
+            return is_string($cutoff)
+                && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
+        };
+
         $this->notSyncedDataProvider->expects($this->atLeastOnce())
-            ->method('getIds')
+            ->method('getIdsWithCutoff')
+            ->with($this->mainTable, $this->gridTable, $this->callback($cutoffMatcher))
             ->willReturnOnConsecutiveCalls($notSyncedIds, []);
         $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())
@@ -156,6 +162,10 @@ class GridTest extends TestCase
             'status' => 1,
             'updated_at' => '2021-01-01 01:02:03',
         ]];
+        $cutoffMatcher = static function ($cutoff): bool {
+            return is_string($cutoff)
+                && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
+        };
         $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())
             ->method('from')
@@ -169,7 +179,8 @@ class GridTest extends TestCase
             ->willReturnSelf();
 
         $this->notSyncedDataProvider->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
-            ->method('getIds')
+            ->method('getIdsWithCutoff')
+            ->with($this->mainTable, $this->gridTable, $this->callback($cutoffMatcher))
             ->willReturn($notSyncedIds);
         $this->connection->expects($this->atLeastOnce())
             ->method('select')
@@ -178,11 +189,11 @@ class GridTest extends TestCase
             ->method('fetchAll')
             ->with($select)
             ->willReturn($fetchResult);
-        $this->connection->expects($this->atLeastOnce())
+        $this->connection->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
             ->method('insertOnDuplicate')
             ->with($this->gridTable, $fetchResult, array_keys($this->columns))
             ->willReturn(1);
-        $this->lastUpdateTimeCache->expects($this->atLeastOnce())
+        $this->lastUpdateTimeCache->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
             ->method('save')
             ->with($this->gridTable, '2021-01-01 01:02:03');
 

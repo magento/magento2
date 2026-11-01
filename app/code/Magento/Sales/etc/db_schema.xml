@@ -1905,6 +1905,7 @@
                 default="0" comment="Qty Ordered"/>
         <column xsi:type="smallint" name="rating_pos" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Rating Pos"/>
+        <column xsi:type="date" name="period_month" comment="1st day of the period month"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
@@ -1920,6 +1921,12 @@
             <column name="store_id"/>
         </index>
         <index referenceId="SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID" indexType="btree">
+            <column name="product_id"/>
+        </index>
+        <index referenceId="SALES_BESTSELLERS_AGGRED_DAILY_STORE_ID_PERIOD_MONTH_PRD_ID"
+               indexType="btree">
+            <column name="store_id"/>
+            <column name="period_month"/>
             <column name="product_id"/>
         </index>
     </table>

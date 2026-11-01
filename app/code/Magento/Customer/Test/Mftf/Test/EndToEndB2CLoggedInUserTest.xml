@@ -18,6 +18,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25681"/>
             <group value="SearchEngine"/>
+            <skip>
+                <issueId value="AC-18038">EndToEndB2CLoggedInUserTest failing because notice message not appearing in frontend</issueId>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>

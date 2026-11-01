@@ -20,6 +20,8 @@
             <validation>
                 <alias_limit_enabled>1</alias_limit_enabled>
                 <maximum_alias_allowed>10</maximum_alias_allowed>
+                <query_length_limit_enabled>1</query_length_limit_enabled>
+                <query_length_limit_allowed>1048576</query_length_limit_allowed>
             </validation>
         </graphql>
     </default>

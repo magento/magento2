@@ -73,10 +73,6 @@ class CallbackInvoker implements CallbackInvokerInterface
         $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
         $sleep = (int) $sleep ?: 1;
         $maxIdleTime = $maxIdleTime ? (int) $maxIdleTime : PHP_INT_MAX;
-        $connectionName = method_exists($queue, 'getConnectionName') ? $queue->getConnectionName(): null;
-        if ($connectionName === 'stomp') {
-            $queue->subscribeQueue();
-        }
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             $idleStartTime = microtime(true);
             do {

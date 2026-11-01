@@ -7,11 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Model\Dashboard;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Dashboard period info retriever
  */
 class Period
 {
+    private const CONFIG_PATH_USE_AGGREGATED_DATA = 'sales/dashboard/use_aggregated_data';
+
     public const PERIOD_TODAY = 'today';
     public const PERIOD_24_HOURS = '24h';
     public const PERIOD_7_DAYS = '7d';
@@ -22,6 +27,14 @@ class Period
     private const PERIOD_UNIT_HOUR = 'hour';
     private const PERIOD_UNIT_DAY = 'day';
     private const PERIOD_UNIT_MONTH = 'month';
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
+    }
 
     /**
      * Prepare array with periods for dashboard graphs
@@ -55,5 +68,48 @@ class Period
             static::PERIOD_1_YEAR => self::PERIOD_UNIT_MONTH,
             static::PERIOD_2_YEARS => self::PERIOD_UNIT_MONTH
         ];
+    }
+
+    /**
+     * Check if aggregated dashboard data is enabled
+     *
+     * @return bool
+     */
+    public function isAggregatedDataEnabled(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(
+            self::CONFIG_PATH_USE_AGGREGATED_DATA,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Get default dashboard period based on configuration
+     *
+     * @return string
+     */
+    public function getDefaultPeriod(): string
+    {
+        if ($this->isAggregatedDataEnabled()) {
+            return static::PERIOD_7_DAYS;
+        }
+
+        return static::PERIOD_TODAY;
+    }
+
+    /**
+     * Resolve dashboard period from request value
+     *
+     * @param string|null $period
+     * @return string
+     */
+    public function resolvePeriod(?string $period): string
+    {
+        $availablePeriods = array_keys($this->getDatePeriods());
+        if ($period !== null && $period !== '' && in_array($period, $availablePeriods, true)) {
+            return $period;
+        }
+
+        return $this->getDefaultPeriod();
     }
 }

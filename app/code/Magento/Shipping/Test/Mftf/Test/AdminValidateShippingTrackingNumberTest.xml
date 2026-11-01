@@ -43,6 +43,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="ClearShipmentsGridFiltersActionGroup" stepKey="clearShipmentsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToCreateOrderPage"/>

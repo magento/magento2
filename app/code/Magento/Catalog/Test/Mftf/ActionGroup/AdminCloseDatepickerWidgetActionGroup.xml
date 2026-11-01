@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCloseDatepickerWidgetActionGroup">
+        <annotations>
+            <description>Closes the shared datepicker widget</description>
+        </annotations>
+        <arguments>
+            <argument name="inputSelector" type="string"/>
+            <argument name="datePickerWidgetSelector" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{datePickerWidgetSelector}}" stepKey="waitForDatepickerWidgetBeforeClose"/>
+        <pressKey selector="{{inputSelector}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="closeDatepickerWithEscapeKey"/>
+        <waitForElementNotVisible selector="{{datePickerWidgetSelector}}" stepKey="waitForDatepickerWidgetToClose"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetFilterInUrlRewriteGridActionGroup">
+        <annotations>
+            <description>Navigates to the Admin URL Rewrites grid and clears keyword search and column filters.</description>
+        </annotations>
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteGridForFilterReset"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteGridForFilterReset"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"
+                          dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true"
+                          stepKey="clearUrlRewriteGridKeywordFilters"/>
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}"
+                          dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show"
+                          visible="true" stepKey="clearUrlRewriteGridAppliedFilters"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteGridAfterFilterReset"/>
+    </actionGroup>
+</actionGroups>

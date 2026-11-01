@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEditConfigurableProductNarrowOptionsVerifySummary">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit configurable product configurations"/>
+            <title value="Admin narrows configurable options and verifies associated and disassociated products on summary"/>
+            <description value="Creates configurable with Color (5 options) and Size (5 options), uploads matrix images for all 25 variations, saves, edits configurations to keep only black/red and 8/10, applies bulk unique images by Color, unique prices by Size, single qty, verifies associated and disassociated product summary grids, regenerates, and saves."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-4714"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Login as admin to backend -->
+            <createData entity="_defaultCategory" stepKey="createCategoryForConfigurableParent"/>
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigurableParentProduct">
+                <requiredEntity createDataKey="createCategoryForConfigurableParent"/>
+            </createData>
+        </before>
+        <after>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <deleteData createDataKey="createCategoryForConfigurableParent" stepKey="deleteCategoryForConfigurableParent"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteSizeAttribute">
+                <argument name="productAttributeLabel" value="{{ProductSizeAttribute.frontend_label}}"/>
+            </actionGroup>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToColorAttributeEditPage">
+                <argument name="ProductAttribute" value="color"/>
+            </actionGroup>
+            <click selector="{{AdminNewAttributePanel.deleteOptionByName(ColorOptionBlack.label)}}" stepKey="removeBlackFromColor"/>
+            <click selector="{{AdminNewAttributePanel.deleteOptionByName(ColorOptionRed.label)}}" stepKey="removeRedFromColor"/>
+            <click selector="{{AdminNewAttributePanel.deleteOptionByName(ColorOptionBlue.label)}}" stepKey="removeBlueFromColor"/>
+            <click selector="{{AdminNewAttributePanel.deleteOptionByName(ColorOptionPink.label)}}" stepKey="removePinkFromColor"/>
+            <click selector="{{AdminNewAttributePanel.deleteOptionByName(ColorOptionWhite.label)}}" stepKey="removeWhiteFromColor"/>
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveColorAttributeAfterCleanup"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step 2: Navigate to Products - Catalog -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Step 3-4: Open API-created configurable parent product for edit -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterConfigurableParentBySku">
+            <argument name="product" value="$$createConfigurableParentProduct$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="waitForConfigurableParentEditButton"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openConfigurableParentForEdit"/>
+        <!-- Step 5: Click 'Create Configurations' button -->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForCreateConfigurationsButton"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <!-- Step 6: Click 'Add New Attribute' on 1st step in 'Create Product Configurations' wizard -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitForConfigPanel"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitForCreateNewAttributeButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickCreateNewAttribute"/>
+        <waitForPageLoad stepKey="waitForNewAttributeIFrame"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <!-- Step 7: Fill out label and options | Test Data: label: size, options: 8, 10, 12, 14, 16 -->
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{ProductSizeAttribute.frontend_label}}" stepKey="fillSizeAttributeLabel"/>
+        <actionGroup ref="AdminNavigateToProductAttributeAdvancedSectionActionGroup" stepKey="goToAdvancedSection"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{ProductSizeAttribute.attribute_code}}" stepKey="fillSizeAttributeCode"/>
+        <actionGroup ref="AdminAddAttributeOptionInIFrameActionGroup" stepKey="addSizeOption8">
+            <argument name="optionLabel" value="{{SizeOption8.label}}"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAttributeOptionInIFrameActionGroup" stepKey="addSizeOption10">
+            <argument name="optionLabel" value="{{SizeOption10.label}}"/>
+            <argument name="optionIndex" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAttributeOptionInIFrameActionGroup" stepKey="addSizeOption12">
+            <argument name="optionLabel" value="{{SizeOption12.label}}"/>
+            <argument name="optionIndex" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAttributeOptionInIFrameActionGroup" stepKey="addSizeOption14">
+            <argument name="optionLabel" value="{{SizeOption14.label}}"/>
+            <argument name="optionIndex" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddAttributeOptionInIFrameActionGroup" stepKey="addSizeOption16">
+            <argument name="optionLabel" value="{{SizeOption16.label}}"/>
+            <argument name="optionIndex" value="5"/>
+        </actionGroup>
+        <!-- Step 8: Click 'Save Attribute' -->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveNewSizeAttribute"/>
+        <waitForPageLoad stepKey="waitForSizeAttributeSave"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+        <!-- Step 9: Select both attributes in grid (default color and new created size attributes) -->
+        <actionGroup ref="AdminFilterAttributeInConfigurableAttributesGrid" stepKey="filterSizeAttribute">
+            <argument name="attributeCode" value="{{ProductSizeAttribute.attribute_code}}"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnSizeCheckbox"/>
+        <actionGroup ref="AdminFilterAttributeInConfigurableAttributesGrid" stepKey="filterColorAttribute">
+            <argument name="attributeCode" value="color"/>
+        </actionGroup>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnColorCheckbox"/>
+        <!-- Step 10: Click 'Next' button -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToAttributeValues"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToAttributeValues"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute('Color')}}" stepKey="waitForAttributeValuesPage"/>
+        <!-- Step 11: Add 5 options to default color attribute | Test Data: label: Color, Options: black, red, blue, pink, white -->
+        <actionGroup ref="AdminCreateAttributeValueInConfigurationWizardActionGroup" stepKey="addColorBlackOption">
+            <argument name="attributeLabel" value="Color"/>
+            <argument name="optionValue" value="{{ColorOptionBlack.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateAttributeValueInConfigurationWizardActionGroup" stepKey="addColorRedOption">
+            <argument name="attributeLabel" value="Color"/>
+            <argument name="optionValue" value="{{ColorOptionRed.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateAttributeValueInConfigurationWizardActionGroup" stepKey="addColorBlueOption">
+            <argument name="attributeLabel" value="Color"/>
+            <argument name="optionValue" value="{{ColorOptionBlue.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateAttributeValueInConfigurationWizardActionGroup" stepKey="addColorPinkOption">
+            <argument name="attributeLabel" value="Color"/>
+            <argument name="optionValue" value="{{ColorOptionPink.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateAttributeValueInConfigurationWizardActionGroup" stepKey="addColorWhiteOption">
+            <argument name="attributeLabel" value="Color"/>
+            <argument name="optionValue" value="{{ColorOptionWhite.label}}"/>
+        </actionGroup>
+        <!-- Step 12: Select all options for both attributes -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute('Color')}}" stepKey="selectAllColorOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute(ProductSizeAttribute.frontend_label)}}" stepKey="selectAllSizeOptions"/>
+        <!-- Step 13: Click 'Next' button -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToBulkOptions"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToBulkOptions"/>
+        <!-- Step 14: On step 3 - Quantity: Apply single quantity to each SKUs | Test Data: Quantity: 10000 -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForBulkOptionsStep"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForSingleQuantityRadio"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickSingleQuantity"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityField"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10000" stepKey="fillQuantity"/>
+        <!-- Step 15: Click 'Generate Products' on Step 4: Summary | Expected Result: 25 variations are generated -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToSummary"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSummary"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForSummaryStep"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductsButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProducts"/>
+        <waitForPageLoad stepKey="waitForProductsGeneration"/>
+        <!-- Step 16: Upload an image for each variation in Image column of Current Variations grid -->
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" stepKey="waitForFirstVariationRow"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.paginationDropDropdown}}" stepKey="waitForMatrixPagination"/>
+        <selectOption selector="{{AdminProductFormConfigurationsSection.paginationDropDropdown}}" userInput="30" stepKey="setMatrixPageSizeToThirty"/>
+        <waitForPageLoad stepKey="waitAfterMatrixPageSizeChange"/>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow01">
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow02">
+            <argument name="row" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow03">
+            <argument name="row" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow04">
+            <argument name="row" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow05">
+            <argument name="row" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow06">
+            <argument name="row" value="6"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow07">
+            <argument name="row" value="7"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow08">
+            <argument name="row" value="8"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow09">
+            <argument name="row" value="9"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow10">
+            <argument name="row" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow11">
+            <argument name="row" value="11"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow12">
+            <argument name="row" value="12"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow13">
+            <argument name="row" value="13"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow14">
+            <argument name="row" value="14"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow15">
+            <argument name="row" value="15"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow16">
+            <argument name="row" value="16"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow17">
+            <argument name="row" value="17"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow18">
+            <argument name="row" value="18"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow19">
+            <argument name="row" value="19"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow20">
+            <argument name="row" value="20"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow21">
+            <argument name="row" value="21"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow22">
+            <argument name="row" value="22"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow23">
+            <argument name="row" value="23"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow24">
+            <argument name="row" value="24"/>
+        </actionGroup>
+        <actionGroup ref="AdminAttachImageToConfigurableMatrixRowActionGroup" stepKey="uploadMatrixRow25">
+            <argument name="row" value="25"/>
+        </actionGroup>
+        <!-- Step 17: Click 'Save' button | Expected Result: 'Choose Affected Product Template' pop-up appears -->
+        <!-- Step 18: Select 'Add configurable attributes to the current set(Default)' and press 'Confirm' | Expected Result: 'You saved the product.' message appears -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveConfigurableProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmAttributeSetForConfigurableProduct"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessageAfterFirstSave"/>
+        <!-- Step 19: Click 'Edit Configurations' -->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitForEditConfigurationsButton"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <!-- Step 20: Select Color and Size attributes -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForEditConfigPanel"/>
+        <!-- Step 21: Click 'Next' button -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextFromSelectAttributes"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextFromSelectAttributes"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute('Color')}}" stepKey="waitForAttributeValuesOnEdit"/>
+        <!-- Step 22: Check only next Attribute Values for Color attribute | Test Data: Attribute Values: black, red -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.deSelectAllByAttribute('Color')}}" stepKey="waitForDeselectAllColorButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.deSelectAllByAttribute('Color')}}" stepKey="deselectAllColorOptions"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeOption(ColorOptionBlack.label)}}" stepKey="waitForBlackOptionCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption(ColorOptionBlack.label)}}" stepKey="selectColorBlack"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeOption(ColorOptionRed.label)}}" stepKey="waitForRedOptionCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption(ColorOptionRed.label)}}" stepKey="selectColorRed"/>
+        <!-- Step 23: Check only next Attribute Values for Size attribute | Test Data: Attribute Values: 8, 10 -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.deSelectAllByAttribute(ProductSizeAttribute.frontend_label)}}" stepKey="waitForDeselectAllSizeButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.deSelectAllByAttribute(ProductSizeAttribute.frontend_label)}}" stepKey="deselectAllSizeOptions"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeOption(SizeOption8.label)}}" stepKey="waitForSize8OptionCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption(SizeOption8.label)}}" stepKey="selectSize8"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.attributeOption(SizeOption10.label)}}" stepKey="waitForSize10OptionCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeOption(SizeOption10.label)}}" stepKey="selectSize10"/>
+        <!-- Step 24: Click 'Next' button -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToBulkAfterNarrow"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToBulkAfterNarrow"/>
+        <!-- Step 25: On 'Step 3' - Images: Apply unique images by attribute (Color), Price: Apply unique prices by attribute (Size: 8=$4, 10=$6), Quantity: Apply single quantity (10000) -->
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="waitForBulkStepAfterNarrow"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="waitForUniqueImagesRadio"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueImagesToEachSkus}}" stepKey="clickApplyUniqueImagesByAttribute"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" stepKey="waitForImagesAttributeSelect"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectImagesButton}}" userInput="Color" stepKey="selectImagesAttributeColor"/>
+        <waitForPageLoad stepKey="waitAfterSelectImagesAttribute"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(ColorOptionBlack.label)}}" time="60" stepKey="waitForBlackImageUploadInput"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(ColorOptionBlack.label)}}" userInput="{{ProductImage.file}}" stepKey="uploadWizardImageForBlack"/>
+        <waitForElementNotVisible selector="{{AdminCreateProductConfigurationsPanel.uploadProgressBar}}" stepKey="waitForBlackUploadComplete"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageFile(ProductImage.fileName)}}" stepKey="waitForBlackWizardThumbnail"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(ColorOptionRed.label)}}" time="60" stepKey="waitForRedImageUploadInput"/>
+        <attachFile selector="{{AdminCreateProductConfigurationsPanel.uploadImagesButton(ColorOptionRed.label)}}" userInput="{{TestImageNew.file}}" stepKey="uploadWizardImageForRed"/>
+        <waitForElementNotVisible selector="{{AdminCreateProductConfigurationsPanel.uploadProgressBar}}" stepKey="waitForRedUploadComplete"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.imageFile(TestImageNew.filename)}}" stepKey="waitForRedWizardThumbnail"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="waitForUniquePricesRadio"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesToEachSkus}}" stepKey="clickApplyUniquePricesByAttribute"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.selectPriceButton}}" stepKey="waitForPriceAttributeSelect"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectPriceButton}}" userInput="{{ProductSizeAttribute.frontend_label}}" stepKey="selectPriceAttributeSize"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.price(SizeOption8.label)}}" stepKey="waitForPriceFieldSize8"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.price(SizeOption8.label)}}" userInput="4" stepKey="fillPriceForSize8"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.price(SizeOption10.label)}}" stepKey="waitForPriceFieldSize10"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.price(SizeOption10.label)}}" userInput="6" stepKey="fillPriceForSize10"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitForSingleQtyRadioOnSecondPass"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickSingleQuantityOnSecondPass"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityFieldOnSecondPass"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10000" stepKey="fillQuantityOnSecondPass"/>
+        <!-- Step 26: Click 'Next' button | Expected Result: Step 4 Summary shows Associated Products (conf1-black-8, conf1-black-10, conf1-red-8, conf1-red-10) and Disassociated Products (all other variations) -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextToSummaryOnSecondPass"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickNextToSummaryOnSecondPass"/>
+        <waitForText userInput="Step 4: Summary" stepKey="waitForSummaryStepTitle"/>
+        <waitForText userInput="Associated Products" stepKey="seeAssociatedProductsHeading"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption8.label}}-{{ColorOptionBlack.label}}" stepKey="seeAssociatedSkuBlack8"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption10.label}}-{{ColorOptionBlack.label}}" stepKey="seeAssociatedSkuBlack10"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption8.label}}-{{ColorOptionRed.label}}" stepKey="seeAssociatedSkuRed8"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption10.label}}-{{ColorOptionRed.label}}" stepKey="seeAssociatedSkuRed10"/>
+        <waitForText userInput="Disassociated Products" stepKey="seeDisassociatedProductsHeading"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.summaryDisassociatedPerPageMenuToggle}}" stepKey="waitForDisassociatedPerPageMenu"/>
+        <click selector="{{AdminProductFormConfigurationsSection.summaryDisassociatedPerPageMenuToggle}}" stepKey="openDisassociatedPerPageMenu"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.summaryDisassociatedPerPageOption30}}" stepKey="waitForDisassociatedPerPage30"/>
+        <click selector="{{AdminProductFormConfigurationsSection.summaryDisassociatedPerPageOption30}}" stepKey="setDisassociatedPerPageToThirty"/>
+        <waitForPageLoad stepKey="waitAfterDisassociatedPageSizeChange"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption8.label}}-{{ColorOptionBlue.label}}" stepKey="seeDisassociatedSampleBlue8"/>
+        <waitForText userInput="$$createConfigurableParentProduct.sku$$-{{SizeOption16.label}}-{{ColorOptionWhite.label}}" stepKey="seeDisassociatedSampleWhite16"/>
+        <!-- Step 27: Click 'Generate Products' -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductsOnSecondPass"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickGenerateProductsOnSecondPass"/>
+        <waitForPageLoad stepKey="waitForProductsRegeneration"/>
+        <!-- Step 28: Click 'Save' product | Expected Result: 'You saved the product.' message appears -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveConfigurableProductAfterNarrow"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessageAfterFinalSave"/>
+        <!-- Step 28 Assertion: Verify only narrowed variations remain on product page -->
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName(ColorOptionBlack.label)}}" stepKey="verifyFinalVariationContainsBlack"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName(ColorOptionRed.label)}}" stepKey="verifyFinalVariationContainsRed"/>
+    </test>
+</tests>
