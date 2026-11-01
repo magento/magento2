@@ -15,5 +15,6 @@
         <container name="div.sidebar.additional" htmlTag="div" htmlClass="sidebar sidebar-additional"
                    after="div.sidebar.main"/>
     </referenceContainer>
+    <referenceContainer name="sidebar.additional" display="true"/>
     <move element="sidebar.additional" destination="div.sidebar.additional"/>
 </layout>

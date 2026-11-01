@@ -10,6 +10,8 @@ namespace Magento\Theme\View\Layout;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -21,13 +23,12 @@ use PHPUnit\Framework\TestCase;
  *
  * @see https://github.com/magento/magento2/issues/36806
  */
+#[AppArea('frontend'), AppIsolation(true)]
 class PageLayoutSidebarAdditionalTest extends TestCase
 {
     /**
      * @param string $pageLayoutHandle
      * @return void
-     * @magentoAppIsolation enabled
-     * @magentoAppArea frontend
      */
     #[DataProvider('pageLayoutHandlesDataProvider')]
     public function testSidebarAdditionalContainerExists(string $pageLayoutHandle): void
@@ -51,25 +52,61 @@ class PageLayoutSidebarAdditionalTest extends TestCase
      * "div.sidebar.additional" wrapper, so existing sidebar rendering is preserved.
      *
      * @return void
-     * @magentoAppIsolation enabled
-     * @magentoAppArea frontend
      */
     public function testSidebarAdditionalIsMovedIntoWrapperOnTwoColumnLayout(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get(LayoutCache::class)->clean();
-
-        /** @var LayoutInterface $layout */
-        $layout = $objectManager->get(LayoutFactory::class)->create();
-        $layout->getUpdate()->load(['2columns-left']);
-        $layout->generateXml();
-        $layout->generateElements();
+        $layout = $this->createLayout(['2columns-left']);
 
         $this->assertSame(
             'div.sidebar.additional',
             $layout->getParentName('sidebar.additional'),
             'On a two-column layout "sidebar.additional" must be nested in the "div.sidebar.additional" wrapper.'
         );
+    }
+
+    /**
+     * On single-column page layouts the container must not render its children, so blocks attached to it
+     * in default.xml (compare, reorder, wishlist) do not start appearing below the main column.
+     *
+     * @return void
+     */
+    public function testSidebarAdditionalIsNotRenderedOnOneColumnLayout(): void
+    {
+        $layout = $this->createLayout(['default', '1column']);
+
+        $this->assertNotEmpty(
+            $layout->getChildNames('sidebar.additional'),
+            'Blocks from default.xml are expected to be attached to "sidebar.additional".'
+        );
+        $this->assertSame('', $layout->renderElement('sidebar.additional'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSidebarAdditionalIsRenderedOnTwoColumnLayout(): void
+    {
+        $layout = $this->createLayout(['default', '2columns-left']);
+
+        $this->assertNotSame('', trim($layout->renderElement('sidebar.additional')));
+    }
+
+    /**
+     * @param string[] $handles
+     * @return LayoutInterface
+     */
+    private function createLayout(array $handles): LayoutInterface
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(LayoutCache::class)->clean();
+
+        /** @var LayoutInterface $layout */
+        $layout = $objectManager->get(LayoutFactory::class)->create();
+        $layout->getUpdate()->load($handles);
+        $layout->generateXml();
+        $layout->generateElements();
+
+        return $layout;
     }
 
     /**
@@ -82,6 +119,8 @@ class PageLayoutSidebarAdditionalTest extends TestCase
             '2columns-left' => ['2columns-left'],
             '2columns-right' => ['2columns-right'],
             '3columns' => ['3columns'],
+            'checkout' => ['checkout'],
+            'empty' => ['empty'],
         ];
     }
 }
