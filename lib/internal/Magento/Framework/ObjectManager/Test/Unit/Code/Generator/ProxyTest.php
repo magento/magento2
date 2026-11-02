@@ -15,8 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class ProxyTest extends TestCase
 {
-    private const MIXED_TYPE_PHP_VERSION = '8.0.0';
-
     /**
      * @var MockObject
      */
@@ -57,10 +55,6 @@ class ProxyTest extends TestCase
 
     public function testGenerateMixedType()
     {
-        if (version_compare(PHP_VERSION, self::MIXED_TYPE_PHP_VERSION) < 0) {
-            $this->markTestSkipped('This test requires at least PHP version ' . self::MIXED_TYPE_PHP_VERSION);
-        }
-
         require_once __DIR__ . '/_files/SampleMixed.php';
         $model = $this->getMockBuilder(Proxy::class)
             ->onlyMethods(['_validateData'])
