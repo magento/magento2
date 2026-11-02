@@ -14,6 +14,8 @@ use Zend_Db_Statement_Exception;
 
 /**
  * Reindex product prices according rule settings.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReindexRuleProductPrice
 {
@@ -53,6 +55,11 @@ class ReindexRuleProductPrice
     private $reindexRuleProductsPriceProcessor;
 
     /**
+     * @var RuleProductsSelectBatchProvider
+     */
+    private $batchProvider;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param RuleProductsSelectBuilder $ruleProductsSelectBuilder
      * @param ProductPriceCalculator $productPriceCalculator
@@ -60,6 +67,8 @@ class ReindexRuleProductPrice
      * @param RuleProductPricesPersistor $pricesPersistor
      * @param bool $useWebsiteTimezone
      * @param ReindexRuleProductsPriceProcessor|null $reindexRuleProductsPriceProcessor
+     * @param RuleProductsSelectBatchProvider|null $batchProvider
+     * @param bool $useSelectBatching Whether to batch the rule-product select for memory efficiency.
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -68,7 +77,9 @@ class ReindexRuleProductPrice
         TimezoneInterface $localeDate,
         RuleProductPricesPersistor $pricesPersistor,
         bool $useWebsiteTimezone = true,
-        ?ReindexRuleProductsPriceProcessor $reindexRuleProductsPriceProcessor = null
+        ?ReindexRuleProductsPriceProcessor $reindexRuleProductsPriceProcessor = null,
+        ?RuleProductsSelectBatchProvider $batchProvider = null,
+        private readonly bool $useSelectBatching = true
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;
@@ -78,6 +89,8 @@ class ReindexRuleProductPrice
         $this->useWebsiteTimezone = $useWebsiteTimezone;
         $this->reindexRuleProductsPriceProcessor = $reindexRuleProductsPriceProcessor ??
             ObjectManager::getInstance()->get(ReindexRuleProductsPriceProcessor::class);
+        $this->batchProvider = $batchProvider
+            ?? ObjectManager::getInstance()->get(RuleProductsSelectBatchProvider::class);
     }
 
     /**
@@ -93,6 +106,19 @@ class ReindexRuleProductPrice
      */
     public function execute(int $batchCount, ?int $productId = null, bool $useAdditionalTable = false)
     {
+        if ($this->useSelectBatching === true && $productId === null && $useAdditionalTable) {
+            foreach ($this->storeManager->getWebsites() as $website) {
+                $this->reindexRuleProductsPriceProcessor->executeBatches(
+                    $this->batchProvider->execute((int)$website->getId(), null, true),
+                    $website,
+                    $batchCount,
+                    true,
+                    $this->useWebsiteTimezone
+                );
+            }
+            return true;
+        }
+
         /**
          * Update products rules prices per each website separately
          * because for each website date in website's timezone should be used
