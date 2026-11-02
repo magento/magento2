@@ -81,6 +81,8 @@
                 <argument name="shippingMethodName" value="Flat Rate"/>
             </actionGroup>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <!-- Select Check/Money order payment method if it's rendered as a visible radio (auto-selected/hidden when only one payment method available) -->
+            <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" visible="true" stepKey="selectCheckMoneyOrderPaymentIfVisible"/>
             <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
             <!-- I see order successful Page -->
             <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
@@ -144,4 +146,3 @@
         </actionGroup>
     </test>
 </tests>
-
