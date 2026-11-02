@@ -109,7 +109,7 @@ define([
                 },
                 options: {
                     transitions: {
-                        resize: {
+                        attach: {
                             animation: {
                                 duration: 0
                             }
