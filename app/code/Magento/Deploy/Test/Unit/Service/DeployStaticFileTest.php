@@ -11,6 +11,7 @@ use Magento\Deploy\Service\DeployStaticFile;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\View\Asset\Repository;
@@ -88,6 +89,37 @@ class DeployStaticFileTest extends TestCase
                 'css/styles.css',
                 'adminhtml/Magento/backend/fr_FR/css/styles.css',
             ],
+        ];
+    }
+
+    /**
+     * @param string $path
+     * @param bool $expected
+     */
+    #[DataProvider('packagePathDataProvider')]
+    public function testIsInPackage(string $path, bool $expected): void
+    {
+        $this->pubStaticDir->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('frontend/Magento/luma/en_US')
+            ->willReturn('/var/www/html/pub/static/frontend/Magento/luma/en_US/');
+        $this->pubStaticDir->method('getDriver')->willReturn(new File());
+
+        $this->assertSame($expected, $this->service->isInPackage($path, 'frontend/Magento/luma/en_US'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function packagePathDataProvider(): array
+    {
+        return [
+            'file in the package' => ['css/../images/logo.svg', true],
+            'module file in the package' => ['Magento_Theme/css/../../images/a.svg', true],
+            'file at the package root' => ['./logo.svg', true],
+            'ancestor package' => ['css/../../../../../frontend/Magento/blank/en_US/images/logo.svg', false],
+            'out through a subdirectory' => ['css/../images/../../a.svg', false],
+            'sibling directory with the package name as prefix' => ['../en_US_old/a.svg', false],
         ];
     }
 

@@ -218,19 +218,22 @@ class DeployPackageTest extends TestCase
     }
 
     /**
-     * @param string $parentCss
-     * @param bool $copy
+     * @param bool $inPackage
      */
-    #[DataProvider('parentCssUrlsDataProvider')]
-    public function testCopiesLessRootOnlyWhenParentCssUrlsStayInPackage(string $parentCss, bool $copy): void
+    #[DataProvider('urlInPackageDataProvider')]
+    public function testCopiesLessRootOnlyWhenParentCssUrlsStayInPackage(bool $inPackage): void
     {
         $this->inherit($this->createFile($this->themePackage, 'css/styles-m.less', null, 'css/styles-m.css'));
         $this->deployStaticFile->method('fileExists')->willReturn(true);
         $this->deployStaticFile->method('readFile')->willReturnMap([
-            ['css/styles-m.css', $this->parentPackage->getPath(), $parentCss],
+            ['css/styles-m.css', $this->parentPackage->getPath(), ".a{background:url('../images/logo.svg')}"],
         ]);
+        $this->deployStaticFile->expects($this->once())
+            ->method('isInPackage')
+            ->with('css/../images/logo.svg', $this->parentPackage->getPath())
+            ->willReturn($inPackage);
 
-        if ($copy) {
+        if ($inPackage) {
             $this->expectCopy('css/styles-m.css');
         } else {
             $this->expectDeploy('css/styles-m.less');
@@ -241,58 +244,42 @@ class DeployPackageTest extends TestCase
     /**
      * @return array
      */
-    public static function parentCssUrlsDataProvider(): array
+    public static function urlInPackageDataProvider(): array
     {
         return [
-            'url in the package' => [".a{background:url('../images/logo.svg')}", true],
-            'url to a module in the package' => ['.a{background:url(../Magento_Theme/images/icon.svg)}', true],
-            'absolute, data and external urls' => [
-                '.a{background:url(/media/a.png),url("data:image/png;base64,AA=="),url(https://example.com/a.png)}',
-                true,
-            ],
-            'url rewritten to an ancestor package' => [
-                ".a{background:url('../../../../../frontend/Magento/blank/en_US/images/logo.svg')}",
-                false,
-            ],
-            'url leaving the package through a subdirectory' => ['.a{background:url(../images/../../a.svg)}', false],
+            'url in the package' => [true],
+            'url outside the package' => [false],
         ];
     }
 
-    /**
-     * Module files are deployed one directory deeper, below the module name
-     *
-     * @param string $parentCss
-     * @param bool $copy
-     */
-    #[DataProvider('parentModuleCssUrlsDataProvider')]
-    public function testCopiesModuleCssOnlyWhenParentCssUrlsStayInPackage(string $parentCss, bool $copy): void
+    public function testCopiesCssWithAbsoluteDataAndExternalUrls(): void
     {
-        $this->inherit($this->createFile($this->themePackage, 'css/a.css', null, null, 'Magento_Theme'));
+        $this->inherit($this->createFile($this->themePackage, 'css/styles-m.less', null, 'css/styles-m.css'));
         $this->deployStaticFile->method('fileExists')->willReturn(true);
-        $this->deployStaticFile->method('readFile')->willReturnMap([
-            ['Magento_Theme::css/a.css', $this->parentPackage->getPath(), $parentCss],
-        ]);
+        $this->deployStaticFile->method('readFile')->willReturn(
+            '.a{background:url(/media/a.png),url("data:image/png;base64,AA=="),url(https://example.com/a.png)}'
+        );
+        $this->deployStaticFile->expects($this->never())->method('isInPackage');
 
-        if ($copy) {
-            $this->expectCopy('Magento_Theme::css/a.css');
-        } else {
-            $this->deployStaticFile->expects($this->never())->method('copyFile');
-            $this->deployStaticFile->expects($this->once())
-                ->method('deployFile')
-                ->with('css/a.css', ['module' => 'Magento_Theme'] + $this->deployParams('de_DE'));
-        }
+        $this->expectCopy('css/styles-m.css');
         $this->deploy();
     }
 
     /**
-     * @return array
+     * Module files are deployed one directory deeper, below the module name
      */
-    public static function parentModuleCssUrlsDataProvider(): array
+    public function testResolvesModuleCssUrlsFromTheModuleDirectory(): void
     {
-        return [
-            'url to the theme in the package' => ['.a{background:url(../../images/a.svg)}', true],
-            'url leaving the package' => ['.a{background:url(../../../a.svg)}', false],
-        ];
+        $this->inherit($this->createFile($this->themePackage, 'css/a.css', null, null, 'Magento_Theme'));
+        $this->deployStaticFile->method('fileExists')->willReturn(true);
+        $this->deployStaticFile->method('readFile')->willReturn('.a{background:url(../../images/a.svg)}');
+        $this->deployStaticFile->expects($this->once())
+            ->method('isInPackage')
+            ->with('Magento_Theme/css/../../images/a.svg', $this->parentPackage->getPath())
+            ->willReturn(true);
+
+        $this->expectCopy('Magento_Theme::css/a.css');
+        $this->deploy();
     }
 
     /**

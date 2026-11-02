@@ -14,7 +14,6 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\FileSystem;
 use Magento\Framework\View\Url\CssResolver;
 use Magento\Deploy\Console\InputValidator;
 use Psr\Log\LoggerInterface;
@@ -310,7 +309,7 @@ class DeployPackage
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $fileDir = dirname(str_replace(Repository::FILE_ID_SEPARATOR, '/', $fileId));
         foreach ($matches[1] as $url) {
-            if (str_starts_with(FileSystem::normalizePath($fileDir . '/' . $url), '../')) {
+            if (!$this->deployStaticFile->isInPackage($fileDir . '/' . $url, $parentPackage->getPath())) {
                 return true;
             }
         }

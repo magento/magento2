@@ -155,6 +155,22 @@ class DeployStaticFile
     }
 
     /**
+     * Check if a path relative to a package directory stays inside that package
+     *
+     * @see \Magento\Framework\App\Filesystem\DirectoryResolver::validatePath()
+     * @param string $path
+     * @param string $packagePath
+     * @return bool
+     */
+    public function isInPackage(string $path, string $packagePath): bool
+    {
+        $packageRoot = rtrim($this->pubStaticDir->getAbsolutePath($packagePath), '/');
+        $realPath = $this->pubStaticDir->getDriver()->getRealPathSafety($packageRoot . '/' . $path);
+
+        return str_starts_with($realPath, $packageRoot . '/');
+    }
+
+    /**
      * Open static file
      *
      * @param string $fileName
