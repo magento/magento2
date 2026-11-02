@@ -114,7 +114,7 @@ class StompClient implements StompClientInterface, ResetAfterRequestInterface
     {
         $client = null;
         try {
-            $client = $this->clientFactory->create($this->stompConfig, true);
+            $client = $this->clientFactory->create($this->stompConfig);
             // An isolated, non-matching subscription declares the queue without receiving business messages.
             $client->sendFrame(new Frame('SUBSCRIBE', [
                 'id' => 'queue-installer',

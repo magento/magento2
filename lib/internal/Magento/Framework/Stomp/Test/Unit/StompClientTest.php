@@ -30,16 +30,20 @@ class StompClientTest extends TestCase
         $failure = new ConnectionException('Declaration connection failed');
         $connection = $this->createConnection($connected, $frames, $response, $failedCommand, $failure);
         $config = $this->createMock(Config::class);
-        $config->expects($this->once())->method('getConnection')->willReturn($connection);
+        $config->expects($this->never())->method('getConnection');
         $sslOptions = $sslEnabled ? ['verify_peer' => true] : null;
         $config->method('getValue')->willReturnMap([
             [Config::HOST, 'broker.example'],
             [Config::PORT, '61613'],
+            [Config::USERNAME, 'test-user'],
+            [Config::PASSWORD, 'test-password'],
             [Config::SSL, $sslEnabled ? 'true' : 'false'],
             [Config::SSL_OPTIONS, $sslOptions],
         ]);
-        $connectionFactory = $this->createMock(ConnectionFactory::class);
-        $connectionFactory->expects($this->once())->method('create')->with(
+        $connectionFactory = $this->getMockBuilder(ConnectionFactory::class)
+            ->onlyMethods(['create'])
+            ->getMock();
+        $connectionFactory->expects($this->exactly(2))->method('create')->with(
             $this->callback(static function (FactoryOptions $options) use ($sslEnabled, $sslOptions): bool {
                 return $options->getHost() === 'broker.example'
                     && $options->getPort() === '61613'

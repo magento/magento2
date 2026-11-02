@@ -11,7 +11,6 @@ use Magento\Framework\Stomp\Config;
 use Magento\Framework\Stomp\StompClient;
 use Stomp\Client;
 use Stomp\Exception\ConnectionException;
-use Stomp\Network\Connection;
 use Stomp\Network\Observer\HeartbeatEmitter;
 
 class ClientFactory
@@ -24,16 +23,15 @@ class ClientFactory
     }
 
     /**
-     * Create a configured client, optionally with an independent connection and parser.
+     * Create a configured client with an independent connection and parser.
      *
      * @param Config $config
-     * @param bool $isolated
      * @return Client
      * @throws ConnectionException
      */
-    public function create(Config $config, bool $isolated = false): Client
+    public function create(Config $config): Client
     {
-        $connection = $isolated ? $this->createConnection($config) : clone $config->getConnection();
+        $connection = $this->connectionFactory->createFromConfig($config);
         $readTimeout = $config->getValue('read_timeout') ?? StompClient::READ_TIME_OUT;
         $connection->setReadTimeout(0, $readTimeout);
         $connection->getObservers()->addObserver(new HeartbeatEmitter($connection));
@@ -46,23 +44,5 @@ class ClientFactory
         $client->setHeartbeat($heartbeatSend, $heartbeatReceive);
 
         return $client;
-    }
-
-    /**
-     * Create an independent connection without sharing the cached connection's parser.
-     *
-     * @param Config $config
-     * @return Connection
-     * @throws ConnectionException
-     */
-    private function createConnection(Config $config): Connection
-    {
-        $options = new FactoryOptions();
-        $options->setHost($config->getValue(Config::HOST));
-        $options->setPort($config->getValue(Config::PORT));
-        $options->setSslEnabled(trim($config->getValue(Config::SSL) ?? '') === 'true');
-        $options->setSslOptions($config->getValue(Config::SSL_OPTIONS));
-
-        return $this->connectionFactory->create($options);
     }
 }

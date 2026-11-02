@@ -14,7 +14,7 @@ use Stomp\Transport\Message;
 interface StompClientInterface
 {
     /**
-     * Create a queue without publishing or consuming messages.
+     * Create a queue.
      *
      * @param string $queue
      * @return void
