@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
@@ -25,7 +27,6 @@ use Magento\Catalog\Model\Indexer\Product\Price\Action\Rows;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\MultiDimensionProvider;
 use PHPUnit\Framework\TestCase;
@@ -309,5 +310,51 @@ class RowsTest extends TestCase
             });
 
         $action->execute([1]);
+    }
+
+    /**
+     * A failed rollback must not be followed by another index attempt.
+     *
+     * @return void
+     */
+    public function testDoesNotRetryWhenRollbackLeavesTransactionOpen(): void
+    {
+        $adapter = $this->createMock(AdapterInterface::class);
+        $this->defaultIndexerResource->method('getConnection')->willReturn($adapter);
+        $adapter->method('getTransactionLevel')->willReturn(1);
+        $adapter->expects($this->once())
+            ->method('rollBack')
+            ->willThrowException(new \RuntimeException('Rollback failed fixture'));
+
+        $action = $this->getMockBuilder(Rows::class)
+            ->setConstructorArgs([
+                $this->config,
+                $this->storeManager,
+                $this->currencyFactory,
+                $this->localeDate,
+                $this->dateTime,
+                $this->catalogProductType,
+                $this->indexerPriceFactory,
+                $this->defaultIndexerResource,
+                $this->tierPriceIndexResource,
+                $this->dimensionCollectionFactory,
+                $this->tableMaintainer,
+                2,
+            ])
+            ->onlyMethods(['_reindexRows'])
+            ->getMock();
+        $conflict = new DeadlockException('Record has changed since last read', 1020);
+        $action->expects($this->once())
+            ->method('_reindexRows')
+            ->with([1])
+            ->willThrowException($conflict);
+
+        try {
+            $action->execute([1]);
+            $this->fail('Expected recovery to stop after rollback failure.');
+        } catch (LocalizedException $exception) {
+            $this->assertInstanceOf(\RuntimeException::class, $exception->getPrevious());
+            $this->assertSame($conflict, $exception->getPrevious()->getPrevious());
+        }
     }
 }

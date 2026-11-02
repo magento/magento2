@@ -645,7 +645,7 @@ abstract class AbstractAction
                 if ($attempt === $maxAttempts || !$this->isRestartableTransactionConflict($exception)) {
                     throw $exception;
                 }
-                $this->restartTransactionAfterConflict();
+                $this->restartTransactionAfterConflict($exception);
             }
         }
 
@@ -680,16 +680,28 @@ abstract class AbstractAction
     /**
      * Clear the adapter transaction that the server has already aborted.
      *
+     * Retry only after the adapter reports no remaining transaction. A failed
+     * rollback must not be followed by another index attempt.
+     *
+     * @param \Exception $conflict
      * @return void
+     * @throws \RuntimeException
      */
-    private function restartTransactionAfterConflict(): void
+    private function restartTransactionAfterConflict(\Exception $conflict): void
     {
         $connection = $this->getConnection();
-        while ($connection->getTransactionLevel() > 0) {
-            try {
+        try {
+            while ($connection->getTransactionLevel() > 0) {
                 $connection->rollBack();
-            } catch (\Throwable $exception) {
-                break;
+            }
+        } catch (\Throwable $rollbackException) {
+            if ($connection->getTransactionLevel() > 0) {
+                throw new \RuntimeException(
+                    'Price index transaction could not be restarted after a conflict. '
+                    . $rollbackException->getMessage(),
+                    0,
+                    $conflict
+                );
             }
         }
     }
