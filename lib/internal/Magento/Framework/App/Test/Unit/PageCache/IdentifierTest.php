@@ -428,6 +428,60 @@ class IdentifierTest extends TestCase
     }
 
     /**
+     * Test parameters whose names end with a marketing parameter name are kept in the FPC cache key.
+     *
+     * @param string $uri
+     * @param string $expectedQuery
+     * @return void
+     */
+    #[DataProvider('parametersContainingMarketingNamesDataProvider')]
+    public function testGetValueKeepsParametersContainingMarketingNames(string $uri, string $expectedQuery): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn($uri);
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        $expectedQuery,
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function parametersContainingMarketingNamesDataProvider(): array
+    {
+        return [
+            'ef_id inside ref_id' => ['http://example.com/path1/?ref_id=9', 'ref_id=9'],
+            '_ga inside shop_ga' => ['http://example.com/path1/?shop_ga=3', 'shop_ga=3'],
+            'cx inside xcx' => ['http://example.com/path1/?xcx=1', 'xcx=1'],
+            'cof inside decof' => ['http://example.com/path1/?decof=1', 'decof=1'],
+            'mixed with marketing parameters' => [
+                'http://example.com/path1/?gclid=1&pref_id=5&utm_source=abc&_ga=2&shop_ga=3',
+                'pref_id=5&shop_ga=3'
+            ],
+        ];
+    }
+
+    /**
      * Test get identifier value with invalid URL.
      *
      * @return void
