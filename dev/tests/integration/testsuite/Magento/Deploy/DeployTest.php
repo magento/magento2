@@ -171,11 +171,15 @@ class DeployTest extends \PHPUnit\Framework\TestCase
      * collector creates both of those packages before the requested locales are added, so one of them is the base
      * locale package the other locales copy from and the other is a variant carrying overrides the base lacks.
      *
+     * Vendor/parent styles reference an image of that theme. With --no-images it is not deployed, so the CssUrls
+     * post-processor rewrites the URL to the image in an ancestor package of the same locale.
+     *
      * @magentoDataFixture Magento/Deploy/_files/theme.php
      * @param string[] $themes
      * @param string[] $locales
      * @param bool $noParent
      * @param bool $minify
+     * @param bool $noImages
      * @return void
      */
     #[DataProvider('quickDeployDataProvider')]
@@ -183,7 +187,8 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         array $themes,
         array $locales,
         bool $noParent,
-        bool $minify
+        bool $minify,
+        bool $noImages = false
     ): void {
         $options = array_replace(
             $this->options,
@@ -191,6 +196,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
                 Options::THEME => $themes,
                 Options::LANGUAGE => $locales,
                 Options::NO_PARENT => $noParent,
+                Options::NO_IMAGES => $noImages,
             ]
         );
 
@@ -232,6 +238,8 @@ class DeployTest extends \PHPUnit\Framework\TestCase
             'reversed locales' => [$vendorThemes, array_reverse($locales), false, false],
             'child theme only, no parent' => [['Vendor/child'], $locales, true, false],
             'css and js minified' => [$vendorThemes, $locales, false, true],
+            'images not deployed' => [$vendorThemes, ['en_US', 'nl_NL'], false, false, true],
+            'images not deployed, css and js minified' => [$vendorThemes, ['en_US', 'nl_NL'], false, true, true],
         ];
     }
 
@@ -344,7 +352,18 @@ class DeployTest extends \PHPUnit\Framework\TestCase
                     $this->assertStringNotContainsString($marker, $styles, $message);
                 }
             }
-            $this->assertChildLocaleFiles($strategy, $packagePath, $locale, isset($markers[$locale]), $minification);
+            $imageUrl = $options[Options::NO_IMAGES]
+                ? 'frontend/Vendor/parent/' . $locale . '/images/parent-only.svg'
+                : '../images/parent-only.svg';
+            $this->assertStringContainsString($imageUrl, $styles, "{$strategy}: {$stylesPath} misses {$imageUrl}");
+            $this->assertChildLocaleFiles(
+                $strategy,
+                $packagePath,
+                $locale,
+                isset($markers[$locale]),
+                $minification,
+                !$options[Options::NO_IMAGES]
+            );
 
             $parentStylesPath = $minification->addMinifiedSign(
                 'frontend/Vendor/parent/' . $locale . '/css/styles-m.css'
@@ -375,6 +394,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
      * @param string $locale
      * @param bool $hasOverrides
      * @param Minification $minification
+     * @param bool $imagesDeployed
      * @return void
      */
     private function assertChildLocaleFiles(
@@ -382,11 +402,13 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         string $packagePath,
         string $locale,
         bool $hasOverrides,
-        Minification $minification
+        Minification $minification,
+        bool $imagesDeployed
     ): void {
         $sourceDir = __DIR__ . '/_files/Vendor/child/web/' . ($hasOverrides ? 'i18n/' . $locale . '/' : '');
         $jsMarker = $hasOverrides ? $locale : 'default';
-        foreach (['images/test-logo.svg', 'js/test-marker.js'] as $filePath) {
+        $filePaths = $imagesDeployed ? ['images/test-logo.svg', 'js/test-marker.js'] : ['js/test-marker.js'];
+        foreach ($filePaths as $filePath) {
             $deployedPath = $minification->addMinifiedSign($packagePath . $filePath);
             $content = $this->staticDir->readFile($deployedPath);
             $message = "{$strategy}: {$deployedPath} is not deployed from {$sourceDir}{$filePath}";

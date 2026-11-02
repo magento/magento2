@@ -218,6 +218,84 @@ class DeployPackageTest extends TestCase
     }
 
     /**
+     * @param string $parentCss
+     * @param bool $copy
+     */
+    #[DataProvider('parentCssUrlsDataProvider')]
+    public function testCopiesLessRootOnlyWhenParentCssUrlsStayInPackage(string $parentCss, bool $copy): void
+    {
+        $this->inherit($this->createFile($this->themePackage, 'css/styles-m.less', null, 'css/styles-m.css'));
+        $this->deployStaticFile->method('fileExists')->willReturn(true);
+        $this->deployStaticFile->method('readFile')->willReturnMap([
+            ['css/styles-m.css', $this->parentPackage->getPath(), $parentCss],
+        ]);
+
+        if ($copy) {
+            $this->expectCopy('css/styles-m.css');
+        } else {
+            $this->expectDeploy('css/styles-m.less');
+        }
+        $this->deploy();
+    }
+
+    /**
+     * @return array
+     */
+    public static function parentCssUrlsDataProvider(): array
+    {
+        return [
+            'url in the package' => [".a{background:url('../images/logo.svg')}", true],
+            'url to a module in the package' => ['.a{background:url(../Magento_Theme/images/icon.svg)}', true],
+            'absolute, data and external urls' => [
+                '.a{background:url(/media/a.png),url("data:image/png;base64,AA=="),url(https://example.com/a.png)}',
+                true,
+            ],
+            'url rewritten to an ancestor package' => [
+                ".a{background:url('../../../../../frontend/Magento/blank/en_US/images/logo.svg')}",
+                false,
+            ],
+            'url leaving the package through a subdirectory' => ['.a{background:url(../images/../../a.svg)}', false],
+        ];
+    }
+
+    /**
+     * Module files are deployed one directory deeper, below the module name
+     *
+     * @param string $parentCss
+     * @param bool $copy
+     */
+    #[DataProvider('parentModuleCssUrlsDataProvider')]
+    public function testCopiesModuleCssOnlyWhenParentCssUrlsStayInPackage(string $parentCss, bool $copy): void
+    {
+        $this->inherit($this->createFile($this->themePackage, 'css/a.css', null, null, 'Magento_Theme'));
+        $this->deployStaticFile->method('fileExists')->willReturn(true);
+        $this->deployStaticFile->method('readFile')->willReturnMap([
+            ['Magento_Theme::css/a.css', $this->parentPackage->getPath(), $parentCss],
+        ]);
+
+        if ($copy) {
+            $this->expectCopy('Magento_Theme::css/a.css');
+        } else {
+            $this->deployStaticFile->expects($this->never())->method('copyFile');
+            $this->deployStaticFile->expects($this->once())
+                ->method('deployFile')
+                ->with('css/a.css', ['module' => 'Magento_Theme'] + $this->deployParams('de_DE'));
+        }
+        $this->deploy();
+    }
+
+    /**
+     * @return array
+     */
+    public static function parentModuleCssUrlsDataProvider(): array
+    {
+        return [
+            'url to the theme in the package' => ['.a{background:url(../../images/a.svg)}', true],
+            'url leaving the package' => ['.a{background:url(../../../a.svg)}', false],
+        ];
+    }
+
+    /**
      * @param string $parentTheme
      * @param string $parentLocale
      * @param bool $dictionaryEnabled
@@ -284,20 +362,23 @@ class DeployPackageTest extends TestCase
      * @param string $fileName
      * @param string|null $sourcePath
      * @param string|null $deployedFileName
+     * @param string|null $module
      * @return PackageFile
      */
     private function createFile(
         Package $package,
         string $fileName,
         ?string $sourcePath = null,
-        ?string $deployedFileName = null
+        ?string $deployedFileName = null,
+        ?string $module = null
     ): PackageFile {
         $file = new PackageFile(
             $fileName,
             $sourcePath ?? '/' . $package->getTheme() . '/web/' . $fileName,
             $package->getArea(),
             $package->getTheme(),
-            $package->isVirtual() ? null : $package->getLocale()
+            $package->isVirtual() ? null : $package->getLocale(),
+            $module
         );
         $file->setDeployedFileName($deployedFileName ?? $fileName);
         $file->setPackage($package);

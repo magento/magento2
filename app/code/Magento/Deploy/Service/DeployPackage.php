@@ -13,6 +13,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\FileSystem;
+use Magento\Framework\View\Url\CssResolver;
 use Magento\Deploy\Console\InputValidator;
 use Psr\Log\LoggerInterface;
 
@@ -241,9 +244,9 @@ class DeployPackage
         return $parentPackage
             && $package->getParam('copy_from_parent')
             && $file->getOrigPackage() !== $package
-            && $this->isOutputPackageIndependent($file, $package)
             && $this->hasSameSourceInParent($file, $parentPackage)
-            && $this->deployStaticFile->fileExists($file->getDeployedFileId(), $parentPackage->getPath());
+            && $this->deployStaticFile->fileExists($file->getDeployedFileId(), $parentPackage->getPath())
+            && $this->isOutputPackageIndependent($file, $package, $parentPackage);
     }
 
     /**
@@ -266,16 +269,17 @@ class DeployPackage
      *
      * @param PackageFile $file
      * @param Package $package
+     * @param Package $parentPackage
      * @return bool
      */
-    private function isOutputPackageIndependent(PackageFile $file, Package $package): bool
+    private function isOutputPackageIndependent(PackageFile $file, Package $package, Package $parentPackage): bool
     {
         return match ($file->getExtension()) {
             // Compiled CSS depends on the whole @import graph resolved through theme and locale fallback, so the
             // full set of style sources decides. The file scope says nothing here: the Less and Css pre-processors
             // re-scope an inherited root to the package whenever the package holds any of its imports, which
             // aggregation guarantees.
-            'less', 'css' => $this->styleSourcesMatchParent,
+            'less', 'css' => $this->styleSourcesMatchParent && !$this->hasUrlsOutsidePackage($file, $parentPackage),
             // The embedded translation strategy writes theme and locale specific phrases into every JS file.
             // The framework Translate\Js\Config only exposes dictionaryEnabled(), so the "none" strategy also
             // gives false here. That is merely conservative, JS is not rewritten under "none". The Translation
@@ -284,6 +288,33 @@ class DeployPackage
                 && $this->jsTranslationConfig->dictionaryEnabled(),
             default => $this->isCollectedForOtherScope($file, $package),
         };
+    }
+
+    /**
+     * Check if the deployed CSS of the parent package references a file outside of that package
+     *
+     * The CssUrls post-processor rewrites a URL whose target is not found in the package, for example with
+     * --no-images or when a theme URL climbs out of the package, to the target in an ancestor package. That URL
+     * is only valid for the parent package.
+     *
+     * @see \Magento\Deploy\Package\Processor\PostProcessor\CssUrls::parseCss()
+     * @param PackageFile $file
+     * @param Package $parentPackage
+     * @return bool
+     */
+    private function hasUrlsOutsidePackage(PackageFile $file, Package $parentPackage): bool
+    {
+        $fileId = $file->getDeployedFileId();
+        $css = (string)$this->deployStaticFile->readFile($fileId, $parentPackage->getPath());
+        preg_match_all(CssResolver::REGEX_CSS_RELATIVE_URLS, $css, $matches);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $fileDir = dirname(str_replace(Repository::FILE_ID_SEPARATOR, '/', $fileId));
+        foreach ($matches[1] as $url) {
+            if (str_starts_with(FileSystem::normalizePath($fileDir . '/' . $url), '../')) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
