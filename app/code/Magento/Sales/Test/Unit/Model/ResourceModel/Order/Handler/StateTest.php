@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -624,6 +625,78 @@ class StateTest extends TestCase
         $this->subject->check($order);
     }
 
+    #[DataProvider('partiallyShippedDecimalQtyProvider')]
+    public function testOrderStaysProcessingWhenDecimalQtyIsNotFullyShipped(float $ordered, float $shipped): void
+    {
+        /** @var Order|MockObject $order */
+        $order = $this->createOrderMock();
+
+        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
+        $order->method('getIsInProcess')->willReturn(false);
+        $order->method('isCanceled')->willReturn(false);
+        $order->method('canUnhold')->willReturn(false);
+        $order->method('canInvoice')->willReturn(false);
+        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([]));
+        $order->method('getTotalDue')->willReturn(0);
+        $order->method('canShip')->willReturn(true);
+        $order->method('canCreditmemo')->willReturn(false);
+        $order->method('getIsNotVirtual')->willReturn(true);
+        $order->method('getAllItems')->willReturn([
+            $this->createOrderItemStub($ordered, 0, $shipped, 0)
+        ]);
+
+        $order->expects($this->never())->method('setState');
+
+        $this->subject->check($order);
+    }
+
+    /**
+     * @return array
+     */
+    public static function partiallyShippedDecimalQtyProvider(): array
+    {
+        return [
+            'nothing shipped, qty below 1' => [0.5, 0.0],
+            'fraction left after whole units shipped' => [1.5, 1.0],
+        ];
+    }
+
+    public function testSetsCompleteWhenDecimalQtyIsFullyShipped(): void
+    {
+        /** @var Order|MockObject $order */
+        $order = $this->createOrderMock();
+
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['getStateDefaultStatus'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
+        $order->method('getIsInProcess')->willReturn(false);
+        $order->method('isCanceled')->willReturn(false);
+        $order->method('canUnhold')->willReturn(false);
+        $order->method('canInvoice')->willReturn(false);
+        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([]));
+        $order->method('getTotalDue')->willReturn(0);
+        $order->method('canShip')->willReturn(true);
+        $order->method('canCreditmemo')->willReturn(true);
+        // 0.9 - 0.3 - 0.6 is slightly above 0 in floating point arithmetic
+        $order->method('getAllItems')->willReturn([
+            $this->createOrderItemStub(0.9, 0.3, 0.6, 0)
+        ]);
+
+        $order->expects($this->once())
+            ->method('setState')
+            ->with(Order::STATE_COMPLETE)
+            ->willReturnSelf();
+
+        $config->method('getStateDefaultStatus')->with(Order::STATE_COMPLETE)->willReturn('complete');
+        $order->method('setStatus')->with('complete')->willReturnSelf();
+        $order->method('getConfig')->willReturn($config);
+
+        $this->subject->check($order);
+    }
+
     public function testSetsClosedForVirtualOrderWithClosedStatus(): void
     {
         /** @var Order|MockObject $order */
@@ -714,19 +787,19 @@ class StateTest extends TestCase
     /**
      * Create a minimal order item stub that exposes the quantities used by State::areAllItemsFulfilled().
      */
-    private function createOrderItemStub(int $ordered, int $canceled, int $shipped, int $refunded): object
+    private function createOrderItemStub(float $ordered, float $canceled, float $shipped, float $refunded): object
     {
         return new class($ordered, $canceled, $shipped, $refunded) {
-            /** @var int */
+            /** @var float */
             private $ordered;
-            /** @var int */
+            /** @var float */
             private $canceled;
-            /** @var int */
+            /** @var float */
             private $shipped;
-            /** @var int */
+            /** @var float */
             private $refunded;
 
-            public function __construct(int $ordered, int $canceled, int $shipped, int $refunded)
+            public function __construct(float $ordered, float $canceled, float $shipped, float $refunded)
             {
                 $this->ordered = $ordered;
                 $this->canceled = $canceled;
@@ -746,19 +819,19 @@ class StateTest extends TestCase
             {
                 return null;
             }
-            public function getQtyOrdered(): int
+            public function getQtyOrdered(): float
             {
                 return $this->ordered;
             }
-            public function getQtyCanceled(): int
+            public function getQtyCanceled(): float
             {
                 return $this->canceled;
             }
-            public function getQtyShipped(): int
+            public function getQtyShipped(): float
             {
                 return $this->shipped;
             }
-            public function getQtyRefunded(): int
+            public function getQtyRefunded(): float
             {
                 return $this->refunded;
             }

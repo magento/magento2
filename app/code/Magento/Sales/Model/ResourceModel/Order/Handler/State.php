@@ -142,12 +142,13 @@ class State
                 ? $parentItem
                 : $item;
 
-            $qtyOrdered = (int) $subject->getQtyOrdered();
-            $qtyCanceled = (int) $subject->getQtyCanceled();
-            $qtyShipped  = (int) $subject->getQtyShipped();
-            $qtyRefunded = (int) $subject->getQtyRefunded();
+            $qtyOrdered = (float) $subject->getQtyOrdered();
+            $qtyCanceled = (float) $subject->getQtyCanceled();
+            $qtyShipped  = (float) $subject->getQtyShipped();
+            $qtyRefunded = (float) $subject->getQtyRefunded();
 
-            $openQty = $qtyOrdered - $qtyCanceled - $qtyShipped - $qtyRefunded;
+            // Quantities are stored with 4 decimals, so round away float noise
+            $openQty = round($qtyOrdered - $qtyCanceled - $qtyShipped - $qtyRefunded, 4);
             if ($openQty > 0) {
                 return false;
             }
