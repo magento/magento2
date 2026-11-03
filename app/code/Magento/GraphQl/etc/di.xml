@@ -44,10 +44,11 @@
             <argument name="data" xsi:type="object">Magento\Framework\GraphQl\Config\Data</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\GraphQl\Config\AreaAwareData">
+    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\Reader</argument>
             <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlSchemaStitching_Config_Data</argument>
+            <argument name="expectedArea" xsi:type="string">graphql</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Framework\GraphQl\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">

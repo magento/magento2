@@ -99,7 +99,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGraphQlConfigCannotBeLoadedOutsideGraphQlArea(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('GraphQL configuration can only be loaded in the graphql area.');
+        $this->expectExceptionMessage('Configuration can only be loaded in the "graphql" area.');
 
         $objectManager = Bootstrap::getObjectManager();
         $this->assertSame(
