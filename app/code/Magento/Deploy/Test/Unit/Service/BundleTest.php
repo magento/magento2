@@ -35,6 +35,13 @@ class BundleTest extends TestCase
     private array $bundled = [];
 
     /**
+     * Content of the package's result map file, if it has one
+     *
+     * @var array|null
+     */
+    private ?array $resultMap = null;
+
+    /**
      * @var Bundle
      */
     private Bundle $service;
@@ -43,7 +50,8 @@ class BundleTest extends TestCase
     {
         $this->staticDir = sys_get_temp_dir() . '/' . uniqid('bundle-test-') . '/';
         $pubStaticDir = $this->createStub(WriteInterface::class);
-        $pubStaticDir->method('isFile')->willReturn(false);
+        $pubStaticDir->method('isFile')->willReturnCallback(fn () => $this->resultMap !== null);
+        $pubStaticDir->method('readFile')->willReturnCallback(fn () => json_encode($this->resultMap));
         $pubStaticDir->method('getAbsolutePath')->willReturnCallback(fn (string $path) => $this->staticDir . $path);
         $pubStaticDir->method('getRelativePath')
             ->willReturnCallback(fn (string $path) => substr($path, strlen($this->staticDir)));
@@ -101,6 +109,16 @@ class BundleTest extends TestCase
 
         $this->assertSame(['vimeo/player.min.js'], $this->bundled['frontend/Magento/luma/en_US']);
         $this->assertSame(['vimeo/player.js'], $this->bundled['frontend/Vendor/theme/en_US']);
+    }
+
+    public function testBundlesFilesInPathOrderWhateverTheListingOrder(): void
+    {
+        $source = ['area' => 'frontend', 'theme' => 'Magento/luma', 'locale' => 'en_US'];
+        $this->resultMap = ['js/b.js' => $source, 'Magento_Ui::js/c.js' => $source, 'js/a.js' => $source];
+
+        $this->service->deploy('frontend', 'Magento/luma', 'en_US');
+
+        $this->assertSame(['Magento_Ui/js/c.js', 'js/a.js', 'js/b.js'], $this->bundled['frontend/Magento/luma/en_US']);
     }
 
     /**

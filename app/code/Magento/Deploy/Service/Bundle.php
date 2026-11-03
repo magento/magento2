@@ -144,10 +144,12 @@ class Bundle
             $resultMap = $this->pubStaticDir->readFile($mapFilePath);
             if ($resultMap) {
                 $files = json_decode($resultMap, true);
+                ksort($files);
             }
         } else {
             $packageDir = $this->pubStaticDir->getAbsolutePath($area . '/' . $theme . '/' . $locale);
             $files = $this->utilityFiles->getFiles([$packageDir], '*.*');
+            sort($files);
         }
 
         foreach ($files as $filePath => $sourcePath) {
