@@ -153,8 +153,14 @@
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchHI"/>
         <waitForPageLoad stepKey="waitForFilterHI"/>
         <!-- Verify start date and end date in grid -->
-        <executeJS function="return (new Date('{$startDateHIRaw}T00:00:00Z').toLocaleDateString('hi-IN', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedStartDateHindiGrid"/>
-        <executeJS function="return (new Date('{$endDateHIRaw}T00:00:00Z').toLocaleDateString('hi-IN', {timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric'}))" stepKey="expectedEndDateHindiGrid"/>
+        <helper class="Magento\SalesRule\Test\Mftf\Helper\LocalizedGridDateHelper" method="formatGridDate" stepKey="expectedStartDateHindiGrid">
+            <argument name="isoDate">{$startDateHIRaw}</argument>
+            <argument name="locale">hi_IN</argument>
+        </helper>
+        <helper class="Magento\SalesRule\Test\Mftf\Helper\LocalizedGridDateHelper" method="formatGridDate" stepKey="expectedEndDateHindiGrid">
+            <argument name="isoDate">{$endDateHIRaw}</argument>
+            <argument name="locale">hi_IN</argument>
+        </helper>
         <grabTextFrom selector="{{AdminCartPriceRulesSection.gridStartDateByRuleName(TestCartPriceRule.name)}}" stepKey="actualStartDateHindiGrid"/>
         <grabTextFrom selector="{{AdminCartPriceRulesSection.gridEndDateByRuleName(TestCartPriceRule.name)}}" stepKey="actualEndDateHindiGrid"/>
         <assertStringContainsString stepKey="verifyStartDateHindiInGrid">

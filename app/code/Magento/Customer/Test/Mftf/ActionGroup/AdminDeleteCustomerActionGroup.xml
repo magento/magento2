@@ -22,6 +22,7 @@
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilters"/>
         <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="{{customerEmail}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilters"/>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" stepKey="waitForCustomerRowVisible"/>
         <click stepKey="chooseCustomer" selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}"/>
         <click stepKey="openActions" selector="{{AdminCustomerGridMainActionsSection.actions}}"/>
         <waitForPageLoad stepKey="waitActions"/>
@@ -32,8 +33,8 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomersGridIsLoaded"/>
         <!-- Remove previous filters using Clear All -->
-        <waitForElementClickable selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="waitForClearAllFiltersClickable"/>
-        <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="clickClearAllFiltersAfterDeletion"/>
-        <waitForPageLoad stepKey="waitAfterClearingAllFilters"/>
+        <waitForElementClickable selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="waitForClearAllVisible"/>
+        <conditionalClick selector="{{AdminCustomerFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerFiltersSection.clearAll}}" visible="true" stepKey="clickClearAllFilters"/>
+        <waitForPageLoad stepKey="waitForClearAllFiltersPageLoad"/>
     </actionGroup>
 </actionGroups>
