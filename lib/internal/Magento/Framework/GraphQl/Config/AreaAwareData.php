@@ -9,16 +9,16 @@ namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Config\Data as ConfigData;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * GraphQL configuration data must only be loaded with GraphQL area dependencies.
  */
-class Data extends ConfigData
+class AreaAwareData extends ConfigData
 {
     /**
      * @param ReaderInterface $reader
