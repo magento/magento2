@@ -44,6 +44,7 @@
         <scrollTo selector="{{AdminDesignConfigSection.headerSection}}" stepKey="scrollToHtmlHeadSection"/>
         <click selector="{{AdminDesignConfigSection.headerSection}}" stepKey="openHtmlHeadSection"/>
         <!--Upload the First Image-->
+        <waitForElementClickable selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="waitForSelectFromGalleryClickable"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
         <!--Navigate to Storage Folder-->
@@ -80,11 +81,13 @@
         <!--Edit Store View for Second Image-->
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPageForSecondImage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementClickable selector="{{AdminDesignConfigSection.scopeRow('1')}}" stepKey="waitForScopeRow1ClickableForSecondImage"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('1')}}" stepKey="editStoreViewForSecondImage"/>
         <waitForPageLoad stepKey="waitForPageLoadPostSelectingScopeRow"/>
         <scrollTo selector="{{AdminDesignConfigSection.headerSection}}" stepKey="scrollToHtmlHeadSectionForSecondImageUpload"/>
         <click selector="{{AdminDesignConfigSection.headerSection}}" stepKey="openHtmlHeadSectionForSecondImageUpload"/>
         <!-- Upload second Image-->
+        <waitForElementClickable selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="waitForSelectFromGalleryClickableForSecondImage"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGalleryForSecondImage"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtnForSecondImage"/>
         <!--Navigate to Created Folder to Store Second Image-->
@@ -120,6 +123,7 @@
         <scrollTo selector="{{AdminDesignConfigSection.headerSection}}" stepKey="scrollToHtmlHeadSectionToDeleteImage"/>
         <click selector="{{AdminDesignConfigSection.headerSection}}" stepKey="openHtmlHeadSectionToDeleteImage"/>
         <!--Delete uploaded Image From Header-->
+        <waitForElementClickable selector="{{AdminDesignConfigSection.deleteHeaderSectionImage}}" stepKey="waitForDeleteHeaderImageClickable"/>
         <click selector="{{AdminDesignConfigSection.deleteHeaderSectionImage}}" stepKey="clickUseDefault"/>
         <waitForElementVisible selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="waitForSaveConfiguration"/>
         <click selector="{{AdminDesignConfigSection.saveConfiguration}}" stepKey="saveConfigSectionConfiguration"/>
