@@ -451,6 +451,30 @@ class AbstractTemplateTest extends TestCase
         $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());
     }
 
+    public function testEmulateDesignScopesUrlsAndRevertDesignResetsScope(): void
+    {
+        $model = $this->getModelMock();
+        $model->setDesignConfig(['area' => 'adminhtml', 'store' => 0]);
+        $scopes = [];
+        $this->urlModel->expects($this->exactly(6))
+            ->method('setScope')
+            ->willReturnCallback(function ($scope) use (&$scopes) {
+                $scopes[] = $scope;
+                return $this->urlModel;
+            });
+        $this->appEmulation->expects($this->exactly(3))
+            ->method('startEnvironmentEmulation');
+        $this->appEmulation->expects($this->exactly(3))
+            ->method('stopEnvironmentEmulation');
+
+        foreach ([0, 1, 2] as $storeId) {
+            $model->emulateDesign($storeId, Area::AREA_FRONTEND);
+            $model->revertDesign();
+        }
+
+        $this->assertSame([0, null, 1, null, 2, null], $scopes);
+    }
+
     /**
      * @return void
      */
