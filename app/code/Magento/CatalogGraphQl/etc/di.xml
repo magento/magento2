@@ -26,14 +26,14 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+    <type name="Magento\Framework\GraphQl\Config\Data">
         <arguments>
             <argument name="cacheTags" xsi:type="array">
                 <!-- Note: Because of DynamicAttributeReaders, this cache needs to be cleaned when attributes change-->
                 <item name="EAV" xsi:type="string">EAV</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Framework\GraphQl\Query\FieldTranslator">
         <arguments>
             <argument name="translationMap" xsi:type="array">

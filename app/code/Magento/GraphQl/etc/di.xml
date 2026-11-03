@@ -44,12 +44,12 @@
             <argument name="data" xsi:type="object">Magento\Framework\GraphQl\Config\Data</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+    <type name="Magento\Framework\GraphQl\Config\Data">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\Reader</argument>
             <argument name="cacheId" xsi:type="string">Magento_Framework_GraphQlSchemaStitching_Config_Data</argument>
         </arguments>
-    </virtualType>
+    </type>
     <virtualType name="Magento\Framework\GraphQl\Config\SchemaLocator" type="Magento\Framework\Config\SchemaLocator">
         <arguments>
             <argument name="realPath" xsi:type="string">urn:magento:module:Magento_GraphQl:etc/graphql.xsd</argument>
