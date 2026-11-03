@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Link;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -82,21 +83,7 @@ class SaveHandler
         /** @var ProductLinkInterface[] $productLinks */
         $productLinks = array_reduce($linksByType, 'array_merge', []);
 
-        // Existing links that are kept are updated in place by the repository, so only delete the removed ones
-        $link = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
-        if ($this->linkResource->hasProductLinks($link)) {
-            $keptLinks = [];
-            foreach ($productLinks as $productLink) {
-                if ((string)$productLink->getSku() === (string)$entity->getSku()) {
-                    $keptLinks[$productLink->getLinkType()][$productLink->getLinkedProductSku()] = true;
-                }
-            }
-            foreach ($this->productLinkRepository->getList($entity) as $existingLink) {
-                if (!isset($keptLinks[$existingLink->getLinkType()][$existingLink->getLinkedProductSku()])) {
-                    $this->productLinkRepository->delete($existingLink);
-                }
-            }
-        }
+        $this->deleteRemovedLinks($entityType, $entity, $productLinks);
 
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {
@@ -120,5 +107,33 @@ class SaveHandler
             }
         }
         return true;
+    }
+
+    /**
+     * Delete existing links that are no longer present, kept links are updated in place by the repository
+     *
+     * @param string $entityType
+     * @param ProductInterface $entity
+     * @param ProductLinkInterface[] $productLinks
+     * @return void
+     */
+    private function deleteRemovedLinks(string $entityType, ProductInterface $entity, array $productLinks): void
+    {
+        $linkId = $entity->getData($this->metadataPool->getMetadata($entityType)->getLinkField());
+        if (!$this->linkResource->hasProductLinks($linkId)) {
+            return;
+        }
+
+        $keptLinks = [];
+        foreach ($productLinks as $productLink) {
+            if ((string)$productLink->getSku() === (string)$entity->getSku()) {
+                $keptLinks[$productLink->getLinkType()][$productLink->getLinkedProductSku()] = true;
+            }
+        }
+        foreach ($this->productLinkRepository->getList($entity) as $existingLink) {
+            if (!isset($keptLinks[$existingLink->getLinkType()][$existingLink->getLinkedProductSku()])) {
+                $this->productLinkRepository->delete($existingLink);
+            }
+        }
     }
 }

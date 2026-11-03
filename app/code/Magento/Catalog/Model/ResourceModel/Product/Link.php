@@ -352,10 +352,7 @@ class Link extends AbstractDb
                     );
                     if (isset($links[$linkedProductId])) {
                         // An upsert of an unchanged value still consumes an auto increment id, so skip it
-                        $storedValue = $isStored
-                            ? $this->_prepareAttributeValue($attributeInfo['type'], $storedValues[$storedKey])
-                            : null;
-                        if ($isStored && $storedValue === $value) {
+                        if ($this->isStoredValueUnchanged($storedValues, $storedKey, $attributeInfo['type'], $value)) {
                             continue;
                         }
                         $updateData[$attributeTable][] = [
@@ -410,5 +407,20 @@ class Link extends AbstractDb
         }
 
         return $values;
+    }
+
+    /**
+     * Check whether the stored value of a link attribute matches the value being saved
+     *
+     * @param array $storedValues
+     * @param string $storedKey
+     * @param string $type
+     * @param mixed $value
+     * @return bool
+     */
+    private function isStoredValueUnchanged(array $storedValues, string $storedKey, string $type, $value): bool
+    {
+        return array_key_exists($storedKey, $storedValues)
+            && $this->_prepareAttributeValue($type, $storedValues[$storedKey]) === $value;
     }
 }
