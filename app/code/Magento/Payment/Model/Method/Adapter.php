@@ -20,6 +20,7 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Model\SaleOperationInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,7 +32,7 @@ use Psr\Log\LoggerInterface;
  * @api Use this class as a base for virtual types declaration
  * @since 100.0.2
  */
-class Adapter implements MethodInterface, SaleOperationInterface
+class Adapter implements MethodInterface, SaleOperationInterface, PaymentMethodInterface
 {
     /**
      * @var ValueHandlerPoolInterface
