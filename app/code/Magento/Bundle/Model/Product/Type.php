@@ -635,6 +635,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             $selections = [];
+            $isEmptySelectionAllowed = false;
             $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
 
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
@@ -649,11 +650,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
 
-                if (empty($optionIds) && $isStrictProcessMode) {
-                    $hasRequiredOptions = $this->bundleHasRequiredOptions($product);
-                    if ($hasRequiredOptions) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
-                    }
+                if (empty($optionIds)
+                    && $isStrictProcessMode
+                    && $this->isAnyOptionRequired($this->getOptionsCollection($product))
+                ) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
                 }
 
                 $product->getTypeInstance()
@@ -695,6 +696,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $selections = $selections->getItems();
                 } else {
                     $selections = [];
+                    $isEmptySelectionAllowed = $isStrictProcessMode
+                        && !$this->isAnyOptionRequired($optionsCollection);
                 }
             } else {
                 $product->setOptionsValidationFail(true);
@@ -711,10 +714,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
-            $canSkipSelection = is_array($selections)
-                && count($selections) === 0
-                && !$this->bundleHasRequiredOptions($product);
-            if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode || $canSkipSelection) {
+            if ((is_array($selections) && count($selections) > 0)
+                || !$isStrictProcessMode
+                || $isEmptySelectionAllowed
+            ) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
                 if ($buyRequest->getBundleOptionsData()) {
@@ -799,14 +802,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Check whether the bundle product has at least one required option.
+     * Check whether at least one bundle option is required.
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Collection $optionsCollection
      * @return bool
      */
-    private function bundleHasRequiredOptions(\Magento\Catalog\Model\Product $product): bool
+    private function isAnyOptionRequired(Collection $optionsCollection): bool
     {
-        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+        foreach ($optionsCollection->getItems() as $option) {
             if ($option->getRequired()) {
                 return true;
             }
@@ -1098,7 +1101,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
-        if (empty($bundleOption)) {
+        if (empty($bundleOption)
+            && (!is_array($bundleOption) || $this->isAnyOptionRequired($this->getOptionsCollection($product)))
+        ) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
         }
 
