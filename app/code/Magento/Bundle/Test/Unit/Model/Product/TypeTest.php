@@ -1235,11 +1235,6 @@ class TypeTest extends TestCase
         $this->parentClass($group, $option, $buyRequest, $product);
 
         $product->method('getSkipCheckRequiredOption')->willReturn(true);
-        /** @var MockObject|Collection $optionCollection */
-        $optionCollection = $this->createPartialMock(Collection::class, ['getItems']);
-        $optionCollection->method('getItems')
-            ->willReturn([new DataObject(['required' => 1])]);
-        $product->setData('_cache_instance_options_collection', $optionCollection);
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([0, '', 'str']);

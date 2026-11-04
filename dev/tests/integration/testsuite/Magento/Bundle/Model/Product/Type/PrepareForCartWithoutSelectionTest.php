@@ -26,6 +26,10 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -90,12 +94,34 @@ use PHPUnit\Framework\TestCase;
     ),
     DataFixture(
         BundleProductFixture::class,
-        ['sku' => 'required-only', '_options' => ['$required1$']],
+        [
+            'sku' => 'required-only',
+            'price' => 50,
+            'custom_attributes' => [
+                'price_view' => '0',
+                'sku_type' => '0',
+                'price_type' => '1',
+                'weight_type' => '0',
+                'shipment_type' => '0',
+            ],
+            '_options' => ['$required1$'],
+        ],
         as: 'required_only'
     ),
     DataFixture(
         BundleProductFixture::class,
-        ['sku' => 'mixed', '_options' => ['$required1$', '$optional2$']],
+        [
+            'sku' => 'mixed',
+            'price' => 50,
+            'custom_attributes' => [
+                'price_view' => '0',
+                'sku_type' => '0',
+                'price_type' => '1',
+                'weight_type' => '0',
+                'shipment_type' => '0',
+            ],
+            '_options' => ['$required1$', '$optional2$'],
+        ],
         as: 'mixed'
     ),
     DataFixture(GuestCartFixture::class, as: 'cart'),
@@ -134,7 +160,7 @@ class PrepareForCartWithoutSelectionTest extends TestCase
     }
 
     /**
-     * An empty selection posted for a bundle without required options adds the bundle alone.
+     * An empty selection posted for a fixed price bundle without required options adds the bundle alone.
      *
      * @param string $sku
      * @param string $selection
@@ -167,8 +193,6 @@ class PrepareForCartWithoutSelectionTest extends TestCase
         return [
             'fixed price, empty bundle_option' => ['optional-fixed', 'empty', 50.0],
             'fixed price, "None" chosen' => ['optional-fixed', 'none', 50.0],
-            'dynamic price, empty bundle_option' => ['optional-dynamic', 'empty', 0.0],
-            'dynamic price, "None" chosen' => ['optional-dynamic', 'none', 0.0],
         ];
     }
 
@@ -189,15 +213,15 @@ class PrepareForCartWithoutSelectionTest extends TestCase
     }
 
     /**
-     * Bundles with a required option still reject a missing selection.
+     * Bundles with a required option, and dynamic price bundles, still reject a missing selection.
      *
      * @param string $sku
      * @param string $selection
      * @param string $expectedMessage
      * @return void
      */
-    #[DataProvider('requiredOptionMissingSelectionDataProvider')]
-    public function testBundleWithRequiredOptionRejectsMissingSelection(
+    #[DataProvider('missingSelectionDataProvider')]
+    public function testMissingSelectionIsRejected(
         string $sku,
         string $selection,
         string $expectedMessage
@@ -213,9 +237,11 @@ class PrepareForCartWithoutSelectionTest extends TestCase
     /**
      * @return array
      */
-    public static function requiredOptionMissingSelectionDataProvider(): array
+    public static function missingSelectionDataProvider(): array
     {
         return [
+            'dynamic price, empty bundle_option' => ['optional-dynamic', 'empty', 'Please specify product option(s).'],
+            'dynamic price, "None" chosen' => ['optional-dynamic', 'none', 'Please specify product option(s).'],
             'required only, empty bundle_option' => ['required-only', 'empty', 'Please specify product option(s).'],
             'required only, empty value posted' => ['required-only', 'none', 'Please specify product option(s).'],
             'required only, omitted bundle_option' => ['required-only', 'omitted', 'Please specify product option(s).'],
@@ -291,16 +317,14 @@ class PrepareForCartWithoutSelectionTest extends TestCase
     }
 
     /**
-     * A bundle added without selection can be ordered, with no child item.
+     * A fixed price bundle added without selection can be ordered, invoiced and shipped, with no child item.
      *
-     * @param string $sku
-     * @param float $expectedSubtotal
      * @return void
      */
-    #[DataProvider('placeOrderDataProvider')]
-    public function testPlaceOrderWithBundleWithoutSelection(string $sku, float $expectedSubtotal): void
+    public function testOrderBundleWithoutSelection(): void
     {
-        $product = $this->getProduct($sku);
+        $expectedSubtotal = 50.0;
+        $product = $this->getProduct('optional-fixed');
         $quote = $this->addToCart($product, $this->buildBuyRequest($product, 'empty'));
         $cartId = (int)$quote->getId();
 
@@ -324,17 +348,16 @@ class PrepareForCartWithoutSelectionTest extends TestCase
             (float)$order->getGrandTotal(),
             0.0001
         );
-    }
 
-    /**
-     * @return array
-     */
-    public static function placeOrderDataProvider(): array
-    {
-        return [
-            'fixed price' => ['optional-fixed', 50.0],
-            'dynamic price' => ['optional-dynamic', 0.0],
-        ];
+        $invoice = $this->objectManager->get(InvoiceFixture::class)->apply(['order_id' => $order->getEntityId()]);
+        $this->assertEqualsWithDelta((float)$order->getGrandTotal(), (float)$invoice->getGrandTotal(), 0.0001);
+        $this->objectManager->get(ShipmentFixture::class)->apply(['order_id' => $order->getEntityId()]);
+
+        $order = $this->objectManager->create(OrderRepositoryInterface::class)->get($order->getEntityId());
+        $this->assertSame(Order::STATE_COMPLETE, $order->getState());
+        $item = current($order->getItems());
+        $this->assertEqualsWithDelta(1.0, (float)$item->getQtyInvoiced(), 0.0001);
+        $this->assertEqualsWithDelta(1.0, (float)$item->getQtyShipped(), 0.0001);
     }
 
     /**

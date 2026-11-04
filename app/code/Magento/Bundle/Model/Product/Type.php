@@ -652,7 +652,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 if (empty($optionIds)
                     && $isStrictProcessMode
-                    && $this->isAnyOptionRequired($this->getOptionsCollection($product))
+                    && !$this->canBeBoughtWithoutSelection($product)
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
                 }
@@ -697,7 +697,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 } else {
                     $selections = [];
                     $isEmptySelectionAllowed = $isStrictProcessMode
-                        && !$this->isAnyOptionRequired($optionsCollection);
+                        && $this->canBeBoughtWithoutSelection($product);
                 }
             } else {
                 $product->setOptionsValidationFail(true);
@@ -802,20 +802,26 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Check whether at least one bundle option is required.
+     * Check whether the bundle can be bought without any selection.
      *
-     * @param Collection $optionsCollection
+     * Only a fixed price bundle without required options has a price of its own when no selection is made.
+     *
+     * @param \Magento\Catalog\Model\Product $product
      * @return bool
      */
-    private function isAnyOptionRequired(Collection $optionsCollection): bool
+    private function canBeBoughtWithoutSelection($product): bool
     {
-        foreach ($optionsCollection->getItems() as $option) {
+        if ((int)$product->getPriceType() !== Price::PRICE_TYPE_FIXED) {
+            return false;
+        }
+
+        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
             if ($option->getRequired()) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -1102,7 +1108,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)
-            && (!is_array($bundleOption) || $this->isAnyOptionRequired($this->getOptionsCollection($product)))
+            && (!is_array($bundleOption) || !$this->canBeBoughtWithoutSelection($product))
         ) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
         }
