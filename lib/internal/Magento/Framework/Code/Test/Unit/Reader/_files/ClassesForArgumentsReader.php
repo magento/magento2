@@ -304,3 +304,10 @@ class ClassWithMixedArgumentsForParentCall extends FirstClassForParentCall
         $this->_runeTimeException = $runeTimeException;
     }
 }
+
+class ClassWithParameterTypeParent extends ClassWithoutConstruct
+{
+    public function __construct(parent $parentObject)
+    {
+    }
+}
