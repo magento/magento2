@@ -26,15 +26,11 @@ use PHPMD\TextUI\ExitCode;
  */
 class LiveCodeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var string
-     */
-    protected static $reportDir = '';
+    protected static string $reportDir = '';
 
-    /**
-     * @var string
-     */
-    protected static $pathToSource = '';
+    protected string $rulesetDir = 'Magento';
+
+    protected static string $pathToSource = '';
 
     /**
      * Setup basics for all tests
@@ -239,7 +235,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         if (!file_exists($reportFile)) {
             touch($reportFile);
         }
-        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer($this->rulesetDir, $reportFile, new Wrapper());
         $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
         $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpcs/ignorelist/*.txt');
         if ($ignoreList) {
