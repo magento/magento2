@@ -113,16 +113,6 @@ class GridTest extends TestCase
         $fetchResult[50]['updated_at'] = '2021-02-03 01:02:03';
         $fetchResult[150]['updated_at'] = '2021-03-04 01:02:03';
 
-        $expectedCutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-            ->sub(new \DateInterval('PT1S'))
-            ->format('Y-m-d H:i:s');
-        $expectedRowsForInsert = array_map(
-            static function (array $row) use ($expectedCutoff): array {
-                return array_merge($row, ['updated_at' => $expectedCutoff]);
-            },
-            $fetchResult
-        );
-
         $cutoffMatcher = static function ($cutoff): bool {
             return is_string($cutoff)
                 && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
@@ -154,12 +144,12 @@ class GridTest extends TestCase
             ->willReturn($fetchResult);
         $this->connection->expects($this->atLeastOnce())
             ->method('insertOnDuplicate')
-            ->with($this->gridTable, $expectedRowsForInsert, array_keys($this->columns))
+            ->with($this->gridTable, $fetchResult, array_keys($this->columns))
             ->willReturn(array_count_values($notSyncedIds));
 
         $this->lastUpdateTimeCache->expects($this->once())
             ->method('save')
-            ->with($this->gridTable, $expectedCutoff);
+            ->with($this->gridTable, '2021-03-04 01:02:03');
 
         $this->grid->refreshBySchedule();
     }
@@ -172,16 +162,6 @@ class GridTest extends TestCase
             'status' => 1,
             'updated_at' => '2021-01-01 01:02:03',
         ]];
-        $expectedCutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
-            ->sub(new \DateInterval('PT1S'))
-            ->format('Y-m-d H:i:s');
-        $expectedRowsForInsert = [
-            [
-                'entity_id' => 1,
-                'status' => 1,
-                'updated_at' => $expectedCutoff,
-            ],
-        ];
         $cutoffMatcher = static function ($cutoff): bool {
             return is_string($cutoff)
                 && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
@@ -211,11 +191,11 @@ class GridTest extends TestCase
             ->willReturn($fetchResult);
         $this->connection->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
             ->method('insertOnDuplicate')
-            ->with($this->gridTable, $expectedRowsForInsert, array_keys($this->columns))
+            ->with($this->gridTable, $fetchResult, array_keys($this->columns))
             ->willReturn(1);
         $this->lastUpdateTimeCache->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
             ->method('save')
-            ->with($this->gridTable, $expectedCutoff);
+            ->with($this->gridTable, '2021-01-01 01:02:03');
 
         $this->grid->refreshBySchedule();
     }

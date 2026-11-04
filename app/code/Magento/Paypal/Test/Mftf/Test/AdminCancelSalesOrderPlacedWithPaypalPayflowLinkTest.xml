@@ -50,12 +50,19 @@
             <comment userInput="Stagger the Payflow Link charge so it does not land in the same submission window as other Payflow tests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account" stepKey="commentStaggerBeforePayflowSubmit"/>
             <wait time="30" stepKey="staggerBeforePayflowSubmit"/>
             <actionGroup ref="StorefrontFillCreditCardDetailsActionGroup" stepKey="inputCreditCardNumberFillCreditCardDetails"/>
-            <waitForPageLoad stepKey="waitForOrderData"/>
+            <switchToIFrame stepKey="switchBackToMainFrameAfterPayflowSubmit"/>
+            <waitForPageLoad time="120" stepKey="waitForOrderData"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForCheckoutSuccessPageAfterPayflowSubmit"/>
+            <waitForElementClickable selector="{{CheckoutSuccessMainSection.orderLink}}" time="60" stepKey="waitForOrderLinkOnSuccessPage"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <magentoCLI command="config:set {{DisablePayflowLinkConfigData.path}} {{DisablePayflowLinkConfigData.value}}" stepKey="disablePayflowLinkConfig"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCacheAfterDisablingPayflowLink">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <!-- Logout from storefront -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

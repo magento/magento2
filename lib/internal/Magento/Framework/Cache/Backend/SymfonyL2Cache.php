@@ -89,6 +89,21 @@ class SymfonyL2Cache extends AbstractBackend implements
     private const LOCK_TTL = 10;
 
     /**
+     * Lock-id prefix for guarding a data key and its companion hash key as one pair.
+     */
+    private const PAIR_LOCK_PREFIX = 'pair::';
+
+    /**
+     * Maximum time to wait for an in-flight save/remove on the same id.
+     */
+    private const PAIR_LOCK_TIMEOUT_MICROSECONDS = 5000000;
+
+    /**
+     * Delay between pair-lock acquisition attempts.
+     */
+    private const PAIR_LOCK_RETRY_MICROSECONDS = 20000;
+
+    /**
      * Per-process signature to confirm regeneration-lock ownership
      *
      * @var string
@@ -222,57 +237,64 @@ class SymfonyL2Cache extends AbstractBackend implements
     public function save($data, $id, $tags = [], $specificLifetime = null)
     {
         $hashSaved = false;
+        $remoteSaved = false;
+        $pairLocked = $this->acquirePairLock($id);
 
         try {
-            $sameRemoteData = $this->isRemoteUpToDate($data, $id);
-            // A tagged save must reach the remote adapter even when the payload is unchanged;
-            // otherwise changed tag associations would be skipped with the data deduplication.
-            if (empty($tags) && $sameRemoteData) {
-                // Skip redundant data and hash writes when L2 already contains this exact value,
-                // avoiding duplicate Redis traffic for repeated saves.
-                $remoteSaved = true;
-                $hashSaved = true;
+            try {
+                $sameRemoteData = $this->isRemoteUpToDate($data, $id);
+                // A tagged save must reach the remote adapter even when the payload is unchanged;
+                // otherwise changed tag associations would be skipped with the data deduplication.
+                if (empty($tags) && $sameRemoteData) {
+                    // Skip redundant data and hash writes when L2 already contains this exact value,
+                    // avoiding duplicate Redis traffic for repeated saves.
+                    $remoteSaved = true;
+                    $hashSaved = true;
+                } else {
+                    if (!empty($tags) && $sameRemoteData) {
+                        // Remove first so all previous remote tag memberships are cleared before re-save.
+                        $this->remote->remove($id);
+                    }
+                    // Save data first to avoid hash pointing to non-existent data
+                    $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
+
+                    if ($remoteSaved !== false) {
+                        // Calculate and save hash to remote for synchronization
+                        $hash = $this->getDataHash($data);
+                        $hashSaved = $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+                    }
+                }
+            } catch (\Exception) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                // do nothing, remoteSaved and hashSaved remain false
+            }
+
+            // If L1 disk usage is high, clear it before saving so the current value survives the flush.
+            // clearLocal() is required because tag-scoped clean() cannot clear a tag-less L1.
+            if ($this->shouldCheckLocalSpace() && $this->isLocalCacheSpaceExceeded()) {
+                $this->clearLocal();
+            }
+
+            // L1 mirrors data only; tags go to L2 (keeps L1 free of any tag index), like legacy RSC.
+            $this->local->save($data, $id, [], $specificLifetime);
+
+            if ($remoteSaved !== false && $hashSaved !== false) {
+                $this->markValid($id);
             } else {
-                if (!empty($tags) && $sameRemoteData) {
-                    // Remove first so all previous remote tag memberships are cleared before re-save.
-                    $this->remote->remove($id);
-                }
-                // Save data first to avoid hash pointing to non-existent data
-                $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
-
-                if ($remoteSaved !== false) {
-                    // Calculate and save hash to remote for synchronization
-                    $hash = $this->getDataHash($data);
-                    $hashSaved = $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+                if ($this->useStaleCache) {
+                    $this->markInvalid($id);
                 }
             }
-        } catch (\Exception $e) {
-            $remoteSaved = false;
-            $hashSaved = false;
-        }
 
-        // If L1 disk usage is high, clear it before saving so the current value survives the flush.
-        // clearLocal() is required because tag-scoped clean() cannot clear a tag-less L1.
-        if ($this->shouldCheckLocalSpace() && $this->isLocalCacheSpaceExceeded()) {
-            $this->clearLocal();
-        }
+            // Release the regeneration lock after storing the fresh L2 value, allowing immediate
+            // re-invalidation to elect a new regenerator without waiting for the lock TTL.
+            $this->releaseRegenLock($id);
 
-        // L1 mirrors data only; tags go to L2 (keeps L1 free of any tag index), like legacy RSC.
-        $this->local->save($data, $id, [], $specificLifetime);
-
-        if ($remoteSaved !== false && $hashSaved !== false) {
-            $this->markValid($id);
-        } else {
-            if ($this->useStaleCache) {
-                $this->markInvalid($id);
+            return $remoteSaved;
+        } finally {
+            if ($pairLocked) {
+                $this->releasePairLock($id);
             }
         }
-
-        // Release the regeneration lock after storing the fresh L2 value, allowing immediate
-        // re-invalidation to elect a new regenerator without waiting for the lock TTL.
-        $this->releaseRegenLock($id);
-
-        return $remoteSaved;
     }
 
     /**
@@ -280,31 +302,39 @@ class SymfonyL2Cache extends AbstractBackend implements
      */
     public function remove($id)
     {
+        $pairLocked = $this->acquirePairLock($id);
+
         try {
-            // Remove hash from remote
-            $hashRemoved = $this->remote->remove($id . self::HASH_SUFFIX);
+            try {
+                // Remove hash from remote
+                $hashRemoved = $this->remote->remove($id . self::HASH_SUFFIX);
 
-            // Remove from remote
-            $result = $this->remote->remove($id);
-        } catch (\Exception $e) {
-            $hashRemoved = false;
-            $result = false;
-        }
+                // Remove from remote
+                $result = $this->remote->remove($id);
+            } catch (\Exception) {
+                $hashRemoved = false;
+                $result = false;
+            }
 
-        // Only remove from local if NOT using stale cache (keep stale data for availability)
-        if (!$this->useStaleCache) {
-            $this->local->remove($id);
-        }
+            // Only remove from local if NOT using stale cache (keep stale data for availability)
+            if (!$this->useStaleCache) {
+                $this->local->remove($id);
+            }
 
-        if ($result !== false && $hashRemoved !== false) {
-            $this->markValid($id);
-        } else {
-            if ($this->useStaleCache) {
-                $this->markInvalid($id);
+            if ($result !== false && $hashRemoved !== false) {
+                $this->markValid($id);
+            } else {
+                if ($this->useStaleCache) {
+                    $this->markInvalid($id);
+                }
+            }
+
+            return $result;
+        } finally {
+            if ($pairLocked) {
+                $this->releasePairLock($id);
             }
         }
-
-        return $result;
     }
 
     /**
@@ -466,7 +496,7 @@ class SymfonyL2Cache extends AbstractBackend implements
             $tagAdapter = $this->remote->getLowLevelFrontend()->getTagAdapter();
 
             return $tagAdapter instanceof TagAdapterInterface ? $tagAdapter->getFillingPercentage() : 0;
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             return 0;
         }
     }
@@ -516,7 +546,7 @@ class SymfonyL2Cache extends AbstractBackend implements
             // Probabilistically throttle the disk-space check (~1 in 101 saves). random_int avoids the
             // insecure-function static warning; a crypto-grade source is not required here but is fine.
             return random_int(0, 100) === 0;
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // A failing CSPRNG must never break a cache save; just skip the check this time.
             return false;
         }
@@ -559,7 +589,7 @@ class SymfonyL2Cache extends AbstractBackend implements
             }
             $hash = $this->getDataHash($data);
             $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $lifetime);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
 
@@ -654,7 +684,7 @@ class SymfonyL2Cache extends AbstractBackend implements
             $this->remote->remove($id . self::HASH_SUFFIX);
             $this->remote->remove($id);
             return true;
-        } catch (\Exception $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+        } catch (\Exception) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             // If remote is still unavailable, the invalid marker will be cleared anyway
             return false;
         }
@@ -732,6 +762,57 @@ class SymfonyL2Cache extends AbstractBackend implements
     }
 
     /**
+     * Acquire a Redis-backed per-id lock that guards the data key and its companion hash key.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function acquirePairLock(string $id): bool
+    {
+        $adapter = $this->getLockAdapter();
+        if ($adapter === null) {
+            return false;
+        }
+
+        $lockId = self::PAIR_LOCK_PREFIX . $id;
+        if (isset($this->heldLocks[$lockId])) {
+            return true;
+        }
+
+        $deadline = microtime(true) + (self::PAIR_LOCK_TIMEOUT_MICROSECONDS / 1000000);
+        do {
+            if ($adapter->acquireLock($lockId, $this->lockSign, self::LOCK_TTL)) {
+                $this->heldLocks[$lockId] = true;
+                return true;
+            }
+
+            usleep(self::PAIR_LOCK_RETRY_MICROSECONDS);
+        } while (microtime(true) < $deadline);
+
+        return false;
+    }
+
+    /**
+     * Release the pair lock acquired by acquirePairLock().
+     *
+     * @param string $id
+     * @return void
+     */
+    private function releasePairLock(string $id): void
+    {
+        $lockId = self::PAIR_LOCK_PREFIX . $id;
+        if (!isset($this->heldLocks[$lockId])) {
+            return;
+        }
+
+        $adapter = $this->getLockAdapter();
+        if ($adapter !== null) {
+            $adapter->releaseLock($lockId, $this->lockSign);
+        }
+        unset($this->heldLocks[$lockId]);
+    }
+
+    /**
      * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op otherwise).
      *
      * Cheap: only issues a call when this process is recorded as the lock holder.
@@ -802,7 +883,7 @@ class SymfonyL2Cache extends AbstractBackend implements
             if ($adapter instanceof RedisTagAdapter) {
                 $this->lockAdapter = $adapter;
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             $this->lockAdapter = null;
         }
 

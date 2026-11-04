@@ -13,6 +13,6 @@
             <description>Assert Transfer Cart Line and Shipping Method</description>
         </annotations>
         <!--Verify cart and shipping were transferred: the Continue to Review Order button is only shown when PayPal accepted the full order context (cart lines + shipping)-->
-        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" stepKey="transferCartLineAssertion"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.paypalSubmitBtn}}" time="120" stepKey="transferCartLineAssertion"/>
     </actionGroup>
 </actionGroups>
