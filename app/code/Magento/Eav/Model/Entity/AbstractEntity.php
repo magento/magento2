@@ -40,6 +40,11 @@ abstract class AbstractEntity extends AbstractResource implements
     DefaultAttributesProvider,
     ResetAfterRequestInterface
 {
+    private const ATTRIBUTE_ACTION_DEFAULT = 0;
+    private const ATTRIBUTE_ACTION_INSERT = 1;
+    private const ATTRIBUTE_ACTION_UPDATE = 2;
+    private const ATTRIBUTE_ACTION_DELETE = 3;
+
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
      * @since 100.1.0
@@ -1350,22 +1355,20 @@ abstract class AbstractEntity extends AbstractResource implements
                 continue;
             }
 
-            /**
-             * Check comparability for attribute value
-             */
-            if ($this->_canUpdateAttribute($attribute, $v, $origData)) {
-                if ($this->_isAttributeValueEmpty($attribute, $v)) {
+            switch ($this->_determineAttributeAction($attribute, $v, $k, $origData)) {
+                case self::ATTRIBUTE_ACTION_DELETE:
                     $this->_aggregateDeleteData($delete, $attribute, $newObject);
-                } elseif (!is_numeric($v) && $v !== $origData[$k]
-                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k]))
-                ) {
+                    break;
+                case self::ATTRIBUTE_ACTION_UPDATE:
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
                         'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
                     ];
-                }
-            } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
-                $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
+                    break;
+                case self::ATTRIBUTE_ACTION_INSERT:
+                    $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
+                    break;
+                default:
             }
         }
 
@@ -1385,6 +1388,35 @@ abstract class AbstractEntity extends AbstractResource implements
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $v, array &$origData)
     {
         return array_key_exists($attribute->getAttributeCode(), $origData);
+    }
+
+    /**
+     * Decide the appropriate action for the given attribute and origData
+     *
+     * @param AbstractAttribute $attribute
+     * @param array|mixed|null $v
+     * @param string $k
+     * @param array|mixed|null $origData
+     * @return int
+     */
+    private function _determineAttributeAction($attribute, $v, $k, $origData): int
+    {
+        if ($this->_isAttributeValueEmpty($attribute, $v)) {
+            return self::ATTRIBUTE_ACTION_DELETE;
+        }
+        /**
+         * Check comparability for attribute value
+         */
+        if ($this->_canUpdateAttribute($attribute, $v, $origData)
+            && (!is_numeric($v) && $v !== $origData[$k]
+                || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k])))
+        ) {
+            return self::ATTRIBUTE_ACTION_UPDATE;
+        } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
+            return self::ATTRIBUTE_ACTION_INSERT;
+        }
+
+        return self::ATTRIBUTE_ACTION_DEFAULT;
     }
 
     /**
