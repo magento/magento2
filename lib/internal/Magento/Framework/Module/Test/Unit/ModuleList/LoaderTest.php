@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Phrase;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Xml\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -279,5 +282,53 @@ class LoaderTest extends TestCase
         foreach ($fixtures as $name => $fixture) {
             $this->assertSame($fixture, $result[$name]);
         }
+    }
+
+    public function testLoadModuleReadsOnlyRequestedModule(): void
+    {
+        $fixture = ['name' => 'Foo_Bar', 'setup_version' => null, 'sequence' => ['Magento_Store']];
+        $this->registry->expects($this->never())->method('getPaths');
+        $this->registry->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::MODULE, 'Foo_Bar')
+            ->willReturn('/path/to/Foo_Bar');
+        $this->driver->expects($this->once())
+            ->method('fileGetContents')
+            ->with('/path/to/Foo_Bar/etc/module.xml')
+            ->willReturn(self::$sampleXml);
+        $this->parser2->expects($this->once())->method('loadXML')->with(self::$sampleXml);
+        $this->converter->expects($this->once())->method('convert')->willReturn(['Foo_Bar' => $fixture]);
+
+        $this->assertSame($fixture, $this->loader->loadModule('Foo_Bar'));
+    }
+
+    public function testLoadModuleSkipsUnregisteredModule(): void
+    {
+        $this->registry->method('getPath')->willReturn(null);
+        $this->driver->expects($this->never())->method('fileGetContents');
+        $this->converter->expects($this->never())->method('convert');
+
+        $this->assertNull($this->loader->loadModule('Foo_Bar'));
+    }
+
+    public function testLoadModuleIgnoresDefinitionDeclaredUnderAnotherName(): void
+    {
+        $this->registry->method('getPath')->willReturn('/path/to/Foo_Bar');
+        $this->driver->method('fileGetContents')->willReturn(self::$sampleXml);
+        $this->converter->method('convert')->willReturn(['Foo_Baz' => ['name' => 'Foo_Baz', 'sequence' => []]]);
+
+        $this->assertNull($this->loader->loadModule('Foo_Bar'));
+    }
+
+    public function testLoadModuleReportsInvalidDocument(): void
+    {
+        $this->registry->method('getPath')->willReturn('/path/to/Foo_Bar');
+        $this->driver->method('fileGetContents')->willReturn('<config');
+        $this->parser2->method('loadXML')->willThrowException(new LocalizedException(new Phrase('broken')));
+        $this->converter->expects($this->never())->method('convert');
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid Document: /path/to/Foo_Bar/etc/module.xml');
+        $this->loader->loadModule('Foo_Bar');
     }
 }
