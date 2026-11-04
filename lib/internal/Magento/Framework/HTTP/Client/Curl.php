@@ -246,6 +246,87 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
+     * Make PUT request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function put($uri, $params = [])
+    {
+        $this->makeRequest("PUT", $uri, $params);
+    }
+
+    /**
+     * Make DELETE request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function delete($uri, $params = [])
+    {
+        $this->makeRequest("DELETE", $uri, $params);
+    }
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function patch($uri, $params = [])
+    {
+        $this->makeRequest("PATCH", $uri, $params);
+    }
+
+    /**
+     * Make OPTIONS request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function options($uri, $params = [])
+    {
+        $this->makeRequest("OPTIONS", $uri, $params);
+    }
+
+    /**
+     * Make HEAD request
+     *
+     * @param string $uri
+     * @return void
+     */
+    public function head($uri)
+    {
+        $this->makeRequest("HEAD", $uri);
+    }
+
+    /**
+     * Make TRACE request
+     *
+     * @param string $uri
+     * @return void
+     */
+    public function trace($uri)
+    {
+        $this->makeRequest("TRACE", $uri);
+    }
+
+    /**
+     * Make CONNECT request
+     *
+     * @param string $uri
+     * @return void
+     */
+    public function connect($uri)
+    {
+        $this->makeRequest("CONNECT", $uri);
+    }
+
+    /**
      * Get response headers
      *
      * @return array
