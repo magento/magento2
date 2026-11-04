@@ -147,6 +147,7 @@ class LinkedMapProvider implements MapProviderInterface
             $this->linkModel->setLinkTypeId($typeId);
             $collection->setLinkModel($this->linkModel);
             $collection->setIsStrongMode();
+            $collection->setPositionOrder();
             $found[$type] = $collection->getItems();
         }
 
