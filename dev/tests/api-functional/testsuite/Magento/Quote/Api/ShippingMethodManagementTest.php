@@ -5,15 +5,44 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Customer\Test\Fixture\CustomerGroup;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Tax\Test\Fixture\CustomerTaxClass;
+use Magento\Tax\Test\Fixture\ProductTaxClass;
+use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
+use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
+use Magento\TestFramework\App\ApiMutableScopeConfig;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingMethodManagementTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteShippingMethodManagementV1';
-    const RESOURCE_PATH = '/V1/carts/';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'quoteShippingMethodManagementV1';
+    public const RESOURCE_PATH = '/V1/carts/';
+
+    private const SHIPPING_TAX_RULE_DATA = [
+        'customer_tax_class_ids' => [3, '$customer_group.tax_class_id$'],
+        'product_tax_class_ids' => ['$shipping_tax_class.classId$'],
+        'tax_rate_ids' => ['$rate.id$']
+    ];
+
+    private const SHIPPING_ADDRESS_DATA = [
+        'cart_id' => '$cart.id$',
+        'address' => ['postcode' => '75477']
+    ];
 
     /**
      * @var ObjectManager
@@ -121,6 +150,157 @@ class ShippingMethodManagementTest extends WebapiAbstract
         ];
 
         $this->assertEquals($expectedData, $result[0]);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
+        Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, ['group_id' => '$customer_group.id$'], 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductTaxClass::class, as: 'shipping_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::SHIPPING_TAX_RULE_DATA),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]),
+        DataFixture(SetShippingAddress::class, self::SHIPPING_ADDRESS_DATA)
+    ]
+    public function testGetListWithInclusiveShippingInputAndInclusiveCatalogDisplay(): void
+    {
+        $this->assertShippingListPrices(9.3, 10);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
+        Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, ['group_id' => '$customer_group.id$'], 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductTaxClass::class, as: 'shipping_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::SHIPPING_TAX_RULE_DATA),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]),
+        DataFixture(SetShippingAddress::class, self::SHIPPING_ADDRESS_DATA)
+    ]
+    public function testGetListWithInclusiveShippingInputAndBothCatalogDisplays(): void
+    {
+        $this->assertShippingListPrices(9.3, 10);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
+        Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, ['group_id' => '$customer_group.id$'], 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductTaxClass::class, as: 'shipping_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::SHIPPING_TAX_RULE_DATA),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]),
+        DataFixture(SetShippingAddress::class, self::SHIPPING_ADDRESS_DATA)
+    ]
+    public function testGetListWithExclusiveShippingInputAndInclusiveCatalogDisplay(): void
+    {
+        $this->assertShippingListPrices(10, 10.75);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 1, 'store', 'default'),
+        Config('shipping/origin/postcode', '75477', 'store', 'default'),
+        Config('carriers/flatrate/active', 1, 'store', 'default'),
+        Config('carriers/flatrate/price', 10, 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
+        Config('tax/classes/shipping_tax_class', 0, 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, ['group_id' => '$customer_group.id$'], 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductTaxClass::class, as: 'shipping_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::SHIPPING_TAX_RULE_DATA),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]),
+        DataFixture(SetShippingAddress::class, self::SHIPPING_ADDRESS_DATA)
+    ]
+    public function testGetListWithExclusiveShippingInputAndBothCatalogDisplays(): void
+    {
+        $this->assertShippingListPrices(10, 10.75);
+    }
+
+    private function assertShippingListPrices(float $expectedExclTax, float $expectedInclTax): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        Bootstrap::getObjectManager()->get(ApiMutableScopeConfig::class)->setValue(
+            'tax/classes/shipping_tax_class',
+            (string)$fixtures->get('shipping_tax_class')->getClassId(),
+            'store',
+            'default'
+        );
+        $cartId = $fixtures->get('cart')->getId();
+        self::assertNotEmpty($cartId, 'quote fixture failed');
+
+        $rates = $this->_webApiCall($this->getListServiceInfo($cartId), ['cartId' => $cartId]);
+        $flatRates = array_values(array_filter(
+            $rates,
+            static fn (array $rate): bool => $rate['carrier_code'] === 'flatrate'
+                && $rate['method_code'] === 'flatrate'
+        ));
+        self::assertCount(1, $flatRates);
+        $rate = $flatRates[0];
+        self::assertEquals(10, $rate[ShippingMethodInterface::KEY_SHIPPING_AMOUNT]);
+        self::assertEquals(10, $rate[ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT]);
+        self::assertTrue($rate[ShippingMethodInterface::KEY_AVAILABLE]);
+        self::assertEquals($expectedExclTax, $rate[ShippingMethodInterface::KEY_PRICE_EXCL_TAX]);
+        self::assertEquals($expectedInclTax, $rate[ShippingMethodInterface::KEY_PRICE_INCL_TAX]);
     }
 
     /**
