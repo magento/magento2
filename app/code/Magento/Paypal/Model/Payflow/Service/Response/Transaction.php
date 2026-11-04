@@ -119,11 +119,12 @@ class Transaction
         $payment->setAdditionalInformation(Payflowpro::PNREF, $response->getData(Payflowpro::PNREF));
         $payment->setAdditionalInformation('result_code', $response->getData('result'));
 
-        $expDate = $response->getData('expdate');
-        $expMonth = $this->getCcExpMonth($expDate);
-        $payment->setCcExpMonth($expMonth);
-        $expYear = $this->getCcExpYear($expDate);
-        $payment->setCcExpYear($expYear);
+        if ($expDate = $response->getData('expdate') && is_numeric($expDate)) {
+            $expMonth = $this->getCcExpMonth($expDate);
+            $payment->setCcExpMonth($expMonth);
+            $expYear = $this->getCcExpYear($expDate);
+            $payment->setCcExpYear($expYear);
+        }
 
         $this->errorHandler->handle($payment, $response);
 
