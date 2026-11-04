@@ -26,7 +26,7 @@ class Validator
     /**
      * View filesystem
      *
-     * @var \Magento\Framework\FileSystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
