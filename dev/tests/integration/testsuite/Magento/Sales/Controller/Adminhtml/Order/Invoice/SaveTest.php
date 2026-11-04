@@ -8,11 +8,23 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Framework\Escaper;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Item;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 
@@ -23,6 +35,7 @@ use PHPUnit\Framework\Constraint\StringContains;
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends AbstractInvoiceControllerTest
 {
@@ -163,6 +176,50 @@ class SaveTest extends AbstractInvoiceControllerTest
                 'doShipment' => true,
             ],
         ];
+    }
+
+    /**
+     * Shipment created together with the invoice must contain the whole decimal quantity.
+     *
+     * @return void
+     */
+    #[
+        Config('payment/checkmo/active', '1'),
+        Config('carriers/flatrate/active', '1'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'extension_attributes' => [
+                    'stock_item' => ['is_qty_decimal' => true, 'use_config_min_sale_qty' => 0, 'min_sale_qty' => 0.1]
+                ]
+            ],
+            'product'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$', 'email' => 'guest@example.com']),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1.5]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(
+            SetDeliveryMethodFixture::class,
+            ['cart_id' => '$cart.id$', 'carrier_code' => 'flatrate', 'method_code' => 'flatrate']
+        ),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$', 'method' => 'checkmo']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+    ]
+    public function testInvoiceWithShipmentOfDecimalQty(): void
+    {
+        $orderId = (int)$this->_objectManager->get(DataFixtureStorageManager::class)
+            ->getStorage()->get('order')->getEntityId();
+        $this->prepareRequest(['invoice' => ['do_shipment' => true]], ['order_id' => $orderId]);
+        $this->dispatch('backend/sales/order_invoice/save');
+
+        $order = $this->_objectManager->create(Order::class)->load($orderId);
+        $this->assertEquals(1.5, (float)$order->getShipmentsCollection()->getFirstItem()->getTotalQty());
+        $this->assertEquals(Order::STATE_COMPLETE, $order->getState());
     }
 
     /**

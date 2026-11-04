@@ -136,20 +136,7 @@ class State
                 }
             }
 
-            $subject = $parentItem && $parentItem->getProductType() === Type::TYPE_BUNDLE
-            && $parentItem->getProduct()
-            && $parentItem->getProduct()->getShipmentType() == AbstractType::SHIPMENT_TOGETHER
-                ? $parentItem
-                : $item;
-
-            $qtyOrdered = (float) $subject->getQtyOrdered();
-            $qtyCanceled = (float) $subject->getQtyCanceled();
-            $qtyShipped  = (float) $subject->getQtyShipped();
-            $qtyRefunded = (float) $subject->getQtyRefunded();
-
-            // Quantities are stored with 4 decimals, so round away float noise
-            $openQty = round($qtyOrdered - $qtyCanceled - $qtyShipped - $qtyRefunded, 4);
-            if ($openQty > 0) {
+            if ($item->getSimpleQtyToShip() > 0) {
                 return false;
             }
         }
