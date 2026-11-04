@@ -106,7 +106,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             Area::AREA_GLOBAL,
             $objectManager->get(ScopeInterface::class)->getCurrentScope()
         );
-        $objectManager->create(\Magento\Framework\GraphQl\Config\Data::class);
+        $objectManager->create('Magento\Framework\GraphQl\Config\Data');
     }
 
     /**
