@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="magento_login_as_customer_log" resource="default" engine="innodb" comment="Login as Customer Logging">
-        <column xsi:type="int" name="log_id" unsigned="false" nullable="false" identity="true" comment="Log Id"/>
+        <column xsi:type="int" name="log_id" unsigned="true" nullable="false" identity="true" comment="Log Id"/>
         <column xsi:type="timestamp" name="time" on_update="false" nullable="true" comment="Event Date"/>
         <column xsi:type="int" name="user_id" unsigned="true" nullable="true" identity="false" comment="User Id"/>
         <column xsi:type="varchar" name="user_name" nullable="true" length="40" comment="User Name"/>
