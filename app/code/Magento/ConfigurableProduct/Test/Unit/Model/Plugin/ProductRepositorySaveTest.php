@@ -79,7 +79,10 @@ class ProductRepositorySaveTest extends TestCase
         $this->productAttributeRepository =
             $this->createMock(ProductAttributeRepositoryInterface::class);
 
-        $this->product = $this->createPartialMock(Product::class, ['getTypeId', 'getExtensionAttributes']);
+        $this->product = $this->createPartialMock(
+            Product::class,
+            ['getTypeId', 'getExtensionAttributes', 'getSku']
+        );
 
         $this->result = $this->createPartialMock(Product::class, ['getExtensionAttributes']);
 
@@ -245,5 +248,69 @@ class ProductRepositorySaveTest extends TestCase
             ->willReturn($attributeId);
 
         $this->plugin->beforeSave($this->productRepository, $this->product);
+    }
+
+    /**
+     * REST updates may send child links without configurable_product_options.
+     *
+     * The plugin must load options already stored on the product instead of
+     * treating every child as having the same empty attribute set.
+     *
+     * @return void
+     */
+    public function testBeforeSaveWithLinksLoadsExistingOptionsWhenRequestOmitsThem(): void
+    {
+        $links = [4, 5];
+        $attributeCode = 'color';
+        $attributeId = 23;
+        $sku = 'configurable-sku';
+
+        $this->option->expects(static::once())
+            ->method('getAttributeId')
+            ->willReturn($attributeId);
+
+        $this->product->expects(static::once())
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
+        $this->product->method('getSku')->willReturn($sku);
+        $this->product->expects(static::once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributes);
+
+        $this->extensionAttributes->method('getConfigurableProductOptions')->willReturn([]);
+        $this->extensionAttributes->method('getConfigurableProductLinks')->willReturn($links);
+
+        $existingProduct = $this->createPartialMock(Product::class, ['getExtensionAttributes']);
+        $existingExtension = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'getConfigurableProductOptions',
+                'getConfigurableProductLinks',
+            ]
+        );
+        $existingProduct->method('getExtensionAttributes')->willReturn($existingExtension);
+        $existingExtension->method('getConfigurableProductOptions')->willReturn([$this->option]);
+
+        $this->productRepository->expects(static::once())
+            ->method('get')
+            ->with($sku)
+            ->willReturn($existingProduct);
+
+        $this->productAttributeRepository->expects(static::once())
+            ->method('get')
+            ->willReturn($this->eavAttribute);
+        $this->eavAttribute->expects(static::once())
+            ->method('getAttributeCode')
+            ->willReturn($attributeCode);
+
+        $childOne = $this->createPartialMock(Product::class, ['getData']);
+        $childTwo = $this->createPartialMock(Product::class, ['getData']);
+        $childOne->method('getData')->with($attributeCode)->willReturn('red');
+        $childTwo->method('getData')->with($attributeCode)->willReturn('blue');
+        $this->productRepository->expects(static::exactly(2))
+            ->method('getById')
+            ->willReturnOnConsecutiveCalls($childOne, $childTwo);
+
+        $this->assertNull($this->plugin->beforeSave($this->productRepository, $this->product));
     }
 }
