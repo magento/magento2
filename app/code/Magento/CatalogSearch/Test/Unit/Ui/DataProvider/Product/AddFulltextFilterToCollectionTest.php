@@ -7,26 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Ui\DataProvider\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\CatalogSearch\Model\ResourceModel\Search\Collection as SearchCollection;
 use Magento\CatalogSearch\Ui\DataProvider\Product\AddFulltextFilterToCollection;
-use Magento\Framework\Data\Collection;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\DB\Select;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AddFulltextFilterToCollectionTest extends TestCase
 {
-    use MockCreationTrait;
-
     /**
      * @var SearchCollection|MockObject
      */
     private $searchCollection;
 
     /**
-     * @var Collection|MockObject
+     * @var ProductCollection|MockObject
      */
     private $collection;
+
+    /**
+     * @var Select|MockObject
+     */
+    private $select;
 
     /**
      * @var AddFulltextFilterToCollection
@@ -35,31 +40,64 @@ class AddFulltextFilterToCollectionTest extends TestCase
 
     protected function setUp(): void
     {
+        $entity = $this->createMock(AbstractEntity::class);
+        $entity->method('getLinkField')->willReturn('entity_id');
+
         $this->searchCollection = $this->createPartialMock(
             SearchCollection::class,
-            ['addBackendSearchFilter', 'load', 'getAllIds']
+            ['getEntity', 'getBackendSearchEntityIdsSelect']
         );
-        $this->searchCollection->method('load')->willReturnSelf();
+        $this->searchCollection->method('getEntity')->willReturn($entity);
 
-        $this->collection = $this->createPartialMockWithReflection(
-            Collection::class,
-            ['addIdFilter']
-        );
+        $this->select = $this->createMock(Select::class);
+        $this->collection = $this->createMock(ProductCollection::class);
+        $this->collection->method('getSelect')->willReturn($this->select);
 
         $this->model = new AddFulltextFilterToCollection($this->searchCollection);
     }
 
-    public function testAddFilter()
+    public function testAddFilterJoinsSearchResultSelect()
     {
+        $idsSelect = $this->createMock(Select::class);
         $this->searchCollection->expects($this->once())
-            ->method('addBackendSearchFilter')
-            ->with('test');
-        $this->searchCollection->expects($this->once())
-            ->method('getAllIds')
-            ->willReturn([]);
-        $this->collection->expects($this->once())
-            ->method('addIdFilter')
-            ->with(-1);
-        $this->model->addFilter($this->collection, 'test', ['fulltext' => 'test']);
+            ->method('getBackendSearchEntityIdsSelect')
+            ->with('test')
+            ->willReturn($idsSelect);
+
+        $this->select->expects($this->once())
+            ->method('joinInner')
+            ->with(
+                ['search_result' => $idsSelect],
+                'search_result.entity_id = e.entity_id',
+                []
+            );
+
+        $this->model->addFilter($this->collection, 'fulltext', ['fulltext' => 'test']);
+    }
+
+    /**
+     * @param array|null $condition
+     */
+    #[DataProvider('emptyConditionDataProvider')]
+    public function testAddFilterIsSkippedForEmptyCondition($condition)
+    {
+        $this->searchCollection->expects($this->never())
+            ->method('getBackendSearchEntityIdsSelect');
+        $this->select->expects($this->never())
+            ->method('joinInner');
+
+        $this->model->addFilter($this->collection, 'fulltext', $condition);
+    }
+
+    /**
+     * @return array
+     */
+    public static function emptyConditionDataProvider(): array
+    {
+        return [
+            'no condition' => [null],
+            'no fulltext key' => [['like' => 'test']],
+            'empty fulltext' => [['fulltext' => '']],
+        ];
     }
 }
