@@ -22,13 +22,14 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRealMemoryUsageUnix()
     {
-        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $object = $this->createMemory(null);
         $this->_shell->expects(
             $this->once()
         )->method(
             'execute'
         )->with(
-            $this->stringStartsWith('ps ')
+            $this->stringStartsWith('ps '),
+            [getmypid()]
         )->willReturn(
             '26321'
         );
@@ -38,19 +39,106 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     public function testGetRealMemoryUsageWin()
     {
         $this->_shell
+            ->expects($this->exactly(2))
             ->method('execute')
             ->willReturnCallback(
-                function ($arg1) {
+                function ($arg1, $arguments) {
                     if (strpos($arg1, 'ps ') === 0) {
+                        $this->assertSame([getmypid()], $arguments);
                         throw new \Magento\Framework\Exception\LocalizedException(__('command not found'));
-                    } elseif (strpos($arg1, 'tasklist.exe ') === 0) {
-                        return '"php.exe","12345","N/A","0","26,321 K"';
                     }
+                    $this->assertSame('tasklist.exe /fi %s /fo CSV /nh', $arg1);
+                    $this->assertSame(['PID eq ' . getmypid()], $arguments);
+                    return '"php.exe","12345","N/A","0","26,321 K"';
                 }
             );
 
-        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $object = $this->createMemory(null);
         $this->assertEquals(26952704, $object->getRealMemoryUsage());
+    }
+
+    #[DataProvider('unusableProcStatusDataProvider')]
+    public function testGetRealMemoryUsageFallsBackToUnix(?string $status): void
+    {
+        $this->_shell->expects($this->once())->method('execute')
+            ->with($this->stringStartsWith('ps '), [getmypid()])
+            ->willReturn('26321');
+
+        $object = $this->createMemory($status);
+        $this->assertSame(26952704, $object->getRealMemoryUsage());
+    }
+
+    public static function unusableProcStatusDataProvider(): array
+    {
+        return [
+            'unavailable' => [null],
+            'empty' => [''],
+            'missing VmRSS' => ["Name:\tphp\nVmSize:\t12345 kB\n"],
+            'invalid VmRSS' => ["VmRSS:\tunknown kB\n"],
+            'invalid unit' => ["VmRSS:\t26321 MB\n"],
+            'incomplete value' => ["VmRSS:\n26321 kB\n"],
+            'different field' => ["OtherVmRSS:\t26321 kB\n"]
+        ];
+    }
+
+    #[DataProvider('procStatusDataProvider')]
+    public function testGetRealMemoryUsageProc(string $status, int $expected): void
+    {
+        $this->_shell->expects($this->never())->method('execute');
+        $object = $this->createMemory($status);
+
+        $this->assertSame($expected, $object->getRealMemoryUsage());
+    }
+
+    public static function procStatusDataProvider(): array
+    {
+        return [
+            'kilobytes' => ["Name:\tphp\nVmRSS:\t26321 kB\nVmData:\t12345 kB\n", 26952704],
+            'spaces' => ["VmRSS:   42 kB  \n", 43008],
+            'zero' => ["VmRSS:\t0 kB\n", 0]
+        ];
+    }
+
+    public function testReadProcStatusForMissingProcess(): void
+    {
+        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $method = new \ReflectionMethod(\Magento\TestFramework\Helper\Memory::class, 'readProcStatus');
+        $errors = [];
+        set_error_handler(static function (int $severity, string $message) use (&$errors): bool {
+            $errors[] = [$severity, $message];
+            return true;
+        });
+        try {
+            $this->assertNull($method->invoke($object, -1));
+        } finally {
+            restore_error_handler();
+        }
+        $this->assertSame([], $errors);
+    }
+
+    public function testReadProcStatusForCurrentProcess(): void
+    {
+        if (!is_readable('/proc/self/status')) {
+            $this->markTestSkipped('Readable procfs process status is required.');
+        }
+
+        $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
+        $method = new \ReflectionMethod(\Magento\TestFramework\Helper\Memory::class, 'readProcStatus');
+        $status = $method->invoke($object, getmypid());
+
+        $this->assertIsString($status);
+        $this->assertStringContainsString('VmRSS:', $status);
+    }
+
+    private function createMemory(?string $status): \Magento\TestFramework\Helper\Memory
+    {
+        $memory = $this->getMockBuilder(\Magento\TestFramework\Helper\Memory::class)
+            ->setConstructorArgs([$this->_shell])
+            ->onlyMethods(['readProcStatus'])
+            ->getMock();
+        $memory->expects($this->once())->method('readProcStatus')->with(getmypid())->willReturn($status);
+
+        return $memory;
     }
 
     /**
