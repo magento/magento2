@@ -7,16 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+use Generator;
 use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProductPrice;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProductsPriceProcessor;
 use Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor;
 use Magento\CatalogRule\Model\Indexer\RuleProductsSelectBuilder;
+use Magento\CatalogRule\Model\Indexer\RuleProductsSelectBatchProvider;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Statement_Interface;
 
 class ReindexRuleProductPriceTest extends TestCase
 {
@@ -56,6 +60,11 @@ class ReindexRuleProductPriceTest extends TestCase
     private $reindexRuleProductsPriceProcessorMock;
 
     /**
+     * @var RuleProductsSelectBatchProvider|MockObject
+     */
+    private $batchProvider;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -66,6 +75,7 @@ class ReindexRuleProductPriceTest extends TestCase
         $this->localeDate = $this->createMock(TimezoneInterface::class);
         $this->pricesPersistorMock = $this->createMock(RuleProductPricesPersistor::class);
         $this->reindexRuleProductsPriceProcessorMock = $this->createMock(ReindexRuleProductsPriceProcessor::class);
+        $this->batchProvider = $this->createMock(RuleProductsSelectBatchProvider::class);
 
         $this->model = new ReindexRuleProductPrice(
             $this->storeManagerMock,
@@ -74,7 +84,8 @@ class ReindexRuleProductPriceTest extends TestCase
             $this->localeDate,
             $this->pricesPersistorMock,
             true,
-            $this->reindexRuleProductsPriceProcessorMock
+            $this->reindexRuleProductsPriceProcessorMock,
+            $this->batchProvider
         );
     }
 
@@ -94,7 +105,7 @@ class ReindexRuleProductPriceTest extends TestCase
             ->method('getWebsites')
             ->willReturn([$websiteMock]);
 
-        $statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $statementMock = $this->createMock(Zend_Db_Statement_Interface::class);
         $this->ruleProductsSelectBuilderMock->expects($this->once())
             ->method('build')
             ->with($websiteId, $productId, true)
@@ -117,5 +128,66 @@ class ReindexRuleProductPriceTest extends TestCase
             ->method('execute');
 
         $this->assertTrue($this->model->execute(1, $productId, true));
+    }
+
+    public function testFullIndexUsesOnlyBatchedStatements(): void
+    {
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->method('getId')->willReturn(7);
+        $this->storeManagerMock->method('getWebsites')->willReturn([$website]);
+        $statement = $this->createMock(Zend_Db_Statement_Interface::class);
+        $statements = (static function () use ($statement): Generator {
+            yield $statement;
+        })();
+        $this->batchProvider->expects($this->once())->method('execute')
+            ->with(7, null, true)->willReturn($statements);
+        $this->reindexRuleProductsPriceProcessorMock->expects($this->once())->method('executeBatches')
+            ->with($statements, $website, 5000, true, true);
+        // A fallback here would buffer the whole catalog again after processing every batch.
+        $this->ruleProductsSelectBuilderMock->expects($this->never())->method('build');
+        $this->reindexRuleProductsPriceProcessorMock->expects($this->never())->method('execute');
+
+        self::assertTrue($this->model->execute(5000, null, true));
+    }
+
+    #[DataProvider('unbatchedPathProvider')]
+    public function testDisabledOrPartialIndexUsesOriginalPath(
+        bool $batching,
+        ?int $productId,
+        bool $working
+    ): void {
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->method('getId')->willReturn(7);
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn([$website]);
+        $statement = $this->createMock(Zend_Db_Statement_Interface::class);
+        $this->batchProvider->expects($this->never())->method('execute');
+        $this->reindexRuleProductsPriceProcessorMock->expects($this->never())->method('executeBatches');
+        $this->ruleProductsSelectBuilderMock->expects($this->once())->method('build')
+            ->with(7, $productId, $working)->willReturn($statement);
+        $this->reindexRuleProductsPriceProcessorMock->expects($this->once())->method('execute')
+            ->with($statement, $website, 5000, $working, false);
+        $model = new ReindexRuleProductPrice(
+            $this->storeManagerMock,
+            $this->ruleProductsSelectBuilderMock,
+            $this->productPriceCalculatorMock,
+            $this->localeDate,
+            $this->pricesPersistorMock,
+            false,
+            $this->reindexRuleProductsPriceProcessorMock,
+            $this->batchProvider,
+            $batching
+        );
+
+        self::assertTrue($model->execute(5000, $productId, $working));
+    }
+
+    public static function unbatchedPathProvider(): array
+    {
+        return [
+            'disabled full index' => [false, null, true],
+            'enabled single product working table' => [true, 55, true],
+            'enabled single product main table' => [true, 55, false],
+            'enabled unrestricted main table' => [true, null, false]
+        ];
     }
 }
