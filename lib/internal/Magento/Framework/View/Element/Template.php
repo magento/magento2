@@ -107,6 +107,13 @@ class Template extends AbstractBlock
     private $mediaDirectory;
 
     /**
+     * Whether rendering this block failed and its output must not be written to the block cache
+     *
+     * @var bool
+     */
+    private $renderingFailed = false;
+
+    /**
      * @var \Magento\Framework\View\Element\BlockInterface
      */
     protected $templateContext;
@@ -275,10 +282,29 @@ class Template extends AbstractBlock
                 );
             }
             $this->_logger->critical($errorMessage);
+            $this->renderingFailed = true;
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);
         return $html;
+    }
+
+    /**
+     * Save block content to cache storage, unless rendering it failed
+     *
+     * An empty string produced by a failed render is indistinguishable from a block that renders
+     * nothing by design, so caching it would serve the failure for the whole cache lifetime.
+     *
+     * @param string $data
+     * @return $this|false
+     */
+    protected function _saveCache($data)
+    {
+        if ($this->renderingFailed) {
+            return false;
+        }
+
+        return parent::_saveCache($data);
     }
 
     /**
