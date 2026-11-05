@@ -22,6 +22,6 @@ class Pdf extends \Magento\Config\Model\Config\Backend\Image
      */
     protected function _getAllowedExtensions()
     {
-        return ['tif', 'tiff', 'png', 'jpg', 'jpe', 'jpeg', 'pdf'];
+        return ['tif', 'tiff', 'png', 'jpg', 'jpe', 'jpeg'];
     }
 }
