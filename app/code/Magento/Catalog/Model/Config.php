@@ -202,7 +202,9 @@ class Config extends \Magento\Eav\Model\Config
             return $this;
         }
 
-        $attributeSetCollection = $this->_setCollectionFactory->create()->load();
+        $attributeSetCollection = $this->_setCollectionFactory->create()
+            ->addFieldToSelect(['entity_type_id', 'attribute_set_name'])
+            ->load();
 
         $this->_attributeSetsById = [];
         $this->_attributeSetsByName = [];
@@ -271,7 +273,9 @@ class Config extends \Magento\Eav\Model\Config
             return $this;
         }
 
-        $attributeSetCollection = $this->_groupCollectionFactory->create()->load();
+        $attributeSetCollection = $this->_groupCollectionFactory->create()
+            ->addFieldToSelect(['attribute_set_id', 'attribute_group_name'])
+            ->load();
 
         $this->_attributeGroupsById = [];
         $this->_attributeGroupsByName = [];
