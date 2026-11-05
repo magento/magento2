@@ -53,9 +53,8 @@
                                        id="login-email"
                                        type="email"
                                        class="input-text"
-                                       data-bind="attr: {autocomplete: autocomplete}"
-                                       data-validate="{required:true, 'validate-email':true}"
-                                />
+                                       data-bind="attr: {autocomplete: autocomplete === 'off' ? 'off' : 'username'}"
+                                       data-validate="{required:true, 'validate-email':true}">
                             </div>
                         </div>
                         <div class="field field-password required">
@@ -65,9 +64,8 @@
                                        class="input-text"
                                        id="login-password"
                                        name="password"
-                                       data-bind="attr: {autocomplete: autocomplete}"
-                                       data-validate="{required:true}"
-                                       autocomplete="off"/>
+                                       data-bind="attr: {autocomplete: autocomplete === 'off' ? 'off' : 'current-password'}"
+                                       data-validate="{required:true}">
                             </div>
                         </div>
                         <!-- ko foreach: getRegion('additional-login-form-fields') -->
@@ -75,7 +73,7 @@
                         <!-- /ko -->
                     </div>
                     <div class="actions-toolbar">
-                        <input name="context" type="hidden" value="checkout" />
+                        <input name="context" type="hidden" value="checkout">
                         <div class="primary">
                             <button type="submit" class="action action-login secondary"><span data-bind="i18n: 'Sign In'"></span></button>
                         </div>
