@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -537,6 +538,40 @@ class StateTest extends TestCase
         $order->expects($this->never())->method('setState');
 
         $this->subject->check($order);
+    }
+
+    #[DataProvider('totalDueBelowOneProvider')]
+    public function testEarlyReturnWhenOpenInvoiceAndTotalDueBelowOne(float $totalDue): void
+    {
+        /** @var Order|MockObject $order */
+        $order = $this->createOrderMock();
+
+        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
+        $order->method('getIsInProcess')->willReturn(false);
+        $order->method('isCanceled')->willReturn(false);
+        $order->method('canUnhold')->willReturn(false);
+        $order->method('canInvoice')->willReturn(false);
+        $order->method('canShip')->willReturn(false);
+        $order->method('getTotalDue')->willReturn($totalDue);
+
+        $openInvoice = $this->createStub(Invoice::class);
+        $openInvoice->method('getState')->willReturn(Invoice::STATE_OPEN);
+        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([$openInvoice]));
+
+        $order->expects($this->never())->method('setState');
+
+        $this->subject->check($order);
+    }
+
+    /**
+     * @return array
+     */
+    public static function totalDueBelowOneProvider(): array
+    {
+        return [
+            'fifty cents' => [0.5],
+            'one cent' => [0.01],
+        ];
     }
 
     public function testSetsCompleteWhenProcessingAndCannotShip(): void
