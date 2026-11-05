@@ -31,6 +31,9 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_SKU" indexType="btree">
             <column name="sku"/>
         </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_TYPE_ID" indexType="btree">
+            <column name="type_id"/>
+        </index>
     </table>
     <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Product Datetime Attribute Backend Table">
@@ -504,9 +507,9 @@
             <column name="category_id"/>
             <column name="product_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_category_product"
-                    column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
-                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_CTGR_PRD_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_category_product" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="CAT_CTGR_PRD_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID"
                     table="catalog_category_product" column="category_id" referenceTable="catalog_category_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
@@ -579,10 +582,12 @@
         <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
                     table="catalog_compare_item" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID" table="catalog_compare_item"
-                    column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID" table="catalog_compare_item"
-                    column="list_id" referenceTable="catalog_compare_list" referenceColumn="list_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID"
+                    table="catalog_compare_item" column="store_id" referenceTable="store" referenceColumn="store_id"
+                    onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID"
+                    table="catalog_compare_item" column="list_id" referenceTable="catalog_compare_list"
+                    referenceColumn="list_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_COMPARE_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
@@ -598,7 +603,8 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="catalog_compare_list" resource="default" engine="innodb" comment="Catalog Compare List with hash Table">
+    <table name="catalog_compare_list" resource="default" engine="innodb"
+           comment="Catalog Compare List with hash Table">
         <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false"
                 identity="true" comment="Compare List ID"/>
         <column xsi:type="varchar" name="list_id_mask" nullable="true" length="32" comment="Masked ID"/>
@@ -630,9 +636,9 @@
         <constraint xsi:type="foreign" referenceId="CATALOG_PRODUCT_WEBSITE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID"
                     table="catalog_product_website" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_WS_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_product_website"
-                    column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
-                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_WS_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_website" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_PRODUCT_WEBSITE_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
@@ -659,9 +665,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="link_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_LNK_LNKED_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_product_link"
-                    column="linked_product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
-                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_LNK_LNKED_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_link" column="linked_product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="CATALOG_PRODUCT_LINK_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
                     table="catalog_product_link" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
@@ -911,9 +917,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="option_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_OPT_PRD_ID_CAT_PRD_ENTT_ENTT_ID" table="catalog_product_option"
-                    column="product_id" referenceTable="catalog_product_entity" referenceColumn="entity_id"
-                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_OPT_PRD_ID_CAT_PRD_ENTT_ENTT_ID"
+                    table="catalog_product_option" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_PRODUCT_OPTION_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
@@ -1260,8 +1266,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="website_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_IDX_WS_WS_ID_STORE_WS_WS_ID" table="catalog_product_index_website"
-                    column="website_id" referenceTable="store_website" referenceColumn="website_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="CAT_PRD_IDX_WS_WS_ID_STORE_WS_WS_ID"
+                    table="catalog_product_index_website" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_PRODUCT_INDEX_WEBSITE_WEBSITE_DATE" indexType="btree">
             <column name="website_date"/>
         </index>

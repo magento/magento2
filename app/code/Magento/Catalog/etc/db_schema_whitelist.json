@@ -12,7 +12,8 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID": true,
-            "CATALOG_PRODUCT_ENTITY_SKU": true
+            "CATALOG_PRODUCT_ENTITY_SKU": true,
+            "CATALOG_PRODUCT_ENTITY_TYPE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
