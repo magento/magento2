@@ -149,6 +149,18 @@ class Bundle
             $files = $this->utilityFiles->getFiles([$packageDir], '*.*');
         }
 
+        // Resolve each entry to its path pair, then sort. The list arrives either keyed by file id
+        // (from the map file) or from a filesystem scan, and Files::getFiles() globs with
+        // GLOB_NOSORT, so nothing above fixes an order. Bundle composition depends on that order
+        // twice over: files are packed into numbered bundles in iteration order, and
+        // hasMinVersion() only excludes an unminified file once it has seen the ".min." twin, so
+        // whether a file is bundled at all depends on which of the pair came first.
+        //
+        // Sorting therefore has to put the minified twin first. Ordering purely by path would put
+        // "widget.js" ahead of "widget.min.js" and bundle both: hasMinVersion()'s other exclusion
+        // path cannot compensate, because it checks isExist() on a package-relative path against a
+        // directory rooted at pub/static and so never matches.
+        $resolved = [];
         foreach ($files as $filePath => $sourcePath) {
             if (is_array($sourcePath)) {
                 $filePath = str_replace(Repository::FILE_ID_SEPARATOR, '/', $filePath);
@@ -162,6 +174,21 @@ class Bundle
                 $filePath = substr($sourcePath, strlen($area . '/' . $theme . '/' . $locale) + 1);
             }
 
+            $resolved[] = [$filePath, $sourcePath];
+        }
+        usort($resolved, static function (array $a, array $b) {
+            // Order by path, but keep a ".min." file ahead of its unminified twin. hasMinVersion()
+            // only excludes the twin it has already seen, so the minified one has to come first.
+            $aStem = str_replace('.min.', '.', $a[0]);
+            $bStem = str_replace('.min.', '.', $b[0]);
+            if ($aStem !== $bStem) {
+                return strcmp($aStem, $bStem);
+            }
+
+            return str_contains($a[0], '.min.') ? -1 : 1;
+        });
+
+        foreach ($resolved as [$filePath, $sourcePath]) {
             $contentType = $this->file->getPathInfo($filePath);
             if (!array_key_exists('extension', $contentType) ||
                 !in_array($contentType['extension'], self::$availableTypes)
