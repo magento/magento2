@@ -5,7 +5,8 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
-use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,5 +28,15 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
         $allOptions = $this->model->getAllOptions();
         $cachedAllOptions = $this->model->getAllOptions();
         $this->assertEquals($allOptions, $cachedAllOptions);
+    }
+
+    public function testUnassignedCountryOfManufactureText(): void
+    {
+        $product = Bootstrap::getObjectManager()->create(Product::class);
+        $attribute = $product->getResource()->getAttribute('country_of_manufacture');
+
+        $this->assertNull($product->getData('country_of_manufacture'));
+        $this->assertSame('', $product->getAttributeText('country_of_manufacture'));
+        $this->assertSame('', $attribute->getFrontend()->getValue($product));
     }
 }
