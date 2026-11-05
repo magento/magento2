@@ -487,6 +487,9 @@ define([
                 return null;
             }
 
+            oldNewFilePosition = tmpOldImage ? this._gallery.find('[data-role=image]:not(.removed)').index(
+                this._gallery.productGallery('findElement', tmpOldImage)
+            ) : 0;
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
 
@@ -513,7 +516,6 @@ define([
                 name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
             }).val(key);
 
-            oldNewFilePosition = parseInt(tmpOldImage.position, 10);
             imageData.position = oldNewFilePosition;
 
             this._gallery.trigger('setPosition', {
