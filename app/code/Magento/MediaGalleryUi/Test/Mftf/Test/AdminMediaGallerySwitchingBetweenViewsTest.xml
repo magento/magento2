@@ -55,6 +55,10 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGalleryLoadingMaskAfterOpen"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderInTree('wysiwyg')}}" stepKey="waitForFolderTreeLoadedInCategoryGallery"/>
+        <waitForText selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" userInput="{{NewGridView.name}}" stepKey="waitForSavedViewRestoredInBookmarks"/>
+        <waitForElementClickable selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="waitForBookmarkToggleClickableInCategoryGallery"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters2"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
             <argument name="selectView" value="{{DefaultGridView.name}}"/>
