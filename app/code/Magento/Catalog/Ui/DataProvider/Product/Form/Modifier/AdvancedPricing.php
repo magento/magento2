@@ -175,6 +175,25 @@ class AdvancedPricing extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        $product = $this->locator->getProduct();
+        $path = ($product->getId() ?? '') . '/' . self::DATA_SOURCE_DEFAULT . '/'
+            . ProductAttributeInterface::CODE_TIER_PRICE;
+        $tierPrices = $this->arrayManager->get($path, $data);
+        if (is_array($tierPrices) && !$this->isScopeGlobal()) {
+            // Tier prices of a website the product was removed from have no website option in the form.
+            $websiteIds = array_map('intval', (array)$product->getWebsiteIds());
+            $data = $this->arrayManager->set(
+                $path,
+                $data,
+                array_values(array_filter(
+                    $tierPrices,
+                    static fn ($row) => !isset($row['website_id'])
+                        || (int)$row['website_id'] === 0
+                        || in_array((int)$row['website_id'], $websiteIds, true)
+                ))
+            );
+        }
+
         return $data;
     }
 
