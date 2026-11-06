@@ -79,10 +79,6 @@
             <word>CHANGELOG</word>
         </item>
         <item>
-            <path>app/code/Magento/CatalogInventory/Model/ResourceModel/Stock/Item.php</path>
-            <word>CHANGELOG</word>
-        </item>
-        <item>
             <path>lib/web/hugerte/plugins/emoticons/js/emojis.min.js</path>
             <word>Enterprise</word>
         </item>
