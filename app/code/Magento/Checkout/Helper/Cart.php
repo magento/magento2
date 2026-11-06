@@ -7,25 +7,23 @@ namespace Magento\Checkout\Helper;
 
 /**
  * Shopping cart helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cart extends \Magento\Framework\Url\Helper\Data
 {
     /**
      * Path to controller to delete item from cart
      */
-    const DELETE_URL = 'checkout/cart/delete';
+    public const DELETE_URL = 'checkout/cart/delete';
 
     /**
      * Path for redirect to cart
      */
-    const XML_PATH_REDIRECT_TO_CART = 'checkout/cart/redirect_to_cart';
+    public const XML_PATH_REDIRECT_TO_CART = 'checkout/cart/redirect_to_cart';
 
     /**
      * Maximal coupon code length according to database table definitions (longer codes are truncated)
      */
-    const COUPON_CODE_MAX_LENGTH = 255;
+    public const COUPON_CODE_MAX_LENGTH = 255;
 
     /**
      * @var \Magento\Checkout\Model\Cart
@@ -69,7 +67,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param array $additional
-     * @return  string
+     * @return string
      */
     public function getAddUrl($product, $additional = [])
     {
