@@ -36,6 +36,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test price index calculation of BaseFinalPrice for websites with a non-default base currency.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BaseFinalPriceTest extends TestCase
 {
