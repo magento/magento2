@@ -61,6 +61,13 @@
         <plugin name="urlSignature" type="Magento\Theme\Model\Url\Plugin\Signature"/>
     </type>
     <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
+    <type name="Magento\Theme\Model\Config\Importer">
+        <arguments>
+            <argument name="themeFilesystemCollection" xsi:type="object">
+                Magento\Theme\Model\Theme\Data\Collection
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">
