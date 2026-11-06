@@ -307,6 +307,9 @@ class CustomerRepository implements CustomerRepositoryInterface
             }
             $savedAddressIds = [];
             foreach ($customer->getAddresses() as $address) {
+                if ($address->getId() && !in_array($address->getId(), $existingAddressIds)) {
+                    throw NoSuchEntityException::singleField('addressId', $address->getId());
+                }
                 $address->setCustomerId($customerId)
                     ->setRegion($address->getRegion());
                 $this->addressRepository->save($address);
