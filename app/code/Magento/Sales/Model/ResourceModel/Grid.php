@@ -133,7 +133,7 @@ class Grid extends AbstractGrid
     /**
      * Adds new orders to the grid.
      *
-     * Only orders created/updated since the last method call will be added.
+     * Missing rows and eligible timestamp mismatches are reconciled.
      *
      * @return void
      */
@@ -155,13 +155,6 @@ class Grid extends AbstractGrid
             foreach (array_chunk($notSyncedIds, self::BATCH_SIZE) as $bunch) {
                 $select = $this->getGridOriginSelect()->where($this->mainTableName . '.entity_id IN (?)', $bunch);
                 $fetchResult = $this->getConnection()->fetchAll($select);
-
-                foreach ($fetchResult as &$row) {
-                    if (array_key_exists('updated_at', $row)) {
-                        $row['updated_at'] = $cutoff;
-                    }
-                }
-                unset($row);
 
                 $this->getConnection()->insertOnDuplicate(
                     $this->getTable($this->gridTableName),
