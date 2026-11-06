@@ -214,7 +214,11 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      */
     public function registerShutdown()
     {
-        register_shutdown_function([$this, 'writeClose']);
+        // A WeakReference, so the shutdown function list does not keep this session alive until the process ends
+        $session = \WeakReference::create($this);
+        register_shutdown_function(static function () use ($session): void {
+            $session->get()?->writeClose();
+        });
     }
 
     /**
