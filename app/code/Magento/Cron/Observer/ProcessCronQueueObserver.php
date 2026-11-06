@@ -842,10 +842,12 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @param array $jobsRoot
      * @param int $currentTime
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processPendingJobs(string $groupId, array $jobsRoot, int $currentTime): void
     {
         $processedJobs = [];
+        $lockFailedJobs = [];
         $pendingJobs = $this->getPendingSchedules($groupId);
         /** @var Schedule $schedule */
         foreach ($pendingJobs as $schedule) {
@@ -870,7 +872,10 @@ class ProcessCronQueueObserver implements ObserverInterface
                     $processedJobs[$jobCode] = true;
                 }
             } catch (CronException $e) {
-                $this->logger->warning($e->getMessage());
+                if (!isset($lockFailedJobs[$jobCode])) {
+                    $this->logger->warning($e->getMessage());
+                    $lockFailedJobs[$jobCode] = true;
+                }
                 continue;
             } catch (\Exception $e) {
                 $this->processError($schedule, $e);
