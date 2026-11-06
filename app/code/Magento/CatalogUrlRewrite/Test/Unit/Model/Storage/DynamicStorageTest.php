@@ -755,21 +755,24 @@ class DynamicStorageTest extends TestCase
 
     /**
      * Test prepareSelect with category_id in metadata
+     *
+     * @param string|array $categoryId
      */
-    public function testPrepareSelectWithCategoryMetadata(): void
+    #[DataProvider('categoryMetadataDataProvider')]
+    public function testPrepareSelectWithCategoryMetadata($categoryId): void
     {
         $data = [
             UrlRewrite::ENTITY_TYPE => 'product',
             UrlRewrite::STORE_ID => 1,
-            UrlRewrite::METADATA => ['category_id' => '5']
+            UrlRewrite::METADATA => ['category_id' => $categoryId]
         ];
 
+        $categoryConditions = [];
         $this->selectMock->expects($this->atLeastOnce())
             ->method('where')
-            ->willReturnCallback(function ($condition, $value = null) {
-                // Verify that category_id condition is applied
-                if ($condition === 'relation.category_id = ?') {
-                    $this->assertEquals('5', $value);
+            ->willReturnCallback(function ($condition, $value = null) use (&$categoryConditions) {
+                if (str_starts_with($condition, 'relation.category_id')) {
+                    $categoryConditions[] = [$condition, $value];
                 }
                 return $this->selectMock;
             });
@@ -777,6 +780,43 @@ class DynamicStorageTest extends TestCase
         $method = new ReflectionMethod($this->object, 'prepareSelect');
         $result = $method->invoke($this->object, $data);
         $this->assertInstanceOf(Select::class, $result);
+        $this->assertSame([['relation.category_id IN (?)', $categoryId]], $categoryConditions);
+    }
+
+    /**
+     * @return array
+     */
+    public static function categoryMetadataDataProvider(): array
+    {
+        return [
+            'single category' => ['5'],
+            'multiple categories' => [['5', '7']],
+        ];
+    }
+
+    /**
+     * Test prepareSelect with empty category_id in metadata sets category_id IS NULL
+     */
+    public function testPrepareSelectWithEmptyCategoryMetadata(): void
+    {
+        $data = [
+            UrlRewrite::ENTITY_TYPE => 'product',
+            UrlRewrite::STORE_ID => 1,
+            UrlRewrite::METADATA => ['category_id' => []]
+        ];
+
+        $whereConditions = [];
+        $this->selectMock->expects($this->atLeastOnce())
+            ->method('where')
+            ->willReturnCallback(function ($condition) use (&$whereConditions) {
+                $whereConditions[] = $condition;
+                return $this->selectMock;
+            });
+
+        $method = new ReflectionMethod($this->object, 'prepareSelect');
+        $method->invoke($this->object, $data);
+        $this->assertContains('relation.category_id IS NULL', $whereConditions);
+        $this->assertNotContains('relation.category_id IN (?)', $whereConditions);
     }
 
     /**
