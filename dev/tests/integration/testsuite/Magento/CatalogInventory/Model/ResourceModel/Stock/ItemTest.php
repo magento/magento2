@@ -393,15 +393,29 @@ class ItemTest extends TestCase
     {
         $sku = DataFixtureStorageManager::getStorage()->get('simple')->getSku();
         $this->updateMview();
-        $changelog = $this->objectManager->get(PriceProcessor::class)->getIndexer()->getView()->getChangelog();
-        $versionBefore = $changelog->getVersion();
+        $queuedBefore = $this->getQueuedPriceReindexCount();
 
         $stockRegistry = $this->objectManager->get(StockRegistryInterface::class);
         $stockItem = $stockRegistry->getStockItemBySku($sku);
         $stockItem->setQty((float)$stockItem->getQty() + 5);
         $stockRegistry->updateStockItemBySku($sku, $stockItem);
 
-        $this->assertEquals($versionBefore, $changelog->getVersion());
+        $this->assertEquals($queuedBefore, $this->getQueuedPriceReindexCount());
+    }
+
+    /**
+     * Get the number of rows queued for the scheduled price reindex
+     *
+     * @return int
+     */
+    private function getQueuedPriceReindexCount(): int
+    {
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+
+        return (int)$connection->fetchOne(
+            $connection->select()->from($resource->getTableName('catalog_product_price_cl'), 'COUNT(*)')
+        );
     }
 
     /**
@@ -421,7 +435,7 @@ class ItemTest extends TestCase
     }
 
     /**
-     * Process the indexer changelogs the same way the indexer_update_all_views cron job does
+     * Process the queued indexer updates the same way the indexer_update_all_views cron job does
      *
      * @return void
      */
