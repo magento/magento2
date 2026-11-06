@@ -19,7 +19,7 @@ class Sequence implements SequenceInterface
     /**
      * Default pattern for Sequence
      */
-    const DEFAULT_PATTERN  = "%s%'.09d%s";
+    public const DEFAULT_PATTERN  = "%s%'.09d%s";
 
     /**
      * @var string
@@ -90,11 +90,47 @@ class Sequence implements SequenceInterface
     /**
      * Calculate current value depends on start value
      *
-     * @return string
+     * Returns the numeric part of the current value, before prefix, suffix and pattern are applied.
+     *
+     * @return int|null Null until a value has been generated
      */
-    private function calculateCurrentValue()
+    public function calculateCurrentValue(): ?int
     {
+        if (!isset($this->lastIncrementId)) {
+            return null;
+        }
+
         return ($this->lastIncrementId - $this->meta->getActiveProfile()->getStartValue())
         * $this->meta->getActiveProfile()->getStep() + $this->meta->getActiveProfile()->getStartValue();
+    }
+
+    /**
+     * Retrieve entity type the sequence generates values for
+     *
+     * @return string
+     */
+    public function getEntityType(): string
+    {
+        return (string)$this->meta->getData('entity_type');
+    }
+
+    /**
+     * Retrieve store ID the sequence generates values for
+     *
+     * @return int
+     */
+    public function getStoreId(): int
+    {
+        return (int)$this->meta->getData('store_id');
+    }
+
+    /**
+     * Retrieve active profile holding prefix, suffix, start value and step
+     *
+     * @return Profile
+     */
+    public function getMetaProfile(): Profile
+    {
+        return $this->meta->getActiveProfile();
     }
 }
