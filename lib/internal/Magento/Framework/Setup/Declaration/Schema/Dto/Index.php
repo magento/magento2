@@ -25,6 +25,11 @@ class Index extends GenericElement implements
     const FULLTEXT_INDEX = "fulltext";
 
     /**
+     * Storage engine, that silently stores HASH indexes as BTREE.
+     */
+    private const INNODB_ENGINE = 'innodb';
+
+    /**
      * @var Table
      */
     private $table;
@@ -95,8 +100,25 @@ class Index extends GenericElement implements
         return [
             'type' => $this->getType(),
             'columns' => $this->getColumnNames(),
-            'indexType' => $this->getIndexType()
+            'indexType' => $this->getComparableIndexType()
         ];
+    }
+
+    /**
+     * Get index type as it is stored by the table engine.
+     *
+     * InnoDB accepts HASH indexes but creates them as BTREE, so both declarations are equal for InnoDB tables.
+     *
+     * @return string
+     */
+    private function getComparableIndexType(): string
+    {
+        $indexType = (string)$this->getIndexType();
+        if (strtolower($indexType) === 'hash' && $this->table->getEngine() === self::INNODB_ENGINE) {
+            return 'btree';
+        }
+
+        return $indexType;
     }
 
     /**
