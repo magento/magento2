@@ -5,7 +5,8 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
@@ -26,8 +27,5 @@
                 <item name="copyright" xsi:type="string">design/footer/copyright</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Data\Collection">
-        <plugin name="currentPageDetection" disabled="true"/>
     </type>
 </config>
