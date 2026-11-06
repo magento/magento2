@@ -43,10 +43,8 @@ class UpdateHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = []): ProductInterface
     {
-        $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
-
-        if ($samples && $entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
-            $this->updateSamples($entity, $samples);
+        if ($entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
+            $this->updateSamples($entity);
         }
 
         return $entity;
@@ -56,20 +54,22 @@ class UpdateHandler implements ExtensionInterface
      * Update product samples
      *
      * @param ProductInterface $entity
-     * @param array $samples
      * @return void
      */
-    private function updateSamples(ProductInterface $entity, array $samples): void
+    private function updateSamples(ProductInterface $entity): void
     {
         $isGlobalScope = (int) $entity->getStoreId() === self::GLOBAL_SCOPE_ID;
+        $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
         $oldSamples = $this->sampleRepository->getList($entity->getSku());
 
-        $updatedSamples = [];
-        foreach ($samples as $sample) {
-            if ($sample->getId()) {
-                $updatedSamples[$sample->getId()] = true;
+        if (!empty($samples)) {
+            $updatedSamples = [];
+            foreach ($samples as $sample) {
+                if ($sample->getId()) {
+                    $updatedSamples[$sample->getId()] = true;
+                }
+                $this->sampleRepository->save($entity->getSku(), $sample, $isGlobalScope);
             }
-            $this->sampleRepository->save($entity->getSku(), $sample, $isGlobalScope);
         }
 
         foreach ($oldSamples as $sample) {
