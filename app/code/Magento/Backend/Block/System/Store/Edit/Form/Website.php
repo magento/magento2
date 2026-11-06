@@ -96,18 +96,20 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 $websiteModel->getId()
             )->toOptionArray();
 
-            $fieldset->addField(
-                'website_default_group_id',
-                'select',
-                [
-                    'name' => 'website[default_group_id]',
-                    'label' => __('Default Store'),
-                    'value' => $websiteModel->getDefaultGroupId(),
-                    'values' => $groups,
-                    'required' => false,
-                    'disabled' => $websiteModel->isReadOnly()
-                ]
-            );
+            if ($groups) {
+                $fieldset->addField(
+                    'website_default_group_id',
+                    'select',
+                    [
+                        'name' => 'website[default_group_id]',
+                        'label' => __('Default Store'),
+                        'value' => $websiteModel->getDefaultGroupId(),
+                        'values' => $groups,
+                        'required' => false,
+                        'disabled' => $websiteModel->isReadOnly()
+                    ]
+                );
+            }
         }
 
         $hasOnlyDefaultStore = $websiteModel->getStoresCount() == 1 &&
