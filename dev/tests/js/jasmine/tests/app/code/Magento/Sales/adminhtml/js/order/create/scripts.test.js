@@ -258,6 +258,40 @@ define([
             expect(order.loadArea).toHaveBeenCalled();
         });
 
+        describe('Testing the shipping and payment method reload links', function () {
+            it('Shipping reload link has no inline handler and loads shipping rates on click', function () {
+                var link,
+                    clickEvent = $.Event('click');
+
+                init();
+                spyOn(order, 'loadShippingRates');
+                order.resetShippingMethod();
+                link = $('#order-shipping_method a.action-default');
+
+                expect(link.length).toEqual(1);
+                expect(link.attr('onclick')).toBeUndefined();
+                link.trigger(clickEvent);
+                expect(order.loadShippingRates).toHaveBeenCalledTimes(1);
+                expect(clickEvent.isDefaultPrevented()).toBeTrue();
+            });
+
+            it('Payment reload link has no inline handler and loads payment methods on click', function () {
+                var link,
+                    clickEvent = $.Event('click');
+
+                init();
+                spyOn(order, 'loadPaymentMethods');
+                order.resetPaymentMethod();
+                link = $('#order-billing_method a.action-default');
+
+                expect(link.length).toEqual(1);
+                expect(link.attr('onclick')).toBeUndefined();
+                link.trigger(clickEvent);
+                expect(order.loadPaymentMethods).toHaveBeenCalledTimes(1);
+                expect(clickEvent.isDefaultPrevented()).toBeTrue();
+            });
+        });
+
         describe('Testing the process customer group change', function () {
             it('and confirm method is called', function () {
                 init();
