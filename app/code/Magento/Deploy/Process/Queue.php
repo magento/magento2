@@ -241,6 +241,11 @@ class Queue
                             $packages,
                             $packages[$dependencyName]
                         );
+                        // In parallel mode the dependency has only been started (forked), or not started at all:
+                        // the package waits for the next pass until the dependency is deployed.
+                        if (!$this->isDeployed($dependency)) {
+                            $dependenciesNotFinished = true;
+                        }
                     }
                 }
             }
