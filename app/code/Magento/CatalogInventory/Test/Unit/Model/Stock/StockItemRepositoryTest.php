@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterface;
 use Magento\CatalogInventory\Api\Data\StockItemCollectionInterfaceFactory;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
@@ -139,6 +140,8 @@ class StockItemRepositoryTest extends TestCase
                 'setIsInStock',
                 'getIsInStock',
                 'getStockStatusChangedAuto',
+                'hasStockStatusChangedAuto',
+                'isObjectNew',
                 'getManageStock',
                 'setLowStockDate',
                 'setStockStatusChangedAuto',
@@ -466,6 +469,69 @@ class StockItemRepositoryTest extends TestCase
                 'existingStockItemMockConfig' => [
                 ],
             ]
+        ];
+    }
+
+    /**
+     * A composite product's stock item is created implicitly and records no merchant decision, so it must
+     * start under automatic control.
+     *
+     * @param bool $isObjectNew
+     * @param bool $hasFlag
+     * @param bool $hasStockStatus
+     * @param bool $expectMarked
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    #[DataProvider('compositeStockItemDataProvider')]
+    public function testSaveMarksNewCompositeStockItemAsAutomaticallyMaintained(
+        bool $isObjectNew,
+        bool $hasFlag,
+        bool $hasStockStatus,
+        bool $expectMarked
+    ): void {
+        $productId = 1;
+        if ($hasStockStatus) {
+            $this->stockItemMock->setData(StockItemInterface::IS_IN_STOCK, false);
+        }
+
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
+        $this->stockConfigurationMock->expects($this->once())
+            ->method('isQty')
+            ->with('configurable')
+            ->willReturn(false);
+
+        $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
+        $this->stockItemMock->expects($this->once())->method('setQty')->with(0)->willReturnSelf();
+        $this->stockItemMock->expects($this->any())->method('isObjectNew')->willReturn($isObjectNew);
+        $this->stockItemMock->expects($this->any())->method('hasStockStatusChangedAuto')->willReturn($hasFlag);
+        $this->stockItemMock->expects($expectMarked ? $this->once() : $this->never())
+            ->method('setStockStatusChangedAuto')
+            ->with(1);
+        $this->stockItemMock->expects($this->any())->method('getWebsiteId')->willReturn(1);
+        $this->stockItemMock->expects($this->any())->method('getStockId')->willReturn(1);
+        $this->stockItemMock->expects($this->once())->method('setWebsiteId')->with(1)->willReturnSelf();
+        $this->stockItemMock->expects($this->once())->method('setStockId')->with(1)->willReturnSelf();
+
+        $this->stockItemResourceMock->expects($this->once())
+            ->method('save')
+            ->with($this->stockItemMock)
+            ->willReturnSelf();
+
+        $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
+    }
+
+    /**
+     * @return array
+     */
+    public static function compositeStockItemDataProvider(): array
+    {
+        return [
+            'new item under no merchant decision is marked' => [true, false, false, true],
+            'new item with an explicit automatic flag is left alone' => [true, true, false, false],
+            'new item with an explicit stock status is left alone' => [true, false, true, false],
+            'existing item is left alone' => [false, false, false, false],
         ];
     }
 

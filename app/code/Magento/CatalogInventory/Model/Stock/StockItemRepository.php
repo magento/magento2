@@ -187,6 +187,7 @@ class StockItemRepository implements StockItemRepositoryInterface
                 }
             } else {
                 $stockItem->setQty(0);
+                $this->markImplicitStockItemAsAutomatic($stockItem);
             }
 
             $stockItem->setWebsiteId($stockItem->getWebsiteId());
@@ -198,6 +199,26 @@ class StockItemRepository implements StockItemRepositoryInterface
             throw new CouldNotSaveException(__('The stock item was unable to be saved. Please try again.'), $exception);
         }
         return $stockItem;
+    }
+
+    /**
+     * Put an implicitly created stock item of a product without qty (a composite) under automatic control
+     *
+     * A composite product's stock status is derived from its children. An implicitly created stock item records no
+     * merchant decision, so it must start under automatic control, otherwise ChangeParentStockStatus can never move
+     * the parent back in stock. An explicit stock status on create is a merchant decision and is left alone.
+     *
+     * @param StockItemInterface $stockItem
+     * @return void
+     */
+    private function markImplicitStockItemAsAutomatic(StockItemInterface $stockItem): void
+    {
+        if ($stockItem->isObjectNew()
+            && !$stockItem->hasStockStatusChangedAuto()
+            && !$stockItem->hasData(StockItemInterface::IS_IN_STOCK)
+        ) {
+            $stockItem->setStockStatusChangedAuto(1);
+        }
     }
 
     /**
