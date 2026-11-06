@@ -20,6 +20,46 @@ define([
             $pageMainActions.remove();
         });
 
+        describe('ajax "beforeSend" callback', function () {
+            var beforeSend = function (settings) {
+                $.ajaxSettings.beforeSend({}, settings);
+
+                return settings;
+            };
+
+            it('should not append form_key to a JSON request body', function () {
+                var body = JSON.stringify({'form_key': 'abc', 'qty': 1}),
+                    settings = beforeSend({
+                        url: '/rest/V1/test',
+                        contentType: 'application/json',
+                        data: body
+                    });
+
+                expect(settings.data).toBe(body);
+            });
+
+            it('should not corrupt a JSON request body without form_key', function () {
+                var body = JSON.stringify({'qty': 1}),
+                    settings = beforeSend({
+                        url: '/rest/V1/test',
+                        contentType: 'application/json; charset=UTF-8',
+                        data: body
+                    });
+
+                expect(settings.data).toBe(body);
+            });
+
+            it('should append form_key to a url-encoded string body', function () {
+                var settings = beforeSend({
+                    url: '/test',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: 'a=1'
+                });
+
+                expect(settings.data).toMatch(/^a=1&form_key=/);
+            });
+        });
+
         describe('"sendPostponeRequest" method', function () {
             it('should insert "Error" notification if request failed', function () {
                 var data = {
