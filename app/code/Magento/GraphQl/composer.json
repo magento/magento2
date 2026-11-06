@@ -11,7 +11,8 @@
         "webonyx/graphql-php": "^15.0"
     },
     "suggest": {
-        "magento/module-graph-ql-cache": "*"
+        "magento/module-graph-ql-cache": "*",
+        "magento/module-indexer": "*"
     },
     "license": [
         "OSL-3.0",
