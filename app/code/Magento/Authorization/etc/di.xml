@@ -26,4 +26,12 @@
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
     <preference for="Magento\Framework\App\Backpressure\IdentityProviderInterface"
                 type="Magento\Authorization\Model\IdentityProvider"/>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="adminRolesListCommand"
+                      xsi:type="object">Magento\Authorization\Command\AdminRolesListCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
