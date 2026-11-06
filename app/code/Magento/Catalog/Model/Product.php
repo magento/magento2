@@ -655,7 +655,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get product status
      *
-     * @return int
+     * @return int|string
      */
     public function getStatus()
     {
