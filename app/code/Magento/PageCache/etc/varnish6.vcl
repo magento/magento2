@@ -164,6 +164,14 @@ sub vcl_backend_response {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
+    # Do not cache a missing static or media file, it can exist moments later (merged CSS/JS is written on page render)
+    if (beresp.status == 404 && bereq.url ~ "^/(pub/)?(media|static)/") {
+        set beresp.ttl = 0s;
+        set beresp.grace = 0s;
+        set beresp.uncacheable = true;
+        return (deliver);
+    }
+
     # cache only successfully responses and 404s that are not marked as private
     if ((beresp.status != 200 && beresp.status != 404) || beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
@@ -220,6 +228,13 @@ sub vcl_deliver {
 
     # Not letting browser to cache non-static files.
     if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
+        set resp.http.Pragma = "no-cache";
+        set resp.http.Expires = "-1";
+        set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
+    }
+
+    # Not letting CDNs and browsers cache a missing static or media file
+    if (resp.status == 404 && req.url ~ "^/(pub/)?(media|static)/") {
         set resp.http.Pragma = "no-cache";
         set resp.http.Expires = "-1";
         set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
