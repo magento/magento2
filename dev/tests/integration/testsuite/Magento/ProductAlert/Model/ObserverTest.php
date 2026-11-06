@@ -62,12 +62,14 @@ class ObserverTest extends TestCase
      */
     private function assertProcessAlertByConsumer(): void
     {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+
         /** @var PublisherConsumerController $publisherConsumerController */
         $publisherConsumerController = Bootstrap::getObjectManager()->create(
             PublisherConsumerController::class,
             [
                 'consumers' => ['product_alert'],
-                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'logFilePath' => $settings->get('TESTS_TEMP_DIR') . '/MessageQueueTestLog.txt',
                 'maxMessages' => 1,
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]

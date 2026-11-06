@@ -38,9 +38,16 @@ class Logger extends Monolog
         array $handlers = [],
         array $processors = []
     ) {
-        $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL')
-            ? TESTS_ERROR_LOG_LISTENER_LEVEL
-            : -1;
+        $envLevel = getenv('TESTS_ERROR_LOG_LISTENER_LEVEL');
+
+        if ($envLevel === false) {
+            $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL')
+                ? TESTS_ERROR_LOG_LISTENER_LEVEL
+                : -1;
+        } else {
+            $this->minimumErrorLevel = $envLevel;
+        }
+
         parent::__construct($name, $handlers, $processors);
     }
 

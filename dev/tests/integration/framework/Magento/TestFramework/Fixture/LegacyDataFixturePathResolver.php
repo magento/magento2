@@ -10,6 +10,7 @@ namespace Magento\TestFramework\Fixture;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Fixture path resolver for file based data fixture
@@ -42,7 +43,8 @@ class LegacyDataFixturePathResolver
         if ($this->isModuleAnnotation($fixture)) {
             $filePath = $this->getModulePath($fixture);
         } else {
-            $filePath = INTEGRATION_TESTS_DIR . '/testsuite/' . $fixture;
+            $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+            $filePath = $settings->get('INTEGRATION_TESTS_DIR') . '/testsuite/' . $fixture;
         }
 
         return $filePath;
