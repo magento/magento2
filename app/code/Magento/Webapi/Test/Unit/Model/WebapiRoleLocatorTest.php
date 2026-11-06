@@ -11,121 +11,143 @@ use Magento\Authorization\Model\CompositeUserContext;
 use Magento\Authorization\Model\ResourceModel\Role\Collection as RoleCollection;
 use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\Role;
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Model\WebapiRoleLocator;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class WebapiRoleLocatorTest extends TestCase
 {
     /**
      * @var WebapiRoleLocator
      */
-    protected $locator;
+    private $locator;
 
     /**
-     * @var ObjectManager
+     * @var CompositeUserContext|Stub
      */
-    protected $objectManager;
+    private $userContext;
 
     /**
-     * @var UserContextInterface
+     * @var RoleCollectionFactory|Stub
      */
-    protected $userContext;
+    private $roleCollectionFactory;
 
     /**
-     * @var RoleCollectionFactory
+     * @var array<string, int|null>
      */
-    protected $roleCollectionFactory;
+    private array $rolesByUser = [];
 
     /**
-     * @var RoleCollection
+     * @var int
      */
-    protected $roleCollection;
+    private int $userId = 0;
 
     /**
-     * @var Role
+     * @var int
      */
-    protected $role;
+    private int $userType = 0;
 
     /**
-     * @var ObjectManager
+     * @var int
      */
-    private $_objectManager;
+    private int $roleQueries = 0;
 
     protected function setUp(): void
     {
-        $this->_objectManager = new ObjectManager($this);
+        $this->userContext = $this->createStub(CompositeUserContext::class);
+        $this->userContext->method('getUserId')->willReturnCallback(fn () => $this->userId);
+        $this->userContext->method('getUserType')->willReturnCallback(fn () => $this->userType);
+        $this->roleCollectionFactory = $this->createStub(RoleCollectionFactory::class);
+        $this->roleCollectionFactory->method('create')
+            ->willReturnCallback(fn () => $this->createRoleCollection());
 
-        $userId = 'userId';
-        $userType = 'userType';
+        $this->locator = new WebapiRoleLocator($this->userContext, $this->roleCollectionFactory);
+    }
 
-        $this->userContext = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUserId', 'getUserType'])
-            ->getMock();
-        $this->userContext->expects($this->once())
-            ->method('getUserId')
-            ->willReturn($userId);
-        $this->userContext->expects($this->once())
-            ->method('getUserType')
-            ->willReturn($userType);
+    public function testNoRoleId(): void
+    {
+        $this->setUser(5, 2);
+        $this->rolesByUser = ['2|5' => null];
 
-        $this->roleCollectionFactory = $this->getMockBuilder(
-            \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->onlyMethods(['create'])->getMock();
+        $this->assertNull($this->locator->getAclRoleId());
+    }
 
-        $this->roleCollection = $this->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setUserFilter', 'getFirstItem'])
-            ->getMock();
-        $this->roleCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->roleCollection);
-        $this->roleCollection->expects($this->once())
-            ->method('setUserFilter')
-            ->with($userId, $userType)
-            ->willReturn($this->roleCollection);
+    public function testGetAclRoleId(): void
+    {
+        $this->setUser(5, 2);
+        $this->rolesByUser = ['2|5' => 9];
 
-        $this->role = $this->getMockBuilder(Role::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getId', '__wakeup'])
-            ->getMock();
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+    }
 
-        $this->roleCollection->expects($this->once())
-            ->method('getFirstItem')
-            ->willReturn($this->role);
+    public function testRoleIdIsLoadedOncePerUser(): void
+    {
+        $this->setUser(5, 2);
+        $this->rolesByUser = ['2|5' => 9];
 
-        $this->locator = $this->_objectManager->getObject(
-            WebapiRoleLocator::class,
-            [
-                'userContext' => $this->userContext,
-                'roleCollectionFactory' => $this->roleCollectionFactory
-            ]
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->assertSame(1, $this->roleQueries);
+    }
+
+    public function testMissingRoleIsLoadedAgainOnNextCall(): void
+    {
+        $this->setUser(5, 2);
+        $this->rolesByUser = ['2|5' => null];
+
+        $this->assertNull($this->locator->getAclRoleId());
+        $this->rolesByUser = ['2|5' => 9];
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->assertSame(2, $this->roleQueries);
+    }
+
+    public function testRoleIdIsResolvedPerUserIdAndType(): void
+    {
+        $this->rolesByUser = ['2|5' => 9, '1|5' => 12, '2|6' => 15];
+
+        $this->setUser(5, 2);
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->setUser(5, 1);
+        $this->assertEquals(12, $this->locator->getAclRoleId());
+        $this->setUser(6, 2);
+        $this->assertEquals(15, $this->locator->getAclRoleId());
+        $this->setUser(5, 2);
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->assertSame(3, $this->roleQueries);
+    }
+
+    public function testResetStateDropsLoadedRoleIds(): void
+    {
+        $this->setUser(5, 2);
+        $this->rolesByUser = ['2|5' => 9];
+
+        $this->assertEquals(9, $this->locator->getAclRoleId());
+        $this->locator->_resetState();
+        $this->rolesByUser = ['2|5' => 10];
+        $this->assertEquals(10, $this->locator->getAclRoleId());
+        $this->assertSame(2, $this->roleQueries);
+    }
+
+    private function setUser(int $userId, int $userType): void
+    {
+        $this->userId = $userId;
+        $this->userType = $userType;
+    }
+
+    private function createRoleCollection(): RoleCollection
+    {
+        $this->roleQueries++;
+        $role = $this->createStub(Role::class);
+        $collection = $this->createStub(RoleCollection::class);
+        $collection->method('setUserFilter')->willReturnCallback(
+            function ($userId, $userType) use ($collection, $role) {
+                $role->method('getId')->willReturn($this->rolesByUser[$userType . '|' . $userId] ?? null);
+                return $collection;
+            }
         );
-    }
+        $collection->method('getFirstItem')->willReturn($role);
 
-    public function testNoRoleId()
-    {
-        $this->role->expects($this->once())
-            ->method('getId')
-            ->willReturn(null);
-
-        $this->assertEquals('', $this->locator->getAclRoleId());
-    }
-
-    public function testGetAclRoleId()
-    {
-        $roleId = 9;
-
-        $this->role->expects($this->exactly(2))
-            ->method('getId')
-            ->willReturn($roleId);
-
-        $this->assertEquals($roleId, $this->locator->getAclRoleId());
+        return $collection;
     }
 }
