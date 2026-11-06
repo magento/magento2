@@ -14,11 +14,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\TypeTransitionManager;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogAttribute;
 use Magento\Catalog\Model\ResourceModel\Product\Action;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\Entity\Context;
@@ -27,6 +29,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -105,6 +108,11 @@ class ActionTest extends TestCase
     private $productCollectionMock;
 
     /**
+     * @var AbstractAttribute[]
+     */
+    private $attributeMocks = [];
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -154,7 +162,7 @@ class ActionTest extends TestCase
                     if ($code === 'has_weight' || $code === ProductAttributeInterface::CODE_HAS_WEIGHT) {
                         return $hasWeightAttributeMock;
                     }
-                    return $updatedAtAttributeMock;
+                    return $this->attributeMocks[$code] ?? $updatedAtAttributeMock;
                 }
             );
 
@@ -274,6 +282,112 @@ class ActionTest extends TestCase
                 array_slice(static::ENTITY_IDS, 2, 2)
             ]
         ];
+    }
+
+    /**
+     * @param bool $hasSingleStore
+     * @param string $backendType
+     * @param int $expectedDeletes
+     * @return void
+     */
+    #[DataProvider('updateAttributesStoreValuesCleanupDataProvider')]
+    public function testUpdateAttributesStoreValuesCleanup(
+        bool $hasSingleStore,
+        string $backendType,
+        int $expectedDeletes
+    ): void {
+        $table = $this->prepareSingleStoreScenario($hasSingleStore, $backendType);
+
+        $this->connectionMock->expects($this->exactly($expectedDeletes))
+            ->method('delete')
+            ->with(
+                $table,
+                [
+                    'attribute_id = ?' => 97,
+                    'entity_id IN (?)' => static::ENTITY_IDS,
+                    'store_id <> ?' => 0,
+                ]
+            );
+        $this->connectionMock->expects($this->once())
+            ->method('insertOnDuplicate');
+
+        $this->model->updateAttributes(static::ENTITY_IDS, ['nrsweep_attribute' => 1], 0);
+    }
+
+    /**
+     * @return array
+     */
+    public static function updateAttributesStoreValuesCleanupDataProvider(): array
+    {
+        return [
+            'single store, eav attribute' => [true, 'int', 1],
+            'multiple stores, eav attribute' => [false, 'int', 0],
+            'single store, static attribute' => [true, 'static', 0],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdateAttributesDeletesStoreValuesPerSavedBatch(): void
+    {
+        $table = $this->prepareSingleStoreScenario(true, 'int');
+        $entityIds = range(1, 1001);
+        $deletedEntityIds = [];
+
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturnCallback(
+                function (string $deleteTable, array $where) use ($table, &$deletedEntityIds): int {
+                    $this->assertSame($table, $deleteTable);
+                    $deletedEntityIds[] = $where['entity_id IN (?)'];
+                    return count($where['entity_id IN (?)']);
+                }
+            );
+
+        $this->model->updateAttributes($entityIds, ['nrsweep_attribute' => 1], 0);
+
+        $this->assertSame([range(1, 1000), [1001]], $deletedEntityIds);
+    }
+
+    /**
+     * @param bool $hasSingleStore
+     * @param string $backendType
+     * @return string
+     */
+    private function prepareSingleStoreScenario(bool $hasSingleStore, string $backendType): string
+    {
+        $table = $backendType === 'static' ? 'catalog_product_entity' : 'catalog_product_entity_int';
+        $this->prepareAdapter();
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn([self::STUB_PRIMARY_KEY => ['COLUMNS_LIST' => ['entity_id']]]);
+        $column = ['DATA_TYPE' => 'int', 'NULLABLE' => true];
+        $this->connectionMock->method('describeTable')
+            ->willReturn(['entity_id' => $column, 'value' => $column, 'nrsweep_attribute' => $column]);
+
+        $store = $this->createMock(StoreInterface::class);
+        $store->method('getId')->willReturn(0);
+        $this->storeManagerMock->method('getStore')->willReturn($store);
+        $this->storeManagerMock->method('hasSingleStore')->willReturn($hasSingleStore);
+
+        $backend = $this->createMock(AbstractBackend::class);
+        $backend->method('getTable')->willReturn($table);
+        $attribute = $this->createPartialMock(CatalogAttribute::class, ['getBackend', 'getBackendTable']);
+        $attribute->method('getBackend')->willReturn($backend);
+        $attribute->method('getBackendTable')->willReturn($table);
+        $attribute->setData(
+            [
+                'attribute_id' => 97,
+                'attribute_code' => 'nrsweep_attribute',
+                'backend_type' => $backendType,
+                'is_global' => CatalogAttribute::SCOPE_GLOBAL,
+            ]
+        );
+        $attribute->setId(97);
+        $this->attributeMocks['nrsweep_attribute'] = $attribute;
+
+        return $table;
     }
 
     /**
