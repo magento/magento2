@@ -12,8 +12,10 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Translate\InlineInterface;
@@ -507,5 +509,45 @@ class MessagePluginTest extends TestCase
             ->willReturn($cookieMetadataMock);
 
         $this->model->afterRenderResult($resultMock, $resultMock);
+    }
+
+    public function testAfterRenderResultKeepsMessagesInSessionWhenNewMessagesExceedCookieSize(): void
+    {
+        $existingMessages = [
+            ['type' => 'message0type', 'text' => 'message0text'],
+        ];
+        /** @var Redirect|MockObject $resultMock */
+        $resultMock = $this->createMock(Redirect::class);
+        $this->cookieMetadataFactoryMock->method('createPublicCookieMetadata')
+            ->willReturn($this->createMock(PublicCookieMetadata::class));
+        $this->cookieManagerMock->method('getCookie')
+            ->with(MessagePlugin::MESSAGES_COOKIES_NAME)
+            ->willReturn(json_encode($existingMessages));
+        $this->serializerMock->method('unserialize')
+            ->willReturnCallback(fn ($data) => json_decode($data, true));
+        $this->serializerMock->method('serialize')
+            ->willReturnCallback(fn ($data) => json_encode($data));
+        $this->cookieManagerMock->expects($this->exactly(2))
+            ->method('setPublicCookie')
+            ->willThrowException(new CookieSizeLimitReachedException(new Phrase('Too big')));
+
+        /** @var MessageInterface|MockObject $messageMock */
+        $messageMock = $this->createMock(MessageInterface::class);
+        $messageMock->method('getType')->willReturn('error');
+        $this->interpretationStrategyMock->method('interpret')
+            ->with($messageMock)
+            ->willReturn(str_repeat('x', 5000));
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->method('getItems')->willReturn([$messageMock]);
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+        $this->managerMock->expects($this->once())
+            ->method('addMessages')
+            ->with([$messageMock]);
+
+        $this->assertSame($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 }
