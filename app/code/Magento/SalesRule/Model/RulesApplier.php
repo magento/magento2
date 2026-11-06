@@ -198,9 +198,6 @@ class RulesApplier
         }
         $ruleCoupon = $this->selectRuleCoupon->execute($rule, $couponCodes);
         if ($ruleCoupon) {
-            if ($rule->getDescription()) {
-                return $rule->getDescription();
-            }
             return $ruleCoupon;
         }
         return '';

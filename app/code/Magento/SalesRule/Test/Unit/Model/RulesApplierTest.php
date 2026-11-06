@@ -221,35 +221,121 @@ class RulesApplierTest extends TestCase
     }
 
     /**
+     * @param string $storeLabel
+     * @param string|null $selectedCoupon
+     * @param string|null $ruleDescription
+     * @param array $couponCodes
+     * @param array $expected
      * @return void
      */
-    public function testAddCouponDescriptionWithRuleDescriptionIsUsed(): void
+    #[DataProvider('discountDescriptionProvider')]
+    public function testAddDiscountDescription(
+        string $storeLabel,
+        ?string $selectedCoupon,
+        ?string $ruleDescription,
+        array $couponCodes,
+        array $expected
+    ): void {
+        $address = $this->getDescriptionAddress();
+        $rule = $this->getDescriptionRule(1, $storeLabel, $ruleDescription);
+        $this->selectRuleCouponMock->method('execute')->willReturnMap([
+            [$rule, $couponCodes, $selectedCoupon],
+        ]);
+
+        self::assertSame(
+            $this->rulesApplier,
+            $this->rulesApplier->addDiscountDescription($address, $rule, $couponCodes)
+        );
+        self::assertSame($expected, (array)$address->getDiscountDescriptionArray());
+    }
+
+    /**
+     * @return array
+     */
+    public static function discountDescriptionProvider(): array
     {
-        $ruleId = 1;
-        $ruleDescription = 'Rule description';
+        return [
+            'store label overrides coupon' => [
+                'Merchant label', 'SAVE10', 'Internal description', ['SAVE10'], [1 => 'Merchant label'],
+            ],
+            'coupon overrides description' => [
+                '', 'SAVE10', 'Internal description', ['SAVE10'], [1 => 'SAVE10'],
+            ],
+            'coupon without description' => [
+                '', 'SAVE10', null, ['SAVE10'], [1 => 'SAVE10'],
+            ],
+            'automatic rule description is not displayed' => [
+                '', null, 'Automatic promotion', [], [],
+            ],
+            'unrelated coupon does not produce a label' => [
+                '', null, 'Automatic promotion', ['OTHER'], [],
+            ],
+            'no label coupon or description' => [
+                '', null, null, [], [],
+            ],
+        ];
+    }
 
-        /**
-         * @var Rule|MockObject $rule
-         */
-        $rule = $this->createPartialMockWithReflection(
-            Rule::class,
-            ['getCouponType', 'getRuleId', 'getStoreLabel', 'getActions']
+    /**
+     * @return void
+     */
+    public function testAddDiscountDescriptionPreservesMultipleRuleLabels(): void
+    {
+        $address = $this->getDescriptionAddress();
+        $automaticRule = $this->getDescriptionRule(1, 'Merchant label', 'Automatic description');
+        $couponRule = $this->getDescriptionRule(2, '', 'Internal description');
+        $unlabeledRule = $this->getDescriptionRule(3, '', 'Internal automatic description');
+        $couponCodes = ['SAVE10'];
+        $this->selectRuleCouponMock->method('execute')->willReturnMap([
+            [$couponRule, $couponCodes, 'SAVE10'],
+            [$unlabeledRule, $couponCodes, null],
+        ]);
+
+        $this->rulesApplier->addDiscountDescription($address, $automaticRule, $couponCodes);
+        $this->rulesApplier->addDiscountDescription($address, $couponRule, $couponCodes);
+        $this->rulesApplier->addDiscountDescription($address, $couponRule, $couponCodes);
+        $this->rulesApplier->addDiscountDescription($address, $unlabeledRule, $couponCodes);
+
+        self::assertSame([1 => 'Merchant label', 2 => 'SAVE10'], $address->getDiscountDescriptionArray());
+    }
+
+    /**
+     * @return Address
+     */
+    private function getDescriptionAddress(): Address
+    {
+        $data = [];
+        $address = $this->createPartialMock(Address::class, ['getQuote', 'setData', 'getData']);
+        $address->method('getQuote')->willReturn($this->createStub(Quote::class));
+        $address->method('setData')->willReturnCallback(
+            function ($key, $value = null) use (&$data, &$address) {
+                $data[$key] = $value;
+                return $address;
+            }
+        );
+        $address->method('getData')->willReturnCallback(
+            function ($key = '') use (&$data) {
+                return $data[$key] ?? null;
+            }
         );
 
-        $rule->setDescription($ruleDescription);
+        return $address;
+    }
 
-        /**
-         * @var Address|MockObject $address
-         */
-        $address = $this->createPartialMockWithReflection(
-            Address::class,
-            ['setCouponCode', 'setAppliedRuleIds', 'getQuote']
-        );
-        $description = $address->getDiscountDescriptionArray();
-        $description[$ruleId] = $rule->getDescription();
-        $address->setDiscountDescriptionArray($description[$ruleId]);
+    /**
+     * @param int $id
+     * @param string $storeLabel
+     * @param string|null $description
+     * @return Rule
+     */
+    private function getDescriptionRule(int $id, string $storeLabel, ?string $description): Rule
+    {
+        $rule = $this->createPartialMock(Rule::class, ['getId', 'getStoreLabel']);
+        $rule->method('getId')->willReturn($id);
+        $rule->method('getStoreLabel')->willReturn($storeLabel);
+        $rule->setDescription($description);
 
-        $this->assertEquals($address->getDiscountDescriptionArray(), $description[$ruleId]);
+        return $rule;
     }
 
     /**
