@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ConfigurationMismatchException;
@@ -842,6 +843,72 @@ class UpdateHandlerTest extends TestCase
         $product = $this->productRepository->get($sku, false, $store2->getId(), true);
         $this->assertImage($defaultImageDataUpdated, current($product->getData('media_gallery', 'images')));
         $this->assertEquals($defaultImageDataUpdated['label'], $product->getData('image_label'));
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(StoreFixture::class, as: 'store_view_2'),
+        DataFixture(
+            AttributeFixture::class,
+            ['attribute_code' => 'custom_role', 'frontend_input' => 'media_image', 'scope' => 'store'],
+            as: 'custom_role'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['attribute_code' => 'custom_role_label', 'scope' => 'store'],
+            as: 'custom_role_label'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['media_gallery_entries' => [['label' => 'test label']]],
+            as: 'p1',
+            scope: 'global_scope'
+        ),
+    ]
+    public function testCustomImageRoleWithLabel(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $productId = (int)$fixtures->get('p1')->getId();
+        $sku = $fixtures->get('p1')->getSku();
+        $storeId = (int)$fixtures->get('store_view_2')->getId();
+        $labels = ['image_label', 'custom_role_label'];
+
+        $this->objectManager->configure([
+            CreateHandler::class => ['arguments' => ['mediaAttributesWithLabels' => ['custom_role']]],
+        ]);
+        try {
+            $updateHandler = $this->objectManager->create(
+                UpdateHandler::class,
+                ['mediaConfig' => $this->objectManager->create(Config::class)]
+            );
+        } finally {
+            $this->objectManager->configure([
+                CreateHandler::class => ['arguments' => ['mediaAttributesWithLabels' => []]],
+            ]);
+        }
+
+        $product = $this->productRepository->get($sku, true, Store::DEFAULT_STORE_ID, true);
+        $product->setData('custom_role', $product->getData('image'));
+        $this->updateImage($product, ['label' => 'global label']);
+        $updateHandler->execute($product);
+        $this->assertEquals(
+            ['image_label' => 'global label', 'custom_role_label' => 'global label'],
+            $this->productResource->getAttributeRawValue($productId, $labels, Store::DEFAULT_STORE_ID)
+        );
+
+        $product = $this->productRepository->get($sku, true, $storeId, true);
+        $product->setData('custom_role', $product->getData('image'));
+        $this->updateImage($product, ['label' => 'store label']);
+        $updateHandler->execute($product);
+        $this->assertEquals(
+            ['image_label' => 'store label', 'custom_role_label' => 'store label'],
+            $this->productResource->getAttributeRawValue($productId, $labels, $storeId)
+        );
+        $this->assertEquals(
+            ['image_label' => 'global label', 'custom_role_label' => 'global label'],
+            $this->productResource->getAttributeRawValue($productId, $labels, Store::DEFAULT_STORE_ID)
+        );
     }
 
     public static function useDefaultWithMultipleStoresDataProvider(): array
