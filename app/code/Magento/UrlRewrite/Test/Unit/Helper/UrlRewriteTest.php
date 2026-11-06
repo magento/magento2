@@ -71,7 +71,8 @@ class UrlRewriteTest extends TestCase
         return [
             'two slashes' => ['request/path/with/two//slashes'],
             'three slashes' => ['request/path/with/three///slashes'],
-            'anchor' => ['request/path/with#anchor']
+            'anchor' => ['request/path/with#anchor'],
+            'query string' => ['request/path/with?param=1']
         ];
     }
 }
