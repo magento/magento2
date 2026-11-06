@@ -45,17 +45,9 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $header = 'Content-Security-Policy';
         }
         $value = $policy->getId() .' ' .$policy->getValue() .';';
-        if ($config->getReportUri() && !$response->getHeader('Report-To')) {
-            $reportToData = [
-                'group' => 'report-endpoint',
-                'max_age' => 10886400,
-                'endpoints' => [
-                    ['url' => $config->getReportUri()]
-                ]
-            ];
-            $value .= ' report-uri ' .$config->getReportUri() .';';
-            $value .= ' report-to '. $reportToData['group'] .';';
-            $response->setHeader('Report-To', json_encode($reportToData), true);
+        if ($config->getReportUri()) {
+            $value .= ' report-uri ' . $config->getReportUri() .';';
+            $value .= ' report-to '. $config->getReportUri() .';';
         }
         if ($existing = $response->getHeader($header)) {
             $value = $value .' ' .$existing->getFieldValue();
