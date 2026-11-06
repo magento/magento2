@@ -181,6 +181,55 @@ class AjaxLoginTest extends TestCase
         $this->assertEquals($this->resultJsonMock, $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
+    public function testAroundExecuteMalformedJsonProceedsWithoutCaptcha(): void
+    {
+        $model = new AjaxLogin(
+            $this->captchaHelperMock,
+            $this->sessionManagerMock,
+            $this->jsonFactoryMock,
+            self::$formIds,
+            new Json()
+        );
+        $this->requestMock->expects($this->once())->method('getContent')->willReturn('{bad');
+        $this->captchaHelperMock->expects($this->never())->method('getCaptcha');
+        $this->captchaMock->expects($this->never())->method('isRequired');
+        $this->captchaMock->expects($this->never())->method('logAttempt');
+        $this->jsonFactoryMock->expects($this->never())->method('create');
+
+        $closure = function () {
+            return 'result';
+        };
+        $this->assertEquals('result', $model->aroundExecute($this->loginControllerMock, $closure));
+    }
+
+    #[DataProvider('nonArrayJsonContentProvider')]
+    public function testAroundExecuteNonArrayJsonProceedsWithoutCaptcha(string $content, mixed $decoded): void
+    {
+        $this->requestMock->expects($this->once())->method('getContent')->willReturn($content);
+        $this->serializerMock->expects($this->once())->method('unserialize')->with($content)
+            ->willReturn($decoded);
+        $this->captchaHelperMock->expects($this->never())->method('getCaptcha');
+        $this->captchaMock->expects($this->never())->method('isRequired');
+        $this->captchaMock->expects($this->never())->method('logAttempt');
+
+        $closure = function () {
+            return 'result';
+        };
+        $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
+    }
+
+    /**
+     * @return array
+     */
+    public static function nonArrayJsonContentProvider(): array
+    {
+        return [
+            'string' => ['"abc"', 'abc'],
+            'integer' => ['1', 1],
+            'null' => ['null', null],
+        ];
+    }
+
     /**
      * @param string $username
      * @param array $requestContent
