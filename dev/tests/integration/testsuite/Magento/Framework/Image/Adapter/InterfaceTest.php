@@ -7,7 +7,6 @@
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\ImageFixture;
@@ -17,6 +16,7 @@ use PHPUnit\Framework\Attributes\Depends;
 /**
  * @magentoDataFixture Magento/Framework/Image/_files/image_fixture.php
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InterfaceTest extends \PHPUnit\Framework\TestCase
 {
@@ -400,7 +400,6 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $comparePoint2
      * @param string $adapterType
      */
-    #[Depends('testOpen')]
     #[Depends('testImageSize')]
     #[DataProvider('imageWatermarkWithAlphaTransparencyDataProvider')]
     public function testWatermarkWithAlphaTransparency(
@@ -478,6 +477,61 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 ],
             ]
         );
+    }
+
+    /**
+     * Pure white in a watermark with a set size keeps its colour, like off-white
+     *
+     * @param int $opacity
+     * @param string $adapterType
+     */
+    #[DataProvider('watermarkWithWhiteDataProvider')]
+    public function testWatermarkWithWhite(int $opacity, string $adapterType): void
+    {
+        /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $rootDirectory = $this->objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+            ->getDirectoryWrite(DirectoryList::TMP);
+        $rootDirectory->create('image/watermark_white');
+        $imagePath = $rootDirectory->getAbsolutePath('image/watermark_white/image.png');
+        $watermarkPath = $rootDirectory->getAbsolutePath('image/watermark_white/watermark.png');
+
+        $image = imagecreatetruecolor(300, 300);
+        imagefilledrectangle($image, 0, 0, 299, 299, imagecolorallocate($image, 128, 128, 128));
+        imagepng($image, $imagePath);
+
+        // Transparent background, left half pure white, right half off-white.
+        $watermark = imagecreatetruecolor(100, 100);
+        imagealphablending($watermark, false);
+        imagesavealpha($watermark, true);
+        imagefilledrectangle($watermark, 0, 0, 99, 99, imagecolorallocatealpha($watermark, 0, 0, 0, 127));
+        imagefilledrectangle($watermark, 0, 0, 49, 99, imagecolorallocate($watermark, 255, 255, 255));
+        imagefilledrectangle($watermark, 50, 0, 99, 99, imagecolorallocate($watermark, 254, 254, 254));
+        imagepng($watermark, $watermarkPath);
+
+        $adapter = $this->_getAdapter($adapterType);
+        $adapter->open($imagePath);
+        $adapter->setWatermarkWidth(100)
+            ->setWatermarkHeight(100)
+            ->setWatermarkImageOpacity($opacity)
+            ->setWatermarkPosition(\Magento\Framework\Image\Adapter\AbstractAdapter::POSITION_TOP_LEFT)
+            ->watermark($watermarkPath);
+        $rootDirectory->delete('image/watermark_white');
+
+        $white = $adapter->getColorAt(25, 50);
+        $offWhite = $adapter->getColorAt(75, 50);
+        unset($white['alpha'], $offWhite['alpha']);
+        $this->assertTrue(
+            $this->_compareColors($offWhite, $white),
+            join(',', $white) . ' should be close to ' . join(',', $offWhite)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function watermarkWithWhiteDataProvider(): array
+    {
+        return self::_prepareData([[50], [100]]);
     }
 
     /**
