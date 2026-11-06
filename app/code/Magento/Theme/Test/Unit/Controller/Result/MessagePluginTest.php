@@ -326,6 +326,73 @@ class MessagePluginTest extends TestCase
         $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
     }
 
+    public function testAfterRenderResultWithUnreadableCookie(): void
+    {
+        $messageType = 'message1type';
+        $messageText = 'message1text';
+        $messages = [
+            [
+                'type' => $messageType,
+                'text' => $messageText,
+            ],
+        ];
+
+        /** @var Redirect|MockObject $resultMock */
+        $resultMock = $this->createMock(Redirect::class);
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
+        $cookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($cookieMetadataMock);
+        $this->cookieManagerMock->expects($this->once())
+            ->method('setPublicCookie')
+            ->with(
+                MessagePlugin::MESSAGES_COOKIES_NAME,
+                json_encode($messages),
+                $cookieMetadataMock
+            );
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
+            ->with(
+                MessagePlugin::MESSAGES_COOKIES_NAME
+            )
+            ->willReturn('%7Bbroken');
+
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with('%7Bbroken')
+            ->willThrowException(new \InvalidArgumentException('Unable to unserialize value.'));
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
+            ->willReturnCallback(
+                function ($data) {
+                    return json_encode($data);
+                }
+            );
+
+        /** @var MessageInterface|MockObject $messageMock */
+        $messageMock = $this->createMock(MessageInterface::class);
+        $messageMock->expects($this->once())
+            ->method('getType')
+            ->willReturn($messageType);
+        $this->interpretationStrategyMock->expects($this->once())
+            ->method('interpret')
+            ->with($messageMock)
+            ->willReturn($messageText);
+
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->createMock(Collection::class);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$messageMock]);
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+    }
+
     public function testAfterRenderResultWithWrongArray()
     {
         $messageType = 'message1type';
