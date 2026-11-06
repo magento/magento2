@@ -114,6 +114,10 @@ class FormatTest extends TestCase
         $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
             ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
+            ['en_US', 'USD', ['precision' => 2]],
+            ['en_US', 'JPY', ['precision' => 0]],
+            ['ja_JP', 'BHD', ['precision' => 3]],
+            ['en_US', 'KWD', ['precision' => 3]],
             ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
             ['de_CH', 'CHF', ['decimalSymbol' => '.', 'groupSymbol' => $swissGroupSymbol]],
             ['uk_UA', 'UAH', ['decimalSymbol' => ',', 'groupSymbol' => ' ']]
