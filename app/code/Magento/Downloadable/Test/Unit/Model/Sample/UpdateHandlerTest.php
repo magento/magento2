@@ -15,6 +15,7 @@ use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\UpdateHandler;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -130,9 +131,8 @@ class UpdateHandlerTest extends TestCase
         $this->entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE . 'some');
-        $this->entityMock->expects($this->once())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->productExtensionMock);
+        $this->entityMock->expects($this->never())
+            ->method('getExtensionAttributes');
         $this->entityMock->expects($this->never())
             ->method('getSku');
         $this->entityMock->expects($this->never())
@@ -146,6 +146,88 @@ class UpdateHandlerTest extends TestCase
             ->method('delete');
 
         $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
+    }
+
+    /**
+     * Explicitly supplied empty sample list removes all existing samples.
+     *
+     * @return void
+     */
+    public function testExecuteWithEmptySamplesDeletesAllExistingSamples(): void
+    {
+        $entitySku = 'sku';
+        $productExtensionMock = $this->getProductExtensionMock();
+        $productExtensionMock->method('getDownloadableProductSamples')->willReturn([]);
+
+        $firstSampleMock = $this->createMock(SampleInterface::class);
+        $firstSampleMock->method('getId')->willReturn(11);
+        $secondSampleMock = $this->createMock(SampleInterface::class);
+        $secondSampleMock->method('getId')->willReturn(22);
+
+        $this->entityMock->method('getTypeId')->willReturn(Type::TYPE_DOWNLOADABLE);
+        $this->entityMock->method('getExtensionAttributes')->willReturn($productExtensionMock);
+        $this->entityMock->method('getSku')->willReturn($entitySku);
+        $this->entityMock->method('getStoreId')->willReturn(0);
+
+        $this->sampleRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($entitySku)
+            ->willReturn([$firstSampleMock, $secondSampleMock]);
+        $this->sampleRepositoryMock->expects($this->never())
+            ->method('save');
+        $deletedIds = [];
+        $this->sampleRepositoryMock->expects($this->exactly(2))
+            ->method('delete')
+            ->willReturnCallback(
+                function (int $id) use (&$deletedIds): bool {
+                    $deletedIds[] = $id;
+                    return true;
+                }
+            );
+
+        $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
+        $this->assertSame([11, 22], $deletedIds);
+    }
+
+    /**
+     * Omitted samples or missing extension attributes leave existing samples untouched.
+     *
+     * @param bool $hasExtensionAttributes
+     * @return void
+     */
+    #[DataProvider('omittedSamplesDataProvider')]
+    public function testExecuteWithOmittedSamplesKeepsExistingSamples(bool $hasExtensionAttributes): void
+    {
+        $productExtensionMock = null;
+        if ($hasExtensionAttributes) {
+            $productExtensionMock = $this->getProductExtensionMock();
+            $productExtensionMock->method('getDownloadableProductSamples')->willReturn(null);
+        }
+
+        $this->entityMock->method('getTypeId')->willReturn(Type::TYPE_DOWNLOADABLE);
+        $this->entityMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($productExtensionMock);
+
+        $this->sampleRepositoryMock->expects($this->never())
+            ->method('getList');
+        $this->sampleRepositoryMock->expects($this->never())
+            ->method('save');
+        $this->sampleRepositoryMock->expects($this->never())
+            ->method('delete');
+
+        $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
+    }
+
+    /**
+     * @return array
+     */
+    public static function omittedSamplesDataProvider(): array
+    {
+        return [
+            'samples not set' => [true],
+            'no extension attributes' => [false],
+        ];
     }
 
     /**
