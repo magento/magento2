@@ -76,6 +76,8 @@
         <!--<const name="RABBITMQ_MANAGEMENT_PROTOCOL" value="https"/>-->
         <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
         <!--<const name="RABBITMQ_VIRTUALHOST" value="/"/>-->
+        <!-- Set TESTS_PARALLEL_RUN=1 in all processes and deploy modules once before starting shards.
+             Older deployment code without the shared lock can still remove modules used by other processes. -->
         <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
         <const name="USE_OVERRIDE_CONFIG" value="enabled"/>
     </php>
