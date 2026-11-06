@@ -160,6 +160,30 @@ class ShippingTest extends TestCase
     }
 
     /**
+     * No configured carriers should not cause a fatal error when collecting rates.
+     *
+     * @return void
+     */
+    public function testCollectRatesWithNoCarriersConfigured()
+    {
+        $request = new RateRequest();
+        $request->setOrig(true);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(
+                'carriers',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $request->getStoreId()
+            )
+            ->willReturn(null);
+
+        $result = $this->shipping->collectRates($request);
+
+        $this->assertSame($this->shipping, $result);
+    }
+
+    /**
      * @return CarrierFactory|MockObject
      */
     private function getCarrierFactory()
