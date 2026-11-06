@@ -78,7 +78,10 @@ class ProductsListPlugin
     /**
      * Adds configurable products to the item list if child products are already part of the collection
      *
-     * Configurable products are only added if the child products are not visible individually
+     * Configurable products are only added if the child products are not visible individually. The products
+     * matching the widget condition are handed to the database as a subquery: a condition can match a large
+     * share of the catalog, and reading those ids into PHP to send them back in an IN list is what made the
+     * widget slow.
      *
      * @param ProductsList $subject
      * @param Collection $result
@@ -88,13 +91,8 @@ class ProductsListPlugin
      */
     public function afterCreateCollection(ProductsList $subject, Collection $result): Collection
     {
-        $notVisibleCollection = $subject->getBaseCollection();
-        $currentIds = $result->getAllIds();
-        $searchProducts = array_unique(array_merge($currentIds, $notVisibleCollection->getAllIds()));
-
-        if (empty($searchProducts)) {
-            return $result;
-        }
+        // The base collection differs from the result only by the visibility filter, so it holds every matching id.
+        $matchingProductIds = $subject->getBaseCollection()->getAllIdsSql()->resetJoinLeft();
 
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)
             ->getLinkField();
@@ -135,7 +133,7 @@ class ProductsListPlugin
                 ]),
                 []
             )
-            ->where('link_table.product_id IN (?)', $searchProducts);
+            ->where('link_table.product_id IN (?)', $matchingProductIds);
         $visibilityExpr = $connection->getCheckSql(
             'visibility_store.value IS NULL',
             'visibility_default.value',
@@ -146,17 +144,13 @@ class ProductsListPlugin
             Visibility::VISIBILITY_NOT_VISIBLE
         );
 
-        $productIds = $connection->fetchCol($select);
-
-        if (empty($productIds)) {
-            return $result;
-        }
-
         $visibleCatalogIds = $this->catalogProductVisibility->getVisibleInCatalogIds();
         $configurableProductCollection = $this->productCollectionFactory->create();
         $configurableProductCollection->setVisibility($visibleCatalogIds);
-        $configurableProductCollection->addIdFilter($productIds);
+        $configurableProductCollection->addFieldToFilter('entity_id', ['in' => $select]);
 
+        // Only the configurable ids are read back: an IN subquery behind OR is re-evaluated for every row
+        // the widget query examines, whereas the id list is matched once.
         $configurableEntityIds = $configurableProductCollection->getAllIds();
         if (empty($configurableEntityIds)) {
             return $result;
