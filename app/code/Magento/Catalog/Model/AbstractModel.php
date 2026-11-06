@@ -13,7 +13,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
@@ -46,8 +45,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     protected $_isDeleteable = true;
 
     /**
-     * Is model readonly
-     *
      * @var boolean
      */
     protected $_isReadonly = false;

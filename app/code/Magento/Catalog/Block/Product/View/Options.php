@@ -24,22 +24,16 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_product;
 
     /**
-     * Product option
-     *
      * @var \Magento\Catalog\Model\Product\Option
      */
     protected $_option;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_registry = null;
 
     /**
-     * Product
-     *
      * @var Product
      */
     protected $_catalogProduct;
