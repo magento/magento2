@@ -98,7 +98,7 @@ class LoggerTest extends TestCase
         $exception = new \Exception('Error message');
         $this->psrLogger->expects($this->once())
             ->method('critical')
-            ->with($exception->getMessage());
+            ->with('Redis session handler failure', ['exception' => $exception]);
         $this->logger->logException($exception);
     }
 }

@@ -56,13 +56,16 @@ class Transport implements TransportInterface
             $mailer = new Mailer($this->symfonyTransport);
             $mailer->send($email);
         } catch (TransportExceptionInterface $transportException) {
-            $this->logger->error('Transport error while sending email: ' . $transportException->getMessage());
+            $this->logger->error(
+                'Transport error while sending an email message',
+                ['exception' => $transportException]
+            );
             throw new MailException(
                 new Phrase('Transport error: Unable to send mail at this time.'),
                 $transportException
             );
         } catch (\Exception $e) {
-            $this->logger->error($e);
+            $this->logger->error('Unable to send an email message', ['exception' => $e]);
             throw new MailException(new Phrase('Unable to send mail. Please try again later.'), $e);
         }
     }
