@@ -26,6 +26,7 @@ use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -155,6 +156,26 @@ class QuoteManagementTest extends TestCase
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
         self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
+    }
+
+    /**
+     * Verify guest order stores the customer prefix and suffix from the billing address.
+     *
+     * @return void
+     */
+    #[DataFixture('Magento/Sales/_files/guest_quote_with_addresses.php')]
+    public function testSubmitGuestCustomerWithPrefixAndSuffix(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
+        $quote->getBillingAddress()->setPrefix('Dr.');
+        $quote->getBillingAddress()->setSuffix('Jr.');
+        $quote->save();
+
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $order = $this->orderRepository->get($orderId);
+
+        self::assertEquals('Dr.', $order->getCustomerPrefix());
+        self::assertEquals('Jr.', $order->getCustomerSuffix());
     }
 
     /**
