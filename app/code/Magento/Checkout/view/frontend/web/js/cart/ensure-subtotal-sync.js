@@ -46,9 +46,24 @@ define([
         function getCentralSubtotal()
         {
             // Sum of row totals on the table
-            let sum = 0;
+            let sum = 0,
+                $prices = $root.find(
+                    '#shopping-cart-table .col.subtotal .price-excluding-tax .cart-price'
+                );
 
-            $root.find('#shopping-cart-table .col.subtotal .price-excluding-tax .cart-price').each(function () {
+            // Including-tax display renders .price-including-tax only; both-prices mode
+            // keeps excl-tax first so central and summary stay on the same tax basis.
+            if (!$prices.length) {
+                $prices = $root.find(
+                    '#shopping-cart-table .col.subtotal .price-including-tax .cart-price'
+                );
+            }
+
+            if (!$prices.length) {
+                $prices = $root.find('#shopping-cart-table .col.subtotal .cart-price');
+            }
+
+            $prices.each(function () {
                 const text = $(this).text(), val = parsePrice(text);
 
                 if (!isNaN(val)) {
