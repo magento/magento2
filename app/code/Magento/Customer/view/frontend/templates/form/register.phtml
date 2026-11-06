@@ -312,7 +312,7 @@ $formData = $block->getFormData();
     </div>
 </form>
 <?php if ($_dob->isEnabled()): ?>
-<script>
+    <?php $scriptString = <<<script
 require([
     'jquery',
     'mage/mage'
@@ -334,7 +334,9 @@ require([
         ignore: ':hidden:not(input[id$="full"])'
     }).find('input:text').attr('autocomplete', 'off');
 });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
 <?php if ($block->getShowAddressFields()): ?>
     <?php

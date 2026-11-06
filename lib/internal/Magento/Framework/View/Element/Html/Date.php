@@ -5,11 +5,34 @@
  */
 namespace Magento\Framework\View\Element\Html;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Date element block
  */
 class Date extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+    }
+
     /**
      * Render block HTML
      *
@@ -28,7 +51,7 @@ class Date extends \Magento\Framework\View\Element\Template
         $showOn = $this->getShowOn();
         $firstDay = $this->getFirstDay();
 
-        $html .= '<script type="text/javascript">
+        $script = '
             require(["jquery", "mage/calendar"], function($){
                     $("#' .
             $this->getId() .
@@ -63,7 +86,8 @@ class Date extends \Magento\Framework\View\Element\Template
             ($firstDay ? ', firstDay: ' . $firstDay : '') .
             '})
             });
-            </script>';
+            ';
+        $html .= $this->secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false);
 
         return $html;
     }
@@ -76,6 +100,7 @@ class Date extends \Magento\Framework\View\Element\Template
     public function getEscapedValue()
     {
         if ($this->getFormat() && $this->getValue()) {
+            // phpcs:ignore PHPCompatibility.FunctionUse.RemovedFunctions.strftimeDeprecated
             return strftime($this->getFormat(), strtotime($this->getValue()));
         }
         return $this->escapeHtml($this->getValue());
