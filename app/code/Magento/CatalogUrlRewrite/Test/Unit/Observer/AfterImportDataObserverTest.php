@@ -25,6 +25,7 @@ use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\Event;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
@@ -376,7 +377,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->urlRewrite->method('setTargetPath')->willReturnSelf();
         $this->urlRewrite->method('getTargetPath')->willReturn('targetPath');
         $this->urlRewrite->method('getRequestPath')->willReturn('requestPath');
-        
+
         $getStoreIdCallCount = 0;
         $this->urlRewrite->method('getStoreId')
             ->willReturnCallback(function () use (&$getStoreIdCallCount) {
@@ -404,6 +405,76 @@ class AfterImportDataObserverTest extends TestCase
             ->with('catalog/seo/generate_category_product_rewrites')
             ->willReturn(true);
         $this->import->execute($this->observer);
+    }
+
+    public function testStoreUrlKeysAreLoadedForEachBunch(): void
+    {
+        $website = $this->createPartialMock(Website::class, ['getStoreIds']);
+        $website->method('getStoreIds')->willReturn([1, 2]);
+        $this->storeManager->method('getWebsite')->willReturn($website);
+        $this->importProduct->method('getNewSku')->willReturnMap([
+            ['first', ['entity_id' => 10]],
+            ['second', ['entity_id' => 20]],
+        ]);
+        $this->importProduct->method('getProductCategories')->willReturn([]);
+        $this->importProduct->method('getProductWebsites')->willReturn([1]);
+        $this->catalogProductFactory->method('create')->willReturnCallback(function () {
+            $product = $this->createPartialMock(Product::class, ['getSku']);
+            $product->method('getSku')->willReturnCallback(static fn() => $product->getData('sku'));
+            return $product;
+        });
+        $this->urlFinder->method('findAllByData')->willReturn([]);
+        $this->scopeConfig->method('getValue')->willReturn(false);
+        $this->productUrlPathGenerator->method('getUrlPath')->willReturnCallback(
+            static fn(Product $product) => $product->getUrlKey()
+        );
+        $this->productUrlPathGenerator->method('getUrlPathWithSuffix')->willReturnCallback(
+            static fn(Product $product) => $product->getUrlKey() . '.html'
+        );
+        $this->productUrlPathGenerator->method('getCanonicalUrlPath')->willReturnCallback(
+            static fn(Product $product) => 'catalog/product/view/id/' . $product->getId()
+        );
+        $this->urlRewriteFactory->method('create')->willReturnCallback(
+            static fn() => new UrlRewrite([], new Json())
+        );
+        $this->attributeValue->expects($this->exactly(2))->method('getValuesMultiple')->willReturnMap([
+            [
+                ProductInterface::class,
+                [10],
+                [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
+                [1, 2],
+                [10 => [1 => 'first-store-one', 2 => 'first-store-two']],
+            ],
+            [
+                ProductInterface::class,
+                [20],
+                [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
+                [1, 2],
+                [20 => [1 => 'second-store-one', 2 => 'second-store-two']],
+            ],
+        ]);
+        $pathsByBunch = [];
+        $this->urlPersist->expects($this->exactly(2))->method('replace')->willReturnCallback(
+            static function (array $rewrites) use (&$pathsByBunch): array {
+                $paths = [];
+                foreach ($rewrites as $rewrite) {
+                    $paths[(int)$rewrite->getStoreId()] = $rewrite->getRequestPath();
+                }
+                $pathsByBunch[] = $paths;
+                return $rewrites;
+            }
+        );
+
+        foreach (['first', 'second'] as $sku) {
+            $event = new Event([
+                'adapter' => $this->importProduct,
+                'bunch' => [['sku' => $sku, 'url_key' => $sku . '-default']],
+            ]);
+            $this->import->execute(new Observer(['event' => $event]));
+        }
+
+        $this->assertSame([1 => 'first-store-one.html', 2 => 'first-store-two.html'], $pathsByBunch[0]);
+        $this->assertSame([1 => 'second-store-one.html', 2 => 'second-store-two.html'], $pathsByBunch[1]);
     }
 
     /**
