@@ -10,8 +10,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Eav Entity store resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

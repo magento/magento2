@@ -10,8 +10,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Eav Form Type Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Type extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
