@@ -8,6 +8,7 @@ namespace Magento\Swagger\Block;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template;
 use Magento\Swagger\Api\Data\SchemaTypeInterface;
+use UnexpectedValueException;
 
 /**
  * Block for swagger index page
@@ -44,7 +45,7 @@ class Index extends Template
         );
 
         if (!array_key_exists($schemaTypeCode, $this->getSchemaTypes())) {
-            throw new \UnexpectedValueException(
+            throw new UnexpectedValueException(
                 new Phrase('Unknown schema type supplied')
             );
         }
