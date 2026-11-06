@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for the Order Item model
  *
- * @suppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ItemTest extends TestCase
 {
