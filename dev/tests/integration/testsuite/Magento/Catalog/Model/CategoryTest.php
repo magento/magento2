@@ -16,13 +16,16 @@ use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Url;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -217,6 +220,17 @@ class CategoryTest extends TestCase
         $this->assertFalse($this->_model->getImageUrl());
         $this->_model->setImage('test.gif');
         $this->assertStringEndsWith('media/catalog/category/test.gif', $this->_model->getImageUrl());
+    }
+
+    #[ConfigFixture('web/unsecure/base_media_url', 'https://cdn.example.test/media/', 'store', 'default')]
+    public function testGetImageUrlWithMediaDirectoryPrefix(): void
+    {
+        $mediaUri = $this->objectManager->get(Filesystem::class)->getUri(DirectoryList::MEDIA);
+        $this->_model->setImage('/' . $mediaUri . '/catalog/category/test.gif');
+        $this->assertSame(
+            'https://cdn.example.test/media/catalog/category/test.gif',
+            $this->_model->getImageUrl()
+        );
     }
 
     public function testGetCustomDesignDate(): void
