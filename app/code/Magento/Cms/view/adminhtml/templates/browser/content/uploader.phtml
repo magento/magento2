@@ -17,7 +17,8 @@ $blockHtmlId = $block->getHtmlId();
             "maxFileSize": <?= /* @noEscape */ $block->getFileSizeService()->getMaxFileSize() ?>,
             "maxWidth": <?= /* @noEscape */ $block->getImageUploadMaxWidth() ?>,
             "maxHeight": <?= /* @noEscape */ $block->getImageUploadMaxHeight() ?>,
-            "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>
+            "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>,
+            "allowedExtensions": <?= /* @noEscape */ $block->getAllowedExtensionsJson() ?>
         }
     }'
 >

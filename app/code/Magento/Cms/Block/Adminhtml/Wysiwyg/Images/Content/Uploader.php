@@ -5,6 +5,9 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
+
 /**
  * Uploader block for Wysiwyg Images
  *
@@ -19,18 +22,26 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
     protected $_imagesStorage;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
      * @param array $data
+     * @param Json|null $serializer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\File\Size $fileSize,
         \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage,
-        array $data = []
+        array $data = [],
+        ?Json $serializer = null
     ) {
         $this->_imagesStorage = $imagesStorage;
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $fileSize, $data);
     }
 
@@ -57,6 +68,26 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
         )->setFilters(
             ['images' => ['label' => __('Images (%1)', implode(', ', $labels)), 'files' => $files]]
         );
+    }
+
+    /**
+     * Get list of file extensions allowed to upload for the current media type
+     *
+     * @return string[]
+     */
+    public function getAllowedExtensions(): array
+    {
+        return $this->_imagesStorage->getAllowedExtensions($this->_getMediaType());
+    }
+
+    /**
+     * Get JSON-encoded list of file extensions allowed to upload for the current media type
+     *
+     * @return string
+     */
+    public function getAllowedExtensionsJson(): string
+    {
+        return $this->serializer->serialize($this->getAllowedExtensions());
     }
 
     /**
