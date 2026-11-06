@@ -88,13 +88,8 @@ class ProductsListPlugin
      */
     public function afterCreateCollection(ProductsList $subject, Collection $result): Collection
     {
-        $notVisibleCollection = $subject->getBaseCollection();
-        $currentIds = $result->getAllIds();
-        $searchProducts = array_unique(array_merge($currentIds, $notVisibleCollection->getAllIds()));
-
-        if (empty($searchProducts)) {
-            return $result;
-        }
+        $searchProductsSelect = $subject->getBaseCollection()->getAllIdsSql();
+        $searchProductsSelect->resetJoinLeft();
 
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)
             ->getLinkField();
@@ -135,7 +130,7 @@ class ProductsListPlugin
                 ]),
                 []
             )
-            ->where('link_table.product_id IN (?)', $searchProducts);
+            ->where('link_table.product_id IN (?)', $searchProductsSelect);
         $visibilityExpr = $connection->getCheckSql(
             'visibility_store.value IS NULL',
             'visibility_default.value',
