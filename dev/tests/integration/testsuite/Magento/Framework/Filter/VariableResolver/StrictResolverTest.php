@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\VariableResolver;
 
+use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
@@ -37,8 +38,7 @@ class StrictResolverTest extends TestCase
     #[DataProvider('useCasesProvider')]
     public function testResolve($value, array $variables, $expected)
     {
-        if(str_contains($value, 'foo.email.getUrl'))
-        {
+        if (str_contains($value, 'foo.email.getUrl')) {
             $variables['store'] = $variables['store']($this);
             $variables['foo']['email'] = $variables['foo']['email']($this);
         }
@@ -46,7 +46,7 @@ class StrictResolverTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    private function getMockForStoreClass()
+    public function getMockForStoreClass()
     {
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         return $storeMock;
@@ -86,8 +86,11 @@ class StrictResolverTest extends TestCase
         };
         $dataClassStub->setData('foo', 'bar');
 
+        $simpleObjectStub = new class(['custom_attribute' => 'abc']) extends AbstractSimpleObject {
+        };
+
         $storeMock = static fn (self $testCase) => $testCase->getMockForStoreClass();
-        $emailTemplate = static fn (self $testCase) => $testCase->getMockForEmailTemplate($storeMock);;
+        $emailTemplate = static fn (self $testCase) => $testCase->getMockForEmailTemplate($storeMock);
 
         return [
             ['', [], null],
@@ -108,6 +111,13 @@ class StrictResolverTest extends TestCase
             'deny normal method for DataObject' => ['foo.doThing()',['foo' => $dataClassStub], null],
             'deny getter method for DataObject' => ['foo.getThing()',['foo' => $dataClassStub], null],
             'convert getter method to getData(foo)' => ['foo.getFoo()',['foo' => $dataClassStub], 'bar'],
+            'property of simple data object' =>
+                ['foo.extension_attributes.custom_attribute',
+                    ['foo' => new DataObject(['extension_attributes' => $simpleObjectStub])], 'abc'],
+            'getter of simple data object' =>
+                ['foo.getCustomAttribute()', ['foo' => $simpleObjectStub], 'abc'],
+            'missing key of simple data object' =>
+                ['foo.unknown', ['foo' => $simpleObjectStub], null],
             'backwards compatibility exception for getUrl' => [
                 'foo.email.getUrl($store,\'some path\',[_query:[id:$foo.bar.baz.bash,token:abc],abc:1])',
                 [
