@@ -5,7 +5,9 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
 use Magento\Customer\Model\Address\AddressModelInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\AbstractModel;
 
@@ -27,6 +29,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public const TYPE_BILLING = 'billing';
 
     public const TYPE_SHIPPING = 'shipping';
+
+    private const REGION_CACHE_KEY_PREFIX = 'sales_order_address_';
 
     /**
      * @var \Magento\Sales\Model\Order
@@ -54,6 +58,11 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     protected $regionFactory;
 
     /**
+     * @var RegionModelsCache
+     */
+    private $regionModelsCache;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -63,6 +72,8 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param RegionModelsCache|null $regionModelsCache
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -73,10 +84,13 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         \Magento\Directory\Model\RegionFactory $regionFactory,
         ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?RegionModelsCache $regionModelsCache = null
     ) {
         $data = $this->implodeStreetField($data);
         $this->regionFactory = $regionFactory;
+        $this->regionModelsCache = $regionModelsCache
+            ?? ObjectManager::getInstance()->get(RegionModelsCache::class);
         $this->orderFactory = $orderFactory;
         parent::__construct(
             $context,
@@ -123,7 +137,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         $regionId = (!$this->getRegionId() && is_numeric($this->getRegion())) ?
             $this->getRegion() :
             $this->getRegionId();
-        $model = $this->regionFactory->create()->load($regionId);
+        $model = $this->resolveRegion($regionId);
         if ($model->getCountryId() == $this->getCountryId()) {
             return $model->getCode();
         } elseif (is_string($this->getRegion())) {
@@ -131,6 +145,29 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         } else {
             return null;
         }
+    }
+
+    /**
+     * Load the region once per region id for all order addresses
+     *
+     * Entries use their own key prefix: customer and quote addresses read the region name from the same cache,
+     * and a region loaded here may carry the name of an emulated store locale.
+     *
+     * @param mixed $regionId
+     * @return \Magento\Directory\Model\Region
+     */
+    private function resolveRegion($regionId)
+    {
+        if (!$regionId) {
+            return $this->regionFactory->create()->load($regionId);
+        }
+        $cacheKey = self::REGION_CACHE_KEY_PREFIX . $regionId;
+        $model = $this->regionModelsCache->get($cacheKey);
+        if ($model === null) {
+            $model = $this->regionFactory->create()->load($regionId);
+            $this->regionModelsCache->add($cacheKey, $model);
+        }
+        return $model;
     }
 
     /**
