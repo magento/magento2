@@ -15,8 +15,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class EavSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Eav setup.
-     *
      * @var \Magento\Eav\Setup\EavSetup
      */
     private $eavSetup;
@@ -34,8 +32,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute work correct attribute_code.
      *
      * @param string $attributeCode
-     *
-     * 
      */
     #[DataProvider('addAttributeDataProvider')]
     public function testAddAttribute($attributeCode)
@@ -66,8 +62,6 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute throw exception if attribute_code is not valid.
      *
      * @param string|null $attributeCode
-     *
-     * 
      */
     #[DataProvider('addAttributeThrowExceptionDataProvider')]
     public function testAddAttributeThrowException($attributeCode)
@@ -99,14 +93,14 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * Verify that add attribute throw exception if attribute_code is not valid.
      *
      * @param string|null $attributeCode
-     *
-     * 
      */
     #[DataProvider('addInvalidAttributeThrowExceptionDataProvider')]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,');
+        $this->expectExceptionMessage(
+            'Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,'
+        );
 
         $attributeData = $this->getAttributeData();
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
@@ -122,6 +116,34 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             ['1first_character_is_not_letter'],
             ['attribute.with.dots'],
         ];
+    }
+
+    /**
+     * Verify that a rejected attribute code does not make the next valid attribute code fail.
+     */
+    public function testAddAttributeAfterInvalidAttributeCode(): void
+    {
+        $attributeData = $this->getAttributeData();
+        try {
+            $this->eavSetup->addAttribute(
+                \Magento\Catalog\Model\Product::ENTITY,
+                'attribute.with.dots',
+                $attributeData
+            );
+            $this->fail('An invalid attribute code must be rejected.');
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
+            $this->assertStringContainsString('Please use only letters', $exception->getMessage());
+        }
+
+        $this->eavSetup->addAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'eav_setup_test_after_invalid',
+            $attributeData
+        );
+
+        $this->assertNotEmpty(
+            $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, 'eav_setup_test_after_invalid')
+        );
     }
 
     /**
