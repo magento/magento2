@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckProductAttributeGridSystemFieldTest">
+        <annotations>
+            <description value="Check inverted 'system' column in product attribute modal grid."/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="newProductAttribute" stepKey="createProductAttribute"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Open product attribute modal grid -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToAdminProductIndexPage"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <actionGroup ref="AdminClickAddAttributeOnProductEditPageActionGroup" stepKey="clickAddAttribute"/>
+
+        <!-- Filter created product attribute -->
+        <conditionalClick selector="{{AdminProductAddAttributeModalSection.clearFilters}}" dependentSelector="{{AdminProductAddAttributeModalSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
+        <click selector="{{AdminProductAddAttributeModalSection.filters}}" stepKey="openFilters"/>
+        <fillField selector="{{AdminProductAddAttributeModalSection.attributeCodeFilter}}" userInput="$$createProductAttribute.attribute_code$$" stepKey="fillAttributeCode"/>
+        <click selector="{{AdminProductAddAttributeModalSection.applyFilters}}" stepKey="applyFilters"/>
+
+        <!-- Check inverted 'system' column -->
+        <see selector="{{AdminProductAddAttributeModalSection.systemColumn}}" userInput="No" stepKey="seeSystemColumn"/>
+    </test>
+</tests>
