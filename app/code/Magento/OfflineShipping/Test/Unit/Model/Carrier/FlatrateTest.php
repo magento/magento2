@@ -9,10 +9,12 @@ namespace Magento\OfflineShipping\Test\Unit\Model\Carrier;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Model\Carrier\Flatrate;
 use Magento\OfflineShipping\Model\Carrier\Flatrate\ItemPriceCalculator;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
@@ -243,6 +245,60 @@ class FlatrateTest extends TestCase
         return [
             ['freeshipping' => true],
             ['freeshipping' => false]
+        ];
+    }
+
+    #[DataProvider('addressFreeShippingDataProvider')]
+    public function testCollectRatesWithAddressFreeShipping(bool $freeShipping, float $expectedPrice): void
+    {
+        $config = [
+            'carriers/flatrate/active' => true,
+            'carriers/flatrate/price' => 5,
+            'carriers/flatrate/type' => 'O',
+            'carriers/flatrate/handling_fee' => 0,
+            'carriers/flatrate/handling_type' => AbstractCarrier::HANDLING_TYPE_FIXED,
+            'carriers/flatrate/handling_action' => AbstractCarrier::HANDLING_ACTION_PERORDER,
+        ];
+        $this->scopeConfigMock->method('isSetFlag')->willReturnCallback(
+            static fn (string $path) => (bool)($config[$path] ?? false)
+        );
+        $this->scopeConfigMock->method('getValue')->willReturnCallback(
+            static fn (string $path) => $config[$path] ?? null
+        );
+        $this->priceCalculatorMock->method('getShippingPricePerOrder')->willReturn(5.0);
+
+        $priceCurrency = $this->createStub(PriceCurrencyInterface::class);
+        $priceCurrency->method('round')->willReturnCallback(static fn ($price) => (float)$price);
+        $method = new Method($priceCurrency);
+        $this->methodFactoryMock->method('create')->willReturn($method);
+        $result = $this->createMock(Result::class);
+        $this->resultFactoryMock->method('create')->willReturn($result);
+        $result->expects($this->once())->method('append')->with($method);
+
+        $product = $this->createStub(Product::class);
+        $product->method('isVirtual')->willReturn(false);
+        $item = $this->createStub(QuoteItem::class);
+        $item->method('getProduct')->willReturn($product);
+        $item->method('getQty')->willReturn(1);
+
+        $request = new RateRequest();
+        $request->setAllItems([$item]);
+        $request->setPackageQty(2);
+        $request->setFreeShipping($freeShipping);
+
+        $this->model->collectRates($request);
+
+        $this->assertSame($expectedPrice, $method->getPrice());
+    }
+
+    /**
+     * @return array
+     */
+    public static function addressFreeShippingDataProvider(): array
+    {
+        return [
+            'address free shipping' => [true, 0.0],
+            'no free shipping' => [false, 5.0],
         ];
     }
 }

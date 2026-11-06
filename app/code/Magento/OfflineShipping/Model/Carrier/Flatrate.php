@@ -113,19 +113,28 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
                     continue;
                 }
 
-                $freeShippingMethod = $item->getFreeShippingMethod();
-
                 if ($item->getHasChildren() && $item->isShipSeparately()) {
                     $freeBoxes += $this->getFreeBoxesCountFromChildren($item);
-                } elseif (
-                    $item->getFreeShipping()
-                    && ($freeShippingMethod === null || $freeShippingMethod === 'flatrate_flatrate')
-                ) {
+                } elseif ($this->isItemFreeForFlatrate($item)) {
                     $freeBoxes += $item->getQty();
                 }
             }
         }
         return $freeBoxes;
+    }
+
+    /**
+     * Check if the item has free shipping applicable to this carrier
+     *
+     * @param mixed $item
+     * @return bool
+     */
+    private function isItemFreeForFlatrate($item): bool
+    {
+        $freeShippingMethod = $item->getFreeShippingMethod();
+
+        return $item->getFreeShipping()
+            && ($freeShippingMethod === null || $freeShippingMethod === 'flatrate_flatrate');
     }
 
     /**
@@ -160,7 +169,7 @@ class Flatrate extends AbstractCarrier implements CarrierInterface
 
         $shippingPrice = $this->getFinalPriceWithHandlingFee($shippingPrice);
 
-        if ($shippingPrice !== false && $request->getPackageQty() == $freeBoxes) {
+        if ($shippingPrice !== false && ($request->getFreeShipping() || $request->getPackageQty() == $freeBoxes)) {
             $shippingPrice = '0.00';
         }
         return $shippingPrice;
