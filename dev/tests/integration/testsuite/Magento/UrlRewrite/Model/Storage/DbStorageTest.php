@@ -336,6 +336,43 @@ class DbStorageTest extends TestCase
     }
 
     /**
+     * @param string $requestPath
+     * @return void
+     */
+    #[DataProvider('percentEncodingCaseDataProvider')]
+    #[
+        DataFixture(
+            UrlRewriteFixture::class,
+            ['request_path' => 'hex-case/%c5%82.html', 'target_path' => 'cms/hex-case', 'store_id' => 1]
+        )
+    ]
+    public function testFindOneByDataMatchesPercentEncodingRegardlessOfHexCase(string $requestPath): void
+    {
+        $result = $this->storage->findOneByData(
+            [
+                UrlRewrite::REQUEST_PATH => $requestPath,
+                UrlRewrite::STORE_ID => 1
+            ]
+        );
+
+        $this->assertNotNull($result);
+        $this->assertEquals('hex-case/%c5%82.html', $result->getRequestPath());
+        $this->assertEquals('cms/hex-case', $result->getTargetPath());
+        $this->assertEquals(0, $result->getRedirectType());
+    }
+
+    /**
+     * @return array
+     */
+    public static function percentEncodingCaseDataProvider(): array
+    {
+        return [
+            'same case' => ['hex-case/%c5%82.html'],
+            'uppercase hex' => ['hex-case/%C5%82.html'],
+        ];
+    }
+
+    /**
      * Data provider for 4-byte UTF-8 characters (requires utf8mb4)
      *
      * @return array
