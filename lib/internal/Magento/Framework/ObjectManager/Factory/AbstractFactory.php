@@ -275,7 +275,13 @@ abstract class AbstractFactory implements FactoryInterface
         }
 
         if ($isVariadic) {
-            return is_array($argument) ? $argument : [$argument];
+            $variadicArguments = is_array($argument) ? $argument : [$argument];
+
+            foreach ($variadicArguments as &$variadicArgument) {
+                $this->resolveArgument($variadicArgument, $paramType, $paramDefault, $paramName, $requestedType);
+            };
+
+            return $variadicArguments;
         }
 
         $this->resolveArgument($argument, $paramType, $paramDefault, $paramName, $requestedType);
