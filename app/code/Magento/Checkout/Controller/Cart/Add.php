@@ -144,7 +144,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 return $this->goBack();
             }
 
-            $this->addProductToCart->execute($this->cart, $product, $params, $related ? explode(',', $related) : []);
+            $this->addProductToCart->execute($this->cart, $product, $params, $this->getRelatedIds($related));
 
             /**
              * @todo remove wishlist observer \Magento\Wishlist\Observer\AddToCart
@@ -275,5 +275,16 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             'checkout/cart/redirect_to_cart',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Split the related_product request value into ids, ignoring anything that is not a string.
+     *
+     * @param mixed $related
+     * @return string[]
+     */
+    private function getRelatedIds($related): array
+    {
+        return is_string($related) && $related ? explode(',', $related) : [];
     }
 }
