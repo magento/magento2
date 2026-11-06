@@ -573,7 +573,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  )
      * )
      *
-     * @param  \Magento\Sales\Model\Order|Invoice|Creditmemo $source
+     * @param  \Magento\Sales\Model\Order|Invoice|Creditmemo|null $source
      * @return array
      */
     public function getCalculatedTaxes($source)
