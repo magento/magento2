@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Model\Import\Entity;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\ImportExport\Model\Import\AbstractSource;
@@ -518,6 +519,7 @@ abstract class AbstractEntity implements EntityInterface
         $indexValAttrs = []
     ) {
         $options = [];
+        $sourceOptions = [];
 
         if ($attribute->usesSource()) {
             // merge global entity index value attributes
@@ -533,9 +535,14 @@ abstract class AbstractEntity implements EntityInterface
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $value = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($value as $innerOption) {
-                        if (strlen($innerOption['value'] ?? '')) {
-                            // skip ' -- Please Select -- ' option
-                            $options[strtolower($innerOption[$index] ?? '')] = $innerOption['value'];
+                        // skip ' -- Please Select -- ' option
+                        if (!strlen($innerOption['value'] ?? '')) {
+                            continue;
+                        }
+                        $label = $innerOption[$index] ?? '';
+                        $options[strtolower($label)] = $innerOption['value'];
+                        if ($label instanceof Phrase) {
+                            $sourceOptions += [strtolower($label->getText()) => $innerOption['value']];
                         }
                     }
                 }
@@ -544,7 +551,7 @@ abstract class AbstractEntity implements EntityInterface
                 // ignore exceptions connected with source models
             }
         }
-        return $options;
+        return $options + $sourceOptions;
     }
 
     /**
