@@ -886,7 +886,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         return $this->getConnection()->getCheckSql(
             sprintf('%s.value = 0', $tableAlias),
             sprintf(
-                'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
+                'ROUND(%s * (1 - %s.percentage_value / 100), 4)',
                 $priceExpression,
                 $tableAlias
             ),
