@@ -255,10 +255,12 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="SALES_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="sales_order"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="sales_order"
                     column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
                     onDelete="SET NULL"/>
-        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STORE_ID_STORE_STORE_ID" table="sales_order" column="store_id"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STORE_ID_STORE_STORE_ID" table="sales_order"
+                    column="store_id"
                     referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
         <constraint xsi:type="unique" referenceId="SALES_ORDER_INCREMENT_ID_STORE_ID">
             <column name="increment_id"/>
@@ -594,7 +596,8 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="item_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="SALES_ORDER_ITEM_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_order_item"
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_ITEM_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_order_item"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SALES_ORDER_ITEM_STORE_ID_STORE_STORE_ID" table="sales_order_item"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
@@ -735,7 +738,8 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_shipment"
+        <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_shipment"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SALES_SHIPMENT_STORE_ID_STORE_STORE_ID" table="sales_shipment"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
@@ -788,7 +792,7 @@
         <column xsi:type="varchar" name="shipping_name" nullable="true" length="128" comment="Shipping Name"/>
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
         <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
+        <column xsi:type="varchar" name="payment_method" nullable="true" length="128" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="true" comment="Created At"/>
@@ -1345,7 +1349,8 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_ORDER_ID_SALES_ORDER_ENTITY_ID" table="sales_creditmemo"
+        <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_creditmemo"
                     column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SALES_CREDITMEMO_STORE_ID_STORE_STORE_ID" table="sales_creditmemo"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
@@ -1403,7 +1408,7 @@
         <column xsi:type="varchar" name="customer_email" nullable="true" length="128" comment="Customer Email"/>
         <column xsi:type="smallint" name="customer_group_id" unsigned="false" nullable="true"
                 identity="false" comment="Customer Group ID"/>
-        <column xsi:type="varchar" name="payment_method" nullable="true" length="32" comment="Payment Method"/>
+        <column xsi:type="varchar" name="payment_method" nullable="true" length="128" comment="Payment Method"/>
         <column xsi:type="varchar" name="shipping_information" nullable="true" length="255"
                 comment="Shipping Method Name"/>
         <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
@@ -1752,7 +1757,8 @@
         <constraint xsi:type="foreign" referenceId="SALES_PAYMENT_TRANSACTION_ORDER_ID_SALES_ORDER_ENTITY_ID"
                     table="sales_payment_transaction" column="order_id" referenceTable="sales_order"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="FK_B99FF1A06402D725EBDB0F3A7ECD47A2" table="sales_payment_transaction"
+        <constraint xsi:type="foreign" referenceId="FK_B99FF1A06402D725EBDB0F3A7ECD47A2"
+                    table="sales_payment_transaction"
                     column="parent_id" referenceTable="sales_payment_transaction" referenceColumn="transaction_id"
                     onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="SALES_PAYMENT_TRANSACTION_PAYMENT_ID_SALES_ORDER_PAYMENT_ENTT_ID"
@@ -2108,7 +2114,8 @@
             <column name="store_id"/>
         </index>
     </table>
-    <table name="sales_order_status_change_history" resource="default" engine="innodb" comment="Save the updated order status with timestamp">
+    <table name="sales_order_status_change_history" resource="default" engine="innodb"
+           comment="Save the updated order status with timestamp">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
