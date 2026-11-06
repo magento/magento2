@@ -215,8 +215,14 @@ abstract class Product extends Action
         }
 
         if ($categoryId) {
-            $category = $this->categoryRepository->get($categoryId);
-            $this->coreRegistry->register('current_category', $category);
+            try {
+                $category = $this->categoryRepository->get($categoryId);
+            } catch (NoSuchEntityException $e) {
+                $category = null;
+            }
+            if ($category) {
+                $this->coreRegistry->register('current_category', $category);
+            }
         }
 
         try {
