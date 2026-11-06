@@ -27,7 +27,7 @@
         </before>
 
         <!-- Open Cache Management page -->
-        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="amOnPageCacheManagement"/>
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="amOnPageCacheManagement"/>
         <waitForPageLoad stepKey="waitForPageCacheManagementLoad"/>
 
         <!-- Check 'Flush Static Files Cache' not visible in production mode. -->
