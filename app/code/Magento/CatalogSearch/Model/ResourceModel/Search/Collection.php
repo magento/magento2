@@ -148,10 +148,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addBackendSearchFilter($query)
     {
         $this->_searchQuery = $query;
-        $this->addFieldToFilter(
-            $this->getEntity()->getLinkField(),
-            ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query, false))]
-        );
+        $words = array_unique(preg_split('/\\s+/', (string)$query, -1, PREG_SPLIT_NO_EMPTY) ?: []);
+        try {
+            foreach ($words as $word) {
+                // The SQL builders also read the query from collection state.
+                $this->_searchQuery = $word;
+                $this->addFieldToFilter(
+                    $this->getEntity()->getLinkField(),
+                    ['in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($word, false))]
+                );
+            }
+        } finally {
+            $this->_searchQuery = $query;
+        }
         return $this;
     }
 
