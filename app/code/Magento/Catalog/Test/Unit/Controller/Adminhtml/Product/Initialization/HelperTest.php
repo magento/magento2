@@ -767,6 +767,28 @@ class HelperTest extends TestCase
         $this->assertEquals($expectedResults, $result);
     }
 
+    public function testMergeProductOptionsMarksPriceAsUseDefault(): void
+    {
+        $productOptions = [
+            [
+                'option_id' => '7',
+                'price' => '15',
+                'default_price' => '10',
+                'values' => [
+                    ['option_type_id' => '2', 'price' => '5', 'default_price' => '3'],
+                    ['option_type_id' => '3', 'price' => '6', 'default_price' => '4'],
+                ],
+            ],
+        ];
+        $useDefault = [7 => ['price' => '1', 'values' => [2 => ['price' => '1'], 3 => ['price' => '0']]]];
+
+        $result = $this->helper->mergeProductOptions($productOptions, $useDefault);
+
+        $this->assertSame(1, (int)$result[0]['is_use_default_price']);
+        $this->assertSame(1, (int)$result[0]['values'][0]['is_use_default_price']);
+        $this->assertSame(0, (int)$result[0]['values'][1]['is_use_default_price']);
+    }
+
     /**
      * @param array $types
      * @return array

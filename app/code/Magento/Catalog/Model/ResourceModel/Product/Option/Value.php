@@ -106,6 +106,40 @@ class Value extends AbstractDb
     }
 
     /**
+     * Check if the store view price of the option value has to fall back to the default one
+     *
+     * @param AbstractModel $object
+     * @return bool
+     */
+    private function isStorePriceReset(AbstractModel $object): bool
+    {
+        return (bool)$object->getData('is_use_default_price')
+            && (int)$object->getStoreId() !== Store::DEFAULT_STORE_ID
+            && (int)$this->_config->getValue(
+                Store::XML_PATH_PRICE_SCOPE,
+                ScopeInterface::SCOPE_STORE
+            ) === Store::PRICE_SCOPE_WEBSITE;
+    }
+
+    /**
+     * Remove option value prices of all store views in the website of the option value store view
+     *
+     * @param AbstractModel $object
+     * @return void
+     */
+    private function deleteWebsiteStorePrices(AbstractModel $object): void
+    {
+        $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
+        if (empty($storeIds)) {
+            return;
+        }
+        $this->getConnection()->delete(
+            $this->getTable('catalog_product_option_type_price'),
+            ['option_type_id = ?' => (int)$object->getId(), 'store_id IN (?)' => array_map('intval', $storeIds)]
+        );
+    }
+
+    /**
      * Save option value price data
      *
      * @param AbstractModel $object
@@ -115,6 +149,11 @@ class Value extends AbstractDb
      */
     protected function _saveValuePrices(AbstractModel $object)
     {
+        if ($this->isStorePriceReset($object)) {
+            $this->deleteWebsiteStorePrices($object);
+            return;
+        }
+
         $objectPrice = $object->getPrice();
         $priceTable = $this->getTable('catalog_product_option_type_price');
         $formattedPrice = $this->getLocaleFormatter()->getNumber($objectPrice);
