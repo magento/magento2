@@ -18,6 +18,7 @@ define([
     'use strict';
 
     return Component.extend({
+        isSubmitting: false,
         registerUrl: window.authenticationPopup.customerRegisterUrl,
         forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
         autocomplete: window.authenticationPopup.autocomplete,
@@ -96,6 +97,11 @@ define([
                 formDataArray = formElement.serializeArray();
 
             event.stopPropagation();
+
+            if (this.isSubmitting) {
+                return false;
+            }
+
             formDataArray.forEach(function (entry) {
                 loginData[entry.name] = entry.value;
             });
@@ -103,8 +109,15 @@ define([
             if (formElement.validation() &&
                 formElement.validation('isValid')
             ) {
+                this.isSubmitting = true;
                 this.isLoading(true);
-                loginAction(loginData);
+                loginAction(loginData).done(function (response) {
+                    if (response.errors) {
+                        this.isSubmitting = false;
+                    }
+                }.bind(this)).fail(function () {
+                    this.isSubmitting = false;
+                }.bind(this));
             }
 
             return false;
