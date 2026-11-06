@@ -12,22 +12,16 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class CmsPage implements ItemProviderInterface
 {
     /**
-     * Cms page factory
-     *
      * @var PageFactory
      */
     private $cmsPageFactory;
 
     /**
-     * Sitemap item factory
-     *
      * @var SitemapItemInterfaceFactory
      */
     private $itemFactory;
 
     /**
-     * Config reader
-     *
      * @var ConfigReaderInterface
      */
     private $configReader;
@@ -50,21 +44,32 @@ class CmsPage implements ItemProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems($storeId)
     {
         $collection = $this->cmsPageFactory->create()->getCollection($storeId);
-        $items = array_map(function ($item) use ($storeId) {
-            return $this->itemFactory->create([
-                'url' => $item->getUrl(),
-                'updatedAt' => $item->getUpdatedAt(),
-                'images' => $item->getImages(),
-                'priority' => $this->configReader->getPriority($storeId),
-                'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-            ]);
-        }, $collection);
 
-        return $items;
+        return array_map(function ($item) use ($storeId) {
+            return $this->itemFactory->create($this->getItemData($item, $storeId));
+        }, $collection);
+    }
+
+    /**
+     * Get constructor arguments for the sitemap item factory.
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @param int $storeId
+     * @return array
+     */
+    public function getItemData($item, $storeId)
+    {
+        return [
+            'url' => $item->getUrl(),
+            'updatedAt' => $item->getUpdatedAt(),
+            'images' => $item->getImages(),
+            'priority' => $this->configReader->getPriority($storeId),
+            'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
+        ];
     }
 }
