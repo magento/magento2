@@ -134,6 +134,48 @@ define([
             expect(instance.data('mage-multiselect2').setCurrentPage).toHaveBeenCalledWith(2);
         });
 
+        it('multiselect2 loads next page when scrolled to the bottom of a list with fractional height', function () {
+            var widget = instance.data('mage-multiselect2'),
+                properties = {
+                    clientHeight: 119,
+                    scrollHeight: 2268,
+                    scrollTop: 2149
+                };
+
+            spyOn(widget, 'loadOptions');
+            widget.$wrapper = {
+                height: jasmine.createSpy().and.returnValue(118.69),
+                prop: function (name) {
+                    return properties[name];
+                }
+            };
+
+            widget.onScroll();
+
+            expect(widget.loadOptions).toHaveBeenCalled();
+        });
+
+        it('multiselect2 does not load next page before scrolled to the bottom', function () {
+            var widget = instance.data('mage-multiselect2'),
+                properties = {
+                    clientHeight: 119,
+                    scrollHeight: 2268,
+                    scrollTop: 1000
+                };
+
+            spyOn(widget, 'loadOptions');
+            widget.$wrapper = {
+                height: jasmine.createSpy().and.returnValue(118.69),
+                prop: function (name) {
+                    return properties[name];
+                }
+            };
+
+            widget.onScroll();
+
+            expect(widget.loadOptions).not.toHaveBeenCalled();
+        });
+
         it('multiselect2 item click', function () {
             var option = '<div><label><input type="checkbox" value="1"/><span>Label</span></label></div>',
                 checkbox;
