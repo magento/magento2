@@ -9,14 +9,17 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Make sure that a request's method can be processed by an action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HttpMethodValidator implements ValidatorInterface
 {
@@ -31,15 +34,23 @@ class HttpMethodValidator implements ValidatorInterface
     private $log;
 
     /**
+     * @var RawFactory
+     */
+    private $rawFactory;
+
+    /**
      * @param HttpMethodMap $map
      * @param LoggerInterface $logger
+     * @param RawFactory|null $rawFactory
      */
     public function __construct(
         HttpMethodMap $map,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?RawFactory $rawFactory = null
     ) {
         $this->map = $map;
         $this->log = $logger;
+        $this->rawFactory = $rawFactory ?: ObjectManager::getInstance()->get(RawFactory::class);
     }
 
     /**
@@ -66,8 +77,23 @@ class HttpMethodValidator implements ValidatorInterface
             "URI '$uri'' cannot be accessed with $method method ($actionClass)"
         );
 
+        $allowedMethods = [];
+        foreach ($this->map->getMap() as $httpMethod => $interface) {
+            if ($action instanceof $interface) {
+                $allowedMethods[] = $httpMethod;
+            }
+        }
+
+        if ($allowedMethods) {
+            throw new InvalidRequestException(
+                $this->rawFactory->create()
+                    ->setHttpResponseCode(405)
+                    ->setHeader('Allow', implode(', ', $allowedMethods), true)
+            );
+        }
+
         throw new InvalidRequestException(
-            new NotFoundException(new Phrase('Page not found.'))
+            new NotFoundException(__('Page not found.'))
         );
     }
 
