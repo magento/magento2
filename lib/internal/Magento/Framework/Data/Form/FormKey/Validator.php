@@ -36,6 +36,6 @@ class Validator
     {
         $formKey = $request->getParam('form_key', null);
         
-        return $formKey && Security::compareStrings($formKey, $this->_formKey->getFormKey());
+        return is_string($formKey) && $formKey && Security::compareStrings($formKey, $this->_formKey->getFormKey());
     }
 }
