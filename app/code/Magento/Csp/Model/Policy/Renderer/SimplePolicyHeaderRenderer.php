@@ -19,6 +19,10 @@ use Magento\Framework\App\Response\HttpInterface as HttpResponse;
  */
 class SimplePolicyHeaderRenderer implements PolicyRendererInterface
 {
+    private const REPORTING_ENDPOINTS_HEADER = 'Reporting-Endpoints';
+
+    private const REPORTING_GROUP = 'report-endpoint';
+
     /**
      * @var ModeConfigManagerInterface
      */
@@ -45,17 +49,15 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $header = 'Content-Security-Policy';
         }
         $value = $policy->getId() .' ' .$policy->getValue() .';';
-        if ($config->getReportUri() && !$response->getHeader('Report-To')) {
-            $reportToData = [
-                'group' => 'report-endpoint',
-                'max_age' => 10886400,
-                'endpoints' => [
-                    ['url' => $config->getReportUri()]
-                ]
-            ];
+        if ($config->getReportUri() && !$response->getHeader(self::REPORTING_ENDPOINTS_HEADER)) {
             $value .= ' report-uri ' .$config->getReportUri() .';';
-            $value .= ' report-to '. $reportToData['group'] .';';
-            $response->setHeader('Report-To', json_encode($reportToData), true);
+            $value .= ' report-to ' .self::REPORTING_GROUP .';';
+            $endpoint = str_replace(['\\', '"'], ['\\\\', '\\"'], $config->getReportUri());
+            $response->setHeader(
+                self::REPORTING_ENDPOINTS_HEADER,
+                self::REPORTING_GROUP .'="' .$endpoint .'"',
+                true
+            );
         }
         if ($existing = $response->getHeader($header)) {
             $value = $value .' ' .$existing->getFieldValue();
