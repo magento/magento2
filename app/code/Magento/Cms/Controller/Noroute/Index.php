@@ -51,7 +51,7 @@ class Index extends \Magento\Framework\App\Action\Action
         if ($resultPage) {
             $resultPage->setStatusHeader(404, '1.1', 'Not Found');
             $resultPage->setHeader('Status', '404 File not found');
-            $resultPage->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+            $resultPage->setHeader('Cache-Control', 'no-cache, must-revalidate, max-age=0', true);
             return $resultPage;
         } else {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
