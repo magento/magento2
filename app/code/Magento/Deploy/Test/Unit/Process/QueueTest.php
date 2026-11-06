@@ -716,4 +716,59 @@ class QueueTest extends TestCase
             'failure exit' => [1, false],
         ];
     }
+
+    /**
+     * Test that isDeployed sets hasErrors when a child process exits with a non-zero status.
+     *
+     * @return void
+     * @covers ::isDeployed
+     */
+    public function testIsDeployedSetsHasErrorsOnChildFailure(): void
+    {
+        if (!function_exists('pcntl_fork')) {
+            $this->markTestSkipped('pcntl_fork not available');
+        }
+
+        $pid = pcntl_fork();
+        if ($pid === -1) {
+            $this->fail('Failed to fork');
+        } elseif ($pid === 0) {
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+            exit(1);
+        }
+
+        usleep(2000000); // wait for child to become a zombie
+
+        $queue = $this->createQueue(4);
+        $package = $this->createMock(Package::class);
+        $package->expects($this->any())->method('getPath')->willReturn('test/path');
+        $package->expects($this->any())->method('getState')->willReturn(null);
+        $package->expects($this->once())->method('setState')->with(Package::STATE_COMPLETED);
+
+        $this->setPrivateProperty($queue, 'processIds', ['test/path' => $pid]);
+        $this->setPrivateProperty($queue, 'inProgress', ['test/path' => $package]);
+
+        $this->logger->expects($this->once())->method('info');
+
+        $this->invokeMethod($queue, 'isDeployed', [$package]);
+
+        $this->assertTrue($this->getPrivateProperty($queue, 'hasErrors'));
+
+        $this->setPrivateProperty($queue, 'inProgress', []);
+    }
+
+    /**
+     * Test that process() throws RuntimeException when child process failures were detected.
+     *
+     * @return void
+     * @covers ::process
+     */
+    public function testProcessThrowsRuntimeExceptionWhenHasErrors(): void
+    {
+        $queue = $this->createQueue();
+        $this->setPrivateProperty($queue, 'hasErrors', true);
+
+        $this->expectException(\RuntimeException::class);
+        $queue->process();
+    }
 }
