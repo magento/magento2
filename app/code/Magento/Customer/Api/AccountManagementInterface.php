@@ -143,8 +143,7 @@ interface AccountManagementInterface
     /**
      * Reset customer password.
      *
-     * @param string $email If empty value given then the customer
-     * will be matched by the RP token.
+     * @param string $email Customer email, required. The customer is not matched by the RP token alone.
      * @param string $resetToken
      * @param string $newPassword
      *
@@ -157,8 +156,7 @@ interface AccountManagementInterface
     /**
      * Check if password reset token is valid.
      *
-     * @param int $customerId If null is given then a customer
-     * will be matched by the RP token.
+     * @param int $customerId Customer ID, required. The customer is not matched by the RP token alone.
      * @param string $resetPasswordLinkToken
      *
      * @return bool True if the token is valid
