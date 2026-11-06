@@ -8,7 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\Directory\Command;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Phrase;
 use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
@@ -18,6 +21,9 @@ use Psr\Log\LoggerInterface;
  */
 class CreateByPaths implements CreateDirectoriesByPathsInterface
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
     /**
      * @var LoggerInterface
      */
@@ -34,18 +40,26 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     private $isPathExcluded;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $coreConfig;
+
+    /**
      * @param LoggerInterface $logger
      * @param Storage $storage
      * @param IsPathExcludedInterface $isPathExcluded
+     * @param ScopeConfigInterface|null $coreConfig
      */
     public function __construct(
         LoggerInterface $logger,
         Storage $storage,
-        IsPathExcludedInterface $isPathExcluded
+        IsPathExcludedInterface $isPathExcluded,
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->logger = $logger;
         $this->storage = $storage;
         $this->isPathExcluded = $isPathExcluded;
+        $this->coreConfig = $coreConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -54,9 +68,10 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     public function execute(array $paths): void
     {
         $failedPaths = [];
+        $excludedPaths = [];
         foreach ($paths as $path) {
             if ($this->isPathExcluded->execute($path)) {
-                $failedPaths[] = $path;
+                $excludedPaths[] = $path;
                 continue;
             }
             try {
@@ -76,15 +91,42 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
             }
         }
 
+        $messages = [];
+        if (!empty($excludedPaths)) {
+            $messages[] = $this->getExcludedPathsMessage($excludedPaths);
+        }
         if (!empty($failedPaths)) {
+            $messages[] = __('Could not create directories: %paths', ['paths' => implode(' ,', $failedPaths)]);
+        }
+        if (!empty($messages)) {
             throw new CouldNotSaveException(
-                __(
-                    'Could not create directories: %paths',
-                    [
-                        'paths' => implode(' ,', $failedPaths)
-                    ]
-                )
+                count($messages) === 1 ? $messages[0] : new Phrase('%1 %2', $messages)
             );
         }
+    }
+
+    /**
+     * Describe restrictions separately from storage failures.
+     *
+     * @param string[] $paths
+     * @return Phrase
+     */
+    private function getExcludedPathsMessage(array $paths): Phrase
+    {
+        $folders = $this->coreConfig->getValue(self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH, 'default');
+        $folders = is_array($folders) ? $folders : [];
+        $folders = array_filter($folders, static fn ($folder) => is_string($folder) && trim($folder) !== '');
+        $folders = array_unique(array_map('trim', $folders));
+        if (empty($folders)) {
+            return __(
+                'Could not create directories: %paths. These paths are outside the allowed Media Gallery folders.',
+                ['paths' => implode(' ,', $paths)]
+            );
+        }
+
+        return __(
+            'Could not create directories: %paths. You can create folders only inside these folders: %allowedPaths.',
+            ['paths' => implode(' ,', $paths), 'allowedPaths' => implode(', ', $folders)]
+        );
     }
 }
