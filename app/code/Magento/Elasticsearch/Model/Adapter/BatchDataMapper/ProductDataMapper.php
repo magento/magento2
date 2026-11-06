@@ -80,6 +80,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         'status',
         'visibility',
         'tax_class_id',
+        'url_key',
     ];
 
     /**
