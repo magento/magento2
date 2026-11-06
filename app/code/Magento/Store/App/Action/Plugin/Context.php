@@ -144,6 +144,10 @@ class Context
                 $defaultStoreCode = $request->getServerValue(StoreManager::PARAM_RUN_CODE);
                 $defaultStore = $this->storeManager->getStore($defaultStoreCode);
                 break;
+            case ScopeInterface::SCOPE_WEBSITE == $request->getServerValue(StoreManager::PARAM_RUN_TYPE):
+                $defaultWebsiteCode = $request->getServerValue(StoreManager::PARAM_RUN_CODE);
+                $defaultStore = $this->storeManager->getWebsite($defaultWebsiteCode)->getDefaultStore();
+                break;
             default:
                 $defaultStoreCode = $this->storeManager->getDefaultStoreView()->getCode();
                 $defaultStore = $this->storeManager->getStore($defaultStoreCode);
