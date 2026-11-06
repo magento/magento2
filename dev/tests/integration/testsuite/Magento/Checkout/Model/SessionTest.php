@@ -13,9 +13,11 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -132,6 +134,32 @@ class SessionTest extends TestCase
         $this->assertEquals(0, $quote->getItemsCount());
         $this->assertEmpty($quote->getItems());
         $this->assertEquals(0, $quote->getShippingAddress()->getBaseGrandTotal());
+    }
+
+    /**
+     * Tests that the quote follows the store currency when the rate leaves the totals unchanged.
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoConfigFixture default_store currency/options/base USD
+     * @magentoConfigFixture default_store currency/options/default USD
+     * @magentoConfigFixture default_store currency/options/allow USD,EUR
+     * @magentoAppIsolation enabled
+     *
+     * @return void
+     */
+    public function testGetQuoteWithSameCurrencyRate(): void
+    {
+        $this->objectManager->create(Currency::class)->saveRates(['USD' => ['EUR' => '1.0000']]);
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->assertEquals('USD', $quote->getQuoteCurrencyCode());
+
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->getStore()->setCurrentCurrencyCode('EUR');
+        $storeManager->reinitStores();
+        $this->checkoutSession->setQuoteId($quote->getId());
+
+        $this->assertEquals('EUR', $this->checkoutSession->getQuote()->getQuoteCurrencyCode());
+        $this->assertEquals('EUR', $this->quoteRepository->get($quote->getId())->getQuoteCurrencyCode());
     }
 
     /**
