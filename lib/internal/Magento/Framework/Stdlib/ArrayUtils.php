@@ -6,7 +6,7 @@
 namespace Magento\Framework\Stdlib;
 
 /**
- * Class ArrayUtils
+ * Provides helper methods for sorting, decorating, flattening and diffing arrays.
  *
  * @api
  * @since 100.0.2
@@ -41,6 +41,7 @@ class ArrayUtils
 
     /**
      * Decorate a plain array of arrays or objects
+     *
      * The array actually can be an object with Iterator interface
      *
      * Keys with prefix_* will be set:
@@ -167,10 +168,9 @@ class ArrayUtils
                 continue;
             }
 
-            $result = array_merge(
-                $result,
-                $this->flatten($value, $fullPath, $separator)
-            );
+            foreach ($this->flatten($value, $fullPath, $separator) as $flattenedKey => $flattenedValue) {
+                $result[$flattenedKey] = $flattenedValue;
+            }
         }
 
         return $result;
@@ -190,7 +190,7 @@ class ArrayUtils
 
         foreach ($originalArray as $key => $value) {
             if (array_key_exists($key, $newArray)) {
-                if (is_array($value)) {
+                if (is_array($value) && is_array($newArray[$key])) {
                     $valueDiff = $this->recursiveDiff($value, $newArray[$key]);
                     if (count($valueDiff)) {
                         $diff[$key] = $valueDiff;
