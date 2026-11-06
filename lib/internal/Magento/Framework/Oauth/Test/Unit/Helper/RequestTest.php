@@ -182,4 +182,67 @@ class RequestTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * Test that the query string parameters are correctly decoded, including a plus sign as a space.
+     *
+     * @param string $queryString
+     * @param array $expectedParams
+     */
+    #[DataProvider('dataProviderForTestPrepareRequestQueryString')]
+    public function testPrepareRequestQueryString($queryString, $expectedParams)
+    {
+        $httpRequestMock = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $httpRequestMock->expects($this->once())->method('getScheme')->willReturn('https');
+        $httpRequestMock->expects($this->once())->method('getHttpHost')->willReturn('example.com');
+        $httpRequestMock->expects($this->once())
+            ->method('getRequestUri')
+            ->willReturn('/rest/V1/products?' . $queryString);
+
+        $httpRequestMock->expects($this->any())
+            ->method('getHeader')
+            ->willReturnCallback(function ($header) {
+                switch ($header) {
+                    case 'Authorization':
+                        return 'OAuth oauth_consumer_key="x",oauth_token="x"';
+                    case 'Content-Type':
+                        return Client::ENC_URLENCODED;
+                    default:
+                        return null;
+                }
+            });
+
+        $this->assertEquals(
+            ['oauth_consumer_key' => 'x', 'oauth_token' => 'x'] + $expectedParams,
+            $this->oauthRequestHelper->prepareRequest($httpRequestMock)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderForTestPrepareRequestQueryString()
+    {
+        return [
+            'plusInValue' => [
+                'searchCriteria%5BfilterGroups%5D%5B0%5D%5Bfilters%5D%5B0%5D%5Bvalue%5D=2021-01-01+12:00',
+                ['searchCriteria[filterGroups][0][filters][0][value]' => '2021-01-01 12:00']
+            ],
+            'plusInKey' => [
+                'some+key=value',
+                ['some key' => 'value']
+            ],
+            'encodedPlus' => [
+                'value=a%2Bb',
+                ['value' => 'a+b']
+            ],
+            'encodedSpace' => [
+                'value=2021-01-01%2012:00',
+                ['value' => '2021-01-01 12:00']
+            ]
+        ];
+    }
 }
