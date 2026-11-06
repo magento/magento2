@@ -112,6 +112,43 @@ class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAf
                 'arguments' => $exchangeArguments,
             ];
         }
+
+        /** @var $queue \DOMElement */
+        foreach ($source->getElementsByTagName('queue') as $queue) {
+            $result = $this->processQueue($queue, $result);
+        }
+        return $result;
+    }
+
+    /**
+     * Convert queue declaration and merge it with a declaration of the same queue converted earlier.
+     *
+     * @param \DOMElement $queue
+     * @param array $result
+     * @return array
+     */
+    private function processQueue(\DOMElement $queue, array $result): array
+    {
+        $name = $this->getAttributeValue($queue, 'name');
+        $connection = $this->getAttributeValue($queue, 'connection', $this->defaultValue->getConnection());
+        $key = 'queue--' . $name . '--' . $connection;
+
+        $arguments = $result[$key]['arguments'] ?? [];
+        foreach ($queue->childNodes as $node) {
+            if ($node->nodeType === XML_ELEMENT_NODE && $node->nodeName === 'arguments') {
+                $arguments = array_merge($arguments, $this->processArguments($node));
+            }
+        }
+
+        $result[$key] = [
+            'name' => $name,
+            'type' => 'queue',
+            'connection' => $connection,
+            'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($queue, 'durable', true)),
+            'autoDelete' => $this->booleanUtils->toBoolean($this->getAttributeValue($queue, 'autoDelete', false)),
+            'arguments' => $arguments,
+        ];
+
         return $result;
     }
 

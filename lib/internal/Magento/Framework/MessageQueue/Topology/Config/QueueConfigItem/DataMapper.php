@@ -69,7 +69,7 @@ class DataMapper
     {
         if (null === $this->mappedData) {
             $mappedData = [];
-            foreach ($this->configData->get() as $exchange) {
+            foreach ($this->configData->getExchanges() as $exchange) {
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
                     if ($binding['destinationType'] === 'queue') {
@@ -83,6 +83,7 @@ class DataMapper
                     }
                 }
             }
+            $mappedData[] = $this->createDeclaredQueueItems();
             $this->mappedData = array_merge([], ...$mappedData);
         }
 
@@ -128,6 +129,27 @@ class DataMapper
             'autoDelete' => false,
             'arguments' => $arguments,
         ];
+
+        return $output;
+    }
+
+    /**
+     * Create queue config items for queues declared explicitly in topology config.
+     *
+     * @return array
+     */
+    private function createDeclaredQueueItems(): array
+    {
+        $output = [];
+        foreach ($this->configData->getQueues() as $queue) {
+            $output[$queue['name'] . '--' . $queue['connection']] = [
+                'name' => $queue['name'],
+                'connection' => $queue['connection'],
+                'durable' => $queue['durable'],
+                'autoDelete' => $queue['autoDelete'],
+                'arguments' => $queue['arguments'],
+            ];
+        }
 
         return $output;
     }
