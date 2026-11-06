@@ -89,11 +89,16 @@ class ProductFieldsAutogenerationTest extends WebapiAbstract
     }
 
     /**
-     * Empty meta fields of a new product are generated from the default masks, HTML is stripped.
+     * Empty meta fields of a new product are generated from the masks, HTML is stripped.
+     *
+     * The description mask is set here because Magento_PageBuilder changes its default to {{name}}.
      *
      * @return void
      */
-    #[Config(self::CONFIG_APPLY_TO_API, 1)]
+    #[
+        Config(self::CONFIG_APPLY_TO_API, 1),
+        Config('catalog/fields_masks/meta_description', '{{name}} {{description}}'),
+    ]
     public function testNewProductGetsMetaFieldsFromMasks(): void
     {
         $product = $this->saveProduct($this->getNewProductData([
