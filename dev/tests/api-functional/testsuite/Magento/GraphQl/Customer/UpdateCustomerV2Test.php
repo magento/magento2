@@ -8,17 +8,23 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Exception;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Fixture\CustomerWithAddresses;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for new update customer endpoint
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 #[
     DataFixture(
@@ -277,6 +283,128 @@ QUERY;
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), 'password')
         );
+    }
+
+    /**
+     * Account updates must preserve existing addresses and defaults in the response and storage.
+     */
+    #[
+        DataFixture(
+            CustomerWithAddresses::class,
+            ['email' => 'addressbook@example.com', 'password' => 'password'],
+            'customerWithAddresses'
+        )
+    ]
+    #[DataProvider('customerUpdateMutationProvider')]
+    public function testUpdateCustomerV2PreservesAddresses(string $mutation): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customerWithAddresses');
+        $customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+        $customerRegistry = $objectManager->get(CustomerRegistry::class);
+        $customerRegistry->remove($customer->getId());
+        $originalCustomer = $customerRepository->getById($customer->getId());
+        $originalAddresses = array_map(
+            static fn ($address) => $address->__toArray(),
+            $originalCustomer->getAddresses()
+        );
+        $this->assertCount(3, $originalAddresses);
+        $defaultBilling = $originalCustomer->getDefaultBilling();
+        $defaultShipping = $originalCustomer->getDefaultShipping();
+        $this->assertNotEmpty($defaultBilling);
+        $this->assertNotEmpty($defaultShipping);
+        $headers = $this->getCustomerAuthHeaders($customer->getEmail(), 'password');
+        $newLastname = 'Rowe';
+
+        $selection = <<<FIELDS
+            lastname
+            default_billing
+            default_shipping
+            addresses {
+                uid
+                firstname
+                middlename
+                lastname
+                prefix
+                suffix
+                company
+                street
+                city
+                postcode
+                country_code
+                telephone
+                fax
+                vat_id
+                region {
+                    region
+                    region_code
+                    region_id
+                }
+                default_billing
+                default_shipping
+            }
+FIELDS;
+        $customerQuery = "{ customer { {$selection} } }";
+        $originalResponse = $this->graphQlQuery($customerQuery, [], '', $headers)['customer'];
+        $this->assertCount(3, $originalResponse['addresses']);
+
+        $query = <<<QUERY
+mutation {
+    {$mutation}(
+        input: {
+            lastname: "{$newLastname}"
+        }
+    ) {
+        customer {
+            {$selection}
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $headers
+        );
+
+        $responseCustomer = $response[$mutation]['customer'];
+        $this->assertEquals($newLastname, $responseCustomer['lastname']);
+        $this->assertEqualsCanonicalizing(
+            $originalResponse['addresses'],
+            $responseCustomer['addresses']
+        );
+        $this->assertSame($originalResponse['default_billing'], $responseCustomer['default_billing']);
+        $this->assertSame($originalResponse['default_shipping'], $responseCustomer['default_shipping']);
+
+        $persistedResponse = $this->graphQlQuery($customerQuery, [], '', $headers)['customer'];
+        $this->assertSame($newLastname, $persistedResponse['lastname']);
+        $this->assertEqualsCanonicalizing($originalResponse['addresses'], $persistedResponse['addresses']);
+        $this->assertSame($originalResponse['default_billing'], $persistedResponse['default_billing']);
+        $this->assertSame($originalResponse['default_shipping'], $persistedResponse['default_shipping']);
+
+        // Reload persistence independently of the mutation's customer object.
+        $customerRegistry->remove($customer->getId());
+        $persistedCustomer = $customerRepository->getById($customer->getId());
+        $this->assertSame($newLastname, $persistedCustomer->getLastname());
+        $this->assertEqualsCanonicalizing(
+            $originalAddresses,
+            array_map(static fn ($address) => $address->__toArray(), $persistedCustomer->getAddresses())
+        );
+        $this->assertSame($defaultBilling, $persistedCustomer->getDefaultBilling());
+        $this->assertSame($defaultShipping, $persistedCustomer->getDefaultShipping());
+    }
+
+    /**
+     * @return array
+     */
+    public static function customerUpdateMutationProvider(): array
+    {
+        return [
+            'customer update' => ['updateCustomerV2'],
+            'deprecated customer update' => ['updateCustomer'],
+        ];
     }
 
     /**
