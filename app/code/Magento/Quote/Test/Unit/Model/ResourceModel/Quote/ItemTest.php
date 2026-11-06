@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -65,6 +66,16 @@ class ItemTest extends TestCase
     protected $objectRelationProcessorMock;
 
     /**
+     * @var TransactionManagerInterface|MockObject
+     */
+    protected $transactionManagerMock;
+
+    /**
+     * @var Context|MockObject
+     */
+    protected $contextMock;
+
+    /**
      * Mock class dependencies
      */
     protected function setUp(): void
@@ -95,17 +106,19 @@ class ItemTest extends TestCase
         $this->objectRelationProcessorMock = $this->createMock(
             ObjectRelationProcessor::class
         );
-        $contextMock = $this->createMock(Context::class);
-        $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-        $contextMock->expects($this->once())
+        $this->transactionManagerMock = $this->createMock(TransactionManagerInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
+        $this->contextMock->expects($this->once())
             ->method('getObjectRelationProcessor')
             ->willReturn($this->objectRelationProcessorMock);
+        $this->contextMock->method('getTransactionManager')->willReturn($this->transactionManagerMock);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
             \Magento\Quote\Model\ResourceModel\Quote\Item::class,
             [
-                'context' => $contextMock,
+                'context' => $this->contextMock,
                 'entitySnapshot' => $this->entitySnapshotMock,
                 'entityRelationComposite' => $this->relationCompositeMock
             ]
@@ -222,6 +235,29 @@ class ItemTest extends TestCase
         $this->quoteItemMock->expects($this->once())
             ->method('getOptions')
             ->willReturn([$optionMock]);
+
+        $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
+    }
+
+    public function testSaveDeletedItemDoesNotSaveOptions(): void
+    {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->quoteItemMock)
+            ->willReturn(false);
+
+        $this->quoteItemMock->method('isDeleted')->willReturn(true);
+        $this->quoteItemMock->method('isOptionsSaved')->willReturn(false);
+        $this->quoteItemMock->method('getData')->willReturn([]);
+        $this->quoteItemMock->expects($this->never())
+            ->method('saveItemOptions');
+
+        $optionMock = $this->createMock(Option::class);
+        $this->quoteItemMock->method('getOptions')
+            ->willReturn([$optionMock]);
+
+        $this->transactionManagerMock->method('start')->willReturn($this->connectionMock);
+        $this->resourceMock->method('getConnection')->willReturn($this->connectionMock);
 
         $this->assertEquals($this->model, $this->model->save($this->quoteItemMock));
     }
