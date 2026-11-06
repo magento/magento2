@@ -350,9 +350,13 @@ define([
 
             _VIDEO_URL_VALIDATE_TRIGGER: 'validate_video_url',
 
+            _CANCEL_VIDEO_INFORMATION_TRIGGER: 'cancelled_video_information',
+
             _videoInformation: null,
 
             _currentVideoUrl: null,
+
+            _shouldCancelVideoRequest: false,
 
             /**
              * @private
@@ -366,6 +370,11 @@ define([
                     }, this
                 ));
                 this.element.on(this._VIDEO_URL_VALIDATE_TRIGGER, $.proxy(this._onUrlValidateHandler, this));
+                this.element.on(this._CANCEL_VIDEO_INFORMATION_TRIGGER, $.proxy(
+                    function () {
+                        this._shouldCancelVideoRequest = true;
+                    }, this
+                ));
             },
 
             /**
@@ -394,6 +403,8 @@ define([
                     type,
                     id,
                     googleapisUrl;
+
+                this._shouldCancelVideoRequest = false;
 
                 if (this._currentVideoUrl === url) {
                     return;
@@ -471,6 +482,10 @@ define([
                         return;
                     }
 
+                    if (this._shouldCancelVideoRequest) {
+                        return;
+                    }
+
                     tmp = data.items[0];
                     uploadedFormatted = tmp.snippet.publishedAt.replace('T', ' ').replace(/\..+/g, '');
                     respData = {
@@ -502,6 +517,10 @@ define([
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
+                    }
+
+                    if (this._shouldCancelVideoRequest) {
+                        return;
                     }
                     tmp = data;
 
