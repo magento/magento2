@@ -123,4 +123,11 @@
                 sortOrder="10"
                 disabled="false"/>
     </type>
+    <type name="Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customizable_option" xsi:type="object">Magento\Quote\Model\Cart\BuyRequest\CustomizableOptionDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
