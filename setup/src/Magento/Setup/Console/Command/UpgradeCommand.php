@@ -151,6 +151,8 @@ class UpgradeCommand extends AbstractSetupCommand
     {
         try {
             $request = $input->getOptions();
+            // A bare --dry-run leaves this VALUE_OPTIONAL option at null instead of its false default
+            $request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE] ??= true;
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
 
             // Clean up deprecated 'SET NAMES utf8;' from database connections

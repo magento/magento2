@@ -21,6 +21,8 @@ use Magento\Setup\Model\SearchConfigFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -146,6 +148,37 @@ class UpgradeCommandTest extends TestCase
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute($options));
         $this->assertEquals($expectedString, $this->commandTester->getDisplay());
+    }
+
+    #[DataProvider('dryRunOptionDataProvider')]
+    public function testDryRunOption(array $dryRunArguments, mixed $expectedDryRun): void
+    {
+        $this->appStateMock->method('getMode')->willReturn(AppState::MODE_DEVELOPER);
+        $this->deploymentConfigMock->method('isAvailable')->willReturn(false);
+        $requestMatcher = $this->callback(
+            static fn (array $request): bool => $request['dry-run'] === $expectedDryRun
+        );
+        $this->installerMock->expects($this->once())
+            ->method('installSchema')
+            ->with($requestMatcher);
+        $this->installerMock->expects($this->once())
+            ->method('installDataFixtures')
+            ->with($requestMatcher, true);
+
+        $input = new ArgvInput(array_merge(['bin/magento', '--magento-init-params='], $dryRunArguments));
+        $input->setInteractive(false);
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $this->upgradeCommand->run($input, new BufferedOutput()));
+    }
+
+    public static function dryRunOptionDataProvider(): array
+    {
+        return [
+            'absent' => [[], false],
+            'bare flag' => [['--dry-run'], true],
+            'explicit value' => [['--dry-run=1'], '1'],
+            'explicit zero' => [['--dry-run=0'], '0'],
+        ];
     }
 
     /**
