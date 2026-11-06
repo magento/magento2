@@ -72,14 +72,18 @@ class History extends \Magento\Framework\View\Element\Template
     protected function _construct()
     {
         parent::_construct();
-        $this->pageConfig->getTitle()->set(__('My Orders'));
+        $title = $this->pageConfig->getTitle();
+        if (!$title->getShortHeading()) {
+            $title->set(__('My Orders'));
+        }
     }
 
     /**
      * Provide order collection factory
      *
      * @return CollectionFactoryInterface
-     * @deprecated 100.1.1
+     * @deprecated 100.1.1 Lazy lookup is not needed
+     * @see \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface
      */
     private function getOrderCollectionFactory()
     {
@@ -159,6 +163,7 @@ class History extends \Magento\Framework\View\Element\Template
      * @param object $order
      * @return string
      * @deprecated 102.0.3 Action does not exist
+     * @see \Magento\Sales\Block\Order\History::getViewUrl
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
