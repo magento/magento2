@@ -13,8 +13,6 @@ use Magento\Composer\MagentoComposerApplication;
 class Remove
 {
     /**
-     * Composer application factory
-     *
      * @var MagentoComposerApplicationFactory
      */
     private $composerApplicationFactory;
@@ -47,6 +45,7 @@ class Remove
                 'command' => 'remove',
                 'packages' => $packages,
                 '--no-update-with-dependencies' => true,
+                '--no-interaction' => true,
             ]
         );
     }
