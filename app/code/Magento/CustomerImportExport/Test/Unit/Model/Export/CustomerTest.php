@@ -230,6 +230,30 @@ class CustomerTest extends TestCase
         $this->_model->exportItem($item);
     }
 
+    public function testExportItemWithDeletedStoreAndWebsite(): void
+    {
+        $this->_customerData['website_id'] = null;
+        $this->_customerData['store_id'] = null;
+
+        $writer = $this->createPartialMock(AbstractAdapter::class, ['writeRow']);
+        $writer->expects($this->once())
+            ->method('writeRow')
+            ->with(
+                $this->callback(
+                    fn (array $row): bool => $row[Customer::COLUMN_WEBSITE] === ''
+                        && $row[Customer::COLUMN_STORE] === ''
+                )
+            );
+        $this->_model->setWriter($writer);
+
+        $item = $this->createPartialMockWithReflection(AbstractModel::class, ['getData']);
+        $item->method('getData')->willReturnCallback(
+            fn ($key = null) => $key === null ? $this->_customerData : ($this->_customerData[$key] ?? null)
+        );
+
+        $this->_model->exportItem($item);
+    }
+
     /**
      * Validate data passed to writer's writeRow() method
      *

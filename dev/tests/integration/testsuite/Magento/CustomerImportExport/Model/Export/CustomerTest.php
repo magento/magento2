@@ -18,6 +18,10 @@ use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Framework\App\ResourceConnection;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -95,6 +99,29 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $expectedAttributes = $this->getExpectedAttributes();
         $lines = $this->export($expectedAttributes);
         $this->checkExportData($lines, $expectedAttributes);
+    }
+
+    /**
+     * Deleting a store view or website sets the customer's store_id or website_id to NULL.
+     */
+    #[DataFixture(CustomerFixture::class, as: 'customer')]
+    public function testExportCustomerWithDeletedStoreAndWebsite(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $resource->getConnection()->update(
+            $resource->getTableName('customer_entity'),
+            ['store_id' => null, 'website_id' => null],
+            ['entity_id = ?' => $customer->getId()]
+        );
+
+        $this->_model->setWriter($this->objectManager->create(Csv::class));
+        $lines = $this->_csvToArray($this->_model->export(), 'email');
+
+        $this->assertArrayHasKey($customer->getEmail(), $lines['data']);
+        $row = $lines['data'][$customer->getEmail()];
+        $this->assertSame('', $row[Customer::COLUMN_WEBSITE]);
+        $this->assertSame('', $row[Customer::COLUMN_STORE]);
     }
 
     /**
