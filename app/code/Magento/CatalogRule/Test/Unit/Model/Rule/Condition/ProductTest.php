@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\Product\Attribute\Backend\Stock;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Eav\Model\Config;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -347,6 +349,74 @@ class ProductTest extends TestCase
         ]);
 
         $this->assertFalse($this->product->validate($this->productModel));
+    }
+
+    /**
+     * @param array|null $storedValue
+     * @param array $stockData
+     * @param string $operator
+     * @param string $conditionValue
+     * @param bool $expected
+     * @return void
+     */
+    #[DataProvider('validateStockStatusDataProvider')]
+    public function testValidateUsesStockItemForStockStatusAttribute(
+        ?array $storedValue,
+        array $stockData,
+        string $operator,
+        string $conditionValue,
+        bool $expected
+    ): void {
+        $attributeCode = 'quantity_and_stock_status';
+        $this->product->setData('attribute', $attributeCode);
+        $this->product->setData('value_parsed', $conditionValue);
+        $this->product->setData('operator', $operator);
+
+        $backend = $this->createPartialMockWithReflection(Stock::class, ['afterLoad']);
+        $backend->method('afterLoad')->willReturnCallback(
+            function (AbstractModel $object) use ($attributeCode, $stockData, $backend) {
+                $object->setData($attributeCode, $stockData);
+                return $backend;
+            }
+        );
+        $attribute = $this->createPartialMockWithReflection(Attribute::class, ['getBackendModel', 'getBackend']);
+        $attribute->method('getBackendModel')->willReturn(Stock::class);
+        $attribute->method('getBackend')->willReturn($backend);
+
+        $resource = $this->createPartialMock(ProductResource::class, ['getAttribute']);
+        $resource->method('getAttribute')->with($attributeCode)->willReturn($attribute);
+
+        $model = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getResource', 'getId', 'getStoreId']
+        );
+        $model->method('getResource')->willReturn($resource);
+        $model->method('getId')->willReturn(5);
+        $model->method('getStoreId')->willReturn(1);
+        if ($storedValue !== null) {
+            $model->setData($attributeCode, $storedValue);
+        }
+
+        $this->assertSame($expected, $this->product->validate($model));
+        $this->assertSame($storedValue, $model->getData($attributeCode));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateStockStatusDataProvider(): array
+    {
+        $inStock = ['is_in_stock' => true, 'qty' => 10];
+        $outOfStock = ['is_in_stock' => false, 'qty' => 0];
+
+        return [
+            'in stock, nothing stored' => [null, $inStock, '==', '1', true],
+            'in stock, nothing stored, out of stock rule' => [null, $inStock, '==', '0', false],
+            'out of stock, nothing stored' => [null, $outOfStock, '==', '0', true],
+            'in stock, loaded array value' => [$inStock, $inStock, '==', '1', true],
+            'out of stock, loaded array value' => [$outOfStock, $outOfStock, '==', '1', false],
+            'in stock, is not out of stock' => [null, $inStock, '!=', '0', true],
+        ];
     }
 
     /**
