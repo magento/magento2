@@ -27,6 +27,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -271,10 +272,7 @@ class LoginPostTest extends TestCase
 
         $customerMock = $this->createMock(CustomerInterface::class);
 
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('customer/startup/redirect_dashboard')
-            ->willReturn(0);
+        $this->expectConfig(0, '');
 
         $cookieUrl = 'someUrl1';
         $returnUrl = 'someUrl2';
@@ -316,9 +314,14 @@ class LoginPostTest extends TestCase
             ->method('getCookie')
             ->with('mage-cache-sessid')
             ->willReturn(false);
+        $cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->expectSectionDataCleanCookie($cookieMetadataManager, $cookieMetadataFactory, '');
         $refClass = new \ReflectionClass(LoginPost::class);
         $refProperty = $refClass->getProperty('cookieMetadataManager');
         $refProperty->setValue($this->controller, $cookieMetadataManager);
+        $refClass->getProperty('cookieMetadataFactory')->setValue($this->controller, $cookieMetadataFactory);
 
         $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
@@ -352,10 +355,7 @@ class LoginPostTest extends TestCase
 
         $customerMock = $this->createMock(CustomerInterface::class);
 
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('customer/startup/redirect_dashboard')
-            ->willReturn(1);
+        $this->expectConfig(1, '.example.com');
 
         $this->accountManagement->expects($this->once())
             ->method('authenticate')
@@ -395,6 +395,7 @@ class LoginPostTest extends TestCase
         $cookieMetadataManager->expects($this->once())
             ->method('deleteCookie')
             ->with('mage-cache-sessid', $cookieMetadata);
+        $this->expectSectionDataCleanCookie($cookieMetadataManager, $cookieMetadataFactory, '.example.com');
 
         $refClass = new \ReflectionClass(LoginPost::class);
         $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
@@ -404,6 +405,56 @@ class LoginPostTest extends TestCase
         $cookieMetadataFactoryProperty->setValue($this->controller, $cookieMetadataFactory);
 
         $this->assertSame($this->resultRedirect, $this->controller->execute());
+    }
+
+    /**
+     * Configure the redirect-to-dashboard setting and the cookie domain
+     *
+     * @param int $redirectDashboard
+     * @param string $cookieDomain
+     * @return void
+     */
+    private function expectConfig(int $redirectDashboard, string $cookieDomain): void
+    {
+        $this->scopeConfig->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    ['customer/startup/redirect_dashboard', 'default', null, $redirectDashboard],
+                    ['web/cookie/cookie_domain', 'store', null, $cookieDomain],
+                ]
+            );
+    }
+
+    /**
+     * A successful sign-in sets section_data_clean, so the next page reloads all customer data (#41461)
+     *
+     * @param MockObject $cookieManager
+     * @param MockObject $cookieMetadataFactory
+     * @param string $cookieDomain the configured web/cookie/cookie_domain
+     * @return void
+     */
+    private function expectSectionDataCleanCookie(
+        MockObject $cookieManager,
+        MockObject $cookieMetadataFactory,
+        string $cookieDomain
+    ): void {
+        $publicMetadata = $this->getMockBuilder(PublicCookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $publicMetadata->expects($this->once())->method('setPath')->with('/')->willReturnSelf();
+        $publicMetadata->expects($this->once())->method('setHttpOnly')->with(false)->willReturnSelf();
+        // customer-data.js clears the cookie with the configured domain, so it must be set with that domain.
+        $publicMetadata->expects($cookieDomain === '' ? $this->never() : $this->once())
+            ->method('setDomain')
+            ->with($cookieDomain)
+            ->willReturnSelf();
+        $cookieMetadataFactory->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($publicMetadata);
+        $cookieManager->expects($this->once())
+            ->method('setPublicCookie')
+            ->with('section_data_clean', 'login', $publicMetadata);
     }
 
     /**
