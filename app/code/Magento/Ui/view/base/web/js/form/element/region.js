@@ -72,6 +72,7 @@ define([
             this.validation['required-entry'] = isRegionRequired;
 
             registry.get(this.customName, function (input) {
+                this.hideRegion(option);
                 input.required(isRegionRequired);
                 input.validation['required-entry'] = isRegionRequired;
                 input.validation['validate-not-number-first'] = !this.options().length;
