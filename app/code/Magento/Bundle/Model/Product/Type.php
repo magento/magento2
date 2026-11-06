@@ -825,6 +825,22 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Check whether the buy request lacks a selection the bundle needs.
+     *
+     * An omitted bundle_option is always missing; an empty one is accepted only for a bundle
+     * that can be bought without selection.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param mixed $bundleOption
+     * @return bool
+     */
+    private function isSelectionMissing($product, mixed $bundleOption): bool
+    {
+        return empty($bundleOption)
+            && (!is_array($bundleOption) || !$this->canBeBoughtWithoutSelection($product));
+    }
+
+    /**
      * Cast array values to int
      *
      * @param array $array
@@ -1107,9 +1123,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
-        if (empty($bundleOption)
-            && (!is_array($bundleOption) || !$this->canBeBoughtWithoutSelection($product))
-        ) {
+        if ($this->isSelectionMissing($product, $bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
         }
 
