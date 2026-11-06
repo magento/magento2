@@ -175,6 +175,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         $this->assertObjectHasProperty('license', $json);
         $this->assertObjectHasProperty('type', $json);
         $this->assertObjectHasProperty('require', $json);
+        $this->assertLicenseMatchesLicenseFiles($dir, $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
@@ -229,6 +230,25 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
         }
+    }
+
+    /**
+     * Assert that a component shipping OSL and AFL license files declares both licenses in composer.json
+     *
+     * @param string $dir
+     * @param \StdClass $json
+     */
+    private function assertLicenseMatchesLicenseFiles($dir, \StdClass $json)
+    {
+        if (!is_file("$dir/LICENSE.txt") || !is_file("$dir/LICENSE_AFL.txt")) {
+            return;
+        }
+        $this->assertEquals(
+            ['OSL-3.0', 'AFL-3.0'],
+            (array)$json->license,
+            "{$json->name}: the component ships LICENSE.txt and LICENSE_AFL.txt,"
+            . ' so composer.json must declare the "OSL-3.0" and "AFL-3.0" licenses.'
+        );
     }
 
     /**
