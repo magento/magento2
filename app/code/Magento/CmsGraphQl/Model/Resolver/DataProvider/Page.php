@@ -105,7 +105,8 @@ class Page
             PageInterface::META_DESCRIPTION => $page->getMetaDescription(),
             PageInterface::META_KEYWORDS => $page->getMetaKeywords(),
             PageInterface::PAGE_ID => $page->getId(),
-            PageInterface::IDENTIFIER => $page->getIdentifier()
+            PageInterface::IDENTIFIER => $page->getIdentifier(),
+            'redirect_code' => 0,
         ];
         if (empty($fields) || in_array(PageInterface::CONTENT, $fields)) {
             $pageData[PageInterface::CONTENT] = $this->widgetFilter->filter($page->getContent());
