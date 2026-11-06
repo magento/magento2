@@ -330,6 +330,29 @@ class FileTest extends TestCase
         $fileObject->getFormattedOptionValue($optionValue);
     }
 
+    public function testDefaultDownloadParameters(): void
+    {
+        $file = $this->getFileObject();
+        $option = $this->createPartialMockWithReflection(
+            Option::class,
+            ['getId', 'getItemId', 'getCode', 'getItem', 'setValue']
+        );
+        $option->method('getId')->willReturn(12);
+        $option->method('getItemId')->willReturn(42);
+        $option->method('getCode')->willReturn('option_7');
+        $item = $this->createPartialMockWithReflection(\Magento\Quote\Model\Quote\Item::class, ['getQuoteId']);
+        $item->expects($this->once())->method('getQuoteId')->willReturn(21);
+        $option->method('getItem')->willReturn($item);
+        $file->setConfigurationItemOption($option);
+        $params = ['id' => 12, 'quote' => 21, 'item' => 42, 'option' => '7', 'key' => 'secret'];
+        $value = ['title' => 'sample.txt', 'secret_key' => 'secret'];
+        $expected = $value + ['url' => ['route' => 'sales/download/downloadCustomOption', 'params' => $params]];
+        $option->expects($this->once())->method('setValue')->with(json_encode($expected));
+        $this->urlBuilder->expects($this->once())->method('getUrl')
+            ->with('sales/download/downloadCustomOption', $params)->willReturn('download-url');
+        $file->getFormattedOptionValue(json_encode($value));
+    }
+
     public function testGetFormattedOptionValueInvalid()
     {
         $optionValue = 'invalid json option value...';

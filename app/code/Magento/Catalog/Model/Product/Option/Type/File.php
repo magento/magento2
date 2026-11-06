@@ -381,6 +381,9 @@ class File extends DefaultType
                 ? $this->getCustomOptionUrlParams()
                 : [
                     'id' => $this->getConfigurationItemOption()->getId(),
+                    'quote' => $this->getConfigurationItemOption()->getItem()?->getQuoteId(),
+                    'item' => $this->getConfigurationItemOption()->getItemId(),
+                    'option' => substr((string)$this->getConfigurationItemOption()->getCode(), strlen('option_')),
                     'key' => $value['secret_key']
                 ];
 
