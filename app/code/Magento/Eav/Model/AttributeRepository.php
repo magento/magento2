@@ -6,6 +6,10 @@
 
 namespace Magento\Eav\Model;
 
+use Magento\Eav\Model\Attribute as WebsiteScopedAttribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
@@ -81,7 +85,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Eav\Api\Data\AttributeInterface $attribute)
     {
@@ -94,7 +98,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($entityTypeCode, \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -117,13 +121,15 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             []
         );
         $entityType = $this->eavConfig->getEntityType($entityTypeCode);
+        // Website-scoped attribute models load extra scope_* columns, which the collection row does not carry.
+        $importLoadedData = !is_a($entityType->getAttributeModel(), WebsiteScopedAttribute::class, true);
 
         $additionalTable = $entityType->getAdditionalAttributeTable();
         if ($additionalTable) {
             $attributeCollection->join(
                 ['additional_table' => $attributeCollection->getTable($additionalTable)],
                 'main_table.attribute_id = additional_table.attribute_id',
-                []
+                $importLoadedData ? '*' : []
             );
         }
 
@@ -132,10 +138,17 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         // Group attributes by id to prevent duplicates with different attribute sets
         $attributeCollection->addAttributeGrouping();
 
+        if ($importLoadedData) {
+            $this->importCollectionData($attributeCollection, $entityType);
+        }
+
         $attributes = [];
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
         foreach ($attributeCollection as $attribute) {
             $attributes[] = $this->get($entityTypeCode, $attribute->getAttributeCode());
+        }
+        if ($importLoadedData) {
+            $this->setEntityTypeData($attributes, $entityType);
         }
 
         /** @var \Magento\Eav\Api\Data\AttributeSearchResultsInterface $searchResults */
@@ -156,7 +169,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($entityTypeCode, $attributeCode)
     {
@@ -174,7 +187,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Eav\Api\Data\AttributeInterface $attribute)
     {
@@ -187,7 +200,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($attributeId)
     {
@@ -206,9 +219,50 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     }
 
     /**
+     * Register the loaded collection rows in the EAV config so get() does not load each attribute again
+     *
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $attributeCollection
+     * @param Entity\Type $entityType
+     * @return void
+     */
+    private function importCollectionData($attributeCollection, Entity\Type $entityType): void
+    {
+        $attributesData = [];
+        foreach ($attributeCollection as $attribute) {
+            $attributeData = $attribute->getData();
+            unset($attributeData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            $attributesData[] = $attributeData;
+        }
+        $this->eavConfig->importAttributesData($entityType, $attributesData);
+    }
+
+    /**
+     * Apply the entity type data that loading an attribute by code sets
+     *
+     * @param \Magento\Eav\Api\Data\AttributeInterface[] $attributes
+     * @param Entity\Type $entityType
+     * @return void
+     */
+    private function setEntityTypeData(array $attributes, Entity\Type $entityType): void
+    {
+        $entity = $entityType->getEntity();
+        $defaultAttributes = $entity instanceof DefaultAttributesProvider ? $entity->getDefaultAttributes() : [];
+        foreach ($attributes as $attribute) {
+            if (!$attribute instanceof AbstractAttribute) {
+                continue;
+            }
+            if (in_array($attribute->getAttributeCode(), $defaultAttributes, true)) {
+                $attribute->setBackendType(AbstractAttribute::TYPE_STATIC)->setIsGlobal(1);
+            }
+            $attribute->setEntityType($entityType)->setEntityTypeId($entityType->getId());
+        }
+    }
+
+    /**
      * Retrieve collection processor
      *
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 The collection processor is injected through the constructor.
+     * @see \Magento\Eav\Model\AttributeRepository::__construct
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
