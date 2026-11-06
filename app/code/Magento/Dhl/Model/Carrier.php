@@ -2478,8 +2478,8 @@ class Carrier extends AbstractDhl implements CarrierInterface
                     }
                     $shipmentInfo = $awbinfo->ShipmentInfo;
 
-                    if ($shipmentInfo->ShipmentDesc) {
-                        $awbinfoData['service'] = (string)$shipmentInfo->ShipmentDesc;
+                    if ($shipmentInfo->GlobalProductCode) {
+                        $awbinfoData['service'] = $this->getDhlProductTitle((string)$shipmentInfo->GlobalProductCode);
                     }
 
                     $awbinfoData['weight'] = (string)$shipmentInfo->Weight . ' ' . (string)$shipmentInfo->WeightUnit;
