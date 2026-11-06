@@ -68,6 +68,9 @@ class AttributeFilter
     /**
      * Check if custom attribute with empty value allowed
      *
+     * An empty value is kept only when the attribute has a default value, otherwise the attribute backend
+     * would replace the omitted value with that default on save.
+     *
      * @param mixed $attributeList
      * @param string $attributeCode
      * @param array $productData
@@ -86,7 +89,8 @@ class AttributeFilter
             $isAttributeIsRequired = (int) $attribute->getIsRequired();
 
             if ($isAttributeUserDefined && !$isAttributeIsRequired &&
-                empty($productData[$attributeCode])) {
+                empty($productData[$attributeCode]) &&
+                (string) $attribute->getDefaultValue() !== '') {
                 $isAllowed = false;
             }
         }
