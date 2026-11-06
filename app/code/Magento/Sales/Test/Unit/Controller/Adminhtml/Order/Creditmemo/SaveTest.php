@@ -183,6 +183,7 @@ class SaveTest extends TestCase
                 'context' => $context,
                 'creditmemoLoader' => $this->memoLoaderMock,
                 'creditmemoSender' => $this->creditmemoSender,
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
                 'salesData' => $this->salesData
             ]
         );
@@ -406,6 +407,37 @@ class SaveTest extends TestCase
                ->method('send');
         }
          $this->assertEquals($this->resultRedirectMock, $this->_controller->execute());
+    }
+
+    /**
+     * Test execute when creditmemo loader returns false (e.g. invalid IDs)
+     * Should forward to noroute without throwing a TypeError
+     */
+    public function testExecuteWhenCreditmemoLoadReturnsFalse(): void
+    {
+        $data = ['comment_text' => ''];
+        $this->_requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('creditmemo')
+            ->willReturn($data);
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
+
+        $this->memoLoaderMock->expects($this->once())
+            ->method('load')
+            ->willReturn(false);
+
+        $this->resultForwardFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultForwardMock);
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('noroute');
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+
+        $result = $this->_controller->execute();
+        $this->assertInstanceOf(Forward::class, $result);
     }
 
     /**
