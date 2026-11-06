@@ -78,12 +78,12 @@ $regionProvider = $block->getRegionProvider();
                     <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
-                                <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
+                                <span><?= $escaper->escapeHtml(__(sprintf('Street Address: Line %s', $_i + 1))) ?></span>
                             </label>
                             <div class="control">
                                 <input type="text" name="street[<?= /* @noEscape */ $_i ?>]"
                                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
-                                       title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
+                                       title="<?= $escaper->escapeHtmlAttr(__(sprintf('Street Address %s', $_i + 1))) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"
                                        class="input-text
                                         <?= $escaper->escapeHtmlAttr($_streetValidationClassNotRequired) ?>">
