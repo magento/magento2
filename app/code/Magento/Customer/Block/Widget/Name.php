@@ -108,8 +108,12 @@ class Name extends AbstractWidget
         if ($this->getObject() && !empty($prefixOptions)) {
             $prefixOption = $this->getObject()->getPrefix();
             $oldPrefix = $this->escapeHtml(trim($prefixOption ?? ''));
-            if ($prefixOption !== null && !isset($prefixOptions[$oldPrefix]) && !isset($prefixOptions[$prefixOption])) {
-                $prefixOptions[$oldPrefix] = $oldPrefix;
+            // Options are a numerically indexed list of values; check membership by value.
+            if ($prefixOption !== null
+                && !in_array($oldPrefix, $prefixOptions, true)
+                && !in_array((string)$prefixOption, $prefixOptions, true)
+            ) {
+                $prefixOptions[] = $oldPrefix;
             }
         }
         return $prefixOptions;
@@ -166,8 +170,12 @@ class Name extends AbstractWidget
         if ($this->getObject() && !empty($suffixOptions)) {
             $suffixOption = $this->getObject()->getSuffix();
             $oldSuffix = $this->escapeHtml(trim($suffixOption ?? ''));
-            if ($suffixOption !== null && !isset($suffixOptions[$oldSuffix]) && !isset($suffixOptions[$suffixOption])) {
-                $suffixOptions[$oldSuffix] = $oldSuffix;
+            // Options are a numerically indexed list of values; check membership by value.
+            if ($suffixOption !== null
+                && !in_array($oldSuffix, $suffixOptions, true)
+                && !in_array((string)$suffixOption, $suffixOptions, true)
+            ) {
+                $suffixOptions[] = $oldSuffix;
             }
         }
         return $suffixOptions;
