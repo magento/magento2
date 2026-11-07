@@ -175,6 +175,19 @@ class Options extends \Magento\Framework\View\Element\Template
         }
         $data = [
             'prices' => [
+                'baseOldPrice' => [
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $optionOldPrice,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
+                ],
                 'oldPrice' => [
                     'amount' => $this->_catalogData->getTaxPrice(
                         $option->getProduct(),
