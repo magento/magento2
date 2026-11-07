@@ -5,7 +5,8 @@
 
 /* eslint-disable */
 define([
-    'wysiwygAdapter'
+    'wysiwygAdapter',
+    'mage/adminhtml/tools'
 ], function (wysiwygAdapter) {
     'use strict';
 
@@ -136,6 +137,107 @@ define([
             });
 
             runTests(decodedHtml, encodedHtml);
+        });
+    });
+
+    describe('WYSIWYG adapter directives', function () {
+        beforeEach(function () {
+            obj.config = {
+                'add_directives': true,
+                'directives_url': 'https://example.com/admin/cms/wysiwyg/directive/key/test/'
+            };
+        });
+
+        [
+            {
+                name: 'a secure base URL with raw quotes',
+                input: '<a href="{{config path="web/secure/base_url"}}test.html">Link</a>',
+                expected: '<a href="{{config path=&quot;web/secure/base_url&quot;}}test.html">Link</a>'
+            },
+            {
+                name: 'an unsecure base URL with encoded quotes',
+                input: '<a href="{{config path=&quot;web/unsecure/base_url&quot;}}test.html">Link</a>',
+                expected: '<a href="{{config path=&quot;web/unsecure/base_url&quot;}}test.html">Link</a>'
+            },
+            {
+                name: 'a directive with a query string and fragment',
+                input: '<a href="{{config path=&quot;web/secure/base_url&quot;}}test.html?a=1&amp;b=2#top">Link</a>',
+                expected: '<a href="{{config path=&quot;web/secure/base_url&quot;}}test.html?a=1&amp;b=2#top">Link</a>'
+            },
+            {
+                name: 'a store directive',
+                input: '<a href="{{store url=&quot;test.html&quot;}}">Link</a>',
+                expected: '<a href="{{store url=&quot;test.html&quot;}}">Link</a>'
+            },
+            {
+                name: 'a media directive',
+                input: '<a href="{{media url=&quot;wysiwyg/file.pdf&quot;}}">Link</a>',
+                expected: '<a href="{{media url=&quot;wysiwyg/file.pdf&quot;}}">Link</a>'
+            },
+            {
+                name: 'two directives with raw quotes',
+                input: '<a href="{{config path="web/secure/base_url"}}{{store url="test.html"}}">Link</a>',
+                expected: '<a href="{{config path=&quot;web/secure/base_url&quot;}}' +
+                    '{{store url=&quot;test.html&quot;}}">Link</a>'
+            },
+            {
+                name: 'an uppercase HTML attribute',
+                input: '<a HREF="{{config path=&quot;web/secure/base_url&quot;}}">Link</a>',
+                expected: '<a HREF="{{config path=&quot;web/secure/base_url&quot;}}">Link</a>'
+            }
+        ].forEach(function (testCase) {
+            it('preserves ' + testCase.name + ' when loading and saving repeatedly', function () {
+                var event = {content: testCase.input};
+
+                obj.beforeSetContent(event);
+                expect(event.content).toBe(testCase.expected);
+                obj.saveContent(event);
+                expect(event.content).toBe(testCase.expected);
+                obj.beforeSetContent(event);
+                expect(event.content).toBe(testCase.expected);
+                obj.saveContent(event);
+                expect(event.content).toBe(testCase.expected);
+            });
+        });
+
+        [
+            '<img src="{{media url=&quot;wysiwyg/image.jpg&quot;}}" alt="Image">',
+            '<img src="{{config path=&quot;web/secure/base_url&quot;}}image.jpg" alt="Image">'
+        ].forEach(function (content) {
+            it('continues encoding and decoding preview URLs for ' + content, function () {
+                var encoded = obj.encodeDirectives(content);
+
+                expect(encoded).toContain('https://example.com/admin/cms/wysiwyg/directive/___directive/');
+                expect(encoded).not.toContain('{{');
+                expect(obj.decodeDirectives(encoded)).toBe(content);
+            });
+        });
+
+        it('leaves ordinary links unchanged', function () {
+            var content = '<a href="https://example.com/test.html?a=1&amp;b=2#top">Link</a>';
+
+            expect(obj.encodeDirectives(content)).toBe(content);
+            expect(obj.decodeDirectives(content)).toBe(content);
+        });
+
+        it('preserves config links alongside media previews', function () {
+            var content = '<a href="{{config path=&quot;web/secure/base_url&quot;}}test.html">' +
+                    '<img src="{{media url=&quot;wysiwyg/image.jpg&quot;}}"></a>',
+                encoded = obj.encodeDirectives(content);
+
+            expect(encoded).toContain('href="{{config path=&quot;web/secure/base_url&quot;}}test.html"');
+            expect(encoded).toContain('src="https://example.com/admin/cms/wysiwyg/directive/___directive/');
+            expect(obj.decodeDirectives(encoded)).toBe(content);
+        });
+
+        it('leaves content untouched when directive processing is disabled', function () {
+            var event = {content: '<a href="{{config path=&quot;web/secure/base_url&quot;}}">Link</a>'};
+
+            obj.config['add_directives'] = false;
+            obj.beforeSetContent(event);
+            expect(event.content).toBe('<a href="{{config path=&quot;web/secure/base_url&quot;}}">Link</a>');
+            obj.saveContent(event);
+            expect(event.content).toBe('<a href="{{config path=&quot;web/secure/base_url&quot;}}">Link</a>');
         });
     });
 });
