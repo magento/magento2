@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSubscribeProductStockAlertActionGroup">
+        <annotations>
+            <description>Click "Notify me when this product is in stock" on the PDP.</description>
+        </annotations>
+        <waitForElementVisible selector="{{StorefrontProductAlertSection.stockAlertLink}}" stepKey="waitStockAlertLink"/>
+        <click selector="{{StorefrontProductAlertSection.stockAlertLink}}" stepKey="clickStockAlertLink"/>
+        <waitForPageLoad stepKey="waitAfterStockSubscribe"/>
+        <seeElement selector="{{StorefrontProductAlertSection.successMessage}}" stepKey="seeSubscribeSuccess"/>
+    </actionGroup>
+</actionGroups>

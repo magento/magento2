@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
@@ -19,7 +20,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
 use Magento\ProductAlert\Model\StockFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Unsubscribing from 'back in stock alert'.
@@ -105,7 +105,7 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
                 __("The alert subscription couldn't update at this time. Please try again later.")
             );
         }
-        $resultRedirect->setUrl($product->getProductUrl());
+        $resultRedirect->setPath('productalert/customer/index');
         return $resultRedirect;
     }
 

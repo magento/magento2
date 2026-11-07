@@ -2,6 +2,11 @@
 
 This module enables product alerts, which allow customers to sign up for emails about product price or stock status changes.
 
+## Customer account — My Product Alerts
+
+When price and/or stock alerts are enabled in configuration, customers see a **My Product Alerts** link in the account navigation. The page lists current price and stock subscriptions with per-row and unsubscribe-all actions. Old URLs `productalert/customer/price` and `productalert/customer/stock` redirect to the combined index. Email unsubscribe URLs stay compatible with existing links (`unsubscribe/price`, `priceAll`, `stockAll`, and stock single via `unsubscribe/email`).
+
+
 ## Installation
 
 Before installing this module, note that this module is dependent on the following modules:
@@ -31,6 +36,8 @@ Extension developers can interact with the Magento_ProductAlert module. For more
 This module introduces the following layouts in the `view/frontend/layout` directory:
 
 - `catalog_product_view`
+- `customer_account`
+- `productalert_customer_index`
 - `productalert_unsubscribe_email`
 
 For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
