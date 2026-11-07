@@ -208,18 +208,21 @@ class DiCompileCommand extends Command
 
             /** @var ProgressBar $progressBar */
             $progressBar = $this->objectManager->create(
-                \Symfony\Component\Console\Helper\ProgressBar::class,
+                ProgressBar::class,
                 [
                     'output' => $output,
-                    'max' => count($operations)
+                    'max' => count($operations),
+                    'minSecondsBetweenRedraws' => INF,
                 ]
             );
+            $progressBar->setPlaceholderFormatter(
+                'step',
+                fn (ProgressBar $bar): string => (string) min($bar->getProgress() + 1, $bar->getMaxSteps())
+            );
             $progressBar->setFormat(
-                '<info>%message%</info> %current%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s%'
+                '<info>%message%</info> %step%/%max% [%bar%] %percent:3s%% %elapsed% %memory:6s%'
             );
             $output->writeln('<info>Compilation was started.</info>');
-            $progressBar->start();
-            $progressBar->display();
 
             $this->taskManager->process(
                 function (OperationInterface $operation) use ($progressBar): void {
