@@ -87,8 +87,6 @@ class View extends \Magento\Catalog\Block\Product\View
             return '';
         }
 
-        $product->setShortDescription(null);
-
         return parent::_toHtml();
     }
 
