@@ -27,6 +27,8 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test that customers and addresses with orphaned multiselect attribute values can be saved via GraphQL
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrphanedMultiselectAttributeTest extends GraphQlAbstract
 {
@@ -268,10 +270,40 @@ MUTATION;
         $updatedCustomerAttrValue = $updatedCustomer->getCustomAttribute('test_gql_customer_multi')->getValue();
         $this->assertStringNotContainsString($customerOption2->getValue(), $updatedCustomerAttrValue);
 
+        // updateCustomerV2 changes only account fields and does not modify the address book, so the address
+        // multiselect value is left untouched by the mutation. The orphaned address value is instead stripped
+        // when the address itself is saved, which is verified below.
         $updatedAddresses = $updatedCustomer->getAddresses();
         $updatedAddress = reset($updatedAddresses);
         $updatedAddressAttrValue = $updatedAddress->getCustomAttribute('test_gql_address_multi')->getValue();
-        $this->assertStringNotContainsString($addressOption2->getValue(), $updatedAddressAttrValue);
+        $this->assertStringContainsString(
+            $addressOption2->getValue(),
+            $updatedAddressAttrValue,
+            'updateCustomerV2 must not modify the customer address book'
+        );
+
+        // Saving the address (changing only a scalar field) triggers the address save cleaner, which strips the
+        // orphaned multiselect option value; the multiselect itself is not among the changed attributes.
+        $addressUid = base64_encode((string)$updatedAddress->getId());
+        $addressMutation = <<<MUTATION
+mutation {
+  updateCustomerAddressV2(uid: "{$addressUid}", input: { city: "Updated City" }) {
+    city
+  }
+}
+MUTATION;
+        $this->graphQlMutation($addressMutation, [], '', $this->getCustomerAuthHeaders($token));
+
+        $this->customerRegistry->remove($customer->getId());
+        $addressSavedCustomer = $this->customerRepository->getById($customer->getId());
+        $savedAddresses = $addressSavedCustomer->getAddresses();
+        $savedAddress = reset($savedAddresses);
+        $savedAddressAttrValue = $savedAddress->getCustomAttribute('test_gql_address_multi')->getValue();
+        $this->assertStringNotContainsString(
+            $addressOption2->getValue(),
+            $savedAddressAttrValue,
+            'Saving the address must strip the orphaned option value'
+        );
     }
 
     /**

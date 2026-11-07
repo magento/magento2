@@ -582,6 +582,9 @@ QUERY;
      */
     public function testLayeredNavigationForConfigurableProducts(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attributeCode = 'test_configurable';
         $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -590,7 +593,7 @@ QUERY;
         $firstOption = $options[0]->getValue();
         $secondOption = $options[1]->getValue();
         $query = $this->getQueryProductsWithArrayOfCustomAttributes($attributeCode, $firstOption, $secondOption);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
 
         $this->assertEquals(2, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['aggregations']);
@@ -688,7 +691,7 @@ QUERY;
      */
     public function testFilterProductsByDropDownCustomAttribute(): void
     {
-        CacheCleaner::clean(['eav']);
+        CacheCleaner::clean(['eav', 'config']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
@@ -743,7 +746,7 @@ QUERY;
         $product3 = $this->productRepository->get('simple-4');
         $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertEquals(
             3,
             $response['products']['total_count'],
@@ -800,6 +803,9 @@ QUERY;
      */
     public function testFilterProductsByMultiSelectCustomAttributes(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attributeCode = 'multiselect_attribute';
         $attribute = $this->eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -857,7 +863,7 @@ QUERY;
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertArrayNotHasKey('errors', $response, 'Response has errors.');
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
@@ -890,6 +896,9 @@ QUERY;
      */
     public function testSearchAndFilterByCustomAttribute(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
 
@@ -942,7 +951,7 @@ QUERY;
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         //Verify total count of the products returned
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertArrayHasKey('filters', $response['products']);
@@ -1039,6 +1048,9 @@ QUERY;
      */
     public function testFilterByCategoryIdAndCustomAttribute(): void
     {
+        if (!$this->cleanCache()) {
+            $this->fail('Cache could not be cleaned properly.');
+        }
         $category = $this->getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
         $categoryUid = base64_encode($category->getId());
@@ -1090,7 +1102,7 @@ QUERY;
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
         $this->assertEquals(2, $response['products']['total_count']);
         $product1 = $this->productRepository->get('simple');
         $product2 = $this->productRepository->get('simple-4');
