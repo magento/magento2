@@ -135,6 +135,51 @@ class WriteTest extends TestCase
         $this->write->openFile($targetPath);
     }
 
+    public function testOpenFileWithBareFileNameCreatesDirectoryRoot()
+    {
+        $path = 'barefile.csv';
+        $absolutePath = $this->getAbsolutePath($path);
+        $absoluteCurrentDirectory = $this->getAbsolutePath('.');
+        $write = $this->getMockBuilder(Write::class)
+            ->setConstructorArgs([
+                $this->fileFactory,
+                $this->driver,
+                $this->path,
+                0555
+            ])
+            ->onlyMethods(['create'])
+            ->getMock();
+
+        $write->expects($this->once())
+            ->method('create')
+            ->with(null)
+            ->willReturn(true);
+        $this->driver->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturnMap([
+                [$this->path, $path, null, $absolutePath],
+                [$this->path, '.', null, $absoluteCurrentDirectory],
+            ]);
+        $this->driver->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with($absolutePath)
+            ->willReturn($absolutePath);
+        $this->driver->expects($this->once())
+            ->method('isExists')
+            ->with($absolutePath)
+            ->willReturn(false);
+        $this->driver->expects($this->once())
+            ->method('isWritable')
+            ->with($absoluteCurrentDirectory)
+            ->willReturn(true);
+        $this->fileFactory->expects($this->once())
+            ->method('create')
+            ->with($absolutePath, $this->driver, 'w')
+            ->willReturn($this->createMock(\Magento\Framework\Filesystem\File\WriteInterface::class));
+
+        $write->openFile($path);
+    }
+
     /**
      * Assert is file expectation
      *
@@ -233,9 +278,9 @@ class WriteTest extends TestCase
             WriteInterface::class,
             [
                 // ReadInterface methods
-                'getAbsolutePath', 'getRelativePath', 'read', 'readFile', 'isExist', 
+                'getAbsolutePath', 'getRelativePath', 'read', 'readFile', 'isExist',
                 'isDirectory', 'isFile', 'isReadable', 'search', 'stat',
-                // WriteInterface methods  
+                // WriteInterface methods
                 'create', 'delete', 'renameFile', 'copyFile', 'createSymlink',
                 'changePermissions', 'changePermissionsRecursively', 'touch',
                 'isWritable', 'openFile', 'writeFile', 'getDriver',

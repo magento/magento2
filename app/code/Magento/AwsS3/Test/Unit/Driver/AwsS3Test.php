@@ -512,6 +512,14 @@ class AwsS3Test extends TestCase
         self::assertFalse($this->driver->createDirectory(self::URL . 'test/test2/'));
     }
 
+    public function testCreateDirectoryWithCurrentDirectoryReturnsTrueWithoutAdapterCall(): void
+    {
+        $this->adapterMock->expects(self::never())
+            ->method('createDirectory');
+
+        self::assertTrue($this->driver->createDirectory('.'));
+    }
+
     /**
      * Verify that createDirectory resolves '.' path components when parent exists.
      */
