@@ -24,7 +24,7 @@ class DateApplier
             'main_table.from_date is null or main_table.from_date <= ?',
             $now
         )->where(
-            'main_table.to_date is null or main_table.to_date >= ?',
+            'main_table.`to_date` is null or main_table.`to_date` >= ?',
             $now
         );
     }
