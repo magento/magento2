@@ -119,6 +119,32 @@ class DataProviderTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetMetaAppliesModifierFromCategoryFormModifierPool(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool' => [
+                'arguments' => [
+                    'modifiers' => [
+                        'category_form_test_modifier' => [
+                            'class' => CategoryDataProviderModifier::class,
+                            'sortOrder' => 10
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $objectManager->removeSharedInstance('Magento\Catalog\Ui\DataProvider\Category\Form\Modifier\Pool');
+
+        $dataProvider = $this->createDataProvider();
+        $meta = $dataProvider->getMeta();
+
+        $this->assertArrayHasKey(CategoryDataProviderModifier::META_KEY, $meta);
+    }
+
+    /**
      * Check that deprecated custom layout attribute is hidden.
      *
      * @return void
