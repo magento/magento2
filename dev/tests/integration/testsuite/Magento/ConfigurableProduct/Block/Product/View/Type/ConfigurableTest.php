@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Product as HelperProduct;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
@@ -167,6 +168,35 @@ class ConfigurableTest extends TestCase
         $this->assertArrayHasKey('basePrice', $config['prices']);
         $this->assertArrayHasKey('images', $config);
         $this->assertCount(0, $config['images']);
+    }
+
+    /**
+     * Verify that an attribute option used only by a disabled variation is not present in the config.
+     *
+     * @return void
+     */
+    public function testGetJsonConfigExcludesDisabledVariationOption(): void
+    {
+        $disabledChild = $this->productRepository->get('simple_10');
+        $disabledOptionValue = (int)$disabledChild->getData('test_configurable');
+        $disabledChild->setStatus(Status::STATUS_DISABLED);
+        $this->productRepository->save($disabledChild);
+        $this->productRepository->cleanCache();
+
+        $configurable = $this->productRepository->get('configurable', false, null, true);
+        $block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
+        $block->setProduct($configurable);
+
+        $config = $this->serializer->unserialize($block->getJsonConfig());
+        $attribute = reset($config['attributes']);
+        $optionIds = array_map('intval', array_column($attribute['options'], 'id'));
+
+        $this->assertNotContains(
+            $disabledOptionValue,
+            $optionIds,
+            'Option of a disabled configurable variation must not be present in the config.'
+        );
+        $this->assertCount(1, $attribute['options']);
     }
 
     /**
