@@ -97,20 +97,8 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrl" value="$$createConfigurable.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$createOption1.option[store_labels][1][label]$$" stepKey="selectVariation1"/>
-        <waitForElementVisible selector=".product-info-main .old-price .price" stepKey="waitOldVariation1"/>
-        <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldVariation1"/>
-        <assertEquals stepKey="assertOldVariation1">
-            <actualResult type="const">$grabOldVariation1</actualResult>
-            <expectedResult type="string">$100.00</expectedResult>
-        </assertEquals>
-        <grabTextFrom selector=".product-info-main [data-price-type='basePrice'] .price" stepKey="grabFinalVariation1"/>
-        <assertEquals stepKey="assertFinalVariation1">
-            <actualResult type="const">$grabFinalVariation1</actualResult>
-            <expectedResult type="string">$60.00</expectedResult>
-        </assertEquals>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$createOption2.option[store_labels][1][label]$$" stepKey="selectVariation2"/>
-        <waitForElementVisible selector=".product-info-main .old-price .price" stepKey="waitOldVariation2"/>
+        <waitForText selector=".product-info-main [data-price-type='basePrice'] .price" userInput="$120.00" stepKey="waitFinalVariation2"/>
         <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldVariation2"/>
         <assertEquals stepKey="assertOldVariation2">
             <actualResult type="const">$grabOldVariation2</actualResult>
@@ -120,6 +108,18 @@
         <assertEquals stepKey="assertFinalVariation2">
             <actualResult type="const">$grabFinalVariation2</actualResult>
             <expectedResult type="string">$120.00</expectedResult>
+        </assertEquals>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$createOption1.option[store_labels][1][label]$$" stepKey="selectVariation1"/>
+        <waitForText selector=".product-info-main [data-price-type='basePrice'] .price" userInput="$60.00" stepKey="waitFinalVariation1"/>
+        <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldVariation1"/>
+        <assertEquals stepKey="assertOldVariation1">
+            <actualResult type="const">$grabOldVariation1</actualResult>
+            <expectedResult type="string">$100.00</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector=".product-info-main [data-price-type='basePrice'] .price" stepKey="grabFinalVariation1"/>
+        <assertEquals stepKey="assertFinalVariation1">
+            <actualResult type="const">$grabFinalVariation1</actualResult>
+            <expectedResult type="string">$60.00</expectedResult>
         </assertEquals>
     </test>
 </tests>

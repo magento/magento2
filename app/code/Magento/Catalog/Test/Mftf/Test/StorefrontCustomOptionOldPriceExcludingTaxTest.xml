@@ -63,6 +63,7 @@
             <expectedResult type="string">$60.00</expectedResult>
         </assertEquals>
         <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="{{ProductOptionValueDropdown3.title}} +$6.00" stepKey="selectCustomOption"/>
+        <waitForText selector=".product-info-main [data-price-type='basePrice'] .price" userInput="$66.00" stepKey="waitFinalWithOption"/>
         <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldWithOption"/>
         <assertEquals stepKey="assertOldWithOption">
             <actualResult type="const">$grabOldWithOption</actualResult>
