@@ -63,7 +63,7 @@ class AuthenticationTest extends TestCase
         $subject = $this->createMock(Index::class);
         $request = $this->createPartialMock(Http::class, ['getActionName']);
         $user = $this->createPartialMock(User::class, ['reload', '__wakeup']);
-        $storage = $this->createPartialMock(Session::class, ['prolong', 'refreshAcl']);
+        $storage = $this->createPartialMock(Session::class, ['prolong']);
 
         $expectedResult = 'expectedResult';
         $action = 'index';
@@ -88,8 +88,6 @@ class AuthenticationTest extends TestCase
 
         $storage
             ->method('prolong');
-        $storage
-            ->method('refreshAcl');
 
         $proceed = function ($request) use ($expectedResult) {
             return $expectedResult;
