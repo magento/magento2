@@ -28,6 +28,9 @@ class Synchronizer
     /**
      * Considered that for some action, customer should spent some time (e.g. products comparing or product page visit)
      * This constant used in order to track and filter suspicious actions, that happens frequently than expected
+     *
+     * Expressed in seconds spent per action. The number of actions a customer can plausibly perform within the
+     * configured lifetime is therefore the lifetime divided by this value.
      */
     const TIME_TO_DO_ONE_ACTION = 1;
 
@@ -127,7 +130,8 @@ class Synchronizer
     private function filterNewestActions(array $productsData, $typeId)
     {
         $lifetime = $this->getLifeTimeByNamespace($typeId);
-        $actionsNumber = $lifetime * self::TIME_TO_DO_ONE_ACTION;
+        $secondsPerAction = max(1, self::TIME_TO_DO_ONE_ACTION);
+        $actionsNumber = intdiv($lifetime, $secondsPerAction);
 
         uasort(
             $productsData,
