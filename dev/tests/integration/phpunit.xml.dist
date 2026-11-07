@@ -11,7 +11,10 @@
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
-         stderr="true">
+         stderr="true"
+         executionOrder="depends"
+         controlGarbageCollector="true"
+         numberOfTestsBeforeGarbageCollection="50">
     <source>
         <include>
             <directory suffix=".php">../../../app/code/Magento</directory>
