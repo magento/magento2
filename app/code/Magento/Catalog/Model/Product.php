@@ -963,7 +963,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function afterSave()
     {
-        $this->getLinkInstance()->saveProductRelations($this);
+        if ($this->getData('ignore_links_flag') !== true) {
+            $this->getLinkInstance()->saveProductRelations($this);
+        }
+
         $this->getTypeInstance()->save($this);
 
         if ($this->getStockData()) {
