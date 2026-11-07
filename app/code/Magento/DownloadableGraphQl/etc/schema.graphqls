@@ -87,3 +87,18 @@ type DownloadableWishlistItem implements WishlistItemInterface @doc(description:
     links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links.") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
     samples: [DownloadableProductSamples] @doc(description: "An array containing information about the selected samples.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
 }
+
+# Downloadable system configuration for headless / PWA storefronts
+# (Stores > Config > Catalog > Downloadable Product Options)
+extend type StoreConfig {
+    downloadable_disable_guest_checkout: Boolean
+        @doc(description: "catalog/downloadable/disable_guest_checkout: when true, guest checkout is blocked if the cart contains downloadable products.")
+    downloadable_shareable: Boolean
+        @doc(description: "catalog/downloadable/shareable: default shareable flag used when a link is set to Use config.")
+    downloadable_links_target_new_window: Boolean
+        @doc(description: "catalog/downloadable/links_target_new_window: open sample/download links in a new window.")
+    downloadable_samples_title: String
+        @doc(description: "catalog/downloadable/samples_title: default title for the samples section.")
+    downloadable_links_title: String
+        @doc(description: "catalog/downloadable/links_title: default title for the links section.")
+}
