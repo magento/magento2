@@ -868,9 +868,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             );
         }
 
-        $cachedParams = $routeParams;
-        if ($isArray) {
-            ksort($cachedParams);
+        $cachedParams = $routeParams ?? [];
+        ksort($cachedParams);
+        if (!isset($cachedParams['_scope'])) {
+            // Always get fresh scope for cache key to handle store emulation correctly
+            $this->setScope(null);
+            $cachedParams['_scope'] = $this->_getScope()->getId();
         }
 
         $cacheKey = sha1($routePath . $this->serializer->serialize($cachedParams));
