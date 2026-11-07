@@ -52,6 +52,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     public const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
+     * Y coordinate a new page starts drawing at
+     */
+    private const PAGE_TOP_Y = 800;
+
+    /**
+     * Lowest Y coordinate a line of text may be drawn at
+     */
+    private const MIN_TEXT_Y = 15;
+
+    /**
      * Zend PDF object
      *
      * @var \Zend_Pdf
@@ -141,6 +151,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @var array $pageSettings
      */
     private $pageSettings;
+
+    /**
+     * @var \Zend_Pdf_Page|null
+     */
+    private $lastCreatedPage;
+
+    /**
+     * @var int
+     */
+    private $lastCreatedPageTop = self::PAGE_TOP_Y;
 
     /**
      * @var Database
@@ -996,7 +1016,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $pageSize = !empty($settings['page_size']) ? $settings['page_size'] : \Zend_Pdf_Page::SIZE_A4;
         $page = $this->_getPdf()->newPage($pageSize);
         $this->_getPdf()->pages[] = $page;
-        $this->y = 800;
+        $this->y = self::PAGE_TOP_Y;
 
         return $page;
     }
@@ -1063,8 +1083,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 $itemsProp['shift'] = $shift;
             }
 
-            if ($this->y - $itemsProp['shift'] < 15) {
-                $page = $this->newPage($pageSettings);
+            if ($this->y - $itemsProp['shift'] < self::MIN_TEXT_Y
+                && $this->fitsOnEmptyPage($page, $itemsProp['shift'])
+            ) {
+                $page = $this->createPage($pageSettings);
             }
             $page = $this->correctLines($lines, $page, $height);
         }
@@ -1121,6 +1143,41 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
+     * Create a new page and remember the Y coordinate it starts drawing at.
+     *
+     * @param array $pageSettings
+     * @return \Zend_Pdf_Page
+     */
+    private function createPage(array $pageSettings): \Zend_Pdf_Page
+    {
+        $page = $this->newPage($pageSettings);
+        $this->lastCreatedPage = $page;
+        $this->lastCreatedPageTop = $this->y;
+
+        return $page;
+    }
+
+    /**
+     * Whether a block of the given height still fits when started from the top of an empty page.
+     *
+     * A taller block overflows wherever it starts, so breaking the page for it only leaves the
+     * rest of the current page empty - and leaves the page entirely empty when the block is the
+     * first thing drawn on it.
+     *
+     * @param \Zend_Pdf_Page $page
+     * @param int $blockHeight
+     * @return bool
+     */
+    private function fitsOnEmptyPage(\Zend_Pdf_Page $page, $blockHeight): bool
+    {
+        // Pages this class created start at a known coordinate, which a table header lowers.
+        // For any other page only the un-lowered coordinate newPage() sets is known.
+        $pageTop = $page === $this->lastCreatedPage ? $this->lastCreatedPageTop : self::PAGE_TOP_Y;
+
+        return $blockHeight <= $pageTop - self::MIN_TEXT_Y;
+    }
+
+    /**
      * Correct text.
      *
      * @param array $column
@@ -1137,8 +1194,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
         $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
         foreach ($column['text'] as $part) {
-            if ($this->y - $top < 15) {
-                $page = $this->newPage($this->pageSettings);
+            if ($this->y - $top < self::MIN_TEXT_Y) {
+                $page = $this->createPage($this->pageSettings);
                 $top = 0;
             }
 
