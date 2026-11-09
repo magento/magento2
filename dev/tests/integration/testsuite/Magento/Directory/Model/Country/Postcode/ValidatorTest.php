@@ -242,4 +242,28 @@ class ValidatorTest extends TestCase
             ['NG', 'ek01a03fk01'],
         ];
     }
+
+    /**
+     * @param string $countryId
+     * @param string $invalidPostCode
+     * @return void
+     */
+    #[DataProvider('getNigeriaInvalidPostCodes')]
+    public function testInvalidNigeriaPostCode(string $countryId, string $invalidPostCode): void
+    {
+        $this->assertSame(false, $this->validator->validate($invalidPostCode, $countryId));
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function getNigeriaInvalidPostCodes(): array
+    {
+        return [
+            ['NG', 'EK-00-A03-FK-01'],  // $countryId, $invalidPostCode
+            ['NG', 'EK-01-A03-FK-00'],
+            ['NG', 'EK-01-A03-FK-1'],
+            ['NG', 'EK-01-A03-FK-011'],
+        ];
+    }
 }
