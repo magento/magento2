@@ -127,7 +127,7 @@
 </IfModule>
 
 ############################################
-## Workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## Workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch
 ## Please, set it on virtual host configuration level
 
 ##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
