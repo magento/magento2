@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
@@ -104,7 +105,8 @@ class DataFixtureTest extends TestCase
         $dataFixtureSetup = new DataFixtureSetup(
             new Registry(),
             $dataFixtureFactory,
-            $this->createMock(ScopeSwitcherInterface::class)
+            $this->createMock(ScopeSwitcherInterface::class),
+            $this->createMock(ScopeResolverPool::class),
         );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,

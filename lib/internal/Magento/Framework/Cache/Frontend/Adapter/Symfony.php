@@ -9,11 +9,13 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Closure;
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapterProvider;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\GenericTagAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -23,8 +25,9 @@ use Symfony\Component\Cache\CacheItem;
  * Symfony Cache adapter for Magento
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Symfony implements FrontendInterface
+class Symfony implements FrontendInterface, MultiLoadInterface
 {
     public const DEFAULT_CACHE_PREFIX = '69d_';
     public const DEFAULT_LIFETIME = 7200;
@@ -45,6 +48,15 @@ class Symfony implements FrontendInterface
      * @var Closure|null
      */
     private ?Closure $cacheFactory;
+
+    /**
+     * Factory that (re)builds the tag adapter bound to a given pool. Needed so that when the pool is
+     * re-created after a fork, the tag adapter is rebuilt too — otherwise it keeps the extracted
+     * PARENT Redis connection and corrupts tag operations in the child.
+     *
+     * @var Closure|null
+     */
+    private ?Closure $adapterFactory;
 
     /**
      * @var int
@@ -77,6 +89,14 @@ class Symfony implements FrontendInterface
     private bool $batchMode = false;
 
     /**
+     * Nesting depth of beginBatch()/endBatch() calls; only the outermost endBatch() commits,
+     * so an inner caller's batch cannot prematurely turn off batching for an outer caller.
+     *
+     * @var int
+     */
+    private int $batchDepth = 0;
+
+    /**
      * @var array
      */
     private array $batchedItems = [];
@@ -92,22 +112,9 @@ class Symfony implements FrontendInterface
     private bool $hasPendingWrites = false;
 
     /**
-     * @var array
+     * @var Symfony\BackendWrapperFactory|null
      */
-    private array $responseCache = [];
-
-    /**
-     * @var int
-     */
-    private const RESPONSE_CACHE_MAX_SIZE = 500;
-
-    /**
-     * @var int Response cache TTL in seconds
-     *
-     * Set to 0 to disable (safer for multi-instance scenarios)
-     * Can be increased in single-instance production environments
-     */
-    private const RESPONSE_CACHE_TTL = 0;
+    private ?Symfony\BackendWrapperFactory $backendWrapperFactory;
 
     /**
      * Constructor
@@ -116,19 +123,26 @@ class Symfony implements FrontendInterface
      * @param TagAdapterInterface|null $adapter Backend-specific tag adapter
      * @param int $defaultLifetime Default cache lifetime in seconds
      * @param string $idPrefix Cache ID prefix
+     * @param Closure|null $adapterFactory Factory that (re)builds the tag adapter
+     * @param Symfony\BackendWrapperFactory|null $backendWrapperFactory Factory for the backend wrapper
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Closure $cacheFactory,
         ?TagAdapterInterface $adapter = null,
         int $defaultLifetime = self::DEFAULT_LIFETIME,
-        string $idPrefix = self::DEFAULT_CACHE_PREFIX
+        string $idPrefix = self::DEFAULT_CACHE_PREFIX,
+        ?Closure $adapterFactory = null,
+        ?Symfony\BackendWrapperFactory $backendWrapperFactory = null
     ) {
         $this->cacheFactory = $cacheFactory;
+        $this->adapterFactory = $adapterFactory;
         $this->pid = getmypid();
         $this->cache = $cacheFactory();
         $this->defaultLifetime = $defaultLifetime;
         $this->idPrefix = $idPrefix;
         $this->adapter = $adapter ?? new GenericTagAdapter($this->cache);
+        $this->backendWrapperFactory = $backendWrapperFactory;
     }
 
     /**
@@ -143,6 +157,11 @@ class Symfony implements FrontendInterface
         if ($currentPid !== $this->pid) {
             $this->parentCachePools[] = $this->cache;
             $this->cache = ($this->cacheFactory)();
+            // Rebuild the tag adapter against the NEW pool so tag operations use this process's own
+            // Redis connection instead of the parent's inherited (shared) socket.
+            if ($this->adapterFactory !== null) {
+                $this->adapter = ($this->adapterFactory)($this->cache);
+            }
             $this->pid = $currentPid;
             $this->isTagAware = null;
         }
@@ -171,13 +190,9 @@ class Symfony implements FrontendInterface
      */
     private function cleanIdentifier(?string $identifier): ?string
     {
-        if ($identifier === null) {
-            return null;
-        }
-
-        $identifier = strtoupper($identifier);
-        $cleaned = str_replace('.', '__', $identifier);
-        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cleaned);
+        // Single source of truth (shared with PreloadingSymfonyAdapter) so key normalization
+        // cannot drift between the store path and the preload fast-path.
+        return $identifier === null ? null : Symfony\IdentifierNormalizer::normalize($identifier);
     }
 
     /**
@@ -197,16 +212,6 @@ class Symfony implements FrontendInterface
     public function test($identifier)
     {
         $cleanId = $this->cleanIdentifier($identifier);
-        $cacheKey = 'test:' . $cleanId;
-
-        // OPTIMIZATION: Check response cache first (Predis optimization)
-        if (isset($this->responseCache[$cacheKey])) {
-            $cached = $this->responseCache[$cacheKey];
-            if ((time() - $cached['time']) < self::RESPONSE_CACHE_TTL) {
-                return $cached['result'];
-            }
-            unset($this->responseCache[$cacheKey]);
-        }
 
         if ($this->hasPendingWrites) {
             $this->commitPendingWrites();
@@ -221,19 +226,9 @@ class Symfony implements FrontendInterface
 
         $value = $item->get();
 
-        $result = is_array($value) && isset($value['mtime'])
+        return is_array($value) && isset($value['mtime'])
             ? (int)$value['mtime']
             : time();
-
-        // Cache result in memory
-        if (count($this->responseCache) < self::RESPONSE_CACHE_MAX_SIZE) {
-            $this->responseCache[$cacheKey] = [
-                'result' => $result,
-                'time' => time()
-            ];
-        }
-
-        return $result;
     }
 
     /**
@@ -242,16 +237,6 @@ class Symfony implements FrontendInterface
     public function load($identifier)
     {
         $cleanId = $this->cleanIdentifier($identifier);
-        $cacheKey = 'load:' . $cleanId;
-
-        // OPTIMIZATION: Check response cache first (Predis optimization)
-        if (isset($this->responseCache[$cacheKey])) {
-            $cached = $this->responseCache[$cacheKey];
-            if ((time() - $cached['time']) < self::RESPONSE_CACHE_TTL) {
-                return $cached['result'];
-            }
-            unset($this->responseCache[$cacheKey]);
-        }
 
         if ($this->hasPendingWrites) {
             $this->commitPendingWrites();
@@ -266,19 +251,50 @@ class Symfony implements FrontendInterface
 
         $wrappedData = $item->get();
 
-        $result = (is_array($wrappedData) && array_key_exists('data', $wrappedData))
+        return (is_array($wrappedData) && array_key_exists('data', $wrappedData))
             ? $wrappedData['data']
             : $wrappedData;
+    }
 
-        // Cache result in memory (only cache hits, not misses)
-        if ($result !== false && count($this->responseCache) < self::RESPONSE_CACHE_MAX_SIZE) {
-            $this->responseCache[$cacheKey] = [
-                'result' => $result,
-                'time' => time()
-            ];
+    /**
+     * Load several ids in a SINGLE batched round-trip (PSR-6 getItems()).
+     *
+     * Used by the preloading wrapper to fetch all hot keys at once instead of N sequential load()s —
+     * matching the legacy Redis wrapper's pipeline preload. Returns [originalId => value] for hits only.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        if (empty($identifiers)) {
+            return [];
+        }
+        if ($this->hasPendingWrites) {
+            $this->commitPendingWrites();
         }
 
-        return $result;
+        // Map cleaned key -> original id so the caller can look results up by the id it passed.
+        $cleanToOriginal = [];
+        foreach ($identifiers as $identifier) {
+            $cleanToOriginal[$this->cleanIdentifier($identifier)] = $identifier;
+        }
+
+        $results = [];
+        foreach ($this->getCache()->getItems(array_keys($cleanToOriginal)) as $cleanId => $item) {
+            if (!$item->isHit()) {
+                continue;
+            }
+            $wrappedData = $item->get();
+            $value = (is_array($wrappedData) && array_key_exists('data', $wrappedData))
+                ? $wrappedData['data']
+                : $wrappedData;
+            if ($value !== false) {
+                $results[$cleanToOriginal[$cleanId]] = $value;
+            }
+        }
+
+        return $results;
     }
 
     /**
@@ -290,11 +306,6 @@ class Symfony implements FrontendInterface
     {
         $cache = $this->getCache();
         $cleanId = $this->cleanIdentifier($identifier);
-
-        // Clear response cache for this key (important for concurrent access)
-        unset($this->responseCache['test:' . $cleanId]);
-        unset($this->responseCache['load:' . $cleanId]);
-
         $item = $cache->getItem($cleanId);
 
         // Calculate actual lifetime to use
@@ -363,7 +374,7 @@ class Symfony implements FrontendInterface
         if ($this->hasPendingWrites) {
             try {
                 $this->commitPendingWrites();
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 // Intentional no-op: Silently fail in destructor (request is ending anyway)
                 // In production, this would be logged
@@ -431,6 +442,7 @@ class Symfony implements FrontendInterface
      */
     public function beginBatch(): void
     {
+        $this->batchDepth++;
         $this->batchMode = true;
         $this->alwaysDeferSaves = true;  // Enable automatic deferring
         $this->batchedItems = [];
@@ -439,6 +451,10 @@ class Symfony implements FrontendInterface
     /**
      * End batch mode and commit all deferred cache operations
      *
+     * Only the outermost endBatch() (matching the first beginBatch()) actually turns off batch
+     * mode and commits; nested calls just decrement the depth, so an inner caller cannot end
+     * batching that an outer caller is still relying on.
+     *
      * Note: With alwaysDeferSaves mode, this is optional since commits
      * happen automatically before reads and at request end.
      *
@@ -446,6 +462,14 @@ class Symfony implements FrontendInterface
      */
     public function endBatch(): bool
     {
+        if ($this->batchDepth > 0) {
+            $this->batchDepth--;
+        }
+
+        if ($this->batchDepth > 0) {
+            return true;
+        }
+
         $this->batchMode = false;
         $this->alwaysDeferSaves = false;  // Disable automatic deferring
         return $this->commitPendingWrites();
@@ -462,15 +486,20 @@ class Symfony implements FrontendInterface
      */
     private function calculateActualLifetime($lifeTime): ?int
     {
-        $actualLifetime = null;
+        // Legacy Zend/Cm parity for the lifetime argument:
+        //   null  => NO expiration — the entry persists until an explicit flush or tag invalidation
+        //            (config/layout-type caches). Legacy stored these with no TTL; coercing null to a
+        //            default forced a 2h expiry on entries that must live until invalidated.
+        //   false / 0 => fall back to the configured default lifetime (unchanged behavior).
+        //   > 0   => use that lifetime.
+        if ($lifeTime === null) {
+            return null;
+        }
 
-        if ($lifeTime !== null && $lifeTime !== false && $lifeTime !== 0) {
-            $actualLifetime = (int)$lifeTime;
-        } elseif ($lifeTime === 0 || $lifeTime === false) {
-            // 0 or false means use default in Zend behavior
+        if ($lifeTime === false || $lifeTime === 0) {
             $actualLifetime = $this->defaultLifetime;
         } else {
-            $actualLifetime = $this->defaultLifetime;
+            $actualLifetime = (int)$lifeTime;
         }
 
         // Enforce Redis MAX_LIFETIME limit (matches Zend behavior)
@@ -537,9 +566,12 @@ class Symfony implements FrontendInterface
             $cache->commit();
         }
 
-        // Notify helper about the save (for Redis/Filesystem to maintain indices)
-        // Note: onSave() already handles reverse index, no need for separate call
-        if ($success && !empty($cleanTags)) {
+        // Notify the tag adapter on EVERY successful save, including tagless ones, so the backend
+        // index can register the id (e.g. Redis all_ids). This lets CLEANING_MODE_NOT_MATCHING_TAG
+        // sweep untagged entries too. Adapters treat an empty tag set as "index membership only" —
+        // no forward/reverse tag links are written — so the extra call is a cheap SADD (Redis) or a
+        // no-op (Generic/Filesystem).
+        if ($success) {
             $this->adapter->onSave($cleanId, $cleanTags);
         }
     }
@@ -555,10 +587,6 @@ class Symfony implements FrontendInterface
 
         $cache = $this->getCache();
         $cleanId = $this->cleanIdentifier($identifier);
-
-        // Clear from response cache
-        unset($this->responseCache['test:' . $cleanId]);
-        unset($this->responseCache['load:' . $cleanId]);
 
         $this->adapter->onRemove($cleanId);
 
@@ -576,8 +604,6 @@ class Symfony implements FrontendInterface
      */
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
-        $this->responseCache = [];
-
         if ($this->hasPendingWrites) {
             $this->commitPendingWrites();
         }
@@ -604,11 +630,11 @@ class Symfony implements FrontendInterface
             CacheConstants::CLEANING_MODE_ALL, 'all' => $this->cleanAll($cache),
             CacheConstants::CLEANING_MODE_OLD, 'old' => $this->cleanOld($cache),
             CacheConstants::CLEANING_MODE_MATCHING_TAG, 'matchingTag' =>
-                $this->cleanMatchingTag($cache, $tags),
+            $this->cleanMatchingTag($cache, $tags),
             CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, 'notMatchingTag' =>
-                $this->cleanNotMatchingTag($cache, $tags),
+            $this->cleanNotMatchingTag($cache, $tags),
             CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, 'matchingAnyTag' =>
-                $this->cleanMatchingAnyTag($cache, $tags),
+            $this->cleanMatchingAnyTag($cache, $tags),
             default => throw new InvalidArgumentException("Unsupported cleaning mode: {$mode}")
         };
     }
@@ -621,7 +647,6 @@ class Symfony implements FrontendInterface
      */
     private function cleanAll(CacheItemPoolInterface $cache): bool
     {
-        $this->responseCache = [];
         $this->adapter->clearAllIndices();
         $success = $cache->clear();
 
@@ -641,9 +666,11 @@ class Symfony implements FrontendInterface
      */
     private function cleanOld(CacheItemPoolInterface $cache): bool
     {
-        // Symfony handles expiration automatically
-        // This is a no-op as expired items are not returned
-        return true;
+        // Symfony auto-expires the DATA key by TTL, but the id lingers in its tag SETs / reverse index
+        // (cache:tags:*, cache:id_tags:*, cache:all_ids). Sweep those orphaned members so the tag index
+        // does not grow unbounded — the L2 cron path reaches GC here via the remote frontend. Mirrors
+        // legacy Cm Redis clean(OLD) -> _collectGarbage(). No-op on adapters without such an index.
+        return $this->adapter->garbageCollect() >= 0;
     }
 
     /**
@@ -749,7 +776,7 @@ class Symfony implements FrontendInterface
             // Add cache ID prefix to tags (to match Zend behavior)
             $storedTags = $wrappedData['tags'] ?? [];
             $tags = array_values(array_map(function ($tag) {
-                return self::DEFAULT_CACHE_PREFIX . $tag;
+                return $this->idPrefix . $tag;
             }, $storedTags));
 
             return [
@@ -789,7 +816,7 @@ class Symfony implements FrontendInterface
         if (isset($metadata[CacheItem::METADATA_TAGS])) {
             $rawTags = $metadata[CacheItem::METADATA_TAGS];
             $tags = array_values(array_map(function ($tag) {
-                return self::DEFAULT_CACHE_PREFIX . $tag;
+                return $this->idPrefix . $tag;
             }, $rawTags));
         }
 
@@ -860,7 +887,15 @@ class Symfony implements FrontendInterface
      */
     public function getBackend()
     {
-        return new Symfony\BackendWrapper($this->getCache(), $this->adapter, $this);
+        // Lazy resolve so construction never needs the ObjectManager (direct `new` stays test-friendly).
+        $factory = $this->backendWrapperFactory
+            ??= ObjectManager::getInstance()->get(Symfony\BackendWrapperFactory::class);
+
+        return $factory->create([
+            'cache' => $this->getCache(),
+            'adapter' => $this->adapter,
+            'symfony' => $this,
+        ]);
     }
 
     /**

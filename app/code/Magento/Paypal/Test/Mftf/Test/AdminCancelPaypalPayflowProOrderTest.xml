@@ -53,6 +53,7 @@
         <!-- Click Next button -->
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <reloadPage stepKey="refreshThePage"/>
         <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
@@ -61,6 +62,8 @@
             <argument name="cardData" value="VisaDefaultCard"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFillCardData"/>
+        <!-- Stagger the Payflow Pro charge so it doesn't land in the same submission window as other Payflow Protests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account -->
+        <wait time="30" stepKey="staggerBeforePayflowSubmit"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <!-- Grab order number-->
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>

@@ -860,7 +860,7 @@ class QuoteManagementTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     #[DataProvider('guestPlaceOrderDataProvider')]
-    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $countSetAddress): void
+    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $expectedSetEmailCalls): void
     {
         $cartId = 100;
         $orderId = 332;
@@ -885,11 +885,11 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customerMock);
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->any())
             ->method('getCustomerEmail')
             ->willReturn($settledEmail);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
-        $this->quoteMock->expects($this->exactly($countSetAddress))
+        $this->quoteMock->expects($this->exactly($expectedSetEmailCalls))
             ->method('setCustomerEmail')
             ->with($email)
             ->willReturnSelf();
@@ -903,7 +903,7 @@ class QuoteManagementTest extends TestCase
                 'getMiddlename'
             ]
         );
-        $addressMock->expects($this->exactly($countSetAddress))->method('getEmail')->willReturn($email);
+        $addressMock->expects($this->any())->method('getEmail')->willReturn($email);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
@@ -1003,8 +1003,9 @@ class QuoteManagementTest extends TestCase
     public static function guestPlaceOrderDataProvider(): array
     {
         return [
-            [null, 1],
-            ['test@example.com', 0],
+            'empty quote email is backfilled from billing address' => [null, 1],
+            'matching quote email is left unchanged' => ['email@mail.com', 0],
+            'stale quote email is re-synced from billing address' => ['test@example.com', 1],
         ];
     }
 

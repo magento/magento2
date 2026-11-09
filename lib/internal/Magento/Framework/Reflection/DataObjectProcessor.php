@@ -6,7 +6,9 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
+use Magento\Framework\Reflection\DataObject\PropertyMetadataProvider;
 
 /**
  * Data object processor for array serialization using class reflection
@@ -19,41 +21,6 @@ use Magento\Framework\Phrase;
 class DataObjectProcessor
 {
     /**
-     * @var MethodsMap
-     */
-    private $methodsMapProcessor;
-
-    /**
-     * @var TypeCaster
-     */
-    private $typeCaster;
-
-    /**
-     * @var FieldNamer
-     */
-    private $fieldNamer;
-
-    /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
-
-    /**
-     * @var CustomAttributesProcessor
-     */
-    private $customAttributesProcessor;
-
-    /**
-     * @var array
-     */
-    private $processors;
-
-    /**
-     * @var array[]
-     */
-    private $excludedMethodsClassMap;
-
-    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
@@ -61,23 +28,23 @@ class DataObjectProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param array $processors
      * @param array $excludedMethodsClassMap
+     * @param PropertyMetadataProvider $propertyMetadataProvider
      */
     public function __construct(
-        MethodsMap $methodsMapProcessor,
-        TypeCaster $typeCaster,
-        FieldNamer $fieldNamer,
-        CustomAttributesProcessor $customAttributesProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = [],
-        array $excludedMethodsClassMap = []
+        private readonly MethodsMap $methodsMapProcessor,
+        private readonly TypeCaster $typeCaster,
+        private readonly FieldNamer $fieldNamer,
+        private readonly CustomAttributesProcessor $customAttributesProcessor,
+        private readonly ExtensionAttributesProcessor $extensionAttributesProcessor,
+        private readonly array $processors = [],
+        private readonly array $excludedMethodsClassMap = [],
+        private ?PropertyMetadataProvider $propertyMetadataProvider = null
     ) {
-        $this->methodsMapProcessor = $methodsMapProcessor;
-        $this->typeCaster = $typeCaster;
-        $this->fieldNamer = $fieldNamer;
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
-        $this->customAttributesProcessor = $customAttributesProcessor;
-        $this->processors = $processors;
-        $this->excludedMethodsClassMap = $excludedMethodsClassMap;
+        if ($propertyMetadataProvider === null) {
+            $this->propertyMetadataProvider
+                = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(PropertyMetadataProvider::class);
+        }
     }
 
     /**
@@ -93,15 +60,23 @@ class DataObjectProcessor
     {
         $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
+        $methodFieldNames = [];
 
         $excludedMethodsForDataObjectType = $this->excludedMethodsClassMap[$dataObjectType] ?? [];
 
         foreach (array_keys($methods) as $methodName) {
-            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
+            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
 
-            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
+            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
+            if ($key === null) {
+                continue;
+            }
+
+            $methodFieldNames[$key] = true;
+
+            if (in_array($methodName, $excludedMethodsForDataObjectType)) {
                 continue;
             }
 
@@ -115,14 +90,19 @@ class DataObjectProcessor
             }
 
             $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
-            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
                 continue;
             }
 
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                if (!($dataObject instanceof CustomAttributesDataInterface)) {
+                    continue;
+                }
                 $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
+                if (!($value instanceof \Magento\Framework\Api\ExtensionAttributesInterface)) {
+                    continue;
+                }
                 $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
                 if (empty($value)) {
                     continue;
@@ -132,6 +112,10 @@ class DataObjectProcessor
             }
 
             $outputData[$key] = $value;
+        }
+
+        if ($dataObject instanceof \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface) {
+            $outputData = $this->addPublicProperties($dataObject, $dataObjectType, $outputData, $methodFieldNames);
         }
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
@@ -166,6 +150,166 @@ class DataObjectProcessor
             return $valueResult;
         }
         return $this->typeCaster->castValueToType($value, $returnType);
+    }
+
+    /**
+     * Append public properties that do not have a matching getter.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param array $outputData
+     * @param array $methodFieldNames
+     * @return array
+     */
+    private function addPublicProperties(
+        $dataObject,
+        $dataObjectType,
+        array $outputData,
+        array $methodFieldNames
+    ): array {
+        $properties = $this->propertyMetadataProvider->getPublicProperties($dataObjectType);
+
+        foreach ($properties as $property) {
+            $propertyData = $this->getPublicPropertyOutputData(
+                $dataObject,
+                $dataObjectType,
+                $property,
+                $methodFieldNames,
+                $outputData
+            );
+            if ($propertyData === null) {
+                continue;
+            }
+
+            $outputData[$propertyData['key']] = $propertyData['value'];
+        }
+
+        return $outputData;
+    }
+
+    /**
+     * Build output payload for a public property.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param \ReflectionProperty $property
+     * @param array $methodFieldNames
+     * @param array $outputData
+     * @return array|null
+     */
+    private function getPublicPropertyOutputData(
+        $dataObject,
+        $dataObjectType,
+        \ReflectionProperty $property,
+        array $methodFieldNames,
+        array $outputData
+    ): ?array {
+        $key = $this->getPublicPropertyKey($dataObject, $property, $methodFieldNames, $outputData);
+        if ($key === null) {
+            return null;
+        }
+
+        $value = $property->getValue($dataObject);
+        $propertyMetadata = $this->propertyMetadataProvider->getPropertyMetadata($property);
+        if ($this->shouldSkipPublicPropertyValue($key, $value, $propertyMetadata['isRequired'])) {
+            return null;
+        }
+        $returnType =
+            $this->propertyMetadataProvider->resolvePropertyReturnType(
+                $propertyMetadata['type'],
+                $value,
+                $property
+            );
+        $value = $this->processPublicPropertyValue($dataObject, $dataObjectType, $key, $value, $returnType);
+        if ($value === null) {
+            return null;
+        }
+
+        return [
+            'key' => $key,
+            'value' => $value,
+        ];
+    }
+
+    /**
+     * Determine the output key for a public property.
+     *
+     * @param object $dataObject
+     * @param \ReflectionProperty $property
+     * @param array $methodFieldNames
+     * @param array $outputData
+     * @return string|null
+     */
+    private function getPublicPropertyKey(
+        $dataObject,
+        \ReflectionProperty $property,
+        array $methodFieldNames,
+        array $outputData
+    ): ?string {
+        if ($property->isStatic() || !$property->isInitialized($dataObject)) {
+            return null;
+        }
+
+        $key = SimpleDataObjectConverter::camelCaseToSnakeCase($property->getName());
+        if (isset($methodFieldNames[$key]) || array_key_exists($key, $outputData)) {
+            return null;
+        }
+
+        return $key;
+    }
+
+    /**
+     * Determine whether a property should be skipped based on its value.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @param bool $isRequired
+     * @return bool
+     */
+    private function shouldSkipPublicPropertyValue(string $key, $value, bool $isRequired): bool
+    {
+        if ($value === null && !$isRequired) {
+            return true;
+        }
+
+        return $key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === [];
+    }
+
+    /**
+     * Process a public property value based on the field key.
+     *
+     * @param object $dataObject
+     * @param string $dataObjectType
+     * @param string $key
+     * @param mixed $value
+     * @param string|null $returnType
+     * @return mixed|null
+     */
+    private function processPublicPropertyValue(
+        $dataObject,
+        $dataObjectType,
+        string $key,
+        $value,
+        ?string $returnType
+    ) {
+        if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+            if (!($dataObject instanceof CustomAttributesDataInterface)) {
+                return null;
+            }
+
+            return $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
+        }
+
+        if ($key === "extension_attributes") {
+            if (!($value instanceof \Magento\Framework\Api\ExtensionAttributesInterface)) {
+                return null;
+            }
+
+            $extensionAttributes = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+            return empty($extensionAttributes) ? null : $extensionAttributes;
+        }
+
+        return $this->processValue($value, $returnType);
     }
 
     /**

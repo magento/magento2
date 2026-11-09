@@ -57,8 +57,10 @@
         <!-- Select PayPal Standard payment method -->
         <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinueButton"/>
         <!-- Login to PayPal and complete payment -->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" stepKey="loginToPayPal"/>
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterPayment"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForCheckoutSuccessPageAfterPaypalReturn"/>
         <!-- Wait for order success page and grab order number -->
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>

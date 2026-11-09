@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Test\Unit\Plugin;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\SessionStartChecker;
@@ -33,6 +34,11 @@ class DisableSessionTest extends TestCase
     private $appStateMock;
 
     /**
+     * @var Http|MockObject
+     */
+    private $requestMock;
+
+    /**
      * @var DisableSessionPlugin
      */
     private $model;
@@ -46,12 +52,14 @@ class DisableSessionTest extends TestCase
     {
         $this->disableSessionConfigMock = $this->createMock(DisableSession::class);
         $this->appStateMock = $this->createMock(State::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->sessionStartCheckerMock = $this->createMock(SessionStartChecker::class);
         $this->model = (new ObjectManager($this))->getObject(
             DisableSessionPlugin::class,
             [
                 'disableSessionConfig' => $this->disableSessionConfigMock,
-                'appState' => $this->appStateMock
+                'appState' => $this->appStateMock,
+                'request' => $this->requestMock
             ]
         );
     }
@@ -61,15 +69,22 @@ class DisableSessionTest extends TestCase
      *
      * @param string $area
      * @param bool $config
+     * @param bool $isGet
      * @param bool $methodResult
      * @param bool $expectedResult
      * @return void
      */
     #[DataProvider('afterCheckDataProvider')]
-    public function testAfterCheck(string $area, bool $config, bool $methodResult, bool $expectedResult)
-    {
+    public function testAfterCheck(
+        string $area,
+        bool $config,
+        bool $isGet,
+        bool $methodResult,
+        bool $expectedResult
+    ): void {
         $this->disableSessionConfigMock->expects($this->any())->method('isDisabled')->willReturn($config);
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn($area);
+        $this->requestMock->expects($this->any())->method('isGet')->willReturn($isGet);
         $this->assertEquals($expectedResult, $this->model->afterCheck($this->sessionStartCheckerMock, $methodResult));
     }
 
@@ -81,14 +96,38 @@ class DisableSessionTest extends TestCase
     public static function afterCheckDataProvider()
     {
         return [
-            ['area' => 'graphql', 'config' => true, 'methodResult' =>  false, 'expectedResult' => false],
-            ['area' => 'graphql', 'config' => true, 'methodResult' =>  true, 'expectedResult' => false],
-            ['area' => 'graphql', 'config' => false, 'methodResult' =>  true, 'expectedResult' => true],
-            ['area' => 'graphql', 'config' => false, 'methodResult' =>  false, 'expectedResult' => false],
-            ['area' => 'other', 'config' => false, 'methodResult' =>  false, 'expectedResult' => false],
-            ['area' => 'other', 'config' => true, 'methodResult' =>  false, 'expectedResult' => false],
-            ['area' => 'other', 'config' => true, 'methodResult' =>  true, 'expectedResult' => true],
-            ['area' => 'other', 'config' => false, 'methodResult' =>  true, 'expectedResult' => true],
+            [
+                'area' => 'graphql', 'config' => true, 'isGet' => false,
+                'methodResult' => false, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => true, 'isGet' => false,
+                'methodResult' => true, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => false,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => false
+            ],
+            [
+                'area' => 'graphql', 'config' => false, 'isGet' => true,
+                'methodResult' => false, 'expectedResult' => false
+            ],
+            [
+                'area' => 'other', 'config' => false, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'other', 'config' => true, 'isGet' => true,
+                'methodResult' => true, 'expectedResult' => true
+            ],
+            [
+                'area' => 'other', 'config' => false, 'isGet' => false,
+                'methodResult' => false, 'expectedResult' => false
+            ],
         ];
     }
 

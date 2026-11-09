@@ -520,7 +520,7 @@ QUERY;
 }
 QUERY;
 
-        $response = $this->graphQlQuery($query);
+        $response = $this->graphQlQueryWithSchemaCacheRetry($query);
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
