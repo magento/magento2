@@ -1036,6 +1036,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         $this->assertCount(1, $gallery['images']);
         $this->assertEquals(1, $gallery['images'][$existingImageId]['label_use_default']);
         $this->assertEquals(1, $gallery['images'][$existingImageId]['disabled_use_default']);
-        $this->assertEquals(1, $gallery['images'][$existingImageId]['position_use_default']);
+        // Removing an image keeps the store view position the remaining image got when the new image was added
+        $this->assertEquals(0, $gallery['images'][$existingImageId]['position_use_default']);
     }
 }
