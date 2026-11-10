@@ -13,6 +13,7 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Reports\Model\ResourceModel\Helper as ReportsResourceHelper;
@@ -30,7 +31,7 @@ class HelperTest extends TestCase
     private $appResource;
 
     /**
-     * @var AdapterInterface|MockObject
+     * @var AdapterInterface|Stub
      */
     private $connectionMock;
 
@@ -49,7 +50,7 @@ class HelperTest extends TestCase
 
         $this->resourceHelper = $this->createMock(ReportsResourceHelper::class);
 
-        $this->connectionMock = $this->createMock(Mysql::class);
+        $this->connectionMock = $this->createStub(Mysql::class);
 
         $this->helper = $objectManager->getObject(
             Helper::class,
@@ -86,6 +87,41 @@ class HelperTest extends TestCase
             $aggregationAliases,
             $mainTable,
             $aggregationTable
+        );
+    }
+
+    /**
+     * @param string $aggregation
+     * @param array $aggregationAliases
+     * @param string $expectedType
+     * @return void
+     */
+    #[DataProvider('getBestsellersReportUpdateRatingPosProvider')]
+    public function testGetBestsellersReportUpdateRatingPosForPeriods(
+        $aggregation,
+        $aggregationAliases,
+        $expectedType
+    ): void {
+        $periods = ['2025-01-20', '2025-01-21'];
+        $this->resourceHelper->expects($this->never())->method('updateReportRatingPos');
+        $this->resourceHelper->expects($this->once())->method('updateReportRatingPosForPeriods')->with(
+            $this->connectionMock,
+            $expectedType,
+            'qty_ordered',
+            'main_table',
+            'aggregation_table',
+            $periods
+        );
+        $this->appResource->expects($this->once())
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($this->connectionMock);
+        $this->helper->getBestsellersReportUpdateRatingPosForPeriods(
+            $aggregation,
+            $aggregationAliases,
+            'main_table',
+            'aggregation_table',
+            $periods
         );
     }
 
