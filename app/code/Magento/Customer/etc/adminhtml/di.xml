@@ -31,9 +31,10 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="CustomerGridFilterPool" type="CustomerGirdFilterPool"/>
     <virtualType name="CustomerGridCollectionReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
         <arguments>
-            <argument name="filterPool" xsi:type="object">CustomerGirdFilterPool</argument>
+            <argument name="filterPool" xsi:type="object">CustomerGridFilterPool</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Customer\Ui\Component\DataProvider">
