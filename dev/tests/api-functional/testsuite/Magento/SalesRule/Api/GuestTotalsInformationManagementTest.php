@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2019 Adobe
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 
@@ -18,20 +18,18 @@ use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Tests disabled cart rules for customer's cart
+ * Tests disabled cart rules for guest's cart
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TotalsInformationManagement extends WebapiAbstract
+class GuestTotalsInformationManagementTest extends WebapiAbstract
 {
     private const SERVICE_OPERATION = 'calculate';
-    private const SERVICE_NAME = 'checkoutTotalsInformationManagementV1';
+    private const SERVICE_NAME = 'checkoutGuestTotalsInformationManagementV1';
     private const SERVICE_VERSION = 'V1';
-    private const RESOURCE_PATH = '/V1/carts/mine/totals-information';
+    private const RESOURCE_PATH = '/V1/guest-carts/:cartId/totals-information';
     private const QUOTE_RESERVED_ORDER_ID = 'test01';
     private const SALES_RULE_ID = 'Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition/salesRuleId';
-    private const CUSTOMER_EMAIL = 'customer@example.com';
-    private const CUSTOMER_PASSWORD = 'password';
 
     /**
      * @var PublisherConsumerController
@@ -80,11 +78,11 @@ class TotalsInformationManagement extends WebapiAbstract
      * Test sales rule changes should be persisted in the database
      *
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
-     * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testCalculate()
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         /** @var \Magento\SalesRule\Model\Rule $salesRule */
         /** @var \Magento\Framework\Registry $registry */
@@ -104,16 +102,8 @@ class TotalsInformationManagement extends WebapiAbstract
         $response = $this->_webApiCall(
             [
                 'rest' => [
-                    'resourcePath' => self::RESOURCE_PATH,
+                    'resourcePath' => str_replace(':cartId', $quoteIdMask->getMaskedId(), self::RESOURCE_PATH),
                     'httpMethod' => Request::HTTP_METHOD_POST,
-                    'token' => Bootstrap::getObjectManager()
-                        ->create(
-                            \Magento\Integration\Api\CustomerTokenServiceInterface::class
-                        )
-                        ->createCustomerAccessToken(
-                            self::CUSTOMER_EMAIL,
-                            self::CUSTOMER_PASSWORD
-                        )
                 ],
                 'soap' => [
                     'service' => self::SERVICE_NAME,
@@ -122,7 +112,6 @@ class TotalsInformationManagement extends WebapiAbstract
                 ],
             ],
             [
-                'cartId' => $quote->getId(),
                 'addressInformation' => [
                     'address' => []
                 ]
