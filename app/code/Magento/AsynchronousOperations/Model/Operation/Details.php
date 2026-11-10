@@ -22,7 +22,7 @@ class Details
     private $bulkStatus;
 
     /**
-     * @var null
+     * @var string|null
      */
     private $bulkUuid;
 
@@ -43,7 +43,7 @@ class Details
      * Init dependencies.
      *
      * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
-     * @param null $bulkUuid
+     * @param string|null $bulkUuid
      */
     public function __construct(
         BulkStatusInterface $bulkStatus,
