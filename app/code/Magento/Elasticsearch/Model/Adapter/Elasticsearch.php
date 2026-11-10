@@ -6,7 +6,6 @@
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Exception;
 use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
@@ -124,7 +123,8 @@ class Elasticsearch
      * @var array
      */
     private $responseErrorExceptionList = [
-        'elasticsearchMissing404' => Missing404Exception::class
+        // Class of the Elasticsearch 7 client, which is not always installed
+        'elasticsearchMissing404' => 'Elasticsearch\Common\Exceptions\Missing404Exception'
     ];
 
     /**
