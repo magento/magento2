@@ -594,12 +594,13 @@ class UtilityTest extends TestCase
         $actionsCombine->method('getConditions')->willReturn([1]);
 
         $rule = $this->createPartialMock(Rule::class, [
-            'getActions', 'validate', 'hasIsValidForAddress', 'getIsValidForAddress',
+            'getActions', 'getConditions', 'validate', 'hasIsValidForAddress', 'getIsValidForAddress',
             'setIsValidForAddress', 'afterLoad'
         ]);
         $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $rule->method('hasIsValidForAddress')->willReturn(false);
         $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('getConditions')->willReturn($this->addressConditionsCombineStub());
         $rule->method('validate')->willReturn(false);
         $rule->method('afterLoad');
 
@@ -642,6 +643,108 @@ class UtilityTest extends TestCase
         $this->validateCoupon->method('execute')->willReturn(true);
 
         $this->assertTrue($this->utility->canProcessRule($rule, $this->address));
+    }
+
+    /**
+     * A rule without address-level conditions cannot be affected by eligible-item totals,
+     * so the cart is not walked at all.
+     *
+     * @return void
+     */
+    public function testCanProcessRuleSkipsEligibleItemTotalsWhenRuleHasNoAddressConditions(): void
+    {
+        $actionsCombine = $this->createMock(RuleCombine::class);
+        $actionsCombine->method('getConditions')->willReturn([$this->createStub(AbstractCondition::class)]);
+
+        $emptyConditions = $this->createMock(RuleCombine::class);
+        $emptyConditions->method('getConditions')->willReturn([]);
+
+        $rule = $this->createPartialMock(Rule::class, [
+            'getActions',
+            'getConditions',
+            'validate',
+            'hasIsValidForAddress',
+            'getIsValidForAddress',
+            'setIsValidForAddress',
+            'afterLoad',
+        ]);
+        $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $rule->method('hasIsValidForAddress')->willReturn(false);
+        $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('getConditions')->willReturn($emptyConditions);
+        $rule->method('validate')->willReturn(true);
+        $rule->method('afterLoad');
+
+        $address = $this->createPartialMockWithReflection(Address::class, [
+            'isObjectNew',
+            'getQuote',
+            'getAllItems',
+            'setBaseSubtotal',
+        ]);
+        $address->method('isObjectNew')->willReturn(false);
+        $address->method('getQuote')->willReturn($this->quote);
+        $address->expects($this->never())->method('getAllItems');
+        $address->expects($this->never())->method('setBaseSubtotal');
+
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($rule, $address));
+    }
+
+    /**
+     * When no cart item matches the rule actions, address totals stay untouched.
+     *
+     * @return void
+     */
+    public function testCanProcessRuleKeepsAddressTotalsWhenNoItemIsEligible(): void
+    {
+        $actionsCombine = $this->createMock(RuleCombine::class);
+        $actionsCombine->method('getConditions')->willReturn([$this->createStub(AbstractCondition::class)]);
+        $actionsCombine->method('validate')->willReturn(false);
+
+        $rule = $this->createPartialMock(Rule::class, [
+            'getActions',
+            'getConditions',
+            'validate',
+            'hasIsValidForAddress',
+            'getIsValidForAddress',
+            'setIsValidForAddress',
+            'afterLoad',
+        ]);
+        $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $rule->method('hasIsValidForAddress')->willReturn(false);
+        $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('getConditions')->willReturn($this->addressConditionsCombineStub());
+        $rule->method('validate')->willReturn(true);
+        $rule->method('afterLoad');
+
+        $lineItem = $this->eligibleTotalsItemStub([
+            'getParentItem' => null,
+            'getHasChildren' => false,
+            'getChildren' => [],
+            'isChildrenCalculated' => false,
+            'getNoDiscount' => false,
+        ]);
+
+        $addressState = $this->defaultEligibleTotalsAddressState();
+        $address = $this->createAddressMockWithTrackedTotals($addressState, [$lineItem]);
+        $address->expects($this->never())->method('setBaseSubtotal');
+
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($rule, $address));
+        $this->assertSame($this->defaultEligibleTotalsAddressState(), $addressState);
+    }
+
+    /**
+     * @return RuleCombine&MockObject
+     */
+    private function addressConditionsCombineStub(): MockObject
+    {
+        $conditions = $this->createMock(RuleCombine::class);
+        $conditions->method('getConditions')->willReturn([$this->createStub(AbstractCondition::class)]);
+
+        return $conditions;
     }
 
     /**
@@ -799,6 +902,7 @@ class UtilityTest extends TestCase
 
         $rule = $this->createPartialMock(Rule::class, [
             'getActions',
+            'getConditions',
             'validate',
             'hasIsValidForAddress',
             'getIsValidForAddress',
@@ -808,6 +912,7 @@ class UtilityTest extends TestCase
         $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $rule->method('hasIsValidForAddress')->willReturn(false);
         $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('getConditions')->willReturn($this->addressConditionsCombineStub());
         $rule->method('validate')->willReturn($validationResult);
         $rule->method('afterLoad');
         $rule->expects($this->once())
