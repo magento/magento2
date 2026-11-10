@@ -509,6 +509,119 @@ class CreateTest extends TestCase
     }
 
     /**
+     * Verify that initFromOrder enables super mode to skip stock validation
+     * and restores it after items are loaded.
+     */
+    public function testInitFromOrderEnablesSuperModeForItemLoading(): void
+    {
+        $this->sessionQuote->method('getData')
+            ->with('reordered')
+            ->willReturn(false);
+
+        $address = $this->createPartialMock(
+            Address::class,
+            ['setSameAsBilling', 'setCustomerAddressId', 'getSameAsBilling']
+        );
+        $address->method('getSameAsBilling')->willReturn(true);
+        $address->method('setCustomerAddressId')->willReturnSelf();
+
+        $superModeValues = [];
+        $quote = $this->createPartialMockWithReflection(Quote::class, [
+            'getBillingAddress', 'getShippingAddress', 'isVirtual', 'collectTotals',
+            'setIsSuperMode', 'getIsSuperMode', 'addProduct',
+        ]);
+        $quote->method('getBillingAddress')->willReturn($address);
+        $quote->method('getShippingAddress')->willReturn($address);
+        $quote->method('getIsSuperMode')->willReturn(false);
+        $quote->method('setIsSuperMode')->willReturnCallback(
+            function ($value) use (&$superModeValues, $quote) {
+                $superModeValues[] = $value;
+                return $quote;
+            }
+        );
+
+        $this->sessionQuote->method('getQuote')->willReturn($quote);
+
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            ['getParentItem', 'getQtyOrdered', 'getQtyShipped', 'getQtyInvoiced']
+        );
+        $orderItem->method('getQtyOrdered')->willReturn(100);
+        $orderItem->method('getParentItem')->willReturn(false);
+        $orderItem->method('getQtyShipped')->willReturn(0);
+        $orderItem->method('getQtyInvoiced')->willReturn(0);
+
+        $itemCollectionMock = $this->getMockBuilder(ItemCollection::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIterator'])
+            ->getMock();
+        $itemCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([$orderItem]));
+
+        $this->orderMock->method('getItemsCollection')->willReturn($itemCollectionMock);
+        $this->orderMock->method('getShippingAddress')->willReturn($address);
+        $this->orderMock->method('getBillingAddress')->willReturn($address);
+        $this->orderMock->method('getCouponCode')->willReturn(null);
+
+        $this->adminOrderCreate->initFromOrder($this->orderMock);
+
+        $this->assertSame(true, $superModeValues[0] ?? null, 'Super mode must be enabled before item loading');
+        $this->assertSame(false, end($superModeValues), 'Super mode must be restored after item loading');
+    }
+
+    /**
+     * Verify that initFromOrder restores super mode when item loading fails.
+     */
+    public function testInitFromOrderRestoresSuperModeWhenItemLoadingFails(): void
+    {
+        $this->sessionQuote->method('getData')
+            ->with('reordered')
+            ->willReturn(false);
+
+        $superModeValues = [];
+        $quote = $this->createPartialMockWithReflection(Quote::class, ['setIsSuperMode', 'getIsSuperMode']);
+        $quote->method('getIsSuperMode')->willReturn(false);
+        $quote->method('setIsSuperMode')->willReturnCallback(
+            function ($value) use (&$superModeValues, $quote) {
+                $superModeValues[] = $value;
+                return $quote;
+            }
+        );
+        $this->sessionQuote->method('getQuote')->willReturn($quote);
+
+        $orderItem = $this->createPartialMock(
+            OrderItem::class,
+            ['getId', 'getParentItem', 'getQtyOrdered', 'getQtyShipped', 'getQtyInvoiced']
+        );
+        $orderItem->method('getId')->willReturn(1);
+        $orderItem->method('getQtyOrdered')->willReturn(1);
+        $orderItem->method('getParentItem')->willReturn(false);
+        $orderItem->method('getQtyShipped')->willReturn(0);
+        $orderItem->method('getQtyInvoiced')->willReturn(0);
+
+        $itemCollectionMock = $this->getMockBuilder(ItemCollection::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIterator'])
+            ->getMock();
+        $itemCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([$orderItem]));
+
+        $this->orderMock->method('getItemsCollection')->willReturn($itemCollectionMock);
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with(Product::class)
+            ->willThrowException(new \RuntimeException('Product load failed'));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Product load failed');
+
+        try {
+            $this->adminOrderCreate->initFromOrder($this->orderMock);
+        } finally {
+            $this->assertSame(true, $superModeValues[0] ?? null, 'Super mode must be enabled before item loading');
+            $this->assertSame(false, end($superModeValues), 'Super mode must be restored after item loading fails');
+        }
+    }
+
+    /**
      *  Test case for setShippingAsBilling
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
