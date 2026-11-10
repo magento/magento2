@@ -187,4 +187,51 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 
         return parent::validate($address);
     }
+
+    /**
+     * Validate postcode attribute with normalized values for formats that use spaces, hyphens or dots.
+     *
+     * Ensures cart price rules match regardless of formatting (e.g. Sweden "100 00", Poland "56-500").
+     *
+     * @param object|array|int|string|float|bool|null $validatedValue
+     * @return bool
+     */
+    public function validateAttribute($validatedValue)
+    {
+        if ($this->getAttribute() === 'postcode' && is_scalar($validatedValue)) {
+            $normalizedValidated = $this->normalizePostcode((string) $validatedValue);
+            $originalValue = $this->getValueParsed();
+            if (is_array($originalValue)) {
+                $normalizedValue = array_map(
+                    function ($item) {
+                        return $this->normalizePostcode((string) $item);
+                    },
+                    $originalValue
+                );
+            } else {
+                $normalizedValue = $this->normalizePostcode((string) $originalValue);
+            }
+            $this->setData('value_parsed', $normalizedValue);
+            try {
+                return parent::validateAttribute($normalizedValidated);
+            } finally {
+                $this->setData('value_parsed', $originalValue);
+            }
+        }
+
+        return parent::validateAttribute($validatedValue);
+    }
+
+    /**
+     * Normalize postcode by removing whitespace, hyphens and dots for consistent comparison.
+     * Handles formats like: Swedish "100 00", Polish "56-500", Czech "123 45".
+     * Formatting characters (space, hyphen, dot) are optional in many countries.
+     *
+     * @param string $postcode
+     * @return string
+     */
+    private function normalizePostcode(string $postcode): string
+    {
+        return preg_replace('/[\s.\-]+/', '', $postcode);
+    }
 }
