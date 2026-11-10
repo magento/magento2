@@ -28,7 +28,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $discountAmount = $item->getDiscountAmount();
 
         // Calculate $rowTotalInclTax
-        $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
+        $priceInclTax = $this->getUnitPrice($item, $round);
         $rowTotalInclTax = $priceInclTax * $quantity;
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
             $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate, $round);
@@ -104,7 +104,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $discountTaxCompensationAmount = 0;
 
         // Calculate $rowTotal
-        $price = $this->calculationTool->round($item->getUnitPrice());
+        $price = $this->getUnitPrice($item, $round);
         $rowTotal = $price * $quantity;
         $rowTaxes = [];
         $rowTaxesBeforeDiscount = [];
@@ -179,6 +179,19 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             ->setAssociatedItemCode($item->getAssociatedItemCode())
             ->setTaxPercent($rate)
             ->setAppliedTaxes($appliedTaxes);
+    }
+
+    /**
+     * Preserve input precision when rounding is disabled.
+     *
+     * @param QuoteDetailsItemInterface $item
+     * @param bool|null $round
+     * @return float
+     */
+    private function getUnitPrice(QuoteDetailsItemInterface $item, ?bool $round): float
+    {
+        $price = $item->getUnitPrice();
+        return $round ? $this->calculationTool->round($price) : $price;
     }
 
     /**

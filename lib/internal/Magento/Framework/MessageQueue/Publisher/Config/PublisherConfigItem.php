@@ -89,7 +89,6 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     public function setData(array $data)
     {
         $this->topic = $data['topic'];
-        $this->queue = $data['queue'] ?? '';
         $this->isDisabled = $data['disabled'];
         $this->connection->setData($data['connection']);
     }

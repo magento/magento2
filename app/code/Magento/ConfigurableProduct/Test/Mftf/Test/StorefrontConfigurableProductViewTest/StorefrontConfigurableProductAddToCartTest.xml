@@ -17,6 +17,9 @@
             <testCaseId value="MC-89"/>
             <group value="ConfigurableProduct"/>
             <group value="cloud"/>
+            <skip>
+                <issueId value="AC-18210">Add-to-cart from category page for configurable product no longer redirects to PDP; stays on category page with inline notice instead (app regression, not test issue)</issueId>
+            </skip>
         </annotations>
 
         <before>

@@ -64,6 +64,8 @@ interface QueueInterface
      * Only subscribe the queue
      *
      * @return void
+     * @deprecated
+     * @see nothing
      */
     public function subscribeQueue(): void;
 

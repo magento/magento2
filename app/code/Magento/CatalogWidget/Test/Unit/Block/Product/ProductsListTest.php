@@ -202,6 +202,72 @@ class ProductsListTest extends TestCase
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
     }
 
+    /**
+     * Malformed UTF-8 bytes in request params (e.g. truncated fbclid/gclid tracking
+     * parameters) must not break cache key generation. See magento/magento2#40824.
+     */
+    public function testGetCacheKeyInfoWithMalformedUtf8RequestParams()
+    {
+        $store = $this->createPartialMock(Store::class, ['getId']);
+        $store->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
+
+        $theme = $this->createMock(ThemeInterface::class);
+        $theme->expects($this->once())->method('getId')->willReturn('blank');
+        $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
+
+        $this->httpContext->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnCallback(function ($arg) {
+                if ($arg == \Magento\Customer\Model\Context::CONTEXT_GROUP) {
+                    return 'context_group';
+                } elseif ($arg == 'tax_rates') {
+                    return [10];
+                }
+            });
+
+        $this->productsList->setData('conditions', 'some_serialized_conditions');
+        $this->productsList->setData('page_var_name', 'page_number');
+        $this->productsList->setTemplate('test_template');
+        $this->productsList->setData('title', 'test_title');
+        $this->request->expects($this->once())->method('getParam')->with('page_number')->willReturn(1);
+
+        // Overlong UTF-8 slash + dangling percent — typical truncated fbclid traffic.
+        $malformed = [
+            'fbclid' => "foo\xC0\xAF",
+            'utm_source' => "bar\xE0",
+            'nested' => ['dclid' => "\xEDclid"],
+        ];
+        $this->request->expects($this->once())->method('getParams')->willReturn($malformed);
+
+        $currency = $this->createMock(Currency::class);
+        $currency->expects($this->once())->method('getCode')->willReturn('USD');
+        $this->priceCurrency->expects($this->once())->method('getCurrency')->willReturn($currency);
+
+        $this->serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturnCallback(function ($value) {
+                $encoded = json_encode($value);
+                if ($encoded === false) {
+                    throw new \InvalidArgumentException(
+                        'Unable to serialize value. Error: ' . json_last_error_msg()
+                    );
+                }
+                return $encoded;
+            });
+
+        $info = $this->productsList->getCacheKeyInfo();
+
+        // Locate the serialized-params element without relying on a hardcoded index.
+        // getCacheKeyInfo() ends with [..., serializedParams, template, title], so the
+        // params entry is always third from the end regardless of future additions.
+        $serializedParams = $info[count($info) - 3];
+        $this->assertIsString($serializedParams);
+        $this->assertStringContainsString('fbclid', $serializedParams);
+        $this->assertStringContainsString('utm_source', $serializedParams);
+        $this->assertStringContainsString('dclid', $serializedParams);
+    }
+
     public function testGetProductPriceHtml()
     {
         $product = $this->createPartialMock(Product::class, ['getId']);

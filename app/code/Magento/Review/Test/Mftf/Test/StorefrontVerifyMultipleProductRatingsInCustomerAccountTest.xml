@@ -66,7 +66,7 @@
             <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!-- Click on reviews and add reviews with current user -->
-        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab"/>
+        <conditionalClick selector="{{StorefrontProductReviewsSection.reviewsTab}}" dependentSelector="{{StorefrontProductReviewsSection.reviewsTab}}" visible="true" stepKey="openReviewTab"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars">
             <argument name="ratingName" value="Quality"/>
@@ -89,7 +89,7 @@
         </actionGroup>
 
         <!-- Click on reviews and add reviews with current user -->
-        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <conditionalClick selector="{{StorefrontProductReviewsSection.reviewsTab}}" dependentSelector="{{StorefrontProductReviewsSection.reviewsTab}}" visible="true" stepKey="openReviewTab2"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars2">
             <argument name="ratingName" value="Quality"/>
@@ -112,7 +112,7 @@
         </actionGroup>
 
         <!-- Click on reviews and add reviews with current user -->
-        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab3"/>
+        <conditionalClick selector="{{StorefrontProductReviewsSection.reviewsTab}}" dependentSelector="{{StorefrontProductReviewsSection.reviewsTab}}" visible="true" stepKey="openReviewTab3"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars3">
             <argument name="ratingName" value="Quality"/>

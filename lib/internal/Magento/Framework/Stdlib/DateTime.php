@@ -25,9 +25,19 @@ class DateTime
 
     public const DATE_PHP_FORMAT = 'Y-m-d';
 
-    public const DATETIME_SLASH_PHP_FORMAT = 'd/m/Y H:i:s';
-
     /**#@-*/
+
+    /**
+     * Ambiguous slash-separated datetime format (d/m/Y H:i:s).
+     *
+     * Not safe for machine-generated/DB timestamps - was the root cause of
+     * AC-18084 (order_date/timestamp GraphQL fields returning the wrong
+     * calendar date under non-en_US locales).
+     *
+     * @deprecated
+     * @see \Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT
+     */
+    public const DATETIME_SLASH_PHP_FORMAT = 'd/m/Y H:i:s';
 
     /**
      * Minimum allowed year value

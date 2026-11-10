@@ -11,6 +11,8 @@ namespace Magento\Framework\MessageQueue\Bulk\Queue;
  * Factory class for @see QueueInterface
  *
  * @api
+ * @deprecated
+ * @see \Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface
  */
 interface QueueFactoryInterface
 {

@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
+use Magento\Framework\View\EntitySpecificHandlesList;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -13,7 +14,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
-    const FIXTURE_LAYOUT_XML
+    public const FIXTURE_LAYOUT_XML
         = '<block class="Magento\Framework\View\Element\Template" template="Magento_Framework::fixture.phtml"/>';
 
     /**
@@ -82,6 +83,79 @@ class MergeTest extends \PHPUnit\Framework\TestCase
                 'layoutCacheKey' => $this->layoutCacheKeyMock,
             ]
         );
+    }
+
+    /**
+     * Two products with no widget targeting either must share a single layout cache entry.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGetCacheIdIsIdenticalForProductsWithNoWidgetCustomisation(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $theme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme->load(1);
+
+        $entitySpecificHandlesList = $objectManager->get(EntitySpecificHandlesList::class);
+        $entitySpecificHandlesList->addHandle('catalog_product_view_id_1');
+        $entitySpecificHandlesList->addHandle('catalog_product_view_id_2');
+
+        $buildModel = function (array $handles) use ($objectManager, $theme): Merge {
+            $model = $objectManager->create(
+                \Magento\Framework\View\Model\Layout\Merge::class,
+                ['theme' => $theme]
+            );
+            $model->addHandle($handles);
+            return $model;
+        };
+
+        $productA = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_1']);
+        $productB = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_2']);
+
+        $this->assertSame($productA->getCacheId(), $productB->getCacheId());
+    }
+
+    /**
+     * Cache key must diverge when a widget targets one product's entity-specific handle.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testGetCacheIdDiffersWhenOneProductHasWidgetCustomisation(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $theme = $objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme->load(1);
+
+        $layoutUpdate = $objectManager->create(\Magento\Widget\Model\Layout\Update::class);
+        $layoutUpdate->setHandle('catalog_product_view_id_1');
+        $layoutUpdate->setXml('<body></body>');
+        $layoutUpdate->setHasDataChanges(true);
+        $layoutUpdate->save();
+
+        $link = $objectManager->create(\Magento\Widget\Model\Layout\Link::class);
+        $link->setThemeId($theme->getId());
+        $link->setLayoutUpdateId($layoutUpdate->getId());
+        $link->save();
+
+        $entitySpecificHandlesList = $objectManager->get(EntitySpecificHandlesList::class);
+        $entitySpecificHandlesList->addHandle('catalog_product_view_id_1');
+        $entitySpecificHandlesList->addHandle('catalog_product_view_id_2');
+
+        $buildModel = function (array $handles) use ($objectManager, $theme): Merge {
+            $model = $objectManager->create(
+                \Magento\Framework\View\Model\Layout\Merge::class,
+                ['theme' => $theme]
+            );
+            $model->addHandle($handles);
+            return $model;
+        };
+
+        $productA = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_1']);
+        $productB = $buildModel(['default', 'catalog_product_view', 'catalog_product_view_id_2']);
+
+        $this->assertNotSame($productA->getCacheId(), $productB->getCacheId());
     }
 
     public function testLoadDbApp()

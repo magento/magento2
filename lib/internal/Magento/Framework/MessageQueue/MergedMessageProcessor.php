@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Processing messages implementing MergedMessageInterface.
  */
@@ -17,9 +19,12 @@ class MergedMessageProcessor implements MessageProcessorInterface
 
     /**
      * @param MessageStatusProcessor $messageStatusProcessor
+     * @param LoggerInterface $logger
      */
-    public function __construct(MessageStatusProcessor $messageStatusProcessor)
-    {
+    public function __construct(
+        MessageStatusProcessor $messageStatusProcessor,
+        private readonly LoggerInterface $logger,
+    ) {
         $this->messageStatusProcessor = $messageStatusProcessor;
     }
 
@@ -33,7 +38,11 @@ class MergedMessageProcessor implements MessageProcessorInterface
         array $messagesToAcknowledge,
         array $mergedMessages
     ) {
-        $this->messageStatusProcessor->acknowledgeMessages($queue, $messagesToAcknowledge);
+        try {
+            $this->messageStatusProcessor->acknowledgeMessages($queue, $messagesToAcknowledge);
+        } catch (\Exception $e) {
+            $this->logger->critical('Error during acknowledging previously processed messages.', ['exception' => $e]);
+        }
         $this->dispatchMessages($queue, $configuration, $mergedMessages, $messages);
     }
 
@@ -67,7 +76,11 @@ class MergedMessageProcessor implements MessageProcessorInterface
                     }
 
                     $originalMessages = $this->getOriginalMessages($originalMessages, $originalMessagesIds);
-                    $this->messageStatusProcessor->acknowledgeMessages($queue, $originalMessages);
+                    try {
+                        $this->messageStatusProcessor->acknowledgeMessages($queue, $originalMessages);
+                    } catch (\Exception $e) {
+                        $this->logger->critical('Error during acknowledging processed messages.', ['exception' => $e]);
+                    }
                 }
             }
         } catch (\Exception $e) {

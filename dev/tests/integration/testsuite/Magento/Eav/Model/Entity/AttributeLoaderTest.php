@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
@@ -54,6 +55,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
      * @param DataObject|null $object
      */
     #[DataProvider('loadAllAttributesDataProvider')]
+    #[AllowMockObjectsWithoutExpectations]
     public function testLoadAllAttributesTheFirstTime(
         $expectedNumOfAttributesByCode,
         $expectedNumOfAttributesByTable,

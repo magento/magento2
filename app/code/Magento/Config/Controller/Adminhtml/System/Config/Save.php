@@ -13,7 +13,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * System Configuration Save Controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractConfig implements HttpPostActionInterface

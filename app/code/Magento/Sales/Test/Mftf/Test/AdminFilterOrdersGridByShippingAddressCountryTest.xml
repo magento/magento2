@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFilterOrdersGridByShippingAddressCountryTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin order grid shipping address filter"/>
+            <title value="Admin can filter orders grid by shipping address country name"/>
+            <description value="Verify admin can filter orders grid by shipping address country name."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-16709"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!-- Create product and login to admin -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForCleanup"/>
+        </before>
+        <after>
+            <!-- Delete product, reset filters, column and logout from admin -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
+            <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="resetOrdersGridColumnDropdownAfter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdminAfter"/>
+        </after>
+        <!-- Step 1: In storefront add product, checkout with canada address, place order -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodSelectorNextButton}}" stepKey="waitForShippingStepVisible"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillGuestShippingAddressWithCanada">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="Canada_Address"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="proceedToPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!-- Step 2: In admin select shipping Address column and filter orders grid by shipping address -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openAdminOrdersGrid"/>
+        <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="selectShippingAddressColumn">
+            <argument name="column" value="Shipping Address"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.columnHeader('Shipping Address')}}" stepKey="waitForShippingAddressColumnHeader"/>
+        <actionGroup ref="AdminFilterOrderGridByShippingAddressActionGroup" stepKey="filterOrderGridByShippingAddress">
+            <argument name="shippingAddressFilter" value="{{Canada_Address.country}}"/>
+        </actionGroup>
+        <!-- Step 2 Assertion: Verify address includes a country -->
+        <waitForText selector="{{AdminDataGridTableSection.column('Shipping Address')}}" userInput="{{Canada_Address.country}}" stepKey="waitForCountryNameInShippingAddressColumn"/>
+    </test>
+</tests>

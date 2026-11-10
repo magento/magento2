@@ -23,7 +23,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Measure\Exception\MeasureException;
-use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Framework\HTTP\AsyncClient\Request;
@@ -75,6 +74,11 @@ class ShipmentService
     private const AUTHORIZATION_BEARER = 'Bearer ';
     private const ERROR_LOG_MESSAGE = '---Exception from auth api---';
     private const ACCEPT_HEADER = 'application/vnd.usps.labels+json';
+
+    /**
+     * Cache envelope flag for multiple REST quote responses (one per package).
+     */
+    private const MULTI_PACKAGE_CACHE_FLAG = '_magentoUspsMultiPackageQuote';
 
     /**
      * @var CollectionFactory
@@ -185,18 +189,9 @@ class ShipmentService
     }
 
     /**
-     * Build RateV3 request, send it to USPS gateway and retrieve quotes in JSON format
-     *
-     * @link https://developer.usps.com/shippingoptionsv3
-     * @return Result
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws LocalizedException
-     */
-    /**
      * Minimum US postal code length to trigger USPS API call.
      *
+     * @link https://developer.usps.com/shippingoptionsv3
      */
     private const US_POSTCODE_MIN_LENGTH = 4;
 
@@ -206,6 +201,7 @@ class ShipmentService
      * @return Result
      * @throws LocalizedException
      * @throws \Throwable
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getJsonQuotes(): Result
     {
@@ -213,8 +209,7 @@ class ShipmentService
         $accessToken = $this->carrierModel->getOauthAccessRequest();
         // The origin address(shipper) must be only in USA
         if (!$this->carrierModel->_isUSCountry($request->getOrigCountryId())) {
-            $responseBody = [];
-            return $this->_parseJsonResponse($responseBody);
+            return $this->_parseJsonResponse([]);
         }
 
         // Skip USPS API when US postcode is too short - reduces quota usage while typing
@@ -225,29 +220,111 @@ class ShipmentService
             }
         }
 
-        $requestParam = $this->_buildJsonQuotesRequestParam($request);
+        $requestParamsList = $this->buildJsonQuotesRequestParamsList($request);
+        if ($requestParamsList === []) {
+            return $this->_parseJsonResponse([]);
+        }
+
+        $cacheKey = $this->getJsonQuotesCacheKey($requestParamsList);
         $headers = [
             'Content-Type' => self::CONTENT_TYPE_JSON,
             'Authorization' => self::AUTHORIZATION_BEARER . $accessToken
         ];
 
-        $responseBody = $this->carrierModel->getCachedQuotes(json_encode($requestParam));
+        $cachedValue = $this->carrierModel->getCachedQuotes($cacheKey);
+        if ($cachedValue !== null) {
+            return $this->createResultFromCachedJsonQuotes($cachedValue);
+        }
 
-        if ($responseBody === null) {
-            $debugData = ['request' => $this->carrierModel->filterJsonDebugData($requestParam)];
-            $url = $this->carrierModel->getUrl(self::SHIPMENT_REQUEST_END_POINT);
+        $url = $this->carrierModel->getUrl(self::SHIPMENT_REQUEST_END_POINT);
+        if (count($requestParamsList) === 1) {
+            return $this->sendSinglePackageJsonQuoteRequest($url, $headers, $requestParamsList[0], $cacheKey);
+        }
 
-            $deferredResponse = $this->httpClient->request(new Request(
+        return $this->sendMultiPackageJsonQuoteRequests($url, $headers, $requestParamsList, $cacheKey);
+    }
+
+    /**
+     * Send a single async HTTP request for a one-package quote and wrap the deferred response.
+     *
+     * @param string $url
+     * @param array $headers
+     * @param array $requestParam
+     * @param string $cacheKey
+     * @return Result
+     */
+    private function sendSinglePackageJsonQuoteRequest(
+        string $url,
+        array $headers,
+        array $requestParam,
+        string $cacheKey
+    ): Result {
+        $debugData = ['request' => $this->carrierModel->filterJsonDebugData($requestParam)];
+        $deferredResponse = $this->httpClient->request(new Request(
+            $url,
+            Request::METHOD_POST,
+            $headers,
+            json_encode($requestParam)
+        ));
+
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($deferredResponse, $cacheKey, $debugData) {
+                        $responseResult = null;
+                        try {
+                            $responseResult = $deferredResponse->get();
+                        } catch (HttpException $exception) {
+                            $this->_logger->critical(
+                                'Critical error: ' . $exception->getMessage(),
+                                ['exception' => $exception]
+                            );
+                        }
+                        $responseBody = $responseResult ? $responseResult->getBody() : '';
+                        $debugData['result'] = $responseBody;
+                        $this->carrierModel->setCachedQuotes($cacheKey, $responseBody);
+                        $this->carrierModel->_debug($debugData);
+
+                        return $this->_parseJsonResponse(json_decode($responseBody, true) ?: []);
+                    }
+                )
+            ]
+        );
+    }
+
+    /**
+     * Send one async HTTP request per package for a multi-package quote and wrap the aggregated deferred response.
+     *
+     * @param string $url
+     * @param array $headers
+     * @param array $requestParamsList
+     * @param string $cacheKey
+     * @return Result
+     */
+    private function sendMultiPackageJsonQuoteRequests(
+        string $url,
+        array $headers,
+        array $requestParamsList,
+        string $cacheKey
+    ): Result {
+        $deferredResponses = [];
+        foreach ($requestParamsList as $packageRequestParam) {
+            $deferredResponses[] = $this->httpClient->request(new Request(
                 $url,
                 Request::METHOD_POST,
                 $headers,
-                json_encode($requestParam)
+                json_encode($packageRequestParam)
             ));
+        }
 
-            return $this->proxyDeferredFactory->create(
-                [
-                    'deferred' => new CallbackDeferred(
-                        function () use ($deferredResponse, $requestParam, $debugData) {
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($deferredResponses, $requestParamsList, $cacheKey) {
+                        $responseBodies = [];
+                        $debugRequests = [];
+                        foreach ($deferredResponses as $index => $deferredResponse) {
+                            $debugRequests[] = $this->carrierModel->filterJsonDebugData($requestParamsList[$index]);
                             $responseResult = null;
                             try {
                                 $responseResult = $deferredResponse->get();
@@ -257,60 +334,177 @@ class ShipmentService
                                     ['exception' => $exception]
                                 );
                             }
-                            $responseBody = $responseResult ? $responseResult->getBody() : '';
-                            $debugData['result'] = $responseBody;
-                            $this->carrierModel->setCachedQuotes(json_encode($requestParam), $responseBody);
-                            $this->carrierModel->_debug($debugData);
-
-                            return $this->_parseJsonResponse(json_decode($responseBody, true));
+                            $responseBodies[] = $responseResult ? $responseResult->getBody() : '';
                         }
-                    )
-                ]
-            );
-        }
-        return $this->_parseJsonResponse(json_decode($responseBody, true));
+                        $this->carrierModel->_debug(
+                            [
+                                'request' => $debugRequests,
+                                'result' => $responseBodies,
+                            ]
+                        );
+                        $toCache = json_encode(
+                            [
+                                self::MULTI_PACKAGE_CACHE_FLAG => true,
+                                'bodies' => $responseBodies,
+                            ]
+                        );
+                        $this->carrierModel->setCachedQuotes($cacheKey, $toCache);
+
+                        $decodedList = [];
+                        foreach ($responseBodies as $body) {
+                            $decodedList[] = json_decode($body, true) ?: [];
+                        }
+
+                        return $this->parseMergedJsonResponsesIntoResult($decodedList);
+                    }
+                )
+            ]
+        );
     }
 
     /**
-     * Build request params for JSON rate quote API
+     * Build one JSON rate request per package (USPS REST accepts a single package per call).
      *
      * @param \Magento\Framework\DataObject $request
+     * @return array<int, array<string, mixed>>
+     */
+    private function buildJsonQuotesRequestParamsList(DataObject $request): array
+    {
+        $paramsList = [];
+        foreach ($request->getPackages() as $packageData) {
+            $paramsList[] = $this->buildJsonQuoteRequestParamForPackage($request, $packageData);
+        }
+
+        return $paramsList;
+    }
+
+    /**
+     * Cache key: single-package keys stay backward compatible with earlier releases.
+     *
+     * @param array $requestParamsList
+     * @return string
+     */
+    private function getJsonQuotesCacheKey(array $requestParamsList): string
+    {
+        if (count($requestParamsList) === 1) {
+            return json_encode($requestParamsList[0]);
+        }
+
+        return json_encode($requestParamsList);
+    }
+
+    /**
+     * Builds a JSON quote request param for one package, based on the overall request and package-specific data.
+     *
+     * @param DataObject $request
+     * @param array $packageData
      * @return array
      */
-    private function _buildJsonQuotesRequestParam($request): array
+    private function buildJsonQuoteRequestParamForPackage(DataObject $request, array $packageData): array
     {
         $priceType = $this->carrierModel->getConfigData('price_type');
         $requestParam = [
-            "originZIPCode" => $request->getOrigPostal(),
-            'pricingOptions' => [["priceType" => $priceType]],
+            'originZIPCode' => $request->getOrigPostal(),
+            'pricingOptions' => [['priceType' => $priceType]],
         ];
-        foreach ($request->getPackages() as $packageData) {
-            $weightInPounds = (float) ($packageData['weight'] ?? 0);
-            if ($weightInPounds <= 0) {
-                $weightPounds = (float) ($packageData['weight_pounds'] ?? 0);
-                $weightOunces = (float) ($packageData['weight_ounces'] ?? 0);
-                $weightInPounds = $weightPounds + ($weightOunces / Carrier::OUNCES_POUND);
+        $weightInPounds = (float) ($packageData['weight'] ?? 0);
+        if ($weightInPounds <= 0) {
+            $weightPounds = (float) ($packageData['weight_pounds'] ?? 0);
+            $weightOunces = (float) ($packageData['weight_ounces'] ?? 0);
+            $weightInPounds = $weightPounds + ($weightOunces / Carrier::OUNCES_POUND);
+        }
+        $weightInPounds = max(0.01, round($weightInPounds, 2));
+        $requestParam['packageDescription'] = [
+            'weight' => $weightInPounds,
+            'mailClass' => 'ALL',
+        ];
+        $requestParam['packageDescription']['length'] = $request->getLength() ? (int) $request->getLength() : 1;
+        $requestParam['packageDescription']['height'] = $request->getHeight() ? (int) $request->getHeight() : 1;
+        $requestParam['packageDescription']['width'] = $request->getWidth() ? (int) $request->getWidth() : 1;
+        if ($request->getContainer() == 'NONRECTANGULAR' || $request->getContainer() == 'VARIABLE') {
+            $requestParam['packageDescription']['girth'] = $request->getGirth() ? (int) $request->getGirth() : 1;
+        }
+        if ($this->carrierModel->_isUSCountry($request->getDestCountryId())) {
+            $requestParam['destinationZIPCode'] = is_string($request->getDestPostal()) ?
+                substr($request->getDestPostal(), 0, 5) : '';
+        } else {
+            $requestParam['destinationCountryCode'] = $request->getDestCountryId();
+            $requestParam['foreignPostalCode'] = $request->getDestPostal() ?? '';
+        }
+
+        return $requestParam;
+    }
+
+    /**
+     * Restore Result from cache (single USPS payload or multi-package envelope).
+     *
+     * @param string $cachedValue
+     * @return Result
+     */
+    private function createResultFromCachedJsonQuotes(string $cachedValue): Result
+    {
+        $decoded = json_decode($cachedValue, true);
+        if (!is_array($decoded)) {
+            return $this->_parseJsonResponse([]);
+        }
+        if (($decoded[self::MULTI_PACKAGE_CACHE_FLAG] ?? false) === true && isset($decoded['bodies'])
+            && is_array($decoded['bodies'])
+        ) {
+            $responses = [];
+            foreach ($decoded['bodies'] as $body) {
+                if (!is_string($body)) {
+                    continue;
+                }
+                $responses[] = json_decode($body, true) ?: [];
             }
-            $weightInPounds = max(0.01, round($weightInPounds, 2));
-            $requestParam['packageDescription'] = [
-                "weight" => $weightInPounds,
-                "mailClass" => 'ALL'
-            ];
-            $requestParam['packageDescription']['length'] = $request->getLength() ? (int) $request->getLength() : 1;
-            $requestParam['packageDescription']['height'] = $request->getHeight() ? (int) $request->getHeight() : 1;
-            $requestParam['packageDescription']['width'] = $request->getWidth() ? (int) $request->getWidth() : 1;
-            if ($request->getContainer() == 'NONRECTANGULAR' || $request->getContainer() == 'VARIABLE') {
-                $requestParam['packageDescription']['girth'] = $request->getGirth() ? (int) $request->getGirth() : 1;
+
+            return $this->parseMergedJsonResponsesIntoResult($responses);
+        }
+
+        return $this->_parseJsonResponse($decoded);
+    }
+
+    /**
+     * Sum allowed-method prices across packages (aligned with XML RateV4 multi-Package handling).
+     *
+     * @param array $decodedResponses
+     * @return Result
+     */
+    private function parseMergedJsonResponsesIntoResult(array $decodedResponses): Result
+    {
+        $totalCosts = [];
+        foreach ($decodedResponses as $response) {
+            $packageCosts = $this->collectCostsFromJsonResponse($response);
+            $totalCosts = $this->mergeSummedShippingCosts($totalCosts, $packageCosts);
+        }
+        uasort(
+            $totalCosts,
+            static function ($previous, $next) {
+                return ($previous['price'] <= $next['price']) ? -1 : 1;
             }
-            if ($this->carrierModel->_isUSCountry($request->getDestCountryId())) {
-                $requestParam['destinationZIPCode'] = is_string($request->getDestPostal()) ?
-                    substr($request->getDestPostal(), 0, 5) : '';
+        );
+
+        return $this->buildRateResultFromCollectedCosts($totalCosts);
+    }
+
+    /**
+     * Merge shipping costs for the same method across multiple packages by summing prices
+     *
+     * @param array $total
+     * @param array $packageCosts
+     * @return array
+     */
+    private function mergeSummedShippingCosts(array $total, array $packageCosts): array
+    {
+        foreach ($packageCosts as $methodCode => $row) {
+            if (!isset($total[$methodCode])) {
+                $total[$methodCode] = $row;
             } else {
-                $requestParam['destinationCountryCode'] = $request->getDestCountryId();
-                $requestParam['foreignPostalCode'] = $request->getDestPostal() ?? '';
+                $total[$methodCode]['price'] += $row['price'];
             }
         }
-        return $requestParam;
+
+        return $total;
     }
 
     /**
@@ -319,53 +513,72 @@ class ShipmentService
      * @param array $response
      * @return Result
      * @link http://www.usps.com/webtools/htm/Rate-Calculators-v2-3.htm
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     public function _parseJsonResponse($response): Result
     {
+        $costArr = $this->collectCostsFromJsonResponse(is_array($response) ? $response : []);
+
+        return $this->buildRateResultFromCollectedCosts($costArr);
+    }
+
+    /**
+     * Collect the lowest price per allowed method from one USPS JSON quote response.
+     *
+     * @param array $response
+     * @return array
+     */
+    private function collectCostsFromJsonResponse(array $response): array
+    {
         $costArr = [];
-        if (!empty($response)) {
-            $shippingRates = $this->getShippingOptions($response);
-            foreach ($shippingRates as $shippingRate) {
-                foreach ($shippingRate as $rateElement) {
-                    $this->processShippingRateForItem(
-                        $rateElement,
-                        $costArr
-                    );
+        if ($response === []) {
+            return $costArr;
+        }
+        $shippingRates = $this->getShippingOptions($response);
+        foreach ($shippingRates as $shippingRate) {
+            foreach ($shippingRate as $rateElement) {
+                if (is_array($rateElement)) {
+                    $this->processShippingRateForItem($rateElement, $costArr);
                 }
             }
-            uasort($costArr, function ($previous, $next) {
-                return ($previous <= $next) ? -1 : 1;
-            });
         }
+        uasort(
+            $costArr,
+            static function ($previous, $next) {
+                return ($previous['price'] <= $next['price']) ? -1 : 1;
+            }
+        );
 
+        return $costArr;
+    }
+
+    /**
+     * Build Result from collected costs
+     *
+     * @param array $costArr
+     * @return Result
+     */
+    private function buildRateResultFromCollectedCosts(array $costArr): Result
+    {
         $result = $this->_rateFactory->create();
-        if (empty($costArr)) {
+        if ($costArr === []) {
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier('usps');
             $error->setCarrierTitle($this->carrierModel->getConfigData('title'));
             $error->setErrorMessage($this->carrierModel->getConfigData('specificerrmsg'));
             $result->append($error);
-        } else {
-            foreach ($costArr as $method) {
-                $rate = $this->_rateMethodFactory->create();
 
-                /** @var Method $method */
-                $rate->setCarrier('usps');
-                $rate->setCarrierTitle($this->carrierModel->getConfigData('title'));
-
-                $rate->setMethod($method['code']);
-                $rate->setMethodTitle($method['productName']);
-
-                $shippingCost = (float)$method['price'];
-                $rate->setCost($shippingCost);
-                $rate->setPrice($this->carrierModel->getMethodPrice($shippingCost, $method['code']));
-
-                /** @var Result $result */
-                $result->append($rate);
-            }
+            return $result;
+        }
+        foreach ($costArr as $method) {
+            $rate = $this->_rateMethodFactory->create();
+            $rate->setCarrier('usps');
+            $rate->setCarrierTitle($this->carrierModel->getConfigData('title'));
+            $rate->setMethod($method['code']);
+            $rate->setMethodTitle($method['productName']);
+            $shippingCost = (float) $method['price'];
+            $rate->setCost($shippingCost);
+            $rate->setPrice($this->carrierModel->getMethodPrice($shippingCost, $method['code']));
+            $result->append($rate);
         }
 
         return $result;
@@ -838,11 +1051,7 @@ class ShipmentService
             $productCountriesManufacturesList[$product->getId()] = $product->getCountryOfManufacture();
         }
 
-        if ($packageParams->getContentType() == 'OTHER' && $packageParams->getContentTypeOther() != null) {
-            $requestParam['customsForm']['customsContentType'] = $packageParams->getContentType();
-        } else {
-            $requestParam['customsForm']['customsContentType'] = $packageParams->getContentType();
-        }
+        $requestParam['customsForm']['customsContentType'] = $packageParams->getContentType();
 
         foreach ($packageItems as $itemShipment) {
             $item = new DataObject();
