@@ -29,6 +29,8 @@ use Magento\Quote\Model\ResourceModel\Quote\Address\Item\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Item\CollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\Collection as RatesCollection;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Rate\CollectionFactory as RateCollectionFactory;
+use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
+use Magento\Shipping\Model\CarrierFactoryInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -115,6 +117,11 @@ class AddressTest extends TestCase
     private $store;
 
     /**
+     * @var CarrierFactoryInterface|MockObject
+     */
+    private $carrierFactory;
+
+    /**
      * @var WebsiteInterface|MockObject
      */
     private $website;
@@ -154,6 +161,8 @@ class AddressTest extends TestCase
         $this->rateCollectionFactory = $this->getMockBuilder(RateCollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->carrierFactory = $this->createMock(CarrierFactoryInterface::class);
 
         $this->rateCollection = $this->createPartialMockWithReflection(
             RateCollectorInterface::class,
@@ -199,7 +208,8 @@ class AddressTest extends TestCase
                 '_rateCollectionFactory' => $this->rateCollectionFactory,
                 '_rateCollector' => $this->rateCollector,
                 '_regionFactory' => $this->regionFactory,
-                '_addressRateFactory' => $this->addressRateFactory
+                '_addressRateFactory' => $this->addressRateFactory,
+                'carrierFactory' => $this->carrierFactory
             ]
         );
         $this->quote = $this->createMock(Quote::class);
@@ -517,5 +527,49 @@ class AddressTest extends TestCase
             ->with(null, $currentCurrencyCode);
 
         $this->address->requestShippingRates();
+    }
+
+    public function testGetGroupedAllShippingRatesCachesCarrierInstancesByCode(): void
+    {
+        $flatrateCarrier = $this->createMock(AbstractCarrierInterface::class);
+        $tablerateCarrier = $this->createMock(AbstractCarrierInterface::class);
+        $firstFlatrate = $this->createPartialMock(Rate::class, ['isDeleted']);
+        $secondFlatrate = $this->createPartialMock(Rate::class, ['isDeleted']);
+        $tablerate = $this->createPartialMock(Rate::class, ['isDeleted']);
+
+        $firstFlatrate->setCarrier('flatrate');
+        $secondFlatrate->setCarrier('flatrate');
+        $tablerate->setCarrier('tablerate');
+
+        $firstFlatrate->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $secondFlatrate->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $tablerate->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+
+        $flatrateCarrier->expects($this->once())
+            ->method('getSortOrder')
+            ->willReturn(10);
+        $tablerateCarrier->expects($this->once())
+            ->method('getSortOrder')
+            ->willReturn(20);
+
+        $this->carrierFactory->expects($this->exactly(2))
+            ->method('get')
+            ->willReturnMap([
+                ['flatrate', $flatrateCarrier],
+                ['tablerate', $tablerateCarrier],
+            ]);
+
+        $this->setPropertyValue($this->address, '_rates', [$firstFlatrate, $secondFlatrate, $tablerate]);
+
+        $groupedRates = $this->address->getGroupedAllShippingRates();
+
+        $this->assertCount(2, $groupedRates['flatrate']);
+        $this->assertCount(1, $groupedRates['tablerate']);
     }
 }
