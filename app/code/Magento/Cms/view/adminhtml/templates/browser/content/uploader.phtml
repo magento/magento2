@@ -7,6 +7,8 @@
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
 /** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Cms\ViewModel\Adminhtml\Wysiwyg\Images\AllowedExtensions|null $allowedExtensionsViewModel */
+$allowedExtensionsViewModel = $block->getData('allowed_extensions_view_model');
 
 $blockHtmlId = $block->getHtmlId();
 ?>
@@ -18,7 +20,11 @@ $blockHtmlId = $block->getHtmlId();
             "maxWidth": <?= /* @noEscape */ $block->getImageUploadMaxWidth() ?>,
             "maxHeight": <?= /* @noEscape */ $block->getImageUploadMaxHeight() ?>,
             "isResizeEnabled": <?= /* @noEscape */ $block->getImageUploadConfigData()->getIsResizeEnabled() ?>,
-            "allowedExtensions": <?= /* @noEscape */ $block->getAllowedExtensionsJson() ?>
+            "allowedExtensions": <?= $escaper->escapeHtmlAttr(
+                $allowedExtensionsViewModel
+                    ? $allowedExtensionsViewModel->getAllowedExtensionsJson($block->getData('media_type'))
+                    : '[]'
+            ) ?>
         }
     }'
 >

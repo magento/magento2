@@ -32,6 +32,7 @@ define([
             window.byteConvert = jasmine.createSpy('byteConvert');
 
             spyOn($.fn, 'appendTo');
+            spyOn($.fn, 'alert');
 
             $('<div>').mediaUploader();
         });
