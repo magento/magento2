@@ -76,6 +76,9 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
 
         $cursorFlagCode = self::GRID_CURSOR_FLAG_PREFIX . $gridTableName;
         $lastProcessedEntityId = $this->getLastProcessedEntityId($cursorFlagCode, $maxEntityId);
+        if ($lastProcessedEntityId >= $maxEntityId) {
+            return [];
+        }
         $scanUntilEntityId = min($lastProcessedEntityId + self::ENTITY_ID_SCAN_RANGE, $maxEntityId);
         $select = $this->idListQueryBuilder->build(
             $mainTableName,
@@ -136,11 +139,6 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
             return max(0, $maxEntityId - self::ENTITY_ID_SCAN_RANGE);
         }
 
-        $lastProcessedEntityId = (int)$storedCursor;
-        if ($lastProcessedEntityId < 0 || $lastProcessedEntityId >= $maxEntityId) {
-            return 0;
-        }
-
-        return $lastProcessedEntityId;
+        return max(0, min((int)$storedCursor, $maxEntityId));
     }
 }

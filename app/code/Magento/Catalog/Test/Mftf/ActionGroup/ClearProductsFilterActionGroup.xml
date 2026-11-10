@@ -16,5 +16,6 @@
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
         <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
         <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <waitForPageLoad stepKey="waitForProductsPageToLoadAfterClearingFilters"/>
     </actionGroup>
 </actionGroups>

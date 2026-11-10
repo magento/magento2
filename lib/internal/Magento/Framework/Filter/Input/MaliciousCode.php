@@ -53,6 +53,19 @@ class MaliciousCode implements FilterInterface
     ];
 
     /**
+     * Regular expressions for path validation
+     *
+     * @var string
+     */
+    private const PATH_EXPRESSION =
+        '/(?:^|[\/\\\\])(' .
+        '(?:' .
+        '(?:\.\.|%2e%2e|%252e%252e|%c0%2e%2e|%c0%ae%c0%ae|%e0%40%ae%2e|%c0%2e%c0%2e)' .
+        '(?:[\/\\\\]|%2f|%5c|%255c)' .
+        ')' .
+        ')|\\x00|%00/i';
+
+    /**
      * Filter value
      *
      * @param string|array $value
@@ -60,12 +73,25 @@ class MaliciousCode implements FilterInterface
      */
     public function filter($value)
     {
+        return $this->purifier->purify($this->stripMaliciousExpressions($value));
+    }
+
+    /**
+     * Remove malicious expressions without HTML purification.
+     *
+     * Use for raw content that contains template directives, which HTMLPurifier would corrupt.
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    public function stripMaliciousExpressions($value)
+    {
         $replaced = 0;
         do {
             $value = preg_replace($this->_expressions, '', $value ?? '', -1, $replaced);
         } while ($replaced !== 0);
 
-        return $this->purifier->purify($value);
+        return $value;
     }
 
     /**
@@ -92,5 +118,16 @@ class MaliciousCode implements FilterInterface
     {
         $this->_expressions = $expressions;
         return $this;
+    }
+
+    /**
+     * Check if the path is valid
+     *
+     * @param string $fileName
+     * @return bool
+     */
+    public function isValidPath(string $fileName): bool
+    {
+        return !preg_match(self::PATH_EXPRESSION, $fileName);
     }
 }

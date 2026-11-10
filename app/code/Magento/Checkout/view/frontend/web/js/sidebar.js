@@ -58,12 +58,12 @@ define([
              */
             events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
-                $(self.options.targetElement).dropdownDialog('close');
+                self.element.find(self.options.targetElement).dropdownDialog('close');
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer'),
-                    element = $(this.options.button.checkout);
+                    element = this.element.find(this.options.button.checkout);
 
                 if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
@@ -142,10 +142,15 @@ define([
          */
         _showItemButton: function (elem) {
             var itemId = elem.data('cart-item'),
-                itemQty = elem.data('item-qty');
+                itemQty = elem.data('item-qty'),
+                updateButton = elem.siblings(this.options.item.button);
+
+            if (!updateButton.length) {
+                updateButton = $('#update-cart-item-' + itemId);
+            }
 
             if (this._isValidQty(itemQty, elem.val())) {
-                $('#update-cart-item-' + itemId).show('fade', 300);
+                updateButton.show('fade', 300);
             } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
@@ -183,9 +188,14 @@ define([
          * @private
          */
         _hideItemButton: function (elem) {
-            var itemId = elem.data('cart-item');
+            var itemId = elem.data('cart-item'),
+                updateButton = elem.siblings(this.options.item.button);
 
-            $('#update-cart-item-' + itemId).hide('fade', 300);
+            if (!updateButton.length) {
+                updateButton = $('#update-cart-item-' + itemId);
+            }
+
+            updateButton.hide('fade', 300);
         },
 
         /**
@@ -193,11 +203,16 @@ define([
          * @private
          */
         _updateItemQty: function (elem) {
-            var itemId = elem.data('cart-item');
+            var itemId = elem.data('cart-item'),
+                qtyInput = elem.siblings(this.options.item.qty);
+
+            if (!qtyInput.length) {
+                qtyInput = $('#cart-item-' + itemId + '-qty');
+            }
 
             this._ajax(this.options.url.update, {
                 'item_id': itemId,
-                'item_qty': $('#cart-item-' + itemId + '-qty').val()
+                'item_qty': qtyInput.val()
             }, elem, this._updateItemQtyAfter);
         },
 
@@ -326,7 +341,7 @@ define([
             var self = this,
                 height = 0,
                 counter = this.options.minicart.maxItemsVisible,
-                target = $(this.options.minicart.list),
+                target = this.element.find(this.options.minicart.list),
                 outerHeight;
 
             self.scrollHeight = 0;

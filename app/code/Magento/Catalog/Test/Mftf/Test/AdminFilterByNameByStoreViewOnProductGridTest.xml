@@ -32,6 +32,8 @@
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

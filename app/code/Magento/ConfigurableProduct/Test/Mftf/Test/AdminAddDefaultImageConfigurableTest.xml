@@ -84,6 +84,8 @@
             </createData>
         </before>
         <after>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>

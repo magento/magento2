@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -11,48 +11,57 @@ use Magento\Csp\Model\SubresourceIntegrity;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
+use Magento\Csp\Model\SubresourceIntegrityRepository;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 use Magento\Csp\Plugin\GenerateBundleAssetIntegrity;
 use Magento\Deploy\Service\Bundle;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Io\File;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class GenerateBundleAssetIntegrityTest extends TestCase
 {
     /**
-     * @var HashGenerator|MockObject
+     * @var HashGenerator
      */
     private HashGenerator $hashGenerator;
 
     /**
-     * @var SubresourceIntegrityFactory|MockObject
+     * @var SubresourceIntegrityFactory
      */
     private SubresourceIntegrityFactory $integrityFactory;
 
     /**
-     * @var SubresourceIntegrityCollector|MockObject
+     * @var SubresourceIntegrityCollector
      */
     private SubresourceIntegrityCollector $integrityCollector;
 
     /**
-     * @var Filesystem|MockObject
+     * @var Filesystem
      */
     private Filesystem $filesystem;
 
     /**
-     * @var File|MockObject
+     * @var File
      */
     private File $fileIo;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var SubresourceIntegrityRepositoryPool
+     */
+    private SubresourceIntegrityRepositoryPool $repositoryPool;
 
     /**
      * Initialize Dependencies
      *
      * @return void
-     * @throws Exception
      */
     protected function setUp(): void
     {
@@ -61,12 +70,12 @@ class GenerateBundleAssetIntegrityTest extends TestCase
         $this->integrityCollector = $this->createMock(SubresourceIntegrityCollector::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->fileIo = $this->createMock(File::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->repositoryPool = $this->createMock(SubresourceIntegrityRepositoryPool::class);
     }
 
     /**
      * @return void
-     * @throws Exception
-     * @throws FileSystemException
      */
     public function testAfterDeploy(): void
     {
@@ -85,6 +94,7 @@ class GenerateBundleAssetIntegrityTest extends TestCase
         )->willReturn([$file]);
         $pubStaticDir->expects($this->once())->method('readFile')->willReturn($fileContent);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($pubStaticDir);
+
         $integrity = $this->createMock(SubresourceIntegrity::class);
         $this->hashGenerator->expects($this->once())
             ->method('generate')
@@ -103,14 +113,21 @@ class GenerateBundleAssetIntegrityTest extends TestCase
                 ]
             ])
             ->willReturn($integrity);
-        $this->integrityCollector->expects($this->once())->method('collect')->with($integrity);
+
+        $repository = $this->createMock(SubresourceIntegrityRepository::class);
+        $repository->expects($this->once())->method('save')->with($integrity);
+        $this->repositoryPool->expects($this->once())->method('get')
+            ->with($area . '/' . $theme . '/' . $locale)
+            ->willReturn($repository);
 
         $plugin = new GenerateBundleAssetIntegrity(
             $this->hashGenerator,
             $this->integrityFactory,
             $this->integrityCollector,
             $this->filesystem,
-            $this->fileIo
+            $this->fileIo,
+            $this->logger,
+            $this->repositoryPool
         );
         $plugin->afterDeploy($subject, $result, $area, $theme, $locale);
     }

@@ -47,6 +47,9 @@ class Reader
      */
     private $typeReader;
 
+    /** @var array<string, bool> */
+    private array $phpExtensionClassCache = [];
+
     /**
      * @param ConfigInterface $diContainerConfig
      * @param App\ObjectManager\ConfigLoader $configLoader
@@ -110,8 +113,7 @@ class Reader
                 }
 
                 // Classes defined by PHP extensions are allowed.
-                $reflection = new \ReflectionClass($preference);
-                if ($reflection->getExtension()) {
+                if ($this->isPhpExtensionClass($preference)) {
                     $config['preferences'][$instanceName] = $preference;
                     continue;
                 }
@@ -193,5 +195,22 @@ class Reader
         $newInstances = array_fill_keys(array_keys($config->getPreferences()), []);
         $newCollection = array_merge($newInstances, $definedInstances);
         $definitionsCollection->initialize($newCollection);
+    }
+
+    /**
+     * Check whether a class is provided by a PHP extension (e.g. PDO, SplStack).
+     * Result is memoized: this check runs once per preference per area (2,500+ × 8 areas),
+     * but the answer never changes within a single compile run.
+     *
+     * @param string $className
+     * @return bool
+     * @throws \ReflectionException
+     */
+    private function isPhpExtensionClass(string $className): bool
+    {
+        if (!array_key_exists($className, $this->phpExtensionClassCache)) {
+            $this->phpExtensionClassCache[$className] = (new \ReflectionClass($className))->getExtension() !== null;
+        }
+        return $this->phpExtensionClassCache[$className];
     }
 }

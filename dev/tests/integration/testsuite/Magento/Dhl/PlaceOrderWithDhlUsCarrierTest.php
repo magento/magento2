@@ -18,7 +18,6 @@ use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurable
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
-use Magento\Dhl\Model\Carrier;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
@@ -42,9 +41,16 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithDhlUsCarrierTest extends TestCase
 {
+    /**
+     * AsyncClientInterfaceMock falls back to real Guzzle when the queue is empty.
+     * Multiple totals collections (fixtures, address updates, place order) each may request DHL rates.
+     */
+    private const DHL_MOCK_HTTP_RESPONSE_QUEUE_SIZE = 128;
+
     /**
      * @var DataFixtureStorage
      */
@@ -93,6 +99,7 @@ class PlaceOrderWithDhlUsCarrierTest extends TestCase
         $this->cartManagement = $this->objectManager->get(CartManagementInterface::class);
         $this->orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
         $this->httpClient = $this->objectManager->get(AsyncClientInterface::class);
+        $this->queueDhlQuoteMockResponses(self::DHL_MOCK_HTTP_RESPONSE_QUEUE_SIZE);
     }
 
     #[
@@ -178,9 +185,7 @@ class PlaceOrderWithDhlUsCarrierTest extends TestCase
     {
         $cartId = (int)$this->fixtures->get('cart')->getId();
         $this->setShippingAndBillingAddressForQuote($cartId);
-        $content = file_get_contents(__DIR__ . '/_files/dhl_quote_response.json');
-        $response = new Response(200, [], $content);
-        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
+        $this->queueDhlQuoteMockResponses(self::DHL_MOCK_HTTP_RESPONSE_QUEUE_SIZE);
         $order = $this->orderRepository->get($this->selectDhlAndCheckmoAndPlaceOrder($cartId));
         $this->assertNotEmpty($order->getIncrementId());
         $this->assertSame($this->selectedShippingMethod, $order->getShippingMethod());
@@ -192,6 +197,18 @@ class PlaceOrderWithDhlUsCarrierTest extends TestCase
      * @param int $cartId
      * @return void
      */
+    /**
+     * Queue mock DHL REST responses so {@see AsyncClientInterfaceMock} never delegates to live Guzzle.
+     *
+     * @param int $count
+     * @return void
+     */
+    private function queueDhlQuoteMockResponses(int $count): void
+    {
+        $content = file_get_contents(__DIR__ . '/_files/dhl_quote_response.json');
+        $this->httpClient->nextResponses(array_fill(0, $count, new Response(200, [], $content)));
+    }
+
     private function setShippingAndBillingAddressForQuote(int $cartId): void
     {
         $quote = $this->quoteRepository->get($cartId);

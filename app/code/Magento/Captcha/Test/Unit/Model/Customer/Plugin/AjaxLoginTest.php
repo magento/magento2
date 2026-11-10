@@ -95,7 +95,7 @@ class AjaxLoginTest extends TestCase
             ->willReturn($this->requestMock);
 
         $this->captchaHelperMock
-            ->expects($this->exactly(1))
+            ->expects($this->any())
             ->method('getCaptcha')
             ->willReturn($this->captchaMock);
 
@@ -193,7 +193,11 @@ class AjaxLoginTest extends TestCase
         $this->serializerMock->expects($this->once())->method('unserialize')
             ->willReturn($requestContent);
 
-        $this->captchaMock->expects($this->once())->method('isRequired')->with($username)
+        $expectEarlyReturn = !array_key_exists('captcha_form_id', $requestContent)
+            || $requestContent['captcha_form_id'] === null;
+        $this->captchaMock
+            ->expects($expectEarlyReturn ? $this->never() : $this->once())
+            ->method('isRequired')->with($username)
             ->willReturn(false);
         $expectLogAttempt = $requestContent['captcha_form_id'] ?? false;
         $this->captchaMock

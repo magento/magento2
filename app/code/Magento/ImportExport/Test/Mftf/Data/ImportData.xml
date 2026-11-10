@@ -18,4 +18,15 @@
         <data key="sku">simple_long_desc</data>
         <data key="name">Product With Long Description</data>
     </entity>
+    <!-- Store group + store view for AdminCreateStoreViewActionGroup; store_view code must match import CSV. -->
+    <entity name="australiaStoreGroupImportUrlKey" type="group">
+        <data key="name">Australia Store</data>
+        <data key="code">store_aus</data>
+    </entity>
+    <entity name="australiaStoreViewImportUrlKey" type="store">
+        <data key="name">Australia Store View</data>
+        <data key="code">store_view_aus</data>
+        <data key="is_active">1</data>
+        <requiredEntity type="storeGroup">australiaStoreGroupImportUrlKey</requiredEntity>
+    </entity>
 </entities>

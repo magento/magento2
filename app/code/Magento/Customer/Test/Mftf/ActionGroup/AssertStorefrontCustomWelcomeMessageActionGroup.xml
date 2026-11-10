@@ -16,7 +16,7 @@
             <argument name="customMessage" type="string" defaultValue="Welcome to &quot;Food &amp; Drinks&quot; store"/>
         </arguments>
 
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitForWelcomeMessage"/>
-        <waitForText userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyCustomMessage"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.headerWelcomeMessage}}" stepKey="waitForWelcomeMessage"/>
+        <waitForText userInput="{{customMessage}}" selector="{{StorefrontPanelHeaderSection.headerWelcomeMessage}}" stepKey="verifyCustomMessage"/>
     </actionGroup>
 </actionGroups>

@@ -11,7 +11,7 @@
     </head>
     <body>
         <referenceBlock name="head.additional">
-            <block class="Magento\Csp\Block\Sri\Hashes" name="admin.sri.hashes" template="Magento_Csp::sri/hashes.phtml"/>
+            <block class="Magento\Csp\Block\Sri\Hashes" name="admin.sri.hashes" template="Magento_Csp::sri/hashes.phtml" as="csp.sri.hashes"/>
         </referenceBlock>
     </body>
 </page>

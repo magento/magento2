@@ -18,6 +18,11 @@
             <group value="pr_exclude"/>
             <group value="3rd_party_integration"/>
         </annotations>
+
+        <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutCustomer"/>
+        </after>
+
         <remove keyForRemoval="selectExpressWorldWide"/>
         <click selector="{{CheckoutCartSummarySection.shippingMethods('Express easy')}}"  after="verifyMedicalExpressIsAvailable" stepKey="selectExpressEasy"/>
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>

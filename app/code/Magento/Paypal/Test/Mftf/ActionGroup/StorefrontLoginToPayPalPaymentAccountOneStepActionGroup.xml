@@ -12,5 +12,6 @@
             <description>EXTENDS: StorefrontLoginToPayPalPaymentAccountOneStepActionGroup. Remove extra Continue step on PayPal site</description>
         </annotations>
         <remove keyForRemoval="clickNext"/>
+        <conditionalClick selector="{{PayPalPaymentSection.nextButton}}" dependentSelector="{{PayPalPaymentSection.nextButton}}" visible="true" after="fillEmail" stepKey="clickNextIfVisible"/>
     </actionGroup>
 </actionGroups>

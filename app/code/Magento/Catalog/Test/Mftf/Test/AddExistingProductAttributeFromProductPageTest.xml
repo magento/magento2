@@ -67,6 +67,10 @@
             <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createAnchorCategory" stepKey="deleteAnchorCategory"/>
 
+            <!-- Clear filters in product grid -->
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
+
             <!-- logout of the application -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

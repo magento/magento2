@@ -11,18 +11,31 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory;
 use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExportTest extends TestCase
 {
+    /**
+     * @var WriteInterface|MockObject
+     */
+    private $directoryMock;
+
     /**
      * @var ConfigInterface|MockObject
      */
@@ -37,6 +50,11 @@ class ExportTest extends TestCase
      * @var AbstractAdapter|MockObject
      */
     private $exportAdapterMock;
+
+    /**
+     * @var Export\Adapter\Factory|MockObject
+     */
+    private $exportAdapterFactoryMock;
 
     /**
      * @var Export
@@ -72,6 +90,11 @@ class ExportTest extends TestCase
     private $localeEmulator;
 
     /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -95,22 +118,30 @@ class ExportTest extends TestCase
 
         $logger = $this->createMock(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
+        $this->directoryMock = $this->createMock(WriteInterface::class);
+        $filesystem->method('getDirectoryWrite')
+            ->willReturn($this->directoryMock);
         $entityFactory = $this->createMock(Factory::class);
         $entityFactory->method('create')
             ->willReturn($this->exportAbstractEntityMock);
-        $exportAdapterFac = $this->createMock(Export\Adapter\Factory::class);
-        $exportAdapterFac->method('create')
+        $this->exportAdapterFactoryMock = $this->createMock(Export\Adapter\Factory::class);
+        $this->exportAdapterFactoryMock->method('create')
             ->willReturn($this->exportAdapterMock);
         $this->localeEmulator = $this->createMock(LocaleEmulatorInterface::class);
+        $fileIoMock = $this->createMock(File::class);
+        $fileIoMock->method('getPathInfo')
+            ->willReturnCallback(fn (string $fileName) => ['extension' => pathinfo($fileName, PATHINFO_EXTENSION)]);
+        $this->fileInfo = new FileInfo($this->exportConfigMock, $fileIoMock);
 
         $this->model = new Export(
             $logger,
             $filesystem,
             $this->exportConfigMock,
             $entityFactory,
-            $exportAdapterFac,
+            $this->exportAdapterFactoryMock,
             [],
-            $this->localeEmulator
+            $this->localeEmulator,
+            $this->fileInfo
         );
     }
 
@@ -170,6 +201,117 @@ class ExportTest extends TestCase
 
         $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $config['file_format'];
         $this->assertEquals($correctFileName, $fileName);
+    }
+
+    public function testQueueFlowUsesTemporaryDestination(): void
+    {
+        $fileName = 'catalog_product_20260324_120000.csv';
+        $config = [
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            'file_name' => $fileName,
+            Export::FILTER_ELEMENT_GROUP => [],
+        ];
+        $this->model->setData($config);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')
+            ->willReturn($config['entity']);
+        $this->exportAbstractEntityMock->method('export')
+            ->willReturn('content');
+
+        $this->exportAdapterFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(
+                'csvFormatClass',
+                ['destination' => $this->fileInfo->getInProgressFilePath($fileName), 'fileExport' => true]
+            )
+            ->willReturn($this->exportAdapterMock);
+
+        self::assertSame('__RESULT_WRITTEN_TO_FILE__', $this->model->export());
+    }
+
+    public function testOrdinaryFlowDoesNotEnableFileOnlyCompletion(): void
+    {
+        $this->model->setData([
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            Export::FILTER_ELEMENT_GROUP => []
+        ]);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')->willReturn('entityA');
+        $this->exportAbstractEntityMock->method('export')->willReturn("sku\nprobe\n");
+        $this->exportAdapterFactoryMock->expects(self::once())->method('create')
+            ->with('csvFormatClass', [])
+            ->willReturn($this->exportAdapterMock);
+        $this->model->getContentType();
+
+        self::assertSame("sku\nprobe\n", $this->model->export());
+    }
+
+    #[DataProvider('exportFailureDataProvider')]
+    public function testExportFailureCleansUpOnlyQueuedTemporaryOutput(string $fileName, bool $temporaryExists): void
+    {
+        $failure = new LocalizedException(__('Cannot prepare export rows.'));
+        $this->model->setData([
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            'file_name' => $fileName,
+            Export::FILTER_ELEMENT_GROUP => []
+        ]);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(static fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')->willReturn('entityA');
+        $this->exportAbstractEntityMock->method('export')->willThrowException($failure);
+        if ($fileName !== '') {
+            $temporaryPath = $this->fileInfo->getInProgressFilePath($fileName);
+            $this->directoryMock->expects(self::once())->method('isFile')
+                ->with($temporaryPath)->willReturn($temporaryExists);
+            $this->directoryMock->expects($temporaryExists ? self::once() : self::never())->method('delete')
+                ->with($temporaryPath);
+        } else {
+            $this->directoryMock->expects(self::never())->method('isFile');
+            $this->directoryMock->expects(self::never())->method('delete');
+        }
+
+        try {
+            $this->model->export();
+            self::fail('An export failure must reach the caller.');
+        } catch (LocalizedException $exception) {
+            self::assertSame($failure, $exception);
+        }
+    }
+
+    public static function exportFailureDataProvider(): array
+    {
+        return [
+            'queued temporary file exists' => ['catalog_product_failure.csv', true],
+            'queued temporary file was not created' => ['catalog_product_failure.csv', false],
+            'ordinary export does not remove files' => ['', false]
+        ];
+    }
+
+    public function testEmptyQueuedExportRemovesTemporaryOutput(): void
+    {
+        $fileName = 'catalog_product_empty.csv';
+        $temporaryPath = $this->fileInfo->getInProgressFilePath($fileName);
+        $this->model->setData([
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            'file_name' => $fileName,
+            Export::FILTER_ELEMENT_GROUP => []
+        ]);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(static fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')->willReturn('entityA');
+        $this->exportAbstractEntityMock->method('export')->willReturn('');
+        $this->directoryMock->expects(self::once())->method('isFile')->with($temporaryPath)->willReturn(true);
+        $this->directoryMock->expects(self::once())->method('delete')->with($temporaryPath);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('There is no data for the export.');
+        $this->model->export();
     }
 
     /**

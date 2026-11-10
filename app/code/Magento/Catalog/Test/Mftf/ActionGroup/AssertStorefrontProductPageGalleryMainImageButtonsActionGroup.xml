@@ -18,12 +18,14 @@
         </arguments>
         <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForButtons"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeProductImageBeforeActions"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeProductImageBeforeActions"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForClickOnNextImageButton"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeExpectedImageOnPreview"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeExpectedImageOnPreview"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="waitForClickOnPrevImageButton"/>
         <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickOnPrevImageButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageSelectedInRibbonAfterSecondChange"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeMainProductImageAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageSelectedInRibbonAfterSecondChange"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeMainProductImageAfterSecondChange"/>
     </actionGroup>
 </actionGroups>

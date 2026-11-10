@@ -52,7 +52,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() :
      data-mage-init='{"openVideoModal":{}}'
      data-parent-component="<?= $escaper->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?= $escaper->escapeHtmlAttr($imagesJson) ?>"
-     data-types='<?= /* @noEscape */ $jsonHelper->jsonEncode($block->getImageTypes()) ?>'
+     data-types="<?= $escaper->escapeHtmlAttr($jsonHelper->jsonEncode($block->getImageTypes())) ?>"
 >
     <?php if (!$block->getElement()->getReadonly() && $isEditEnabled): ?>
         <div class="image image-placeholder">

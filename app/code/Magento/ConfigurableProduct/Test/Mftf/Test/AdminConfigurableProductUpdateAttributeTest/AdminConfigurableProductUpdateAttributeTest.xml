@@ -95,6 +95,9 @@
         </before>
 
         <after>
+            <!-- Clear the filters in the product grid -->
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <!-- Delete everything that was created in the before block -->

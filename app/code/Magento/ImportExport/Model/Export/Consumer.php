@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Framework\Notification\NotifierInterface;
@@ -46,22 +48,30 @@ class Consumer
     private $filesystem;
 
     /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
      * Consumer constructor.
      * @param \Psr\Log\LoggerInterface $logger
      * @param ExportManagementInterface $exportManager
      * @param Filesystem $filesystem
      * @param NotifierInterface $notifier
+     * @param FileInfo|null $fileInfo
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         ExportManagementInterface $exportManager,
         Filesystem $filesystem,
-        NotifierInterface $notifier
+        NotifierInterface $notifier,
+        ?FileInfo $fileInfo = null
     ) {
         $this->logger = $logger;
         $this->exportManager = $exportManager;
         $this->filesystem = $filesystem;
         $this->notifier = $notifier;
+        $this->fileInfo = $fileInfo ?? ObjectManager::getInstance()->get(FileInfo::class);
     }
 
     /**
@@ -78,8 +88,8 @@ class Consumer
             $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             if ($data !== self::RESULT_WRITTEN_TO_FILE) {
                 $directory->writeFile('export/' . $fileName, $data);
-            } elseif (!$directory->isFile('export/' . $fileName)) {
-                throw new LocalizedException(__('Export file was not created.'));
+            } else {
+                $this->publishFile($directory, $fileName);
             }
 
             $this->notifier->addMajor(
@@ -93,5 +103,25 @@ class Consumer
             );
             $this->logger->critical('Something went wrong while export process. ' . $exception->getMessage());
         }
+    }
+
+    /**
+     * Publish temporary export file to its final location.
+     *
+     * @param WriteInterface $directory
+     * @param string $fileName
+     * @return void
+     * @throws FileSystemException
+     * @throws LocalizedException
+     */
+    private function publishFile(WriteInterface $directory, string $fileName): void
+    {
+        $inProgressFilePath = $this->fileInfo->getInProgressFilePath($fileName);
+        $targetFilePath = 'export/' . $fileName;
+        if (!$directory->isFile($inProgressFilePath)) {
+            throw new LocalizedException(__('Export file was not created.'));
+        }
+
+        $directory->renameFile($inProgressFilePath, $targetFilePath);
     }
 }

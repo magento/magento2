@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSingleInsufficientStockMessageAfterOutOfStockThresholdChangeTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Cart"/>
+            <title value="Single insufficient stock message after out-of-stock threshold is raised while product remains in cart"/>
+            <description value="One insufficient-stock message when cart qty exceeds salable stock after the threshold changes."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-4192"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create a simple product. -->
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <!-- Delete the product. -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Open the product in admin for inventory setup. -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForInitialInventory">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
+        <!-- Open advanced inventory. -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="openAdvancedInventoryInitial"/>
+        <!-- Set quantity to 3. -->
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="setQtyThree">
+            <argument name="qty" value="3"/>
+        </actionGroup>
+        <!-- Set out-of-stock threshold to 1 so salable quantity is 2. -->
+        <actionGroup ref="AdminFillAdvancedInventoryOutOfStockThresholdActionGroup" stepKey="setThresholdOne">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <!-- Apply advanced inventory and save the product. -->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="submitAdvancedInventoryInitial"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInitial"/>
+        <!-- Open the product on the storefront. -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductOnStorefront">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <!-- Add two units to the cart (within salable quantity). -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addTwoToCart">
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <!-- Open admin in a new tab to change the threshold. -->
+        <openNewTab stepKey="openAdminTab"/>
+        <!-- Open the same product in admin. -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForThresholdChange">
+            <argument name="productId" value="$$simpleProduct.id$$"/>
+        </actionGroup>
+        <!-- Open advanced inventory. -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="openAdvancedInventoryForThresholdChange"/>
+        <!-- Set out-of-stock threshold to 2 so salable quantity is 1. -->
+        <actionGroup ref="AdminFillAdvancedInventoryOutOfStockThresholdActionGroup" stepKey="setThresholdTwo">
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <!-- Apply advanced inventory and save the product. -->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="submitAdvancedInventoryThresholdChange"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterThresholdChange"/>
+        <!-- Close the admin tab and return to the storefront. -->
+        <closeTab stepKey="closeAdminTab"/>
+        <!-- Open the shopping cart. -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCart"/>
+        <!-- Set line quantity to 3 and update the cart. -->
+        <waitForElementVisible selector="{{CheckoutCartProductSection.qty($$simpleProduct.sku$$)}}" stepKey="waitForCartQtyInputVisible"/>
+        <fillField selector="{{CheckoutCartProductSection.qty($$simpleProduct.sku$$)}}" userInput="3" stepKey="setCartQtyToThree"/>
+        <waitForElementClickable selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="waitForUpdateShoppingCartClickable"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <!-- Dismiss the attention alert shown after failed cart validation before the cart reloads. -->
+        <waitForElementVisible selector="{{CheckoutCartProductSection.modalMessage}}" stepKey="waitForValidationAlert"/>
+        <waitForText selector="{{CheckoutCartProductSection.modalMessage}}" userInput="{{NotEnoughItemsForSaleMessageData.message}}" stepKey="waitForValidationAlertText"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.modalConfirmButton}}" stepKey="waitForValidationAlertOk"/>
+        <click selector="{{CheckoutCartProductSection.modalConfirmButton}}" stepKey="clickValidationAlertOk"/>
+        <waitForPageLoad stepKey="waitAfterDismissValidationAlert"/>
+        <waitForAjaxLoad stepKey="waitAfterDismissValidationAlertAjax"/>
+        <!-- Assert the insufficient stock message is visible. -->
+        <waitForText selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="{{NotEnoughItemsForSaleMessageData.message}}" stepKey="assertInsufficientStockMessageVisible"/>
+        <!-- The quote-level banner for qty errors must not appear (only item-level copy is shown). -->
+        <dontSee userInput="{{RequestedQtyNotAvailableMessageData.message}}" stepKey="dontSeeRequestedQtyNotAvailableMessage"/>
+    </test>
+</tests>

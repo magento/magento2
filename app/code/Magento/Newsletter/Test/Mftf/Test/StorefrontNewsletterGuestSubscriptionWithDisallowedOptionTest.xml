@@ -23,17 +23,18 @@
         <before>
             <magentoCLI stepKey="disableGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 0"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
-                <argument name="tags" value="config"/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="allowGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 1"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
-                <argument name="tags" value="config"/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+        <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
         <actionGroup ref="StorefrontCreateNewsletterSubscriberActionGroup" stepKey="createSubscription">
             <argument name="email" value="{{_defaultNewsletter.senderEmail}}"/>
         </actionGroup>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVisualSwatchColorPickerHexPersistsAfterEnterTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Admin visual swatch color picker"/>
+            <title value="HEX remains in color picker # field after Enter for multiple swatch rows"/>
+            <description value="Verify that HEX stays in the color picker # field after applying the selection"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3559"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete the visual swatch attribute -->
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Open the product attribute page -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <actionGroup ref="AdminCreateProductAttributeWithSaveAndEditActionGroup" stepKey="createVisualSwatchAttribute">
+            <argument name="attribute" value="VisualSwatchProductAttributeForm"/>
+        </actionGroup>
+        <!-- Swatch row 1: CD0010 -->
+        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="addVisualSwatchRow1">
+            <argument name="swatchType" value="HexPersist1"/>
+            <argument name="adminInputByIndex" value="0"/>
+        </actionGroup>
+        <!-- Open the swatch menu -->
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="openChooseHexRow1">
+            <argument name="index" value="0"/>
+            <argument name="nthColorPicker" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="setHexRow1">
+            <argument name="nthColorPicker" value="1"/>
+            <argument name="hexColor" value="CD0010"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="reopenChooseHexRow1">
+            <argument name="index" value="0"/>
+            <argument name="nthColorPicker" value="1"/>
+        </actionGroup>
+        <!-- Assert the hex value -->
+        <seeInField selector="{{AdminColorPickerSection.hexByIndex('1')}}" userInput="cd0010" stepKey="assertHexCd0010AfterReopen"/>
+        <!-- Swatch row 2: CD0012 -->
+        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="addVisualSwatchRow2">
+            <argument name="swatchType" value="HexPersist2"/>
+            <argument name="adminInputByIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="openChooseHexRow2">
+            <argument name="index" value="1"/>
+            <argument name="nthColorPicker" value="2"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="setHexRow2">
+            <argument name="nthColorPicker" value="2"/>
+            <argument name="hexColor" value="CD0012"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="reopenChooseHexRow2">
+            <argument name="index" value="1"/>
+            <argument name="nthColorPicker" value="2"/>
+        </actionGroup>
+        <!-- Assert the hex value -->
+        <seeInField selector="{{AdminColorPickerSection.hexByIndex('2')}}" userInput="cd0012" stepKey="assertHexCd0012AfterReopen"/>
+        <!-- Swatch row 3: CD0013 -->
+        <actionGroup ref="AdminAddEmptyVisualSwatchActionGroup" stepKey="addVisualSwatchRow3">
+            <argument name="swatchType" value="HexPersist3"/>
+            <argument name="adminInputByIndex" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="openChooseHexRow3">
+            <argument name="index" value="2"/>
+            <argument name="nthColorPicker" value="3"/>
+        </actionGroup>
+        <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="setHexRow3">
+            <argument name="nthColorPicker" value="3"/>
+            <argument name="hexColor" value="CD0013"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenSwatchMenuChooseColorAndWaitHexInputActionGroup" stepKey="reopenChooseHexRow3">
+            <argument name="index" value="2"/>
+            <argument name="nthColorPicker" value="3"/>
+        </actionGroup>
+        <!-- Assert the hex value -->
+        <seeInField selector="{{AdminColorPickerSection.hexByIndex('3')}}" userInput="cd0013" stepKey="assertHexCd0013AfterReopen"/>
+    </test>
+</tests>

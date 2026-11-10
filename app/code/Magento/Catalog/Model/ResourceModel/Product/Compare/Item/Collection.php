@@ -464,12 +464,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $attributesData = $this->getConnection()->fetchAll($select);
                 if ($attributesData) {
                     $entityType = \Magento\Catalog\Model\Product::ENTITY;
-                    $this->_eavConfig->importAttributesData($entityType, $attributesData);
+                    $importData = array_map(
+                        static function (array $data): array {
+                            unset($data['store_label']);
+                            return $data;
+                        },
+                        $attributesData
+                    );
+                    $this->_eavConfig->importAttributesData($entityType, $importData);
                     foreach ($attributesData as $data) {
                         $attribute = $this->_eavConfig->getAttribute($entityType, $data['attribute_code']);
+                        $attribute->setData('store_label', $data['store_label']);
                         $this->_comparableAttributes[$attribute->getAttributeCode()] = $attribute;
                     }
-                    unset($attributesData);
+                    unset($attributesData, $importData);
                 }
             }
         }

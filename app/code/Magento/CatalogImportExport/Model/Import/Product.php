@@ -30,6 +30,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -281,7 +282,7 @@ class Product extends AbstractEntity
     /**
      * @var string
      */
-    private $hashAlgorithm = 'crc32c';
+    private $hashAlgorithm = 'xxh128';
 
     /**
      * @var array
@@ -793,6 +794,11 @@ class Product extends AbstractEntity
     private ?File $fileDriver;
 
     /**
+     * @var DomainValidator|null
+     */
+    private ?DomainValidator $domainValidator;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -843,6 +849,7 @@ class Product extends AbstractEntity
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
      * @param SkuStorage|null $skuStorage
+     * @param DomainValidator|null $domainValidator
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -899,7 +906,8 @@ class Product extends AbstractEntity
         ?LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
-        ?SkuStorage $skuStorage = null
+        ?SkuStorage $skuStorage = null,
+        ?DomainValidator $domainValidator = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -942,7 +950,6 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
             ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-        $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -969,6 +976,8 @@ class Product extends AbstractEntity
             ->get(StockItemProcessorInterface::class);
         $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
             ->get(File::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()
+            ->get(DomainValidator::class);
     }
 
     /**
@@ -2193,6 +2202,11 @@ class Product extends AbstractEntity
             if (stripos($filename, self::FILTER_CHAIN) !== false) {
                 return '';
             }
+
+            if (!$this->domainValidator->isValid($filename)) {
+                return '';
+            }
+
             $content = $this->fileDriver->fileGetContents($filename);
         } catch (\Exception $e) {
             $content = false;
@@ -2860,10 +2874,11 @@ class Product extends AbstractEntity
             }
         }
 
-        if (!empty($rowData['new_from_date']) && !empty($rowData['new_to_date'])
-        ) {
-            $newFromTimestamp = strtotime($this->dateTime->formatDate($rowData['new_from_date'], false));
-            $newToTimestamp = strtotime($this->dateTime->formatDate($rowData['new_to_date'], false));
+        $newFromDate = trim((string)($rowData['new_from_date'] ?? ''));
+        $newToDate = trim((string)($rowData['new_to_date'] ?? ''));
+        if (!empty($newFromDate) && !empty($newToDate)) {
+            $newFromTimestamp = strtotime($this->dateTime->formatDate($newFromDate, false));
+            $newToTimestamp = strtotime($this->dateTime->formatDate($newToDate, false));
             if ($newFromTimestamp > $newToTimestamp) {
                 $this->skipRow(
                     $rowNum,

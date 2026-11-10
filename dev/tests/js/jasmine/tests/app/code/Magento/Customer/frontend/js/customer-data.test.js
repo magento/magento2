@@ -493,6 +493,84 @@ define([
             });
         });
 
+        describe('"disposableCustomerData" extender', function () {
+            var knockout;
+
+            beforeEach(function (done) {
+                clearLocalStorage();
+
+                injector.require([
+                    'ko',
+                    'Magento_Customer/js/customer-data'
+                ], function (ko, Constr) {
+                    knockout = ko;
+                    obj = Constr;
+                    obj.initStorage();
+                    done();
+                });
+            });
+
+            afterEach(function () {
+                jasmine.clock().uninstall();
+            });
+
+            it('Keeps the section when its data_id changed after the cleanup was scheduled', function () {
+                var observable,
+                    result;
+
+                jasmine.clock().install();
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 100,
+                    cart: 5
+                });
+
+                observable = knockout.observable({}).extend({
+                    disposableCustomerData: 'messages'
+                });
+
+                // triggers the subscriber, scheduling the 3s cleanup with data_id = 100
+                observable({
+                    'data_id': 100
+                });
+
+                // fresh messages arrive before the timeout fires, bumping the data_id
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 200,
+                    cart: 5
+                });
+
+                jasmine.clock().tick(3000);
+
+                result = $.cookieStorage.get('section_data_ids') || {};
+                expect(result.hasOwnProperty('messages')).toBe(true);
+            });
+
+            it('Drops the section when its data_id is unchanged when the cleanup fires', function () {
+                var observable,
+                    result;
+
+                jasmine.clock().install();
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 100,
+                    cart: 5
+                });
+
+                observable = knockout.observable({}).extend({
+                    disposableCustomerData: 'messages'
+                });
+
+                observable({
+                    'data_id': 100
+                });
+
+                jasmine.clock().tick(3000);
+
+                result = $.cookieStorage.get('section_data_ids') || {};
+                expect(result.hasOwnProperty('messages')).toBe(false);
+                expect(result.hasOwnProperty('cart')).toBe(true);
+            });
+        });
+
         describe('"invalidated" method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('invalidate')).toBeDefined();
