@@ -139,9 +139,6 @@ class CurrentUrlRewritesRegenerator
             $storeId
         );
 
-        // Admin and REST set this explicitly. Config is only the fallback, otherwise
-        // "Create Permanent Redirect for old URL" is ignored. Restore afterwards so the
-        // next store view still sees the original value.
         $explicitHistory = $product->getData('save_rewrites_history');
         $product->setData(
             'save_rewrites_history',
