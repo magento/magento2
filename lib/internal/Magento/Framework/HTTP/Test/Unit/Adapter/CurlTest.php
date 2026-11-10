@@ -166,6 +166,19 @@ class CurlTest extends TestCase
                     [CURLOPT_HTTPHEADER, ['Content-Type: application/json']],
                 ]
             ],
+            'patch request sends the body' => [
+                'PATCH',
+                'http://example.com',
+                '1.1',
+                ['Content-Type' => 'application/json'],
+                '{"key": "value"}',
+                [
+                    [CURLOPT_CUSTOMREQUEST, 'PATCH'],
+                    [CURLOPT_POSTFIELDS, '{"key": "value"}'],
+                    [CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1],
+                    [CURLOPT_HTTPHEADER, ['Content-Type: application/json']],
+                ]
+            ],
         ];
     }
 
