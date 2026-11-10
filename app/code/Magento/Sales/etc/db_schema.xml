@@ -299,6 +299,11 @@
             <column name="state"/>
             <column name="created_at"/>
         </index>
+        <index referenceId="SALES_ORDER_CUSTOMER_EMAIL_CUSTOMER_IS_GUEST_STORE_ID" indexType="btree">
+            <column name="customer_email"/>
+            <column name="customer_is_guest"/>
+            <column name="store_id"/>
+        </index>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb" comment="Sales Flat Order Grid">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
