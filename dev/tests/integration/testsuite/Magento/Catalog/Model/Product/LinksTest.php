@@ -123,6 +123,50 @@ class LinksTest extends TestCase
     }
 
     /**
+     * Test that product links are kept on the saved product when its SKU is regenerated to stay unique
+     *
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testLinksAreKeptWhenSkuIsRegeneratedToBeUnique(): void
+    {
+        /** @var ProductInterface|Product $product */
+        $product = $this->productRepository->get('simple');
+        $productId = $product->getId();
+
+        // The SKU is changed to one that is already used, as an admin can do when saving a duplicated product.
+        $product->setSku('simple1');
+        $productLinks = [];
+        foreach (['simple2', 'simple3'] as $position => $linkedSku) {
+            /** @var ProductLinkInterface|Link $productLink */
+            $productLink = $this->productLinkInterfaceFactory->create();
+            $productLink->setSku($product->getSku());
+            $productLink->setLinkedProductSku($linkedSku);
+            $productLink->setPosition($position + 1);
+            $productLink->setLinkType('related');
+            $productLinks[] = $productLink;
+        }
+        $product->setProductLinks($productLinks);
+        $this->productResource->save($product);
+
+        $savedProduct = $this->productRepository->getById($productId, false, null, true);
+        $this->assertNotEquals('simple1', $savedProduct->getSku());
+        $this->assertEquals(
+            ['simple2', 'simple3'],
+            array_map(
+                static fn ($relatedProduct) => $relatedProduct->getSku(),
+                array_values($savedProduct->getRelatedProducts())
+            )
+        );
+
+        $productWithOriginalSku = $this->productRepository->get('simple1', false, null, true);
+        $this->assertEmpty($productWithOriginalSku->getRelatedProducts());
+    }
+
+    /**
      * Provide test data for testEditDeleteRelatedUpSellCrossSellProducts().
      *
      * @return array
