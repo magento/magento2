@@ -169,7 +169,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param int|null $storeId
      * @return int|null
      */
-    private function getGroupIdWithoutValidVatId(Quote $quote, $customer, $storeId)
+    private function getGroupIdWithoutValidVatId($quote, $customer, $storeId)
     {
         $defaultGroupId = $this->groupManagement->getDefaultGroup($storeId)->getId();
         $vatGroupIds = array_diff($this->customerVat->getVatValidationGroupIds($storeId), [(int)$defaultGroupId]);
