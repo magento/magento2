@@ -125,8 +125,6 @@ class Adapter implements AdapterInterface
                     $query['body']['size'] = $chunkSize;
                     $rawResponse = $client->query($query);
                     $hits = $rawResponse['hits']['hits'] ?? [];
-                    // A short chunk means there is no document at this offset. Stop
-                    // instead of reading sort from end(false) and paging further.
                     if (!is_array($hits) || count($hits) < $chunkSize) {
                         $beyondLastHit = true;
                         break;
