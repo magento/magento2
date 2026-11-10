@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -10,10 +10,12 @@ namespace Magento\OpenSearch\Test\Unit\SearchAdapter;
 use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\Response\QueryResponse;
 use Magento\OpenSearch\Model\SearchClient;
 use Magento\OpenSearch\SearchAdapter\Adapter;
 use Magento\OpenSearch\SearchAdapter\Mapper;
@@ -112,6 +114,82 @@ class AdapterTest extends TestCase
 
         $this->expectException($throws);
         $this->adapter->query($request);
+    }
+
+    /**
+     * A page offset past the last hit must not page through the rest of the result set.
+     *
+     * @return void
+     */
+    public function testQueryStopsWhenOffsetIsPastLastHit(): void
+    {
+        $maxPageSize = 3;
+        $request = $this->createMock(RequestInterface::class);
+        $request->expects($this->atLeastOnce())->method('getFrom')->willReturn(10);
+        $request->expects($this->atLeastOnce())->method('getSize')->willReturn(2);
+
+        $this->pageSizeProvider->expects($this->atLeastOnce())->method('getMaxPageSize')->willReturn($maxPageSize);
+        $this->mapper->expects($this->once())->method('buildQuery')->with($request)->willReturn([
+            'index' => 'magento2_product_1',
+            'body' => [],
+        ]);
+
+        $client = $this->createMock(SearchClient::class);
+        $client->expects($this->once())
+            ->method('openPointInTime')
+            ->willReturn(['pit_id' => 'pit-1']);
+        $client->expects($this->once())->method('closePointInTime');
+        $client->expects($this->exactly(3))
+            ->method('query')
+            ->willReturnCallback(function (array $query) use ($maxPageSize): array {
+                $size = $query['body']['size'];
+                $this->assertLessThanOrEqual($maxPageSize, $size);
+                static $call = 0;
+                $call++;
+                if ($call < 3) {
+                    return $this->openSearchHits($size, 6);
+                }
+                return $this->openSearchHits(0, 6);
+            });
+        $this->connectionManager->expects($this->atLeastOnce())->method('getConnection')->willReturn($client);
+        $this->logger->expects($this->never())->method('critical');
+
+        $queryContainer = $this->createStub(QueryContainer::class);
+        $this->queryContainerFactory->expects($this->once())->method('create')->willReturn($queryContainer);
+        $this->aggregationBuilder->expects($this->once())->method('setQuery')->with($queryContainer)->willReturnSelf();
+        $this->aggregationBuilder->expects($this->once())->method('build')->willReturn([]);
+
+        $queryResponse = $this->createStub(QueryResponse::class);
+        $this->responseFactory->expects($this->once())
+            ->method('create')
+            ->with($this->callback(function (array $response): bool {
+                return $response['documents'] === [] && $response['total'] === 6;
+            }))
+            ->willReturn($queryResponse);
+
+        $this->assertSame($queryResponse, $this->adapter->query($request));
+    }
+
+    /**
+     * Build an OpenSearch hits payload.
+     *
+     * @param int $count
+     * @param int $total
+     * @return array
+     */
+    private function openSearchHits(int $count, int $total): array
+    {
+        $hits = [];
+        for ($i = 0; $i < $count; $i++) {
+            $hits[] = ['_id' => (string)$i, 'sort' => [$i]];
+        }
+
+        return [
+            'hits' => [
+                'total' => ['value' => $total],
+                'hits' => $hits,
+            ],
+        ];
     }
 
     /**

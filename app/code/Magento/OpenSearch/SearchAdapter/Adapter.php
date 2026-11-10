@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2022 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -104,6 +104,7 @@ class Adapter implements AdapterInterface
         $query = $this->mapper->buildQuery($request);
         try {
             $maxPageSize = $this->pageSizeProvider->getMaxPageSize();
+            $beyondLastHit = false;
             if ($request->getFrom() + $request->getSize() > $maxPageSize) {
                 $pit = $client->openPointInTime(
                     [
@@ -120,16 +121,30 @@ class Adapter implements AdapterInterface
                 $query['body']['from'] = 0;
                 $processed = 0;
                 while ($processed < $request->getFrom()) {
-                    $query['body']['size'] = min($request->getFrom() - $processed, $maxPageSize);
-                    $processed += $query['body']['size'];
+                    $chunkSize = min($request->getFrom() - $processed, $maxPageSize);
+                    $query['body']['size'] = $chunkSize;
                     $rawResponse = $client->query($query);
-                    $lastHit = end($rawResponse['hits']['hits']);
+                    $hits = $rawResponse['hits']['hits'] ?? [];
+                    // A short chunk means there is no document at this offset. Stop
+                    // instead of reading sort from end(false) and paging further.
+                    if (!is_array($hits) || count($hits) < $chunkSize) {
+                        $beyondLastHit = true;
+                        break;
+                    }
+                    $processed += $chunkSize;
+                    $lastHit = end($hits);
                     $query['body']['search_after'] = $lastHit['sort'];
                 }
-                $query['body']['size'] = $request->getSize();
+                if ($beyondLastHit) {
+                    $rawResponse['hits']['hits'] = [];
+                } else {
+                    $query['body']['size'] = $request->getSize();
+                }
             }
 
-            $rawResponse = $client->query($query);
+            if (!$beyondLastHit) {
+                $rawResponse = $client->query($query);
+            }
         } catch (Missing404Exception|BadRequest400Exception $e) {
             $this->logger->critical($e);
             throw new EmptyRequestDataException("Could not perform search query.");
