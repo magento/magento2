@@ -6,12 +6,15 @@
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Vat;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
@@ -54,11 +57,14 @@ class CollectTotalsObserver implements ObserverInterface
     protected $customerDataFactory;
 
     /**
-     * Group Management
-     *
      * @var GroupManagementInterface
      */
     protected $groupManagement;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
 
     /**
      * Initialize dependencies.
@@ -70,6 +76,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param GroupManagementInterface $groupManagement
      * @param AddressRepositoryInterface $addressRepository
      * @param Session $customerSession
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         Address $customerAddressHelper,
@@ -78,7 +85,8 @@ class CollectTotalsObserver implements ObserverInterface
         CustomerInterfaceFactory $customerDataFactory,
         GroupManagementInterface $groupManagement,
         AddressRepositoryInterface $addressRepository,
-        Session $customerSession
+        Session $customerSession,
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
@@ -87,6 +95,8 @@ class CollectTotalsObserver implements ObserverInterface
         $this->groupManagement = $groupManagement;
         $this->addressRepository = $addressRepository;
         $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository
+            ?? ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -126,7 +136,7 @@ class CollectTotalsObserver implements ObserverInterface
 
         $groupId = null;
         if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
-            $groupId = $customer->getId() ? $quote->getCustomerGroupId() :
+            $groupId = $customer->getId() ? $this->getGroupIdWithoutValidVatId($quote, $customer, $storeId) :
                 $this->groupManagement->getNotLoggedInGroup()->getId();
         } else {
             // Magento always has to emulate group even if customer uses default billing/shipping address
@@ -145,5 +155,36 @@ class CollectTotalsObserver implements ObserverInterface
             $customer->setEmail($customer->getEmail() ?: $quote->getCustomerEmail());
             $quote->setCustomer($customer);
         }
+    }
+
+    /**
+     * Get the customer group for an address without a VAT ID or outside the EU.
+     *
+     * The quote may still carry a group that VAT validation assigned for another address, so such a group is
+     * replaced with the group of the customer account, or with the default group when the account is in a group
+     * assigned by VAT validation too. Any other quote group, such as Wholesale, stays.
+     *
+     * @param Quote $quote
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param int|null $storeId
+     * @return int|null
+     */
+    private function getGroupIdWithoutValidVatId(Quote $quote, $customer, $storeId)
+    {
+        $defaultGroupId = $this->groupManagement->getDefaultGroup($storeId)->getId();
+        $vatGroupIds = array_diff($this->customerVat->getVatValidationGroupIds($storeId), [(int)$defaultGroupId]);
+
+        $groupId = $quote->getCustomerGroupId();
+        if (!in_array((int)$groupId, $vatGroupIds, true)) {
+            return $groupId;
+        }
+
+        try {
+            $groupId = $this->customerRepository->getById($customer->getId())->getGroupId();
+        } catch (NoSuchEntityException $e) {
+            return $defaultGroupId;
+        }
+
+        return in_array((int)$groupId, $vatGroupIds, true) ? $defaultGroupId : $groupId;
     }
 }
