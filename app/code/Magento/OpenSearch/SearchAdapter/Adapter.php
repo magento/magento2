@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2026 Adobe
+ * Copyright 2022 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -106,9 +106,15 @@ class Adapter implements AdapterInterface
         try {
             $maxPageSize = $this->pageSizeProvider->getMaxPageSize();
             if ($request->getFrom() + $request->getSize() > $maxPageSize) {
-                $deepPage = $this->buildPointInTimeQuery($client, $query, $request, $maxPageSize);
+                $pit = $client->openPointInTime(
+                    [
+                        'index' => $query['index'],
+                        'keep_alive' => '1m',
+                    ]
+                );
+                $pitId = $pit['pit_id'];
+                $deepPage = $this->buildPointInTimeQuery($client, $query, $request, $maxPageSize, $pitId);
                 $query = $deepPage['query'];
-                $pitId = $deepPage['pitId'];
                 if ($deepPage['beyondLastHit']) {
                     $rawResponse = $deepPage['rawResponse'];
                     $rawResponse['hits']['hits'] = [];
@@ -150,21 +156,16 @@ class Adapter implements AdapterInterface
      * @param array $query
      * @param RequestInterface $request
      * @param int $maxPageSize
-     * @return array{query: array, pitId: string, beyondLastHit: bool, rawResponse: array}
+     * @param string $pitId
+     * @return array{query: array, beyondLastHit: bool, rawResponse: array}
      */
     private function buildPointInTimeQuery(
         mixed $client,
         array $query,
         RequestInterface $request,
-        int $maxPageSize
+        int $maxPageSize,
+        string $pitId
     ): array {
-        $pit = $client->openPointInTime(
-            [
-                'index' => $query['index'],
-                'keep_alive' => '1m',
-            ]
-        );
-        $pitId = $pit['pit_id'];
         $query['body']['pit'] = [
             'id' => $pitId,
         ];
@@ -193,7 +194,6 @@ class Adapter implements AdapterInterface
 
         return [
             'query' => $query,
-            'pitId' => $pitId,
             'beyondLastHit' => $beyondLastHit,
             'rawResponse' => $rawResponse,
         ];

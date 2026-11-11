@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2026 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -168,6 +168,40 @@ class AdapterTest extends TestCase
             ->willReturn($queryResponse);
 
         $this->assertSame($queryResponse, $this->adapter->query($request));
+    }
+
+    /**
+     * A failing deep-page chunk query must still close the point in time.
+     *
+     * @return void
+     */
+    public function testDeepPageClosesPointInTimeWhenChunkQueryFails(): void
+    {
+        $request = $this->createMock(RequestInterface::class);
+        $request->expects($this->atLeastOnce())->method('getFrom')->willReturn(10);
+        $request->expects($this->atLeastOnce())->method('getSize')->willReturn(2);
+
+        $this->pageSizeProvider->expects($this->atLeastOnce())->method('getMaxPageSize')->willReturn(3);
+        $this->mapper->expects($this->once())->method('buildQuery')->with($request)->willReturn([
+            'index' => 'magento2_product_1',
+            'body' => [],
+        ]);
+
+        $client = $this->createMock(SearchClient::class);
+        $client->expects($this->once())
+            ->method('openPointInTime')
+            ->willReturn(['pit_id' => 'pit-1']);
+        $client->expects($this->once())
+            ->method('closePointInTime')
+            ->with(['body' => ['pit_id' => ['pit-1']]]);
+        $client->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \RuntimeException('error'));
+        $this->connectionManager->expects($this->atLeastOnce())->method('getConnection')->willReturn($client);
+        $this->logger->expects($this->once())->method('critical');
+
+        $this->expectException(ClientException::class);
+        $this->adapter->query($request);
     }
 
     /**
