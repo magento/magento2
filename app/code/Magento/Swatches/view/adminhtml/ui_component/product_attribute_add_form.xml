@@ -170,7 +170,6 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Admin</label>
-                        <required>true</required>
                         <validation>
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
@@ -296,7 +295,6 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Admin</label>
-                        <required>true</required>
                         <validation>
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
