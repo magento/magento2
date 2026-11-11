@@ -98,6 +98,18 @@ class StaticProperties
     }
 
     /**
+     * Whether a class file path belongs to Magento TestFramework sources.
+     *
+     * @param string $classFile
+     * @return bool
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
+    protected static function isTestFrameworkFile($classFile)
+    {
+        return strpos($classFile, 'TestFramework') !== false;
+    }
+
+    /**
      * Check if class has to be backed up
      *
      * @param string $classFile
@@ -189,7 +201,7 @@ class StaticProperties
                 | Files::INCLUDE_TESTS
             ),
             function ($classFile) {
-                return strpos($classFile, 'TestFramework')  === -1
+                return !StaticProperties::isTestFrameworkFile($classFile)
                     && StaticProperties::_isClassInCleanableFolders($classFile)
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     && strpos(file_get_contents($classFile), ' static ')  > 0;
