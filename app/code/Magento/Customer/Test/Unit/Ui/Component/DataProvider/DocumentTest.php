@@ -12,12 +12,14 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Ui\Component\DataProvider\Document;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -216,6 +218,80 @@ class DocumentTest extends TestCase
     }
 
     /**
+     * The admin website (id 0) is omitted from getWebsites() unless the default is requested, so a customer
+     * created in the admin must still resolve to a website name instead of an undefined array key.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testGetWebsiteAttributeForAdminWebsite()
+    {
+        $this->document->setData('website_id', 0);
+
+        $this->groupRepository->expects(static::never())
+            ->method('getById');
+
+        $this->customerMetadata->expects(static::never())
+            ->method('getAttributeMetadata');
+
+        $adminWebsite = $this->createMock(WebsiteInterface::class);
+        $mainWebsite = $this->createMock(WebsiteInterface::class);
+
+        $this->storeManager->expects(static::once())
+            ->method('getWebsites')
+            ->with(true)
+            ->willReturn([0 => $adminWebsite, 1 => $mainWebsite]);
+
+        $adminWebsite->expects(static::once())
+            ->method('getName')
+            ->willReturn('Admin');
+
+        $mainWebsite->expects(static::never())
+            ->method('getName');
+
+        $attribute = $this->document->getCustomAttribute('website_id');
+        static::assertEquals('Admin', $attribute->getValue());
+    }
+
+    /**
+     * A website id with no matching website, for example a NULL column or a website removed after the customer
+     * was created, resolves to an empty value rather than raising an undefined array key.
+     *
+     * @param int|null $websiteId
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    #[DataProvider('getUnknownWebsiteDataProvider')]
+    public function testGetWebsiteAttributeForUnknownWebsite($websiteId): void
+    {
+        $this->document->setData('website_id', $websiteId);
+
+        $website = $this->createMock(WebsiteInterface::class);
+
+        $this->storeManager->expects(static::once())
+            ->method('getWebsites')
+            ->with(true)
+            ->willReturn([0 => $website, 1 => $website]);
+
+        $website->expects(static::never())
+            ->method('getName');
+
+        $attribute = $this->document->getCustomAttribute('website_id');
+        static::assertEquals('', $attribute->getValue());
+    }
+
+    /**
+     * Data provider for testGetWebsiteAttributeForUnknownWebsite
+     *
+     * @return array
+     */
+    public static function getUnknownWebsiteDataProvider()
+    {
+        return [
+            'website that no longer exists' => [99],
+            'null website id' => [null],
+        ];
+    }
+
+    /**
      * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
      */
     public function testGetConfirmationAttribute()
@@ -234,6 +310,104 @@ class DocumentTest extends TestCase
         $value = $attribute->getValue();
         static::assertInstanceOf(Phrase::class, $value);
         static::assertEquals('Confirmed', (string)$value);
+    }
+
+    /**
+     * The website id is written into the document's data before the confirmation column is read, so a
+     * falsy but valid id such as the admin website's 0 must not fall through to the website label.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testConfirmationScopeUsesTheWebsiteIdForAdminWebsite()
+    {
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->method('getName')
+            ->willReturn('Admin');
+
+        $this->storeManager->method('getWebsites')
+            ->willReturn([0 => $website, 1 => $website]);
+
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, static::identicalTo(0))
+            ->willReturn(false);
+
+        $this->document->setData('website_id', 0);
+        $this->document->setData('confirmation', null);
+
+        // customer_listing renders website_id (sortOrder 110) before confirmation (sortOrder 130)
+        $this->document->getCustomAttribute('website_id');
+        $this->document->getCustomAttribute('confirmation');
+    }
+
+    /**
+     * A null website id must remain null after the website label has been resolved.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testConfirmationScopeUsesNullForNullWebsiteId(): void
+    {
+        $this->storeManager->expects(static::once())
+            ->method('getWebsites')
+            ->with(true)
+            ->willReturn([]);
+
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, static::isNull())
+            ->willReturn(true);
+
+        $this->document->setData('website_id', null);
+        $this->document->setData('confirmation', null);
+
+        $this->document->getCustomAttribute('website_id');
+        $attribute = $this->document->getCustomAttribute('confirmation');
+
+        static::assertSame('Confirmed', (string)$attribute->getValue());
+    }
+
+    /**
+     * Read before the website column, the confirmation scope must use the row's raw website id.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testConfirmationScopeUsesTheRawWebsiteIdBeforeTheWebsiteColumnIsRead(): void
+    {
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, static::identicalTo(1))
+            ->willReturn(false);
+
+        $this->document->setData('website_id', 1);
+        $this->document->setData('confirmation', null);
+
+        $this->document->getCustomAttribute('confirmation');
+    }
+
+    /**
+     * After the website column replaces website_id with its label, the stored non-zero id must reach the scope.
+     *
+     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     */
+    public function testConfirmationScopeUsesTheStoredWebsiteIdAfterTheWebsiteColumnIsRead(): void
+    {
+        $website = $this->createMock(WebsiteInterface::class);
+        $website->method('getName')
+            ->willReturn('Main Website');
+
+        $this->storeManager->method('getWebsites')
+            ->willReturn([1 => $website]);
+
+        $this->scopeConfig->expects(static::once())
+            ->method('isSetFlag')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, static::identicalTo(1))
+            ->willReturn(false);
+
+        $this->document->setData('website_id', 1);
+        $this->document->setData('confirmation', null);
+
+        $this->document->getCustomAttribute('website_id');
+        $this->document->getCustomAttribute('confirmation');
     }
 
     /**
