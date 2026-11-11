@@ -333,6 +333,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             1205 => LockWaitException::class,
             // SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock
             1213 => DeadlockException::class,
+            // SQLSTATE[HY000]: General error: 1020 Record has changed since last read (MariaDB
+            // innodb_snapshot_isolation, ON by default since 11.6.2 - MDEV-35124). Resolved by
+            // restarting the transaction, same as a deadlock, so it is retried the same way.
+            1020 => DeadlockException::class,
             // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
             1062 => DuplicateException::class,
             // SQLSTATE[42S02]: Base table or view not found: 1146
