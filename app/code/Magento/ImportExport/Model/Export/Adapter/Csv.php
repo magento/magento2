@@ -6,6 +6,8 @@
 namespace Magento\ImportExport\Model\Export\Adapter;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\Write;
 
 /**
@@ -16,6 +18,8 @@ use Magento\Framework\Filesystem\File\Write;
  */
 class Csv extends AbstractAdapter
 {
+    private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
+
     /**
      * Field delimiter.
      *
@@ -36,6 +40,27 @@ class Csv extends AbstractAdapter
      * @var Write
      */
     protected $_fileHandler;
+
+    /**
+     * @var bool
+     */
+    private bool $fileExport = false;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param string|null $destination
+     * @param string $destinationDirectoryCode
+     * @param bool $fileExport
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        $destination = null,
+        $destinationDirectoryCode = DirectoryList::VAR_IMPORT_EXPORT,
+        bool $fileExport = false
+    ) {
+        $this->fileExport = $fileExport;
+        parent::__construct($filesystem, $destination, $destinationDirectoryCode);
+    }
 
     /**
      * Object destructor
@@ -147,9 +172,9 @@ class Csv extends AbstractAdapter
     }
 
     /**
-     * Return CSV contents from destination.
+     * Return CSV contents, or a completion marker in file-export mode.
      *
-     * Ensure buffered writes are flushed before reading the file back.
+     * Ensure buffered writes are flushed before inspecting the completed file.
      *
      * @return string
      */
@@ -159,6 +184,12 @@ class Csv extends AbstractAdapter
             $this->_fileHandler->flush();
             $this->_fileHandler->close();
             $this->_fileHandler = null;
+        }
+
+        if ($this->fileExport) {
+            return $this->_directoryHandle->stat($this->_destination)['size'] > 0
+                ? self::RESULT_WRITTEN_TO_FILE
+                : '';
         }
 
         return parent::getContents();
