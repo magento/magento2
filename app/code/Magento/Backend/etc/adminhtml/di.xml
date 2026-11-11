@@ -168,4 +168,25 @@
     </type>
     <preference for="CsrfRequestValidator" type="Magento\Backend\App\Request\BackendValidator" />
     <preference for="Magento\Backend\Model\Image\UploadResizeConfigInterface" type="Magento\Backend\Model\Image\UploadResizeConfig" />
+    <type name="Magento\Backend\Model\Dashboard\Sales\FetchStrategy">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Block\Proxy</argument>
+            <argument name="cacheTtl" xsi:type="number">0</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Backend\Model\Dashboard\SalesCollection" type="Magento\Reports\Model\ResourceModel\Order\Collection">
+        <arguments>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Backend\Model\Dashboard\Sales\FetchStrategy</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Backend\Model\Dashboard\SalesCollectionFactory" type="Magento\Reports\Model\ResourceModel\Order\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Backend\Model\Dashboard\SalesCollection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Backend\Block\Dashboard\Sales">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Magento\Backend\Model\Dashboard\SalesCollectionFactory</argument>
+        </arguments>
+    </type>
 </config>
