@@ -87,7 +87,7 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             return;
         }
 
-        $value = $group . '="' . addcslashes($uri, '"\\') . '"';
+        $value = $group . '=' . json_encode($uri, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
         $existing = $response->getHeader('Reporting-Endpoints');
         if ($existing && $existing->getFieldValue() !== '') {
             // A later dictionary member takes precedence when its key already exists.

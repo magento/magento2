@@ -30,7 +30,11 @@ class SimplePolicyHeaderRendererTest extends TestCase
         $modernHeader = $response->getHeader('Reporting-Endpoints');
         self::assertNotFalse($modernHeader);
         self::assertSame('report-endpoint="' . $uri . '"', $modernHeader->getFieldValue());
-        $legacyHeader = json_decode($response->getHeader('Report-To')->getFieldValue(), true, flags: JSON_THROW_ON_ERROR);
+        $legacyHeader = json_decode(
+            $response->getHeader('Report-To')->getFieldValue(),
+            true,
+            flags: JSON_THROW_ON_ERROR
+        );
         self::assertSame('report-endpoint', $legacyHeader['group']);
         self::assertSame([['url' => $uri]], $legacyHeader['endpoints']);
         $policy = $response->getHeader($header)->getFieldValue();
