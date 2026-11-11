@@ -120,6 +120,18 @@ class PayflowProResponse implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
+        // Only proceed for a cart that is in a genuine Payflow payment context. The legitimate
+        // Payflow Pro flow selects a Payflow method (setPaymentMethodOnCart, then
+        // createPayflowProToken) before this resolver runs, so a cart with no Payflow method
+        // never entered a real payment attempt and must not reach the merchant payment-failure
+        // notification below.
+        $selectedMethod = (string)$cart->getPayment()->getMethod();
+        if ($selectedMethod !== $this->transparent->getCode()
+            && $selectedMethod !== Transparent::CC_VAULT_CODE
+        ) {
+            throw new GraphQlInputException(__('Transaction has been declined'));
+        }
+
         $paypalPayload = $args['input']['paypal_payload'] ?? '';
 
         // this is a replacement for parse_str()
