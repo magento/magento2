@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Workaround\Cleanup;
+namespace Magento\Framework\Test\Unit\TestFramework\Workaround\Cleanup;
 
+use Magento\TestFramework\Workaround\Cleanup\StaticProperties;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
@@ -24,7 +25,7 @@ class StaticPropertiesTest extends TestCase
         if (class_exists(StaticProperties::class, false)) {
             return;
         }
-        $root = getenv('CLONE_ROOT') ?: (defined('BP') ? BP : dirname(__DIR__, 8));
+        $root = getenv('CLONE_ROOT') ?: (defined('BP') ? BP : dirname(__DIR__, 10));
         require_once $root
             . '/dev/tests/integration/framework/Magento/TestFramework/Workaround/Cleanup/StaticProperties.php';
     }
