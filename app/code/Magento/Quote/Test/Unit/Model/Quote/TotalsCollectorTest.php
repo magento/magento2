@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
@@ -116,6 +117,8 @@ class TotalsCollectorTest extends TestCase
 
         // Use real Total instances — Total extends DataObject and all its get/set
         // methods are magic, which PHPUnit cannot configure via method stubs.
+        // The serializer is passed explicitly because Total otherwise falls back to
+        // the global ObjectManager, which is not initialized when this test runs alone.
         $shippingAddressTotal = new Total([
             'shipping_amount'              => $shippingAmount,
             'base_shipping_amount'         => $shippingAmount,
@@ -126,16 +129,16 @@ class TotalsCollectorTest extends TestCase
             'base_subtotal_with_discount'  => 100.0,
             'grand_total'                  => 110.0,
             'base_grand_total'             => 110.0,
-        ]);
+        ], new Json());
 
-        $billingAddressTotal = new Total();
+        $billingAddressTotal = new Total([], new Json());
 
         $quoteMock = $this->createMock(Quote::class);
         // Billing address comes AFTER shipping address (triggering the bug)
         $quoteMock->method('getAllAddresses')->willReturn([$shippingAddress, $billingAddress]);
         $quoteMock->method('getData')->with('coupon_code')->willReturn(null);
 
-        $aggregateTotal = new Total();
+        $aggregateTotal = new Total([], new Json());
         $this->totalFactoryMock->method('create')->willReturn($aggregateTotal);
 
         $this->model->method('collectAddressTotals')
@@ -193,13 +196,13 @@ class TotalsCollectorTest extends TestCase
             'base_subtotal_with_discount' => 50.0,
             'grand_total'                 => 50.0,
             'base_grand_total'            => 50.0,
-        ]);
+        ], new Json());
 
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->method('getAllAddresses')->willReturn([$billingAddress]);
         $quoteMock->method('getData')->with('coupon_code')->willReturn(null);
 
-        $aggregateTotal = new Total();
+        $aggregateTotal = new Total([], new Json());
         $this->totalFactoryMock->method('create')->willReturn($aggregateTotal);
 
         $this->model->method('collectAddressTotals')
