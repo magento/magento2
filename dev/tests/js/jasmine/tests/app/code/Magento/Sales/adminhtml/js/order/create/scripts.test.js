@@ -319,6 +319,98 @@ define([
                 });
             });
 
+            it('reloads payment methods with shipping rates after an address change', function () {
+                var paymentForm;
+
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: 'free'
+                });
+                $(formEl).find(':radio[value="free"]').attr('checked', 'checked');
+                paymentForm = $('#order-billing_method').html();
+                $(formEl).append(
+                    '<div id="order-billing_address">' +
+                        '<input id="order-billing_address_customer_address_id" ' +
+                            'name="order[billing_address][customer_address_id]" value="1"/>' +
+                        '<input id="order-billing_address_telephone" ' +
+                            'name="order[billing_address][telephone]" value="1234567890"/>' +
+                    '</div>' +
+                    '<div id="order-shipping_address">' +
+                        '<input id="order-shipping_address_customer_address_id" ' +
+                            'name="order[shipping_address][customer_address_id]" value="1"/>' +
+                        '<input id="order-shipping_address_telephone" ' +
+                            'name="order[shipping_address][telephone]" value="1234567890"/>' +
+                    '</div>'
+                );
+                order.billingAddressContainer = 'order-billing_address';
+                order.shippingAddressContainer = 'order-shipping_address';
+                order.shippingAsBilling = true;
+                order.bindAddressFields(order.billingAddressContainer);
+                $.ajax.calls.reset();
+
+                $('#order-billing_address_telephone').val('9876543210').trigger('change');
+                order.submit();
+
+                expect($.ajax).not.toHaveBeenCalled();
+                expect($(formEl).valid()).toBeFalse();
+
+                spyOn(order, 'loadArea').and.callFake(function (areas) {
+                    order.loadingAreas = areas.slice();
+                    order.loadAreaResponseHandler({
+                        billing_method: paymentForm,
+                        shipping_method: '<input type="radio" name="order[shipping_method]" ' +
+                            'value="flatrate_flatrate" checked="checked"/>'
+                    });
+                });
+                order.loadShippingRates();
+                order.submit();
+
+                expect(order.loadArea).toHaveBeenCalledWith(
+                    ['shipping_method', 'billing_method', 'totals'],
+                    true,
+                    jasmine.objectContaining({
+                        'order[billing_address][telephone]': '9876543210',
+                        'collect_shipping_rates': 1
+                    })
+                );
+                expect($(formEl).find(':radio[value="free"]').prop('checked')).toBeTrue();
+                expect($(formEl).valid()).toBeTrue();
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
+                    url: '/admin/sales/order/create',
+                    data: jasmine.arrayContaining([{
+                        name: 'payment[method]',
+                        value: 'free'
+                    }])
+                }));
+            });
+
+            it('requires a new selection when the reloaded payment methods exclude the previous method', function () {
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: 'free'
+                });
+                order.billingAddressContainer = 'edit_form';
+                order.shippingAsBilling = true;
+                order.resetPaymentMethod();
+                $.ajax.calls.reset();
+                spyOn(order, 'loadArea').and.callFake(function (areas) {
+                    order.loadingAreas = areas.slice();
+                    order.loadAreaResponseHandler({
+                        billing_method: '<input type="radio" name="payment[method]" ' +
+                            'value="payment1" class="required-entry"/>' +
+                            '<input type="radio" name="payment[method]" ' +
+                            'value="payment2" class="required-entry"/>'
+                    });
+                });
+
+                order.loadShippingRates();
+                order.submit();
+
+                expect($(formEl).find('[name="order[has_payment]"]').length).toBe(0);
+                expect($(formEl).valid()).toBeFalse();
+                expect($.ajax).not.toHaveBeenCalled();
+            });
+
             it('allows submission after payment methods are reloaded and selected', function () {
                 var paymentForm;
 

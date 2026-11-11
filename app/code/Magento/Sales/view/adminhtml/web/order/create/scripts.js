@@ -483,7 +483,7 @@
 
             data['collect_shipping_rates'] = 1;
             this.isShippingMethodReseted = false;
-            this.loadArea(['shipping_method', 'totals'], true, data);
+            this.loadArea(['shipping_method', 'billing_method', 'totals'], true, data);
 
             return false;
         },
