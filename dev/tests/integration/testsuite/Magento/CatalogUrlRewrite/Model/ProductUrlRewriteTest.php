@@ -301,6 +301,99 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
+     * A category-only save must update the other store without losing scoped keys or existing redirects.
+     *
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     * @magentoConfigFixture default/catalog/seo/product_rewrite_context store_view
+     * @magentoConfigFixture default/catalog/seo/save_rewrites_history 1
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @return void
+     */
+    public function testCategoryChangeInStoreViewPreservesScopedKeysAndHistory(): void
+    {
+        $firstStoreId = (int)$this->storeRepository->get('default')->getId();
+        $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
+        $product = $this->productRepository->get('simple2', false, 0, true);
+        $oldUrlKey = $product->getUrlKey();
+        $this->saveProduct(
+            ['category_ids' => [3], 'url_key' => 'default-product-key', 'save_rewrites_history' => true],
+            $product
+        );
+        $this->saveProduct(
+            ['url_key' => 'second-store-key', 'save_rewrites_history' => true],
+            $this->productRepository->get('simple2', false, $secondStoreId, true)
+        );
+        $product = $this->productRepository->get('simple2', false, $firstStoreId, true);
+        $this->assertSame('default-product-key', $product->getUrlKey());
+        $productId = (int)$product->getId();
+        $this->assertStoreRewrite(
+            $productId,
+            $firstStoreId,
+            $oldUrlKey . $this->suffix,
+            'default-product-key' . $this->suffix,
+            OptionProvider::PERMANENT
+        );
+
+        $this->saveProduct(['category_ids' => [3, 6], 'save_rewrites_history' => true], $product);
+
+        $this->assertStoreRewrite(
+            $productId,
+            $secondStoreId,
+            'category-2/second-store-key' . $this->suffix,
+            'catalog/product/view/id/' . $productId . '/category/6'
+        );
+        $this->assertStoreRewrite(
+            $productId,
+            $firstStoreId,
+            'category-2/default-product-key' . $this->suffix,
+            'catalog/product/view/id/' . $productId . '/category/6'
+        );
+        $this->assertStoreRewrite(
+            $productId,
+            $firstStoreId,
+            $oldUrlKey . $this->suffix,
+            'default-product-key' . $this->suffix,
+            OptionProvider::PERMANENT
+        );
+        $this->assertStoreRewrite(
+            $productId,
+            $secondStoreId,
+            'second-store-key' . $this->suffix,
+            'catalog/product/view/id/' . $productId
+        );
+    }
+
+    /**
+     * Assert a product rewrite within one store view.
+     *
+     * @param int $productId
+     * @param int $storeId
+     * @param string $requestPath
+     * @param string $targetPath
+     * @param int $redirectType
+     * @return void
+     */
+    private function assertStoreRewrite(
+        int $productId,
+        int $storeId,
+        string $requestPath,
+        string $targetPath,
+        int $redirectType = 0
+    ): void {
+        $rewrites = $this->getEntityRewriteCollection($productId)
+            ->addFieldToFilter('store_id', $storeId)
+            ->addFieldToFilter('request_path', $requestPath);
+        $this->assertCount(1, $rewrites, $requestPath);
+        $rewrite = $rewrites->getFirstItem();
+        $this->assertSame($targetPath, $rewrite->getTargetPath());
+        $this->assertSame($redirectType, (int)$rewrite->getRedirectType());
+    }
+
+    /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * Check if redirects are generated correctly while product urls are changed during import process.
      *
