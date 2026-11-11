@@ -25,6 +25,7 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -135,6 +136,43 @@ class CreditmemoTest extends TestCase
     {
         $this->creditmemo->setGrandTotal(1);
         $this->assertTrue($this->creditmemo->isValidGrandTotal());
+    }
+
+    /**
+     * @param float $grandTotal
+     * @param string $allowZeroGrandTotal
+     * @param bool $expected
+     * @return void
+     */
+    #[DataProvider('isValidGrandTotalWithZeroGrandTotalConfigDataProvider')]
+    public function testIsValidGrandTotalWithZeroGrandTotalConfig(
+        float $grandTotal,
+        string $allowZeroGrandTotal,
+        bool $expected
+    ): void {
+        $this->scopeConfigMock->method('getValue')
+            ->with('sales/zerograndtotal_creditmemo/allow_zero_grandtotal')
+            ->willReturn($allowZeroGrandTotal);
+        $this->creditmemo->setGrandTotal($grandTotal);
+
+        $this->assertSame($expected, $this->creditmemo->isValidGrandTotal());
+    }
+
+    /**
+     * @return array
+     */
+    public static function isValidGrandTotalWithZeroGrandTotalConfigDataProvider(): array
+    {
+        return [
+            'negative total, zero allowed' => [-10.0, '1', false],
+            'negative total, zero not allowed' => [-10.0, '0', false],
+            'smallest negative total, zero allowed' => [-0.0001, '1', false],
+            'zero total, zero allowed' => [0.0, '1', true],
+            'zero total, zero not allowed' => [0.0, '0', false],
+            'zero total with float error, zero allowed' => [10.1 + 20.2 - 30.3, '1', true],
+            'positive total, zero allowed' => [10.0, '1', true],
+            'positive total, zero not allowed' => [10.0, '0', true],
+        ];
     }
 
     public function testGetIncrementId()
