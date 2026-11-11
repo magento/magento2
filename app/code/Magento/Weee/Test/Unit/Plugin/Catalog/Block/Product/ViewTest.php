@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * The price box keeps Fixed Product Tax when it redraws an excluding-tax price.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends TestCase
 {
