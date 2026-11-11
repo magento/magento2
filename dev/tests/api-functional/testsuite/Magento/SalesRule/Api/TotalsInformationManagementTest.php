@@ -96,7 +96,10 @@ class TotalsInformationManagementTest extends WebapiAbstract
         $salesRuleId = $registry->registry(self::SALES_RULE_ID);
         $salesRule = Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\RuleFactory::class)->create();
         $salesRule->load($salesRuleId);
-        $this->assertContains($salesRule->getRuleId(), str_getcsv($quote->getAppliedRuleIds(), ',', '"', '\\'));
+        $this->assertContains(
+            $salesRule->getRuleId(),
+            str_getcsv((string) $quote->getAppliedRuleIds(), ',', '"', '\\')
+        );
         $this->assertEquals(0, $quote->getTriggerRecollect());
         $salesRule->setIsActive(0);
         $salesRule->save();
@@ -124,13 +127,38 @@ class TotalsInformationManagementTest extends WebapiAbstract
             [
                 'cartId' => $quote->getId(),
                 'addressInformation' => [
-                    'address' => []
+                    'address' => $this->getTotalsAddressData()
                 ]
             ]
         );
         $this->assertNotEmpty($response);
         $quote->load(self::QUOTE_RESERVED_ORDER_ID, 'reserved_order_id');
-        $this->assertNotContains($salesRule->getId(), str_getcsv($quote->getAppliedRuleIds(), ',', '"', '\\'));
+        $this->assertNotContains(
+            $salesRule->getId(),
+            str_getcsv((string) $quote->getAppliedRuleIds(), ',', '"', '\\')
+        );
+    }
+
+    /**
+     * Address payload accepted by both REST and SOAP totals calculate calls.
+     *
+     * @return array
+     */
+    private function getTotalsAddressData(): array
+    {
+        return [
+            'firstname' => 'firstname',
+            'lastname' => 'lastname',
+            'email' => 'customer@example.com',
+            'street' => ['street'],
+            'city' => 'Los Angeles',
+            'region' => 'CA',
+            'region_id' => 12,
+            'region_code' => 'CA',
+            'postcode' => '11111',
+            'country_id' => 'US',
+            'telephone' => '11111111',
+        ];
     }
 
     /**
