@@ -15,7 +15,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     /**
      * Number of warm-up reinitialization iterations conducted before measuring memory usage.
      */
-    private const WARM_UP_LOOPS = 5;
+    private const WARM_UP_LOOPS = 10;
 
     /**
      * @var \Magento\TestFramework\Helper\Memory
@@ -24,9 +24,6 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped("Test not relevant because no gc in HHVM.");
-        }
         $this->_helper = new \Magento\TestFramework\Helper\Memory(
             new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer())
         );

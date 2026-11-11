@@ -82,9 +82,10 @@ sub vcl_recv {
     # collect all cookies
     std.collect(req.http.Cookie);
 
-    # Remove all marketing get parameters to minimize the cache objects
-    if (req.url ~ "(\?|&)(gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+|gad_[a-z]+)=") {
-        set req.url = regsuball(req.url, "(gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+|gad_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
+    # Remove tracking query string parameters used by analytics and marketing tools.
+    # Keep in sync with Magento\Framework\App\PageCache\Identifier::getMarketingParameterPatterns().
+    if (req.url ~ "(\?|&)(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cof|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|s_kwcid|sb_referer_host|ScCid|siteurl|snrai_[a-z]+|srsltid|tduid|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=") {
+        set req.url = regsuball(req.url, "(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cof|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|s_kwcid|sb_referer_host|ScCid|siteurl|snrai_[a-z]+|srsltid|tduid|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=[-_A-z0-9+()%.]+&?", "");
         set req.url = regsub(req.url, "[?|&]+$", "");
     }
 

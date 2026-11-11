@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
@@ -17,6 +18,7 @@ use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
+use Magento\CatalogImportExport\Model\Export\Stub\ProductWithSingleItemPages;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
@@ -24,17 +26,22 @@ use Magento\Directory\Helper\Data as DirectoryData;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Notification\NotifierInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
+use Magento\ImportExport\Model\Export\Consumer;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
@@ -798,6 +805,127 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString($product->getName(), $exportData);
     }
 
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixtureBeforeTransaction(StoreFixture::class, as: 'first_store'),
+        DataFixtureBeforeTransaction(StoreFixture::class, as: 'later_store'),
+        DataFixture(ProductFixture::class, as: 'first_product'),
+        DataFixture(ProductFixture::class, as: 'second_product'),
+        DataFixture(ProductFixture::class, as: 'third_product'),
+    ]
+    public function testCandidatePagesIncludeDisjointStoreMatches(): void
+    {
+        $firstStore = $this->fixtures->get('first_store');
+        $laterStore = $this->fixtures->get('later_store');
+        $firstProduct = $this->fixtures->get('first_product');
+        $secondProduct = $this->fixtures->get('second_product');
+        $thirdProduct = $this->fixtures->get('third_product');
+        $action = $this->objectManager->get(ProductAction::class);
+        $action->updateAttributes(
+            [(int)$firstProduct->getId(), (int)$thirdProduct->getId()],
+            ['name' => 'Selected'],
+            (int)$laterStore->getId()
+        );
+        $action->updateAttributes(
+            [(int)$secondProduct->getId()],
+            ['name' => 'Selected'],
+            (int)$firstStore->getId()
+        );
+        $this->model = $this->objectManager->create(ProductWithSingleItemPages::class);
+
+        $rows = $this->csvToArray($this->doExport(['name' => 'Selected']));
+
+        self::assertSame(
+            [$firstProduct->getSku(), $secondProduct->getSku(), $thirdProduct->getSku()],
+            array_column($rows, 'sku')
+        );
+        self::assertSame(
+            [$laterStore->getCode(), $firstStore->getCode(), $laterStore->getCode()],
+            array_column($rows, 'store_view_code')
+        );
+        self::assertSame(['Selected', 'Selected', 'Selected'], array_column($rows, 'name'));
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(ProductFixture::class, as: 'first_product'),
+        DataFixture(ProductFixture::class, as: 'second_product')
+    ]
+    public function testQueuedExportDoesNotPublishAfterBatchPreparationFailure(): void
+    {
+        $fileName = 'catalog_product_failure_' . bin2hex(random_bytes(8)) . '.csv';
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $temporaryPath = $this->objectManager->get(FileInfo::class)->getInProgressFilePath($fileName);
+        $finalPath = 'export/' . $fileName;
+        $firstProductId = (int)$this->fixtures->get('first_product')->getId();
+        $originalCustomizer = $this->objectManager->get(RowCustomizerInterface::class);
+        $customizer = $this->createMock(RowCustomizerInterface::class);
+        $preparedPages = 0;
+        $processedProducts = [];
+        $failure = new \RuntimeException('Cannot prepare the second export page.');
+        $customizer->expects(self::exactly(2))->method('prepareData')->willReturnCallback(
+            static function (
+                $collection,
+                $productIds
+            ) use (
+                &$preparedPages,
+                &$processedProducts,
+                $firstProductId,
+                $directory,
+                $temporaryPath,
+                $originalCustomizer,
+                $failure
+            ): void {
+                if (++$preparedPages === 2) {
+                    self::assertContains($firstProductId, $processedProducts);
+                    self::assertTrue($directory->isFile($temporaryPath));
+                    throw $failure;
+                }
+                $originalCustomizer->prepareData($collection, $productIds);
+            }
+        );
+        $customizer->method('addData')->willReturnCallback(
+            static function (array $data, $productId) use (&$processedProducts, $originalCustomizer): array {
+                $processedProducts[] = (int)$productId;
+                return $originalCustomizer->addData($data, $productId);
+            }
+        );
+        $customizer->method('addHeaderColumns')->willReturnCallback([$originalCustomizer, 'addHeaderColumns']);
+        $customizer->method('getAdditionalRowsCount')->willReturnCallback(
+            [$originalCustomizer, 'getAdditionalRowsCount']
+        );
+        $this->objectManager->addSharedInstance($customizer, RowCustomizerInterface::class, true);
+        $this->objectManager->configure(['preferences' => [Product::class => ProductWithSingleItemPages::class]]);
+        $notifier = $this->createMock(NotifierInterface::class);
+        $notifier->expects(self::never())->method('addMajor');
+        $notifier->expects(self::once())->method('addCritical');
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $logger->expects(self::once())->method('critical');
+        $info = $this->objectManager->create(LocalizedExportInfoInterface::class);
+        $info->setEntity('catalog_product');
+        $info->setFileFormat('csv');
+        $info->setFileName($fileName);
+        $info->setLocale('en_US');
+        $info->setExportFilter('[]');
+        $info->setSkipAttr([]);
+
+        try {
+            $consumer = $this->objectManager->create(Consumer::class, ['notifier' => $notifier, 'logger' => $logger]);
+            $consumer->process($info);
+
+            self::assertSame(2, $preparedPages);
+            self::assertFalse($directory->isFile($finalPath));
+            self::assertFalse($directory->isFile($temporaryPath));
+        } finally {
+            $this->objectManager->addSharedInstance($originalCustomizer, RowCustomizerInterface::class, true);
+            foreach ([$temporaryPath, $finalPath] as $path) {
+                if ($directory->isFile($path)) {
+                    $directory->delete($path);
+                }
+            }
+        }
+    }
+
     /**
      * Verify that "stock status" filter correctly applies to export result
      *
@@ -818,6 +946,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         foreach ($productsIncluded as $productName) {
             $this->assertStringContainsString($productName, $exportData);
         }
+
         foreach ($productsNotIncluded as $productName) {
             $this->assertStringNotContainsString($productName, $exportData);
         }
@@ -1079,5 +1208,51 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         sort($exportedSkus);
 
         $this->assertSame($dbSkus, $exportedSkus);
+    }
+
+    /**
+     * A single product left in an orphaned gallery state (an image label at a non-default store view
+     * with no default-scope image) must not cause the whole export batch to be silently truncated.
+     */
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1'], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2'], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3'], 'p3'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod4'], 'p4'),
+        DataFixture(ProductFixture::class, ['sku' => 'prod5'], 'p5'),
+    ]
+    public function testExportIsNotTruncatedByOrphanedImageLabel(): void
+    {
+        // Put one of the middle products into the orphaned gallery state: clear the default-scope
+        // image so the fallback lookup has no value to read, then leave an image label at a store view.
+        $productId = (int)$this->fixtures->get('p3')->getId();
+        $store2Id = (int)$this->fixtures->get('store2')->getId();
+        $action = $this->objectManager->get(ProductAction::class);
+        $action->updateAttributes([$productId], ['image' => ''], Store::DEFAULT_STORE_ID);
+        $action->updateAttributes([$productId], ['image_label' => 'Orphaned Label - No Image'], $store2Id);
+
+        $this->model->setWriter(
+            $this->objectManager->create(\Magento\ImportExport\Model\Export\Adapter\Csv::class)
+        );
+        $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
+        $exportedSkus = [];
+        foreach ($rows as $row) {
+            if (($row['store_view_code'] ?? '') === '' && !empty($row['sku'])) {
+                $exportedSkus[] = $row['sku'];
+            }
+        }
+
+        foreach (['prod1', 'prod2', 'prod3', 'prod4', 'prod5'] as $sku) {
+            $this->assertContains(
+                $sku,
+                $exportedSkus,
+                sprintf('Product "%s" is missing from the export - the batch was truncated.', $sku)
+            );
+        }
     }
 }

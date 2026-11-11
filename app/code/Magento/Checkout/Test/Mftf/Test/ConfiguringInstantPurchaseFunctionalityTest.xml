@@ -86,8 +86,10 @@
         <waitForPageLoad stepKey="waitForFillCardData"/>
 
         <!-- Place order -->
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
 
         <!-- Go to Configuration > Sales -->
         <actionGroup ref="AdminOpenInstantPurchaseConfigPageActionGroup" stepKey="openInstantPurchaseConfigPage"/>

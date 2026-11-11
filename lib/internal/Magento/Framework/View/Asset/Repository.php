@@ -286,9 +286,9 @@ class Repository implements ResetAfterRequestInterface
     {
         $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = DirectoryList::STATIC_VIEW;
-        $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
+        $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
+        $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale, $url]);
         if (!isset($this->fallbackContext[$id])) {
-            $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
             $this->fallbackContext[$id] = $this->fallbackContextFactory->create(
                 [
                     'baseUrl' => $url,
@@ -368,9 +368,9 @@ class Repository implements ResetAfterRequestInterface
      */
     private function getFileContext($baseDirType, $urlType, $dirPath)
     {
-        $id = implode('|', [$baseDirType, $urlType, $dirPath]);
+        $url = $this->baseUrl->getBaseUrl(['_type' => $urlType]);
+        $id = implode('|', [$baseDirType, $urlType, $dirPath, $url]);
         if (!isset($this->fileContext[$id])) {
-            $url = $this->baseUrl->getBaseUrl(['_type' => $urlType]);
             $this->fileContext[$id] = $this->contextFactory->create(
                 ['baseUrl' => $url, 'baseDirType' => $baseDirType, 'contextPath' => $dirPath]
             );
