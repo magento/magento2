@@ -3,6 +3,8 @@
  * All Rights Reserved.
  */
 
+/*eslint max-nested-callbacks: 0*/
+
 define([
     'jquery',
     'ko',
@@ -10,10 +12,9 @@ define([
     'uiRegistry',
     'Magento_Catalog/js/components/dynamic-rows-tier-price',
     'Magento_Ui/js/dynamic-rows/record',
-    'Magento_Ui/js/lib/knockout/template/renderer',
-    'text!ui/template/form/element/helper/service.html',
-    'text!ui/template/dynamic-rows/templates/default.html'
-], function ($, ko, Element, registry, DynamicRows, Record, renderer, serviceTemplate, rowsTemplate) {
+    'Magento_Ui/js/lib/knockout/template/engine',
+    'Magento_Ui/js/lib/knockout/bootstrap'
+], function ($, ko, Element, registry, DynamicRows, Record, templateEngine) {
     'use strict';
 
     describe('Magento_Catalog/js/components/dynamic-rows-tier-price', function () {
@@ -25,6 +26,7 @@ define([
                 index: 'tier_price',
                 provider: 'tier_price_provider',
                 dataScope: 'data.product',
+                template: 'ui/dynamic-rows/templates/default',
                 disabled: true,
                 dndConfig: {
                     enabled: false
@@ -35,6 +37,20 @@ define([
             }, config));
 
             return model;
+        }
+
+        function renderModel() {
+            var rendered = templateEngine.waitForFinishRender(),
+                context = new ko.bindingContext(model).extend({
+                    element: model,
+                    $t: $.mage.__,
+                    ko: ko
+                });
+
+            container.setAttribute('data-bind', 'template: template');
+            ko.applyBindings(context, container);
+
+            return rendered;
         }
 
         beforeEach(function () {
@@ -76,36 +92,34 @@ define([
             expect(provider.get('data.use_default.tier_price')).toBe(0);
         });
 
-        it('enables and disables Add through the default-value checkbox template', function () {
-            var checkbox, button, context;
-
+        it('enables and disables Add through the grid default-value checkbox', function (done) {
             createModel();
-            $(container).append(serviceTemplate);
-            container.appendChild($(rowsTemplate).find('tfoot button').first()[0]);
-            renderer.normalize(container);
-            context = new ko.bindingContext(model).extend({
-                element: model
-            });
-            ko.applyBindings(context, container);
-            checkbox = container.querySelector('input[type="checkbox"]');
-            button = container.querySelector('button');
+            renderModel().then(function () {
+                var checkbox = container.querySelector('input[type="checkbox"]'),
+                    button = container.querySelector('[data-action="add_new_row"]'),
+                    label = container.querySelector('.admin__field-service label');
 
-            expect(checkbox.checked).toBe(true);
-            expect(button.disabled).toBe(true);
+                expect(checkbox).not.toBeNull();
+                expect(button).not.toBeNull();
+                expect(checkbox.checked).toBe(true);
+                expect(button.disabled).toBe(true);
+                expect(label.htmlFor).toBe(checkbox.id);
+                expect(checkbox.id).toBe(model.name + '_default');
 
-            checkbox.click();
+                label.click();
 
-            expect(model.isUseDefault()).toBe(false);
-            expect(model.disabled()).toBe(false);
-            expect(button.disabled).toBe(false);
-            expect(provider.get('data.use_default.tier_price')).toBe(0);
+                expect(model.isUseDefault()).toBe(false);
+                expect(model.disabled()).toBe(false);
+                expect(button.disabled).toBe(false);
+                expect(provider.get('data.use_default.tier_price')).toBe(0);
 
-            checkbox.click();
+                checkbox.click();
 
-            expect(model.isUseDefault()).toBe(true);
-            expect(model.disabled()).toBe(true);
-            expect(button.disabled).toBe(true);
-            expect(provider.get('data.use_default.tier_price')).toBe(1);
+                expect(model.isUseDefault()).toBe(true);
+                expect(model.disabled()).toBe(true);
+                expect(button.disabled).toBe(true);
+                expect(provider.get('data.use_default.tier_price')).toBe(1);
+            }).then(done, done.fail);
         });
 
         it('toggles existing rows without enabling the locked website selector', function () {
@@ -158,14 +172,22 @@ define([
             expect(website.disabled()).toBe(true);
         });
 
-        it('keeps tier prices disabled when the default-value control is locked', function () {
+        it('keeps tier prices disabled when the default-value control is locked', function (done) {
             createModel({
                 serviceDisabled: true
             });
-            model.isUseDefault(false);
+            renderModel().then(function () {
+                var checkbox = container.querySelector('input[type="checkbox"]');
 
-            expect(model.disabled()).toBe(true);
-            expect(provider.get('data.use_default.tier_price')).toBeUndefined();
+                expect(checkbox.disabled).toBe(true);
+                checkbox.click();
+                expect(container.querySelector('[data-action="add_new_row"]').disabled).toBe(true);
+
+                model.isUseDefault(false);
+
+                expect(model.disabled()).toBe(true);
+                expect(provider.get('data.use_default.tier_price')).toBeUndefined();
+            }).then(done, done.fail);
         });
 
         it('does not unlock tier prices without a default-value control', function () {
@@ -178,14 +200,17 @@ define([
             expect(provider.get('data.use_default.tier_price')).toBeUndefined();
         });
 
-        it('does not submit default-value flags at the default scope', function () {
+        it('does not render a default-value checkbox or submit its flag at the default scope', function (done) {
             createModel({
                 disabled: false,
                 service: null
             });
-
-            expect(model.disabled()).toBe(false);
-            expect(provider.get('data.use_default.tier_price')).toBeUndefined();
+            renderModel().then(function () {
+                expect(model.disabled()).toBe(false);
+                expect(container.querySelector('input[type="checkbox"]')).toBeNull();
+                expect(container.querySelector('[data-action="add_new_row"]').disabled).toBe(false);
+                expect(provider.get('data.use_default.tier_price')).toBeUndefined();
+            }).then(done, done.fail);
         });
     });
 });

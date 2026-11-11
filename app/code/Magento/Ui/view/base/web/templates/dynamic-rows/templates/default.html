@@ -72,5 +72,7 @@
                 </tfoot>
             </table>
         </div>
+        <render args="$data.service.template"
+                if="$data.service && $data.service.template && typeof $data.isUseDefault === 'function'"></render>
     </div>
 </div>

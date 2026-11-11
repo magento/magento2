@@ -15,6 +15,7 @@ define([
      */
     return DynamicRows.extend({
         defaults: {
+            uid: '${ $.name }',
             isUseDefault: '',
             serviceDisabled: false,
             listens: {
