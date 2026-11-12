@@ -17,6 +17,7 @@ use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -622,6 +623,87 @@ abstract class AbstractAction
         }
 
         return $byType;
+    }
+
+    /**
+     * Run a price-index step again when MariaDB aborts the transaction.
+     *
+     * Error 1020 (innodb_snapshot_isolation) and deadlock 1213 roll the current
+     * transaction back. The index statements have to run in a new transaction.
+     *
+     * @param callable $operation
+     * @return array
+     * @throws \Exception
+     */
+    protected function executeToleratingTransactionConflict(callable $operation): array
+    {
+        $maxAttempts = 3;
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+            try {
+                return $operation();
+            } catch (\Exception $exception) {
+                if ($attempt === $maxAttempts || !$this->isRestartableTransactionConflict($exception)) {
+                    throw $exception;
+                }
+                $this->restartTransactionAfterConflict($exception);
+            }
+        }
+
+        throw new \LogicException('The price index transaction was not restarted.');
+    }
+
+    /**
+     * Whether MariaDB or InnoDB already aborted this transaction.
+     *
+     * @param \Throwable $exception
+     * @return bool
+     */
+    private function isRestartableTransactionConflict(\Throwable $exception): bool
+    {
+        $current = $exception;
+        while ($current !== null) {
+            if ($current instanceof DeadlockException) {
+                return true;
+            }
+            if ($current instanceof \PDOException) {
+                $driverCode = isset($current->errorInfo[1]) ? (int)$current->errorInfo[1] : 0;
+                if ($driverCode === 1020 || $driverCode === 1213) {
+                    return true;
+                }
+            }
+            $current = $current->getPrevious();
+        }
+
+        return false;
+    }
+
+    /**
+     * Clear the adapter transaction that the server has already aborted.
+     *
+     * Retry only after the adapter reports no remaining transaction. A failed
+     * rollback must not be followed by another index attempt.
+     *
+     * @param \Exception $conflict
+     * @return void
+     * @throws \RuntimeException
+     */
+    private function restartTransactionAfterConflict(\Exception $conflict): void
+    {
+        $connection = $this->getConnection();
+        try {
+            while ($connection->getTransactionLevel() > 0) {
+                $connection->rollBack();
+            }
+        } catch (\Throwable $rollbackException) {
+            if ($connection->getTransactionLevel() > 0) {
+                throw new \RuntimeException(
+                    'Price index transaction could not be restarted after a conflict. '
+                    . $rollbackException->getMessage(),
+                    0,
+                    $conflict
+                );
+            }
+        }
     }
 
     /**
