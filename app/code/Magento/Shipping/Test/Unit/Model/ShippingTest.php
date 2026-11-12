@@ -20,6 +20,7 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\CarrierFactory;
 use Magento\Shipping\Model\Shipping;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -173,7 +174,7 @@ class ShippingTest extends TestCase
             ->method('getValue')
             ->with(
                 'carriers',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $request->getStoreId()
             )
             ->willReturn(null);
