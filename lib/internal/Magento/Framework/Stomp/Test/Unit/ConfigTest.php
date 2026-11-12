@@ -60,7 +60,9 @@ class ConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getConfigData'])
             ->getMock();
-        $this->connectionFactory = $this->createMock(ConnectionFactory::class);
+        $this->connectionFactory = $this->getMockBuilder(ConnectionFactory::class)
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->stompConfig = new Config($this->deploymentConfigMock, 'stomp', $this->connectionFactory);
     }
 
@@ -234,5 +236,6 @@ class ConfigTest extends TestCase
             ->willReturn($connectionMock);
 
         $this->assertEquals($connectionMock, $this->stompConfig->getConnection());
+        $this->assertSame($connectionMock, $this->stompConfig->getConnection());
     }
 }

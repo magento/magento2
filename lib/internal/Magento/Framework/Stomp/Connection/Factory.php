@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stomp\Connection;
 
+use Magento\Framework\Stomp\Config;
 use Stomp\Exception\ConnectionException;
 use Stomp\Network\Connection;
 
@@ -15,6 +16,26 @@ use Stomp\Network\Connection;
  */
 class Factory
 {
+    /**
+     * Create a connection from the configured transport options.
+     *
+     * @param Config $config
+     * @return Connection
+     * @throws ConnectionException
+     */
+    public function createFromConfig(Config $config): Connection
+    {
+        $options = new FactoryOptions();
+        $options->setHost($config->getValue(Config::HOST));
+        $options->setPort($config->getValue(Config::PORT));
+        $options->setUsername($config->getValue(Config::USERNAME));
+        $options->setPassword($config->getValue(Config::PASSWORD));
+        $options->setSslEnabled(trim($config->getValue(Config::SSL) ?? '') === 'true');
+        $options->setSslOptions($config->getValue(Config::SSL_OPTIONS));
+
+        return $this->create($options);
+    }
+
     /**
      * Create connection according to given options.
      *
