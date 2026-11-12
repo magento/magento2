@@ -18,6 +18,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +38,7 @@ class SynchronizerTest extends TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var Session|MockObject
+     * @var Session
      */
     protected $sessionMock;
 
@@ -71,7 +72,7 @@ class SynchronizerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->sessionMock = $this->createMock(Session::class);
+        $this->sessionMock = $this->createStub(Session::class);
         $this->visitorMock = $this->createMock(Visitor::class);
         $this->productFrontendActionFactoryMock = $this->createPartialMock(
             ProductFrontendActionFactory::class,
@@ -98,9 +99,9 @@ class SynchronizerTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function testFilterProductActions(): void
+    #[DataProvider('existingProductsDataProvider')]
+    public function testFilterProductActions(array $existingProductIds, int $expectedDeletes): void
     {
-        $typeId = 'recently_compared_product';
         $productsData = [
             'website-1-1' => [
                 'added_at' => 12,
@@ -125,11 +126,13 @@ class SynchronizerTest extends TestCase
             ->method('get')
             ->with('recently_compared_product')
             ->willReturn($frontendConfiguration);
-        $action1 = $this->createMock(ProductFrontendActionInterface::class);
-        $action2 = $this->createMock(ProductFrontendActionInterface::class);
+        $action1 = $this->createStub(ProductFrontendActionInterface::class);
+        $action2 = $this->createStub(ProductFrontendActionInterface::class);
 
-        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+        $frontendAction = $this->createStub(ProductFrontendActionInterface::class);
+        $frontendAction->method('getActionId')->willReturn(1);
         $collection = $this->createMock(Collection::class);
+        $collection->method('getColumnValues')->with('existing_product_id')->willReturn($existingProductIds);
         $this->sessionMock->method('getCustomerId')->willReturn(1);
         $this->visitorMock->expects($this->exactly(2))
             ->method('getId')
@@ -140,38 +143,37 @@ class SynchronizerTest extends TestCase
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
             ->with(1, 34);
-        $collection
-            ->method('addFieldToFilter')
-            ->willReturnCallback(function ($arg1, $arg2) use ($typeId) {
-                if ($arg1 == 'type_id' && $arg2 == $typeId) {
-                    return null;
-                } elseif ($arg1 == 'product_id' && $arg2 == [1, 2]) {
-                    return null;
-                }
-            });
-        $iterator = new \IteratorIterator(new \ArrayIterator([$frontendAction]));
-        $collection->expects($this->once())
+        $iterator = new \IteratorIterator(
+            new \ArrayIterator([$frontendAction, $this->createStub(ProductFrontendActionInterface::class)])
+        );
+        $collection->expects($this->exactly($expectedDeletes))
             ->method('getIterator')
             ->willReturn($iterator);
-        $this->entityManagerMock->expects($this->once())
+        $this->entityManagerMock->expects($this->exactly($expectedDeletes))
             ->method('delete')
             ->with($frontendAction);
-        $this->productFrontendActionFactoryMock->expects($this->exactly(2))
+        $this->productFrontendActionFactoryMock->expects($this->exactly(count($existingProductIds)))
             ->method('create')
-            ->willReturnCallback(function ($args) use ($action1, $action2) {
+            ->willReturnCallback(function ($args) use ($action1, $action2, $existingProductIds) {
+                $this->assertContains((int) $args['data']['product_id'], $existingProductIds);
                 if ($args['data']['added_at'] === 12) {
                     return $action1;
                 } elseif ($args['data']['added_at'] === 13) {
                     return $action2;
                 }
             });
-        $this->entityManagerMock->expects($this->exactly(2))
+        $this->entityManagerMock->expects($this->exactly(count($existingProductIds)))
             ->method('save')
-            ->willReturnCallback(function ($arg) use ($action1, $action2) {
-                if ($arg == $action1 || $arg == $action2) {
-                    return null;
-                }
-            });
+            ->with($this->logicalOr($this->identicalTo($action1), $this->identicalTo($action2)));
         $this->model->syncActions($productsData, 'recently_compared_product');
+    }
+
+    public static function existingProductsDataProvider(): array
+    {
+        return [
+            'valid products' => [[1, 2], 1],
+            'mixed batch' => [[1], 1],
+            'all deleted' => [[], 0],
+        ];
     }
 }
