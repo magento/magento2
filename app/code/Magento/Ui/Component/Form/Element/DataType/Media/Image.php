@@ -32,7 +32,7 @@ class Image extends Media
     private $fileSize;
 
     /**
-     * @var OpednDialogUrl
+     * @var OpenDialogUrl
      */
     private $openDialogUrl;
 

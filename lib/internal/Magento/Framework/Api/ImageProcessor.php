@@ -34,7 +34,7 @@ class ImageProcessor implements ImageProcessorInterface, ImageContentUploaderInt
     private $filesystem;
 
     /**
-     * @var Filesystem
+     * @var ImageContentValidatorInterface
      */
     private $contentValidator;
 

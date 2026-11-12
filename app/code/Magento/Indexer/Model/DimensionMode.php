@@ -13,7 +13,7 @@ namespace Magento\Indexer\Model;
 class DimensionMode
 {
     /**
-     * @var array
+     * @var string
      */
     private $name;
 

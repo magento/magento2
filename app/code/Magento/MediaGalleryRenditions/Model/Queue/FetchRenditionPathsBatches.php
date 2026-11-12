@@ -27,7 +27,7 @@ class FetchRenditionPathsBatches
     private $filesystem;
 
     /**
-     * @var string
+     * @var string[]
      */
     private $fileExtensions;
 
@@ -46,7 +46,7 @@ class FetchRenditionPathsBatches
      * @param Filesystem $filesystem
      * @param GetFilesIterator $getFilesIterator
      * @param int $batchSize
-     * @param array $fileExtensions
+     * @param string[] $fileExtensions
      */
     public function __construct(
         LoggerInterface $log,

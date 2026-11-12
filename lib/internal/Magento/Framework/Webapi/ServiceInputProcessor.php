@@ -71,7 +71,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     private $nameFinder;
 
     /**
-     * @var array
+     * @var ServiceTypeToEntityTypeMap
      */
     private $serviceTypeToEntityTypeMap;
 
