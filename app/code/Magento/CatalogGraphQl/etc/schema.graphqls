@@ -265,7 +265,7 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     level: Int @doc(description: "The depth of the category within the tree.")
     created_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The timestamp indicating when the category was created.")
     updated_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The timestamp indicating when the category was updated.")
-    product_count: Int @doc(description: "The number of products in the category that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\ProductsCount")
+    product_count: Int @doc(description: "The number of products in the category that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\BatchProductsCount")
     default_sort_by: String @doc(description: "The attribute to use for sorting.")
     products(
         pageSize: Int = 20 @doc(description: "The maximum number of results to return at once. The default value is 20."),
