@@ -21,6 +21,7 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="updateCustomerByIdFromRequest" type="Magento\Customer\Model\Plugin\UpdateCustomer" />
+        <plugin name="restrictedSearchFields" type="Magento\Customer\Model\Plugin\CustomerRepository\RestrictedFieldsPlugin" sortOrder="1"/>
     </type>
     <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
         <arguments>

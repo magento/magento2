@@ -188,6 +188,75 @@ class ConfigurableProductHandlerTest extends TestCase
         );
     }
 
+    #[DataProvider('ruleContextDataProvider')]
+    public function testAntecedentRulesOnlyIdentifyInheritedMatches(
+        array $firstMatches,
+        array $secondMatches,
+        bool $sameRule,
+        array $expectedMatches
+    ): void {
+        $this->configurableProductsProviderMock->expects($this->exactly(2))->method('getIds')
+            ->willReturnCallback(static fn (array $ids): array => array_intersect($ids, [100]));
+        $this->configurableMock->expects($this->once())->method('getChildrenIds')
+            ->with(100)->willReturn([0 => [101]]);
+        $firstRule = $this->ruleMock;
+        $firstRule->expects($this->once())->method('getId')->willReturn(11);
+        $secondRule = $this->createStub(Rule::class);
+        $secondRule->method('getId')->willReturn($sameRule ? 11 : 12);
+
+        $this->configurableProductHandler->aroundGetMatchingProductIds(
+            $firstRule,
+            static fn (): array => $firstMatches
+        );
+
+        self::assertSame(
+            $expectedMatches,
+            $this->configurableProductHandler->aroundGetMatchingProductIds(
+                $secondRule,
+                static fn (): array => $secondMatches
+            )
+        );
+    }
+
+    public static function ruleContextDataProvider(): array
+    {
+        return [
+            'direct child matches must not become antecedent rules' => [
+                [100 => [1 => true], 101 => [1 => true]],
+                [101 => [1 => true]],
+                false,
+                [101 => [1 => true]],
+            ],
+            'parent-only inheritance remains replaceable by a child rule' => [
+                [100 => [1 => true]],
+                [101 => [1 => true]],
+                false,
+                [101 => [
+                    1 => true,
+                    'has_antecedent_rule' => true,
+                    'antecedent_rule_ids' => [1 => [11]],
+                ]],
+            ],
+            'inheritance is scoped to the website that did not match directly' => [
+                [100 => [1 => true, 2 => true], 101 => [1 => true, 2 => false]],
+                [101 => [1 => true, 2 => true]],
+                false,
+                [101 => [
+                    1 => true,
+                    2 => true,
+                    'has_antecedent_rule' => true,
+                    'antecedent_rule_ids' => [2 => [11]],
+                ]],
+            ],
+            'reprocessing the same rule does not inherit its previous state' => [
+                [100 => [1 => true]],
+                [101 => [1 => true]],
+                true,
+                [101 => [1 => true]],
+            ],
+        ];
+    }
+
     /**
      * @return array[]
      */

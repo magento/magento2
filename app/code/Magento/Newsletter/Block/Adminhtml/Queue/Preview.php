@@ -16,6 +16,11 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     /**
      * @var string
      */
+    protected const ADMIN_RESOURCE = 'Magento_Newsletter::queue';
+
+    /**
+     * @var string
+     */
     protected $profilerName = "newsletter_queue_proccessing";
 
     /**

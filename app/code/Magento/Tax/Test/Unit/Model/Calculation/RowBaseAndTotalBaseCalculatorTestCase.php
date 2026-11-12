@@ -94,12 +94,13 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
      * initialize all mocks
      *
      * @param bool $isTaxIncluded
+     * @param bool $round
      */
-    public function initMocks($isTaxIncluded)
+    public function initMocks($isTaxIncluded, bool $round = true)
     {
         $this->initMockItem($isTaxIncluded);
         $this->initMockConfig();
-        $this->initMockCalculationTool($isTaxIncluded);
+        $this->initMockCalculationTool($isTaxIncluded, $round);
         $this->initMockAppliedTaxDataObjectFactory();
     }
 
@@ -225,8 +226,9 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
      * init mock calculation model
      *
      * @param boolean $isTaxIncluded
+     * @param bool $round
      */
-    protected function initMockCalculationTool($isTaxIncluded)
+    protected function initMockCalculationTool($isTaxIncluded, bool $round = true)
     {
         $mockValues = [
             [
@@ -265,7 +267,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             $this->mockCalculationTool,
             $mockValues
         );
-        $this->mockCalculationTool->expects($this->atLeastOnce())
+        $this->mockCalculationTool->expects($round ? $this->atLeastOnce() : $this->never())
             ->method('round')
             ->willReturnCallback(
                 function ($price) {

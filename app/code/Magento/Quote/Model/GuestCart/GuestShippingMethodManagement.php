@@ -13,6 +13,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
 
 /**
  * Shipping method management class for guest carts.
@@ -38,56 +39,68 @@ class GuestShippingMethodManagement implements
     private $shipmentEstimationManagement;
 
     /**
+     * @var GetGuestCart|null
+     */
+    private $getGuestCart;
+
+    /**
      * Constructs a shipping method read service object.
      *
      * @param ShippingMethodManagementInterface $shippingMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param GetGuestCart|null $getGuestCart
      */
     public function __construct(
         ShippingMethodManagementInterface $shippingMethodManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        ?GetGuestCart $getGuestCart = null
     ) {
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->getGuestCart = $getGuestCart ?? ObjectManager::getInstance()->get(GetGuestCart::class);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function get($cartId)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->shippingMethodManagement->get($quoteIdMask->getQuoteId());
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function getList($cartId)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->shippingMethodManagement->getList($quoteIdMask->getQuoteId());
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function set($cartId, $carrierCode, $methodCode)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->shippingMethodManagement->set($quoteIdMask->getQuoteId(), $carrierCode, $methodCode);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->shippingMethodManagement->estimateByAddress($quoteIdMask->getQuoteId(), $address);
     }
 
@@ -98,6 +111,7 @@ class GuestShippingMethodManagement implements
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
 
         return $this->getShipmentEstimationManagement()
             ->estimateByExtendedAddress((int) $quoteIdMask->getQuoteId(), $address);
@@ -105,8 +119,10 @@ class GuestShippingMethodManagement implements
 
     /**
      * Get shipment estimation management service
+     *
      * @return ShipmentEstimationInterface
      * @deprecated 100.0.7
+     * @see getShipmentEstimationManagement
      */
     private function getShipmentEstimationManagement()
     {

@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Webapi;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
 
 /**
  * Class for checking empty array and remove it from the output result
  */
-class ProductOutputProcessor
+class ProductOutputProcessor implements ResetAfterRequestInterface
 {
     /**
      * @var Request
@@ -25,6 +26,11 @@ class ProductOutputProcessor
      * @var DeserializerInterface
      */
     private $deserializer;
+
+    /**
+     * @var array|null
+     */
+    private ?array $requestProducts = null;
 
     /**
      * @param Request $request
@@ -49,35 +55,55 @@ class ProductOutputProcessor
         ProductInterface $product,
         array $result
     ): array {
-        $requestContent = $this->request->getContent() ?? [];
-        if (empty($requestContent)) {
-            return $result;
+        if ($this->requestProducts === null) {
+            $this->requestProducts = $this->getRequestProducts();
         }
-        $requestContentDetails = (array)$this->deserializer->deserialize($requestContent);
-        $requestProductList = $this->extractProductList($requestContentDetails);
 
-        $requestProductList = array_filter(
-            $requestProductList,
-            function ($requestProduct) use ($product) {
-                return isset($requestProduct['sku']) && $requestProduct['sku'] === $product->getSku();
-            }
-        );
-
-        if (empty($requestProductList)) {
+        $sku = $product->getSku();
+        $key = get_debug_type($sku) . ':' . $sku;
+        if (!isset($this->requestProducts[$key])) {
             return $result;
         }
 
-        $requestProduct = current($requestProductList);
+        $requestProduct = $this->requestProducts[$key];
 
-        if (empty($product->getTierPrices()) && !array_key_exists('tier_prices', $requestProduct)) {
+        if (empty($product->getTierPrices()) && !$requestProduct['tier_prices']) {
             unset($result['tier_prices']);
         }
 
-        if (empty($product->getProductLinks()) && !array_key_exists('product_links', $requestProduct)) {
+        if (empty($product->getProductLinks()) && !$requestProduct['product_links']) {
             unset($result['product_links']);
         }
 
         return $result;
+    }
+
+    /**
+     * Index request field presence by SKU.
+     *
+     * @return array
+     */
+    private function getRequestProducts(): array
+    {
+        $requestContent = $this->request->getContent();
+        if (empty($requestContent)) {
+            return [];
+        }
+        $requestProducts = [];
+        $requestContentDetails = (array)$this->deserializer->deserialize($requestContent);
+        foreach ($this->extractProductList($requestContentDetails) as $requestProduct) {
+            if (!isset($requestProduct['sku'])) {
+                continue;
+            }
+            $key = get_debug_type($requestProduct['sku']) . ':' . $requestProduct['sku'];
+            if (!isset($requestProducts[$key])) {
+                $requestProducts[$key] = [
+                    'tier_prices' => array_key_exists('tier_prices', $requestProduct),
+                    'product_links' => array_key_exists('product_links', $requestProduct),
+                ];
+            }
+        }
+        return $requestProducts;
     }
 
     /**
@@ -97,5 +123,13 @@ class ProductOutputProcessor
             }
         }
         return $productList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->requestProducts = null;
     }
 }
