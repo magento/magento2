@@ -54,6 +54,7 @@ class CommandLoader implements CommandLoaderInterface
         Command\ModuleStatusCommand::NAME => Command\ModuleStatusCommand::class,
         Command\ModuleUninstallCommand::NAME => Command\ModuleUninstallCommand::class,
         Command\ModuleConfigStatusCommand::NAME => Command\ModuleConfigStatusCommand::class,
+        Command\QueueUpgradeCommand::NAME => Command\QueueUpgradeCommand::class,
         Command\RollbackCommand::NAME => Command\RollbackCommand::class,
         Command\UpgradeCommand::NAME => Command\UpgradeCommand::class,
         Command\UninstallCommand::NAME => Command\UninstallCommand::class,
