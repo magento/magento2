@@ -159,9 +159,21 @@ class Transparent extends Payflowpro implements TransparentInterface
      *
      * @return ResponseValidator
      */
-    public function getResponceValidator()
+    public function getResponseValidator()
     {
         return $this->responseValidator;
+    }
+
+    /**
+     * Gets response validator instance.
+     *
+     * @return ResponseValidator
+     * @deprecated Use getResponseValidator() instead.
+     * @see getResponseValidator()
+     */
+    public function getResponceValidator()
+    {
+        return $this->getResponseValidator();
     }
 
     /**

@@ -34,6 +34,7 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
+use Magento\Usps\Model\TrackingService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -166,6 +167,37 @@ class CarrierTest extends TestCase
     public function testGetCodeBool()
     {
         $this->assertFalse($this->carrier->getCode('test_code'));
+    }
+
+    public function testGetTrackingUsesCorrectlySpelledExtensionPoint(): void
+    {
+        $carrier = $this->getMockBuilder(Carrier::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setTrackingRequest', 'isXmlRequest'])
+            ->getMock();
+        $carrier->expects(self::once())->method('setTrackingRequest');
+        $carrier->method('isXmlRequest')->willReturn(false);
+        $trackingService = $this->createMock(TrackingService::class);
+        $trackingService->expects(self::once())
+            ->method('getRestTracking')
+            ->with(['tracking-number'])
+            ->willReturn(null);
+        $property = new \ReflectionProperty(Carrier::class, 'trackingService');
+        $property->setValue($carrier, $trackingService);
+
+        self::assertNull($carrier->getTracking('tracking-number'));
+    }
+
+    public function testSetTrackingRequestUsesLegacyExtensionPoint(): void
+    {
+        $carrier = $this->getMockBuilder(Carrier::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setTrackingReqeust'])
+            ->getMock();
+        $carrier->expects(self::once())->method('setTrackingReqeust');
+        $method = new \ReflectionMethod(Carrier::class, 'setTrackingRequest');
+
+        $method->invoke($carrier);
     }
 
     public function testReturnOfShipment()

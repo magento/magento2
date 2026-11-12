@@ -70,7 +70,7 @@ class AuthorizationCommand implements CommandInterface
         $this->payflowFacade->processErrors($response);
 
         try {
-            $this->payflowFacade->getResponceValidator()->validate($response, $this->payflowFacade);
+            $this->payflowFacade->getResponseValidator()->validate($response, $this->payflowFacade);
         } catch (LocalizedException $exception) {
             $payment->setParentTransactionId($response->getData(Transparent::PNREF));
             $this->payflowFacade->void($payment);

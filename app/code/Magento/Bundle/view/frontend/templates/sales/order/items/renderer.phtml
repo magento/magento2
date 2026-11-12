@@ -154,7 +154,7 @@ $prevOptionId = '';
                 <?php foreach ($options as $option): ?>
                     <dt><?= $escaper->escapeHtml($option['label']) ?></dt>
                     <?php if (!$block->getPrintStatus()): ?>
-                        <?php $formattedOptionValue = $block->getFormatedOptionValue($option) ?>
+                        <?php $formattedOptionValue = $block->getFormattedOptionValue($option) ?>
                         <dd<?php if (isset($formattedOptionValue['full_view'])): ?>
                             class="tooltip wrapper"
                         <?php endif; ?>>
