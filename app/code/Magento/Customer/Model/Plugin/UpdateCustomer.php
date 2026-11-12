@@ -88,7 +88,8 @@ class UpdateCustomer
         CustomerInterface $customer
     ): CustomerInterface {
         $newCustomer = clone $originCustomer;
-        foreach ($customer->__toArray() as $name => $value) {
+        $payload = $customer->__toArray();
+        foreach ($payload as $name => $value) {
             if ($name === CustomerInterface::CUSTOM_ATTRIBUTES) {
                 $value = array_replace($newCustomer->getCustomAttributes(), $customer->getCustomAttributes());
             } elseif ($name === CustomerInterface::EXTENSION_ATTRIBUTES_KEY) {
@@ -98,6 +99,10 @@ class UpdateCustomer
             }
 
             $newCustomer->setData($name, $value);
+        }
+
+        if (!array_key_exists(CustomerInterface::KEY_ADDRESSES, $payload)) {
+            $newCustomer->setAddresses(null);
         }
 
         return $newCustomer;
