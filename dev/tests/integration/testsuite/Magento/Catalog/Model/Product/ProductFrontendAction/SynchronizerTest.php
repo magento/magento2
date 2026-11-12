@@ -8,13 +8,22 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\ProductFrontendAction;
 
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Customer\Test\Fixture\CustomerVisitors;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SynchronizerTest extends \PHPUnit\Framework\TestCase
 {
@@ -182,6 +191,57 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
             ['visitorId' => null, 'customerEmail' => 'customer@example.com', 'expectedCollectionSize' => 2],
             ['visitorId' => 123, 'customerEmail' => null, 'expectedCollectionSize' => 2],
             ['visitorId' => null, 'customerEmail' => null, 'expectedCollectionSize' => 0],
+        ];
+    }
+
+    #[AppArea('adminhtml')]
+    #[AppIsolation(true)]
+    #[DataFixture(ProductFixture::class, as: 'product', count: 3)]
+    #[DataFixture(CustomerFixture::class, as: 'customer')]
+    #[DataFixture(CustomerVisitors::class, ['customer_id' => '$customer.id$', 'count' => 0], as: 'visitors')]
+    #[DataProvider('deletedProductsDataProvider')]
+    public function testSyncActionsSkipsDeletedProducts(string $typeId, bool $isCustomer): void
+    {
+        $fixtures = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(DataFixtureStorageManager::class)->getStorage();
+        $deletedProduct = $fixtures->get('product1');
+        $validProduct = $fixtures->get('product2');
+        $unchangedProduct = $fixtures->get('product3');
+        $this->session->setCustomerId($isCustomer ? $fixtures->get('customer')->getId() : null);
+        $this->visitor->setId($fixtures->get('visitors')->getData('guest_ids')[0]);
+        $productsData = [];
+        foreach ([$deletedProduct, $validProduct, $unchangedProduct] as $product) {
+            $productsData[$product->getId()] = ['product_id' => $product->getId(), 'added_at' => 100];
+        }
+        $this->synchronizer->syncActions($productsData, $typeId);
+        $this->productRepository->delete($deletedProduct);
+        $productsData[$validProduct->getId()]['added_at'] = 200;
+        unset($productsData[$unchangedProduct->getId()]);
+
+        $this->synchronizer->syncActions($productsData, $typeId);
+
+        $actions = $this->synchronizer->getActionsByType($typeId)->getData();
+        $this->assertCount(2, $actions);
+        $this->assertEquals(
+            [$validProduct->getId() => 200, $unchangedProduct->getId() => 100],
+            array_column($actions, 'added_at', 'product_id')
+        );
+
+        $this->synchronizer->syncActions(
+            [$deletedProduct->getId() => $productsData[$deletedProduct->getId()]],
+            $typeId
+        );
+
+        $this->assertEquals($actions, $this->synchronizer->getActionsByType($typeId)->getData());
+    }
+
+    public static function deletedProductsDataProvider(): array
+    {
+        return [
+            'guest viewed' => ['recently_viewed_product', false],
+            'customer viewed' => ['recently_viewed_product', true],
+            'guest compared' => ['recently_compared_product', false],
+            'customer compared' => ['recently_compared_product', true],
         ];
     }
 }
