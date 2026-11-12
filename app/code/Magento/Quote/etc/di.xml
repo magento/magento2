@@ -180,10 +180,14 @@
                 <item name="There are no source items" xsi:type="string">NOT_SALABLE</item>
                 <item name="The fewest you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="The most you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
-                <item name="The requested qty is not available" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="The requested qty" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="You need to choose options for your item." xsi:type="string">REQUIRED_PARAMETER_MISSING</item>
+                <item name="The product quantity should be greater than" xsi:type="string">INVALID_PARAMETER_VALUE</item>
+                <item name="You cannot use decimal quantity" xsi:type="string">INVALID_PARAMETER_VALUE</item>
+                <item name="only in quantities of" xsi:type="string">INVALID_PARAMETER_VALUE</item>
+                <item name="Wrong format of the entered option data" xsi:type="string">INVALID_PARAMETER_VALUE</item>
             </argument>
         </arguments>
     </type>
