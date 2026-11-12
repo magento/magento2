@@ -433,6 +433,96 @@ class StoreTest extends TestCase
         );
     }
 
+    /**
+     * Entry point appended to the base URL when web server rewrites are disabled
+     *
+     * @covers \Magento\Store\Model\Store::getBaseUrl
+     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     *
+     * @param string|null $scriptFilename
+     * @param bool $isCustomEntryPoint
+     * @param string $expectedBaseUrl
+     * @return void
+     */
+    #[DataProvider('getBaseUrlEntryPointDataProvider')]
+    public function testGetBaseUrlEntryPointResolution(
+        $scriptFilename,
+        $isCustomEntryPoint,
+        $expectedBaseUrl
+    ) {
+        $expectedPath = 'web/unsecure/base_link_url';
+        /** @var ReinitableConfigInterface $configMock */
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
+        $configMock->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
+                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
+            });
+        $this->requestMock->expects($this->any())
+            ->method('getServer')
+            ->with('SCRIPT_FILENAME')
+            ->willReturn($scriptFilename);
+
+        /** @var Store $model */
+        $model = $this->objectManagerHelper->getObject(
+            Store::class,
+            [
+                'config' => $configMock,
+                'isCustomEntryPoint' => $isCustomEntryPoint,
+                'request' => $this->requestMock
+            ]
+        );
+        $model->setCode('scopeCode');
+
+        $this->setUrlModifier($model);
+
+        $this->assertEquals(
+            $expectedBaseUrl,
+            $model->getBaseUrl(UrlInterface::URL_TYPE_LINK, false)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBaseUrlEntryPointDataProvider()
+    {
+        $baseUrl = 'http://domain.com/web/unsecure/base_link_url/';
+
+        return [
+            'web request through the default entry point' => [
+                '/var/www/html/pub/index.php',
+                false,
+                $baseUrl . 'index.php/',
+            ],
+            'web request through a custom entry point script' => [
+                '/var/www/html/pub/custom_entry.php',
+                false,
+                $baseUrl . 'custom_entry.php/',
+            ],
+            'console command executed via bin/magento' => [
+                '/var/www/html/bin/magento',
+                false,
+                $baseUrl . 'index.php/',
+            ],
+            'entry point forced by the custom_entry_point parameter' => [
+                '/var/www/html/bin/magento',
+                true,
+                $baseUrl . 'index.php/',
+            ],
+            'empty SCRIPT_FILENAME' => [
+                '',
+                false,
+                $baseUrl . 'index.php/',
+            ],
+            'missing SCRIPT_FILENAME' => [
+                null,
+                false,
+                $baseUrl . 'index.php/',
+            ],
+        ];
+    }
+
     public function testGetBaseUrlWrongType()
     {
         $this->expectException(\InvalidArgumentException::class);
