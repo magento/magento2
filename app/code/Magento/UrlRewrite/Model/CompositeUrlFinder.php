@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
- * Class CompositeUrlFinder
+ * Looks up url rewrites across all configured storage finders, sorted by priority
  */
 class CompositeUrlFinder implements UrlFinderInterface
 {
@@ -35,6 +35,16 @@ class CompositeUrlFinder implements UrlFinderInterface
      * @var ScopeConfigInterface
      */
     private $config;
+
+    /**
+     * @var bool
+     */
+    private $childrenSorted = false;
+
+    /**
+     * @var UrlFinderInterface[]
+     */
+    private $resolvedChildren = [];
 
     /**
      * @param array $children
@@ -72,8 +82,8 @@ class CompositeUrlFinder implements UrlFinderInterface
         $isDynamicRewrites = !$this->isCategoryRewritesEnabled();
 
         $mergeDataProvider = $this->mergeDataProviderFactory->create();
-        foreach ($this->getChildren() as $child) {
-            $urlFinder = $this->objectManager->get($child['class']);
+        foreach ($this->getChildren() as $key => $child) {
+            $urlFinder = $this->getChildFinder($key, $child);
             $rewrites = $urlFinder->findAllByData($data);
             if (!$isDynamicRewrites) {
                 return $rewrites;
@@ -88,8 +98,8 @@ class CompositeUrlFinder implements UrlFinderInterface
      */
     public function findOneByData(array $data)
     {
-        foreach ($this->getChildren() as $child) {
-            $urlFinder = $this->objectManager->get($child['class']);
+        foreach ($this->getChildren() as $key => $child) {
+            $urlFinder = $this->getChildFinder($key, $child);
             $rewrite = $urlFinder->findOneByData($data);
             if (!empty($rewrite)) {
                 return $rewrite;
@@ -105,12 +115,30 @@ class CompositeUrlFinder implements UrlFinderInterface
      */
     private function getChildren(): array
     {
-        uasort(
-            $this->children,
-            function ($first, $second) {
-                return (int)$first['sortOrder'] <=> (int)$second['sortOrder'];
-            }
-        );
+        if (!$this->childrenSorted) {
+            uasort(
+                $this->children,
+                function ($first, $second) {
+                    return (int)$first['sortOrder'] <=> (int)$second['sortOrder'];
+                }
+            );
+            $this->childrenSorted = true;
+        }
         return $this->children;
+    }
+
+    /**
+     * Resolve and cache the finder instance for a child configuration entry
+     *
+     * @param int|string $key
+     * @param array $child
+     * @return UrlFinderInterface
+     */
+    private function getChildFinder($key, array $child): UrlFinderInterface
+    {
+        if (!isset($this->resolvedChildren[$key])) {
+            $this->resolvedChildren[$key] = $this->objectManager->get($child['class']);
+        }
+        return $this->resolvedChildren[$key];
     }
 }
