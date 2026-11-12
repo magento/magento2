@@ -166,6 +166,7 @@ class QuoteManager
         $billingAddress = $quote->getBillingAddress();
         $quote->setCustomerId(null)
             ->setCustomerGroupId(GroupInterface::NOT_LOGGED_IN_ID)
+            ->setCustomerIsGuest(true)
             ->setCustomerEmail($billingAddress->getEmail())
             ->setCustomerFirstname($billingAddress->getFirstname())
             ->setCustomerLastname($billingAddress->getLastname())
