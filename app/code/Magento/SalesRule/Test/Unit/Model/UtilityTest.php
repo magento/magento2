@@ -1027,17 +1027,22 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @return void
+     * Scenario: Cap accumulated discounts for standalone items and children with effective quantities.
+     * Expected: Both currencies retain valid discounts without exceeding the effective item value.
      */
-    public function testMinFix(): void
-    {
-        $qty = 13;
-        $amount = 10;
-        $baseAmount = 12;
-        $fixedAmount = 20;
-        $fixedBaseAmount = 24;
-        $this->getItemPrice();
-        $this->getItemBasePrice();
+    #[DataProvider('minFixDataProvider')]
+    public function testMinFix(
+        float $qty,
+        float $totalQty,
+        float $amount,
+        float $baseAmount,
+        float $fixedAmount,
+        float $fixedBaseAmount
+    ): void {
+        $this->item->method('getDiscountCalculationPrice')->willReturn(4);
+        $this->item->method('getCalculationPrice')->willReturn(4);
+        $this->item->method('getBaseDiscountCalculationPrice')->willReturn(5);
+        $this->item->expects($this->atLeastOnce())->method('getTotalQty')->willReturn($totalQty);
         $this->item->setDiscountAmount($amount);
         $this->item->setBaseDiscountAmount($baseAmount);
         $this->item->setQty($qty);
@@ -1056,6 +1061,20 @@ class UtilityTest extends TestCase
             ->with($fixedBaseAmount);
 
         $this->assertNull($this->utility->minFix($discountData, $this->item, $qty));
+    }
+
+    /**
+     * @return array
+     */
+    public static function minFixDataProvider(): array
+    {
+        return [
+            'standalone below cap' => [13, 13, 10, 12, 20, 24],
+            'standalone at cap' => [1, 1, 10, 12, 4, 5],
+            'child below effective cap' => [10, 100, 50, 60, 100, 120],
+            'child at effective cap' => [10, 100, 300, 400, 400, 500],
+            'fractional parent quantity' => [10, 5, 30, 40, 20, 25],
+        ];
     }
 
     /**

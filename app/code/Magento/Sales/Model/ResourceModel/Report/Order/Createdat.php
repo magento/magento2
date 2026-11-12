@@ -78,7 +78,10 @@ class Createdat extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
                 'store_id' => 'o.store_id',
                 'order_status' => 'o.status',
                 'orders_count' => new \Zend_Db_Expr('COUNT(o.entity_id)'),
-                'total_qty_ordered' => new \Zend_Db_Expr('SUM(oi.total_qty_ordered)'),
+                'total_qty_ordered' => new \Zend_Db_Expr(
+                    'SUM(CASE WHEN COALESCE(o.base_total_canceled, 0) > 0'
+                    . ' THEN oi.total_qty_invoiced ELSE oi.total_qty_ordered END)'
+                ),
                 'total_qty_invoiced' => new \Zend_Db_Expr('SUM(oi.total_qty_invoiced)'),
                 'total_income_amount' => new \Zend_Db_Expr(
                     sprintf(
