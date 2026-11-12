@@ -93,7 +93,7 @@ class ConfigModel
      */
     public function process($inputOptions)
     {
-        $this->checkInstallationFilePermissions();
+        $this->checkDeploymentConfigFilePermissions();
 
         $options = $this->collector->collectOptionsLists();
 
@@ -158,14 +158,14 @@ class ConfigModel
     }
 
     /**
-     * Check permissions of directories that are expected to be writable for installation
+     * Check permissions of paths that are expected to be writable for saving the deployment configuration
      *
      * @return void
      * @throws \Exception
      */
-    private function checkInstallationFilePermissions()
+    private function checkDeploymentConfigFilePermissions()
     {
-        $results = $this->filePermissions->getMissingWritablePathsForInstallation();
+        $results = $this->filePermissions->getMissingWritablePathsForDeploymentConfig();
         if ($results) {
             $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
             throw new SetupException($errorMsg);
