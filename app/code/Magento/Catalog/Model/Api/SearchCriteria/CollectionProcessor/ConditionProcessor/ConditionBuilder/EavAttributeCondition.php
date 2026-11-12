@@ -53,31 +53,52 @@ class EavAttributeCondition implements CustomConditionInterface
     {
         $attribute = $this->getAttributeByCode($filter->getField());
         $tableAlias = 'ca_' . $attribute->getAttributeCode();
+        $entityIdField = $attribute->getEntityIdField();
+        $isNegative = $this->isNegativeConditionType($filter->getConditionType());
 
         $conditionType = $this->mapConditionType($filter->getConditionType());
+        if ($isNegative) {
+            $conditionType = $this->mapToPositiveConditionType($conditionType);
+        }
         $conditionValue = $this->mapConditionValue($conditionType, $filter->getValue());
 
         // NOTE: store scope was ignored intentionally to perform search across all stores
-        if ($conditionType == 'is_null') {
+        if ($conditionType === 'is_null') {
             $entityResourceModel = $attribute->getEntity();
             $attributeSelect = $this->resourceConnection->getConnection()
                 ->select()
                 ->from(
                     [Collection::MAIN_TABLE_ALIAS => $entityResourceModel->getEntityTable()],
-                    Collection::MAIN_TABLE_ALIAS . '.' . $attribute->getEntityIdField()
+                    Collection::MAIN_TABLE_ALIAS . '.' . $entityIdField
                 )->joinLeft(
                     [$tableAlias => $attribute->getBackendTable()],
-                    $tableAlias . '.' . $attribute->getEntityIdField() . '=' . Collection::MAIN_TABLE_ALIAS .
-                    '.' . $attribute->getEntityIdField() . ' AND ' . $tableAlias . '.' .
+                    $tableAlias . '.' . $entityIdField . '=' . Collection::MAIN_TABLE_ALIAS .
+                    '.' . $entityIdField . ' AND ' . $tableAlias . '.' .
                     $attribute->getIdFieldName() . '=' . $attribute->getAttributeId(),
                     ''
-                )->where($tableAlias . '.value is null');
+                )->where(
+                    $tableAlias . '.value IS NULL OR ' . $tableAlias . '.value = ?',
+                    ''
+                );
+        } elseif ($conditionType === 'notnull') {
+            $attributeSelect = $this->resourceConnection->getConnection()
+                ->select()
+                ->from(
+                    [$tableAlias => $attribute->getBackendTable()],
+                    $tableAlias . '.' . $entityIdField
+                )->where(
+                    $this->resourceConnection->getConnection()->prepareSqlCondition(
+                        $tableAlias . '.' . $attribute->getIdFieldName(),
+                        ['eq' => $attribute->getAttributeId()]
+                    )
+                )->where($tableAlias . '.value IS NOT NULL')
+                ->where($tableAlias . '.value != ?', '');
         } else {
             $attributeSelect = $this->resourceConnection->getConnection()
                 ->select()
                 ->from(
                     [$tableAlias => $attribute->getBackendTable()],
-                    $tableAlias . '.' . $attribute->getEntityIdField()
+                    $tableAlias . '.' . $entityIdField
                 )->where(
                     $this->resourceConnection->getConnection()->prepareSqlCondition(
                         $tableAlias . '.' . $attribute->getIdFieldName(),
@@ -91,12 +112,14 @@ class EavAttributeCondition implements CustomConditionInterface
                 );
         }
 
+        $outerConditionType = $isNegative ? 'nin' : 'in';
+
         return $this->resourceConnection
             ->getConnection()
             ->prepareSqlCondition(
-                Collection::MAIN_TABLE_ALIAS . '.' . $attribute->getEntityIdField(),
+                Collection::MAIN_TABLE_ALIAS . '.' . $entityIdField,
                 [
-                    'in' => $attributeSelect
+                    $outerConditionType => $attributeSelect
                 ]
             );
     }
@@ -130,6 +153,34 @@ class EavAttributeCondition implements CustomConditionInterface
     }
 
     /**
+     * Whether the filter condition type is a negative comparison.
+     *
+     * @param string $conditionType
+     * @return bool
+     */
+    private function isNegativeConditionType(string $conditionType): bool
+    {
+        return in_array($conditionType, ['neq', 'nin', 'nlike'], true);
+    }
+
+    /**
+     * Map a (possibly already-mapped) negative condition type to its positive counterpart.
+     *
+     * @param string $conditionType
+     * @return string
+     */
+    private function mapToPositiveConditionType(string $conditionType): string
+    {
+        $conditionsMap = [
+            'neq' => 'eq',
+            'nin' => 'in',
+            'nlike' => 'like',
+        ];
+
+        return $conditionsMap[$conditionType] ?? $conditionType;
+    }
+
+    /**
      * Wraps value with '%' if condition type is 'like' or 'not like'
      *
      * @param string $conditionType
@@ -140,7 +191,7 @@ class EavAttributeCondition implements CustomConditionInterface
     {
         $conditionsMap = ['like', 'nlike'];
 
-        if (in_array($conditionType, $conditionsMap)) {
+        if (in_array($conditionType, $conditionsMap, true)) {
             $conditionValue = '%' . $conditionValue . '%';
         }
 
