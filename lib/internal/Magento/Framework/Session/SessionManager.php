@@ -17,6 +17,11 @@ use Magento\Framework\Session\Config\ConfigInterface;
 class SessionManager implements SessionManagerInterface, ResetAfterRequestInterface
 {
     /**
+     * Session key holding the time the session id was replaced by regenerateId()
+     */
+    private const SUPERSEDED_AT_KEY = 'destroyed';
+
+    /**
      * Default options when a call destroy()
      *
      * Description:
@@ -179,20 +184,19 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
                 // Need to apply the config options so they can be ready by session_start
                 $this->initIniOptions();
                 $this->registerSaveHandler();
-                if (isset($_SESSION['new_session_id'])) {
-                    // Not fully expired yet. Could be lost cookie by unstable network.
-                    session_commit();
-                    session_id($_SESSION['new_session_id']);
-                }
                 session_start();
-                if (isset($_SESSION['destroyed'])
-                    && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
+                $isSuperseded = isset($_SESSION[self::SUPERSEDED_AT_KEY]);
+                if ($isSuperseded
+                    && $_SESSION[self::SUPERSEDED_AT_KEY] < time() - $this->sessionConfig->getCookieLifetime()
                 ) {
-                    $this->destroy(['clear_storage' => true]);
+                    $this->clearStorage();
+                    $_SESSION = [self::SUPERSEDED_AT_KEY => $_SESSION[self::SUPERSEDED_AT_KEY]];
                 }
 
                 $this->validator->validate($this);
-                $this->renewCookie(null);
+                if (!$isSuperseded) {
+                    $this->renewCookie(null);
+                }
 
                 $this->registerShutdown();
 
@@ -521,13 +525,11 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
         }
 
         if ($this->isSessionExists()) {
-            // Regenerate the session
+            // session_regenerate_id() writes the current data to the old session id before switching
+            $_SESSION[self::SUPERSEDED_AT_KEY] = time();
             session_regenerate_id();
+            unset($_SESSION[self::SUPERSEDED_AT_KEY]);
             $newSessionId = session_id();
-            $_SESSION['new_session_id'] = $newSessionId;
-
-            // Set destroy timestamp
-            $_SESSION['destroyed'] = time();
 
             // Write and close current session;
             session_commit();
@@ -539,10 +541,6 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
             session_id($newSessionId);
             session_start();
             $_SESSION = $oldSession;
-
-            // New session does not need them
-            unset($_SESSION['destroyed']);
-            unset($_SESSION['new_session_id']);
         } else {
             session_start();
         }
