@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlNewRelic\Plugin;
 
+use GraphQL\Error\ClientAware;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
@@ -23,6 +24,26 @@ class ReportException
     }
 
     /**
+     * Sends an exception that is not client-safe to New Relic before it is formatted for the response
+     *
+     * @param ExceptionFormatter $subject
+     * @param \Throwable $exception
+     * @param string|null $internalErrorMessage
+     * @return null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeCreate(
+        ExceptionFormatter $subject,
+        \Throwable $exception,
+        $internalErrorMessage = null
+    ) {
+        if (!($exception instanceof ClientAware && $exception->isClientSafe())) {
+            $this->newRelicWrapper->reportError($exception);
+        }
+        return null;
+    }
+
+    /**
      * Sends error from GraphQL to New Relic
      *
      * @param ExceptionFormatter $subject
@@ -30,6 +51,8 @@ class ReportException
      * @param string|null $internalErrorMessage
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated ExceptionFormatter has no check() method, so this plugin method is never invoked
+     * @see self::beforeCreate()
      */
     public function beforeCheck(
         ExceptionFormatter $subject,
