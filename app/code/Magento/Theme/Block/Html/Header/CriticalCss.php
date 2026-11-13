@@ -47,8 +47,30 @@ class CriticalCss implements ArgumentInterface
      */
     public function getCriticalCssData()
     {
+        return $this->loadContent($this->filePath);
+    }
+
+    /**
+     * Returns critical css data for the given file, set by the file_path argument of critical_css_block.
+     *
+     * @param string $filePath
+     * @return string
+     */
+    public function getCriticalCssDataByPath(string $filePath): string
+    {
+        return $this->loadContent($filePath);
+    }
+
+    /**
+     * Returns the content of the given asset, or an empty string when it cannot be loaded.
+     *
+     * @param string $filePath
+     * @return string
+     */
+    private function loadContent(string $filePath): string
+    {
         try {
-            $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
+            $asset = $this->assetRepo->createAsset($filePath, ['_secure' => 'false']);
             $content = $asset->getContent();
         } catch (LocalizedException | NotFoundException $e) {
             $content = '';
