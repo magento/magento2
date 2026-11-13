@@ -26,4 +26,7 @@
     <type name="Magento\Swatches\Block\Product\Renderer\Listing\Configurable">
         <plugin name="addWeeeToSwatchListingJsonConfig" type="Magento\Weee\Plugin\ConfigurableProduct\Block\Product\View\Type\Configurable"/>
     </type>
+    <type name="Magento\Catalog\Block\Product\View">
+        <plugin name="addWeeeToProductViewJsonConfig" type="Magento\Weee\Plugin\Catalog\Block\Product\View"/>
+    </type>
 </config>
