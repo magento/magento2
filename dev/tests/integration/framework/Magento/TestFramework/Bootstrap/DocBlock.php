@@ -61,7 +61,7 @@ class DocBlock
             new \Magento\TestFramework\Workaround\Override\Fixture\Resolver\TestSetter(),
             new \Magento\TestFramework\Annotation\AppIsolation($application),
             new \Magento\TestFramework\Annotation\IndexerDimensionMode(),
-            new \Magento\TestFramework\Isolation\AppConfig(),
+            new \Magento\TestFramework\Isolation\AppConfig($application->getGlobalConfigFile()),
             new \Magento\TestFramework\Annotation\ConfigFixture(),
             new \Magento\TestFramework\Annotation\DataFixtureBeforeTransaction(),
             new \Magento\TestFramework\Event\Transaction(
