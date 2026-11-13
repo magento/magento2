@@ -100,7 +100,9 @@ class WebsitesTest extends AbstractModifierTestCase
         $this->assignedWebsites = [self::SECOND_WEBSITE_ID];
         $this->productId = self::PRODUCT_ID;
         $this->websiteMock = $this->createPartialMock(Website::class, ['getId', 'getName']);
+        $this->websiteMock->method('getName')->willReturn('Unit test');
         $this->secondWebsiteMock = $this->createPartialMock(Website::class, ['getId', 'getName']);
+        $this->secondWebsiteMock->method('getName')->willReturn('Unit test');
         $this->websitesList = [$this->websiteMock, $this->secondWebsiteMock];
         $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
         $this->websiteRepositoryMock->method('getDefault')->willReturn($this->websiteMock);
