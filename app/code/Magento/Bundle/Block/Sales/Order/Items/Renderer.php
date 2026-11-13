@@ -7,6 +7,9 @@ namespace Magento\Bundle\Block\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Order item render block
@@ -212,7 +215,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     /**
      * Get the html for item price
      *
-     * @param OrderItem|InvoiceItem|CreditmemoItem $item
+     * @param OrderItemInterface|InvoiceItemInterface|CreditmemoItemInterface $item
      * @return string
      */
     public function getItemPrice($item)
