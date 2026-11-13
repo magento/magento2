@@ -55,7 +55,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 }
 
                 $comment = trim(strip_tags($data['comment']));
-                $history = $order->addStatusHistoryComment($comment, $orderStatus);
+                $history = $order->addStatusHistoryComment($comment, $data['status']);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
