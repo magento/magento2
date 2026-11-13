@@ -106,6 +106,11 @@ class ViewedTest extends TestCase
     protected $flagMock;
 
     /**
+     * @var string[]
+     */
+    private array $queries = [];
+
+    /**
      * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -140,7 +145,17 @@ class ViewedTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->any())->method('query')->willReturn($this->zendDbMock);
+        $this->connectionMock->expects($this->any())->method('query')->willReturnCallback(
+            function ($sql) {
+                $this->queries[] = (string)$sql;
+                return $this->zendDbMock;
+            }
+        );
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnCallback(
+            function ($identifier) {
+                return '`' . str_replace('.', '`.`', $identifier) . '`';
+            }
+        );
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -269,6 +284,14 @@ class ViewedTest extends TestCase
             ->willReturnSelf();
 
         $this->viewed->aggregate($from, $to);
+
+        $this->assertStringContainsString(
+            'ON DUPLICATE KEY UPDATE `product_name` = VALUES(`product_name`), '
+            . '`product_price` = VALUES(`product_price`), '
+            . '`report_viewed_product_aggregated_daily`.`views_num` = GREATEST('
+            . '`report_viewed_product_aggregated_daily`.`views_num`, VALUES(`views_num`))',
+            implode(PHP_EOL, $this->queries)
+        );
     }
 
     /**
@@ -281,12 +304,12 @@ class ViewedTest extends TestCase
                 'from' => new \DateTime('+3 day'),
                 'to' => new \DateTime('-3 day'),
                 'truncateCount' => 'never',
-                'deleteCount' => 'once'
+                'deleteCount' => 'never'
             ],
             [
                 'from' => null,
                 'to' => null,
-                'truncateCount' => 'once',
+                'truncateCount' => 'never',
                 'deleteCount' => 'never'
             ]
         ];
