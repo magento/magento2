@@ -9,7 +9,6 @@ namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
@@ -33,11 +32,6 @@ class ProductList
     protected $scopeConfig;
 
     /**
-     * @var Registry
-     */
-    private $coreRegistry;
-
-    /**
      * Default limits per page
      *
      * @var array
@@ -46,14 +40,14 @@ class ProductList
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param Registry $coreRegistry
+     * @param Registry|null $coreRegistry @deprecated - no longer used
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ?Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);
     }
 
     /**
@@ -100,16 +94,10 @@ class ProductList
     /**
      * Get default sort field
      *
-     * @FIXME Helper should be context-independent
      * @return null|string
      */
     public function getDefaultSortField()
     {
-        $currentCategory = $this->coreRegistry->registry('current_category');
-        if ($currentCategory) {
-            return $currentCategory->getDefaultSortBy();
-        }
-
         return $this->scopeConfig->getValue(Config::XML_PATH_LIST_DEFAULT_SORT_BY, ScopeInterface::SCOPE_STORE);
     }
 
