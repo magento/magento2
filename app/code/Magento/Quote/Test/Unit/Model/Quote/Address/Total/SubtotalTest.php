@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
@@ -57,13 +58,20 @@ class SubtotalTest extends TestCase
     protected $stockRegistry;
 
     /**
+     * @var ManagerInterface|MockObject
+     */
+    private $eventManager;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
         $this->subtotalModel = $this->objectManager->getObject(
-            Subtotal::class
+            Subtotal::class,
+            ['eventManager' => $this->eventManager]
         );
 
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
@@ -262,5 +270,119 @@ class SubtotalTest extends TestCase
             []
         );
         $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
+    }
+
+    public function testCollectRemovesUnsavedQuoteItemAndRelatedItems(): void
+    {
+        $quote = $this->createPartialMock(Quote::class, ['removeItem']);
+        $quote->setStoreId(1);
+        $quote->expects($this->never())->method('removeItem');
+        $quote->setItemsCount(1)->setGiftMessageId(10);
+        $address = $this->createPartialMock(Address::class, ['removeItem', 'getQuote']);
+        $address->method('getQuote')->willReturn($quote);
+        $address->expects($this->never())->method('removeItem');
+
+        $item = $this->createPartialMock(Item::class, []);
+        $item->setQuote($quote);
+        $parent = $this->createPartialMock(Item::class, []);
+        $child = $this->createPartialMock(Item::class, []);
+        $sibling = $this->createPartialMock(Item::class, []);
+        $item->setParentItem($parent);
+        $child->setParentItem($item);
+        $sibling->setParentItem($parent);
+
+        $this->eventManager->expects($this->once())->method('dispatch')->with(
+            'sales_quote_remove_item',
+            $this->identicalTo(['quote_item' => $item])
+        );
+        $this->collectInvalidItem($quote, $address, $item);
+
+        self::assertTrue((bool)$item->isDeleted());
+        self::assertTrue((bool)$child->isDeleted());
+        self::assertTrue((bool)$parent->isDeleted());
+        self::assertFalse((bool)$sibling->isDeleted());
+        self::assertSame(0, $quote->getGiftMessageId());
+    }
+
+    public function testCollectRemovesSavedQuoteItemById(): void
+    {
+        $quote = $this->createPartialMock(Quote::class, ['removeItem']);
+        $quote->setStoreId(1);
+        $quote->expects($this->once())->method('removeItem')->with(42);
+        $address = $this->createPartialMock(Address::class, ['removeItem', 'getQuote']);
+        $address->method('getQuote')->willReturn($quote);
+        $address->expects($this->once())->method('removeItem')->with(42);
+        $item = $this->createPartialMock(Item::class, []);
+        $item->setQuote($quote)->setId(42);
+
+        $this->eventManager->expects($this->never())->method('dispatch');
+        $this->collectInvalidItem($quote, $address, $item);
+    }
+
+    #[DataProvider('addressItemIdsProvider')]
+    public function testCollectRemovesAddressItemWithoutNullLookup(?int $addressItemId, ?int $quoteItemId): void
+    {
+        $quote = $this->createPartialMock(Quote::class, ['removeItem', 'getItemById']);
+        $quote->setStoreId(1);
+        $quoteItem = $this->createPartialMock(Item::class, []);
+        $quoteItem->setQuote($quote)->setId($quoteItemId);
+        if ($quoteItemId === null) {
+            $quote->expects($this->never())->method('getItemById');
+            $quote->expects($this->never())->method('removeItem');
+            $this->eventManager->expects($this->once())->method('dispatch')->with(
+                'sales_quote_remove_item',
+                $this->identicalTo(['quote_item' => $quoteItem])
+            );
+        } else {
+            $quote->expects($this->once())->method('getItemById')->with($quoteItemId)->willReturn($quoteItem);
+            $quote->expects($this->once())->method('removeItem')->with($quoteItemId);
+            $this->eventManager->expects($this->never())->method('dispatch');
+        }
+        $address = $this->createPartialMock(Address::class, ['removeItem', 'getQuote']);
+        $address->method('getQuote')->willReturn($quote);
+        if ($addressItemId === null) {
+            $address->expects($this->never())->method('removeItem');
+        } else {
+            $address->expects($this->once())->method('removeItem')->with($addressItemId);
+        }
+        $addressItem = $this->createPartialMock(AddressItem::class, []);
+        $addressItem->setAddress($address)->setId($addressItemId);
+        $addressItem->setQuoteItemId($quoteItemId)->setQuoteItem($quoteItem);
+
+        $this->collectInvalidItem($quote, $address, $addressItem);
+
+        if ($addressItemId === null) {
+            self::assertTrue((bool)$addressItem->isDeleted());
+        }
+        if ($quoteItemId === null) {
+            self::assertTrue((bool)$quoteItem->isDeleted());
+        }
+    }
+
+    public static function addressItemIdsProvider(): array
+    {
+        return [
+            'both unsaved' => [null, null],
+            'unsaved address item' => [null, 42],
+            'unsaved quote item' => [123, null],
+            'both saved' => [123, 42],
+        ];
+    }
+
+    /**
+     * @param Quote $quote
+     * @param Address $address
+     * @param Item|AddressItem $item
+     * @return void
+     */
+    private function collectInvalidItem(Quote $quote, Address $address, Item|AddressItem $item): void
+    {
+        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping->method('getAddress')->willReturn($address);
+        $assignment = $this->createMock(ShippingAssignmentInterface::class);
+        $assignment->method('getShipping')->willReturn($shipping);
+        $assignment->method('getItems')->willReturn([$item]);
+
+        $this->subtotalModel->collect($quote, $assignment, $this->createPartialMock(Total::class, []));
     }
 }
