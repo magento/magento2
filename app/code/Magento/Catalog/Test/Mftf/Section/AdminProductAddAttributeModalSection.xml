@@ -15,5 +15,6 @@
         <element name="clearFilters" type="button" selector=".product_form_product_form_add_attribute_modal .action-clear" timeout="30"/>
         <element name="firstRowCheckBox" type="input" selector=".product_form_product_form_add_attribute_modal .data-grid-checkbox-cell input"/>
         <element name="applyFilters" type="button" selector=".product_form_product_form_add_attribute_modal .admin__data-grid-filters-footer .action-secondary" timeout="30"/>
+        <element name="systemColumn" type="text" selector=".product_form_product_form_add_attribute_modal .data-grid .col-system .data-grid-cell-content"/>
     </section>
 </sections>
