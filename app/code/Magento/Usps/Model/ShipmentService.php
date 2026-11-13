@@ -603,13 +603,7 @@ class ShipmentService
         $allowedMethodCodes = array_keys($allowedMethods);
 
         if (!in_array($methodCode, $allowedMethodCodes)) {
-            $rateMailClass = $rateElement['mailClass'] ?? '';
-            if ($rateMailClass) {
-                $methodCode = $this->shippingMethodManager->findAllowedMethodByMailClass(
-                    $rateMailClass,
-                    $allowedMethodCodes
-                );
-            }
+            $methodCode = $this->shippingMethodManager->findAllowedMethodForRate($rateElement, $allowedMethodCodes);
         }
 
         if ($methodCode && in_array($methodCode, $allowedMethodCodes)) {
