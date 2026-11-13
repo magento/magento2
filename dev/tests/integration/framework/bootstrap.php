@@ -35,7 +35,10 @@ try {
     setCustomErrorHandler();
 
     /* Bootstrap the application */
-    $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
+    $settings = new \Magento\TestFramework\Bootstrap\Settings(
+        $testsBaseDir,
+        array_replace(get_defined_constants(), getenv())
+    );
 
     $testFrameworkDir = __DIR__;
     require_once 'deployTestModules.php';
@@ -69,7 +72,7 @@ try {
         $globalConfigFile .= '.dist';
     }
     $sandboxUniqueId = hash('sha256', sha1_file($installConfigFile));
-    $installDir = TESTS_TEMP_DIR . "/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
+    $installDir = $settings->get('TESTS_TEMP_DIR') . "/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
     $application = new \Magento\TestFramework\Application(
         $shell,
         $installDir,

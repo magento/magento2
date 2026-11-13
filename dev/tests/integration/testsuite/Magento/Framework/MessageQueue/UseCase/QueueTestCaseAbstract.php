@@ -52,15 +52,17 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->logFilePath = $settings->get('TESTS_TEMP_DIR') . '/MessageQueueTestLog.txt';
         $this->publisherConsumerController = $this->objectManager->create(
             PublisherConsumerController::class,
             [
                 'consumers' => $this->consumers,
                 'logFilePath' => $this->logFilePath,
                 'maxMessages' => $this->maxMessages,
-                'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
         );
 

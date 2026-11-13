@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Size;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Bootstrap\Settings;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +34,8 @@ class ValidatorInfoTest extends TestCase
      */
     protected $objectManager;
 
+    protected ?Settings $settings = null;
+
     /**
      * @var Filesystem\Directory\WriteInterface
      */
@@ -49,6 +52,7 @@ class ValidatorInfoTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
         $filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->config = $this->objectManager->get(Config::class);
@@ -104,7 +108,8 @@ class ValidatorInfoTest extends TestCase
      */
     public function testFileNotImage(): void
     {
-        $this->copyFileToTmpMedia(INTEGRATION_TESTS_DIR . '/testsuite/Magento/Catalog/_files/empty.csv');
+        $testDir = $this->settings->get('INTEGRATION_TESTS_DIR');
+        $this->copyFileToTmpMedia($testDir . '/testsuite/Magento/Catalog/_files/empty.csv');
 
         self::assertFalse($this->model->validate($this->getOptionValue('empty.csv'), $this->getProductOption()));
     }
@@ -182,7 +187,8 @@ class ValidatorInfoTest extends TestCase
         if (!$this->mediaDirectory->isFile($quoteFile)) {
             $driver = $this->mediaDirectory->getDriver();
             $driver->createDirectory(dirname($quoteFilePath));
-            $sourceFile = INTEGRATION_TESTS_DIR . '/testsuite/Magento/Catalog/_files/' . $fileName;
+            $testDir = $this->settings->get('INTEGRATION_TESTS_DIR');
+            $sourceFile = $testDir . '/testsuite/Magento/Catalog/_files/' . $fileName;
             if (file_exists($sourceFile)) {
                 $driver->filePutContents($quoteFilePath, file_get_contents($sourceFile));
             } else {

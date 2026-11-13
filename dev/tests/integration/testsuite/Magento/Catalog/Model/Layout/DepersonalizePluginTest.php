@@ -77,22 +77,25 @@ class DepersonalizePluginTest extends TestCase
      */
     public static function afterGenerateElementsDataProvider(): array
     {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+        $testsDir = $settings->get('INTEGRATION_TESTS_DIR');
+
         return [
             'cacheable' => [
-                'layout' => INTEGRATION_TESTS_DIR . '/testsuite/Magento/Framework/View/_files/layout/cacheable.xml',
+                'layout' => $testsDir . '/testsuite/Magento/Framework/View/_files/layout/cacheable.xml',
                 'expectedResult' => [],
             ],
             'nonCacheable' => [
-                'layout' => INTEGRATION_TESTS_DIR . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable.xml',
+                'layout' => $testsDir . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable.xml',
                 'expectedResult' => ['some_data' => 1],
             ],
             'nonCacheableBlockWithoutReference' => [
-                'layout' => INTEGRATION_TESTS_DIR
+                'layout' => $testsDir
                     . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable_block_with_missing_refference.xml',
                 'expectedResult' => [],
             ],
             'nonCacheableBlockWithExistedReference' => [
-                'layout' => INTEGRATION_TESTS_DIR
+                'layout' => $testsDir
                     . '/testsuite/Magento/Framework/View/_files/layout/non_cacheable_block_with_declared_reference.xml',
                 'expectedResult' => ['some_data' => 1],
             ],

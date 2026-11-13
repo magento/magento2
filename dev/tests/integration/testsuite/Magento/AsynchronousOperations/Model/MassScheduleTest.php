@@ -79,10 +79,12 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
         $this->massSchedule = $this->objectManager->create(MassSchedule::class);
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $this->logFilePath = $settings->get('TESTS_TEMP_DIR') . '/MessageQueueTestLog.txt';
         $this->collection = $this->objectManager->create(Collection::class);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         /** @var PublisherConsumerController publisherConsumerController */
