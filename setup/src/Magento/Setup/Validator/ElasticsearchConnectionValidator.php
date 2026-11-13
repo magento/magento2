@@ -42,12 +42,9 @@ class ElasticsearchConnectionValidator
     private function buildConfig(array $options)
     {
         $hostname = preg_replace('/http[s]?:\/\//i', '', $options['hostname']);
-        // @codingStandardsIgnoreStart
-        $protocol = parse_url($options['hostname'], PHP_URL_SCHEME);
-        // @codingStandardsIgnoreEnd
-        if (!$protocol) {
-            $protocol = 'http';
-        }
+        $url = parse_url($options['hostname']);
+
+        $options['scheme'] = $url['scheme'] ?? 'http';
 
         $authString = '';
         if (isset($options['enableAuth']) && true === $options['enableAuth']) {
@@ -59,7 +56,7 @@ class ElasticsearchConnectionValidator
             $authString = "{$options['username']}:{$options['password']}@";
         }
         $portString = empty($options['port']) ? '' : ':' . $options['port'];
-        $host = $protocol . '://' . $authString . $hostname . $portString;
+        $host = ($options['scheme'] ?? 'http') . '://' . $authString . $hostname . $portString;
         $options['hosts'] = [$host];
 
         return $options;
