@@ -62,4 +62,30 @@ class DetailsTest extends TestCase
         $result = $this->model->getDetails($uuid);
         $this->assertEquals($expectedResult, $result);
     }
+
+    /**
+     * getDetails() is called with null when the bulk details modal is rendered without a uuid request param.
+     * Null must not be used as an array key (deprecated in PHP 8.5).
+     */
+    public function testGetDetailsWithNullUuid(): void
+    {
+        $this->bulkStatusMock->expects($this->exactly(5))
+            ->method('getOperationsCountByBulkIdAndStatus')
+            ->with(null, $this->anything())
+            ->willReturn(0);
+
+        $expectedResult = [
+            'operations_total' => 0,
+            'operations_successful' => 0,
+            'operations_failed' => 0,
+            'failed_retriable' => 0,
+            'failed_not_retriable' => 0,
+            'rejected' => 0,
+            'open' => 0,
+        ];
+
+        $this->assertEquals($expectedResult, $this->model->getDetails(null));
+        // second call is served from the cache, no further lookups
+        $this->assertEquals($expectedResult, $this->model->getDetails(null));
+    }
 }

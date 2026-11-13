@@ -22,7 +22,7 @@ class Details
     private $bulkStatus;
 
     /**
-     * @var null
+     * @var string|null
      */
     private $bulkUuid;
 
@@ -43,7 +43,7 @@ class Details
      * Init dependencies.
      *
      * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
-     * @param null $bulkUuid
+     * @param string|null $bulkUuid
      */
     public function __construct(
         BulkStatusInterface $bulkStatus,
@@ -56,7 +56,7 @@ class Details
     /**
      * Collect operations statistics for the bulk
      *
-     * @param string $bulkUuid
+     * @param string|null $bulkUuid
      * @return array
      */
     public function getDetails($bulkUuid)
@@ -70,8 +70,9 @@ class Details
             'rejected'              => 0,
         ];
 
-        if (array_key_exists($bulkUuid, $this->operationCache)) {
-            return $this->operationCache[$bulkUuid];
+        $cacheKey = (string)$bulkUuid;
+        if (array_key_exists($cacheKey, $this->operationCache)) {
+            return $this->operationCache[$cacheKey];
         }
 
         foreach ($this->statusMap as $statusCode => $readableKey) {
@@ -83,7 +84,7 @@ class Details
 
         $details['operations_total'] = array_sum($details);
         $details['operations_failed'] = $details['failed_retriable'] + $details['failed_not_retriable'];
-        $this->operationCache[$bulkUuid] = $details;
+        $this->operationCache[$cacheKey] = $details;
 
         return $details;
     }
