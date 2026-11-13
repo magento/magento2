@@ -1669,6 +1669,43 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $installer->updateModulesSequence(false);
         }
 
+        /**
+         * The object manager must be rebuilt after the new module list is written to config.php,
+         * also when generated files are kept, so newly added modules are seen by the schema and
+         * data installers.
+         *
+         * @return void
+         */
+        public function testUpdateModulesSequenceKeepGeneratedResetsObjectManagerAfterModulesConfig(): void
+        {
+            $calls = [];
+            $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
+            $objectManagerProvider->method('get')->willReturn($this->objectManager);
+            $objectManagerProvider->expects($this->atLeastOnce())
+                ->method('reset')
+                ->willReturnCallback(function () use (&$calls) {
+                    $calls[] = 'reset';
+                });
+            $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedFiles');
+
+            $installer = $this->prepareForUpdateModulesTests(
+                $objectManagerProvider,
+                function () use (&$calls) {
+                    $calls[] = 'saveConfig';
+                }
+            );
+
+            $installer->updateModulesSequence(true);
+
+            $saveConfigPosition = array_search('saveConfig', $calls, true);
+            $this->assertNotFalse($saveConfigPosition, 'The modules config was not written.');
+            $this->assertContains(
+                'reset',
+                array_slice($calls, $saveConfigPosition + 1),
+                'The object manager must be reset after the modules config is written.'
+            );
+        }
+
         public function testUpdateModulesSequenceKeepGenerated()
         {
             $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
@@ -1808,10 +1845,15 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
         /**
          * Prepare mocks for update modules tests and returns the installer to use
+         *
+         * @param MockObject|bool $objectManagerProvider
+         * @param callable|null $saveConfigCallback
          * @return Installer
          */
-        private function prepareForUpdateModulesTests()
-        {
+        private function prepareForUpdateModulesTests(
+            $objectManagerProvider = false,
+            ?callable $saveConfigCallback = null
+        ) {
             $allModules = [
                 'Foo_One' => [],
                 'Bar_Two' => [],
@@ -1845,10 +1887,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
                 ->with(ConfigOptionsListConstants::KEY_MODULES)
                 ->willReturn(true);
 
-            $newObject = $this->createObject(false, false);
+            $newObject = $this->createObject(false, $objectManagerProvider);
             $this->configReader->expects($this->once())->method('load')
                 ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0]]);
-            $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
+            $saveConfig = $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
+            if ($saveConfigCallback !== null) {
+                $saveConfig->willReturnCallback($saveConfigCallback);
+            }
 
             return $newObject;
         }
