@@ -737,7 +737,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     {
         $weeeTotal = 0;
         $displayTotalsInclTax = $this->displayTotalsInclTax($store);
-        foreach ($items as $item) {
+        foreach ($this->getItemsRepresentingWeee($items) as $item) {
             if ($displayTotalsInclTax) {
                 $weeeTotal += $this->getRowWeeeTaxInclTax($item);
             } else {
@@ -761,7 +761,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     {
         $baseWeeeTotal = 0;
         $displayTotalsInclTax = $this->displayTotalsInclTax($store);
-        foreach ($items as $item) {
+        foreach ($this->getItemsRepresentingWeee($items) as $item) {
             if ($displayTotalsInclTax) {
                 $baseWeeeTotal += $this->getBaseRowWeeeTaxInclTax($item);
             } else {
@@ -769,6 +769,49 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
             }
         }
         return $baseWeeeTotal;
+    }
+
+    /**
+     * Configurable and bundle parents repeat the child FPT.
+     *
+     * Quote parents merge child amounts in getApplied(), and order parents keep a copy of the child
+     * weee_tax_applied payload. The child row is the amount that was added to the grand total.
+     *
+     * @param QuoteAbstractItem[]|OrderItem[] $items
+     * @return QuoteAbstractItem[]|OrderItem[]
+     */
+    private function getItemsRepresentingWeee($items): array
+    {
+        $parentsWithChildren = [];
+        foreach ($items as $item) {
+            $parent = $this->getLinkedParentItem($item);
+            if ($parent) {
+                $parentsWithChildren[spl_object_id($parent)] = true;
+            }
+        }
+
+        $result = [];
+        foreach ($items as $item) {
+            if (isset($parentsWithChildren[spl_object_id($item)])) {
+                continue;
+            }
+            $result[] = $item;
+        }
+        return $result;
+    }
+
+    /**
+     * Parent quote or order item linked from a child, when this item has one.
+     *
+     * @param QuoteAbstractItem|OrderItem $item
+     * @return QuoteAbstractItem|OrderItem|null
+     */
+    private function getLinkedParentItem($item)
+    {
+        if ($item instanceof QuoteAbstractItem || $item instanceof OrderItem) {
+            return $item->getParentItem() ?: null;
+        }
+        return null;
     }
 
     /**
