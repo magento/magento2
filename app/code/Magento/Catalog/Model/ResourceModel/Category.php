@@ -462,7 +462,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
         if (!empty($update)) {
             $newPositions = [];
             foreach ($update as $productId => $position) {
-                $delta = $position - $oldProducts[$productId];
+                $delta = (int)$position - (int)$oldProducts[$productId];
                 if (!isset($newPositions[$delta])) {
                     $newPositions[$delta] = [];
                 }
