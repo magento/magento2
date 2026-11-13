@@ -360,6 +360,15 @@
     "conflict": {
         "gene/bluefoot": "*"
     },
+    "archive": {
+        "exclude": [
+            "/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontGuestCheckoutWithDifferentShippingAndBillingAddressWithRestrictedCountriesForPaymentTest.xml",
+            "/app/code/Magento/Paypal/Test/Mftf/Test/StorefrontRegisteredCustomerCheckoutWithPayPalPayflowProCreditCardWithPaymentActionSaleAndVirtualQuoteAndVerifyTheOrderInBackendTest.xml",
+            "/app/code/Magento/Sales/Test/Mftf/ActionGroup/AdminClickConfigureAndAddToOrderForConfigurableProductInWishListSectionOnCreateOrderPageActionGroup.xml",
+            "/app/code/Magento/SalesRule/Test/Mftf/Test/AdminBlockCouponGeneratesUntilCartPriceRuleSavedWithSpecificCouponTypeAndAutoGenerationTickedTest.xml",
+            "/dev/tests/acceptance/tests/_data/adobe-base-image-long-name-*.jpg"
+        ]
+    },
     "extra": {
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
