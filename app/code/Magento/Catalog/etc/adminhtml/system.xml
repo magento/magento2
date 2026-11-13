@@ -36,6 +36,12 @@
                     <label>Mask for Meta Description</label>
                     <comment>Use {{name}} and {{description}} as Product Name and Product Description placeholders</comment>
                 </field>
+                <field id="apply_to_api" translate="label comment" type="select" sortOrder="50" showInDefault="1" canRestore="1">
+                    <label>Apply Meta Masks to Products Created Through Web API</label>
+                    <comment>Uses the masks above to fill meta fields missing from REST and SOAP requests that create a product.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>catalog/fields_masks_api/enabled</config_path>
+                </field>
             </group>
             <group id="recently_products" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1">
                 <label>Recently Viewed/Compared Products</label>
