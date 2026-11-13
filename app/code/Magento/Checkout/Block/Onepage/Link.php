@@ -9,7 +9,6 @@ namespace Magento\Checkout\Block\Onepage;
  * One page checkout cart link
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
@@ -43,6 +42,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return URL for checkout
+     *
      * @return string
      */
     public function getCheckoutUrl()
@@ -51,6 +52,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if Onepage Checkout is disabled
+     *
      * @return bool
      */
     public function isDisabled()
@@ -59,6 +62,8 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return true if it is possible to use the Onepage Checkout
+     *
      * @return bool
      */
     public function isPossibleOnepageCheckout()
