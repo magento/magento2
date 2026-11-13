@@ -516,7 +516,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                             );
                             $baseDiscountAmount = $discountAmount;
                         } else {
-                            // CartFixed::calculate() already took the item shares from the rule amount, based on
+                            // The CartFixed discount action already took the item shares from the rule amount, based on
                             // the shipping price it could see before shipping tax was collected. Shipping gets
                             // the rest, so the shares always add up to the rule amount.
                             $remainingAmount = max(0.0, (float) $quoteCartRules[$ruleId]);
