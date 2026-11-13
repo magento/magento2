@@ -18,6 +18,7 @@ use Magento\Indexer\Model\Indexer\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Processor;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Magento\Indexer\Model\ProcessTitle;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -61,6 +62,11 @@ class ProcessorTest extends TestCase
     private $indexerRegistryMock;
 
     /**
+     * @var ProcessTitle|MockObject
+     */
+    private $processTitleMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -81,6 +87,8 @@ class ProcessorTest extends TestCase
             ['get']
         );
 
+        $this->processTitleMock = $this->createMock(ProcessTitle::class);
+
         $indexerRegistryMock = $this->getIndexRegistryMock([]);
         $makeSharedValidMock = new MakeSharedIndexValid(
             $this->configMock,
@@ -93,7 +101,8 @@ class ProcessorTest extends TestCase
             $this->indexersFactoryMock,
             $this->viewProcessorMock,
             $makeSharedValidMock,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $this->processTitleMock
         );
     }
 
@@ -149,6 +158,41 @@ class ProcessorTest extends TestCase
         $this->indexerFactoryMock
             ->method('create')
             ->willReturnOnConsecutiveCalls($indexer1Mock, $indexer2Mock, $indexer3Mock);
+
+        $this->processTitleMock->expects($this->once())
+            ->method('setIndexerContext')
+            ->with('indexer1');
+        $this->processTitleMock->expects($this->once())
+            ->method('restore');
+
+        $this->model->reindexAllInvalid();
+    }
+
+    /**
+     * @return void
+     */
+    public function testReindexAllInvalidResetsProcessTitleOnException(): void
+    {
+        $this->configMock->expects($this->once())->method('getIndexers')->willReturn(['indexer1' => []]);
+        $this->configMock->method('getIndexer')->willReturn(['shared_index' => null]);
+
+        $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $stateMock->method('getStatus')->willReturn(StateInterface::STATUS_INVALID);
+        $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $indexerMock->method('getState')->willReturn($stateMock);
+        $indexerMock->expects($this->once())
+            ->method('reindexAll')
+            ->willThrowException(new \RuntimeException('Reindex failed'));
+        $this->indexerFactoryMock->method('create')->willReturn($indexerMock);
+
+        $this->processTitleMock->expects($this->once())
+            ->method('setIndexerContext')
+            ->with('indexer1');
+        $this->processTitleMock->expects($this->once())
+            ->method('restore');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Reindex failed');
 
         $this->model->reindexAllInvalid();
     }
@@ -217,7 +261,8 @@ class ProcessorTest extends TestCase
             $this->indexersFactoryMock,
             $this->viewProcessorMock,
             $makeSharedValidMock,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $this->processTitleMock
         );
         $model->reindexAllInvalid();
     }

@@ -16,8 +16,8 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Magento\Indexer\Model\ProcessTitle;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -58,23 +58,31 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private $logger;
 
     /**
+     * @var ProcessTitle
+     */
+    private ProcessTitle $processTitle;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerRegistry|null $indexerRegistry
      * @param DependencyInfoProvider|null $dependencyInfoProvider
      * @param MakeSharedIndexValid|null $makeSharedValid
      * @param LoggerInterface|null $logger
+     * @param ProcessTitle|null $processTitle
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         ?IndexerRegistry $indexerRegistry = null,
         ?DependencyInfoProvider $dependencyInfoProvider = null,
         ?MakeSharedIndexValid $makeSharedValid = null,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        ?ProcessTitle $processTitle = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->dependencyInfoProvider = $dependencyInfoProvider;
         $this->makeSharedValid = $makeSharedValid;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->processTitle = $processTitle ?: ObjectManager::getInstance()->get(ProcessTitle::class);
         parent::__construct($objectManagerFactory);
     }
 
@@ -99,6 +107,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         foreach ($this->getIndexers($input) as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
+                $this->processTitle->setIndexerContext($indexer->getId());
 
                 $output->write($indexer->getTitle() . ' index ');
 
@@ -133,6 +142,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $this->logger->critical($e->getMessage());
             }
         }
+
+        $this->processTitle->restore();
 
         return $returnValue;
     }

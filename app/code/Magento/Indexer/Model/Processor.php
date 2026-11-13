@@ -57,12 +57,18 @@ class Processor
     private IndexerRegistry $indexerRegistry;
 
     /**
+     * @var ProcessTitle
+     */
+    private ProcessTitle $processTitle;
+
+    /**
      * @param ConfigInterface $config
      * @param IndexerInterfaceFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param ProcessorInterface $mviewProcessor
      * @param MakeSharedIndexValid|null $makeSharedValid
      * @param IndexerRegistry|null $indexerRegistry
+     * @param ProcessTitle|null $processTitle
      */
     public function __construct(
         ConfigInterface $config,
@@ -70,7 +76,8 @@ class Processor
         Indexer\CollectionFactory $indexersFactory,
         ProcessorInterface $mviewProcessor,
         ?MakeSharedIndexValid $makeSharedValid = null,
-        ?IndexerRegistry $indexerRegistry = null
+        ?IndexerRegistry $indexerRegistry = null,
+        ?ProcessTitle $processTitle = null
     ) {
         $this->config = $config;
         $this->indexerFactory = $indexerFactory;
@@ -78,6 +85,7 @@ class Processor
         $this->mviewProcessor = $mviewProcessor;
         $this->makeSharedValid = $makeSharedValid ?: ObjectManager::getInstance()->get(MakeSharedIndexValid::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
+        $this->processTitle = $processTitle ?: ObjectManager::getInstance()->get(ProcessTitle::class);
     }
 
     /**
@@ -97,7 +105,12 @@ class Processor
                 // Skip indexers having shared index that was already complete
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
-                    $indexer->reindexAll();
+                    $this->processTitle->setIndexerContext($indexerId);
+                    try {
+                        $indexer->reindexAll();
+                    } finally {
+                        $this->processTitle->restore();
+                    }
                     $indexer->load($indexer->getId());
                     if ($indexer->isValid()) {
                         if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
