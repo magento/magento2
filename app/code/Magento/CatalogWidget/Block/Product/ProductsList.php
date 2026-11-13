@@ -479,15 +479,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getProductsCount()
     {
-        if ($this->hasData('products_count')) {
-            return $this->getData('products_count');
-        }
-
-        if (null === $this->getData('products_count')) {
+        if (!is_numeric($this->getData('products_count'))) {
             $this->setData('products_count', self::DEFAULT_PRODUCTS_COUNT);
         }
 
-        return $this->getData('products_count');
+        return (int)$this->getData('products_count');
     }
 
     /**
@@ -497,10 +493,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getProductsPerPage()
     {
-        if (!$this->hasData('products_per_page')) {
+        if (!is_numeric($this->getData('products_per_page'))) {
             $this->setData('products_per_page', self::DEFAULT_PRODUCTS_PER_PAGE);
         }
-        return $this->getData('products_per_page');
+
+        return (int)$this->getData('products_per_page');
     }
 
     /**
