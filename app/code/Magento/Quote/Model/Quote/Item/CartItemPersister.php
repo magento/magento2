@@ -7,6 +7,7 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
@@ -19,6 +20,15 @@ use Magento\Quote\Api\Data\CartItemInterface;
  */
 class CartItemPersister
 {
+    private const CONFIGURATION_KEYS = [
+        'options',
+        'super_attribute',
+        'super_group',
+        'bundle_option',
+        'bundle_option_qty',
+        'links',
+    ];
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -73,7 +83,7 @@ class CartItemPersister
                 }
                 $productType = $currentItem->getProduct()->getTypeId();
                 $buyRequestData = $this->cartItemOptionProcessor->getBuyRequest($productType, $item);
-                if (is_object($buyRequestData)) {
+                if (is_object($buyRequestData) && $this->isConfigurationChanged($currentItem, $buyRequestData)) {
                     /** Update item product options */
                     if ($quote->getIsActive()) {
                         $item = $quote->updateItem($itemId, $buyRequestData);
@@ -119,5 +129,49 @@ class CartItemPersister
             }
         }
         throw new CouldNotSaveException(__("The quote couldn't be saved."));
+    }
+
+    /**
+     * Check whether the submitted buy request configures the item differently than it is configured now
+     *
+     * @param \Magento\Quote\Model\Quote\Item $currentItem
+     * @param DataObject $buyRequest
+     * @return bool
+     */
+    private function isConfigurationChanged($currentItem, DataObject $buyRequest): bool
+    {
+        $currentData = $currentItem->getBuyRequest()->getData();
+        $newData = $buyRequest->getData();
+        unset($newData['qty']);
+
+        foreach (self::CONFIGURATION_KEYS as $key) {
+            if (isset($currentData[$key]) !== isset($newData[$key])) {
+                return true;
+            }
+        }
+        foreach ($newData as $key => $value) {
+            if (!array_key_exists($key, $currentData)
+                || json_encode($this->stringify($value)) !== json_encode($this->stringify($currentData[$key]))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Cast scalars to strings recursively so that "1" and 1 compare equal
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function stringify($value)
+    {
+        if (is_array($value)) {
+            ksort($value);
+            return array_map([$this, 'stringify'], $value);
+        }
+        return is_scalar($value) ? (string)$value : $value;
     }
 }
