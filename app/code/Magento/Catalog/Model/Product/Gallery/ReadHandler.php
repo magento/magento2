@@ -17,6 +17,11 @@ use Magento\Catalog\Model\Product;
 class ReadHandler implements ExtensionInterface
 {
     /**
+     * Read argument holding the media gallery rows of the entity, already loaded by the caller
+     */
+    public const PRELOADED_ENTRIES = 'preloaded_media_gallery_entries';
+
+    /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
      * @since 101.0.0
      */
@@ -52,12 +57,11 @@ class ReadHandler implements ExtensionInterface
      * @param Product $entity
      * @param array $arguments
      * @return object
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @since 101.0.0
      */
     public function execute($entity, $arguments = [])
     {
-        $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
+        $mediaEntries = $arguments[self::PRELOADED_ENTRIES] ?? $this->resourceModel->loadProductGalleryByAttributeId(
             $entity,
             $this->getAttribute()->getAttributeId()
         );
