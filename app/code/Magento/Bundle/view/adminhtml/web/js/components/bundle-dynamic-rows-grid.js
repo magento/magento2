@@ -193,6 +193,48 @@ define([
                     this.processingAddChild(newRecord, ++recordIndex, newRecord[this.identificationProperty]);
                 }, this);
             }
+        },
+
+        /**
+         * Change page to next
+         */
+        nextPage: function () {
+            var validate;
+
+            validate = this.validateElements();
+            if (validate) {
+                this._super();
+            }
+        },
+
+        /**
+         * Change page to previous
+         */
+        previousPage: function () {
+            var validate;
+
+            validate = this.validateElements();
+            if (validate) {
+                this._super();
+            }
+        },
+
+        /**
+         * Check validate when change page
+         */
+        validateElements: function () {
+            var changed,
+                validate,
+                valid = true;
+
+            changed = this.getChangedElems(this.elems());
+            changed.forEach(function (elem) {
+                validate = elem.validate();
+                if (!validate.valid) {
+                    valid = false;
+                }
+            }, this);
+            return valid;
         }
     });
 });
