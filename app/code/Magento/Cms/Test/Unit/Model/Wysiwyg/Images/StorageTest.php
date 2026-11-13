@@ -291,7 +291,10 @@ class StorageTest extends TestCase
             'folder1',
             'folder2/subfolder21',
             'folder2/subfolder22',
-            'folder3/subfolder31/subfolder32'
+            'folder3/subfolder31/subfolder32',
+            'abc-',
+            'abc',
+            'mid-word'
         ];
         $this->coreConfigMock->expects($this->any())
             ->method('getValue')
@@ -388,7 +391,7 @@ class StorageTest extends TestCase
         $this->generalTestGetDirsCollection(
             self::STORAGE_ROOT_DIR,
             1,
-            '/^(target|folder1|folder2|folder3)$/'
+            '/^(target|folder1|folder2|folder3|abc-|abc|mid-word)$/'
         );
     }
 
@@ -537,7 +540,7 @@ class StorageTest extends TestCase
             [
                 'path' => self::STORAGE_ROOT_DIR,
                 'callNum' => 1,
-                'dirsFilter' => '/^(target|folder1|folder2|folder3)$/'
+                'dirsFilter' => '/^(target|folder1|folder2|folder3|abc-|abc|mid-word)$/'
             ],
             [
                 'path' => self::STORAGE_ROOT_DIR . 'target',
@@ -565,6 +568,23 @@ class StorageTest extends TestCase
                 'path' => self::STORAGE_ROOT_DIR . 'unknown',
                 'callNum' => 1,
                 'dirsFilter' => '/^()$/'
+            ],
+            [
+                'path' => self::STORAGE_ROOT_DIR . 'abc-',
+                'callNum' => 0,
+            ],
+            [
+                'path' => self::STORAGE_ROOT_DIR . 'abc-/subfolder',
+                'callNum' => 0,
+            ],
+            [
+                'path' => self::STORAGE_ROOT_DIR . 'abc-def',
+                'callNum' => 1,
+                'dirsFilter' => '/^()$/'
+            ],
+            [
+                'path' => self::STORAGE_ROOT_DIR . 'mid-word/subfolder',
+                'callNum' => 0,
             ],
         ];
     }
