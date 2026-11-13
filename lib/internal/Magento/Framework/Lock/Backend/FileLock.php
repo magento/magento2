@@ -61,6 +61,10 @@ class FileLock implements LockManagerInterface
         $this->fileDriver = $fileDriver;
         $this->path = rtrim($path, '/') . '/';
 
+        if (!$this->fileDriver->getRealPath($this->path)) {
+            $this->path = BP . DIRECTORY_SEPARATOR . $this->path;
+        }
+
         try {
             if (!$this->fileDriver->isExists($this->path)) {
                 $this->fileDriver->createDirectory($this->path);
