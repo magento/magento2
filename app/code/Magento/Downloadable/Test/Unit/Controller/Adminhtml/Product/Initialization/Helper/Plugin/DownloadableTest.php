@@ -181,4 +181,19 @@ class DownloadableTest extends TestCase
             [null],
         ];
     }
+
+    public function testAfterInitializeSkipsDownloadableDataWhenIsDownloadableUnchecked()
+    {
+        $this->requestMock->method('getParam')->with('is_downloadable')->willReturn('0');
+        $this->requestMock->method('getPost')
+            ->with('downloadable')
+            ->willReturn(['sample' => [['sample_id' => '1', 'is_delete' => '']]]);
+        $this->productMock->expects($this->never())->method('setDownloadableData');
+        $this->productMock->expects($this->never())->method('getExtensionAttributes');
+
+        $this->assertSame(
+            $this->productMock,
+            $this->downloadablePlugin->afterInitialize($this->subjectMock, $this->productMock)
+        );
+    }
 }
