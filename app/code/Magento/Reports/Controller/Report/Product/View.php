@@ -59,7 +59,9 @@ class View implements HttpPostActionInterface
     {
         $result = $this->resultJsonFactory->create();
 
-        if ($this->reportStatus->isReportEnabled((string)Event::EVENT_PRODUCT_VIEW)) {
+        if ($this->reportStatus->isReportEnabled((string)Event::EVENT_PRODUCT_VIEW)
+            && !$this->customerVisitor->isIgnoredUserAgent()
+        ) {
             $productId = $this->request->getParam('product_id');
 
             $viewData['product_id'] = $productId;
