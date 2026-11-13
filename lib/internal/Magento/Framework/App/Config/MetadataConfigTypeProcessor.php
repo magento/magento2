@@ -7,6 +7,7 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config\Data\EnvironmentValueProcessorInterface;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -39,6 +40,13 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      * @var ConfigPathResolver
      */
     private $configPathResolver;
+
+    /**
+     * Environment values indexed by metadata path, scope type and code for the current process call.
+     *
+     * @var array|null
+     */
+    private $environmentValues;
 
     /**
      * @param ProcessorFactory $processorFactory
@@ -104,7 +112,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     /**
      * Process data by sections: stores, default, websites and by scope codes.
      *
-     * Doesn't processes configuration values that present in $_ENV variables.
+     * Uses environment processing when supported for values provided through $_ENV variables.
      *
      * @param array $data An array of scope configuration
      * @param string $scope The configuration scope
@@ -118,10 +126,11 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     ) {
         foreach ($this->_metadata as $path => $metadata) {
             try {
-                $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
-                if (!empty($this->configSource->get($configPath))) {
-                    continue;
+                if ($this->environmentValues === null) {
+                    $this->environmentValues = $this->getEnvironmentValues($this->configSource->get());
                 }
+                $configPath = $this->configPathResolver->resolve($path, $scope, $scopeCode);
+                $isEnvironmentValue = !empty($this->configSource->get($configPath));
             } catch (\Throwable $exception) {
                 //Failed to load scopes or config source, perhaps config data received is outdated.
                 return $data;
@@ -130,12 +139,78 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
             if (isset($metadata['backendModel'])) {
                 /** @var \Magento\Framework\App\Config\Data\ProcessorInterface $processor */
                 $processor = $this->_processorFactory->get($metadata['backendModel']);
-                $value = $processor->processValue($this->_getValue($data, $path));
+                $value = $this->_getValue($data, $path);
+                $isEnvironmentValue = $isEnvironmentValue || (is_scalar($value)
+                    && in_array((string)$value, $this->getEnvironmentCandidates($path, $scope, $scopeCode), true));
+                if ($isEnvironmentValue) {
+                    if (!$processor instanceof EnvironmentValueProcessorInterface) {
+                        continue;
+                    }
+                    $value = $processor->processEnvironmentValue($value);
+                } else {
+                    $value = $processor->processValue($value);
+                }
                 $this->_setValue($data, $path, $value);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Environment values the current scope may have inherited the value of the given path from.
+     *
+     * @param string $path
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @return string[]
+     */
+    private function getEnvironmentCandidates(string $path, string $scope, $scopeCode): array
+    {
+        $environmentValues = $this->environmentValues[$path] ?? [];
+        $candidates = array_values($environmentValues[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] ?? []);
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT && isset($environmentValues[$scope][$scopeCode])) {
+            $candidates[] = $environmentValues[$scope][$scopeCode];
+        }
+        if ($scope === 'stores') {
+            foreach ($environmentValues['websites'] ?? [] as $websiteValue) {
+                $candidates[] = $websiteValue;
+            }
+        }
+
+        return $candidates;
+    }
+
+    /**
+     * Collect scalar environment values for each backend metadata path, grouped by scope type and code.
+     *
+     * @param array $environmentData
+     * @return array
+     */
+    private function getEnvironmentValues(array $environmentData): array
+    {
+        $scopeData = [
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT => [
+                '' => $environmentData[ScopeConfigInterface::SCOPE_TYPE_DEFAULT] ?? []
+            ],
+            'websites' => $environmentData['websites'] ?? [],
+            'stores' => $environmentData['stores'] ?? []
+        ];
+        $values = [];
+        foreach ($this->_metadata as $path => $metadata) {
+            if (!isset($metadata['backendModel'])) {
+                continue;
+            }
+            foreach ($scopeData as $scope => $scopes) {
+                foreach ($scopes as $scopeCode => $data) {
+                    $value = $this->_getValue($data, $path);
+                    if (is_scalar($value)) {
+                        $values[$path][$scope][$scopeCode] = (string)$value;
+                    }
+                }
+            }
+        }
+        return $values;
     }
 
     /**
@@ -146,6 +221,7 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
      */
     public function process(array $rawData)
     {
+        $this->environmentValues = null;
         $processedData = [];
         foreach ($rawData as $scope => $scopeData) {
             if ($scope == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
