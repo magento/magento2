@@ -726,6 +726,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->addMediaGalleryData();
         }
 
+        foreach ($this->_items as $item) {
+            $item->setDataChanges(false);
+        }
+
         if (count($this)) {
             $this->_eventManager->dispatch('catalog_product_collection_load_after', ['collection' => $this]);
         }
