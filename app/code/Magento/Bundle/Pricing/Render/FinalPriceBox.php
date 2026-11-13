@@ -24,7 +24,7 @@ class FinalPriceBox extends CatalogRender\FinalPriceBox
     {
         /** @var FinalPrice $bundlePrice */
         $bundlePrice = $this->getPriceType(FinalPrice::PRICE_CODE);
-        $showRange = $bundlePrice->getMinimalPrice() != $bundlePrice->getMaximalPrice();
+        $showRange = $bundlePrice->getMinimalPrice()->getValue() != $bundlePrice->getMaximalPrice()->getValue();
 
         if (!$showRange) {
             //Check the custom options, if any
