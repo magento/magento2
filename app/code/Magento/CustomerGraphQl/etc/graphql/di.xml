@@ -244,6 +244,7 @@
     <type name="Magento\Customer\Model\AccountManagement">
         <plugin name="merge_order_after_customer_signup"
                 type="Magento\CustomerGraphQl\Plugin\Model\MergeGuestOrder" />
+        <plugin name="validate_captcha_graphql" type="Magento\Customer\Model\Plugin\ValidateCaptcha" sortOrder="10" />
     </type>
     <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
         <arguments>
@@ -251,5 +252,8 @@
                 <item name="authorizationValidator" xsi:type="object">Magento\CustomerGraphQl\Controller\HttpRequestValidator\AuthorizationRequestValidator</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="restrictedSearchFields" type="Magento\Customer\Model\Plugin\CustomerRepository\RestrictedFieldsPlugin" sortOrder="1"/>
     </type>
 </config>
