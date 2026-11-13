@@ -14,11 +14,15 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Mview\View;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Model\Indexer;
+use Magento\Indexer\Model\Indexer\DeferredCacheCleaner;
 use Magento\Indexer\Model\Indexer\DependencyDecorator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DependencyDecoratorTest extends TestCase
 {
     /**
@@ -324,6 +328,38 @@ class DependencyDecoratorTest extends TestCase
             ->method('get')
             ->willReturnMap($calls);
         $this->dependencyDecorator->reindexList($inputIds);
+    }
+
+    #[DataProvider('reindexPartialDataProvider')]
+    public function testReindexPartialFlushesCacheCleanerWhenIndexerFails(string $method, mixed $argument): void
+    {
+        $exception = new \RuntimeException('Reindex failed');
+        $cacheCleaner = $this->createMock(DeferredCacheCleaner::class);
+        $cacheCleaner->expects($this->once())->method('start');
+        $cacheCleaner->expects($this->once())->method('flush');
+        $this->indexerMock->expects($this->once())
+            ->method($method)
+            ->with($argument)
+            ->willThrowException($exception);
+        $this->dependencyInfoProviderMock->expects($this->never())
+            ->method('getIndexerIdsToRunAfter');
+        $decorator = new DependencyDecorator(
+            $this->indexerMock,
+            $this->dependencyInfoProviderMock,
+            $this->indexerRegistryMock,
+            $cacheCleaner
+        );
+
+        $this->expectExceptionObject($exception);
+        $decorator->$method($argument);
+    }
+
+    public static function reindexPartialDataProvider(): array
+    {
+        return [
+            'row' => ['reindexRow', 100200],
+            'list' => ['reindexList', [100200, 100300]],
+        ];
     }
 
     /**
