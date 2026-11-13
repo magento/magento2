@@ -876,5 +876,20 @@ class CustomerRepositoryTest extends TestCase
 
         $this->assertSame(self::NEW_CUSTOMER_EMAIL, $updatedDefaultOrder->getCustomerEmail());
         $this->assertSame(self::CUSTOM_ORDER_EMAIL, $unchangedCustomOrder->getCustomerEmail());
+
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $gridEmails = $connection->fetchPairs(
+            $connection->select()
+                ->from($resource->getTableName('sales_order_grid'), ['entity_id', 'customer_email'])
+                ->where('customer_id = ?', $reloadedCustomer->getId())
+        );
+        $this->assertEquals(
+            [
+                $defaultOrder->getEntityId() => self::NEW_CUSTOMER_EMAIL,
+                $customOrder->getEntityId() => self::CUSTOM_ORDER_EMAIL,
+            ],
+            $gridEmails
+        );
     }
 }
