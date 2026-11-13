@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -73,7 +72,7 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
 
         return $customPrice !== null
             ? $this->convertPrice($customPrice)
-            : $this->priceCurrency->format($product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
+            : $this->priceCurrency->format($this->getPriceWithCustomOptions($product));
     }
 
     /**
