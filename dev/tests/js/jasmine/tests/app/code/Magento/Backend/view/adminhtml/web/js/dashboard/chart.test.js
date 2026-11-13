@@ -120,6 +120,42 @@ define([
             expect(canvas.parent().is(':visible')).toBeTrue();
             expect(canvas.parent().next('.dashboard-diagram-nodata').is(':visible')).toBeFalse();
         });
+        it('should render the chart at its final size when a hidden container is revealed', (done) => {
+            const request = $.Deferred(),
+                container = canvas.parent();
+            let chartWidget;
+
+            /**
+             * Waits until Chart.js has measured the revealed container.
+             */
+            function waitForAttach() {
+                const element = chartWidget.chart.getDatasetMeta(0).data[0],
+                    props = ['x', 'y', 'base', 'width'];
+
+                if (!chartWidget.chart.width || !element) {
+                    setTimeout(waitForAttach, 10);
+
+                    return;
+                }
+
+                props.forEach((prop) => {
+                    expect(element[prop]).withContext(prop).toBe(element.getProps(props, true)[prop]);
+                });
+                done();
+            }
+
+            container.css({width: '400px', height: '200px'}).hide();
+            chartWidget = getWidgetInstance(canvas, {}, {
+                _request: function () {
+                    return request;
+                }
+            });
+
+            expect(chartWidget.chart.width).toBe(0);
+
+            request.resolve(dataProvider['1m']);
+            waitForAttach();
+        });
         it('should update the chart when period changes', () => {
             const period = '1m',
                 chartWidget = getWidgetInstance(canvas);
