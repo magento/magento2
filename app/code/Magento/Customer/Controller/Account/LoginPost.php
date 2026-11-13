@@ -23,6 +23,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Controller\AbstractAccount;
+use Magento\Customer\ViewModel\CookieSettings;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -32,6 +34,11 @@ use Magento\Framework\Phrase;
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {
+    /**
+     * Cookie that makes customer-data.js reload all sections on the next page
+     */
+    private const SECTION_DATA_CLEAN_COOKIE = 'section_data_clean';
+
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface
      */
@@ -146,6 +153,33 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     }
 
     /**
+     * Make the next page reload all customer data sections
+     *
+     * The customer-data.js script reloads the sections a sign-in changes from a listener on the form's submit
+     * event. A form submitted before that script has loaded skips it, and the header and mini-cart then keep
+     * showing a guest. The section_data_clean cookie (also used on store switch) makes customer-data.js reload
+     * every section on the next page and then clears it.
+     *
+     * @return void
+     */
+    private function requestCustomerDataReload(): void
+    {
+        $metadata = $this->getCookieMetadataFactory()->createPublicCookieMetadata()
+            ->setPath('/')
+            ->setHttpOnly(false);
+        // customer-data.js clears the cookie with the configured cookie domain; a host-only cookie would outlive that.
+        $domain = (string)$this->getScopeConfig()->getValue(
+            CookieSettings::XML_PATH_COOKIE_DOMAIN,
+            ScopeInterface::SCOPE_STORE
+        );
+        if ($domain !== '') {
+            $metadata->setDomain($domain);
+        }
+        // A text value: customer-data.js tests it with _.isEmpty(), which is true for any number.
+        $this->getCookieManager()->setPublicCookie(self::SECTION_DATA_CLEAN_COOKIE, 'login', $metadata);
+    }
+
+    /**
      * @inheritDoc
      */
     public function createCsrfValidationException(
@@ -195,6 +229,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         $metadata->setPath('/');
                         $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
                     }
+                    $this->requestCustomerDataReload();
                     $redirectUrl = $this->accountRedirect->getRedirectCookie();
                     if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectUrl) {
                         $this->accountRedirect->clearRedirectCookie();
