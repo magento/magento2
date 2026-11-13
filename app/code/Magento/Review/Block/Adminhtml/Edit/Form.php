@@ -36,6 +36,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
+    /**
+     * @var \Magento\Framework\Url\EncoderInterface
+     */
+    private $urlEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -45,6 +49,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Customer\APi\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Helper\Data $reviewData
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param array $data
      */
     public function __construct(
@@ -55,12 +60,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Helper\Data $reviewData,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
         array $data = []
     ) {
         $this->_reviewData = $reviewData;
         $this->customerRepository = $customerRepository;
         $this->_productFactory = $productFactory;
         $this->_systemStore = $systemStore;
+        $this->urlEncoder = $urlEncoder;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -120,10 +127,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         try {
+            $fromPath=$this->urlEncoder->encode('review/product/edit');
             $customer = $this->customerRepository->getById($review->getCustomerId());
             $customerText = __(
                 '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-                $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']),
+                $this->getUrl(
+                    'customer/index/edit',
+                    [
+                        'id' => $customer->getId(),
+                        'active_tab' => 'review',
+                        'fromPath' => $fromPath,
+                        'review_id' => $this->getRequest()->getParam('id')
+                    ]
+                ),
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail())
