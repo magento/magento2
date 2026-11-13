@@ -274,6 +274,8 @@ class QuoteManagementTest extends TestCase
                 'setCustomerFirstname',
                 'setCustomerLastname',
                 'setCustomerMiddlename',
+                'setCustomerPrefix',
+                'setCustomerSuffix',
                 'assignCustomer',
                 'collectTotals',
                 'getBillingAddress',
@@ -870,6 +872,8 @@ class QuoteManagementTest extends TestCase
         $firstName = 'TestFirst';
         $middleName = 'TestMiddle';
         $lastName = 'TestLast';
+        $prefix = 'TestPrefix';
+        $suffix = 'TestSuffix';
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -900,7 +904,9 @@ class QuoteManagementTest extends TestCase
                 'getEmail',
                 'getFirstname',
                 'getLastname',
-                'getMiddlename'
+                'getMiddlename',
+                'getPrefix',
+                'getSuffix'
             ]
         );
         $addressMock->expects($this->any())->method('getEmail')->willReturn($email);
@@ -932,6 +938,20 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('setCustomerLastname')
             ->willReturn($middleName);
+        $addressMock->expects($this->exactly(2))
+            ->method('getPrefix')
+            ->willReturn($prefix);
+        $addressMock->expects($this->exactly(2))
+            ->method('getSuffix')
+            ->willReturn($suffix);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerPrefix')
+            ->with($prefix)
+            ->willReturn($prefix);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerSuffix')
+            ->with($suffix)
+            ->willReturn($suffix);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(GroupInterface::NOT_LOGGED_IN_ID);
