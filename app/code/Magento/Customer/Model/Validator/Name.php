@@ -26,15 +26,15 @@ class Name extends AbstractValidator
     public function isValid($customer)
     {
         if (!$this->isValidName($customer->getFirstname())) {
-            parent::_addMessages([['firstname' => 'First Name is not valid!']]);
+            parent::_addMessages([['firstname' => __('First Name is not valid!')]]);
         }
 
         if (!$this->isValidName($customer->getLastname())) {
-            parent::_addMessages([['lastname' => 'Last Name is not valid!']]);
+            parent::_addMessages([['lastname' => __('Last Name is not valid!')]]);
         }
 
         if (!$this->isValidName($customer->getMiddlename())) {
-            parent::_addMessages([['middlename' => 'Middle Name is not valid!']]);
+            parent::_addMessages([['middlename' => __('Middle Name is not valid!')]]);
         }
 
         return count($this->_messages) == 0;
