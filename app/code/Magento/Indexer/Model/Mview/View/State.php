@@ -99,6 +99,22 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     }
 
     /**
+     * Advance the saved and runtime cursor only while this view remains working.
+     *
+     * @param int $versionId
+     * @return bool Whether the checkpoint was advanced.
+     */
+    public function updateVersionIdIfWorking(int $versionId): bool
+    {
+        if ($this->_getResource()->updateVersionIdIfWorking($this->getViewId(), $versionId) > 0) {
+            $this->setVersionId($versionId);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Processing object before save data
      *
      * @return $this
@@ -150,9 +166,8 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         $status = $this->getData('status');
         if ($this->isUseApplicationLock()) {
-            if (
-                $status == \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING &&
-                !$this->lockManager->isLocked($this->lockPrefix . $this->getViewId())
+            if ($status == \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING
+                && !$this->lockManager->isLocked($this->lockPrefix . $this->getViewId())
             ) {
                 return \Magento\Framework\Mview\View\StateInterface::STATUS_IDLE;
             }
