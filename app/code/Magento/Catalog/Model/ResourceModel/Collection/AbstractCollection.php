@@ -276,11 +276,15 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 $this->getDefaultStoreId()
             );
 
-            $this->getSelect()->{$method}(
+            $this->getSelect()->joinLeft(
                 [$defAlias => $attribute->getBackend()->getTable()],
                 $defCondition,
                 []
             );
+
+            if ($method === 'joinInner') {
+                $this->getSelect()->where("{$tableAlias}.value_id IS NOT NULL OR {$defAlias}.value_id IS NOT NULL");
+            }
 
             $method = 'joinLeft';
             $fieldAlias = $this->getConnection()->getCheckSql(
