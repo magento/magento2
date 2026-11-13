@@ -117,18 +117,4 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
         $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
         return $expectedLinesCount === $actualCount;
     }
-
-    /**
-     * Workaround for https://bugs.php.net/bug.php?id=72286
-     * phpcs:disable Magento2.Functions.StaticFunction
-     */
-    public static function tearDownAfterClass(): void
-    {
-        // phpcs:enable Magento2.Functions.StaticFunction
-        if (version_compare(phpversion(), '7') == -1) {
-            $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
-            $config = Bootstrap::getObjectManager()->get(\Magento\Amqp\Model\Config::class);
-            $closeConnection->invoke($config);
-        }
-    }
 }
