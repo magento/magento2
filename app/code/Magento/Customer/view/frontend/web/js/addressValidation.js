@@ -37,6 +37,14 @@ define([
             this.zipInput = $(this.options.selectors.zip, this.element);
             this.countrySelect = $(this.options.selectors.country, this.element);
 
+            this._on(window, {
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        $(this.options.selectors.button, this.element).attr('disabled', false);
+                    }
+                }
+            });
+
             this.element.validation({
 
                 /**
