@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Filter\VariableResolver;
 
 use Magento\Email\Model\AbstractTemplate;
+use Magento\Framework\Api\AbstractSimpleObject;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\Template\Tokenizer\VariableFactory;
@@ -81,6 +82,9 @@ class StrictResolver implements VariableResolverInterface
         if ($stackArgs[$i]['type'] == 'property') {
             if (is_array($stackArgs[$i - 1]['variable'])) {
                 $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable'][$stackArgs[$i]['name']];
+            } elseif ($stackArgs[$i - 1]['variable'] instanceof AbstractSimpleObject) {
+                $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']->__toArray()[$stackArgs[$i]['name']]
+                    ?? null;
             } else {
                 // Strict mode should not call getter methods except DataObject's getData
                 $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']
@@ -116,7 +120,9 @@ class StrictResolver implements VariableResolverInterface
             );
         } else {
             $dataKey = $this->extractDataKeyFromGetter($stackArgs[$i]['name']);
-            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']->getData($dataKey);
+            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable'] instanceof AbstractSimpleObject
+                ? ($stackArgs[$i - 1]['variable']->__toArray()[$dataKey] ?? null)
+                : $stackArgs[$i - 1]['variable']->getData($dataKey);
         }
     }
 
@@ -164,6 +170,7 @@ class StrictResolver implements VariableResolverInterface
         return isset($stackArgs[$i - 1]['variable'])
             && (
                 $stackArgs[$i - 1]['variable'] instanceof DataObject
+                || $stackArgs[$i - 1]['variable'] instanceof AbstractSimpleObject
                 || $stackArgs[$i - 1]['variable'] instanceof AbstractTemplate
                 || is_array($stackArgs[$i - 1]['variable'])
             );
