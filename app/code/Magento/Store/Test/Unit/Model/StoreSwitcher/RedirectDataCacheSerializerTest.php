@@ -12,6 +12,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreSwitcher\RedirectDataCacheSerializer;
+use Magento\Store\Model\StoreSwitcher\RedirectDataNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -81,7 +82,7 @@ class RedirectDataCacheSerializerTest extends TestCase
 
     public function testUnserializeShouldThrowExceptionIfCacheHasExpired(): void
     {
-        $this->expectExceptionObject(new InvalidArgumentException('Couldn\'t retrieve data from cache.'));
+        $this->expectExceptionObject(new RedirectDataNotFoundException('Couldn\'t retrieve data from cache.'));
         $this->cache->expects($this->once())
             ->method('load')
             ->with('store_switch_' . self::RANDOM_STRING)
