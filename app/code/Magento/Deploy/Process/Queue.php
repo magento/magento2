@@ -241,6 +241,10 @@ class Queue
                             $packages,
                             $packages[$dependencyName]
                         );
+                        // In parallel mode the dependency has only been forked, wait until it is written
+                        if (!$this->isDeployed($dependency)) {
+                            $dependenciesNotFinished = true;
+                        }
                     }
                 }
             }
