@@ -164,6 +164,7 @@ define([
             additionalFields: [],
             additionalInvalid: false,
             selectorPrefix: '.page-content',
+            collapsibleSelector: '.admin__collapsible-content',
             messagesClass: 'messages',
             errorClass: '.admin__field._error',
             eventPrefix: '.${ $.index }',
@@ -277,10 +278,29 @@ define([
             var invalidField = _.find(this.delegate('checkInvalid'));
 
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
+                this.focusInvalidOnCollapsibleOpen(invalidField);
                 invalidField.focused(true);
             }
 
             return this;
+        },
+
+        /**
+         * Add an event listener to the collapsible content block which triggers
+         * invalid input focusing when collapsible is open.
+         *
+         * @param {Object} invalidField
+         */
+        focusInvalidOnCollapsibleOpen: function (invalidField) {
+            var collapsibleContent = $('#' + invalidField.uid).closest(this.collapsibleSelector);
+
+            if (collapsibleContent.length > 0) {
+                collapsibleContent
+                    .off('transitionend')
+                    .one('transitionend', function () {
+                        invalidField.focused(true);
+                    });
+            }
         },
 
         /**
