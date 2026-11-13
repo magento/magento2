@@ -26,7 +26,7 @@ class StoreUrl implements ItemProviderInterface
      * @var ConfigReaderInterface
      */
     private $configReader;
-    
+
     /**
      * StoreUrlSitemapItemResolver constructor.
      *
@@ -46,12 +46,20 @@ class StoreUrl implements ItemProviderInterface
      */
     public function getItems($storeId)
     {
-        $items[] = $this->itemFactory->create([
+        $items[] = $this->itemFactory->create($this->prepareParams(null, $storeId));
+
+        return $items;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepareParams($item, $storeId)
+    {
+        return [
             'url' => '',
             'priority' => $this->configReader->getPriority($storeId),
             'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-        ]);
-
-        return $items;
+        ];
     }
 }
