@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableOldPriceExcludingTaxTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Old price with catalog prices including tax and display excluding tax"/>
+            <title value="Old price of a selected variation stays excluding tax"/>
+            <description value="Old price of a selected variation stays excluding tax"/>
+            <severity value="MAJOR"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set tax/calculation/based_on origin" stepKey="setTaxBasedOnOrigin"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 1" stepKey="setCatalogPricesIncludingTax"/>
+            <magentoCLI command="config:set tax/display/type 1" stepKey="setDisplayExcludingTax"/>
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createOption1">
+                <requiredEntity createDataKey="createAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createOption2">
+                <requiredEntity createDataKey="createAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addToSet">
+                <requiredEntity createDataKey="createAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getOption1">
+                <requiredEntity createDataKey="createAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getOption2">
+                <requiredEntity createDataKey="createAttribute"/>
+            </getData>
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigurable">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createChild1">
+                <requiredEntity createDataKey="createAttribute"/>
+                <requiredEntity createDataKey="getOption1"/>
+                <field key="price">108.25</field>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createChild2">
+                <requiredEntity createDataKey="createAttribute"/>
+                <requiredEntity createDataKey="getOption2"/>
+                <field key="price">216.50</field>
+            </createData>
+            <createData entity="specialProductPrice" stepKey="specialChild1">
+                <requiredEntity createDataKey="createChild1"/>
+                <field key="price">64.95</field>
+            </createData>
+            <createData entity="specialProductPrice" stepKey="specialChild2">
+                <requiredEntity createDataKey="createChild2"/>
+                <field key="price">129.90</field>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigurableOption">
+                <requiredEntity createDataKey="createConfigurable"/>
+                <requiredEntity createDataKey="createAttribute"/>
+                <requiredEntity createDataKey="getOption1"/>
+                <requiredEntity createDataKey="getOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addChild1">
+                <requiredEntity createDataKey="createConfigurable"/>
+                <requiredEntity createDataKey="createChild1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addChild2">
+                <requiredEntity createDataKey="createConfigurable"/>
+                <requiredEntity createDataKey="createChild2"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigurable" stepKey="deleteConfigurable"/>
+            <deleteData createDataKey="createChild1" stepKey="deleteChild1"/>
+            <deleteData createDataKey="createChild2" stepKey="deleteChild2"/>
+            <deleteData createDataKey="createAttribute" stepKey="deleteAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <magentoCLI command="config:set tax/calculation/based_on shipping" stepKey="resetTaxBasedOn"/>
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0" stepKey="resetCatalogPrices"/>
+            <magentoCLI command="config:set tax/display/type 1" stepKey="resetDisplay"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfter">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createConfigurable.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$createOption2.option[store_labels][1][label]$$" stepKey="selectVariation2"/>
+        <waitForText selector=".product-info-main [data-price-type='basePrice'] .price" userInput="$120.00" stepKey="waitFinalVariation2"/>
+        <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldVariation2"/>
+        <assertEquals stepKey="assertOldVariation2">
+            <actualResult type="const">$grabOldVariation2</actualResult>
+            <expectedResult type="string">$200.00</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector=".product-info-main [data-price-type='basePrice'] .price" stepKey="grabFinalVariation2"/>
+        <assertEquals stepKey="assertFinalVariation2">
+            <actualResult type="const">$grabFinalVariation2</actualResult>
+            <expectedResult type="string">$120.00</expectedResult>
+        </assertEquals>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$createOption1.option[store_labels][1][label]$$" stepKey="selectVariation1"/>
+        <waitForText selector=".product-info-main [data-price-type='basePrice'] .price" userInput="$60.00" stepKey="waitFinalVariation1"/>
+        <grabTextFrom selector=".product-info-main .old-price .price" stepKey="grabOldVariation1"/>
+        <assertEquals stepKey="assertOldVariation1">
+            <actualResult type="const">$grabOldVariation1</actualResult>
+            <expectedResult type="string">$100.00</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector=".product-info-main [data-price-type='basePrice'] .price" stepKey="grabFinalVariation1"/>
+        <assertEquals stepKey="assertFinalVariation1">
+            <actualResult type="const">$grabFinalVariation1</actualResult>
+            <expectedResult type="string">$60.00</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -56,9 +56,11 @@ class Adjustment extends AbstractAdjustment
             $this->amountRender->setDisplayValue(
                 $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
             );
-            if ($this->taxHelper->priceIncludesTax() && $this->amountRender->getPriceType() == 'finalPrice') {
+            if ($this->taxHelper->priceIncludesTax()
+                && in_array($this->amountRender->getPriceType(), ['finalPrice', 'oldPrice'], true)
+            ) {
                 // for dynamic calculations of prices with any options, use the base price amount
-                $this->amountRender->setPriceType('basePrice');
+                $this->amountRender->setPriceType($this->getDataPriceType());
             }
         }
         return $this->toHtml();

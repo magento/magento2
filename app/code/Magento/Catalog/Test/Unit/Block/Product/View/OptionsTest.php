@@ -136,7 +136,7 @@ class OptionsTest extends TestCase
         $catalogDataMock->method('getTaxPrice')
             ->willReturnMap([
                 [$productMock, 17.842134, true, null, null, null, null, null, false, 17.842134],
-                [$productMock, 17.842134, false, null, null, null, null, null, false, 17.842134],
+                [$productMock, 17.842134, false, null, null, null, null, null, false, 15.25],
                 [$productMock, 35.67, true, null, null, null, null, null, false, 35.67]
             ]);
 
@@ -156,12 +156,15 @@ class OptionsTest extends TestCase
         $expectedConfig = [
             1 => [
                 'prices' => [
+                    'baseOldPrice' => [
+                        'amount' => 15.25
+                    ],
                     'oldPrice' => [
                         'amount' => 17.842134,
                         'adjustments' => []
                     ],
                     'basePrice' => [
-                        'amount' => 17.842134
+                        'amount' => 15.25
                     ],
                     'finalPrice' => [
                         'amount' => 17.842134

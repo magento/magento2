@@ -317,6 +317,51 @@ class AdjustmentTest extends TestCase
         $this->model->render($amountRender, $arguments);
     }
 
+    /**
+     * The storefront scripts replace a price by the amount stored under its type, so a price shown excluding tax
+     * has to refer to the amount excluding tax.
+     */
+    #[DataProvider('excludingTaxPriceTypeDataProvider')]
+    public function testPriceTypeWhenPriceIsDisplayedExcludingTax(
+        bool $priceIncludesTax,
+        string $priceType,
+        ?string $expectedPriceType
+    ): void {
+        $amountMock = $this->createMock(AmountInterface::class);
+        $amountRender = $this->createPartialMockWithReflection(
+            Amount::class,
+            ['getAmount', 'getPriceType', 'setPriceType', 'setDisplayValue']
+        );
+        $amountRender->method('getAmount')->willReturn($amountMock);
+        $amountRender->method('getPriceType')->willReturn($priceType);
+
+        $this->taxHelperMock->method('displayBothPrices')->willReturn(false);
+        $this->taxHelperMock->method('displayPriceExcludingTax')->willReturn(true);
+        $this->taxHelperMock->method('priceIncludesTax')->willReturn($priceIncludesTax);
+
+        if ($expectedPriceType === null) {
+            $amountRender->expects($this->never())->method('setPriceType');
+        } else {
+            $amountRender->expects($this->once())->method('setPriceType')->with($expectedPriceType);
+        }
+
+        $this->model->render($amountRender, []);
+    }
+
+    /**
+     * @return array
+     */
+    public static function excludingTaxPriceTypeDataProvider(): array
+    {
+        return [
+            'final price, catalog prices include tax' => [true, 'finalPrice', 'basePrice'],
+            'old price, catalog prices include tax' => [true, 'oldPrice', 'baseOldPrice'],
+            'other price, catalog prices include tax' => [true, 'minPrice', null],
+            'final price, catalog prices exclude tax' => [false, 'finalPrice', null],
+            'old price, catalog prices exclude tax' => [false, 'oldPrice', null],
+        ];
+    }
+
     public function testGetHtmlBoth(): void
     {
         $arguments = [];
