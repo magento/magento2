@@ -182,7 +182,9 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
             throw NoSuchEntityException::singleField('attributeSetId', $attributeSetId);
         }
         $attributeCollection = $this->attributeCollectionFactory->create();
-        $attributeCollection->setAttributeSetFilter($attributeSet->getAttributeSetId())->load();
+        $attributeCollection->setAttributeSetFilter($attributeSet->getAttributeSetId())
+            ->addFieldToFilter('entity_attribute.entity_type_id', $requiredEntityTypeId)
+            ->load();
 
         return $attributeCollection->getItems();
     }
