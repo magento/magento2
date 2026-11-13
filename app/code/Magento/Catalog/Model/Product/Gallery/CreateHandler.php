@@ -143,6 +143,7 @@ class CreateHandler implements ExtensionInterface
      * @param MediaGalleryValue|null $mediaGalleryValue
      * @param AttributeValue|null $attributeValue
      * @param \Magento\Eav\Model\Config|null $config
+     * @param string[] $mediaAttributesWithLabels
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -158,7 +159,8 @@ class CreateHandler implements ExtensionInterface
         ?DeleteValidator $deleteValidator = null,
         ?MediaGalleryValue $mediaGalleryValue = null,
         ?AttributeValue $attributeValue = null,
-        ?\Magento\Eav\Model\Config $config = null
+        ?\Magento\Eav\Model\Config $config = null,
+        array $mediaAttributesWithLabels = []
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -172,6 +174,9 @@ class CreateHandler implements ExtensionInterface
         $this->mediaGalleryValue = $mediaGalleryValue ?? ObjectManager::getInstance()->get(MediaGalleryValue::class);
         $this->attributeValue = $attributeValue ?? ObjectManager::getInstance()->get(AttributeValue::class);
         $this->eavConfig = $config ?? ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->mediaAttributesWithLabels = array_values(
+            array_unique(array_merge($this->mediaAttributesWithLabels, $mediaAttributesWithLabels))
+        );
     }
 
     /**
