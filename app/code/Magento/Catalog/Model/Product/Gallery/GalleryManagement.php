@@ -146,10 +146,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             }
             $existingMediaGalleryEntries[] = $entry;
         }
+        $existingProduct = $product;
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
-        $this->processUnmodifiedMediaEntries($product);
+        $this->processUnmodifiedMediaEntries($product, $existingProduct);
         try {
             $product = $this->productRepository->save($product);
         } catch (\Exception $e) {
@@ -209,10 +210,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
                 __('No image with the provided ID was found. Verify the ID and try again.')
             );
         }
+        $existingProduct = $product;
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
-        $this->processUnmodifiedMediaEntries($product, (int) $entry->getId());
+        $this->processUnmodifiedMediaEntries($product, $existingProduct, (int) $entry->getId());
 
         try {
             $this->productRepository->save($product);
@@ -251,10 +253,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
                 __('No image with the provided ID was found. Verify the ID and try again.')
             );
         }
+        $existingProduct = $product;
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
-        $this->processUnmodifiedMediaEntries($product);
+        $this->processUnmodifiedMediaEntries($product, $existingProduct);
         $this->productRepository->save($product);
         return true;
     }
@@ -327,14 +330,20 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * Retains default values for unmodified media if applicable
      *
+     * The store view values are read for the saved product: the product to save has no id yet.
+     *
      * @param Product $product
+     * @param Product $existingProduct
      * @param int|null $modifiedEntryId
      * @return void
      */
-    private function processUnmodifiedMediaEntries(Product $product, ?int $modifiedEntryId = null): void
-    {
+    private function processUnmodifiedMediaEntries(
+        Product $product,
+        Product $existingProduct,
+        ?int $modifiedEntryId = null
+    ): void {
         $data = $product->getData('media_gallery');
-        $processedData = $this->defaultValueProcessor->process($product, $data);
+        $processedData = $this->defaultValueProcessor->process($existingProduct, $data, (int) $product->getStoreId());
         if ($modifiedEntryId !== null && !empty($processedData['images'])) {
             foreach ($processedData['images'] as &$processedImage) {
                 if (((int) $processedImage['value_id']) === $modifiedEntryId) {
