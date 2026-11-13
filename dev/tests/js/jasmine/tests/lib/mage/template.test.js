@@ -43,6 +43,14 @@ define([
             expect(template(templateData)).toEqual(expectedString);
         });
 
+        it('warns with the missing selector and renders an empty template', function () {
+            spyOn(console, 'warn');
+
+            expect(mageTemplate('#missing-template-node', templateData)).toEqual('');
+            expect(console.warn)
+                .toHaveBeenCalledWith('No template was found by selector: #missing-template-node');
+        });
+
         it('renders template with string and data passed', function () {
             expect(mageTemplate(templateString, templateData)).toEqual(expectedString);
         });
