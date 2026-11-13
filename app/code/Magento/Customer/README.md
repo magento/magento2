@@ -328,6 +328,16 @@ For more information about a layout, see the [Layout documentation](https://deve
 
 For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
+#### Partial customer updates through REST
+
+`PUT /V1/customers/:customerId` preserves the existing address book when `customer.addresses` is omitted,
+without saving each address. The response still includes the stored addresses and default address IDs.
+Explicit address lists retain the repository's synchronization behavior, including deleting all addresses
+when an empty list is supplied.
+
+Account-only updates no longer trigger address-save events or plugins. Integrations that need address
+validation or address-save side effects must explicitly submit the addresses or use the customer address API.
+
 ### UI components
 
 You can extend customer and customer address updates using the configuration files located in the `view/adminhtml/ui_component` and `view/base/ui_component` directories:

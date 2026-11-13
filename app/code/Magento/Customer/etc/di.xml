@@ -250,7 +250,7 @@
     </type>
     <type name="Magento\Customer\Model\ResourceModel\Address\Collection">
         <arguments>
-            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entitySnapshot" xsi:type="object">CustomerAddressSnapshot</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">

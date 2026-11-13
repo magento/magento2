@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\ConditionsToSearchCriteriaMapper;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
@@ -22,6 +23,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -359,19 +361,27 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      * @param string $attribute
      * @param string $operator
      * @param mixed $value
+     * @param string $backendType
      * @return SimpleCondition|MockObject
      */
-    private function createSimpleConditionMock(string $attribute, string $operator, $value): MockObject
-    {
+    private function createSimpleConditionMock(
+        string $attribute,
+        string $operator,
+        $value,
+        string $backendType = 'static'
+    ): MockObject {
         $conditionMock = $this->createPartialMockWithReflection(
             SimpleCondition::class,
-            ['getAttribute', 'getOperator', 'getValue']
+            ['getAttribute', 'getOperator', 'getValue', 'getAttributeObject']
         );
+        $attributeMock = $this->createPartialMockWithReflection(Attribute::class, ['getBackendType']);
+        $attributeMock->method('getBackendType')->willReturn($backendType);
 
         // Stub the getter methods that are called by the mapper
         $conditionMock->method('getAttribute')->willReturn($attribute);
         $conditionMock->method('getOperator')->willReturn($operator);
         $conditionMock->method('getValue')->willReturn($value);
+        $conditionMock->method('getAttributeObject')->willReturn($attributeMock);
 
         return $conditionMock;
     }
@@ -381,10 +391,14 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      *
      * @param array $conditions
      * @param string $aggregator
+     * @param bool $value
      * @return CombinedCondition|MockObject
      */
-    private function createCombinedConditionMock(array $conditions, string $aggregator): MockObject
-    {
+    private function createCombinedConditionMock(
+        array $conditions,
+        string $aggregator,
+        bool $value = true
+    ): MockObject {
         $combinedConditionMock = $this->createPartialMockWithReflection(
             CombinedCondition::class,
             ['getAggregator', 'getConditions', 'getValue']
@@ -393,7 +407,7 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         // Stub the getter methods that are called by the mapper
         $combinedConditionMock->method('getConditions')->willReturn($conditions);
         $combinedConditionMock->method('getAggregator')->willReturn($aggregator);
-        $combinedConditionMock->method('getValue')->willReturn(true);
+        $combinedConditionMock->method('getValue')->willReturn($value);
 
         return $combinedConditionMock;
     }
@@ -432,48 +446,52 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      *
      * Tests if ((bool)$combinedCondition->getValue() === false)
      */
-    public function testMapCombinedConditionWithValueFalse()
-    {
-        $conditionMock = $this->createSimpleConditionMock('sku', '==', 'test-sku');
-        
-        $combinedConditionMock = $this->createPartialMockWithReflection(
-            CombinedCondition::class,
-            ['getAggregator', 'getConditions', 'getValue']
+    #[DataProvider('falseConditionProvider')]
+    public function testMapCombinedConditionWithValueFalse(
+        string $backendType,
+        string $aggregator,
+        string $operator,
+        string $reversedOperator,
+        string $combinationMode
+    ): void {
+        $conditionMock = $this->createSimpleConditionMock(
+            'test_attribute',
+            $operator,
+            'test-value',
+            $backendType
         );
-        
-        $combinedConditionMock->method('getConditions')->willReturn([$conditionMock]);
-        $combinedConditionMock->method('getAggregator')->willReturn('all');
-        $combinedConditionMock->method('getValue')->willReturn(false); // This triggers reverse logic
-
-        $filterMock = $this->createPartialMock(
-            Filter::class,
-            ['getConditionType', 'setConditionType']
-        );
-        
-        $filterMock->method('getConditionType')->willReturn('eq');
-        $filterMock->expects($this->once())
-            ->method('setConditionType')
-            ->with('neq'); // Should be reversed from 'eq' to 'neq'
-
-        $filterGroupMock = $this->createPartialMock(
-            CombinedFilterGroup::class,
-            ['getFilters']
-        );
-        $filterGroupMock->method('getFilters')->willReturn([$filterMock]);
-
+        $combinedConditionMock = $this->createCombinedConditionMock([$conditionMock], $aggregator, false);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $searchCriteriaBuilderMock = $this->createSearchCriteriaBuilderMock($searchCriteriaMock);
-
         $this->filterFactoryMock
-            ->expects($this->once())
             ->method('create')
-            ->willReturn($filterMock);
-
+            ->willReturnCallback(static fn (array $data) => new Filter($data['data']));
         $this->combinedFilterGroupFactoryMock
-            ->expects($this->once())
             ->method('create')
-            ->willReturn($filterGroupMock);
-
+            ->willReturnCallback(static fn (array $data) => new CombinedFilterGroup($data['data']));
+        $searchCriteriaBuilderMock->expects($this->once())
+            ->method('setFilterGroups')
+            ->with($this->callback(function (array $groups) use (
+                $backendType,
+                $reversedOperator,
+                $combinationMode
+            ): bool {
+                $this->assertCount(1, $groups);
+                $this->assertSame($combinationMode, $groups[0]->getCombinationMode());
+                $filters = $groups[0]->getFilters();
+                $this->assertCount(1, $filters);
+                if ($backendType !== 'static') {
+                    $this->assertSame('OR', $filters[0]->getCombinationMode());
+                    $filters = $filters[0]->getFilters();
+                    $this->assertCount(2, $filters);
+                    $this->assertSame('is_null', $filters[1]->getConditionType());
+                    $this->assertSame('test_attribute', $filters[1]->getField());
+                }
+                $this->assertSame($reversedOperator, $filters[0]->getConditionType());
+                $this->assertSame('test_attribute', $filters[0]->getField());
+                $this->assertSame('test-value', $filters[0]->getValue());
+                return true;
+            }));
         $this->searchCriteriaBuilderFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -482,6 +500,17 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         $result = $this->mapper->mapConditionsToSearchCriteria($combinedConditionMock);
 
         $this->assertSame($searchCriteriaMock, $result);
+    }
+
+    public static function falseConditionProvider(): array
+    {
+        return [
+            'static attribute' => ['static', 'all', '==', 'neq', 'AND'],
+            'ALL FALSE date' => ['datetime', 'all', '==', 'neq', 'AND'],
+            'ANY FALSE date' => ['datetime', 'any', '==', 'neq', 'OR'],
+            'ALL FALSE multiselect' => ['text', 'all', '{}', 'nlike', 'AND'],
+            'ANY FALSE multiselect' => ['text', 'any', '{}', 'nlike', 'OR'],
+        ];
     }
 
     /**
@@ -842,61 +871,41 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      *
      * Tests reverseSqlOperatorInFilterRecursively with nested FilterGroups
      */
-    public function testReverseSqlOperatorInNestedFilterGroup()
+    public function testReverseSqlOperatorInNestedFilterGroup(): void
     {
-        $innerCondition = $this->createSimpleConditionMock('price', '>', '50');
-        $innerCombined = $this->createPartialMockWithReflection(
-            CombinedCondition::class,
-            ['getAggregator', 'getConditions', 'getValue']
-        );
-        
-        $innerCombined->method('getConditions')->willReturn([$innerCondition]);
-        $innerCombined->method('getAggregator')->willReturn('all');
-        $innerCombined->method('getValue')->willReturn(true);
-
-        $outerCombined = $this->createPartialMockWithReflection(
-            CombinedCondition::class,
-            ['getAggregator', 'getConditions', 'getValue']
-        );
-        
-        $outerCombined->method('getConditions')->willReturn([$innerCombined]);
-        $outerCombined->method('getAggregator')->willReturn('all');
-        $outerCombined->method('getValue')->willReturn(false); // Triggers reverse logic
-
-        $innerFilterMock = $this->createPartialMock(
-            Filter::class,
-            ['getConditionType', 'setConditionType']
-        );
-        $innerFilterMock->method('getConditionType')->willReturn('gt');
-        $innerFilterMock->expects($this->once())
-            ->method('setConditionType')
-            ->with('lteq');
-
-        $innerFilterGroupMock = $this->createPartialMock(
-            CombinedFilterGroup::class,
-            ['getFilters']
-        );
-        $innerFilterGroupMock->method('getFilters')->willReturn([$innerFilterMock]);
-
-        $outerFilterGroupMock = $this->createPartialMock(
-            CombinedFilterGroup::class,
-            ['getFilters']
-        );
-        $outerFilterGroupMock->method('getFilters')->willReturn([$innerFilterGroupMock]);
+        $innerCondition = $this->createSimpleConditionMock('price', '>', '50', 'decimal');
+        $innerCombined = $this->createCombinedConditionMock([$innerCondition], 'all');
+        $outerCombined = $this->createCombinedConditionMock([$innerCombined], 'all', false);
 
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $searchCriteriaBuilderMock = $this->createSearchCriteriaBuilderMock($searchCriteriaMock);
 
         $this->filterFactoryMock
-            ->expects($this->once())
             ->method('create')
-            ->willReturn($innerFilterMock);
-
+            ->willReturnCallback(static fn (array $data) => new Filter($data['data']));
         $this->combinedFilterGroupFactoryMock
-            ->expects($this->exactly(2))
             ->method('create')
-            ->willReturnOnConsecutiveCalls($innerFilterGroupMock, $outerFilterGroupMock);
-
+            ->willReturnCallback(static fn (array $data) => new CombinedFilterGroup($data['data']));
+        $searchCriteriaBuilderMock->expects($this->once())
+            ->method('setFilterGroups')
+            ->with($this->callback(function (array $groups): bool {
+                $this->assertCount(1, $groups);
+                $this->assertSame('AND', $groups[0]->getCombinationMode());
+                $innerGroups = $groups[0]->getFilters();
+                $this->assertCount(1, $innerGroups);
+                $this->assertSame('OR', $innerGroups[0]->getCombinationMode());
+                $nullableGroups = $innerGroups[0]->getFilters();
+                $this->assertCount(1, $nullableGroups);
+                $this->assertSame('OR', $nullableGroups[0]->getCombinationMode());
+                $filters = $nullableGroups[0]->getFilters();
+                $this->assertCount(2, $filters);
+                $this->assertSame('lteq', $filters[0]->getConditionType());
+                $this->assertSame('50', $filters[0]->getValue());
+                $this->assertSame('price', $filters[0]->getField());
+                $this->assertSame('is_null', $filters[1]->getConditionType());
+                $this->assertSame('price', $filters[1]->getField());
+                return true;
+            }));
         $this->searchCriteriaBuilderFactoryMock
             ->expects($this->once())
             ->method('create')

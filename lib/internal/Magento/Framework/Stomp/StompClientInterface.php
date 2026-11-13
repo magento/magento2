@@ -14,6 +14,15 @@ use Stomp\Transport\Message;
 interface StompClientInterface
 {
     /**
+     * Create a queue.
+     *
+     * @param string $queue
+     * @return void
+     * @throws ClientException
+     */
+    public function createQueue(string $queue): void;
+
+    /**
      * Push message to queue/topic
      *
      * @param string $queue
