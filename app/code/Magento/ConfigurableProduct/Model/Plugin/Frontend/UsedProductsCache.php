@@ -15,6 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -22,7 +23,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class UsedProductsCache
+class UsedProductsCache implements ResetAfterRequestInterface
 {
     /**
      * Default cache life time: 1 year
@@ -58,6 +59,13 @@ class UsedProductsCache
      * @var int
      */
     private $cacheLifeTime;
+
+    /**
+     * Products built from cached data, keyed by cache key; only clones are handed out
+     *
+     * @var Product[][]
+     */
+    private array $usedProductsPrototypes = [];
 
     /**
      * @param MetadataPool $metadataPool
@@ -145,14 +153,35 @@ class UsedProductsCache
      */
     private function readUsedProductsCacheData(string $cacheKey): ?array
     {
-        $data = $this->cache->load($cacheKey);
-        if (!$data) {
-            return null;
+        if (isset($this->usedProductsPrototypes[$cacheKey]) && !$this->cache->test($cacheKey)) {
+            unset($this->usedProductsPrototypes[$cacheKey]);
         }
 
+        if (!isset($this->usedProductsPrototypes[$cacheKey])) {
+            $data = $this->cache->load($cacheKey);
+            if (!$data || !$this->memoizeUsedProducts($cacheKey, $data)) {
+                return null;
+            }
+        }
+
+        return array_map(
+            static fn (Product $prototype): Product => clone $prototype,
+            $this->usedProductsPrototypes[$cacheKey]
+        );
+    }
+
+    /**
+     * Build products from serialized cache data and keep them for the rest of the request
+     *
+     * @param string $cacheKey
+     * @param string $data
+     * @return bool
+     */
+    private function memoizeUsedProducts(string $cacheKey, string $data): bool
+    {
         $items = $this->serializer->unserialize($data);
         if (!$items) {
-            return null;
+            return false;
         }
 
         $usedProducts = [];
@@ -162,8 +191,9 @@ class UsedProductsCache
             $productItem->setData($item);
             $usedProducts[] = $productItem;
         }
+        $this->usedProductsPrototypes[$cacheKey] = $usedProducts;
 
-        return $usedProducts;
+        return true;
     }
 
     /**
@@ -197,7 +227,18 @@ class UsedProductsCache
             ]
         );
         $result = $this->cache->save($data, $cacheKey, $tags, $this->cacheLifeTime);
+        if ($result && is_string($data)) {
+            $this->memoizeUsedProducts($cacheKey, $data);
+        }
 
         return (bool) $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->usedProductsPrototypes = [];
     }
 }
