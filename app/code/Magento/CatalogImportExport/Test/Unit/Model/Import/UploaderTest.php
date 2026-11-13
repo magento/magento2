@@ -8,16 +8,15 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogImportExport\Model\Import\Uploader;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Directory\Write;
-use Magento\Framework\Filesystem\Driver\Http;
-use Magento\Framework\Filesystem\Driver\Https;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\HTTP\ClientFactory;
+use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\Math\Random;
 use Magento\MediaStorage\Helper\File\Storage;
@@ -86,6 +85,16 @@ class UploaderTest extends TestCase
      */
     private $domainValidator;
 
+    /**
+     * @var ClientFactory|MockObject
+     */
+    private $httpClientFactory;
+
+    /**
+     * @var ClientInterface|MockObject
+     */
+    private $httpClient;
+
     protected function setUp(): void
     {
         $this->coreFileStorageDb = $this->createMock(Database::class);
@@ -97,6 +106,9 @@ class UploaderTest extends TestCase
         $this->validator = $this->createMock(NotProtectedExtension::class);
 
         $this->readFactory = $this->createPartialMock(ReadFactory::class, ['create']);
+        $this->readFactory->expects($this->never())->method('create');
+        $this->httpClientFactory = $this->createMock(ClientFactory::class);
+        $this->httpClient = $this->createMock(ClientInterface::class);
 
         $this->directoryMock = $this->createPartialMock(
             Write::class,
@@ -132,7 +144,8 @@ class UploaderTest extends TestCase
                     null,
                     $this->random,
                     $this->targetDirectory,
-                    $this->domainValidator
+                    $this->domainValidator,
+                    $this->httpClientFactory
                 ]
             )
             ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
@@ -141,13 +154,13 @@ class UploaderTest extends TestCase
 
     /**
      * @param $fileUrl
-     * @param $expectedHost
      * @param $expectedFileName
      * @param $checkAllowedExtension
+     * @param int $status
      * @throws LocalizedException
      */
     #[DataProvider('moveFileUrlDataProvider')]
-    public function testMoveFileUrl($fileUrl, $expectedHost, $expectedFileName, $checkAllowedExtension)
+    public function testMoveFileUrl($fileUrl, $expectedFileName, $checkAllowedExtension, int $status = 200)
     {
         $tmpDir = 'var/tmp';
         $destDir = 'var/dest/dir';
@@ -156,6 +169,7 @@ class UploaderTest extends TestCase
         // Mock domain validator to allow the URL
         $this->domainValidator->expects($this->once())
             ->method('isValid')
+            ->with($fileUrl)
             ->willReturn(true);
 
         // Expected invocation to validate file extension
@@ -169,20 +183,23 @@ class UploaderTest extends TestCase
 
         // Expected invocation to build the temp file path with the correct directory and filename
         $this->directoryMock->expects($this->any())->method('getRelativePath')
-            ->with($tmpDir . '/' . $expectedFileName);
+            ->with($tmpDir . '/' . $expectedFileName)
+            ->willReturn($tmpDir . '/' . $expectedFileName);
 
-        // Create adjusted reader which does not validate path.
-        $readMock = $this->createPartialMock(Read::class, ['readAll']);
-
-        // Expected invocations to create reader and read contents from url
-        $this->readFactory->expects($this->once())->method('create')
-            ->with($expectedHost)
-            ->willReturn($readMock);
-        $readMock->expects($this->once())->method('readAll')
-            ->willReturn(null);
-
-        // Expected invocation to write the temp file
-        $this->directoryMock->method('writeFile')->willReturn($expectedFileName);
+        $this->httpClientFactory->expects($this->once())->method('create')->willReturn($this->httpClient);
+        $this->httpClient->expects($this->once())->method('setTimeout')->with(0);
+        $this->httpClient->expects($this->once())->method('setOptions')->with([
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_LOW_SPEED_LIMIT => 1,
+            CURLOPT_LOW_SPEED_TIME => 60
+        ]);
+        $this->httpClient->expects($this->once())->method('get')->with($fileUrl);
+        $this->httpClient->expects($this->once())->method('getStatus')->willReturn($status);
+        $this->httpClient->expects($this->once())->method('getBody')->willReturn('image contents');
+        $this->directoryMock->expects($this->once())->method('writeFile')
+            ->with($tmpDir . '/' . $expectedFileName, 'image contents')
+            ->willReturn($expectedFileName);
 
         // Expected invocations save the downloaded file to temp file
         // and move the temp file to the destination directory
@@ -274,117 +291,229 @@ class UploaderTest extends TestCase
         $this->uploader->move($fileName);
     }
 
-    #[DataProvider('moveFileUrlDriverPoolDataProvider')]
-    public function testMoveFileUrlDrivePool($fileUrl, $expectedHost, $expectedDriverPool, $expectedScheme)
+    #[DataProvider('inaccessibleStatusDataProvider')]
+    public function testMoveFileUrlWithInaccessibleStatus(int $status): void
     {
-        $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMockBuilder($expectedDriverPool)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isExists'])
-            ->getMock();
-        $driverMock->method('isExists')->willReturn(true);
-        $driverPool->method('getDriver')->willReturn($driverMock);
+        $url = 'https://example.com/image.jpg?token=secret';
+        $this->prepareRemoteDownload($url);
+        $this->httpClient->expects($this->once())->method('get')->with($url);
+        $this->httpClient->expects($this->once())->method('getStatus')->willReturn($status);
+        $this->httpClient->expects($this->never())->method('getBody');
+        $this->directoryMock->expects($this->never())->method('writeFile');
+        $this->uploader->expects($this->never())->method('_setUploadFile');
+        $this->uploader->expects($this->never())->method('save');
 
-        // Create a Read mock that will be returned by readFactory->create()
-        $readMock = $this->getMockBuilder(Read::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['readAll'])
-            ->getMock();
-        $readMock->method('readAll')->willReturn(null);
-
-        $readFactory = $this->getMockBuilder(ReadFactory::class)
-            ->setConstructorArgs(
-                [
-                    $driverPool,
-                ]
-            )
-            ->onlyMethods(['create'])
-            ->getMock();
-
-        $readFactory->method('create')
-            ->with($expectedHost, $expectedScheme)
-            ->willReturn($readMock);
-
-        $domainValidatorMock = $this->getMockBuilder(DomainValidator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isValid'])
-            ->getMock();
-        $domainValidatorMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
-
-        $directoryMock = $this->getMockBuilder(Write::class)
-            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDirectoryWrite'])
-            ->getMock();
-        $filesystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryMock);
-
-        $targetDirectoryMock = $this->getMockBuilder(TargetDirectory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
-            ->getMock();
-        $targetDirectoryMock->method('getDirectoryWrite')->willReturn($directoryMock);
-        $targetDirectoryMock->method('getDirectoryRead')->willReturn($directoryMock);
-
-        /** @var Uploader $uploaderMock */
-        $uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->setConstructorArgs(
-                [
-                    $this->coreFileStorageDb,
-                    $this->coreFileStorage,
-                    $this->imageFactory,
-                    $this->validator,
-                    $filesystemMock,
-                    $readFactory,
-                    null,
-                    $this->random,
-                    $targetDirectoryMock,
-                    $domainValidatorMock
-                ]
-            )
-            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
-            ->getMock();
-
-        $this->random->method('getRandomString')->willReturn('test123');
-        $uploaderMock->method('getTmpDir')->willReturn('var/tmp');
-        $uploaderMock->method('checkAllowedExtension')->willReturn(true);
-        $directoryMock->method('isWritable')->willReturn(true);
-        $directoryMock->method('getRelativePath')->willReturn('var/tmp/test_file');
-        $directoryMock->method('writeFile')->willReturn(true);
-        $directoryMock->method('getAbsolutePath')->willReturn('var/dest/dir');
-        $uploaderMock->method('_setUploadFile')->willReturnSelf();
-        $uploaderMock->method('save')->willReturn(['name' => 'test', 'file' => 'var/dest/test']);
-
-        $result = $uploaderMock->move($fileUrl);
-        $this->assertNotNull($result);
+        $this->assertHttpFailure($url, $status, 'https://example.com/image.jpg');
     }
 
-    /**
-     * @return array
-     */
-    public static function moveFileUrlDriverPoolDataProvider()
+    public static function inaccessibleStatusDataProvider(): array
     {
         return [
-            [
-                'fileUrl'              => 'http://test_uploader_file',
-                'expectedHost'         => 'test_uploader_file',
-                'expectedDriverPool'   => Http::class,
-                'expectedScheme'       => DriverPool::HTTP,
-            ],
-            [
-                'fileUrl'              => 'https://!:^&`;file',
-                'expectedHost'         => '!:^&`;file',
-                'expectedDriverPool'   => Https::class,
-                'expectedScheme'       => DriverPool::HTTPS,
-            ],
+            'informational' => [199],
+            'redirect boundary' => [300],
+            'permanent redirect' => [301],
+            'temporary redirect' => [302],
+            'not found' => [404],
+            'server error' => [500]
         ];
+    }
+
+    public function testMoveFileUrlWithTransportException(): void
+    {
+        $url = 'http://example.com/image.jpg';
+        $this->prepareRemoteDownload($url);
+        $exception = new \Exception('Connection timed out');
+        $this->httpClient->expects($this->once())->method('get')->with($url)->willThrowException($exception);
+        $this->httpClient->expects($this->never())->method('getStatus');
+        $this->httpClient->expects($this->never())->method('getBody');
+        $this->directoryMock->expects($this->never())->method('writeFile');
+        $this->uploader->expects($this->never())->method('_setUploadFile');
+        $this->uploader->expects($this->never())->method('save');
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
+
+        $this->uploader->move($url);
+    }
+
+    public function testMoveFileUrlWithInvalidDomain(): void
+    {
+        $url = 'https://example.com/image.jpg';
+        $this->domainValidator->expects($this->once())->method('isValid')->with($url)->willReturn(false);
+        $this->httpClientFactory->expects($this->never())->method('create');
+        $this->directoryMock->expects($this->never())->method('writeFile');
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE);
+
+        $this->uploader->move($url);
+    }
+
+    #[DataProvider('redirectDataProvider')]
+    public function testMoveFileUrlFollowsAllowedRedirect(
+        int $status,
+        string $location,
+        string $expectedUrl,
+        string $headerName
+    ): void {
+        $url = 'https://example.com/import/image.jpg?token=secret';
+        $this->prepareRemoteFilePath();
+        $redirectClient = $this->createRedirectClient($url, $status, [$headerName => $location]);
+        $this->httpClientFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($redirectClient, $this->httpClient);
+        $this->domainValidator->expects($this->exactly(2))->method('isValid')->willReturnMap([
+            [$url, true],
+            [$expectedUrl, true]
+        ]);
+        $this->expectClientOptions($this->httpClient);
+        $this->httpClient->expects($this->once())->method('get')->with($expectedUrl);
+        $this->httpClient->expects($this->once())->method('getStatus')->willReturn(200);
+        $this->httpClient->expects($this->once())->method('getBody')->willReturn('image contents');
+        $this->prepareSuccessfulRemoteSave();
+
+        $this->assertSame(['name' => 'image.jpg', 'file' => '/image.jpg'], $this->uploader->move($url));
+    }
+
+    public static function redirectDataProvider(): array
+    {
+        return [
+            'absolute' => [301, 'https://cdn.example.com/final.jpg', 'https://cdn.example.com/final.jpg', 'Location'],
+            'relative' => [302, '../final.jpg', 'https://example.com/final.jpg', 'location'],
+            'root relative' => [303, '/final.jpg', 'https://example.com/final.jpg', 'LOCATION'],
+            'scheme relative' => [307, '//cdn.example.com/final.jpg', 'https://cdn.example.com/final.jpg', 'LoCaTiOn'],
+            'query relative' => [308, '?v=2', 'https://example.com/import/image.jpg?v=2', 'Location']
+        ];
+    }
+
+    public function testMoveFileUrlRejectsDisallowedRedirect(): void
+    {
+        $url = 'https://example.com/image.jpg?token=original';
+        $redirectUrl = 'https://blocked.example.com/image.jpg?token=redirect';
+        $this->prepareRemoteFilePath();
+        $redirectClient = $this->createRedirectClient($url, 302, ['Location' => $redirectUrl]);
+        $this->httpClientFactory->expects($this->once())->method('create')->willReturn($redirectClient);
+        $this->domainValidator->expects($this->exactly(2))->method('isValid')->willReturnMap([
+            [$url, true],
+            [$redirectUrl, false]
+        ]);
+        $this->directoryMock->expects($this->never())->method('writeFile');
+        $this->uploader->expects($this->never())->method('_setUploadFile');
+        $this->uploader->expects($this->never())->method('save');
+
+        $this->assertHttpFailure($url, 302, 'https://blocked.example.com/image.jpg');
+    }
+
+    #[DataProvider('redirectLimitDataProvider')]
+    public function testMoveFileUrlRedirectLimit(int $redirectCount, bool $succeeds): void
+    {
+        $url = 'https://example.com/image.jpg?hop=0';
+        $this->prepareRemoteFilePath();
+        $clients = [];
+        $validations = [[$url, true]];
+        $nextUrl = $url;
+        for ($hop = 0; $hop < $redirectCount; $hop++) {
+            $currentUrl = 'https://example.com/image.jpg?hop=' . $hop;
+            $nextUrl = 'https://example.com/image.jpg?hop=' . ($hop + 1);
+            $clients[] = $this->createRedirectClient($currentUrl, 302, ['Location' => $nextUrl]);
+            if ($hop < 5) {
+                $validations[] = [$nextUrl, true];
+            }
+        }
+        if ($succeeds) {
+            $this->expectClientOptions($this->httpClient);
+            $this->httpClient->expects($this->once())->method('get')->with($nextUrl);
+            $this->httpClient->expects($this->once())->method('getStatus')->willReturn(200);
+            $this->httpClient->expects($this->once())->method('getBody')->willReturn('image contents');
+            $clients[] = $this->httpClient;
+            $this->prepareSuccessfulRemoteSave();
+        } else {
+            $this->directoryMock->expects($this->never())->method('writeFile');
+            $this->uploader->expects($this->never())->method('_setUploadFile');
+            $this->uploader->expects($this->never())->method('save');
+        }
+        $this->httpClientFactory->expects($this->exactly(6))->method('create')
+            ->willReturnOnConsecutiveCalls(...$clients);
+        $this->domainValidator->expects($this->exactly(6))->method('isValid')->willReturnMap($validations);
+
+        if ($succeeds) {
+            $this->assertSame(['name' => 'image.jpg', 'file' => '/image.jpg'], $this->uploader->move($url));
+        } else {
+            $this->assertHttpFailure($url, 302, 'https://example.com/image.jpg');
+        }
+    }
+
+    public static function redirectLimitDataProvider(): array
+    {
+        return ['five allowed' => [5, true], 'six rejected' => [6, false]];
+    }
+
+    private function createRedirectClient(string $url, int $status, array $headers): ClientInterface
+    {
+        $client = $this->createMock(ClientInterface::class);
+        $this->expectClientOptions($client);
+        $client->expects($this->once())->method('get')->with($url);
+        $client->expects($this->once())->method('getStatus')->willReturn($status);
+        $client->expects($this->once())->method('getHeaders')->willReturn($headers);
+        $client->expects($this->never())->method('getBody');
+        return $client;
+    }
+
+    private function expectClientOptions(ClientInterface $client): void
+    {
+        $client->expects($this->once())->method('setTimeout')->with(0);
+        $client->expects($this->once())->method('setOptions')->with([
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_LOW_SPEED_LIMIT => 1,
+            CURLOPT_LOW_SPEED_TIME => 60
+        ]);
+    }
+
+    private function prepareSuccessfulRemoteSave(): void
+    {
+        $this->directoryMock->expects($this->once())->method('writeFile')
+            ->with('var/tmp/image_38GcEmPFKXXR8NMj.jpg', 'image contents');
+        $this->directoryMock->method('getAbsolutePath')->willReturn('var/dest');
+        $this->uploader->expects($this->once())->method('_setUploadFile');
+        $this->uploader->method('save')->willReturn(['name' => 'image.jpg', 'file' => '/image.jpg']);
+    }
+
+    private function prepareRemoteDownload(string $url): void
+    {
+        $this->domainValidator->expects($this->once())->method('isValid')->with($url)->willReturn(true);
+        $this->prepareRemoteFilePath();
+        $this->httpClientFactory->expects($this->once())->method('create')->willReturn($this->httpClient);
+        $this->httpClient->expects($this->once())->method('setTimeout')->with(0);
+        $this->httpClient->expects($this->once())->method('setOptions')->with([
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_LOW_SPEED_LIMIT => 1,
+            CURLOPT_LOW_SPEED_TIME => 60
+        ]);
+    }
+
+    private function prepareRemoteFilePath(): void
+    {
+        $this->uploader->method('getTmpDir')->willReturn('var/tmp');
+        $this->uploader->method('checkAllowedExtension')->willReturn(true);
+        $this->random->method('getRandomString')->willReturn('38GcEmPFKXXR8NMj');
+        $this->directoryMock->method('getRelativePath')->willReturn('var/tmp/image_38GcEmPFKXXR8NMj.jpg');
+        $this->directoryMock->method('isWritable')->willReturn(true);
+    }
+
+    private function assertHttpFailure(string $url, int $status, string $expectedUrl): void
+    {
+        try {
+            $this->uploader->move($url);
+            $this->fail('Expected an inaccessible media URL exception.');
+        } catch (LocalizedException $exception) {
+            $this->assertSame(RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE, $exception->getMessage());
+            $this->assertInstanceOf(\RuntimeException::class, $exception->getPrevious());
+            $this->assertSame(
+                sprintf('HTTP status %d for URL %s', $status, $expectedUrl),
+                $exception->getPrevious()->getMessage()
+            );
+        }
     }
 
     /**
@@ -393,63 +522,66 @@ class UploaderTest extends TestCase
     public static function moveFileUrlDataProvider()
     {
         return [
+            'no content' => ['https://example.com/image.jpg', 'image_38GcEmPFKXXR8NMj.jpg', 1, 204],
+            'upper success boundary' => ['https://example.com/image.jpg', 'image_38GcEmPFKXXR8NMj.jpg', 1, 299],
+            'uppercase scheme' => ['HTTP://example.com/image.jpg', 'image_38GcEmPFKXXR8NMj.jpg', 1],
+            'http_no_file_ext' => [
+                'fileUrl' => 'http://test_uploader_file',
+                'expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
+            ],
+            'https_special_chars_no_file_ext' => [
+                'fileUrl' => 'https://!:^&`;file',
+                'expectedFileName' => 'file_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
+            ],
             'https_no_file_ext' => [
                 'fileUrl' => 'https://test_uploader_file',
-                'expectedHost' => 'test_uploader_file',
                 'expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
                 'checkAllowedExtension' => 0
             ],
             'https_invalid_chars' => [
                 'fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
-                'expectedHost' => 'www.google.com/!:^&`;image.jpg',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 'checkAllowedExtension' => 1
             ],
             'https_invalid_chars_no_file_ext' => [
                 'fileUrl' => 'https://!:^&`;image',
-                'expectedHost' => '!:^&`;image',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj',
                 'checkAllowedExtension' => 0
             ],
             'http_jpg' => [
                 'fileUrl' => 'http://www.google.com/image.jpg',
-                'expectedHost' => 'www.google.com/image.jpg',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 'checkAllowedExtension' => 1
             ],
             'https_jpg' => [
                 'fileUrl' => 'https://www.google.com/image.jpg',
-                'expectedHost' => 'www.google.com/image.jpg',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 'checkAllowedExtension' => 1
             ],
             'https_jpeg' => [
                 'fileUrl' => 'https://www.google.com/image.jpeg',
-                'expectedHost' => 'www.google.com/image.jpeg',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
                 'checkAllowedExtension' => 1
             ],
             'https_png' => [
                 'fileUrl' => 'https://www.google.com/image.png',
-                'expectedHost' => 'www.google.com/image.png',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
                 'checkAllowedExtension' => 1
             ],
             'https_gif' => [
                 'fileUrl' => 'https://www.google.com/image.gif',
-                'expectedHost' => 'www.google.com/image.gif',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
                 'checkAllowedExtension' => 1
             ],
             'https_one_query_param' => [
                 'fileUrl' => 'https://www.google.com/image.jpg?param=1',
-                'expectedHost' => 'www.google.com/image.jpg?param=1',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 'checkAllowedExtension' => 1
             ],
             'https_two_query_params' => [
                 'fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
-                'expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
                 'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
                 'checkAllowedExtension' => 1
             ]
