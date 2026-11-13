@@ -60,15 +60,27 @@ class Product implements ItemProviderInterface
         }
 
         $items = array_map(function ($item) use ($storeId) {
-            return $this->itemFactory->create([
-                'url' => $item->getUrl(),
-                'updatedAt' => $item->getUpdatedAt(),
-                'images' => $item->getImages(),
-                'priority' => $this->configReader->getPriority($storeId),
-                'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-            ]);
+            return $this->itemFactory->create($this->getItemData($item, $storeId));
         }, $collection);
 
         return $items;
+    }
+
+    /**
+     * Get constructor arguments for the sitemap item factory.
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @param int $storeId
+     * @return array
+     */
+    public function getItemData($item, $storeId)
+    {
+        return [
+            'url' => $item->getUrl(),
+            'updatedAt' => $item->getUpdatedAt(),
+            'images' => $item->getImages(),
+            'priority' => $this->configReader->getPriority($storeId),
+            'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
+        ];
     }
 }
