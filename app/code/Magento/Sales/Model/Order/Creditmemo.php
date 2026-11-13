@@ -658,11 +658,15 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * Check if grand total is valid.
      *
+     * A negative grand total is never valid; a zero grand total is valid only when allowed by configuration.
+     *
      * @return bool
      */
     public function isValidGrandTotal()
     {
-        return !($this->getGrandTotal() <= 0 && !$this->isAllowZeroGrandTotal());
+        $grandTotal = round((float)$this->getGrandTotal(), 4);
+
+        return $grandTotal > 0 || ($grandTotal === 0.0 && $this->isAllowZeroGrandTotal());
     }
 
     /**
