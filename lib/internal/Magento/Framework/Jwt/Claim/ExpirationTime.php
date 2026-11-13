@@ -16,7 +16,7 @@ use Magento\Framework\Jwt\ClaimInterface;
 class ExpirationTime implements ClaimInterface
 {
     /**
-     * @var string
+     * @var int
      */
     private $value;
 

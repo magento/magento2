@@ -16,7 +16,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 class Segment implements SegmentInterface
 {
     /**
-     * @var array
+     * @var string
      */
     private $name;
 

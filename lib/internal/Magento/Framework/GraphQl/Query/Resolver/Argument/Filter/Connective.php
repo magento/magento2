@@ -15,7 +15,7 @@ namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Filter;
 class Connective
 {
     /**
-     * @var string
+     * @var Operator
      */
     private $operator;
 
