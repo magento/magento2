@@ -13,6 +13,7 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Locale\Currency;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,6 +53,7 @@ class CurrencyTest extends TestCase
      */
     protected function setUp(): void
     {
+        (new \ReflectionProperty(Currency::class, '_currencyCache'))->setValue(null, []);
         $this->mockEventManager = $this
             ->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -217,5 +219,103 @@ class CurrencyTest extends TestCase
         $this->assertEquals(self::TEST_EXCEPTION_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
         $this->assertEquals(self::TEST_EXCEPTION_CURRENCY, $retrievedCurrencyObject->getName());
         $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
+    }
+
+    /**
+     * @param string $code
+     * @param string $locale
+     * @param string $expected
+     * @return void
+     */
+    #[DataProvider('currencyPrecisionProvider')]
+    public function testCurrencyPrecision(string $code, string $locale, string $expected): void
+    {
+        $currency = new CurrencyData(null, 'en_US');
+        $this->mockLocaleResolver->method('getLocale')->willReturn($locale);
+        $this->mockCurrencyFactory->method('create')->willReturn($currency);
+
+        $result = $this->testCurrencyObject->getCurrency($code);
+
+        self::assertSame($expected, $result->toCurrency(12.3456, ['display' => CurrencyData::NO_SYMBOL]));
+        self::assertSame(
+            '12.35',
+            $result->toCurrency(12.3456, ['precision' => 2, 'display' => CurrencyData::NO_SYMBOL])
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function currencyPrecisionProvider(): array
+    {
+        return [
+            'two decimals' => ['USD', 'en_US', '12.35'],
+            'zero decimals in another locale' => ['JPY', 'en_US', '12'],
+            'three decimals' => ['BHD', 'en_US', '12.346'],
+            'three decimals in Japan' => ['KWD', 'ja_JP', '12.346'],
+            'empty locale' => ['JPY', '', '12'],
+            'unusual locale' => ['JPY', 'zz_ZZ', '12'],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testPrecisionObserverOverride(): void
+    {
+        $currency = new CurrencyData(null, 'en_US');
+        $this->mockLocaleResolver->method('getLocale')->willReturn('en_US');
+        $this->mockCurrencyFactory->method('create')->willReturn($currency);
+        $this->mockEventManager->expects(self::once())->method('dispatch')->willReturnCallback(
+            static function ($event, $data): void {
+                self::assertSame('currency_display_options_forming', $event);
+                self::assertSame(0, $data['currency_options']->getData('precision'));
+                $data['currency_options']->setData('precision', 3);
+            }
+        );
+
+        $result = $this->testCurrencyObject->getCurrency('JPY');
+
+        self::assertSame('12.346', $result->toCurrency(12.3456, ['display' => CurrencyData::NO_SYMBOL]));
+        self::assertSame(
+            '12.35',
+            $result->toCurrency(12.3456, ['precision' => 2, 'display' => CurrencyData::NO_SYMBOL])
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidCurrencyFallback(): void
+    {
+        $currency = new CurrencyData(null, 'en_US');
+        $this->mockLocaleResolver->method('getLocale')->willReturn('en_US');
+        $this->mockCurrencyFactory->expects(self::exactly(2))->method('create')->willReturnCallback(
+            static function (array $arguments) use ($currency) {
+                return match ($arguments['options']) {
+                    'INVALID' => throw new \Exception('Invalid currency'),
+                    'USD' => $currency,
+                };
+            }
+        );
+
+        $result = $this->testCurrencyObject->getCurrency('INVALID');
+
+        self::assertSame($currency, $result);
+        self::assertSame('INVALID', $result->getName());
+        self::assertSame('12.35', $result->toCurrency(12.3456, ['display' => CurrencyData::NO_SYMBOL]));
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidPrecisionLocaleDoesNotPreventCurrencyCreation(): void
+    {
+        $currency = new CurrencyData(null, 'en_US');
+        $this->mockLocaleResolver->method('getLocale')->willReturn(str_repeat('x', 200));
+        $this->mockCurrencyFactory->expects(self::once())->method('create')->willReturn($currency);
+        $this->mockEventManager->expects(self::once())->method('dispatch');
+
+        self::assertSame($currency, $this->testCurrencyObject->getCurrency('JPY'));
     }
 }
