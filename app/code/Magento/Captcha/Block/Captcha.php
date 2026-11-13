@@ -4,22 +4,17 @@
  * All Rights Reserved.
  */
 
-/**
- * Captcha block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Captcha\Block;
 
 /**
+ * Captcha block
+ *
  * @api
  * @since 100.0.2
  */
 class Captcha extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Captcha data
-     *
      * @var \Magento\Captcha\Helper\Data
      */
     protected $_captchaData = null;
