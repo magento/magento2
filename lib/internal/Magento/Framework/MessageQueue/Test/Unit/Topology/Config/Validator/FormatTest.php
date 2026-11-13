@@ -125,4 +125,37 @@ class FormatTest extends TestCase
         ];
         $this->model->validate($configData);
     }
+
+    public function testValidateValidQueueConfig(): void
+    {
+        $configData = [
+            'queue--queue01--amqp' => [
+                'name' => 'queue01',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => ['x-message-ttl' => 1000],
+            ],
+        ];
+        $this->model->validate($configData);
+        $this->addToAssertionCount(1);
+    }
+
+    public function testValidateMissingRequiredQueueFields(): void
+    {
+        $expectedMessage = "Missing [connection] field for queue queue--queue01--amqp." . PHP_EOL .
+            "Missing [durable] field for queue queue--queue01--amqp." . PHP_EOL .
+            "Missing [autoDelete] field for queue queue--queue01--amqp." . PHP_EOL .
+            "Missing [arguments] field for queue queue--queue01--amqp.";
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedMessage);
+        $configData = [
+            'queue--queue01--amqp' => [
+                'name' => 'queue01',
+                'type' => 'queue',
+            ],
+        ];
+        $this->model->validate($configData);
+    }
 }

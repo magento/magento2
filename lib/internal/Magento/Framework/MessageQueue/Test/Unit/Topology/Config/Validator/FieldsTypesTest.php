@@ -459,4 +459,74 @@ class FieldsTypesTest extends TestCase
             ],
         ];
     }
+
+    public function testValidateValidQueueConfig(): void
+    {
+        $configData = [
+            'queue--queue01--amqp' => [
+                'name' => 'queue01',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => false,
+                'autoDelete' => true,
+                'arguments' => ['x-message-ttl' => 1000],
+            ],
+        ];
+        $this->model->validate($configData);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @param array $queueConfig
+     * @param string $expectedExceptionMessage
+     */
+    #[DataProvider('invalidQueueConfigDataProvider')]
+    public function testValidateInvalidQueue(array $queueConfig, string $expectedExceptionMessage): void
+    {
+        $validQueueConfig = [
+            'name' => 'queue01',
+            'type' => 'queue',
+            'connection' => 'amqp',
+            'durable' => true,
+            'autoDelete' => false,
+            'arguments' => [],
+        ];
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage($expectedExceptionMessage);
+        $this->model->validate(['queue--queue01--amqp' => array_merge($validQueueConfig, $queueConfig)]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function invalidQueueConfigDataProvider(): array
+    {
+        return [
+            'name' => [
+                ['name' => 1],
+                "Type of 'name' field specified in configuration of 'queue--queue01--amqp' queue is invalid."
+                . " Given 'integer', 'string' was expected.",
+            ],
+            'connection' => [
+                ['connection' => null],
+                "Type of 'connection' field specified in configuration of 'queue--queue01--amqp' queue is invalid."
+                . " Given 'NULL', 'string' was expected.",
+            ],
+            'durable' => [
+                ['durable' => 'true'],
+                "Type of 'durable' field specified in configuration of 'queue--queue01--amqp' queue is invalid."
+                . " Given 'string', 'boolean' was expected.",
+            ],
+            'autoDelete' => [
+                ['autoDelete' => 0],
+                "Type of 'autoDelete' field specified in configuration of 'queue--queue01--amqp' queue is invalid."
+                . " Given 'integer', 'boolean' was expected.",
+            ],
+            'arguments' => [
+                ['arguments' => 'args'],
+                "Type of 'arguments' field specified in configuration of 'queue--queue01--amqp' queue is invalid."
+                . " Given 'string', 'array' was expected.",
+            ],
+        ];
+    }
 }

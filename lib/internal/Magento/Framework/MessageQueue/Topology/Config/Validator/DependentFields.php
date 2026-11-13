@@ -13,12 +13,15 @@ use Magento\Framework\MessageQueue\Topology\Config\ValidatorInterface;
 class DependentFields implements ValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate($configData)
     {
         $errors = [];
         foreach ($configData as $name => $data) {
+            if (($data['type'] ?? null) === 'queue') {
+                continue;
+            }
             foreach ((array)$data['bindings'] as $binding) {
                 if (isset($data['type']) && $data['type'] == 'topic' && !isset($binding['topic'])) {
                     $errors[] = 'Topic name is required for topic based exchange: ' . $name;

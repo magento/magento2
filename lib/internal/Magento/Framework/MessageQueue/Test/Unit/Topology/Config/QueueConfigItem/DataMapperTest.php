@@ -45,7 +45,7 @@ class DataMapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configDataMock = $this->createMock(Data::class);
+        $this->configDataMock = $this->createPartialMock(Data::class, ['get']);
         $this->communicationConfigMock = $this->createMock(CommunicationConfig::class);
         $this->queueNameBuilderMock = $this->createMock(ResponseQueueNameBuilder::class);
         $this->model = new DataMapper(
@@ -119,7 +119,7 @@ class DataMapperTest extends TestCase
         $this->communicationConfigMock->expects($this->exactly(2))
             ->method('getTopic')
             ->willReturnMap($communicationMap);
-        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+        $this->configDataMock->method('get')->willReturn($data);
         $this->queueNameBuilderMock->expects($this->once())
             ->method('getQueueName')
             ->with('topic01')
@@ -229,7 +229,7 @@ class DataMapperTest extends TestCase
         $this->communicationConfigMock->expects($this->any())
             ->method('getTopics')
             ->willReturn($communicationData);
-        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+        $this->configDataMock->method('get')->willReturn($data);
         $this->queueNameBuilderMock->expects($this->any())
             ->method('getQueueName')
             ->willReturnCallback(function ($value) {
@@ -325,11 +325,149 @@ class DataMapperTest extends TestCase
                 new Phrase('Topic "%topic" is not configured.', ['topic' => $topicName])
             ));
 
-        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+        $this->configDataMock->method('get')->willReturn($data);
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage(sprintf('Error while checking if topic "%s" is synchronous', $topicName));
 
         $this->model->getMappedData();
+    }
+
+    /**
+     * @return void
+     *
+     * @throws LocalizedException
+     */
+    public function testDeclaredQueueOverridesQueueCreatedFromBinding(): void
+    {
+        $data = [
+            'ex01--amqp' => $this->getExchangeConfig('ex01', 'amqp', 'topic01', 'some.queue'),
+            'queue--some.queue--amqp' => [
+                'name' => 'some.queue',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => false,
+                'autoDelete' => true,
+                'arguments' => ['x-message-ttl' => 1000],
+            ],
+        ];
+
+        $this->communicationConfigMock->expects($this->once())
+            ->method('getTopic')
+            ->with('topic01')
+            ->willReturn(['name' => 'topic01', 'is_synchronous' => true]);
+        $this->configDataMock->method('get')->willReturn($data);
+        $this->queueNameBuilderMock->expects($this->once())
+            ->method('getQueueName')
+            ->with('topic01')
+            ->willReturn('responseQueue.topic01');
+
+        $expectedResult = [
+            'responseQueue.topic01--amqp' => [
+                'name' => 'responseQueue.topic01',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => ['binding' => 'argument'],
+            ],
+            'some.queue--amqp' => [
+                'name' => 'some.queue',
+                'connection' => 'amqp',
+                'durable' => false,
+                'autoDelete' => true,
+                'arguments' => ['x-message-ttl' => 1000],
+            ],
+        ];
+        $this->assertSame($expectedResult, $this->model->getMappedData());
+    }
+
+    /**
+     * @return void
+     *
+     * @throws LocalizedException
+     */
+    public function testDeclaredQueueOnAnotherConnectionDoesNotOverrideBindingQueue(): void
+    {
+        $data = [
+            'ex01--db' => $this->getExchangeConfig('ex01', 'db', 'topic01', 'some.queue'),
+            'queue--some.queue--amqp' => [
+                'name' => 'some.queue',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => false,
+                'autoDelete' => false,
+                'arguments' => [],
+            ],
+            'queue--standalone.queue--amqp' => [
+                'name' => 'standalone.queue',
+                'type' => 'queue',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => ['x-dead-letter-exchange' => 'magento'],
+            ],
+        ];
+
+        $this->communicationConfigMock->expects($this->once())
+            ->method('getTopic')
+            ->with('topic01')
+            ->willReturn(['name' => 'topic01', 'is_synchronous' => false]);
+        $this->configDataMock->method('get')->willReturn($data);
+        $this->queueNameBuilderMock->expects($this->never())->method('getQueueName');
+
+        $expectedResult = [
+            'some.queue--db' => [
+                'name' => 'some.queue',
+                'connection' => 'db',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => ['binding' => 'argument'],
+            ],
+            'some.queue--amqp' => [
+                'name' => 'some.queue',
+                'connection' => 'amqp',
+                'durable' => false,
+                'autoDelete' => false,
+                'arguments' => [],
+            ],
+            'standalone.queue--amqp' => [
+                'name' => 'standalone.queue',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => ['x-dead-letter-exchange' => 'magento'],
+            ],
+        ];
+        $this->assertSame($expectedResult, $this->model->getMappedData());
+    }
+
+    /**
+     * @param string $name
+     * @param string $connection
+     * @param string $topic
+     * @param string $queue
+     * @return array
+     */
+    private function getExchangeConfig(string $name, string $connection, string $topic, string $queue): array
+    {
+        return [
+            'name' => $name,
+            'type' => 'topic',
+            'connection' => $connection,
+            'durable' => true,
+            'internal' => false,
+            'autoDelete' => false,
+            'arguments' => [],
+            'bindings' => [
+                'bind01' => [
+                    'id' => 'bind01',
+                    'topic' => $topic,
+                    'destinationType' => 'queue',
+                    'destination' => $queue,
+                    'disabled' => false,
+                    'arguments' => ['binding' => 'argument'],
+                ],
+            ],
+        ];
     }
 }
