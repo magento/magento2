@@ -6,6 +6,10 @@
 
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Theme\Block\Html\Pager;
+
 /**
  * Block on checkout/cart/index page to display a pager on the  cart items grid
  * The pager will be displayed if items quantity in the shopping cart > than number from
@@ -23,7 +27,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
+     * @var Collection
      */
     private $itemsCollection;
 
@@ -110,29 +114,58 @@ class Grid extends \Magento\Checkout\Block\Cart
         if ($this->isPagerDisplayedOnPage()) {
             $availableLimit = (int)$this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
             $itemsCollection = $this->getItemsForGrid();
-            /** @var  \Magento\Theme\Block\Html\Pager $pager */
-            $pager = $this->getLayout()->createBlock(\Magento\Theme\Block\Html\Pager::class);
+            /** @var  Pager $pager */
+            $pager = $this->getLayout()->createBlock(Pager::class);
             $pager->setAvailableLimit([$availableLimit => $availableLimit])->setCollection($itemsCollection);
             $this->setChild('pager', $pager);
             $itemsCollection->load();
+            $this->assignChildItems($itemsCollection);
             $this->prepareItemUrls();
         }
         return $this;
     }
 
     /**
+     * The grid collection only contains parent items, assign the child items of the quote to the paged parent items
+     *
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemsCollection
+     * @return void
+     */
+    private function assignChildItems(\Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemsCollection): void
+    {
+        if (!$itemsCollection->getItems()) {
+            return;
+        }
+
+        $quoteItemsById = [];
+        foreach ($this->getQuote()->getAllItems() as $quoteItem) {
+            $quoteItemsById[(int)$quoteItem->getId()] = $quoteItem;
+        }
+
+        foreach ($itemsCollection->getItems() as $collectionItem) {
+            $quoteItem = $quoteItemsById[(int)$collectionItem->getId()] ?? null;
+            if ($quoteItem === null || $collectionItem->getChildren()) {
+                continue;
+            }
+            foreach ($quoteItem->getChildren() as $child) {
+                $collectionItem->addChild($child);
+            }
+        }
+    }
+
+    /**
      * Prepare quote items collection for pager
      *
-     * @return \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
+     * @return Collection
      * @since 100.1.7
      */
     public function getItemsForGrid()
     {
         if (!$this->itemsCollection) {
-            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection $itemCollection */
+            /** @var Collection $itemCollection */
             $itemCollection = $this->itemCollectionFactory->create();
 
             $itemCollection->setQuote($this->getQuote());
@@ -167,7 +200,7 @@ class Grid extends \Magento\Checkout\Block\Cart
         if (!$this->isPagerDisplayed) {
             $availableLimit = (int)$this->_scopeConfig->getValue(
                 self::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
             $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
