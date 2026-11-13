@@ -91,15 +91,15 @@
 
         <!-- Verify Cannot Create Directory Under Storage Root -->
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
-        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled">
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup"
+                     stepKey="assertCreateButtonEnabledAllOthersDisabled">
             <argument name="buttonName" value="Create Folder"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="attemptToCreateNewFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertAttentionModalActionGroup" stepKey="assertAttentionModal">
-            <argument name="action" value="create"/>
+        <actionGroup ref="AdminMediaGalleryAssertRestrictedFolderModalActionGroup" stepKey="assertAttentionModal">
             <argument name="folderName" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryCloseAttentionModalActionGroup" stepKey="closeAttentionModal"/>
@@ -111,7 +111,8 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
             <argument name="name" value="wysiwyg"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled2">
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup"
+                     stepKey="assertCreateButtonEnabledAllOthersDisabled2">
             <argument name="buttonName" value="Create Folder"/>
         </actionGroup>
         <!-- Uncomment below after fixing B2B-1928 -->
@@ -127,7 +128,8 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
             <argument name="name" value="category"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled3">
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup"
+                     stepKey="assertCreateButtonEnabledAllOthersDisabled3">
             <argument name="buttonName" value="Create Folder"/>
         </actionGroup>
 
