@@ -39,7 +39,7 @@ define([
 
         it('on empty node comments() returns empty Array', function () {
             expect($(element).comments()).toEqual([]);
-            expect($(iframe).insertAfter('body').comments()).toEqual([]);
+            expect($(iframe).comments()).toEqual([]);
         });
 
         it('on non-empty node comments() returns empty Array with nodes', function () {
