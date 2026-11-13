@@ -218,4 +218,52 @@ class ValidatorTest extends TestCase
             'NL letters only' => ['postCode' => 'ABCD', 'countryId' => 'NL'],
         ];
     }
+
+    /**
+     * @param string $countryId
+     * @param string $validPostCode
+     * @return void
+     */
+    #[DataProvider('getNigeriaValidPostCodes')]
+    public function testValidNigeriaPostCode(string $countryId, string $validPostCode): void
+    {
+        $this->assertSame(true, $this->validator->validate($validPostCode, $countryId));
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function getNigeriaValidPostCodes(): array
+    {
+        return [
+            ['NG', '123456'],  // $countryId, $validPostCode
+            ['NG', 'EK-01-A03-FK-01'],
+            ['NG', 'EK 01 A03 FK 01'],
+            ['NG', 'ek01a03fk01'],
+        ];
+    }
+
+    /**
+     * @param string $countryId
+     * @param string $invalidPostCode
+     * @return void
+     */
+    #[DataProvider('getNigeriaInvalidPostCodes')]
+    public function testInvalidNigeriaPostCode(string $countryId, string $invalidPostCode): void
+    {
+        $this->assertSame(false, $this->validator->validate($invalidPostCode, $countryId));
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    public static function getNigeriaInvalidPostCodes(): array
+    {
+        return [
+            ['NG', 'EK-00-A03-FK-01'],  // $countryId, $invalidPostCode
+            ['NG', 'EK-01-A03-FK-00'],
+            ['NG', 'EK-01-A03-FK-1'],
+            ['NG', 'EK-01-A03-FK-011'],
+        ];
+    }
 }
