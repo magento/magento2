@@ -16,11 +16,12 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Configurable product resource model.
  */
-class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Catalog product relation
@@ -45,6 +46,18 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $optionProvider;
 
     /**
+     * Product link id and scope id the memoized attribute options belong to
+     *
+     * @var string|null
+     */
+    private ?string $attributeOptionsContext = null;
+
+    /**
+     * @var array
+     */
+    private array $attributeOptions = [];
+
+    /**
      * @param DbContext $context
      * @param ProductRelation $catalogProductRelation
      * @param string $connectionName
@@ -61,7 +74,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         ?OptionProvider $optionProvider = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
-        $this->scopeResolver = $scopeResolver;
+        $this->scopeResolver = $scopeResolver ?: ObjectManager::getInstance()->get(ScopeResolverInterface::class);
         $this->attributeOptionProvider = $attributeOptionProvider
             ?: ObjectManager::getInstance()->get(AttributeOptionProviderInterface::class);
         $this->optionProvider = $optionProvider ?: ObjectManager::getInstance()->get(OptionProvider::class);
@@ -141,6 +154,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // configurable product relations should be added to relation table
         $this->catalogProductRelation->processRelations($productId, $productIds);
+        $this->_resetState();
 
         return $this;
     }
@@ -234,6 +248,27 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        return $this->attributeOptionProvider->getAttributeOptions($superAttribute, $productId);
+        $context = $productId . ':' . $this->scopeResolver->getScope()->getId();
+        if ($this->attributeOptionsContext !== $context) {
+            $this->_resetState();
+            $this->attributeOptionsContext = $context;
+        }
+        $attributeId = $superAttribute->getAttributeId();
+        if (!array_key_exists($attributeId, $this->attributeOptions)) {
+            $this->attributeOptions[$attributeId] = $this->attributeOptionProvider->getAttributeOptions(
+                $superAttribute,
+                $productId
+            );
+        }
+        return $this->attributeOptions[$attributeId];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributeOptionsContext = null;
+        $this->attributeOptions = [];
     }
 }
