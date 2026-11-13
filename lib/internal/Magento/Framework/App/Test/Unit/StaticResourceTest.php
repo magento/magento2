@@ -148,6 +148,7 @@ class StaticResourceTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(404);
+        $this->expectNotCacheableHeader();
         $this->responseMock->expects($this->never())
             ->method('setFilePath');
         $this->stateMock->expects($this->never())->method('setAreaCode');
@@ -228,6 +229,7 @@ class StaticResourceTest extends TestCase
             ],
         );
         $this->localeValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
+        $this->responseMock->expects($this->never())->method('setHeader');
         $this->object->launch();
     }
 
@@ -320,9 +322,36 @@ class StaticResourceTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(404);
+        $this->expectNotCacheableHeader();
         $this->driverMock->expects($this->once())
             ->method('getRealPathSafety')
             ->willReturnArgument(0);
+        $this->object->launch();
+    }
+
+    /**
+     * Test to lunch with an unknown theme on production mode
+     *
+     * @param array $themes
+     */
+    #[DataProvider('themesDataProvider')]
+    public function testLaunchWithInvalidThemeProductionMode(array $themes): void
+    {
+        $path = 'frontend/Test/luma/en_US/calendar.css';
+
+        $this->stateMock->method('getMode')->willReturn(State::MODE_PRODUCTION);
+        $this->deploymentConfigMock->method('getConfigData')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn(true);
+        $this->requestMock->method('get')->with('resource')->willReturn($path);
+        $this->driverMock->method('getRealPathSafety')->with($path)->willReturn($path);
+        $this->themePackageListMock->method('getThemes')->willReturn($themes);
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(404);
+        $this->expectNotCacheableHeader();
+        $this->publisherMock->expects($this->never())->method('publish');
+
         $this->object->launch();
     }
 
@@ -455,5 +484,15 @@ class StaticResourceTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * A missing static file can exist moments later, so its 404 must not be cached by a proxy, CDN or browser
+     */
+    private function expectNotCacheableHeader(): void
+    {
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
     }
 }
