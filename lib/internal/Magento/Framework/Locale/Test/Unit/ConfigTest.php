@@ -13,18 +13,24 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private static $allAllowedLocales = [
         'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_Latn_AZ', 'be_BY', 'bg_BG', 'bn_BD',
         'bs_Latn_BA', 'ca_ES', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_CH', 'de_DE', 'el_GR', 'en_AU',
         'en_CA', 'en_GB', 'en_NZ', 'en_US', 'es_AR', 'es_CO', 'es_PA', 'gl_ES', 'es_CR', 'es_ES',
         'es_MX', 'eu_ES', 'es_PE', 'et_EE', 'fa_IR', 'fi_FI', 'fil_PH', 'fr_CA', 'fr_FR', 'gu_IN',
         'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE',
-        'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_Cyrl_MN', 'ms_Latn_MY', 'nl_NL', 'nb_NO',
+        'kk_KZ', 'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_Cyrl_MN', 'ms_Latn_MY', 'nl_NL', 'nb_NO',
         'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_Cyrl_RS', 'sr_Latn_RS',
         'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_Hans_CN', 'zh_Hant_HK', 'zh_Hant_TW', 'es_CL',
         'lo_LA', 'es_VE', 'en_IE',
     ];
 
+    /**
+     * @var array
+     */
     private static $allAllowedCurrencies = [
         'AFN', 'ALL', 'AZN', 'DZD', 'AOA', 'ARS', 'AMD', 'AWG', 'AUD', 'BSD',
         'BHD', 'BDT', 'BBD', 'BYN', 'BZD', 'BMD', 'BTN', 'BOB', 'BAM', 'BWP',
@@ -45,29 +51,47 @@ class ConfigTest extends TestCase
         'XOF', 'WST', 'YER', 'ZMK', 'ZWD', 'TRY', 'AZM', 'ROL', 'TRL', 'XPF',
     ];
 
+    /**
+     * @var array
+     */
     private static $samplePresentLocales = [
         'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
         'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
         'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAbsentLocales = [
         'aa_BB', 'foo_BAR', 'cc_DD',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAdditionalLocales = [
         'en_AA', 'es_ZZ',
     ];
 
+    /**
+     * @var array
+     */
     private static $samplePresentCurrencies = [
         'AUD', 'BBD', 'GBP', 'CAD', 'CZK', 'GQE', 'CNY', 'DJF', 'HKD', 'JPY', 'MYR',
         'MXN', 'NZD', 'PHP', 'SGD', 'CHF', 'TWD', 'USD', 'AED', 'ZWD', 'ROL', 'CHE',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAbsentCurrencies = [
         'ABC', 'DEF', 'GHI', 'ZZZ',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAdditionalCurrencies = [
         'QED', 'PNP', 'EJN', 'MTO', 'EBY',
     ];
