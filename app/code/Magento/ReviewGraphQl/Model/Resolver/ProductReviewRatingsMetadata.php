@@ -75,6 +75,7 @@ class ProductReviewRatingsMetadata implements ResolverInterface
         $ratingCollection = $this->ratingCollectionFactory->create();
         $ratingCollection->addEntityFilter(Review::ENTITY_PRODUCT_CODE)
             ->setStoreFilter($store->getId())
+            ->addRatingPerStoreName($store->getId())
             ->setActiveFilter(true)
             ->setPositionOrder()
             ->addOptionToItems();
