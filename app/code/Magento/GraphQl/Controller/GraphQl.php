@@ -261,13 +261,29 @@ class GraphQl implements FrontControllerInterface
         [$error, $statusCode] = match (true) {
             $e instanceof InvalidRequestInterface => [FormattedError::createFromException($e), $e->getStatusCode()],
             $e instanceof SyntaxError => [FormattedError::createFromException($e), 400],
-            $e instanceof GraphQlAuthenticationException => [$this->graphQlError->create($e), 401],
-            $e instanceof GraphQlAuthorizationException => [$this->graphQlError->create($e), 403],
+            $e instanceof GraphQlAuthenticationException => [$this->formatClientSafeException($e), 401],
+            $e instanceof GraphQlAuthorizationException => [$this->formatClientSafeException($e), 403],
             $e instanceof GraphQlInputException => [FormattedError::createFromException($e), 200],
             default => [$this->graphQlError->create($e), ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS],
         };
 
         return [['errors' => [$error]], $statusCode];
+    }
+
+    /**
+     * Format an authentication or authorization exception without logging it when it is safe to show to the client
+     *
+     * @param GraphQlAuthenticationException|GraphQlAuthorizationException $e
+     * @return array
+     */
+    private function formatClientSafeException(
+        GraphQlAuthenticationException|GraphQlAuthorizationException $e
+    ): array {
+        if ($e->isClientSafe() && !$this->graphQlError->shouldShowDetail()) {
+            return FormattedError::createFromException($e);
+        }
+
+        return $this->graphQlError->create($e);
     }
 
     /**
