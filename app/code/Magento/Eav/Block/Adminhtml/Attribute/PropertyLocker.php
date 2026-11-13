@@ -10,8 +10,6 @@ use Magento\Eav\Model\Entity\Attribute\Config;
 
 /**
  * Disable form fields
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class PropertyLocker
 {
@@ -39,6 +37,8 @@ class PropertyLocker
     }
 
     /**
+     * Lock form data
+     *
      * @param \Magento\Framework\Data\Form $form
      * @return void
      */
