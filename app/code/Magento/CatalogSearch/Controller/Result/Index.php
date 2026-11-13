@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Controller\Result;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Layer\SearchFactory as SearchLayerFactory;
 use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
@@ -57,12 +58,18 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
     private $toolbarMemorizer;
 
     /**
+     * @var SearchLayerFactory
+     */
+    private $searchLayerFactory;
+
+    /**
      * @param Context $context
      * @param Session $catalogSession
      * @param StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
      * @param Resolver $layerResolver
      * @param ToolbarMemorizer|null $toolbarMemorizer
+     * @param SearchLayerFactory|null $searchLayerFactory
      */
     public function __construct(
         Context $context,
@@ -70,7 +77,8 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
         StoreManagerInterface $storeManager,
         QueryFactory $queryFactory,
         Resolver $layerResolver,
-        ?ToolbarMemorizer $toolbarMemorizer = null
+        ?ToolbarMemorizer $toolbarMemorizer = null,
+        ?SearchLayerFactory $searchLayerFactory = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -79,6 +87,8 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
         $this->layerResolver = $layerResolver;
         $this->toolbarMemorizer = $toolbarMemorizer ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(ToolbarMemorizer::class);
+        $this->searchLayerFactory = $searchLayerFactory ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(SearchLayerFactory::class);
     }
 
     /**
@@ -118,13 +128,6 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
         $getAdditionalRequestParameters = $this->getRequest()->getParams();
         unset($getAdditionalRequestParameters[QueryFactory::QUERY_VAR_NAME]);
 
-        $handles = null;
-        if ($query->getNumResults() == 0) {
-            $this->_view->getPage()->initLayout();
-            $handles = $this->_view->getLayout()->getUpdate()->getHandles();
-            $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
-        }
-
         if ($this->shouldRedirectOnToolbarAction()) {
             $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
             return;
@@ -133,10 +136,59 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
         if (empty($getAdditionalRequestParameters) &&
             $this->_objectManager->get(PopularSearchTerms::class)->isCacheable($queryText, $storeId)
         ) {
-            $this->getCacheableResult($catalogSearchHelper, $query, $handles);
+            $this->getCacheableResult($catalogSearchHelper, $query);
         } else {
-            $this->getNotCacheableResult($catalogSearchHelper, $query, $handles);
+            $this->getNotCacheableResult($catalogSearchHelper, $query);
         }
+    }
+
+    /**
+     * Get layout handles, adding the no results handle when it is defined and the search term has no results
+     *
+     * @param \Magento\Search\Model\Query $query
+     * @return array|null
+     */
+    private function getLayoutHandles($query)
+    {
+        if (!$this->isNoResultsHandleDefined() || !$this->hasNoResults($query)) {
+            return null;
+        }
+
+        $this->_view->getPage()->initLayout();
+        $handles = $this->_view->getLayout()->getUpdate()->getHandles();
+        $handles[] = static::DEFAULT_NO_RESULT_HANDLE;
+
+        return $handles;
+    }
+
+    /**
+     * Check whether any layout file of the current area and theme defines the no results handle
+     *
+     * @return bool
+     */
+    private function isNoResultsHandleDefined()
+    {
+        $layoutUpdates = $this->_view->getLayout()->getUpdate()->getFileLayoutUpdatesXml();
+        $handleXpath = sprintf("*[self::handle or self::layout][@id='%s']", static::DEFAULT_NO_RESULT_HANDLE);
+
+        return $layoutUpdates->xpath($handleXpath) !== [];
+    }
+
+    /**
+     * Check whether the search term has no results, ignoring layered navigation filters
+     *
+     * @param \Magento\Search\Model\Query $query
+     * @return bool
+     */
+    private function hasNoResults($query)
+    {
+        if ((int)$query->getNumResults() > 0) {
+            return false;
+        }
+
+        $searchLayer = $this->searchLayerFactory->create();
+
+        return $searchLayer->getProductCollection()->setPageSize(1)->getSize() === 0;
     }
 
     /**
@@ -144,10 +196,9 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
      *
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchHelper
      * @param \Magento\Search\Model\Query $query
-     * @param array $handles
      * @return void
      */
-    private function getCacheableResult($catalogSearchHelper, $query, $handles)
+    private function getCacheableResult($catalogSearchHelper, $query)
     {
         if (!$catalogSearchHelper->isMinQueryLength()) {
             $redirect = $query->getRedirect();
@@ -159,7 +210,7 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
 
         $catalogSearchHelper->checkNotes();
 
-        $this->_view->loadLayout($handles);
+        $this->_view->loadLayout($this->getLayoutHandles($query));
         $this->_view->renderLayout();
     }
 
@@ -168,12 +219,11 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
      *
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchHelper
      * @param \Magento\Search\Model\Query $query
-     * @param array $handles
      * @return void
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getNotCacheableResult($catalogSearchHelper, $query, $handles)
+    private function getNotCacheableResult($catalogSearchHelper, $query)
     {
         if ($catalogSearchHelper->isMinQueryLength()) {
             $query->setId(0)->setIsActive(1)->setIsProcessed(1);
@@ -188,7 +238,7 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
 
         $catalogSearchHelper->checkNotes();
 
-        $this->_view->loadLayout($handles);
+        $this->_view->loadLayout($this->getLayoutHandles($query));
         $this->getResponse()->setNoCacheHeaders();
         $this->_view->renderLayout();
     }
