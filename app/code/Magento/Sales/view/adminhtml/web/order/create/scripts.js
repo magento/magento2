@@ -476,11 +476,16 @@
          * @return {Boolean}
          */
         loadShippingRates: function () {
-            var addressContainer = this.shippingAsBilling ?
-                'billingAddressContainer' :
-                'shippingAddressContainer',
-                data = this.serializeData(this[addressContainer]).toObject();
+            var addressType = this.shippingAsBilling ? 'billing' : 'shipping',
+                addressContainer = addressType + 'AddressContainer',
+                data = this.serializeData(this[addressContainer]).toObject(),
+                addressSelector = $('order-' + addressType + '_address_customer_address_id');
 
+            // The saved address selector is outside the address fields. Without it the quote keeps the saved address
+            // id after the fields were edited, and on reorder the saved address is imported over the edited one.
+            if (addressSelector) {
+                data['order[' + addressType + '_address][customer_address_id]'] = addressSelector.value;
+            }
             data['collect_shipping_rates'] = 1;
             this.isShippingMethodReseted = false;
             this.loadArea(['shipping_method', 'totals'], true, data);
