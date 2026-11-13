@@ -14,8 +14,9 @@ define([
     'uiCollection',
     'uiRegistry',
     'mage/translate',
-    'jquery'
-], function (ko, utils, _, layout, uiCollection, registry, $t, $) {
+    'jquery',
+    'Magento_Ui/js/lib/validation/validator'
+], function (ko, utils, _, layout, uiCollection, registry, $t, $, validator) {
     'use strict';
 
     /**
@@ -150,6 +151,7 @@ define([
                 recordTemplate: 'onUpdateRecordTemplate',
                 recordData: 'setDifferedFromDefault parsePagesData setRecordDataToCache',
                 currentPage: 'changePage',
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validateOffPageRecords',
                 elems: 'checkSpinner',
                 changed: 'updateTrigger'
             },
@@ -659,6 +661,126 @@ define([
                 return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
             }
             return [];
+        },
+
+        /**
+         * Collects validation rules of the record cells.
+         * Cells hidden or disabled by configuration are skipped, and so are cells whose visibility
+         * or availability is imported from another component, as that state is known only once the record is rendered.
+         *
+         * @param {Object} cells
+         * @param {String} [scope]
+         * @param {String} [namePrefix]
+         * @returns {Array}
+         * @private
+         */
+        _getCellRules: function (cells, scope, namePrefix) {
+            var rules = [];
+
+            _.each(cells, function (cell) {
+                var config = cell.config || {},
+                    imports = config.imports || {},
+                    dataScope = _.compact([scope, config.dataScope]).join('.'),
+                    name = _.compact([namePrefix, cell.name]).join('.');
+
+                if (config.visible === false || config.disabled || imports.visible || imports.disabled) {
+                    return;
+                }
+
+                if (config.dataScope && !_.isEmpty(config.validation)) {
+                    rules.push({
+                        field: dataScope,
+                        name: name,
+                        validation: config.validation
+                    });
+                }
+
+                if (cell.children) {
+                    rules = rules.concat(this._getCellRules(cell.children, dataScope, name));
+                }
+            }, this);
+
+            return rules;
+        },
+
+        /**
+         * Checks record data against the cell validation rules.
+         *
+         * @param {Object} record
+         * @param {Array} rules
+         * @returns {Boolean}
+         * @private
+         */
+        _isRecordDataValid: function (record, rules) {
+            return _.every(rules, function (rule) {
+                var value = utils.nested(record, rule.field);
+
+                return validator(rule.validation, utils.isEmpty(value) ? '' : value).passed;
+            });
+        },
+
+        /**
+         * Validates the records of the pages that are not rendered, as only the rendered page has fields
+         * listening to the form validation. Marks the form invalid and opens the first page with an invalid record.
+         */
+        validateOffPageRecords: function () {
+            var pageSize = parseInt(this.pageSize, 10),
+                currentPage = ~~this.currentPage(),
+                rules,
+                invalidIndex;
+
+            if (this.pages() < 2 || !this.visible() || this.disabled() || !this.childTemplate) {
+                return;
+            }
+
+            rules = this._getCellRules(this.childTemplate.children);
+
+            if (!rules.length) {
+                return;
+            }
+
+            invalidIndex = _.findIndex(this.relatedData, function (record, index) {
+                return record && Math.floor(index / pageSize) + 1 !== currentPage &&
+                    !this._isRecordDataValid(record, rules);
+            }, this);
+
+            if (invalidIndex === -1) {
+                return;
+            }
+
+            this.source.set('params.invalid', true);
+
+            // Switching the page destroys the rendered fields, so it waits until they have handled this validation.
+            _.defer(this._openInvalidPage.bind(this, Math.floor(invalidIndex / pageSize) + 1, rules));
+        },
+
+        /**
+         * Opens the page unless the current page shows validation errors itself,
+         * then validates the fields of the opened page to display their errors.
+         *
+         * @param {Number} page
+         * @param {Array} rules
+         * @private
+         */
+        _openInvalidPage: function (page, rules) {
+            var pageSize = parseInt(this.pageSize, 10),
+                indexes;
+
+            if (_.compact(this.delegate('checkInvalid')).length) {
+                return;
+            }
+
+            this.currentPage(page);
+
+            indexes = _.range((page - 1) * pageSize, Math.min(page * pageSize, this.relatedData.length));
+
+            _.each(indexes, function (index) {
+                _.each(rules, function (rule) {
+                    registry.get(this.name + '.' + index + '.' + rule.name, function (field) {
+                        field.validate();
+                    });
+                }, this);
+            }, this);
         },
 
         /**
