@@ -72,6 +72,7 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
             $store = $this->storeManager->getStore(
                 $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
+            $baseCurrency = $store->getBaseCurrency();
 
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
@@ -80,7 +81,8 @@ class Price extends \Magento\Ui\Component\Listing\Columns\Column
                         sprintf("%F", $item[$fieldName]),
                         false,
                         PriceCurrencyInterface::DEFAULT_PRECISION,
-                        $store
+                        $store,
+                        $baseCurrency
                     );
                 }
             }
