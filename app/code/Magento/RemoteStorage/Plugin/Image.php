@@ -53,6 +53,11 @@ class Image
     private $logger;
 
     /**
+     * @var string
+     */
+    private $tmpFilePrefix;
+
+    /**
      * @param Filesystem $filesystem
      * @param File $ioFile
      * @param TargetDirectory $targetDirectory
@@ -73,6 +78,7 @@ class Image
         $this->isEnabled = $config->isEnabled();
         $this->ioFile = $ioFile;
         $this->logger = $logger;
+        $this->tmpFilePrefix = bin2hex(random_bytes(8));
     }
 
     /**
@@ -146,16 +152,25 @@ class Image
         $newName = null
     ): void {
         if ($this->isEnabled) {
-            $relativePath = $this->remoteDirectoryWrite->getRelativePath($destination);
-            $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath($relativePath);
+            $targetPath = $this->prepareDestination($subject, $destination, $newName);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $extension = strrchr(basename($targetPath), '.');
+            $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath()
+                . $this->tmpFilePrefix . '_save_' . hash('sha256', $targetPath)
+                . ($extension === false ? '' : $extension);
 
-            $proceed($tmpPath, $newName);
-
-            $this->tmpDirectoryWrite->getDriver()->rename(
-                $this->prepareDestination($subject, $tmpPath, $newName),
-                $this->prepareDestination($subject, $destination, $newName),
-                $this->remoteDirectoryWrite->getDriver()
-            );
+            try {
+                $proceed($tmpPath, null);
+                $this->tmpDirectoryWrite->getDriver()->rename(
+                    $tmpPath,
+                    $targetPath,
+                    $this->remoteDirectoryWrite->getDriver()
+                );
+            } finally {
+                if ($this->tmpDirectoryWrite->isFile($tmpPath)) {
+                    $this->tmpDirectoryWrite->delete($tmpPath);
+                }
+            }
         } else {
             $proceed($destination, $newName);
         }
@@ -209,7 +224,9 @@ class Image
     private function storeTmpName(string $filePath): string
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath() . basename($filePath);
+        $extension = strrchr(basename($filePath), '.');
+        $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath()
+            . $this->tmpFilePrefix . '_' . hash('sha256', $filePath) . ($extension === false ? '' : $extension);
 
         $this->tmpFiles[$filePath] = $tmpPath;
 
@@ -224,7 +241,7 @@ class Image
      */
     private function fileExistsInTmp(string $filePath): bool
     {
-        return array_key_exists($filePath, $this->tmpFiles);
+        return isset($this->tmpFiles[$filePath]) && $this->tmpDirectoryWrite->isFile($this->tmpFiles[$filePath]);
     }
 
     /**
