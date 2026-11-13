@@ -1212,7 +1212,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getTracking($trackings)
     {
-        $this->setTrackingReqeust();
+        $this->setTrackingRequest();
 
         if (!is_array($trackings)) {
             $trackings = [$trackings];
@@ -1231,6 +1231,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Set tracking request
      *
      * @return void
+     */
+    protected function setTrackingRequest()
+    {
+        $this->setTrackingReqeust();
+    }
+
+    /**
+     * Set tracking request
+     *
+     * @return void
+     * @deprecated Use setTrackingRequest() instead.
+     * @see setTrackingRequest()
      */
     protected function setTrackingReqeust()
     {

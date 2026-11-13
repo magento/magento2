@@ -15,14 +15,14 @@
 <?php if ($_options = $block->getOptionList()) : ?>
     <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
-            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+            <?php $_formattedOptionValue = $block->getFormattedOptionValue($_option) ?>
             <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
-            <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
-                <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
-                <?php if (isset($_formatedOptionValue['full_view'])) : ?>
+            <dd<?= (isset($_formattedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
+                <?= $escaper->escapeHtml($_formattedOptionValue['value'], ['span', 'a']) ?>
+                <?php if (isset($_formattedOptionValue['full_view'])) : ?>
                     <dl class="item options tooltip content">
                         <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
-                        <dd><?= $escaper->escapeHtml($_formatedOptionValue['full_view'], ['span']) ?></dd>
+                        <dd><?= $escaper->escapeHtml($_formattedOptionValue['full_view'], ['span']) ?></dd>
                     </dl>
                 <?php endif; ?>
             </dd>

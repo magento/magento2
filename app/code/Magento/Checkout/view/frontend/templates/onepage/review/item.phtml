@@ -24,13 +24,13 @@ $taxDataHelper = $this->helper(Magento\Tax\Helper\Data::class);
                 <?php if ($_options = $block->getOptionList()) :?>
                     <dl class="item-options">
                         <?php foreach ($_options as $_option) :?>
-                            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                            <?php $_formattedOptionValue = $block->getFormattedOptionValue($_option) ?>
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd>
-                                <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                    <?= /* @noEscape */ $_formatedOptionValue['full_view'] ?>
+                                <?php if (isset($_formattedOptionValue['full_view'])) :?>
+                                    <?= /* @noEscape */ $_formattedOptionValue['full_view'] ?>
                                 <?php else :?>
-                                    <?= /* @noEscape */ $_formatedOptionValue['value'] ?>
+                                    <?= /* @noEscape */ $_formattedOptionValue['value'] ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>
