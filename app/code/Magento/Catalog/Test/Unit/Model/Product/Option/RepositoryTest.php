@@ -285,9 +285,9 @@ class RepositoryTest extends TestCase
             ->willReturn($this->productMock);
         $this->optionMock->method('getOptionId')->willReturn($optionId);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
-        $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
-            ['option_type_id' => 4],
-            ['option_type_id' => 5]
+        $this->optionMock->expects($this->exactly(2))->method('getData')->willReturnMap([
+            ['previous_type', null, 'drop_down'],
+            ['values', null, [['option_type_id' => 4], ['option_type_id' => 5]]],
         ]);
         $optionCollection = $this->createMock(Collection::class);
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
@@ -315,14 +315,23 @@ class RepositoryTest extends TestCase
             ->willReturn($this->productMock);
         $this->optionMock->method('getOptionId')->willReturn($optionId);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
-        $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
-            ['option_type_id' => 4],
-            ['option_type_id' => 5]
+        $this->optionMock->expects($this->exactly(2))->method('getData')->willReturnMap([
+            ['previous_type', null, null],
+            ['values', null, [['option_type_id' => 4], ['option_type_id' => 5]]],
         ]);
+        $this->optionMock->method('getType')->willReturn('field');
+        $data = [];
+        $this->optionMock->method('setData')->willReturnCallback(
+            function ($key, $value = null) use (&$data) {
+                $data[$key] = $value;
+                return $this->optionMock;
+            }
+        );
         $optionCollection = $this->createMock(Collection::class);
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
         $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn(null);
         $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
+        $this->assertEquals('field', $data['previous_type']);
     }
 }
