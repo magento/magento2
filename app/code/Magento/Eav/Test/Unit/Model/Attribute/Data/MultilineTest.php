@@ -132,7 +132,7 @@ class MultilineTest extends TestCase
             ],
             [
                 'format' => AttributeDataFactory::OUTPUT_FORMAT_HTML,
-                'expectedResult' => 'value1<br />value2'
+                'expectedResult' => 'value1<br>value2'
             ],
             [
                 'format' => AttributeDataFactory::OUTPUT_FORMAT_ONELINE,
