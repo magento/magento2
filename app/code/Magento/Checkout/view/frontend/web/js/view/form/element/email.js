@@ -34,6 +34,7 @@ define([
     }
 
     return Component.extend({
+        isSubmitting: false,
         defaults: {
             template: 'Magento_Checkout/form/element/email',
             email: checkoutData.getInputFieldEmailValue(),
@@ -181,15 +182,28 @@ define([
          */
         login: function (loginForm) {
             var loginData = {},
-                formDataArray = $(loginForm).serializeArray();
+                formDataArray;
+
+            if (this.isSubmitting) {
+                return;
+            }
+
+            formDataArray = $(loginForm).serializeArray();
 
             formDataArray.forEach(function (entry) {
                 loginData[entry.name] = entry.value;
             });
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
+                this.isSubmitting = true;
                 fullScreenLoader.startLoader();
-                loginAction(loginData).always(function () {
+                loginAction(loginData).done(function (response) {
+                    if (response.errors) {
+                        this.isSubmitting = false;
+                    }
+                }.bind(this)).fail(function () {
+                    this.isSubmitting = false;
+                }.bind(this)).always(function () {
                     fullScreenLoader.stopLoader();
                 });
             }
