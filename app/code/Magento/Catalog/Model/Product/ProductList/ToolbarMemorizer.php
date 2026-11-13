@@ -15,13 +15,15 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * Class ToolbarMemorizer
  *
  * Responds for saving toolbar settings to catalog session
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ToolbarMemorizer
 {
     /**
      * XML PATH to enable/disable saving toolbar parameters to session
      */
-    const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
+    public const XML_PATH_CATALOG_REMEMBER_PAGINATION = 'catalog/frontend/remember_pagination';
 
     /**
      * @var CatalogSession
@@ -86,8 +88,13 @@ class ToolbarMemorizer
     public function getOrder()
     {
         if ($this->order === null) {
-            $this->order = $this->toolbarModel->getOrder() ??
+            $order = $this->toolbarModel->getOrder();
+            $order = is_array($order) ? null : $order;
+            $this->order = $order !== null ? $order :
                 ($this->isMemorizingAllowed() ? $this->catalogSession->getData(Toolbar::ORDER_PARAM_NAME) : null);
+            if (is_array($this->order)) {
+                $this->order = false;
+            }
         }
         return $this->order;
     }
