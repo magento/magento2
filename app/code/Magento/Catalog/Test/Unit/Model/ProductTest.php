@@ -689,6 +689,15 @@ class ProductTest extends TestCase
     /**
      * @return void
      */
+    public function testGetStatusReturnsInteger(): void
+    {
+        $this->model->setData('status', '2');
+        $this->assertSame(Status::STATUS_DISABLED, $this->model->getStatus());
+    }
+
+    /**
+     * @return void
+     */
     public function testIsInStock(): void
     {
         $this->model->setStatus(Status::STATUS_ENABLED);
