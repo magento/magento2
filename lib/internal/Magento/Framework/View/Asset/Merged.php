@@ -111,7 +111,7 @@ class Merged implements \Iterator
                 $this->mergeStrategy->merge($this->assets, $mergedAsset);
                 $this->assets = [$mergedAsset];
             } catch (\Exception $e) {
-                $this->logger->critical($e);
+                $this->logger->critical('Unable to merge assets', ['exception' => $e]);
             }
         }
     }
