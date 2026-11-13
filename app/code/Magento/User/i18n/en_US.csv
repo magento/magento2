@@ -109,8 +109,8 @@ username,username
 Custom,Custom
 All,All
 Resources,Resources
-"Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?","Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?"
-"Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?","Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?"
+"Warning!<br>This action will remove this user from already assigned role.<br />Are you sure?","Warning!<br />This action will remove this user from already assigned role.<br />Are you sure?"
+"Warning!<br>This action will remove those users from already assigned roles.<br />Are you sure?","Warning!<br />This action will remove those users from already assigned roles.<br />Are you sure?"
 "New admin user '%user_name' created","New admin user '%user_name' created"
 "Hello,","Hello,"
 "A new admin account was created for %first_name, %last_name using %email.","A new admin account was created for %first_name, %last_name using %email."
