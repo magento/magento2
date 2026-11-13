@@ -799,6 +799,13 @@ class Product extends AbstractEntity
     private ?DomainValidator $domainValidator;
 
     /**
+     * Website ids of the existing products in the current bunch, keyed by entity id
+     *
+     * @var array
+     */
+    private array $existingWebsiteIds = [];
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -1680,6 +1687,7 @@ class Product extends AbstractEntity
             $entityRowsIn = [];
             $entityRowsUp = [];
             $this->websitesCache = [];
+            $this->loadExistingWebsiteIds($bunch);
             $this->categoriesCache = [];
             $tierPrices = [];
             $mediaGallery = [];
@@ -1778,11 +1786,32 @@ class Product extends AbstractEntity
                 ]
             );
         }
+        $this->existingWebsiteIds = [];
         return $this;
     }
     //phpcs:enable Generic.Metrics.NestingLevel
 
     // phpcs:enable
+
+    /**
+     * Load website ids of the bunch's existing products that are imported without product_websites
+     *
+     * @param array $bunch
+     * @return void
+     */
+    private function loadExistingWebsiteIds(array $bunch): void
+    {
+        $productIds = [];
+        foreach ($bunch as $rowData) {
+            $rowSku = $rowData[self::COL_SKU] ?? null;
+            if (empty($rowData[self::COL_PRODUCT_WEBSITES]) && $this->isSkuExist($rowSku)) {
+                $productIds[] = (int)$this->getExistingSku($rowSku)['entity_id'];
+            }
+        }
+        $this->existingWebsiteIds = $productIds
+            ? $this->getResource()->getWebsiteIdsByProductIds(array_values(array_unique($productIds)))
+            : [];
+    }
 
     /**
      * In _saveProducts loop, save product entity
@@ -1856,13 +1885,10 @@ class Product extends AbstractEntity
                 $websiteId = $this->storeResolver->getWebsiteCodeToId($websiteCode);
                 $this->websitesCache[$rowSku][$websiteId] = true;
             }
-        } else {
-            $product = $this->retrieveProductBySku($rowSku);
-            if ($product) {
-                $websiteIds = $product->getWebsiteIds();
-                foreach ($websiteIds as $websiteId) {
-                    $this->websitesCache[$rowSku][$websiteId] = true;
-                }
+        } elseif ($this->isSkuExist($rowSku)) {
+            $productId = $this->getExistingSku($rowSku)['entity_id'];
+            foreach ($this->existingWebsiteIds[$productId] ?? [] as $websiteId) {
+                $this->websitesCache[$rowSku][$websiteId] = true;
             }
         }
     }
