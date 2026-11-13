@@ -66,9 +66,14 @@ class CouponPost extends \Magento\Checkout\Controller\Cart implements HttpPostAc
      */
     public function execute()
     {
-        $couponCode = $this->getRequest()->getParam('remove') == 1
-            ? ''
-            : trim($this->getRequest()->getParam('coupon_code', ''));
+        $isRemoval = $this->getRequest()->getParam('remove') == 1;
+        $couponCodeParam = $this->getRequest()->getParam('coupon_code', '');
+        if (!$isRemoval && !is_string($couponCodeParam)) {
+            $this->messageManager->addErrorMessage(__('We cannot apply the coupon code.'));
+            return $this->_goBack();
+        }
+
+        $couponCode = $isRemoval ? '' : trim($couponCodeParam);
 
         $cartQuote = $this->cart->getQuote();
         $oldCouponCode = $cartQuote->getCouponCode() ?? '';
