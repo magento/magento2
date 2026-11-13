@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin;
 
+use Magento\Catalog\Model\Product;
+
 class Import
 {
     /**
@@ -31,7 +33,9 @@ class Import
      */
     public function afterImportSource(\Magento\ImportExport\Model\Import $subject, $import)
     {
-        if (!$this->_indexerEavProcessor->isIndexerScheduled()) {
+        if ($subject->getEntity() === Product::ENTITY
+            && !$this->_indexerEavProcessor->isIndexerScheduled()
+        ) {
             $this->_indexerEavProcessor->markIndexerAsInvalid();
         }
         return $import;
