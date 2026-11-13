@@ -11,9 +11,9 @@
 <div id="order-shipping-method-summary"
      class="order-shipping-method-summary">
     <a href="#"
-       onclick="return order.loadShippingRates();"
+       data-role="order-load-shipping-rates"
        class="action-default">
         <span><%- data.linkText %></span>
     </a>
-    <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
+    <input type="hidden" name="order[has_shipping]" value="" class="required-entry">
 </div>
