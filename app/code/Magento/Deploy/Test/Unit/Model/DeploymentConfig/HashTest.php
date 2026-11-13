@@ -10,6 +10,8 @@ namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Deploy\Model\DeploymentConfig\Hash\Generator;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\FlagFactory;
@@ -17,6 +19,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Verify deployment configuration hash storage and cache invalidation.
+ */
 class HashTest extends TestCase
 {
     /**
@@ -50,6 +55,11 @@ class HashTest extends TestCase
     private $hash;
 
     /**
+     * @var CacheInterface|MockObject
+     */
+    private $cache;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -70,11 +80,13 @@ class HashTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->hash = new Hash(
             $this->configHashGeneratorMock,
             $this->dataConfigCollectorMock,
             $this->flagResourceMock,
-            $this->flagFactoryMock
+            $this->flagFactoryMock,
+            $this->cache
         );
     }
 
@@ -86,6 +98,7 @@ class HashTest extends TestCase
     #[DataProvider('getDataProvider')]
     public function testGet($dataFromStorage, $expectedResult)
     {
+        $this->cache->expects($this->never())->method('clean');
         $this->flagMock->expects($this->once())
             ->method('getFlagData')
             ->willReturn($dataFromStorage);
@@ -119,20 +132,71 @@ class HashTest extends TestCase
      */
     public function testRegenerate()
     {
+        $this->assertRegenerateInvalidatesCache(null);
+    }
+
+    /**
+     * Verify section regeneration invalidates cached checks.
+     *
+     * @return void
+     */
+    public function testSectionRegenerateInvalidatesCache(): void
+    {
+        $this->assertRegenerateInvalidatesCache('section');
+    }
+
+    /**
+     * Verify cache backend errors propagate after the hashes have been saved.
+     *
+     * @return void
+     */
+    public function testRegenerateWithCacheException(): void
+    {
+        $this->generalRegenerateMocks(['section' => 'config'], 'config', 'hash', ['section' => 'hash']);
+        $this->flagResourceMock->expects($this->once())->method('save')->with($this->flagMock)->willReturnSelf();
+        $exception = new \RuntimeException('Cache cleanup failed.');
+        $this->cache->expects($this->once())
+            ->method('clean')
+            ->with(CacheConstants::CLEANING_MODE_MATCHING_TAG, [Hash::CACHE_TAG])
+            ->willThrowException($exception);
+
+        $this->expectExceptionObject($exception);
+        $this->hash->regenerate();
+    }
+
+    /**
+     * Verify cached checks are invalidated only after the hash save succeeds.
+     *
+     * @param string|null $sectionName
+     * @return void
+     */
+    private function assertRegenerateInvalidatesCache(?string $sectionName): void
+    {
         $section = 'section';
         $config = 'some config';
         $fullConfig = ['section' => $config];
         $hash = 'some hash';
         $hashes = [$section => $hash];
 
-        $this->generalRegenerateMocks($fullConfig, $config, $hash, $hashes);
+        $this->generalRegenerateMocks($fullConfig, $config, $hash, $hashes, $sectionName);
 
+        $saved = false;
         $this->flagResourceMock->expects($this->once())
             ->method('save')
             ->with($this->flagMock)
-            ->willReturnSelf();
+            ->willReturnCallback(function () use (&$saved) {
+                $saved = true;
+                return $this->flagResourceMock;
+            });
+        $this->cache->expects($this->once())
+            ->method('clean')
+            ->with(CacheConstants::CLEANING_MODE_MATCHING_TAG, [Hash::CACHE_TAG])
+            ->willReturnCallback(function () use (&$saved) {
+                $this->assertTrue($saved);
+                return true;
+            });
 
-        $this->hash->regenerate();
+        $this->hash->regenerate($sectionName);
     }
 
     /**
@@ -140,6 +204,7 @@ class HashTest extends TestCase
      */
     public function testRegenerateWithException()
     {
+        $this->cache->expects($this->never())->method('clean');
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The hash isn\'t saved.');
         $section = 'section';

@@ -6,6 +6,9 @@
 
 namespace Magento\Deploy\Model\DeploymentConfig;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Flag;
 use Magento\Framework\Flag\FlagResource;
@@ -24,7 +27,12 @@ class Hash
     /**
      * Name of the section where deployment configuration hash is stored.
      */
-    const CONFIG_KEY = 'config_hash';
+    public const CONFIG_KEY = 'config_hash';
+
+    /**
+     * Cache tag for successful deployment configuration checks.
+     */
+    public const CACHE_TAG = 'DEPLOYMENT_CONFIG_HASH';
 
     /**
      * Hash generator.
@@ -55,21 +63,29 @@ class Hash
     private $flagFactory;
 
     /**
+     * @var CacheInterface
+     */
+    private CacheInterface $cache;
+
+    /**
      * @param Hash\Generator $configHashGenerator the hash generator
      * @param DataCollector $dataConfigCollector the config data collector
      * @param FlagResource $flagResource
      * @param FlagFactory $flagFactory
+     * @param CacheInterface|null $cache
      */
     public function __construct(
         Hash\Generator $configHashGenerator,
         DataCollector $dataConfigCollector,
         FlagResource $flagResource,
-        FlagFactory $flagFactory
+        FlagFactory $flagFactory,
+        ?CacheInterface $cache = null
     ) {
         $this->configHashGenerator = $configHashGenerator;
         $this->dataConfigCollector = $dataConfigCollector;
         $this->flagResource = $flagResource;
         $this->flagFactory = $flagFactory;
+        $this->cache = $cache ?? ObjectManager::getInstance()->get(CacheInterface::class);
     }
 
     /**
@@ -100,6 +116,8 @@ class Hash
         } catch (\Exception $exception) {
             throw new LocalizedException(__("The hash isn't saved."), $exception);
         }
+
+        $this->cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [self::CACHE_TAG]);
     }
 
     /**
