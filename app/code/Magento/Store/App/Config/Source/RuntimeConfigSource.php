@@ -10,28 +10,44 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Config source. Retrieve all configuration for scopes from db
  */
-class RuntimeConfigSource implements ConfigSourceInterface
+class RuntimeConfigSource implements ConfigSourceInterface, ResetAfterRequestInterface
 {
     /**
+     * Deployment settings used to determine database availability.
+     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
+     * Database resources for scope tables.
+     *
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
+     * Connection used by the current runtime read.
+     *
      * @var AdapterInterface
      */
     private $connection;
 
     /**
+     * Whether the last read contained entities from every scope table.
+     *
+     * @var bool
+     */
+    private bool $hasRuntimeData = false;
+
+    /**
+     * Initialize the deployment settings and database resources.
+     *
      * @param DeploymentConfig $deploymentConfig
      * @param ResourceConnection $resourceConnection
      */
@@ -56,7 +72,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
     {
         $data = [];
         try {
-            if ($this->canUseDatabase()) {
+            if ($this->isDbAvailable()) {
                 $data = [
                     'websites' => $this->getEntities('store_website', 'code'),
                     'groups' => $this->getEntities('store_group', 'group_id'),
@@ -68,7 +84,29 @@ class RuntimeConfigSource implements ConfigSourceInterface
             $data = [];
         }
 
+        $this->hasRuntimeData = !empty($data['websites']) && !empty($data['groups']) && !empty($data['stores']);
         return $data;
+    }
+
+    /**
+     * Whether the last read returned entities from all three scope tables.
+     *
+     * @return bool
+     */
+    public function hasRuntimeData(): bool
+    {
+        return $this->hasRuntimeData;
+    }
+
+    /**
+     * Release the connection and runtime-data status between requests.
+     *
+     * @return void
+     */
+    public function _resetState(): void
+    {
+        $this->hasRuntimeData = false;
+        $this->connection = null;
     }
 
     /**
@@ -109,11 +147,11 @@ class RuntimeConfigSource implements ConfigSourceInterface
     }
 
     /**
-     * Check whether db connection is available and can be used
+     * Whether deployment configuration permits runtime database reads.
      *
      * @return bool
      */
-    private function canUseDatabase()
+    public function isDbAvailable(): bool
     {
         return $this->deploymentConfig->isDbAvailable();
     }
