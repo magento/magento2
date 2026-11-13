@@ -846,6 +846,9 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE" indexType="btree">
+            <column name="value"/>
+        </index>
     </table>
     <table name="catalog_product_entity_media_gallery_value" resource="default" engine="innodb"
            comment="Catalog Product Media Gallery Attribute Value Table">
