@@ -30,8 +30,14 @@ class ConfigurableOptionsSelectionMetadataTest extends GraphQlAbstract
      */
     private $selectionUidFormatter;
 
+    /**
+     * @var AttributeInterface|null
+     */
     private $firstConfigurableAttribute = null;
 
+    /**
+     * @var AttributeInterface|null
+     */
     private $secondConfigurableAttribute = null;
 
     /**
@@ -356,6 +362,99 @@ QUERY;
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
             ['media_gallery']));
+    }
+
+    /**
+     * Out of stock children are offered for selection when "Display Out of Stock Products" is enabled.
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes_combination.php
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
+     */
+    public function testSelectedFirstAttributeLastOptionShowOutOfStock()
+    {
+        $response = $this->graphQlQuery($this->getLastOptionSelectionQuery());
+        $this->assertEquals(4, count($response['products']['items'][0]['configurable_product_options_selection']
+            ['options_available_for_selection'][1]['option_value_uids']));
+        $this->assertAvailableOptionUids(
+            $this->getSecondConfigurableAttribute()->getAttributeId(),
+            $this->getSecondConfigurableAttribute()->getOptions(),
+            $response['products']['items'][0]['configurable_product_options_selection']
+            ['options_available_for_selection'][1]['option_value_uids']
+        );
+    }
+
+    /**
+     * Out of stock children are hidden when "Display Out of Stock Products" is disabled.
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes_combination.php
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 0
+     */
+    public function testSelectedFirstAttributeLastOptionHideOutOfStock()
+    {
+        $response = $this->graphQlQuery($this->getLastOptionSelectionQuery());
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
+            ['options_available_for_selection'][1]['option_value_uids']));
+    }
+
+    /**
+     * The setting is read per store: the second store shows out of stock children, the default store hides them.
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes_combination.php
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 0
+     * @magentoConfigFixture fixture_second_store_store cataloginventory/options/show_out_of_stock 1
+     */
+    public function testSelectedFirstAttributeLastOptionShowOutOfStockPerStore()
+    {
+        $query = $this->getLastOptionSelectionQuery();
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
+            ['options_available_for_selection'][1]['option_value_uids']));
+
+        $response = $this->graphQlQuery($query, [], '', ['Store' => 'fixture_second_store']);
+        $this->assertEquals(4, count($response['products']['items'][0]['configurable_product_options_selection']
+            ['options_available_for_selection'][1]['option_value_uids']));
+    }
+
+    /**
+     * Build a selection query for the last option of the first attribute (two of its children are out of stock).
+     *
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    private function getLastOptionSelectionQuery(): string
+    {
+        $attribute = $this->getFirstConfigurableAttribute();
+        $options = $attribute->getOptions();
+        $lastOptionUid = $this->selectionUidFormatter->encode(
+            (int)$attribute->getAttributeId(),
+            (int)$options[4]->getValue()
+        );
+
+        return <<<QUERY
+{
+   products(filter:{
+     sku: {eq: "configurable_12345"}
+         })
+   {
+    items
+     {
+      sku
+      ... on ConfigurableProduct {
+        configurable_product_options_selection(
+          configurableOptionValueUids: ["{$lastOptionUid}"]
+        ) {
+          options_available_for_selection {
+            option_value_uids
+            attribute_code
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
     }
 
     /**
