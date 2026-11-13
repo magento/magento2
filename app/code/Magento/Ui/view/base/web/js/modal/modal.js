@@ -448,6 +448,10 @@ define([
          * Destroy overlay.
          */
         _destroyOverlay: function () {
+            if (!this.overlay) {
+                return;
+            }
+
             if (this._getVisibleCount()) {
                 this.overlay.off().on('click', this.prevOverlayHandler);
             } else {
