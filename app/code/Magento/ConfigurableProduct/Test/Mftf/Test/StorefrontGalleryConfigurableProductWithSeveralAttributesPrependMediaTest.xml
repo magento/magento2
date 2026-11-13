@@ -52,13 +52,13 @@
             <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="openConfigurationPanel"/>
 
             <!-- Find Dropdown attribute in grid and select it -->
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindDropdownAttribute"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAttributeGridFiltersToFindDropdownAttribute"/>
             <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForDropdownAttribute"/>
             <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createDropdownAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForDropdownAttribute"/>
             <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForDropdownAttribute"/>
             <click selector="{{AdminDataGridTableSection.rowCheckbox('1')}}" stepKey="selectDropdownAttribute"/>
             <!-- Find Swatch attribute in grid and select it -->
-            <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAttributeGridFiltersToFindSwatchAttribute"/>
             <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersPaneForSwatchAttribute"/>
             <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillAttributeCodeFilterFieldForSwatchAttribute"/>
             <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickApplyFiltersButtonForSwatchAttribute"/>
