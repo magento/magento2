@@ -369,6 +369,62 @@ class ProcessCronQueueObserverTest extends TestCase
     }
 
     /**
+     * A schedule already taken by another process must not leave the job lock held.
+     *
+     * @return void
+     */
+    public function testDispatchReleasesJobLockWhenScheduleIsTakenByAnotherProcess(): void
+    {
+        $lockBalance = [];
+        $this->lockManagerMock->expects($this->atLeastOnce())
+            ->method('lock')
+            ->willReturnCallback(
+                function (string $name) use (&$lockBalance) {
+                    $lockBalance[$name] = ($lockBalance[$name] ?? 0) + 1;
+                    return true;
+                }
+            );
+        $this->lockManagerMock->expects($this->atLeastOnce())
+            ->method('unlock')
+            ->willReturnCallback(
+                function (string $name) use (&$lockBalance) {
+                    $lockBalance[$name] = ($lockBalance[$name] ?? 0) - 1;
+                    return true;
+                }
+            );
+
+        $this->cacheMock->method('load')->willReturn($this->time + 10000000);
+        $this->scopeConfigMock->method('getValue')->willReturnMap(
+            [['system/cron/test_group/schedule_lifetime', ScopeInterface::SCOPE_STORE, null, 2 * 24 * 60]]
+        );
+        $this->consoleRequestMock->method('getParam')->willReturn('test_group');
+
+        $schedule = $this->createPartialMockWithReflection(
+            Schedule::class,
+            ['tryLockJob', '__wakeup', 'save', 'getResource', 'getJobCode', 'getScheduledAt', 'setFinishedAt']
+        );
+        $schedule->method('getJobCode')->willReturn('test_job1');
+        $schedule->method('getScheduledAt')->willReturn(date('Y-m-d H:i:s', $this->time - 86400));
+        $schedule->expects($this->atLeastOnce())->method('tryLockJob')->willReturn(false);
+        $schedule->expects($this->never())->method('setFinishedAt');
+        $this->scheduleCollectionMock->addItem($schedule);
+
+        $this->configMock->method('getJobs')->willReturn(['test_group' => ['test_job1' => ['test_data']]]);
+
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->method('create')->willReturn($scheduleMock);
+
+        $this->cronQueueObserver->execute($this->observerMock);
+
+        $this->assertCount(2, $lockBalance, 'Expected the group lock and the job lock to be taken');
+        $this->assertSame([], array_filter($lockBalance), 'Every lock() must be paired with an unlock()');
+    }
+
+    /**
      * Test case catch exception if too late for schedule.
      *
      * @return void
