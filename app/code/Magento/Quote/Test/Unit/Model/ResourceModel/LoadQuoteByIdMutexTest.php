@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model\ResourceModel;
 use Exception;
 use InvalidArgumentException;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\Quote;
@@ -145,5 +146,44 @@ class LoadQuoteByIdMutexTest extends TestCase
         $this->expectExceptionMessage('Callable exception');
 
         $this->model->execute($maskedIds, fn () => throw new Exception('Callable exception'));
+    }
+
+    public function testExecuteRollsBackWhenLockQueryFails(): void
+    {
+        $maskedIds = [1, 2, 3];
+        $exception = new LockWaitException('Lock wait timeout exceeded');
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $selectMock = $this->createStub(Select::class);
+        $callableInvoked = false;
+
+        $this->quoteResourceModelMock->method('getConnection')->willReturn($connectionMock);
+        $this->quoteResourceModelMock->method('getMainTable')->willReturn('quote_table');
+        $this->quoteResourceModelMock->method('getIdFieldName')->willReturn('entity_id');
+        $selectMock->method('from')->willReturnSelf();
+        $selectMock->method('where')->willReturnSelf();
+        $selectMock->method('forUpdate')->willReturnSelf();
+        $connectionMock->method('select')->willReturn($selectMock);
+        $connectionMock->method('prepareSqlCondition')->willReturn('entity_id IN (1, 2, 3)');
+        $connectionMock->expects($this->once())
+            ->method('beginTransaction');
+        $connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->willThrowException($exception);
+        $connectionMock->expects($this->once())
+            ->method('rollBack');
+        $connectionMock->expects($this->never())
+            ->method('commit');
+        $this->quoteFactoryMock->expects($this->never())
+            ->method('create');
+
+        try {
+            $this->model->execute($maskedIds, function () use (&$callableInvoked) {
+                $callableInvoked = true;
+            });
+            $this->fail('Expected exception was not thrown');
+        } catch (LockWaitException $caught) {
+            $this->assertSame($exception, $caught);
+        }
+        $this->assertFalse($callableInvoked);
     }
 }
