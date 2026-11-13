@@ -195,11 +195,14 @@ class Image
     {
         $select = $this->getUsedImagesSelect();
         $select->where('images.value = ?', $filepath);
-        $result = array_map(
-            fn ($ids) => array_map('intval', explode(',', $ids)),
-            $this->connection->fetchPairs($select)
-        );
 
-        return $result[$filepath] ?? [];
+        $websiteIds = [];
+        foreach ($this->connection->fetchAll($select) as $row) {
+            foreach (explode(',', (string) $row['website_ids']) as $websiteId) {
+                $websiteIds[(int) $websiteId] = (int) $websiteId;
+            }
+        }
+
+        return array_values($websiteIds);
     }
 }
