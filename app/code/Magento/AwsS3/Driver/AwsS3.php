@@ -167,7 +167,8 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function createDirectory($path, $permissions = 0777): bool
     {
-        if ($path === '/') {
+        $path = $this->normalizeRelativePath($path);
+        if ($path === '/' || $path === '.' || $path === '') {
             return true;
         }
 
