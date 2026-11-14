@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\HTTP\AsyncClient;
 
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\CancellationException;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -87,6 +88,10 @@ class GuzzleWrapDeferred implements HttpResponseDeferredInterface
             } else {
                 $this->exception = new HttpException($requestException->getMessage(), 0, $requestException);
             }
+        } catch (GuzzleException $guzzleException) {
+            // ConnectException (cURL timeout), TooManyRedirectsException, etc. are still
+            // failures to send the request - honor the documented @throws HttpException contract.
+            $this->exception = new HttpException($guzzleException->getMessage(), 0, $guzzleException);
         } catch (\Throwable $exception) {
             $this->exception = $exception;
         }
