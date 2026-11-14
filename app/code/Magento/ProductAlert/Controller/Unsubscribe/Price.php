@@ -3,16 +3,20 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\ProductAlert\Controller\Unsubscribe;
 
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
-use Magento\Framework\App\Action\Context;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ProductAlert\Controller\Unsubscribe as UnsubscribeController;
+use Magento\ProductAlert\Model\PriceFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Price
@@ -20,21 +24,37 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Price extends UnsubscribeController implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var PriceFactory
+     */
+    private $priceFactory;
+
+    /**
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param ProductRepositoryInterface $productRepository
+     * @param StoreManagerInterface|null $storeManager
+     * @param PriceFactory|null $priceFactory
      */
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        ?StoreManagerInterface $storeManager = null,
+        ?PriceFactory $priceFactory = null
     ) {
         $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->priceFactory = $priceFactory ?? ObjectManager::getInstance()->get(PriceFactory::class);
         parent::__construct($context, $customerSession);
     }
 
@@ -64,15 +84,12 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
                 return $resultRedirect;
             }
 
-            /** @var \Magento\ProductAlert\Model\Price $model */
-            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)
+            $store = $this->storeManager->getStore();
+            $model = $this->priceFactory->create()
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
-                ->setWebsiteId(
-                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
-                        ->getStore()
-                        ->getWebsiteId()
-                )
+                ->setWebsiteId($store->getWebsiteId())
+                ->setStoreId($store->getId())
                 ->loadByParam();
             if ($model->getId()) {
                 $model->delete();
@@ -89,7 +106,7 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
                 __("The alert subscription couldn't update at this time. Please try again later.")
             );
         }
-        $resultRedirect->setUrl($product->getProductUrl());
+        $resultRedirect->setPath('productalert/customer/index');
         return $resultRedirect;
     }
 }
