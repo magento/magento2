@@ -277,6 +277,161 @@ class ConfigTest extends TestCase
     }
 
     /**
+     * When a dependent FieldArray is fully disabled, nothing for that field is posted.
+     * Config must not touch backend models for fields absent from the groups payload.
+     *
+     * @return void
+     */
+    public function testSaveDoesNotTouchFieldsAbsentFromPostedGroups(): void
+    {
+        $this->appConfigMock->expects($this->exactly(2))->method('reinit');
+        $transactionMock = $this->createMock(Transaction::class);
+        $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
+
+        $this->settingsChecker->expects($this->any())->method('isReadOnly')->willReturn(false);
+
+        // Existing stored FieldArray value must remain unless the field is in the POST
+        $this->configLoaderMock->expects($this->any())->method('getConfigByPath')->willReturn([
+            'section/general/items' => [
+                'path' => 'section/general/items',
+                'value' => '{"_row1":{"item_label":"keep-me"}}',
+                'config_id' => 10,
+            ],
+            'section/general/enabled' => [
+                'path' => 'section/general/enabled',
+                'value' => '0',
+                'config_id' => 11,
+            ],
+        ]);
+
+        $group = $this->createMock(Group::class);
+        $group->method('getPath')->willReturn('section/general');
+        $group->method('getId')->willReturn('general');
+
+        $enabledField = $this->createMock(Field::class);
+        $enabledField->method('getGroupPath')->willReturn('section/general');
+        $enabledField->method('getId')->willReturn('enabled');
+        $enabledField->method('hasBackendModel')->willReturn(false);
+        $enabledField->method('getType')->willReturn('select');
+        $enabledField->method('getData')->willReturn([]);
+        $enabledField->method('getConfigPath')->willReturn(null);
+
+        $this->configStructure
+            ->method('getElement')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/general'] => $group,
+                ['section/general/enabled'] => $enabledField,
+                default => $this->createMock(Field::class),
+            });
+
+        $createdPaths = [];
+        $backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['addData', 'setPath', 'setValue', 'setConfigId', 'unsConfigId', '__sleep', '__wakeup']
+        );
+        $backendModel->method('setValue')->willReturnSelf();
+        $backendModel->method('addData')->willReturnSelf();
+        $backendModel->method('setConfigId')->willReturnSelf();
+        $backendModel->expects($this->atLeastOnce())
+            ->method('setPath')
+            ->willReturnCallback(function ($path) use (&$createdPaths, $backendModel) {
+                $createdPaths[] = $path;
+                return $backendModel;
+            });
+
+        $this->dataFactoryMock->expects($this->any())->method('create')->willReturn($backendModel);
+
+        // Only "enabled" is posted — "items" FieldArray is omitted (all inputs disabled)
+        $this->model->setSection('section');
+        $this->model->setGroups([
+            'general' => [
+                'fields' => [
+                    'enabled' => ['value' => '0'],
+                ],
+            ],
+        ]);
+        $this->model->save();
+
+        $this->assertNotContains(
+            'section/general/items',
+            $createdPaths,
+            'FieldArray path must not be saved when the field is absent from the posted groups'
+        );
+        $this->assertContains('section/general/enabled', $createdPaths);
+    }
+
+    /**
+     * When FieldArray posts only the __empty sentinel, Config still processes the field
+     * and passes that payload to the backend model (which then serializes to []).
+     *
+     * @return void
+     */
+    public function testSavePassesEmptySentinelPayloadToFieldArrayBackend(): void
+    {
+        $this->appConfigMock->expects($this->exactly(2))->method('reinit');
+        $transactionMock = $this->createMock(Transaction::class);
+        $transactionMock->expects($this->atLeastOnce())->method('addObject');
+        $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
+
+        $this->settingsChecker->expects($this->any())->method('isReadOnly')->willReturn(false);
+        $this->configLoaderMock->expects($this->any())->method('getConfigByPath')->willReturn([
+            'section/general/items' => [
+                'path' => 'section/general/items',
+                'value' => '{"_old":{"item_label":"x"}}',
+                'config_id' => 10,
+            ],
+        ]);
+
+        $group = $this->createMock(Group::class);
+        $group->method('getPath')->willReturn('section/general');
+        $group->method('getId')->willReturn('general');
+
+        $itemsField = $this->createMock(Field::class);
+        $itemsField->method('getGroupPath')->willReturn('section/general');
+        $itemsField->method('getId')->willReturn('items');
+        $itemsField->method('hasBackendModel')->willReturn(false);
+        $itemsField->method('getType')->willReturn('text');
+        $itemsField->method('getData')->willReturn([]);
+        $itemsField->method('getConfigPath')->willReturn(null);
+
+        $this->configStructure
+            ->method('getElement')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/general'] => $group,
+                ['section/general/items'] => $itemsField,
+                default => $this->createMock(Field::class),
+            });
+
+        $postedValue = ['__empty' => ''];
+        $backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['addData', 'setPath', 'setValue', 'setConfigId', 'unsConfigId', '__sleep', '__wakeup']
+        );
+        $backendModel->method('setPath')->willReturnSelf();
+        $backendModel->method('addData')->willReturnSelf();
+        $backendModel->expects($this->once())
+            ->method('setValue')
+            ->with($postedValue)
+            ->willReturnSelf();
+        $backendModel->expects($this->once())
+            ->method('setConfigId')
+            ->with(10)
+            ->willReturnSelf();
+
+        $this->dataFactoryMock->expects($this->any())->method('create')->willReturn($backendModel);
+
+        $this->model->setSection('section');
+        $this->model->setGroups([
+            'general' => [
+                'fields' => [
+                    'items' => ['value' => $postedValue],
+                ],
+            ],
+        ]);
+        $this->model->save();
+    }
+
+    /**
      * @return void
      */
     public function testSaveToCheckScopeDataSet(): void
