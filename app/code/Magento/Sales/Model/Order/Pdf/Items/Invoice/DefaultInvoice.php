@@ -151,6 +151,7 @@ class DefaultInvoice extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                     } else {
                         $printValue = $this->filterManager->stripTags($option['value']);
                     }
+                    $printValue = $this->prepareText((string)$printValue);
                     $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     $text = [];
