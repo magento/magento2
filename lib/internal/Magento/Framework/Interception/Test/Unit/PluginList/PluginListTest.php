@@ -240,6 +240,61 @@ class PluginListTest extends TestCase
     }
 
     /**
+     * Plugin instances recorded by an interceptor must still resolve after the plugged
+     * method switches the configuration scope and another interception reloads scoped data.
+     */
+    public function testGetPluginResolvesPluginAfterScopeChange()
+    {
+        $currentScope = 'backend';
+        $this->configScopeMock->method('getCurrentScope')
+            ->willReturnCallback(
+                function () use (&$currentScope) {
+                    return $currentScope;
+                }
+            );
+
+        $backendInherited = [
+            Item::class => [
+                'simple_plugin' => [
+                    'sortOrder' => 10,
+                    'instance' => Simple::class
+                ]
+            ]
+        ];
+        $backendProcessed = [
+            'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item_getName___self' => [
+                4 => ['simple_plugin']
+            ]
+        ];
+        $this->configLoaderMock->method('load')->willReturnMap(
+            [
+                ['global|backend|interception', [[], $backendInherited, $backendProcessed]],
+                ['global|backend|frontend|interception', [[], [], []]]
+            ]
+        );
+
+        $inheritPlugins = function ($type) use ($backendInherited) {
+            if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item') {
+                $this->_inherited[$type] = $backendInherited[$type]; /** @phpstan-ignore-line */
+            } else {
+                $this->_inherited[$type] = null; /** @phpstan-ignore-line */
+            }
+        };
+        $inheritPlugins = $inheritPlugins->bindTo($this->object, PluginList::class);
+        $this->object->method('_inheritPlugins')->willReturnCallback($inheritPlugins);
+
+        // interceptor records the plugin list in the initial scope
+        $this->assertSame([4 => ['simple_plugin']], $this->object->getNext(Item::class, 'getName'));
+
+        // the plugged method switches scope; a subsequent interception reloads scoped data
+        $currentScope = 'frontend';
+        $this->object->getNext(ItemContainer::class, 'getName');
+
+        // the interceptor resolves the previously recorded plugin
+        $this->assertEquals(Simple::class, $this->object->getPlugin(Item::class, 'simple_plugin'));
+    }
+
+    /**
      * @param array $expectedResult
      * @param string $type
      * @param string $method
