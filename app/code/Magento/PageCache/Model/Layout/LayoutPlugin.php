@@ -9,6 +9,7 @@ namespace Magento\PageCache\Model\Layout;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Layout;
@@ -80,10 +81,15 @@ class LayoutPlugin
      * @param Layout $subject
      * @param mixed $result
      * @return mixed
+     * @see https://github.com/magento/magento2/issues/40281 - revoke headers if FPC was disabled mid-request
      */
     public function afterGetOutput(Layout $subject, $result)
     {
-        if ($subject->isCacheable() && $this->config->isEnabled()) {
+        if (!$subject->isCacheable()) {
+            return $result;
+        }
+
+        if ($this->config->isEnabled()) {
             $tags = [];
             $isVarnish = $this->config->getType() === Config::VARNISH;
 
@@ -99,8 +105,34 @@ class LayoutPlugin
             $tags = array_unique(array_merge([], ...$tags));
             $tags = $this->pageCacheTagsPreprocessor->process($tags);
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
+        } else {
+            $this->revokePublicCacheHeaders();
         }
 
         return $result;
+    }
+
+    /**
+     * Replace Magento public FPC Cache-Control with no-cache when full page cache is no longer enabled.
+     *
+     * @return void
+     * @see \Magento\Framework\App\PageCache\Kernel::process()
+     */
+    private function revokePublicCacheHeaders(): void
+    {
+        if (!$this->response instanceof ResponseHttp) {
+            return;
+        }
+
+        $header = $this->response->getHeader('Cache-Control');
+        if (!$header) {
+            return;
+        }
+
+        $value = (string)$header->getFieldValue();
+        // Same detection as Kernel::process() for FPC-storeable responses.
+        if (preg_match('/public.*s-maxage=(\d+)/', $value)) {
+            $this->response->setNoCacheHeaders();
+        }
     }
 }
