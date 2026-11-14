@@ -22,6 +22,7 @@
         "magento/module-wishlist": "*"
     },
     "suggest": {
+        "magento/module-catalog-search": "*",
         "magento/module-grouped-product-sample-data": "*"
     },
     "type": "magento2-module",
