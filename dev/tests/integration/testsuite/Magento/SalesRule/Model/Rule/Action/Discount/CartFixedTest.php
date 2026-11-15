@@ -828,6 +828,90 @@ class CartFixedTest extends TestCase
     }
 
     /**
+     * Rule 20.00 restricted by Actions conditions to P1 (10.00); P2 (90.00) does not match; shipping 2 x 5.00.
+     *
+     * P1 takes its full price and shipping takes the rest of the rule amount.
+     */
+    #[
+        DbIsolation(true),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/type', 'I', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '5', 'store', 'default'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['price' => 90], 'p2'),
+        DataFixture(ProductConditionFixture::class, ['attribute' => 'sku', 'value' => '$p1.sku$'], 'applyCond'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 20,
+                'apply_to_shipping' => 1,
+                'actions' => ['$applyCond$'],
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 1]),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p2.id$', 'qty' => 1]),
+    ]
+    public function testCartFixedWithShippingWhenActionConditionsMatchOneItem(): void
+    {
+        $storage = DataFixtureStorageManager::getStorage();
+        $cart = $storage->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $itemDiscounts = $this->getItemDiscountsByName($totals);
+        $this->assertEquals(-20, $totals->getDiscountAmount());
+        $this->assertEquals(10, $itemDiscounts[$storage->get('p1')->getName()]);
+        $this->assertEquals(0, $itemDiscounts[$storage->get('p2')->getName()]);
+        $this->assertEquals(10, $totals->getShippingDiscountAmount());
+    }
+
+    /**
+     * Rule 30.00 with "Maximum Qty Discount is Applied To" = 1; 10 x P1 (10.00); shipping 10 x 5.00.
+     *
+     * The item share is limited by the discount qty and shipping takes the rest of the rule amount.
+     */
+    #[
+        DbIsolation(true),
+        ConfigFixture('carriers/flatrate/active', '1', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/type', 'I', 'store', 'default'),
+        ConfigFixture('carriers/flatrate/price', '5', 'store', 'default'),
+        DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::CART_FIXED_ACTION,
+                'discount_amount' => 30,
+                'discount_qty' => 1,
+                'apply_to_shipping' => 1,
+            ]
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$p1.id$', 'qty' => 10]),
+    ]
+    public function testCartFixedWithShippingWhenMaximumQtyLimitsItemDiscount(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $totals = $this->getTotals((int) $cart->getId());
+        $this->assertEquals(-30, $totals->getDiscountAmount());
+        $this->assertEquals(5, current($totals->getItems())->getDiscountAmount());
+        $this->assertEquals(25, $totals->getShippingDiscountAmount());
+    }
+
+    /**
+     * @param TotalsInterface $totals
+     * @return array<string, float>
+     */
+    private function getItemDiscountsByName(TotalsInterface $totals): array
+    {
+        $discounts = [];
+        foreach ($totals->getItems() as $item) {
+            $discounts[$item->getName()] = (float) $item->getDiscountAmount();
+        }
+
+        return $discounts;
+    }
+
+    /**
      * Get list of orders by quote id.
      *
      * @param int $quoteId
