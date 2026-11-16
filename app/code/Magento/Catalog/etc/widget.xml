@@ -81,6 +81,14 @@
                 <template name="grid" value="default" />
                 <template name="list" value="list" />
             </container>
+            <container name="content.aside">
+                <template name="grid" value="default" />
+                <template name="list" value="list" />
+            </container>
+            <container name="content.bottom">
+                <template name="grid" value="default" />
+                <template name="list" value="list" />
+            </container>
             <container name="sidebar.additional">
                 <template name="default" value="list_default" />
                 <template name="names_only" value="list_names" />
