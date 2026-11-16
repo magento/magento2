@@ -53,7 +53,8 @@
                         <td attr="{'colspan': element.getColumnsCount()}"
                             visible="element.addButton || pages() > 1">
                             <button if="element.addButton"
-                                    attr="{disabled: disabled, 'data-action': 'add_new_row'}"
+                                    attr="{'data-action': 'add_new_row'}"
+                                    disable="disabled"
                                     type="button"
                                     click="processingAddChild.bind($data, false, false, false)">
                                 <span translate="addButtonLabel"></span>

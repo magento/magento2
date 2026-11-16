@@ -92,6 +92,18 @@ define([
             expect(provider.get('data.use_default.tier_price')).toBe(0);
         });
 
+        [0, ''].forEach(function (disabled) {
+            it('renders Add enabled for an overridden grid with disabled=' + JSON.stringify(disabled), function (done) {
+                createModel({
+                    disabled: disabled
+                });
+                renderModel().then(function () {
+                    expect(container.querySelector('input[type="checkbox"]').checked).toBe(false);
+                    expect(container.querySelector('[data-action="add_new_row"]').disabled).toBe(false);
+                }).then(done, done.fail);
+            });
+        });
+
         it('enables and disables Add through the grid default-value checkbox', function (done) {
             createModel();
             renderModel().then(function () {
