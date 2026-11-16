@@ -22,7 +22,7 @@ class Details
     private $bulkStatus;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $bulkUuid;
 
@@ -50,7 +50,7 @@ class Details
         $bulkUuid = null
     ) {
         $this->bulkStatus = $bulkStatus;
-        $this->bulkUuid = $bulkUuid;
+        $this->bulkUuid = (string)$bulkUuid;
     }
 
     /**

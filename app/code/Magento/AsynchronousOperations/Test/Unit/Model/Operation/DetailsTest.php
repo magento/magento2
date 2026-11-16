@@ -88,4 +88,17 @@ class DetailsTest extends TestCase
         // second call is served from the cache, no further lookups
         $this->assertEquals($expectedResult, $this->model->getDetails(null));
     }
+
+    /**
+     * Constructor defaults bulkUuid to null; methods index operationCache with it.
+     * Null must not be used as an array key (deprecated in PHP 8.5).
+     */
+    public function testGetOperationsTotalWithNullConstructorUuid(): void
+    {
+        $this->bulkStatusMock->expects($this->exactly(5))
+            ->method('getOperationsCountByBulkIdAndStatus')
+            ->willReturn(0);
+
+        $this->assertSame(0, $this->model->getOperationsTotal());
+    }
 }
