@@ -17,5 +17,6 @@
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
         <waitForLoadingMaskToDisappear stepKey="waitAfterClearFilters"/>
+        <wait time="3" stepKey="waitForBookmarkSave"/>
     </actionGroup>
 </actionGroups>

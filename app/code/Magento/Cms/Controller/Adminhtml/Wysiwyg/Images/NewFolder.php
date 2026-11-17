@@ -14,6 +14,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class NewFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
 {
     /**
+     * Authorization for creating folder
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::create_folder';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;

@@ -44,7 +44,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(3))
             ->method('deltaRound')->willReturn(0);
-        $this->initMocks(true);
+        $this->initMocks(true, false);
 
         $this->assertSame(
             $this->taxDetailsItem,

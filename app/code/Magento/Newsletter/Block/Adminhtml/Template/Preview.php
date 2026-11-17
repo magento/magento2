@@ -25,6 +25,11 @@ use Magento\Newsletter\Model\SubscriberFactory;
 class Preview extends Widget
 {
     /**
+     * @var string
+     */
+    protected const ADMIN_RESOURCE = 'Magento_Newsletter::template';
+
+    /**
      * Name for profiler
      *
      * @var string
@@ -74,6 +79,10 @@ class Preview extends Widget
      */
     protected function _toHtml()
     {
+        if (!$this->_authorization->isAllowed(static::ADMIN_RESOURCE)) {
+            return '';
+        }
+
         /* @var $template \Magento\Newsletter\Model\Template */
         $template = $this->_templateFactory->create();
 

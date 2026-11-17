@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\ColumnValueExpression;
 
@@ -45,11 +46,6 @@ class CustomOptionPriceModifier implements PriceModifierInterface
      * @var bool
      */
     private $isPriceGlobalFlag;
-
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private $connection;
 
     /**
      * @var \Magento\Framework\Indexer\Table\StrategyInterface
@@ -158,15 +154,14 @@ class CustomOptionPriceModifier implements PriceModifierInterface
     /**
      * Get connection.
      *
+     * Always resolves through ResourceConnection instead of caching a local reference, so a stale adapter
+     * cannot survive ProcessManager's pre-fork connection cleanup and reconnect to a different MySQL session.
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private function getConnection()
+    private function getConnection(): AdapterInterface
     {
-        if (null === $this->connection) {
-            $this->connection = $this->resource->getConnection($this->connectionName);
-        }
-
-        return $this->connection;
+        return $this->resource->getConnection($this->connectionName);
     }
 
     /**

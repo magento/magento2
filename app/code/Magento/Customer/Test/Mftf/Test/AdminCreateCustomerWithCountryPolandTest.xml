@@ -55,6 +55,9 @@
         <waitForPageLoad stepKey="waitForPageToBeSaved"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGridAfterSave">
+            <argument name="indices" value="customer_grid"/>
+        </actionGroup>
 
         <!-- Assert Customer in grid -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">

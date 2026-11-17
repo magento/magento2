@@ -12,6 +12,8 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Cart Management class for guest carts.
@@ -36,25 +38,33 @@ class GuestCartManagement implements GuestCartManagementInterface
     protected $cartRepository;
 
     /**
+     * @var GetGuestCart|null
+     */
+    private $getGuestCart;
+
+    /**
      * Initialize dependencies.
      *
      * @param CartManagementInterface $quoteManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
+     * @param GetGuestCart|null $getGuestCart
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        ?GetGuestCart $getGuestCart = null
     ) {
         $this->quoteManagement = $quoteManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->cartRepository = $cartRepository;
+        $this->getGuestCart = $getGuestCart ?? ObjectManager::getInstance()->get(GetGuestCart::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function createEmptyCart()
     {
@@ -66,22 +76,24 @@ class GuestCartManagement implements GuestCartManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->quoteManagement->assignCustomer($quoteIdMask->getQuoteId(), $customerId, $storeId);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         $this->cartRepository->get($quoteIdMask->getQuoteId())
             ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId(), $paymentMethod);
