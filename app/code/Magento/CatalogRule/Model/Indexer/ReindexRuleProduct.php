@@ -244,7 +244,9 @@ class ReindexRuleProduct
                     $indexTable,
                     $connection,
                     (int)$ruleData['rule_id'],
-                    $ruleData['sort_order']
+                    $ruleData['sort_order'],
+                    (int)$websiteId,
+                    $ruleData['customer_group_ids']
                 );
 
                 $rows = $this->addCustomerGroupRows(
@@ -293,6 +295,8 @@ class ReindexRuleProduct
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param int $ruleId
      * @param int $sortOrder
+     * @param int $websiteId
+     * @param array $customerGroupIds
      * @return void
      */
     private function handleAntecedentRules(
@@ -301,20 +305,28 @@ class ReindexRuleProduct
         string $indexTable,
         $connection,
         int $ruleId,
-        int $sortOrder
+        int $sortOrder,
+        int $websiteId,
+        array $customerGroupIds
     ): void {
         if (!isset($validationByWebsite['has_antecedent_rule'])) {
             return;
         }
 
-        $antecedentRuleProductList = array_keys(
-            $connection->fetchAssoc(
-                $connection->select()->from($indexTable)
-                    ->where('product_id = ?', $productId)
-                    ->where('rule_id NOT IN (?)', $ruleId)
-                    ->where('sort_order = ?', $sortOrder)
-            )
-        );
+        $antecedentRuleIds = $validationByWebsite['antecedent_rule_ids'][$websiteId] ?? [];
+        if (isset($validationByWebsite['antecedent_rule_ids']) && (!$antecedentRuleIds || !$customerGroupIds)) {
+            return;
+        }
+        $select = $connection->select()->from($indexTable)
+            ->where('product_id = ?', $productId)
+            ->where('rule_id NOT IN (?)', $ruleId)
+            ->where('sort_order = ?', $sortOrder);
+        if (isset($validationByWebsite['antecedent_rule_ids'])) {
+            $select->where('rule_id IN (?)', $antecedentRuleIds)
+                ->where('website_id = ?', $websiteId)
+                ->where('customer_group_id IN (?)', $customerGroupIds);
+        }
+        $antecedentRuleProductList = array_keys($connection->fetchAssoc($select));
         $connection->delete($indexTable, ['rule_product_id IN (?)' => $antecedentRuleProductList]);
     }
 
