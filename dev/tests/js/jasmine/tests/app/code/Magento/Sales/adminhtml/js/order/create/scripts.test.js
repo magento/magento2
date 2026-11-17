@@ -258,6 +258,63 @@ define([
             expect(order.loadArea).toHaveBeenCalled();
         });
 
+        describe('Order validation messages', function () {
+            beforeEach(function () {
+                order = new window.AdminOrder({});
+                $('<div id="order-message">' +
+                    '<div class="message-error">This product is disabled.</div>' +
+                    '<div class="message-warning">This product is out of stock.</div>' +
+                    '</div>').appendTo(formEl);
+            });
+
+            it('clears stale errors and warnings when revalidation returns no messages', function () {
+                order.loadAreaResponseHandler({message: ''});
+
+                expect($('#order-message').html()).toBe('');
+            });
+
+            it('preserves the rejection message during automatic payment initialization', function () {
+                order.loadAreaResponseHandler({message: ''}, true);
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+                expect($('#order-message').text()).toContain('This product is out of stock.');
+            });
+
+            it('replaces stale messages with current validation errors during payment initialization', function () {
+                order.loadAreaResponseHandler({
+                    message: '<div class="message-error">The requested quantity is not available.</div>'
+                }, true);
+
+                expect($('#order-message').text()).toBe('The requested quantity is not available.');
+            });
+
+            it('leaves messages unchanged if the response does not include the message area', function () {
+                order.loadAreaResponseHandler({});
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+            });
+
+            it('clears stale messages when the administrator explicitly selects a payment method', function () {
+                spyOn(Ajax, 'Request').and.callFake(function (url, options) {
+                    options.onSuccess({responseText: '{"message": ""}'});
+                });
+
+                order.switchPaymentMethod('payment1');
+
+                expect($('#order-message').html()).toBe('');
+            });
+
+            it('passes message preservation through the automatic payment request', function () {
+                spyOn(Ajax, 'Request').and.callFake(function (url, options) {
+                    options.onSuccess({responseText: '{"message": ""}'});
+                });
+
+                order.switchPaymentMethod('payment1', true);
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+            });
+        });
+
         describe('Testing the process customer group change', function () {
             it('and confirm method is called', function () {
                 init();
