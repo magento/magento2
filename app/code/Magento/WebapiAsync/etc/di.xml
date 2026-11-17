@@ -13,6 +13,11 @@
     <type name="Magento\Webapi\Model\Cache\Type\Webapi">
         <plugin name="webapiCacheAsync" type="Magento\WebapiAsync\Plugin\Cache\Webapi" />
     </type>
+    <type name="Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor">
+        <arguments>
+            <argument name="response" xsi:type="object">Magento\Framework\Webapi\Rest\Response\Proxy</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\WebapiAsync\Model\VirtualType\Rest\Config" type="Magento\Webapi\Model\Rest\Config">
         <arguments>
             <argument name="config" xsi:type="object">Magento\WebapiAsync\Model\BulkServiceConfig</argument>
