@@ -144,6 +144,7 @@ class AddDefaultPropertiesToGroupPlugin
         // via GenerateMergedAssetIntegrity + AddIntegrityToAssetHtml instead.
         return !$this->assetConfig->isMergeJsFiles() &&
             $asset instanceof LocalInterface &&
+            $asset->getContentType() === 'js' &&
             $this->action->isPaymentPageAction(
                 $this->request->getFullActionName()
             );
