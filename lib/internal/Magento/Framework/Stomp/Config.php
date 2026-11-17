@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Stomp\Connection\Factory as ConnectionFactory;
-use Magento\Framework\Stomp\Connection\FactoryOptions;
 use Stomp\Exception\ConnectionException;
 use Stomp\Network\Connection;
 
@@ -148,19 +147,7 @@ class Config implements ResetAfterRequestInterface
      */
     private function createConnection(): Connection
     {
-        $sslEnabled = trim($this->getValue(self::SSL) ?? '') == 'true';
-        $options = new FactoryOptions();
-        $options->setHost($this->getValue(self::HOST));
-        $options->setPort($this->getValue(self::PORT));
-        $options->setUsername($this->getValue(self::USERNAME));
-        $options->setPassword($this->getValue(self::PASSWORD));
-        $options->setSslEnabled($sslEnabled);
-        /** @var array $sslOptions */
-        if ($sslOptions = $this->getValue(self::SSL_OPTIONS)) {
-            $options->setSslOptions($sslOptions);
-        }
-
-        return $this->connectionFactory->create($options);
+        return $this->connectionFactory->createFromConfig($this);
     }
 
     /**
@@ -168,6 +155,8 @@ class Config implements ResetAfterRequestInterface
      *
      * @return Connection
      * @throws \LogicException\
+     * @deprecated Cached connections can share parser state when cloned; create clients with independent connections.
+     * @see \Magento\Framework\Stomp\Connection\ClientFactory::create()
      */
     public function getConnection() : Connection
     {
