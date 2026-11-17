@@ -59,12 +59,31 @@ define([
         setDisabled: function (state) {
             this.elems.each(function (record) {
                 record.elems.each(function (cell) {
-                    var template = this.childTemplate &&
-                        _.findWhere(this.childTemplate.children, {name: cell.index});
-
-                    cell.disabled(state || !!(template && template.config.disabled));
+                    this.setCellDisabled(cell, state, this.childTemplate && this.childTemplate.children);
                 }, this);
             }, this);
+        },
+
+        /**
+         * Apply inheritance to fields inside groups without removing configured locks.
+         *
+         * @param {Object} cell
+         * @param {Boolean} state
+         * @param {Array} templates
+         */
+        setCellDisabled: function (cell, state, templates) {
+            var template = _.findWhere(templates || [], {name: cell.index}),
+                disabled = state || !!(template && template.config && template.config.disabled);
+
+            if (_.isFunction(cell.disabled)) {
+                cell.disabled(disabled);
+            }
+
+            if (cell.elems) {
+                cell.elems.each(function (child) {
+                    this.setCellDisabled(child, disabled, template && template.children);
+                }, this);
+            }
         },
 
         /**

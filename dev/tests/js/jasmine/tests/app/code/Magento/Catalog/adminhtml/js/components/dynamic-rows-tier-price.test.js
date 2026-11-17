@@ -12,9 +12,11 @@ define([
     'uiRegistry',
     'Magento_Catalog/js/components/dynamic-rows-tier-price',
     'Magento_Ui/js/dynamic-rows/record',
+    'Magento_Ui/js/form/components/group',
+    'Magento_Ui/js/form/element/abstract',
     'Magento_Ui/js/lib/knockout/template/engine',
     'Magento_Ui/js/lib/knockout/bootstrap'
-], function ($, ko, Element, registry, DynamicRows, Record, templateEngine) {
+], function ($, ko, Element, registry, DynamicRows, Record, Group, Input, templateEngine) {
     'use strict';
 
     describe('Magento_Catalog/js/components/dynamic-rows-tier-price', function () {
@@ -199,6 +201,75 @@ define([
 
                 expect(model.disabled()).toBe(true);
                 expect(provider.get('data.use_default.tier_price')).toBeUndefined();
+            }).then(done, done.fail);
+        });
+
+        it('toggles nested price controls and submits inheritance for an existing grouped row', function (done) {
+            var record, group, price, percentage, website, processor;
+
+            createModel();
+            model.childTemplate = {
+                children: [
+                    {
+                        name: 'website_id',
+                        config: {
+                            disabled: true
+                        }
+                    },
+                    {
+                        name: 'price_value',
+                        config: {},
+                        children: [
+                            {name: 'price', config: {}},
+                            {name: 'percentage_value', config: {disabled: true}},
+                            {name: 'price_calc', config: {}}
+                        ]
+                    }
+                ]
+            };
+            website = new Input({
+                name: 'tier_price.0.website_id',
+                index: 'website_id',
+                dataScope: 'data.product.tier_price.0.website_id',
+                disabled: true
+            });
+            price = new Input({
+                name: 'tier_price.0.price_value.price',
+                index: 'price',
+                dataScope: 'data.product.tier_price.0.price',
+                disabled: true
+            });
+            percentage = new Input({
+                name: 'tier_price.0.price_value.percentage_value',
+                index: 'percentage_value',
+                dataScope: 'data.product.tier_price.0.percentage_value',
+                disabled: true
+            });
+            processor = new Element({index: 'price_calc', visible: false}).observe('visible');
+            group = new Group({name: 'tier_price.0.price_value', index: 'price_value'});
+            group.elems([price, percentage, processor]);
+            record = new Record({name: 'tier_price.0'});
+            record.elems([website, group]);
+            model.elems([record]);
+
+            renderModel().then(function () {
+                var checkbox = container.querySelector('input[type="checkbox"]'),
+                    button = container.querySelector('[data-action="add_new_row"]'),
+                    input = container.querySelector('input[name="' + price.inputName + '"]');
+
+                expect(input).not.toBeNull();
+                [false, true, false].forEach(function (useDefault) {
+                    checkbox.click();
+
+                    expect(checkbox.checked).toBe(useDefault);
+                    expect(model.disabled()).toBe(useDefault);
+                    expect(button.disabled).toBe(useDefault);
+                    expect(price.disabled()).toBe(useDefault);
+                    expect(input.disabled).toBe(useDefault);
+                    expect(website.disabled()).toBe(true);
+                    expect(percentage.disabled()).toBe(true);
+                    expect(provider.get('data.use_default.tier_price')).toBe(Number(useDefault));
+                });
             }).then(done, done.fail);
         });
 
