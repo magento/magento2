@@ -21,7 +21,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Update customer account data
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - https://jira.corp.magento.com/browse/MC-18152
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCustomerAccount
 {
@@ -114,7 +114,12 @@ class UpdateCustomerAccount
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
 
+        // Account updates must not synchronize the address book.
+        $addresses = $customer->getAddresses();
+        $customer->setAddresses(null);
         $this->saveCustomer->execute($customer);
+        // Preserve addresses for the mutation response.
+        $customer->setAddresses($addresses);
 
         if (isset($data['is_subscribed'])) {
             if ((bool)$data['is_subscribed']) {

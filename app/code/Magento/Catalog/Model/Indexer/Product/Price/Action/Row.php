@@ -27,7 +27,11 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             );
         }
         try {
-            $this->_reindexRows([$id]);
+            $this->executeToleratingTransactionConflict(
+                function () use ($id) {
+                    return $this->_reindexRows([$id]);
+                }
+            );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }

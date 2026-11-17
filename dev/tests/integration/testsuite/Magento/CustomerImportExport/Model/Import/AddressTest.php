@@ -17,8 +17,14 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DB\Adapter\LockWaitException;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Profiler;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
@@ -26,8 +32,12 @@ use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Model\Import\Source\Json;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -394,6 +404,246 @@ class AddressTest extends TestCase
     }
 
     /**
+     * Importers with the same cached ID must not insert overlapping address IDs.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
+     */
+    public function testImportWithOverlappingPredictedIds(): void
+    {
+        $customer = $this->getCustomer('BetsyParker@example.com');
+        $objectManager = Bootstrap::getObjectManager();
+        $addressModel = $objectManager->create(\Magento\Customer\Model\Address::class);
+        $predictedId = $objectManager->get(Helper::class)
+            ->getNextAutoincrement($addressModel->getResource()->getEntityTable());
+        $originalAddresses = $this->getAddresses(['parent_id' => $customer->getId()]);
+
+        foreach (['First', 'Second'] as $tag) {
+            $this->_entityAdapter = $objectManager->create(Address::class);
+            (new \ReflectionProperty(Address::class, '_nextEntityId'))
+                ->setValue($this->_entityAdapter, $predictedId);
+            $rows = [];
+            foreach ([1, 2] as $number) {
+                $rows[] = [
+                    '_website' => 'base',
+                    '_email' => $customer->getEmail(),
+                    '_entity_id' => '',
+                    'firstname' => $tag,
+                    'lastname' => 'Address' . $number,
+                    'street' => $number . ' Test Street',
+                    'city' => 'Austin',
+                    'country_id' => 'US',
+                    'region' => 'Texas',
+                    'postcode' => '78701',
+                    'telephone' => '5125550100',
+                    '_address_default_billing_' => $tag === 'First' && $number === 1 ? '1' : '',
+                    '_address_default_shipping_' => $tag === 'Second' && $number === 2 ? '1' : '',
+                ];
+            }
+            $errors = $this->doImport($this->generateImportFile($rows));
+            $this->assertImportValidationPassed($errors);
+            $this->assertSame(2, $this->_entityAdapter->getCreatedItemsCount());
+        }
+
+        $addresses = $this->getAddresses(['parent_id' => $customer->getId()]);
+        $this->assertCount(count($originalAddresses) + 4, $addresses);
+        $ids = array_map(static fn (AddressInterface $address): int => (int) $address->getId(), $addresses);
+        $this->assertCount(count($addresses), array_unique($ids));
+        $reloadedCustomer = $objectManager->create(\Magento\Customer\Model\Customer::class)
+            ->load($customer->getId());
+        $this->assertSame('First', $reloadedCustomer->getDefaultBillingAddress()->getFirstname());
+        $this->assertSame('Address1', $reloadedCustomer->getDefaultBillingAddress()->getLastname());
+        $this->assertSame('Second', $reloadedCustomer->getDefaultShippingAddress()->getFirstname());
+        $this->assertSame('Address2', $reloadedCustomer->getDefaultShippingAddress()->getLastname());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     */
+    #[DataFixture(CustomerFixture::class, ['website_id' => 1], 'concurrent_customer')]
+    public function testConcurrentDefaultImportsLockCustomerBeforeInsertingAddresses(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('concurrent_customer');
+        $objectManager = Bootstrap::getObjectManager();
+        $connection = $this->customerResource->getConnection();
+        $dbConfig = $objectManager->get(DeploymentConfig::class)->getConfigData('db');
+        $secondConnection = $objectManager->create(Mysql::class, ['config' => $dbConfig['connection']['default']]);
+        $originalProfiler = $connection->getProfiler();
+        $imports = [];
+        try {
+            $this->assertSame(0, $connection->getTransactionLevel(), 'Fixtures must be visible to both connections.');
+            $this->assertNotEquals(
+                $connection->fetchOne('SELECT CONNECTION_ID()'),
+                $secondConnection->fetchOne('SELECT CONNECTION_ID()')
+            );
+            $secondConnection->query('SET SESSION innodb_lock_wait_timeout = 1');
+            $imports[] = $first = $this->createConcurrentImporter($customer->getEmail(), 'First', $connection);
+            $imports[] = $second = $this->createConcurrentImporter($customer->getEmail(), 'Second', $secondConnection);
+            $customerTable = $this->customerResource->getEntityTable();
+            $checkpointReached = false;
+            $profiler = $this->createPartialMock(Profiler::class, ['queryStart']);
+            $profiler->expects($this->atLeastOnce())->method('queryStart')
+                ->willReturnCallback(function (string $sql) use (
+                    $second,
+                    $secondConnection,
+                    $customerTable,
+                    &$checkpointReached
+                ): ?int {
+                    if (!$checkpointReached && str_contains($sql, 'INTO `' . $customerTable . '`')) {
+                        $checkpointReached = true;
+                        // Pause after the first child insert, just before updating customer defaults.
+                        $this->assertImportWaitsBeforeInserting($second, $secondConnection);
+                    }
+                    return null;
+                });
+            $connection->setProfiler($profiler);
+            $this->assertTrue($first->importData());
+            $this->assertTrue($checkpointReached, 'The competing import must run before the first defaults update.');
+            $connection->setProfiler($originalProfiler);
+
+            $imports[] = $second = $this->createConcurrentImporter($customer->getEmail(), 'Second', $secondConnection);
+            $this->assertTrue($second->importData());
+            $addresses = $this->getAddresses(['parent_id' => $customer->getId()]);
+            $this->assertCount(2, $addresses);
+            $ids = array_map(static fn (AddressInterface $address): int => (int) $address->getId(), $addresses);
+            $this->assertCount(2, array_unique($ids));
+            $reloadedCustomer = $objectManager->create(\Magento\Customer\Model\Customer::class)
+                ->load($customer->getId());
+            $this->assertSame('Second', $reloadedCustomer->getDefaultBillingAddress()->getFirstname());
+            $this->assertSame('Second', $reloadedCustomer->getDefaultShippingAddress()->getFirstname());
+        } finally {
+            $connection->setProfiler($originalProfiler);
+            $secondConnection->closeConnection();
+            $dataSource = $objectManager->create(Data::class);
+            foreach ($imports as $import) {
+                if ($import->getIds()) {
+                    $connection->delete($dataSource->getMainTable(), ['id IN (?)' => $import->getIds()]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Prepare independently staged bunches using the specified database connection.
+     *
+     * @param string $email
+     * @param string $name
+     * @param Mysql $connection
+     * @return Address
+     */
+    private function createConcurrentImporter(string $email, string $name, Mysql $connection): Address
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $source = $objectManager->create(Json::class, ['items' => [[
+            '_website' => 'base',
+            '_email' => $email,
+            '_entity_id' => null,
+            'firstname' => $name,
+            'lastname' => 'Address',
+            'street' => '1 Test Street',
+            'city' => 'Austin',
+            'country_id' => 'US',
+            'region' => 'Texas',
+            'postcode' => '78701',
+            'telephone' => '5125550100',
+            '_address_default_billing_' => '1',
+            '_address_default_shipping_' => '1',
+        ]]]);
+        $importer = $objectManager->create(Address::class, ['data' => [
+            'connection' => $connection,
+            'data_source_model' => $objectManager->create(Data::class),
+        ]]);
+        $errors = $importer->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)->validateData();
+        $this->assertImportValidationPassed($errors);
+        $this->assertNotEmpty($importer->getIds());
+        return $importer;
+    }
+
+    /**
+     * Distinguish waiting for the parent write lock from waiting to upgrade an FK lock.
+     *
+     * @param Address $importer
+     * @param Mysql $connection
+     * @return void
+     */
+    private function assertImportWaitsBeforeInserting(Address $importer, Mysql $connection): void
+    {
+        $profiler = $connection->getProfiler();
+        $profiler->setEnabled(true);
+        $profiler->clear();
+        try {
+            $importer->importData();
+            $this->fail('The overlapping import must wait for the first transaction.');
+        } catch (LockWaitException) {
+            $this->assertSame(0, $connection->getTransactionLevel());
+        }
+        $this->assertFalse(
+            $profiler->getQueryProfiles(\Zend_Db_Profiler::INSERT, true),
+            'The second import must not insert a child row before acquiring the customer write lock.'
+        );
+        $queries = $profiler->getQueryProfiles(null, true);
+        $this->assertNotFalse($queries);
+        $lockingQueries = array_filter(
+            $queries,
+            static fn (\Zend_Db_Profiler_Query $query): bool => str_contains($query->getQuery(), 'FOR UPDATE')
+        );
+        $this->assertCount(1, $lockingQueries);
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
+     */
+    #[DataFixture(
+        CustomerAttribute::class,
+        ['entity_type_id' => 2, 'attribute_code' => 'address_import_note', 'frontend_label' => 'Address Import Note']
+    )]
+    public function testImportPreservesCustomAttributesForNewAndUpdatedAddresses(): void
+    {
+        $customer = $this->getCustomer('BetsyParker@example.com');
+        $addresses = $this->getAddresses(['parent_id' => $customer->getId()]);
+        $existingId = $addresses[0]->getId();
+        $rows = [];
+        foreach (['Updated', 'NewFirst', 'NewSecond'] as $name) {
+            $rows[] = [
+                '_website' => 'base',
+                '_email' => $customer->getEmail(),
+                '_entity_id' => $name === 'Updated' ? $existingId : null,
+                'firstname' => $name,
+                'lastname' => 'Address',
+                'street' => '1 Test Street',
+                'city' => 'Austin',
+                'country_id' => 'US',
+                'region' => 'Texas',
+                'postcode' => '78701',
+                'telephone' => '5125550100',
+                'address_import_note' => $name . ' note',
+            ];
+        }
+        $objectManager = Bootstrap::getObjectManager();
+        $source = $objectManager->create(Json::class, ['items' => $rows]);
+        $errors = $this->_entityAdapter
+            ->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData();
+        $this->assertImportValidationPassed($errors);
+        $this->assertTrue($this->_entityAdapter->importData());
+
+        $collection = $objectManager->create(Collection::class);
+        $collection->addAttributeToSelect('address_import_note')
+            ->addAttributeToFilter('parent_id', $customer->getId());
+        $this->assertCount(3, $collection);
+        foreach ($collection as $address) {
+            $this->assertSame($address->getFirstname() . ' note', $address->getData('address_import_note'));
+            if ($address->getFirstname() === 'Updated') {
+                $this->assertEquals($existingId, $address->getId());
+            }
+        }
+    }
+
+    /**
      * Test import data method with delete behaviour
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers_for_address_import.php
@@ -415,8 +665,25 @@ class AddressTest extends TestCase
         )->validateData()->hasToBeTerminated();
         $this->assertTrue(!$result, 'Validation result must be true.');
 
-        // import data
-        $this->_entityAdapter->importData();
+        $connection = $this->customerResource->getConnection();
+        $originalProfiler = $connection->getProfiler();
+        $profiler = $objectManager->create(Profiler::class, ['enabled' => true]);
+        $connection->setProfiler($profiler);
+        try {
+            $this->assertTrue($this->_entityAdapter->importData());
+            $queries = $profiler->getQueryProfiles(Profiler::SELECT);
+            $this->assertNotFalse($queries);
+            $customerTable = $connection->quoteIdentifier($this->customerResource->getEntityTable());
+            $customerLockQueries = array_filter(
+                $queries,
+                static fn (\Zend_Db_Profiler_Query $query): bool =>
+                    str_contains($query->getQuery(), $customerTable)
+                    && str_contains($query->getQuery(), 'FOR UPDATE')
+            );
+            $this->assertSame([], $customerLockQueries, 'Delete imports must not lock customer rows.');
+        } finally {
+            $connection->setProfiler($originalProfiler);
+        }
 
         // key attribute
         $keyAttribute = 'postcode';
