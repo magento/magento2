@@ -166,10 +166,35 @@ class InputParamsResolver
     /**
      * Filter input data for list arrays by recursing nested arrays.
      *
+     * Each element of a list represents an independent data record (e.g. a bulk import row)
+     * rather than a single reflected object, so normalized-duplicate-key removal is skipped
+     * for the element itself while still being applied to any objects nested within it.
+     *
      * @param array $inputData
      * @return array
      */
     private function filterInputListData(array $inputData): array
+    {
+        foreach ($inputData as $key => $value) {
+            if (is_array($value)) {
+                $inputData[$key] = ($value === [] || array_is_list($value))
+                    ? $this->filterInputData($value)
+                    : $this->filterListItemData($value);
+            }
+        }
+        return $inputData;
+    }
+
+    /**
+     * Recurse into a list element's nested arrays without removing normalized-duplicate keys.
+     *
+     * A list element represents an independent data record (e.g. a bulk import row) rather
+     * than a single reflected object, so its own keys must not be collapsed by normalization.
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterListItemData(array $inputData): array
     {
         foreach ($inputData as $key => $value) {
             if (is_array($value)) {

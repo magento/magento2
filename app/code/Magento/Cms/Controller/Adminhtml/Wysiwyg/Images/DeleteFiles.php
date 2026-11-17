@@ -14,6 +14,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
 {
     /**
+     * Authorization for deleting files
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::delete_assets';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;

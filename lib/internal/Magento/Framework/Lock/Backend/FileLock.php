@@ -139,7 +139,7 @@ class FileLock implements LockManagerInterface
                 continue;
             }
 
-            if ($this->isLocked(basename($lockFile))) {
+            if ($this->isLockFileActive($lockFile)) {
                 continue;
             }
 
@@ -163,25 +163,7 @@ class FileLock implements LockManagerInterface
      */
     public function isLocked(string $name): bool
     {
-        $lockFile = $this->getLockPath($name);
-        $result = false;
-
-        try {
-            if ($this->fileDriver->isExists($lockFile)) {
-                $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
-                if ($this->tryToLock($fileResource)) {
-                    $result = false;
-                } else {
-                    $result = true;
-                }
-                $this->tryToUnlock($fileResource);
-                $this->fileDriver->fileClose($fileResource);
-            }
-        } catch (FileSystemException $exception) {
-            throw new RuntimeException(new Phrase('Cannot verify that the lock exists.'), $exception);
-        }
-
-        return $result;
+        return $this->isFileLocked($this->getLockPath($name));
     }
 
     /**
@@ -210,7 +192,51 @@ class FileLock implements LockManagerInterface
      */
     private function getLockPath(string $name): string
     {
-        return $this->path . $name;
+        return $this->path . hash('sha256', $name);
+    }
+
+    /**
+     * Checks whether a lock file at the given absolute path is currently held
+     *
+     * @param string $lockFile Absolute path to the lock file
+     * @return bool
+     * @throws RuntimeException
+     */
+    private function isFileLocked(string $lockFile): bool
+    {
+        $result = false;
+
+        try {
+            if ($this->fileDriver->isExists($lockFile)) {
+                $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
+                if ($this->tryToLock($fileResource)) {
+                    $result = false;
+                } else {
+                    $result = true;
+                }
+                $this->tryToUnlock($fileResource);
+                $this->fileDriver->fileClose($fileResource);
+            }
+        } catch (FileSystemException $exception) {
+            throw new RuntimeException(new Phrase('Cannot verify that the lock exists.'), $exception);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Checks whether a lock file at the given absolute path is actively held.
+     *
+     * @param string $lockFilePath Absolute path to the lock file
+     * @return bool
+     */
+    private function isLockFileActive(string $lockFilePath): bool
+    {
+        try {
+            return $this->isFileLocked($lockFilePath);
+        } catch (RuntimeException) {
+            return true;
+        }
     }
 
     /**

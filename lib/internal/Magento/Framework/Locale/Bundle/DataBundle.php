@@ -38,6 +38,8 @@ class DataBundle
     }
 
     /**
+     * Create resource bundle for the locale and path
+     *
      * @param string $locale
      * @param string $path
      * @return null|\ResourceBundle
@@ -47,7 +49,6 @@ class DataBundle
         try {
             $bundle = new \ResourceBundle($locale, $path);
         } catch (\Exception $e) {
-            // HHVM compatibility: constructor throws on invalid resource
             $bundle = null;
         }
         return $bundle;

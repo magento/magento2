@@ -16,6 +16,7 @@ use Magento\Email\Model\TemplateFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
@@ -137,9 +138,22 @@ class PreviewTest extends TestCase
             )
             ->willReturn($this->template->getProcessedTemplate());
 
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $context = $this->createPartialMock(
             Context::class,
-            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
+            [
+                'getRequest',
+                'getEventManager',
+                'getScopeConfig',
+                'getDesignPackage',
+                'getStoreManager',
+                'getAppState',
+                'getAuthorization'
+            ]
         );
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
@@ -147,6 +161,7 @@ class PreviewTest extends TestCase
         $context->expects($this->any())->method('getDesignPackage')->willReturn($design);
         $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
+        $context->expects($this->any())->method('getAuthorization')->willReturn($authorization);
         $objects = [
             [
                 JsonHelper::class,

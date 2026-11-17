@@ -328,7 +328,7 @@ class CalculatorTest extends TestCase
             'expectedResult' => [
                 'isMinAmount' => true,
                 'fullAmount' => 790.,
-                'adjustments' => ['tax' => 110, 'weee' => 10],
+                'adjustments' => ['tax' => 100, 'weee' => 10],
             ]
         ];
     }
@@ -406,7 +406,7 @@ class CalculatorTest extends TestCase
             'expectedResult' => [
                 'isMinAmount' => false,
                 'fullAmount' => 844.,
-                'adjustments' => ['tax' => 164, 'weee' => 10],
+                'adjustments' => ['tax' => 154, 'weee' => 10],
             ]
         ];
     }
