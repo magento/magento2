@@ -407,6 +407,8 @@ class IndexBuilder
         foreach ($activeRules as $rule) {
             $rule->setProductsFilter($ids);
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
+            // reset products filter to avoid accumulation of product ids in the rule object to free memory
+            $rule->setProductsFilter([]);
         }
 
         // batch products together, using configurable batch size parameter
