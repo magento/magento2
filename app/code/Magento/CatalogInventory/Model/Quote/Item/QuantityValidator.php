@@ -95,6 +95,27 @@ class QuantityValidator
     }
 
     /**
+     * Add an error to a quote item whose quantity the product type cannot use as requested
+     *
+     * @param Item $quoteItem
+     * @return void
+     */
+    private function addDecimalQtyError(Item $quoteItem): void
+    {
+        $quoteItem->addErrorInfo(
+            'cataloginventory',
+            Data::ERROR_QTY,
+            __('You cannot use decimal quantity for this product.')
+        );
+        $quoteItem->getQuote()->addErrorInfo(
+            'qty',
+            'cataloginventory',
+            Data::ERROR_QTY,
+            __('Please correct the quantity for some products.')
+        );
+    }
+
+    /**
      * Check product inventory data when quote item quantity declaring
      *
      * @param \Magento\Framework\Event\Observer $observer
@@ -187,6 +208,10 @@ class QuantityValidator
          */
         if ($options) {
             $qty = $product->getTypeInstance()->prepareQuoteItemQty($quoteItem->getQty(), $product);
+            if ((float)$qty !== (float)$quoteItem->getQty()) {
+                $this->addDecimalQtyError($quoteItem);
+                return;
+            }
             $quoteItem->setData('qty', $qty);
             if ($stockStatus) {
                 $this->checkOptionsQtyIncrements($quoteItem, $options);
