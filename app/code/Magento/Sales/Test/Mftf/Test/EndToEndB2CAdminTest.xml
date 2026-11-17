@@ -121,10 +121,16 @@
             <argument name="value" value="{$orderNumber}"/>
         </actionGroup>
 
-        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="seePageNameMatchesOrderIdAfterInvoice"/>
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="waitForInvoicesTabClickable" after="seePageNameMatchesOrderIdAfterInvoice"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="waitForInvoicesTabClickable"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" after="clickOrderInvoicesTab"/>
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid" after="waitForInvoiceGridLoadingMask"/>
-        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="seeOrderInvoiceInTabGrid"/>
+        <waitForElementNotVisible selector="{{AdminOrderInvoicesTabSection.spinner}}" time="60" stepKey="waitForInvoiceTabSpinnerGone" after="waitForInvoiceGridLoadingMask"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.clearFilters}}" dependentSelector="{{AdminOrderInvoicesTabSection.clearFilters}}" visible="true" stepKey="clearExistingInvoiceTabFilters" after="waitForInvoiceTabSpinnerGone"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridReloadAfterClearFilters" after="clearExistingInvoiceTabFilters"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" time="60" stepKey="waitForInvoiceRowInTabGrid" after="waitForInvoiceGridReloadAfterClearFilters"/>
+        <waitForText selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" time="30" stepKey="seeOrderInvoiceInTabGrid" after="waitForInvoiceRowInTabGrid"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="waitForViewInvoiceRowClickable" after="seeOrderInvoiceInTabGrid"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="clickToViewInvoiceRow" after="waitForViewInvoiceRowClickable"/>
         <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="$orderNumber" stepKey="seeOrderIdOnInvoice" after="clickToViewInvoiceRow"/>
         <actionGroup ref="VerifyBasicInvoiceInformationActionGroup" stepKey="verifyBasicInvoiceInformation" after="seeOrderIdOnInvoice">
             <argument name="customer" value="Simple_US_Customer"/>

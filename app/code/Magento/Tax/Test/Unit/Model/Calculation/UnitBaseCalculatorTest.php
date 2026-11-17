@@ -22,6 +22,7 @@ use Magento\Tax\Model\TaxDetails\AppliedTax;
 use Magento\Tax\Model\TaxDetails\AppliedTaxRate;
 use Magento\Tax\Model\TaxDetails\ItemDetails;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -220,6 +221,47 @@ class UnitBaseCalculatorTest extends TestCase
         );
         $this->assertEqualsWithDelta(self::TYPE, $this->taxDetailsItem->getType(), self::EPSILON);
         $this->assertEqualsWithDelta(0.0, $this->taxDetailsItem->getRowTax(), self::EPSILON);
+    }
+
+    #[DataProvider('unroundedPriceDataProvider')]
+    public function testCalculateWithoutRounding(
+        bool $includesTax,
+        float $rate,
+        float $expectedNet,
+        float $expectedGross,
+        float $expectedTax
+    ): void {
+        $item = $this->createMock(QuoteDetailsItemInterface::class);
+        $item->method('getIsTaxIncluded')->willReturn($includesTax);
+        $item->method('getUnitPrice')->willReturn(3.256);
+        $item->method('getCode')->willReturn(self::CODE);
+        $item->method('getType')->willReturn(self::TYPE);
+        $item->method('getDiscountAmount')->willReturn(0);
+        $this->mockCalculationTool->method('getRate')->willReturn($rate);
+        $this->mockCalculationTool->method('getStoreRate')->willReturn($rate);
+        $this->mockCalculationTool->method('getAppliedRates')->willReturn([
+            ['id' => 1, 'percent' => $rate, 'rates' => []],
+        ]);
+        $this->mockConfig->method('crossBorderTradeEnabled')->willReturn(false);
+        $this->mockConfig->method('applyTaxAfterDiscount')->willReturn(false);
+
+        $result = $this->model->calculate($item, 100, false);
+
+        $this->assertEqualsWithDelta($expectedNet, $result->getPrice(), self::EPSILON);
+        $this->assertEqualsWithDelta($expectedGross, $result->getPriceInclTax(), self::EPSILON);
+        $this->assertEqualsWithDelta($expectedNet * 100, $result->getRowTotal(), self::EPSILON);
+        $this->assertEqualsWithDelta($expectedGross * 100, $result->getRowTotalInclTax(), self::EPSILON);
+        $this->assertEqualsWithDelta($expectedTax, $result->getRowTax(), self::EPSILON);
+    }
+
+    public static function unroundedPriceDataProvider(): array
+    {
+        return [
+            'exclusive input with tax' => [false, 5.0, 3.256, 3.4188, 16.28],
+            'inclusive input with tax' => [true, 5.0, 3.100952380952381, 3.256, 15.50476190476191],
+            'exclusive input without tax' => [false, 0.0, 3.256, 3.256, 0.0],
+            'inclusive input without tax' => [true, 0.0, 3.256, 3.256, 0.0],
+        ];
     }
 
     /**
