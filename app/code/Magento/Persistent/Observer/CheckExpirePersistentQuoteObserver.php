@@ -154,12 +154,15 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             !$this->_customerSession->isLoggedIn() &&
             $this->_checkoutSession->getQuoteId() &&
             // persistent session does not expire on onepage checkout page
-            !$this->isRequestFromCheckoutPage($this->request) &&
-            $this->getQuoteFlags()['is_persistent']
+            !$this->isRequestFromCheckoutPage($this->request)
         ) {
-            $this->_eventManager->dispatch('persistent_session_expired');
-            $this->quoteManager->expire();
-            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            $flags = $this->getQuoteFlags();
+            // Only expire an active persistent quote; expiring an inactive one would reactivate it via QuoteManager
+            if ($flags['is_active'] && $flags['is_persistent']) {
+                $this->_eventManager->dispatch('persistent_session_expired');
+                $this->quoteManager->expire();
+                $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            }
         }
     }
 
