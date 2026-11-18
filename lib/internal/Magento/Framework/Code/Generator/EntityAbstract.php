@@ -401,6 +401,9 @@ abstract class EntityAbstract
             'name' => $parameter->getName(),
             'passedByReference' => $parameter->isPassedByReference()
         ];
+        if ($parameter->getAttributes(\SensitiveParameter::class)) {
+            $parameterInfo['sensitiveParameter'] = true;
+        }
         if ($parameter->isVariadic()) {
             $parameterInfo['variadic'] = $parameter->isVariadic();
         }

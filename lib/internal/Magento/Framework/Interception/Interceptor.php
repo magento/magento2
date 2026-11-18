@@ -53,7 +53,7 @@ trait Interceptor
      * @param array $arguments
      * @return mixed
      */
-    public function ___callParent($method, array $arguments)
+    public function ___callParent($method, #[\SensitiveParameter] array $arguments)
     {
         return parent::$method(...array_values($arguments));
     }
@@ -95,13 +95,13 @@ trait Interceptor
      * @param array $pluginInfo
      * @return mixed|null
      */
-    protected function ___callPlugins($method, array $arguments, array $pluginInfo)
+    protected function ___callPlugins($method, #[\SensitiveParameter] array $arguments, array $pluginInfo)
     {
         $subject = $this;
         $type = $this->subjectType;
         $pluginList = $this->pluginList;
 
-        $next = function (...$arguments) use (
+        $next = function (#[\SensitiveParameter] ...$arguments) use (
             $method,
             &$pluginInfo,
             $subject,
