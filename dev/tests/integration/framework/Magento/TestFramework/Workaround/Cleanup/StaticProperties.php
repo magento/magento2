@@ -249,8 +249,18 @@ class StaticProperties
                 break;
             }
         }
+        if (!$clearStatics) {
+            $suiteName = $suite->name();
+            if (is_string($suiteName)
+                && $suiteName !== ''
+                && class_exists($suiteName)
+                && is_a($suiteName, \Magento\TestFramework\TestCase\AbstractController::class, true)
+            ) {
+                $clearStatics = true;
+            }
+        }
         if ($clearStatics) {
-            self::restoreStaticVariables();
+            static::restoreStaticVariables();
         }
     }
 }

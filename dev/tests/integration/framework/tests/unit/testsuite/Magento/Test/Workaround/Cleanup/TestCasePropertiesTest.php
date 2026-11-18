@@ -34,32 +34,54 @@ class TestCasePropertiesTest extends TestCase
     /**
      * @return void
      */
-    public function testEndTestSuiteDestruct(): void
+    public function testEndTestSuiteClearsTestsFromSuiteList(): void
     {
-        $phpUnitTestSuite = TestSuite::empty('TestSuite');
-        $phpUnitTestSuite->addTestFile(__DIR__ . '/TestCasePropertiesTest/DummyTestCase.php');
-        // Because addTestFile() adds classes from file to tests array, use first testsuite
-        /** @var TestSuite $testSuite */
-        $testSuite = current($phpUnitTestSuite->tests());
-        $testSuite->run();
+        require_once __DIR__ . '/TestCasePropertiesTest/DummyTestCase.php';
 
-        $reflectionClass = new \ReflectionClass($testSuite);
-        $classProperties = $reflectionClass->getProperties();
-        $fixturePropertiesNames = array_keys($this->fixtureProperties);
+        $dummy = new TestCasePropertiesTest\DummyTestCase('testDummy');
+        $dummy->testDummy();
+        $this->assertSame('public', $dummy->testPublic);
 
-        foreach ($classProperties as $property) {
-            if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $value = $property->getValue($testSuite);
-                $this->assertNotNull($value);
-            }
-        }
+        $suite = TestSuite::empty('TestSuite');
+        $suite->addTest($dummy);
+
         $clearProperties = new TestCaseProperties();
-        $clearProperties->endTestSuite($testSuite);
+        $clearProperties->endTestSuite($suite);
 
-        foreach ($classProperties as $property) {
-            if (in_array($property->getName(), $fixturePropertiesNames)) {
-                $value = $property->getValue($testSuite);
-                $this->assertNull($value);
+        $this->assertFixturePropertiesCleared($dummy);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEndTestSuiteClearsTrackedCasesWhenSuiteTestsEmpty(): void
+    {
+        require_once __DIR__ . '/TestCasePropertiesTest/DummyTestCase.php';
+
+        $dummy = new TestCasePropertiesTest\DummyTestCase('testDummy');
+        $dummy->testDummy();
+        $this->assertSame('public', $dummy->testPublic);
+
+        $clearProperties = new TestCaseProperties();
+        $clearProperties->startTest($dummy);
+        $clearProperties->endTestSuite(TestSuite::empty(TestCasePropertiesTest\DummyTestCase::class));
+
+        $this->assertFixturePropertiesCleared($dummy);
+    }
+
+    /**
+     * @param TestCasePropertiesTest\DummyTestCase $dummy
+     * @return void
+     */
+    private function assertFixturePropertiesCleared(TestCasePropertiesTest\DummyTestCase $dummy): void
+    {
+        $reflectionClass = new \ReflectionClass($dummy);
+        foreach (array_keys($this->fixtureProperties) as $propertyName) {
+            $property = $reflectionClass->getProperty($propertyName);
+            if ($property->isStatic()) {
+                $this->assertNull($property->getValue());
+            } else {
+                $this->assertNull($property->getValue($dummy));
             }
         }
     }
