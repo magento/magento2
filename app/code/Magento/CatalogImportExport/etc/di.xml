@@ -63,6 +63,11 @@
             <argument name="estimatedMemoryPerProduct" xsi:type="number">500000</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogImportExport\Model\Export\Product\TemporaryRowStorage">
+        <arguments>
+            <argument name="writeBufferSize" xsi:type="number">65536</argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogImportExport\Model\Import\Product\LinkProcessor">
         <arguments>
             <argument name="linkNameToId" xsi:type="array">

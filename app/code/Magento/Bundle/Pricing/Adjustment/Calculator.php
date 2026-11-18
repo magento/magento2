@@ -340,7 +340,10 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
             }
         }
 
-        $adjustments['tax'] = $fullAmount - $excludeTaxTotal;
+        $nonTaxAdjustmentTotal = array_sum($adjustments);
+        $adjustments['tax'] = $this->priceCurrency->round(
+            $fullAmount - $excludeTaxTotal - $nonTaxAdjustmentTotal
+        );
         if (is_array($exclude) == false) {
             if ($exclude && isset($adjustments[$exclude])) {
                 $fullAmount -= $adjustments[$exclude];

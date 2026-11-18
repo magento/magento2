@@ -111,22 +111,35 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
         foreach ($ids as $id) {
             $currentBatch[] = $id;
             if (++$i === $this->batchSize) {
-                try {
-                    $this->cacheContext->registerEntities(Product::CACHE_TAG, $this->_reindexRows($currentBatch));
-                } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
-                }
+                $this->processBatch($currentBatch);
                 $i = 0;
                 $currentBatch = [];
             }
         }
 
         if (!empty($currentBatch)) {
-            try {
-                $this->cacheContext->registerEntities(Product::CACHE_TAG, $this->_reindexRows($currentBatch));
-            } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
-            }
+            $this->processBatch($currentBatch);
+        }
+    }
+
+    /**
+     * Reindex one batch, restarting the transaction after MariaDB error 1020 or a deadlock.
+     *
+     * @param array $ids
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processBatch(array $ids): void
+    {
+        try {
+            $affectedIds = $this->executeToleratingTransactionConflict(
+                function () use ($ids) {
+                    return $this->_reindexRows($ids);
+                }
+            );
+            $this->cacheContext->registerEntities(Product::CACHE_TAG, $affectedIds);
+        } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

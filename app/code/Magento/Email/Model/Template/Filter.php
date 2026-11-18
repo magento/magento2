@@ -983,7 +983,14 @@ class Filter extends Template
         // If this template is a child of another template, skip processing so that the parent template will process
         // this directive. This is important as CSS inlining must operate on the entire HTML document.
         if ($this->isChildTemplate()) {
-            return $construction[0];
+            try {
+                return $this->deferToParent($construction[0]);
+            } catch (\Exception $e) {
+                throw new MailException(
+                    __('Unable to defer the "inlinecss" directive for later processing.'),
+                    $e
+                );
+            }
         }
 
         $params = $this->getParameters($construction[2]);

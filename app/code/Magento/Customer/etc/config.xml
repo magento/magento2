@@ -45,7 +45,7 @@
                 <minimum_password_length>8</minimum_password_length>
                 <lockout_failures>10</lockout_failures>
                 <lockout_threshold>10</lockout_threshold>
-                <autocomplete_on_storefront>0</autocomplete_on_storefront>
+                <autocomplete_on_storefront>1</autocomplete_on_storefront>
             </password>
             <address>
                 <street_lines>2</street_lines>
@@ -105,12 +105,5 @@
                 <section_data_lifetime>60</section_data_lifetime>
             </online_customers>
         </customer>
-        <system>
-            <media_storage_configuration>
-                <allowed_resources>
-                    <customer_address_folder>customer_address</customer_address_folder>
-                </allowed_resources>
-            </media_storage_configuration>
-        </system>
     </default>
 </config>

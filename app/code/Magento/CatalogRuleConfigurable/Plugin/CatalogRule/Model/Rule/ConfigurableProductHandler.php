@@ -31,6 +31,13 @@ class ConfigurableProductHandler
     private array $childrenProducts = [];
 
     /**
+     * Inherited child IDs grouped by rule and website.
+     *
+     * @var array<int, array<int, array<int, bool>>>
+     */
+    private array $inheritedProductsByRule = [];
+
+    /**
      * @param ConfigurableProductsResourceModel $configurable
      * @param ConfigurableProductsProvider $configurableProductsProvider
      */
@@ -57,6 +64,8 @@ class ConfigurableProductHandler
         \Magento\CatalogRule\Model\Rule $rule,
         \Closure $proceed
     ): array {
+        $ruleId = (int)$rule->getId();
+        unset($this->inheritedProductsByRule[$ruleId]);
         $productsFilter = $rule->getProductsFilter() ? (array) $rule->getProductsFilter() : [];
         if ($productsFilter) {
             $rule->setProductsFilter(
@@ -71,8 +80,10 @@ class ConfigurableProductHandler
 
         $productIds = $proceed();
         foreach ($productIds as $productId => $productData) {
-            if ($this->hasAntecedentRule((int) $productId)) {
+            $antecedentRuleIds = $this->getAntecedentRuleIds((int)$productId, (array)$productData);
+            if ($antecedentRuleIds) {
                 $productIds[$productId]['has_antecedent_rule'] = true;
+                $productIds[$productId]['antecedent_rule_ids'] = $antecedentRuleIds;
             }
         }
 
@@ -91,6 +102,11 @@ class ConfigurableProductHandler
                     $childValidationResult = isset($productIds[$childrenProductId])
                         ? array_filter($productIds[$childrenProductId])
                         : [];
+                    foreach (array_keys($parentValidationResult) as $websiteId) {
+                        if (empty($childValidationResult[$websiteId])) {
+                            $this->inheritedProductsByRule[$ruleId][$websiteId][$childrenProductId] = true;
+                        }
+                    }
                     $productIds[$childrenProductId] = $parentValidationResult + $childValidationResult;
                 }
             }
@@ -101,20 +117,23 @@ class ConfigurableProductHandler
     }
 
     /**
-     * Check if simple product has previously applied rule.
+     * Identify rules matched only through a configurable parent on each website.
      *
      * @param int $productId
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $validationByWebsite
+     * @return array
      */
-    private function hasAntecedentRule(int $productId): bool
+    private function getAntecedentRuleIds(int $productId, array $validationByWebsite): array
     {
-        foreach ($this->childrenProducts as $parent => $children) {
-            if (in_array($productId, $children)) {
-                return true;
+        $ruleIds = [];
+        foreach ($this->inheritedProductsByRule as $ruleId => $productsByWebsite) {
+            foreach ($validationByWebsite as $websiteId => $isValid) {
+                if ($isValid && isset($productsByWebsite[$websiteId][$productId])) {
+                    $ruleIds[$websiteId][] = $ruleId;
+                }
             }
         }
 
-        return false;
+        return $ruleIds;
     }
 }

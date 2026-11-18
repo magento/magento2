@@ -455,9 +455,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         }
 
         // Build base DSN
-        $baseDsn = $password
-            ? sprintf('redis://%s@%s:%d/%d', urlencode($password), $host, $port, $database)
-            : sprintf('redis://%s:%d/%d', $host, $port, $database);
+        $baseDsn = $this->buildRedisBaseDsn($host, $port, $database, $password);
 
         // Append DSN parameters
         $dsn = $dsnParams ? $baseDsn . '?' . implode('&', $dsnParams) : $baseDsn;
@@ -467,6 +465,82 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         return $connectionClass !== null
             ? RedisAdapter::createConnection($dsn, ['class' => $connectionClass])
             : RedisAdapter::createConnection($dsn);
+    }
+
+    /**
+     * Resolve a Unix socket path from a backend server value.
+     *
+     * @param string $host
+     * @return string|null
+     */
+    private function resolveUnixSocketPath(string $host): ?string
+    {
+        $path = str_starts_with($host, 'unix://') ? substr($host, strlen('unix://')) : $host;
+        return str_starts_with($path, '/') ? $path : null;
+    }
+
+    /**
+     * Build a Redis DSN for a TCP host or Unix socket.
+     *
+     * @param string $host
+     * @param int $port
+     * @param int $database
+     * @param string|null $password
+     * @return string
+     */
+    private function buildRedisBaseDsn(
+        string $host,
+        int $port,
+        int $database,
+        ?string $password
+    ): string {
+        $socketPath = $this->resolveUnixSocketPath($host);
+        if ($socketPath !== null) {
+            $address = sprintf('%s/%d', $socketPath, $database);
+            $encodedPassword = rawurlencode($password ?? '');
+        } else {
+            $address = sprintf('%s:%d/%d', $host, $port, $database);
+            $encodedPassword = urlencode($password ?? '');
+        }
+
+        $auth = $password ? $encodedPassword . '@' : '';
+        return 'redis://' . $auth . $address;
+    }
+
+    /**
+     * Build Predis transport parameters for a TCP host or Unix socket.
+     *
+     * @param string $host
+     * @param int $port
+     * @param int $database
+     * @param string|null $password
+     * @return array
+     */
+    private function buildPredisConnectionParameters(
+        string $host,
+        int $port,
+        int $database,
+        ?string $password
+    ): array {
+        $socketPath = $this->resolveUnixSocketPath($host);
+        $params = $socketPath !== null
+            ? [
+                'scheme' => 'unix',
+                'path' => $socketPath,
+                'database' => $database,
+            ]
+            : [
+                'scheme' => 'tcp',
+                'host' => $host,
+                'port' => $port,
+                'database' => $database,
+            ];
+
+        if ($password) {
+            $params['password'] = $password;
+        }
+
+        return $params;
     }
 
     /**
@@ -526,6 +600,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      */
     private function splitHostPort(string $server, int $defaultPort, int $defaultDatabase): array
     {
+        if ($this->resolveUnixSocketPath($server) !== null) {
+            return [$server, $defaultPort, $defaultDatabase];
+        }
+
         if (strpos($server, ':') !== false) {
             [$host, $port] = explode(':', $server, 2);
             return [$host, (int)$port, $defaultDatabase];
@@ -615,16 +693,12 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         bool $masterWriteOnly = false,
         bool $retryReadsOnMaster = false
     ) {
-        $params = [
-            'scheme' => 'tcp',
-            'host' => $host,
-            'port' => $port,
-            'database' => $database,
-        ];
+        $socketPath = $this->resolveUnixSocketPath($host);
+        $params = $this->buildPredisConnectionParameters($host, $port, $database, $password);
 
         // Predis uses `persistent` for socket persistence and `conn_uid` to distinguish
         // persistent sockets to the same Redis endpoint. These are separate from CLIENT SETNAME.
-        if ($persistent) {
+        if ($persistent && $socketPath === null) {
             $params['persistent'] = true;
             // A persistent socket must never be shared by parent/child processes after fork.
             // Include the database so connections to different databases never share one persistent socket.
@@ -635,10 +709,6 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         }
         if ($readTimeout !== null) {
             $params['read_write_timeout'] = $readTimeout;
-        }
-
-        if ($password) {
-            $params['password'] = $password;
         }
 
         // Single node: no replica configured.
@@ -652,14 +722,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         $params['role'] = 'master';
         $connections = [$params];
         foreach ($slaveSpecs as [$sHost, $sPort, $sDatabase]) {
-            $slave = [
-                'scheme' => 'tcp',
-                'host' => $sHost,
-                'port' => $sPort,
-                'database' => $sDatabase,
-                'role' => 'slave',
-            ];
-            if ($persistent) {
+            $slaveSocketPath = $this->resolveUnixSocketPath($sHost);
+            $slave = $this->buildPredisConnectionParameters($sHost, $sPort, $sDatabase, $password);
+            $slave['role'] = 'slave';
+            if ($persistent && $slaveSocketPath === null) {
                 $slave['persistent'] = true;
                 $slave['conn_uid'] = ($persistentId ?: 'default') . ':' . getmypid()
                     . '_slave_' . $sHost . '_' . $sPort . '_' . $sDatabase;
@@ -669,9 +735,6 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             }
             if ($readTimeout !== null) {
                 $slave['read_write_timeout'] = $readTimeout;
-            }
-            if ($password) {
-                $slave['password'] = $password;
             }
             $connections[] = $slave;
         }
