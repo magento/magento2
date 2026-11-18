@@ -70,6 +70,35 @@ class TestCasePropertiesTest extends TestCase
     }
 
     /**
+     * Readonly and non-nullable typed properties must be left in place.
+     *
+     * @return void
+     */
+    public function testEndTestSuiteSkipsReadonlyAndNonNullableTypedProperties(): void
+    {
+        require_once __DIR__ . '/TestCasePropertiesTest/TypedDummyTestCase.php';
+
+        $dummy = new TestCasePropertiesTest\TypedDummyTestCase('testDummy');
+        $dummy->testDummy();
+        $reflection = new \ReflectionClass($dummy);
+        $typed = $reflection->getProperty('typed')->getValue($dummy);
+        $fixed = $reflection->getProperty('fixed')->getValue($dummy);
+
+        $suite = TestSuite::empty('TypedDummy');
+        $suite->addTest($dummy);
+
+        $clearProperties = new TestCaseProperties();
+        $clearProperties->endTestSuite($suite);
+
+        $this->assertSame($typed, $reflection->getProperty('typed')->getValue($dummy));
+        $this->assertSame($fixed, $reflection->getProperty('fixed')->getValue($dummy));
+        $this->assertNull($reflection->getProperty('nullable')->getValue($dummy));
+        $this->assertNull($reflection->getProperty('untyped')->getValue($dummy));
+        $this->assertSame([], $reflection->getProperty('items')->getValue($dummy));
+        $this->assertSame([], $reflection->getProperty('bareItems')->getValue($dummy));
+    }
+
+    /**
      * @param TestCasePropertiesTest\DummyTestCase $dummy
      * @return void
      */
