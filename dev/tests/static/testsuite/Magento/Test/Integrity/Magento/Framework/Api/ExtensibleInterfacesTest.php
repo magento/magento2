@@ -17,7 +17,7 @@ use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
  */
 class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
 {
-    const EXTENSIBLE_DATA_INTERFACE = \Magento\Framework\Api\ExtensibleDataInterface::class;
+    public const EXTENSIBLE_DATA_INTERFACE = \Magento\Framework\Api\ExtensibleDataInterface::class;
 
     /**
      * Check return types of getExtensionAttributes() methods.
@@ -77,6 +77,76 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetterReturnTypeValidation(): void
+    {
+        $fixtures = [
+            [new class {
+                public function getExtensionAttributes(): \stdClass
+                {
+                    return new \stdClass();
+                }
+            }, true],
+            [new class {
+                /**
+                 * The @returns wording describes what this getter returns.
+                 */
+                public function getExtensionAttributes(): \stdClass
+                {
+                    return new \stdClass();
+                }
+            }, true],
+            [new class {
+                /**
+                 * Retrieve extension attributes.
+                 */
+                public function getExtensionAttributes(): ?\stdClass
+                {
+                    return null;
+                }
+            }, true],
+            [new class {
+                /**
+                 * @return \stdClass
+                 */
+                public function getExtensionAttributes()
+                {
+                    return new \stdClass();
+                }
+            }, true],
+            [new class {
+                /**
+                 * @return string
+                 */
+                public function getExtensionAttributes(): \stdClass
+                {
+                    return new \stdClass();
+                }
+            }, false],
+            [new class {
+                public function getExtensionAttributes()
+                {
+                    return null;
+                }
+            }, false],
+            [new class {
+                public function getExtensionAttributes(): \stdClass|\DateTime
+                {
+                    return new \stdClass();
+                }
+            }, false],
+        ];
+
+        foreach ($fixtures as [$fixture, $accepted]) {
+            $errors = $this->checkGetExtensionAttributes(new \ReflectionClass($fixture), '\\stdClass', 'Fixture');
+            self::assertSame(
+                $accepted ? [] : [
+                    "'Fixture::getExtensionAttributes()' must be declared with a return type of '\\stdClass'.",
+                ],
+                $errors
+            );
+        }
+    }
+
     /**
      * Check getExtensionAttributes methods
      *
@@ -94,9 +164,15 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
         try {
             $methodReflection = $interfaceReflection->getMethod('getExtensionAttributes');
             /** Ensure that proper return type of getExtensionAttributes() method is specified */
-            $methodDocBlock = $methodReflection->getDocComment();
+            $methodDocBlock = (string) $methodReflection->getDocComment();
             $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . "/";
-            if (!preg_match($pattern, $methodDocBlock)) {
+            $hasExpectedReturnType = preg_match($pattern, $methodDocBlock);
+            if (!$hasExpectedReturnType && !preg_match('/@return\b/', $methodDocBlock)) {
+                $returnType = $methodReflection->getReturnType();
+                $hasExpectedReturnType = $returnType instanceof \ReflectionNamedType
+                    && ltrim($returnType->getName(), '\\') === ltrim($extensionInterfaceName, '\\');
+            }
+            if (!$hasExpectedReturnType) {
                 $errors[] =
                     "'{$fullInterfaceName}::getExtensionAttributes()' must be declared "
                     . "with a return type of '{$extensionInterfaceName}'.";
