@@ -11,6 +11,8 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DB\Transaction;
+use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Sales\Api\InvoiceCommentRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
@@ -76,6 +78,11 @@ class InvoiceServiceTest extends TestCase
     protected $invoiceService;
 
     /**
+     * @var TransactionFactory|MockObject
+     */
+    private $transactionFactoryMock;
+
+    /**
      * SetUp
      */
     protected function setUp(): void
@@ -96,6 +103,7 @@ class InvoiceServiceTest extends TestCase
             InvoiceNotifier::class,
             ['notify']
         );
+        $this->transactionFactoryMock = $this->createMock(TransactionFactory::class);
 
         $this->invoiceService = $objectManager->getObject(
             InvoiceService::class,
@@ -104,7 +112,8 @@ class InvoiceServiceTest extends TestCase
                 'commentRepository' => $this->commentRepositoryMock,
                 'criteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
-                'notifier' => $this->invoiceNotifierMock
+                'notifier' => $this->invoiceNotifierMock,
+                'transactionFactory' => $this->transactionFactoryMock,
             ]
         );
     }
@@ -112,12 +121,18 @@ class InvoiceServiceTest extends TestCase
     /**
      * Run test setCapture method
      */
-    public function testSetCapture()
+    public function testSetCapture(): void
     {
         $id = 145;
-        $returnValue = true;
-
-        $invoiceMock = $this->createPartialMock(Invoice::class, ['capture']);
+        $orderMock = $this->getMockBuilder(SalesOrder::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getEntityId'])
+            ->getMock();
+        $invoiceMock = $this->createPartialMock(Invoice::class, ['capture', 'getOrder']);
+        $transactionMock = $this->getMockBuilder(Transaction::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addObject', 'save'])
+            ->getMock();
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -125,7 +140,31 @@ class InvoiceServiceTest extends TestCase
             ->willReturn($invoiceMock);
         $invoiceMock->expects($this->once())
             ->method('capture')
-            ->willReturn($returnValue);
+            ->willReturnSelf();
+        $invoiceMock->expects($this->exactly(2))
+            ->method('getOrder')
+            ->willReturn($orderMock);
+        $this->transactionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($transactionMock);
+        $transactionMock->expects($this->exactly(2))
+            ->method('addObject')
+            ->willReturnCallback(
+                function ($object) use ($transactionMock, $invoiceMock, $orderMock) {
+                    static $call = 0;
+                    if ($call === 0) {
+                        $this->assertSame($invoiceMock, $object);
+                    } else {
+                        $this->assertSame($orderMock, $object);
+                        $this->assertTrue((bool)$orderMock->getIsInProcess());
+                    }
+                    $call++;
+                    return $transactionMock;
+                }
+            );
+        $transactionMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
 
         $this->assertTrue($this->invoiceService->setCapture($id));
     }
@@ -224,7 +263,8 @@ class InvoiceServiceTest extends TestCase
             $this->invoiceNotifierMock,
             $orderRepository,
             $orderConverter,
-            $serializer
+            $serializer,
+            $this->transactionFactoryMock
         );
 
         $order = $this->getMockBuilder(SalesOrder::class)

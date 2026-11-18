@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\Service;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -65,6 +67,11 @@ class InvoiceService implements InvoiceManagementInterface
     private $serializer;
 
     /**
+     * @var TransactionFactory
+     */
+    private $transactionFactory;
+
+    /**
      * @param \Magento\Sales\Api\InvoiceRepositoryInterface $repository
      * @param \Magento\Sales\Api\InvoiceCommentRepositoryInterface $commentRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
@@ -73,6 +80,7 @@ class InvoiceService implements InvoiceManagementInterface
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Convert\Order $orderConverter
      * @param JsonSerializer $serializer
+     * @param TransactionFactory|null $transactionFactory
      */
     public function __construct(
         \Magento\Sales\Api\InvoiceRepositoryInterface $repository,
@@ -82,7 +90,8 @@ class InvoiceService implements InvoiceManagementInterface
         \Magento\Sales\Model\Order\InvoiceNotifier $notifier,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         \Magento\Sales\Model\Convert\Order $orderConverter,
-        JsonSerializer $serializer
+        JsonSerializer $serializer,
+        ?TransactionFactory $transactionFactory = null
     ) {
         $this->repository = $repository;
         $this->commentRepository = $commentRepository;
@@ -92,6 +101,8 @@ class InvoiceService implements InvoiceManagementInterface
         $this->orderRepository = $orderRepository;
         $this->orderConverter = $orderConverter;
         $this->serializer = $serializer;
+        $this->transactionFactory = $transactionFactory
+            ?: ObjectManager::getInstance()->get(TransactionFactory::class);
     }
 
     /**
@@ -99,7 +110,15 @@ class InvoiceService implements InvoiceManagementInterface
      */
     public function setCapture($id)
     {
-        return (bool)$this->repository->get($id)->capture();
+        $invoice = $this->repository->get($id);
+        $result = (bool)$invoice->capture();
+        $invoice->getOrder()->setIsInProcess(true);
+        $this->transactionFactory->create()
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder())
+            ->save();
+
+        return $result;
     }
 
     /**
