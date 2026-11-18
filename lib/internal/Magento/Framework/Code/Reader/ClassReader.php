@@ -6,6 +6,8 @@
 namespace Magento\Framework\Code\Reader;
 
 use Magento\Framework\GetParameterClassTrait;
+use Magento\Framework\Interception\InterceptorInterface;
+use Magento\Framework\ObjectManager\Attribute\Autowire;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
@@ -43,18 +45,28 @@ class ClassReader implements ClassReaderInterface
         $constructor = $class->getConstructor();
         if ($constructor) {
             $result = [];
+            $parameters = $constructor->getParameters();
+            $attributeParameters = $this->getAttributeParameters($class, $parameters);
             /** @var $parameter ReflectionParameter */
-            foreach ($constructor->getParameters() as $parameter) {
+            foreach ($parameters as $parameter) {
                 try {
                     $parameterClass = $this->getParameterClass($parameter);
 
-                    $result[] = [
+                    $parameterInfo = [
                         $parameter->getName(),
                         $parameterClass ? $parameterClass->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
                         $this->getReflectionParameterDefaultValue($parameter),
                         $parameter->isVariadic(),
                     ];
+                    if ($this->isAutowire(
+                        $parameter,
+                        $parameterClass,
+                        $attributeParameters[$parameter->getName()] ?? null
+                    )) {
+                        $parameterInfo[] = true;
+                    }
+                    $result[] = $parameterInfo;
                 } catch (ReflectionException $e) {
                     $message = sprintf(
                         'Impossible to process constructor argument %s of %s class',
@@ -67,6 +79,51 @@ class ClassReader implements ClassReaderInterface
         }
 
         return $this->constructorCache[$className] = $result;
+    }
+
+    /**
+     * Recover attributes omitted by generated Interceptor constructors.
+     *
+     * @param ReflectionClass $class
+     * @param ReflectionParameter[] $parameters
+     * @return array<string, ReflectionParameter>
+     */
+    private function getAttributeParameters(ReflectionClass $class, array $parameters): array
+    {
+        $parent = $class->getParentClass();
+        if ($parent
+            && strcasecmp($class->getName(), $parent->getName() . '\\Interceptor') === 0
+            && $class->implementsInterface(InterceptorInterface::class)
+        ) {
+            $constructor = $parent->getConstructor();
+            $parameters = $constructor ? $constructor->getParameters() : [];
+        }
+
+        $result = [];
+        foreach ($parameters as $parameter) {
+            $result[$parameter->getName()] = $parameter;
+        }
+        return $result;
+    }
+
+    /**
+     * Check whether an optional parameter can opt into object resolution.
+     *
+     * @param ReflectionParameter $parameter
+     * @param ReflectionClass|null $parameterClass
+     * @param ReflectionParameter|null $attributeParameter
+     * @return bool
+     */
+    private function isAutowire(
+        ReflectionParameter $parameter,
+        ?ReflectionClass $parameterClass,
+        ?ReflectionParameter $attributeParameter
+    ): bool {
+        return $parameterClass !== null
+            && $parameter->isOptional()
+            && !$parameter->isVariadic()
+            && $attributeParameter !== null
+            && $attributeParameter->getAttributes(Autowire::class) !== [];
     }
 
     /**

@@ -29,6 +29,11 @@ class ConstructorArgument
     private $defaultValue;
 
     /**
+     * @var bool
+     */
+    private bool $isAutowire = false;
+
+    /**
      * @param array $configuration
      */
     public function __construct(array $configuration)
@@ -37,6 +42,7 @@ class ConstructorArgument
         $this->type = $configuration[1];
         $this->isRequired = $configuration[2];
         $this->defaultValue = $configuration[3];
+        $this->isAutowire = (bool)($configuration[5] ?? false);
     }
 
     /**
@@ -67,6 +73,16 @@ class ConstructorArgument
     public function isRequired()
     {
         return $this->isRequired;
+    }
+
+    /**
+     * Whether an optional dependency should be resolved by the container.
+     *
+     * @return bool
+     */
+    public function isAutowire(): bool
+    {
+        return $this->isAutowire;
     }
 
     /**
