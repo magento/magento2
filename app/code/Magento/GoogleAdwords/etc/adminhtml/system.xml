@@ -7,12 +7,16 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="google" translate="label">
+        <section id="google_adwords" translate="label" type="text" sortOrder="345" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Google AdWords</label>
+            <tab>sales</tab>
+            <resource>Magento_GoogleAdwords::google</resource>
             <group id="adwords" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Google AdWords</label>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>google/adwords/active</config_path>
                 </field>
                 <field id="conversion_id" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Conversion ID</label>
@@ -21,6 +25,7 @@
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_id</config_path>
                 </field>
                 <field id="conversion_language" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Language</label>
@@ -28,12 +33,14 @@
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_language</config_path>
                 </field>
                 <field id="conversion_format" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Format</label>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_format</config_path>
                 </field>
                 <field id="conversion_color" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Color</label>
@@ -41,12 +48,14 @@
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_color</config_path>
                 </field>
                 <field id="conversion_label" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Conversion Label</label>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_label</config_path>
                 </field>
                 <field id="conversion_value_type" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Value Type</label>
@@ -54,6 +63,7 @@
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
+                    <config_path>google/adwords/conversion_value_type</config_path>
                 </field>
                 <field id="conversion_value" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Value</label>
@@ -61,6 +71,7 @@
                         <field id="*/*/active">1</field>
                         <field id="*/*/conversion_value_type">0</field>
                     </depends>
+                    <config_path>google/adwords/conversion_value</config_path>
                 </field>
                 <field id="send_currency" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Order Currency</label>
@@ -69,6 +80,7 @@
                         <field id="*/*/active">1</field>
                         <field id="*/*/conversion_value_type">1</field>
                     </depends>
+                    <config_path>google/adwords/send_currency</config_path>
                 </field>
             </group>
         </section>
