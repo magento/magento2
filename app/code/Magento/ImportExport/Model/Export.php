@@ -194,6 +194,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     if ($fileName !== '') {
                         // Queue export flow: write to a temporary destination and publish atomically on success.
                         $arguments['destination'] = $this->fileInfo->getInProgressFilePath($fileName);
+                        $arguments['fileExport'] = true;
                     }
                     $this->_writer = $this->_exportAdapterFac->create(
                         $fileFormats[$this->getFileFormat()]['model'],
@@ -228,10 +229,21 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public function export()
     {
-        return $this->localeEmulator->emulate(
-            $this->exportCallback(...),
-            $this->getData('locale') ?: null
-        );
+        try {
+            return $this->localeEmulator->emulate(
+                $this->exportCallback(...),
+                $this->getData('locale') ?: null
+            );
+        } catch (\Exception $exception) {
+            $fileName = (string)$this->getData('file_name');
+            if ($fileName !== '') {
+                $filePath = $this->fileInfo->getInProgressFilePath($fileName);
+                if ($this->_varDirectory->isFile($filePath)) {
+                    $this->_varDirectory->delete($filePath);
+                }
+            }
+            throw $exception;
+        }
     }
 
     /**
@@ -250,13 +262,6 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
             $contentLength = strlen((string)$result);
             if ($contentLength === 0) {
-                if ($isQueueFlow) {
-                    $directory = $this->_varDirectory;
-                    $filePath = $this->fileInfo->getInProgressFilePath($fileName);
-                    if ($directory->isFile($filePath)) {
-                        $directory->delete($filePath);
-                    }
-                }
                 throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for the export.'));
             }
             if ($isQueueFlow) {

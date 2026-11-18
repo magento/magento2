@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\GraphQl\CatalogGraphQl;
 
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Customer\Test\Fixture\CustomerGroup;
+use Magento\Tax\Test\Fixture\CustomerTaxClass;
 use Magento\Tax\Test\Fixture\ProductTaxClass;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
@@ -22,9 +25,53 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 /**
  * Test class to verify catalog price rule is applied for
  * tier prices for different customer groups.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceRangeTest extends GraphQlAbstract
 {
+    private const TAX_RULE_DATA = [
+        'customer_tax_class_ids' => [3],
+        'product_tax_class_ids' => ['$product_tax_class.classId$'],
+        'tax_rate_ids' => ['$rate.id$']
+    ];
+
+    private const TAX_PRODUCT_DATA = [
+        'price' => 50,
+        'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+    ];
+
+    private const TAX_CUSTOMER_DATA = [
+        'addresses' => [
+            [
+                'country_id' => 'US',
+                'region_id' => 1,
+                'region' => 'Alabama',
+                'postcode' => '36104',
+                'city' => 'Montgomery'
+            ]
+        ]
+    ];
+
+    private const TAX_GROUP_CUSTOMER_DATA = [
+        'group_id' => '$customer_group.id$',
+        'addresses' => [
+            [
+                'country_id' => 'US',
+                'region_id' => 1,
+                'region' => 'Alabama',
+                'postcode' => '75477',
+                'city' => 'CityM'
+            ]
+        ]
+    ];
+
+    private const TAX_GROUP_RULE_DATA = [
+        'customer_tax_class_ids' => ['$customer_tax_class.classId$'],
+        'product_tax_class_ids' => ['$product_tax_class.classId$'],
+        'tax_rate_ids' => ['$rate.id$']
+    ];
+
     /**
      * @var ObjectManager|null
      */
@@ -46,6 +93,14 @@ class PriceRangeTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites_with_special_price.php
      */
+    #[
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'fixture_second_store'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'fixture_second_store'),
+        Config('tax/cart_display/price', 1, 'store', 'fixture_second_store')
+    ]
     public function testMinimalPriceForConfigurableProductWithSpecialPrice() : void
     {
         $headerMapFirstStore['Store'] = 'default';
@@ -75,6 +130,11 @@ class PriceRangeTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_25_customer_group_all.php
      */
+    #[
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default')
+    ]
     public function testCheckIfCatalogRuleIsAppliedForTierPriceForAllGroups(): void
     {
         $productSku = 'simple';
@@ -101,6 +161,11 @@ class PriceRangeTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_tier_prices_for_logged_in_group.php
      * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_50_registered_customer_group.php
      */
+    #[
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default')
+    ]
     public function testCheckIfCatalogRuleIsAppliedForTierPriceForRegisteredCustomer(): void
     {
         $productSku = 'simple';
@@ -130,6 +195,11 @@ class PriceRangeTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_tier_prices_for_not_logged_in_group.php
      * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_10_off_not_logged.php
      */
+    #[
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default')
+    ]
     public function testCheckIfCatalogRuleIsAppliedForTierPriceForGuest(): void
     {
         $productSku = 'simple';
@@ -150,23 +220,30 @@ class PriceRangeTest extends GraphQlAbstract
 
     /**
      * Test to make sure tax amount is displayed correctly for a logged-in user
-     *
-     * @magentoConfigFixture default_store tax/display/type 2
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_shipping_address_36104.php
-     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_postal_36104.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    #[
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        DataFixture(CustomerFixture::class, self::TAX_CUSTOMER_DATA, 'customer'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'tax_postcode' => '36104', 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, [
+            'price' => 10,
+            'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+        ], 'product')
+    ]
     public function testTaxDisplayAppliesToCustomer(): void
     {
-        $productSku = 'simple';
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $productSku = $fixtures->get('product')->getSku();
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery(
             $query,
             [],
             '',
-            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
+            $this->getCustomerAuthenticationHeader->execute($fixtures->get('customer')->getEmail(), 'password')
         );
 
         $this->assertNotEmpty($response['products']);
@@ -179,15 +256,25 @@ class PriceRangeTest extends GraphQlAbstract
 
     /**
      * Test to make sure tax rule is not applied in display for guest
-     *
-     * @magentoConfigFixture default_store tax/display/type 2
-     *
-     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_postal_36104.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    #[
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 12, 'store', 'default'),
+        Config('tax/defaults/postcode', '90034', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'tax_postcode' => '36104', 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, [
+            'price' => 10,
+            'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+        ], 'product')
+    ]
     public function testTaxDisplayDoesNotApplyToGuest(): void
     {
-        $productSku = 'simple';
+        $productSku = DataFixtureStorageManager::getStorage()->get('product')->getSku();
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery($query);
 
@@ -201,22 +288,32 @@ class PriceRangeTest extends GraphQlAbstract
 
     /**
      * Test to make sure tax rule is applied for customer group
-     *
-     * @magentoConfigFixture default_store tax/display/type 2
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer_with_group_and_address.php
-     * @magentoApiDataFixture Magento/Tax/_files/tax_class_customer_group.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    #[
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, self::TAX_GROUP_CUSTOMER_DATA, 'customer'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'tax_postcode' => '75477', 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_GROUP_RULE_DATA),
+        DataFixture(ProductFixture::class, [
+            'price' => 10,
+            'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+        ], 'product')
+    ]
     public function testTaxDisplayAppliesToCustomerGroup()
     {
-        $productSku = 'simple';
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $productSku = $fixtures->get('product')->getSku();
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery(
             $query,
             [],
             '',
-            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
+            $this->getCustomerAuthenticationHeader->execute($fixtures->get('customer')->getEmail(), 'password')
         );
 
         $this->assertNotEmpty($response['products']);
@@ -229,23 +326,42 @@ class PriceRangeTest extends GraphQlAbstract
 
     /**
      * Test to make sure tax rule is not applied for a customer in the wrong group
-     *
-     * @magentoConfigFixture default_store tax/display/type 2
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer_with_group_and_address.php
-     * @magentoApiDataFixture Magento/Customer/_files/second_customer_with_group_and_address.php
-     * @magentoApiDataFixture Magento/Tax/_files/tax_class_customer_group.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    #[
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        DataFixture(CustomerTaxClass::class, as: 'customer_tax_class'),
+        DataFixture(CustomerGroup::class, ['tax_class_id' => '$customer_tax_class.classId$'], 'customer_group'),
+        DataFixture(CustomerFixture::class, self::TAX_GROUP_CUSTOMER_DATA, 'customer'),
+        DataFixture(CustomerTaxClass::class, as: 'other_customer_tax_class'),
+        DataFixture(
+            CustomerGroup::class,
+            ['tax_class_id' => '$other_customer_tax_class.classId$'],
+            'other_customer_group'
+        ),
+        DataFixture(CustomerFixture::class, [
+            'group_id' => '$other_customer_group.id$',
+            'addresses' => self::TAX_GROUP_CUSTOMER_DATA['addresses']
+        ], 'other_customer'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['tax_region_id' => 1, 'tax_postcode' => '75477', 'rate' => 7.5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_GROUP_RULE_DATA),
+        DataFixture(ProductFixture::class, [
+            'price' => 10,
+            'custom_attributes' => ['tax_class_id' => '$product_tax_class.classId$']
+        ], 'product')
+    ]
     public function testTaxDisplayDoesNotApplyToWrongCustomerGroup(): void
     {
-        $productSku = 'simple';
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $productSku = $fixtures->get('product')->getSku();
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery(
             $query,
             [],
             '',
-            $this->getCustomerAuthenticationHeader->execute('secondcustomer@example.com', 'password')
+            $this->getCustomerAuthenticationHeader->execute($fixtures->get('other_customer')->getEmail(), 'password')
         );
 
         $this->assertNotEmpty($response['products']);
@@ -261,9 +377,16 @@ class PriceRangeTest extends GraphQlAbstract
      * the shipping settings origin but the default tax destination calculation is not set
     */
     #[
-        Config('tax/display/type', 2),
-        Config('tax/cart_display/price', 2),
-        Config('tax/calculation/price_includes_tax', 2),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 2, 'store', 'default'),
+        Config('tax/calculation/price_includes_tax', 1, 'store', 'default'),
+        Config('tax/calculation/based_on', 'shipping', 'store', 'default'),
+        Config('shipping/origin/country_id', 'US', 'store', 'default'),
+        Config('shipping/origin/region_id', 12, 'store', 'default'),
+        Config('shipping/origin/postcode', '90034', 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
         DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
         DataFixture(
             TaxRateFixture::class,
@@ -309,6 +432,185 @@ class PriceRangeTest extends GraphQlAbstract
         $this->assertEquals(9.3, $priceRange['minimum_price']['final_price']['value']);
         $this->assertEquals(9.3, $priceRange['maximum_price']['regular_price']['value']);
         $this->assertEquals(9.3, $priceRange['maximum_price']['final_price']['value']);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithExclusiveShippingInputAndDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 2, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveCartShippingDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 0, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithBothCartShippingDisplays(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 3, 'store', 'default'),
+        Config('tax/cart_display/price', 1, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testBothPricesWithInclusiveShippingInputAndExclusiveDisplay(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 2, 'store', 'default'),
+        Config('tax/cart_display/price', 2, 'store', 'default'),
+        Config('tax/cart_display/shipping', 1, 'store', 'default'),
+        Config('tax/display/shipping', 1, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testInclusivePricesWithInclusiveCartPricesAndShippingInput(): void
+    {
+        $this->assertTaxPriceRange(52.5);
+    }
+
+    #[
+        Config('tax/calculation/price_includes_tax', 0, 'store', 'default'),
+        Config('tax/calculation/shipping_includes_tax', 1, 'store', 'default'),
+        Config('tax/display/type', 1, 'store', 'default'),
+        Config('tax/cart_display/price', 3, 'store', 'default'),
+        Config('tax/cart_display/shipping', 3, 'store', 'default'),
+        Config('tax/display/shipping', 3, 'store', 'default'),
+        Config('tax/defaults/country', 'US', 'store', 'default'),
+        Config('tax/defaults/region', 0, 'store', 'default'),
+        Config('tax/defaults/postcode', '*', 'store', 'default'),
+        DataFixture(ProductTaxClass::class, as: 'product_tax_class'),
+        DataFixture(TaxRateFixture::class, ['rate' => 5], 'rate'),
+        DataFixture(TaxRuleFixture::class, self::TAX_RULE_DATA),
+        DataFixture(ProductFixture::class, self::TAX_PRODUCT_DATA, 'product')
+    ]
+    public function testExclusivePricesWithBothCartPriceDisplaysAndInclusiveShippingInput(): void
+    {
+        $this->assertTaxPriceRange(50);
+    }
+
+    private function assertTaxPriceRange(float $expectedPrice): void
+    {
+        $product = DataFixtureStorageManager::getStorage()->get('product');
+        $response = $this->graphQlQuery(
+            $this->getProductSearchQuery($product->getSku()),
+            [],
+            '',
+            ['Store' => 'default']
+        );
+
+        self::assertCount(1, $response['products']['items']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        foreach (['minimum_price', 'maximum_price'] as $range) {
+            foreach (['regular_price', 'final_price'] as $price) {
+                self::assertEquals($expectedPrice, $priceRange[$range][$price]['value'], "$range.$price");
+            }
+        }
     }
 
     /**

@@ -47,6 +47,9 @@
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <!--Delete customer created during test execution-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGridBeforeDeletingCustomer">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromGrid">
                 <argument name="customerEmail" value="Simple_US_Customer_NY.email"/>
             </actionGroup>

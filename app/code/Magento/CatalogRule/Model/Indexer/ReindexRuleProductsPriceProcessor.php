@@ -49,14 +49,65 @@ class ReindexRuleProductsPriceProcessor
         bool $useAdditionalTable,
         bool $useWebsiteTimezone
     ): void {
-        $dayPrices = [];
-        $stopFlags = [];
-        $prevKey = null;
-
         $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
         $dateInterval = $useWebsiteTimezone
             ? $this->getDateInterval((int)$storeGroup->getDefaultStoreId())
             : $this->getDateInterval(Store::DEFAULT_STORE_ID);
+
+        $this->processStatement($productsStmt, $dateInterval, $batchCount, $useAdditionalTable);
+    }
+
+    /**
+     * Process complete-product batches using the same website dates for every batch.
+     *
+     * @param iterable<Zend_Db_Statement_Interface> $statements
+     * @param WebsiteInterface $website
+     * @param int $batchCount
+     * @param bool $useAdditionalTable
+     * @param bool $useWebsiteTimezone
+     * @return void
+     * @throws Zend_Db_Statement_Exception
+     */
+    public function executeBatches(
+        iterable $statements,
+        WebsiteInterface $website,
+        int $batchCount,
+        bool $useAdditionalTable,
+        bool $useWebsiteTimezone
+    ): void {
+        $storeGroup = $this->storeManager->getGroup($website->getDefaultGroupId());
+        $dateInterval = $useWebsiteTimezone
+            ? $this->getDateInterval((int)$storeGroup->getDefaultStoreId())
+            : $this->getDateInterval(Store::DEFAULT_STORE_ID);
+
+        foreach ($statements as $productsStmt) {
+            try {
+                $this->processStatement($productsStmt, $dateInterval, $batchCount, $useAdditionalTable);
+            } finally {
+                $productsStmt->closeCursor();
+            }
+        }
+    }
+
+    /**
+     * Calculate and persist complete product/group rule chains from one result.
+     *
+     * @param Zend_Db_Statement_Interface $productsStmt
+     * @param DateTime[] $dateInterval
+     * @param int $batchCount
+     * @param bool $useAdditionalTable
+     * @return void
+     * @throws Zend_Db_Statement_Exception
+     */
+    private function processStatement(
+        Zend_Db_Statement_Interface $productsStmt,
+        array $dateInterval,
+        int $batchCount,
+        bool $useAdditionalTable
+    ): void {
+        $dayPrices = [];
+        $stopFlags = [];
+        $prevKey = null;
 
         while ($ruleData = $productsStmt->fetch()) {
             $ruleProductId = (int)$ruleData['product_id'];

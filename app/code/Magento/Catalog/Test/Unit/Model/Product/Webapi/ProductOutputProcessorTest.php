@@ -33,10 +33,7 @@ class ProductOutputProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createPartialMock(
-            Request::class,
-            ['getContent']
-        );
+        $this->requestMock = $this->createStub(Request::class);
         $this->deserializerMock = $this->createMock(DeserializerInterface::class);
         $this->productOutputProcessor = new ProductOutputProcessor($this->requestMock, $this->deserializerMock);
     }
@@ -59,11 +56,88 @@ class ProductOutputProcessorTest extends TestCase
         }
         $this->requestMock
             ->method('getContent')
-            ->willReturn($request);
+            ->willReturn(json_encode($request));
         $this->deserializerMock
+            ->expects($this->once())
             ->method('deserialize')
             ->willReturn($request);
         $this->assertEquals($expectedResult, $this->productOutputProcessor->execute($product, $result));
+    }
+
+    public function testProcessesEachProductWithOneDeserialization(): void
+    {
+        $request = [
+            ['product' => ['sku' => 'omitted']],
+            ['product' => ['sku' => 'explicit', 'tier_prices' => [], 'product_links' => []]],
+        ];
+        $this->requestMock->method('getContent')->willReturn(json_encode($request));
+        $this->deserializerMock->expects($this->once())->method('deserialize')->willReturn($request);
+        $result = ['tier_prices' => [], 'product_links' => []];
+        foreach (['omitted' => [], 'explicit' => $result, 'missing' => $result] as $sku => $expected) {
+            $product = $this->createStub(ProductInterface::class);
+            $product->method('getSku')->willReturn($sku);
+            $product->method('getTierPrices')->willReturn([]);
+            $product->method('getProductLinks')->willReturn([]);
+            $this->assertSame($expected, $this->productOutputProcessor->execute($product, $result));
+        }
+    }
+
+    #[DataProvider('skuMatchingDataProvider')]
+    public function testPreservesSkuMatching(array $request, $sku, array $expected): void
+    {
+        $this->requestMock->method('getContent')->willReturn(json_encode($request));
+        $this->deserializerMock->expects($this->once())->method('deserialize')->willReturn($request);
+        $product = $this->createStub(ProductInterface::class);
+        $product->method('getSku')->willReturn($sku);
+        $product->method('getTierPrices')->willReturn([]);
+        $product->method('getProductLinks')->willReturn([]);
+        $this->assertSame(
+            $expected,
+            $this->productOutputProcessor->execute($product, ['tier_prices' => [], 'product_links' => []])
+        );
+    }
+
+    public static function skuMatchingDataProvider(): array
+    {
+        $fields = ['tier_prices' => [], 'product_links' => []];
+        return [
+            'first duplicate omits fields' => [
+                [['product' => ['sku' => 'same']], ['product' => ['sku' => 'same'] + $fields]],
+                'same',
+                [],
+            ],
+            'first duplicate includes fields' => [
+                [['product' => ['sku' => 'same'] + $fields], ['product' => ['sku' => 'same']]],
+                'same',
+                $fields,
+            ],
+            'numeric and string SKU are distinct' => [
+                [['product' => ['sku' => 123]], ['product' => ['sku' => '123'] + $fields]],
+                '123',
+                $fields,
+            ],
+        ];
+    }
+
+    public function testResetsRequestProductsBetweenRequests(): void
+    {
+        $first = ['product' => ['sku' => 'same']];
+        $second = ['product' => ['sku' => 'same', 'tier_prices' => [], 'product_links' => []]];
+        $this->requestMock->method('getContent')->willReturnOnConsecutiveCalls(
+            json_encode($first),
+            json_encode($second)
+        );
+        $this->deserializerMock->expects($this->exactly(2))->method('deserialize')
+            ->willReturnOnConsecutiveCalls($first, $second);
+        $product = $this->createStub(ProductInterface::class);
+        $product->method('getSku')->willReturn('same');
+        $product->method('getTierPrices')->willReturn([]);
+        $product->method('getProductLinks')->willReturn([]);
+        $result = ['tier_prices' => [], 'product_links' => []];
+
+        $this->assertSame([], $this->productOutputProcessor->execute($product, $result));
+        $this->productOutputProcessor->_resetState();
+        $this->assertSame($result, $this->productOutputProcessor->execute($product, $result));
     }
 
     /**
@@ -311,29 +385,13 @@ class ProductOutputProcessorTest extends TestCase
 
     protected function setProductInformation($productArr)
     {
-        $productMock = $this->createMock(ProductInterface::class);
-        $productMock
-            ->method('setSku')
-            ->with($productArr['sku'])
-            ->willReturn(true);
+        $productMock = $this->createStub(ProductInterface::class);
         $productMock
             ->method('getSku')
             ->willReturn($productArr['sku']);
         $productMock
-            ->method('setStatus')
-            ->with($productArr['status'])
-            ->willReturn(true);
-        $productMock
-            ->method('setProductLinks')
-            ->with($productArr['product_links'])
-            ->willReturn(true);
-        $productMock
             ->method('getProductLinks')
             ->willReturn($productArr['product_links']);
-        $productMock
-            ->method('setTierPrices')
-            ->with($productArr['tier_prices'])
-            ->willReturn(true);
         $productMock
             ->method('getTierPrices')
             ->willReturn($productArr['tier_prices']);
