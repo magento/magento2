@@ -103,6 +103,11 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
             'SCRIPT_FILENAME' => 'index.php',
             'REQUEST_URI' => parse_url($requestUrl, PHP_URL_PATH),
         ];
+        $query = parse_url($requestUrl, PHP_URL_QUERY);
+        if ($query !== null) {
+            $request['REQUEST_URI'] .= '?' . $query;
+            $request['QUERY_STRING'] = $query;
+        }
         $this->setConfig($config);
         $this->setServer($request);
         $app = $this->_objectManager->create(\Magento\Framework\App\Http::class, ['_request' => $this->getRequest()]);
@@ -191,6 +196,21 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
                 'config' => array_merge($baseConfig, ['web/seo/use_rewrites' => 0]),
                 'requestUrl' => 'http://magento.com/a/b/c/d',
                 'redirectUrl' => 'http://magento.com/us/index.php/a/b/c/d'
+            ],
+            'query string' => [
+                'config' => $baseConfig,
+                'requestUrl' => 'http://magento.com/a/b.html?q=shirt&utm_source=news%20letter',
+                'redirectUrl' => 'http://magento.com/us/a/b.html?q=shirt&utm_source=news%20letter'
+            ],
+            'query string with array parameter' => [
+                'config' => $baseConfig,
+                'requestUrl' => 'http://magento.com/?color%5B%5D=red&color%5B%5D=blue',
+                'redirectUrl' => 'http://magento.com/us/?color%5B%5D=red&color%5B%5D=blue'
+            ],
+            'query string without rewrites' => [
+                'config' => array_merge($baseConfig, ['web/seo/use_rewrites' => 0]),
+                'requestUrl' => 'http://magento.com/a/b/c/d?secret=abc123',
+                'redirectUrl' => 'http://magento.com/us/index.php/a/b/c/d?secret=abc123'
             ],
         ];
     }
