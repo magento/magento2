@@ -87,6 +87,36 @@ class SynchronizeFilesTest extends TestCase
     }
 
     /**
+     * A dangling symlink in the batch is skipped and the other files are still imported
+     *
+     * @throws FileSystemException
+     * @throws LocalizedException
+     */
+    public function testExecuteSkipsFileThatCannotBeRead(): void
+    {
+        $validFile = '/magento_sync_valid.jpg';
+        $brokenFile = '/magento_sync_broken.jpg';
+        $validFilePath = $this->mediaDirectory->getAbsolutePath($validFile);
+        $brokenFilePath = $this->mediaDirectory->getAbsolutePath($brokenFile);
+        $this->driver->filePutContents(
+            $validFilePath,
+            file_get_contents(realpath(__DIR__ . '/../_files/magento.jpg'))
+        );
+        $this->driver->symlink($this->mediaDirectory->getAbsolutePath('/magento_sync_missing.jpg'), $brokenFilePath);
+
+        try {
+            $this->synchronizeFiles->execute([$brokenFile, $validFile]);
+
+            $loadedAssets = $this->getAssetsByPath->execute([$brokenFile, $validFile]);
+            $this->assertCount(1, $loadedAssets);
+            $this->assertEquals($validFile, $loadedAssets[0]->getPath());
+        } finally {
+            $this->driver->deleteFile($brokenFilePath);
+            $this->driver->deleteFile($validFilePath);
+        }
+    }
+
+    /**
      * Data provider for testExecute
      *
      * @return array[]

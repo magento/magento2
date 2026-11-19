@@ -132,7 +132,17 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $assets = $this->getAssetsByPaths->execute($assetPaths);
 
         foreach ($assets as $asset) {
-            if ($asset->getUpdatedAt() === $this->getFileModificationTime($asset->getPath())) {
+            try {
+                $modificationTime = $this->getFileModificationTime($asset->getPath());
+            } catch (LocalizedException | \RuntimeException $exception) {
+                $this->log->warning(
+                    'Media gallery synchronization skipped a file that cannot be read.',
+                    ['path' => $asset->getPath(), 'exception' => $exception]
+                );
+                unset($assetPaths[$asset->getPath()]);
+                continue;
+            }
+            if ($asset->getUpdatedAt() === $modificationTime) {
                 unset($assetPaths[$asset->getPath()]);
             }
         }
