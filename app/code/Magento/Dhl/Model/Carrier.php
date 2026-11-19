@@ -1089,7 +1089,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
                 $deferredResponses[] = [
                     'deferred' => $this->httpClient->request(
                         new Request(
-                            (string)$this->getConfigData('gateway_xml_url'),
+                            $this->getGatewayURL(),
                             Request::METHOD_POST,
                             ['Content-Type' => 'application/xml'],
                             mb_convert_encoding($request, 'UTF-8')
