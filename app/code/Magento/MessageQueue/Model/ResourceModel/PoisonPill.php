@@ -19,14 +19,14 @@ class PoisonPill extends AbstractDb implements PoisonPillPutInterface, PoisonPil
     /**
      * Table name.
      */
-    const QUEUE_POISON_PILL_TABLE = 'queue_poison_pill';
+    public const QUEUE_POISON_PILL_TABLE = 'queue_poison_pill';
 
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init(self::QUEUE_POISON_PILL_TABLE, 'version');
+        $this->_init(self::QUEUE_POISON_PILL_TABLE, 'id');
     }
 
     /**
