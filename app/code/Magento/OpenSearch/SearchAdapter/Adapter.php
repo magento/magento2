@@ -102,6 +102,7 @@ class Adapter implements AdapterInterface
     {
         $client = $this->connectionManager->getConnection();
         $query = $this->mapper->buildQuery($request);
+        $rawResponse = ['hits' => ['hits' => [], 'total' => ['value' => 0]]];
         try {
             $maxPageSize = $this->pageSizeProvider->getMaxPageSize();
             if ($request->getFrom() + $request->getSize() > $maxPageSize) {
@@ -112,24 +113,17 @@ class Adapter implements AdapterInterface
                     ]
                 );
                 $pitId = $pit['pit_id'];
-                $query['body']['pit'] = [
-                    'id' => $pitId,
-                ];
-                unset($query['index']);
-
-                $query['body']['from'] = 0;
-                $processed = 0;
-                while ($processed < $request->getFrom()) {
-                    $query['body']['size'] = min($request->getFrom() - $processed, $maxPageSize);
-                    $processed += $query['body']['size'];
+                $deepPage = $this->buildPointInTimeQuery($client, $query, $request, $maxPageSize, $pitId);
+                $query = $deepPage['query'];
+                if ($deepPage['beyondLastHit']) {
+                    $rawResponse = $deepPage['rawResponse'];
+                    $rawResponse['hits']['hits'] = [];
+                } else {
                     $rawResponse = $client->query($query);
-                    $lastHit = end($rawResponse['hits']['hits']);
-                    $query['body']['search_after'] = $lastHit['sort'];
                 }
-                $query['body']['size'] = $request->getSize();
+            } else {
+                $rawResponse = $client->query($query);
             }
-
-            $rawResponse = $client->query($query);
         } catch (Missing404Exception|BadRequest400Exception $e) {
             $this->logger->critical($e);
             throw new EmptyRequestDataException("Could not perform search query.");
@@ -153,5 +147,55 @@ class Adapter implements AdapterInterface
             ]
         );
         return $queryResponse;
+    }
+
+    /**
+     * Walk search_after chunks until the requested offset, or stop when a chunk runs out of hits.
+     *
+     * @param mixed $client
+     * @param array $query
+     * @param RequestInterface $request
+     * @param int $maxPageSize
+     * @param string $pitId
+     * @return array{query: array, beyondLastHit: bool, rawResponse: array}
+     */
+    private function buildPointInTimeQuery(
+        mixed $client,
+        array $query,
+        RequestInterface $request,
+        int $maxPageSize,
+        string $pitId
+    ): array {
+        $query['body']['pit'] = [
+            'id' => $pitId,
+        ];
+        unset($query['index']);
+
+        $query['body']['from'] = 0;
+        $processed = 0;
+        $beyondLastHit = false;
+        $rawResponse = ['hits' => ['hits' => [], 'total' => ['value' => 0]]];
+        while ($processed < $request->getFrom()) {
+            $chunkSize = min($request->getFrom() - $processed, $maxPageSize);
+            $query['body']['size'] = $chunkSize;
+            $rawResponse = $client->query($query);
+            $hits = $rawResponse['hits']['hits'] ?? [];
+            if (!is_array($hits) || count($hits) < $chunkSize) {
+                $beyondLastHit = true;
+                break;
+            }
+            $processed += $chunkSize;
+            $lastHit = end($hits);
+            $query['body']['search_after'] = $lastHit['sort'];
+        }
+        if (!$beyondLastHit) {
+            $query['body']['size'] = $request->getSize();
+        }
+
+        return [
+            'query' => $query,
+            'beyondLastHit' => $beyondLastHit,
+            'rawResponse' => $rawResponse,
+        ];
     }
 }
