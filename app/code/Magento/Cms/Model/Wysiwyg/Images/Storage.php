@@ -14,6 +14,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * Wysiwyg Images model.
@@ -415,8 +417,7 @@ class Storage extends \Magento\Framework\DataObject
             $driver = $this->_directory->getDriver();
             $itemStats = $driver->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $mimeType = $itemStats['mimetype'] ?? $this->mime->getMimeType($item->getFilename());
-            $item->setMimeType($mimeType);
+            $imageMimeType = null;
 
             if ($this->isImageValid($item)) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -433,6 +434,7 @@ class Storage extends \Magento\Framework\DataObject
                     if (is_array($size)) {
                         $item->setWidth($size[0]);
                         $item->setHeight($size[1]);
+                        $imageMimeType = $size['mime'] ?? null;
                     }
                 } catch (\Error $e) {
                     $this->logger->notice(sprintf("GetImageSize caused error: %s", $e->getMessage()));
@@ -447,10 +449,41 @@ class Storage extends \Magento\Framework\DataObject
                 $thumbUrl = $this->_assetRepo->getUrl(self::THUMB_PLACEHOLDER_PATH_SUFFIX);
             }
 
+            $item->setMimeType(
+                $this->getItemMimeType($driver, $item->getFilename(), $itemStats, $imageMimeType)
+            );
             $item->setThumbUrl($thumbUrl);
         }
 
         return $collection;
+    }
+
+    /**
+     * Get the MIME type of a listed file, reusing the type found in the image header for local files
+     *
+     * @param DriverInterface $driver
+     * @param string $filename
+     * @param array $itemStats
+     * @param string|null $imageMimeType
+     * @return string|null
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function getItemMimeType(
+        DriverInterface $driver,
+        string $filename,
+        array $itemStats,
+        ?string $imageMimeType
+    ): ?string {
+        if (isset($itemStats['mimetype'])) {
+            return $itemStats['mimetype'];
+        }
+
+        // Remote drivers report the Content-Type stored with the object, which may differ from the content.
+        if ($imageMimeType !== null && !$driver instanceof ExtendedDriverInterface) {
+            return $imageMimeType;
+        }
+
+        return $this->mime->getMimeType($filename);
     }
 
     /**
