@@ -113,6 +113,11 @@ class CreateTest extends TestCase
     private ObjectManagerInterface $objectManager;
 
     /**
+     * @var \Magento\Catalog\Helper\Product|MockObject
+     */
+    private \Magento\Catalog\Helper\Product $catalogProductHelper;
+
+    /**
      * @var ManagerInterface|ManagerInterface&MockObject|MockObject
      */
     private ManagerInterface $messageManager;
@@ -177,6 +182,10 @@ class CreateTest extends TestCase
 
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->catalogProductHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getSkipSaleableCheck', 'setSkipSaleableCheck'])
+            ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             Create::class,
@@ -192,6 +201,7 @@ class CreateTest extends TestCase
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'quoteRepository' => $this->quoteRepository,
                 'quoteFactory' => $this->quoteFactory,
+                'catalogProductHelper' => $this->catalogProductHelper,
             ]
         );
     }
@@ -709,6 +719,7 @@ class CreateTest extends TestCase
                 'quoteRepository' => $this->quoteRepository,
                 'quoteFactory' => $this->quoteFactory,
                 'customerRepository' => $customerRepository,
+                'catalogProductHelper' => $this->catalogProductHelper,
             ]
         );
     }
