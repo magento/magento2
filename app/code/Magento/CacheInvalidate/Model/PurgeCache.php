@@ -7,9 +7,10 @@ namespace Magento\CacheInvalidate\Model;
 
 use Exception;
 use Generator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\PageCache\Model\Cache\Server;
-use Laminas\Http\Client\Adapter\Socket;
 use Laminas\Uri\Uri;
 
 /**
@@ -26,6 +27,8 @@ class PurgeCache
 
     /**
      * @var SocketFactory
+     * @deprecated Purge requests use the core HTTP client factory.
+     * @see \Magento\Framework\HTTP\Client\CurlFactory
      */
     protected $socketAdapterFactory;
 
@@ -47,23 +50,31 @@ class PurgeCache
     private $maxHeaderSize;
 
     /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
+    /**
      * Constructor
      *
      * @param Server $cacheServer
      * @param SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
      * @param int $maxHeaderSize
+     * @param CurlFactory|null $curlFactory
      */
     public function __construct(
         Server $cacheServer,
         SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger,
-        int $maxHeaderSize = 7680
+        int $maxHeaderSize = 7680,
+        ?CurlFactory $curlFactory = null
     ) {
         $this->cacheServer = $cacheServer;
         $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
         $this->maxHeaderSize = $maxHeaderSize;
+        $this->curlFactory = $curlFactory ?? ObjectManager::getInstance()->get(CurlFactory::class);
     }
 
     /**
@@ -79,13 +90,11 @@ class PurgeCache
         }
 
         $successful = true;
-        $socketAdapter = $this->socketAdapterFactory->create();
         $servers = $this->cacheServer->getUris();
-        $socketAdapter->setOptions(['timeout' => 10]);
 
         $formattedTagsChunks = $this->chunkTags($tags);
         foreach ($formattedTagsChunks as $formattedTagsChunk) {
-            if (!$this->sendPurgeRequestToServers($socketAdapter, $servers, $formattedTagsChunk)) {
+            if (!$this->sendPurgeRequestToServers($servers, $formattedTagsChunk)) {
                 $successful = false;
             }
         }
@@ -122,27 +131,23 @@ class PurgeCache
     /**
      * Send curl purge request to servers to invalidate cache by tags pattern
      *
-     * @param Socket $socketAdapter
      * @param Uri[] $servers
      * @param string $formattedTagsChunk
      * @return bool Return true if successful; otherwise return false
      */
-    private function sendPurgeRequestToServers(Socket $socketAdapter, array $servers, string $formattedTagsChunk): bool
+    private function sendPurgeRequestToServers(array $servers, string $formattedTagsChunk): bool
     {
         $headers = [self::HEADER_X_MAGENTO_TAGS_PATTERN => $formattedTagsChunk];
         $unresponsiveServerError = [];
         foreach ($servers as $server) {
             $headers['Host'] = $server->getHost();
             try {
-                $socketAdapter->connect($server->getHost(), $server->getPort());
-                $socketAdapter->write(
-                    'PURGE',
-                    $server,
-                    '1.1',
-                    $headers
-                );
-                $socketAdapter->read();
-                $socketAdapter->close();
+                $client = $this->curlFactory->create();
+                $client->setTimeout(10);
+                $client->setHeaders($headers);
+                $client->setOption(CURLOPT_CUSTOMREQUEST, 'PURGE');
+                $client->setOption(CURLOPT_PROXY, '');
+                $client->get((string)$server);
             } catch (Exception $e) {
                 $unresponsiveServerError[] = "Cache host: " . $server->getHost() . ":" . $server->getPort() .
                     "resulted in error message: " . $e->getMessage();
