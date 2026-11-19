@@ -7,6 +7,7 @@ namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
 use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
 use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\Context;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\LockerProcessInterface;
@@ -181,6 +182,41 @@ class FrontendCompilationTest extends TestCase
         );
 
         $frontendCompilation->process($this->getChainMockExpects('', 1, 1, $newContentType));
+    }
+
+    public function testProcessSkipsAssetWithoutFallbackContext()
+    {
+        $this->lockerProcessMock->expects(self::once())
+            ->method('lockProcess');
+        $this->lockerProcessMock->expects(self::once())
+            ->method('unlockProcess');
+
+        $this->alternativeSourceMock->expects(self::never())
+            ->method('getAlternativesExtensionsNames');
+        $this->assetSourceMock->expects(self::never())
+            ->method('getContent');
+
+        $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getFilePath')->willReturn(self::FILE_PATH);
+        $assetMock->method('getModule')->willReturn('');
+        $assetMock->method('getContext')->willReturn(
+            new Context('http://localhost/static/', 'static', '')
+        );
+
+        $chainMock = $this->getChainMock();
+        $chainMock->method('getAsset')->willReturn($assetMock);
+        $chainMock->expects(self::never())->method('setContent');
+        $chainMock->expects(self::never())->method('setContentType');
+
+        $frontendCompilation = new FrontendCompilation(
+            $this->assetSourceMock,
+            $this->assetBuilderMock,
+            $this->alternativeSourceMock,
+            $this->lockerProcessMock,
+            'lock'
+        );
+
+        $frontendCompilation->process($chainMock);
     }
 
     /**
