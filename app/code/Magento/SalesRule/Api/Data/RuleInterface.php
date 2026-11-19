@@ -245,6 +245,9 @@ interface RuleInterface extends ExtensibleDataInterface
      * Return product ids
      *
      * @return int[]|null
+     * @deprecated Not populated for sales rules and not consumed anywhere; a sales rule resolves its
+     * target products dynamically from its conditions.
+     * @see \Magento\SalesRule\Api\Data\RuleInterface::getActionCondition()
      */
     public function getProductIds();
 
@@ -253,6 +256,8 @@ interface RuleInterface extends ExtensibleDataInterface
      *
      * @param int[]|null $productIds
      * @return $this
+     * @deprecated The value has no effect on sales rule evaluation.
+     * @see \Magento\SalesRule\Api\Data\RuleInterface::getProductIds()
      */
     public function setProductIds(?array $productIds = null);
 
