@@ -122,10 +122,7 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
             ) {
                 $parametersArray = [];
                 foreach ($methodOptions['parameters'] as $position => $parameterOptions) {
-                    $parameterObject = new \Laminas\Code\Generator\ParameterGenerator();
-                    $this->_setDataToObject($parameterObject, $parameterOptions, $this->_parameterOptions);
-                    $parameterObject->setPosition((int) $position);
-                    $parametersArray[] = $parameterObject;
+                    $parametersArray[] = $this->createParameterGenerator($parameterOptions, (int) $position);
                 }
 
                 $methodObject->setParameters($parametersArray);
@@ -146,6 +143,24 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
             $this->addMethodFromGenerator($methodObject);
         }
         return $this;
+    }
+
+    /**
+     * Create and configure a method parameter generator.
+     *
+     * @param array $parameterOptions
+     * @param int $position
+     * @return ParameterGenerator
+     */
+    private function createParameterGenerator(array $parameterOptions, int $position): ParameterGenerator
+    {
+        $parameterObject = new ParameterGenerator();
+        $this->_setDataToObject($parameterObject, $parameterOptions, $this->_parameterOptions);
+        if (!empty($parameterOptions['sensitiveParameter'])) {
+            $parameterObject->setSensitiveParameter(true);
+        }
+        $parameterObject->setPosition($position);
+        return $parameterObject;
     }
 
     /**
