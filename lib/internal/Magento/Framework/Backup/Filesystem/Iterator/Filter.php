@@ -6,8 +6,6 @@
 
 /**
  * Filter \Iterator
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Backup\Filesystem\Iterator;
 
