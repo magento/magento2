@@ -158,6 +158,11 @@ class SearchClient implements ClientInterface
 
         $options['hosts'] = [$host];
 
+        // Apply the configured server timeout to every request, not only to ping
+        if (!empty($options['timeout'])) {
+            $options['connectionParams']['client']['timeout'] = (int)$options['timeout'];
+        }
+
         return $options;
     }
 
