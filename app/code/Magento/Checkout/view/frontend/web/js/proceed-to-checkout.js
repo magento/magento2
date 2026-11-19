@@ -11,6 +11,12 @@ define([
     'use strict';
 
     return function (config, element) {
+        $(window).on('pageshow', function (event) {
+            if (event.originalEvent.persisted) {
+                $(element).attr('disabled', false);
+            }
+        });
+
         $(element).on('click', function (event) {
             var cart = customerData.get('cart'),
                 customer = customerData.get('customer');
