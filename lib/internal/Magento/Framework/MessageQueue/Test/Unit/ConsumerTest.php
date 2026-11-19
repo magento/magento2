@@ -17,6 +17,7 @@ use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\MessageController;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageStateResetter;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
@@ -221,5 +222,55 @@ class ConsumerTest extends TestCase
         $this->configuration->expects($this->once())->method('getMaxIdleTime')->willReturn('2');
         $this->configuration->expects($this->once())->method('getSleep')->willReturn('2');
         $this->consumer->process($numberOfMessages);
+    }
+
+    public function testProcessResetsStateAfterEachInvokedMessage(): void
+    {
+        $messageStateResetter = $this->mockMessageStateResetter();
+        $this->poisonPillRead->method('getLatestVersion')->willReturn('version-1');
+        $this->poisonPillCompare->method('isLatestVersion')->willReturn(true);
+        $this->deploymentConfig->method('get')->willReturn(1);
+        $queue = $this->createMock(QueueInterface::class);
+        $this->configuration->method('getQueue')->willReturn($queue);
+        $this->configuration->method('getConsumerName')->willReturn('consumer.name');
+        $envelope = $this->createStub(EnvelopeInterface::class);
+        $envelope->method('getProperties')->willReturn(['topic_name' => 'topic.name']);
+        $queue->expects($this->exactly(2))->method('dequeue')->willReturn($envelope);
+        $this->communicationConfig->method('getTopic')->willReturn(['is_synchronous' => true]);
+        $this->messageController->method('lock')
+            ->willThrowException(new NotFoundException(new Phrase('Not found')));
+
+        $messageStateResetter->expects($this->exactly(2))->method('resetState')->with($this->configuration);
+
+        $this->consumer->process(2);
+    }
+
+    public function testProcessResetsStateAfterSubscribedMessageEvenWhenCallbackFails(): void
+    {
+        $messageStateResetter = $this->mockMessageStateResetter();
+        $queue = $this->createMock(QueueInterface::class);
+        $this->configuration->method('getQueue')->willReturn($queue);
+        $envelope = $this->createStub(EnvelopeInterface::class);
+        $envelope->method('getProperties')->willThrowException(new \Error('Broken message'));
+        $queue->expects($this->once())->method('subscribe')
+            ->willReturnCallback(static function (\Closure $callback) use ($envelope): void {
+                $callback($envelope);
+            });
+
+        $messageStateResetter->expects($this->once())->method('resetState')->with($this->configuration);
+        $this->expectException(\Error::class);
+
+        $this->consumer->process();
+    }
+
+    private function mockMessageStateResetter(): MessageStateResetter&MockObject
+    {
+        $messageStateResetter = $this->createMock(MessageStateResetter::class);
+        (new ObjectManager($this))->setBackwardCompatibleProperty(
+            $this->consumer,
+            'messageStateResetter',
+            $messageStateResetter
+        );
+        return $messageStateResetter;
     }
 }
