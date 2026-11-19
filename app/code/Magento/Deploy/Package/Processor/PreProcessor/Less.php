@@ -55,12 +55,16 @@ class Less implements ProcessorInterface
     private $options = [];
 
     /**
-     * @var array
+     * Files each LESS file imports, as a set keyed by path
+     *
+     * @var array<string, array<string, true>>
      */
     private $map = [];
 
     /**
-     * @var array
+     * Files already visited while answering one reachability question
+     *
+     * @var array<string, true>
      */
     private $pFileCache = [];
 
@@ -148,26 +152,26 @@ class Less implements ProcessorInterface
     /**
      * Checks if there is a LESS file in current package which used for generating given CSS from parent package
      *
-     * @param string $fileName
+     * @param string|null $fileName
      * @param string $parentFile
-     * @param array $map
+     * @param array<string,array<string,true>> $map
      * @return bool
      */
-    private function inParentFiles($fileName, $parentFile, $map)
+    private function inParentFiles(?string $fileName, string $parentFile, array $map): bool
     {
-        if (isset($map[$parentFile])) {
-            if (in_array($fileName, $map[$parentFile])) {
+        if ($fileName === null || !isset($map[$parentFile])) {
+            return false;
+        }
+        if (isset($map[$parentFile][$fileName])) {
+            return true;
+        }
+        foreach (array_keys($map[$parentFile]) as $pFile) {
+            if (isset($this->pFileCache[$pFile])) {
+                continue;
+            }
+            $this->pFileCache[$pFile] = true;
+            if ($this->inParentFiles($fileName, $pFile, $map)) {
                 return true;
-            } else {
-                foreach ($map[$parentFile] as $pFile) {
-                    if (in_array($pFile, $this->pFileCache)) {
-                        continue;
-                    }
-                    $this->pFileCache[] = $pFile;
-                    if ($this->inParentFiles($fileName, $pFile, $map)) {
-                        return true;
-                    }
-                }
             }
         }
         return false;
@@ -179,12 +183,14 @@ class Less implements ProcessorInterface
      * @param string $filePath
      * @param string $packagePath
      * @param string $contentType
-     * @return array
+     * @return array<string, array<string, true>>
      */
-    private function buildMap($filePath, $packagePath, $contentType)
+    private function buildMap(string $filePath, string $packagePath, string $contentType): array
     {
+        /** @var string|false $content */
         $content = $this->deployStaticFile->readTmpFile($filePath, $packagePath);
         $replaceCallback = function ($matchedContent) use ($filePath, $packagePath, $contentType) {
+            /** @var array<string> $matchedContent */
             $matchedFileId = $matchedContent['path'] ?? '';
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (!pathinfo($matchedContent['path'], PATHINFO_EXTENSION)) {
@@ -202,11 +208,9 @@ class Less implements ProcessorInterface
             } else {
                 $resolvedMapPath = $this->normalizePath($basePath . '/' . $resolvedPath);
             }
-            if (!isset($this->map[$filePath])) {
-                $this->map[$filePath] = [];
-            }
-            $this->map[$filePath][] = $resolvedMapPath;
+            $this->map[$filePath][$resolvedMapPath] = true;
             $this->buildMap($resolvedMapPath, $packagePath, $contentType);
+            return '';
         };
         if ($content) {
             preg_replace_callback(Import::REPLACE_PATTERN, $replaceCallback, $content);
