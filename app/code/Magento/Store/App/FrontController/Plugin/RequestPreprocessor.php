@@ -72,7 +72,7 @@ class RequestPreprocessor
     ) {
         if ($this->isHttpsRedirect($request) || (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled())) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_WEB,
+                \Magento\Framework\UrlInterface::URL_TYPE_LINK,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
