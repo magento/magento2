@@ -28,7 +28,8 @@ class RedisTagAdapter implements TagAdapterInterface
     private const REVERSE_INDEX_PREFIX = 'cache:id_tags:';
 
     /**
-     * Id set written without the namespace, shared by every namespace on the same Redis database
+     * Id set written without the namespace by earlier versions, shared by every namespace on the same
+     * Redis database. Only read: another namespace may still need its members, so it is never modified.
      */
     private const LEGACY_ALL_IDS_SET = 'cache:all_ids';
 
@@ -562,6 +563,8 @@ LUA;
      */
     public function getIdsNotMatchingTags(array $tags): array
     {
+        $this->copyLiveLegacyIds(1000);
+
         if (empty($tags)) {
             // Return all IDs if no tags specified
             $allIds = $this->redis->smembers($this->allIdsKey());
@@ -1154,8 +1157,8 @@ LUA;
             call_user_func_array([$this->redis, 'del'], $chunk);
         }
 
-        // Clear all_ids sets
-        $this->redis->del([$this->allIdsKey(), self::LEGACY_ALL_IDS_SET]);
+        // Clear all_ids set
+        $this->redis->del($this->allIdsKey());
 
         // Clear reverse index keys
         $reversePattern = self::REVERSE_INDEX_PREFIX . $this->namespace . '*';
@@ -1244,8 +1247,14 @@ LUA;
     private function garbageCollectClientSide(int $batchSize): int
     {
         $batchSize = max(1, $batchSize);
-        $removed = 0;
+        foreach ($this->scanLegacyIds($batchSize) as [$expired]) {
+            // Index entries this namespace wrote for the id before the upgrade; the guarded prune keeps live data.
+            if (!empty($expired)) {
+                $this->pruneTagIndex($expired);
+            }
+        }
 
+        $removed = 0;
         foreach ($this->sscan($this->allIdsKey(), $batchSize) as $members) {
             [$expired] = $this->splitByDataExistence(array_values($members));
             if (!empty($expired)) {
@@ -1254,45 +1263,43 @@ LUA;
             }
         }
 
-        return $removed + $this->migrateLegacyAllIds($batchSize);
+        return $removed;
     }
 
     /**
-     * Carries ids over from the legacy all_ids set, which has no namespace, into this namespace's set.
-     *
-     * The legacy set mixes ids of every namespace on the database, so an id is copied when its data
-     * key exists in this namespace; otherwise its index entries in this namespace are pruned and the id
-     * leaves the legacy set, as GC did before the set was namespaced. Ids with live data stay in the
-     * legacy set, where another namespace may own an entry with the same id.
+     * Copies ids of this namespace from the legacy all_ids set into the namespace's own set
      *
      * @param int $batchSize
-     * @return int Number of ids removed from the legacy set
+     * @return void
      */
-    private function migrateLegacyAllIds(int $batchSize): int
+    private function copyLiveLegacyIds(int $batchSize): void
     {
-        $removed = 0;
-
-        foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {
-            [$expired, $live] = $this->splitByDataExistence(array_values($members));
-            if (empty($expired) && empty($live)) {
+        foreach ($this->scanLegacyIds($batchSize) as [, $live]) {
+            if (empty($live)) {
                 continue;
             }
-            if (!empty($expired)) {
-                $this->pruneTagIndex($expired);
-            }
-
             $pipeline = $this->createPipeline();
             foreach ($live as $id) {
                 $pipeline->sadd($this->allIdsKey(), $id);
             }
-            foreach ($expired as $id) {
-                $pipeline->srem(self::LEGACY_ALL_IDS_SET, $id);
-            }
             $this->executePipeline($pipeline);
-            $removed += count($expired);
         }
+    }
 
-        return $removed;
+    /**
+     * Iterates the legacy all_ids set in batches split by whether the id has data in this namespace.
+     *
+     * The legacy set mixes ids of every namespace on the database: an id belongs to this namespace only
+     * when its data key exists here, and an id without data here may still be live in another namespace.
+     *
+     * @param int $batchSize
+     * @return \Generator<int, array{0: string[], 1: string[]}> [expired, live] per batch
+     */
+    private function scanLegacyIds(int $batchSize): \Generator
+    {
+        foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {
+            yield $this->splitByDataExistence(array_values($members));
+        }
     }
 
     /**

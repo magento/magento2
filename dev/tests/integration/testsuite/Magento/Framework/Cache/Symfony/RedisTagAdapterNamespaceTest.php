@@ -79,23 +79,31 @@ class RedisTagAdapterNamespaceTest extends TestCase
         $this->assertSame(['b_live'], $tagsB->getIdsNotMatchingTags([]));
     }
 
-    public function testGarbageCollectionMigratesIdsFromTheLegacyIdSet(): void
+    public function testIdsFromTheLegacyIdSetAreReadPerNamespaceBeforeGarbageCollection(): void
     {
-        [$pool, $tags] = $this->createAdapters(self::NAMESPACE_A);
-        $item = $pool->getItem('live');
-        $pool->save($item->set('payload'));
-        $tagKey = 'cache:tags:' . self::NAMESPACE_A . 'TAG';
-        $this->redis->sAdd('cache:all_ids', 'live', 'gone');
-        $this->redis->sAdd($tagKey, 'live', 'gone');
-        $this->redis->sAdd('cache:id_tags:' . self::NAMESPACE_A . 'live', 'TAG');
-        $this->redis->sAdd('cache:id_tags:' . self::NAMESPACE_A . 'gone', 'TAG');
+        [$poolA, $tagsA, $poolB, $tagsB] = $this->createUpgradedState();
 
-        $this->assertSame(1, $tags->garbageCollect());
+        $this->assertSame(['a_live'], $tagsA->getIdsNotMatchingTags(['TAG']));
+        $this->assertEqualsCanonicalizing(['a_live', 'a_tagged'], $tagsA->getIdsNotMatchingTags([]));
+        $this->assertSame(['b_live'], $tagsB->getIdsNotMatchingTags([]));
+        $this->assertTrue($poolA->hasItem('a_live'));
+        $this->assertTrue($poolB->hasItem('b_live'));
+    }
 
-        $this->assertSame(['live'], $tags->getIdsNotMatchingTags([]));
-        $this->assertSame(['live'], $this->redis->sMembers($tagKey));
-        $this->assertSame(0, $this->redis->exists('cache:id_tags:' . self::NAMESPACE_A . 'gone'));
-        $this->assertSame(['live'], $this->redis->sMembers('cache:all_ids'));
+    public function testGarbageCollectionAndFlushKeepTheLegacyIdSetForOtherNamespaces(): void
+    {
+        [, $tagsA, , $tagsB] = $this->createUpgradedState();
+        $legacyIds = $this->redis->sMembers('cache:all_ids');
+
+        $tagsA->garbageCollect();
+
+        $this->assertSame(['a_tagged'], $this->redis->sMembers('cache:tags:' . self::NAMESPACE_A . 'TAG'));
+        $this->assertSame(0, $this->redis->exists('cache:id_tags:' . self::NAMESPACE_A . 'a_gone'));
+
+        $tagsA->clearAllIndices();
+
+        $this->assertEqualsCanonicalizing($legacyIds, $this->redis->sMembers('cache:all_ids'));
+        $this->assertSame(['b_live'], $tagsB->getIdsNotMatchingTags([]));
     }
 
     public function testCleanExpiredByTagKeepsEntriesWithoutExpiry(): void
@@ -109,6 +117,27 @@ class RedisTagAdapterNamespaceTest extends TestCase
 
         $this->assertTrue($pool->hasItem('no_expiry'));
         $this->assertSame(['no_expiry'], $this->redis->sMembers($tagKey));
+    }
+
+    /**
+     * Recreate the index an earlier version left behind: ids of both namespaces in the unprefixed set.
+     *
+     * @return array{0: RedisAdapter, 1: RedisTagAdapter, 2: RedisAdapter, 3: RedisTagAdapter}
+     */
+    private function createUpgradedState(): array
+    {
+        [$poolA, $tagsA] = $this->createAdapters(self::NAMESPACE_A);
+        [$poolB, $tagsB] = $this->createAdapters(self::NAMESPACE_B);
+        foreach (['a_live', 'a_tagged'] as $id) {
+            $poolA->save($poolA->getItem($id)->set('payload-' . $id));
+        }
+        $poolB->save($poolB->getItem('b_live')->set('payload-b_live'));
+        $this->redis->sAdd('cache:all_ids', 'a_live', 'a_tagged', 'a_gone', 'b_live');
+        $this->redis->sAdd('cache:tags:' . self::NAMESPACE_A . 'TAG', 'a_tagged', 'a_gone');
+        $this->redis->sAdd('cache:id_tags:' . self::NAMESPACE_A . 'a_tagged', 'TAG');
+        $this->redis->sAdd('cache:id_tags:' . self::NAMESPACE_A . 'a_gone', 'TAG');
+
+        return [$poolA, $tagsA, $poolB, $tagsB];
     }
 
     /**

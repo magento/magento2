@@ -112,22 +112,36 @@ class RedisTagAdapterTest extends TestCase
 
     public function testGetIdsNotMatchingTagsDiffsTheNamespaceAllIdsSet(): void
     {
-        $redis = $this->makeRecordingRedis(['sdiff' => ['id_1']]);
+        $redis = $this->makeRecordingRedis(['sdiff' => ['id_1'], 'sscan' => ['0', []]]);
 
         $result = $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags(['tagA']);
 
         $this->assertSame(['id_1'], $result);
-        $this->assertSame([['sdiff', ['cache:all_ids:ns_', 'cache:tags:ns_tagA']]], $redis->calls);
+        $this->assertSame([['cache:all_ids:ns_', 'cache:tags:ns_tagA']], $redis->argsOf('sdiff'));
     }
 
     public function testGetIdsNotMatchingTagsWithoutTagsReadsTheNamespaceAllIdsSet(): void
     {
-        $redis = $this->makeRecordingRedis(['smembers' => ['id_1']]);
+        $redis = $this->makeRecordingRedis(['smembers' => ['id_1'], 'sscan' => ['0', []]]);
 
         $result = $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]);
 
         $this->assertSame(['id_1'], $result);
-        $this->assertSame([['smembers', ['cache:all_ids:ns_']]], $redis->calls);
+        $this->assertSame([['cache:all_ids:ns_']], $redis->argsOf('smembers'));
+    }
+
+    public function testGetIdsNotMatchingTagsCopiesLegacyIdsWithDataInTheNamespace(): void
+    {
+        $redis = $this->makeRecordingRedis([
+            'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['mine', 'other']] : ['0', []],
+            'smembers' => ['mine'],
+        ]);
+        $redis->pipe->execQueue = [[1, 0], [1]];
+
+        $this->assertSame(['mine'], $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]));
+        $this->assertSame(['ns_:mine', 'ns_:other'], array_merge(...$redis->argsOf('pipe:exists')));
+        $this->assertSame([['cache:all_ids:ns_', 'mine']], $redis->argsOf('pipe:sadd'));
+        $this->assertLegacySetUntouched($redis);
     }
 
     public function testOnSaveWithTagsPassesTheNamespaceAllIdsSetToLua(): void
@@ -213,13 +227,13 @@ class RedisTagAdapterTest extends TestCase
         );
     }
 
-    public function testClearAllIndicesDeletesTheNamespaceAndLegacyAllIdsSets(): void
+    public function testClearAllIndicesDeletesOnlyTheNamespaceAllIdsSet(): void
     {
         $redis = $this->makeRecordingRedis(['scan' => ['0', []]]);
 
         $this->createAdapter($redis, 'ns_')->clearAllIndices();
 
-        $this->assertSame([[['cache:all_ids:ns_', 'cache:all_ids']]], $redis->argsOf('del'));
+        $this->assertSame([['cache:all_ids:ns_']], $redis->argsOf('del'));
     }
 
     public function testGarbageCollectScansTheNamespaceAllIdsSet(): void
@@ -237,21 +251,36 @@ class RedisTagAdapterTest extends TestCase
         );
     }
 
-    public function testGarbageCollectAdoptsLiveLegacyIdsAndDropsMissingOnes(): void
+    public function testGarbageCollectPrunesLegacyIdsWithoutDataButKeepsTheLegacySet(): void
     {
         $redis = $this->makeRecordingRedis([
             'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['live', 'gone']] : ['0', []],
         ]);
-        $redis->pipe->execQueue = [[1, 0], [1, 1]];
+        $redis->pipe->execQueue = [[1, 0]];
 
-        $this->assertSame(1, $this->createAdapter($redis, 'ns_')->garbageCollect());
+        $this->assertSame(0, $this->createAdapter($redis, 'ns_')->garbageCollect());
         $this->assertSame(['ns_:live', 'ns_:gone'], array_merge(...$redis->argsOf('pipe:exists')));
         $this->assertSame(
             ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'gone'],
             $redis->argsOf('evalsha')[0]
         );
-        $this->assertSame([['cache:all_ids:ns_', 'live']], $redis->argsOf('pipe:sadd'));
-        $this->assertSame([['cache:all_ids', 'gone']], $redis->argsOf('pipe:srem'));
+        $this->assertLegacySetUntouched($redis);
+    }
+
+    /**
+     * Assert that no write command addressed the legacy all_ids set.
+     *
+     * @param OptimizedPredisClient $redis
+     * @return void
+     */
+    private function assertLegacySetUntouched(OptimizedPredisClient $redis): void
+    {
+        foreach ($redis->calls as [$command, $arguments]) {
+            if (in_array($command, ['sscan', 'pipe:exists', 'evalsha'], true)) {
+                continue;
+            }
+            $this->assertNotContains('cache:all_ids', (array)($arguments[0] ?? null), $command);
+        }
     }
 
     /**
