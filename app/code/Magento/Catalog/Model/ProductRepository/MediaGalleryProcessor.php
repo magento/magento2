@@ -51,21 +51,30 @@ class MediaGalleryProcessor
     private $deleteValidator;
 
     /**
+     * @var ImageContentHashProvider
+     */
+    private $imageContentHashProvider;
+
+    /**
      * @param Processor $processor
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
      * @param DeleteValidator|null $deleteValidator
+     * @param ImageContentHashProvider|null $imageContentHashProvider
      */
     public function __construct(
         Processor $processor,
         ImageContentInterfaceFactory $contentFactory,
         ImageProcessorInterface $imageProcessor,
-        ?DeleteValidator $deleteValidator = null
+        ?DeleteValidator $deleteValidator = null,
+        ?ImageContentHashProvider $imageContentHashProvider = null
     ) {
         $this->processor = $processor;
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->deleteValidator = $deleteValidator ?? ObjectManager::getInstance()->get(DeleteValidator::class);
+        $this->imageContentHashProvider = $imageContentHashProvider
+            ?? ObjectManager::getInstance()->get(ImageContentHashProvider::class);
     }
 
     /**
@@ -89,12 +98,23 @@ class MediaGalleryProcessor
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
         $entriesById = [];
+        $this->validateProvidedValueIds($mediaGalleryEntries, (array)$existingMediaGallery);
         if (!empty($existingMediaGallery)) {
+            $existingIdByHash = $this->imageContentHashProvider
+                ->getExistingValueIdsByContentHash($existingMediaGallery);
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
+                    $this->removeMatchedValueId($existingIdByHash, (int)$entry['value_id']);
                 } else {
-                    $newEntries[] = $entry;
+                    $matchedValueId = $this->matchExistingImageByContent($entry, $existingIdByHash);
+                    if ($matchedValueId !== null) {
+                        // Update the existing image in place instead of creating a duplicate.
+                        $entry['value_id'] = $matchedValueId;
+                        $entriesById[$matchedValueId] = $entry;
+                    } else {
+                        $newEntries[] = $entry;
+                    }
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
@@ -135,6 +155,90 @@ class MediaGalleryProcessor
 
         $this->processMediaAttributes($product, $images);
         $this->processEntries($product, $newEntries, $entriesById);
+    }
+
+    /**
+     * Reject media gallery entries that reference a value_id absent from the product gallery.
+     *
+     * Prevents silently dropping the entry and deleting existing images when a stale or
+     * unknown image ID is provided (e.g. via the REST/bulk API).
+     *
+     * @param array $mediaGalleryEntries
+     * @param array $existingMediaGallery
+     * @return void
+     * @throws InputException
+     */
+    private function validateProvidedValueIds(array $mediaGalleryEntries, array $existingMediaGallery): void
+    {
+        $existingValueIds = [];
+        foreach ($existingMediaGallery as $existingEntry) {
+            if (isset($existingEntry['value_id'])) {
+                $existingValueIds[(string)$existingEntry['value_id']] = true;
+            }
+        }
+        foreach ($mediaGalleryEntries as $entry) {
+            if (isset($entry['value_id']) && !isset($existingValueIds[(string)$entry['value_id']])) {
+                throw new InputException(
+                    __('The image with the "%1" ID doesn\'t exist. Verify the ID and try again.', $entry['value_id'])
+                );
+            }
+        }
+    }
+
+    /**
+     * Remove an already consumed value_id from every content-hash queue.
+     *
+     * Ensures a value_id referenced explicitly by an incoming entry is not also handed
+     * out to a content-matched entry, which would collapse two entries onto one id.
+     *
+     * @param array $existingIdByHash
+     * @param int $valueId
+     * @return void
+     */
+    private function removeMatchedValueId(array &$existingIdByHash, int $valueId): void
+    {
+        foreach ($existingIdByHash as $hash => $valueIds) {
+            $filtered = array_values(array_filter($valueIds, static fn ($id) => $id !== $valueId));
+            if ($filtered === []) {
+                unset($existingIdByHash[$hash]);
+            } else {
+                $existingIdByHash[$hash] = $filtered;
+            }
+        }
+    }
+
+    /**
+     * Match a new base64 media entry to an existing image by its content hash.
+     *
+     * Returns the value_id of the existing image so the entry updates it in place
+     * instead of being added as a duplicate. The matched value_id is consumed from the
+     * queue so each existing image is matched at most once.
+     *
+     * @param array $entry
+     * @param array $existingIdByHash
+     * @return int|null
+     */
+    private function matchExistingImageByContent(array $entry, array &$existingIdByHash): ?int
+    {
+        $encoded = $entry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA] ?? null;
+        if ($encoded === null) {
+            return null;
+        }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $decoded = base64_decode((string)$encoded, true);
+        if ($decoded === false) {
+            return null;
+        }
+        $hash = sha1($decoded);
+        if (empty($existingIdByHash[$hash])) {
+            return null;
+        }
+        $matchedValueId = (int)array_shift($existingIdByHash[$hash]);
+        if ($existingIdByHash[$hash] === []) {
+            unset($existingIdByHash[$hash]);
+        }
+
+        return $matchedValueId;
     }
 
     /**
