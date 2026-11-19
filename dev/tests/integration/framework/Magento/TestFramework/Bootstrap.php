@@ -6,6 +6,8 @@
 
 namespace Magento\TestFramework;
 
+use Magento\TestFramework\Bootstrap\Settings;
+
 /**
  * Bootstrap for the integration testing environment
  */
@@ -28,7 +30,7 @@ class Bootstrap
     public const ADMIN_ROLE_ID = 1;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\Settings
+     * @var Settings
      */
     private $_settings;
 
@@ -65,7 +67,7 @@ class Bootstrap
     /**
      * Constructor
      *
-     * @param \Magento\TestFramework\Bootstrap\Settings $settings
+     * @param Settings $settings
      * @param \Magento\TestFramework\Bootstrap\Environment $envBootstrap
      * @param \Magento\TestFramework\Bootstrap\DocBlock $docBlockBootstrap
      * @param \Magento\TestFramework\Bootstrap\Profiler $profilerBootstrap
@@ -75,7 +77,7 @@ class Bootstrap
      * @internal param string $tmpDir
      */
     public function __construct(
-        \Magento\TestFramework\Bootstrap\Settings $settings,
+        Settings $settings,
         \Magento\TestFramework\Bootstrap\Environment $envBootstrap,
         \Magento\TestFramework\Bootstrap\DocBlock $docBlockBootstrap,
         \Magento\TestFramework\Bootstrap\Profiler $profilerBootstrap,
@@ -100,6 +102,16 @@ class Bootstrap
     public function getApplication()
     {
         return $this->_application;
+    }
+
+    /**
+     * Get the bootstrap settings
+     *
+     * @return Settings
+     */
+    public function getSettings(): Settings
+    {
+        return $this->_settings;
     }
 
     /**

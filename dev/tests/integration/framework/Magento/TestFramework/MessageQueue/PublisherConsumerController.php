@@ -69,15 +69,17 @@ class PublisherConsumerController
         PublisherInterface $publisher,
         OsInfo $osInfo,
         Amqp $amqpHelper,
-        string $logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt',
+        ?string $logFilePath = null,
         array $consumers = [],
         array $appInitParams = [],
         ?int $maxMessages = null,
         ?ClearQueueProcessor $clearQueueProcessor = null
     ) {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+
         $this->consumers = $consumers;
         $this->publisher = $publisher;
-        $this->logFilePath = $logFilePath;
+        $this->logFilePath = $logFilePath ?? $settings->get('TESTS_TEMP_DIR') . '/MessageQueueTestLog.txt';
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
         $this->appInitParams = $appInitParams ?: Bootstrap::getInstance()->getAppInitParams();
@@ -177,7 +179,8 @@ class PublisherConsumerController
      */
     private function getConsumerStartCommand($consumer, $withEnvVariables = false)
     {
-        $binDirectory = realpath(INTEGRATION_TESTS_DIR . '/bin/');
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+        $binDirectory = realpath($settings->get('INTEGRATION_TESTS_DIR') . '/bin/');
         $magentoCli = $binDirectory . '/magento';
         $consumerStartCommand = "php {$magentoCli} queue:consumers:start -vvv " . $consumer;
         if ($this->maxMessages) {

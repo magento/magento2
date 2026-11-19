@@ -109,6 +109,8 @@ class CouponUsagesTest extends TestCase
      */
     protected function setUp(): void
     {
+        $settings = Bootstrap::getInstance()->getBootstrap()->getSettings();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->usage = $this->objectManager->get(Usage::class);
         $this->couponUsage = $this->objectManager->create(DataObject::class);
@@ -123,7 +125,7 @@ class CouponUsagesTest extends TestCase
             PublisherConsumerController::class,
             [
                 'consumers' => $this->consumers,
-                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'logFilePath' => $settings->get('TESTS_TEMP_DIR') . '/MessageQueueTestLog.txt',
                 'maxMessages' => 100,
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
