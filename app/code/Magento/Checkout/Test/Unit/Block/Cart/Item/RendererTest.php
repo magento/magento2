@@ -9,6 +9,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart\Item;
 
 use Magento\Catalog\Block\Product\Image;
 use Magento\Catalog\Block\Product\ImageBuilder;
+use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
@@ -47,6 +48,11 @@ class RendererTest extends TestCase
      */
     private $itemResolver;
 
+    /**
+     * @var Configuration|MockObject
+     */
+    private $productConfig;
+
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -59,6 +65,7 @@ class RendererTest extends TestCase
             ->willReturn($this->layout);
 
         $this->imageBuilder = $this->createMock(ImageBuilder::class);
+        $this->productConfig = $this->createMock(Configuration::class);
 
         $this->itemResolver = $this->createMock(
             ItemResolverInterface::class
@@ -70,6 +77,7 @@ class RendererTest extends TestCase
                 'context' => $context,
                 'imageBuilder' => $this->imageBuilder,
                 'itemResolver' => $this->itemResolver,
+                'productConfig' => $this->productConfig,
             ]
         );
     }
@@ -219,5 +227,37 @@ class RendererTest extends TestCase
             Image::class,
             $this->renderer->getImage($product, $imageId, $attributes)
         );
+    }
+
+    public function testGetFormattedOptionValue(): void
+    {
+        $optionValue = ['value' => 'Option value'];
+        $expected = ['value' => 'Formatted option value'];
+        $params = [
+            'max_length' => 55,
+            'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
+        ];
+        $this->productConfig->expects(self::once())
+            ->method('getFormattedOptionValue')
+            ->with($optionValue, $params)
+            ->willReturn($expected);
+
+        self::assertSame($expected, $this->renderer->getFormattedOptionValue($optionValue));
+    }
+
+    public function testGetFormatedOptionValueUsesCorrectlySpelledMethod(): void
+    {
+        $optionValue = ['value' => 'Option value'];
+        $expected = ['value' => 'Formatted option value'];
+        $params = [
+            'max_length' => 55,
+            'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
+        ];
+        $this->productConfig->expects(self::once())
+            ->method('getFormattedOptionValue')
+            ->with($optionValue, $params)
+            ->willReturn($expected);
+
+        self::assertSame($expected, $this->renderer->getFormatedOptionValue($optionValue));
     }
 }

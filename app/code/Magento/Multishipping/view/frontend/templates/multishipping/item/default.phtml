@@ -11,14 +11,14 @@
     <?php if ($_options = $block->getOptionList()) : ?>
         <dl class="item options">
             <?php foreach ($_options as $_option) : ?>
-                <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
+                <?php $_formattedOptionValue = $block->getFormattedOptionValue($_option) ?>
                 <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                <dd<?= isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '' ?>>
-                    <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
-                    <?php if (isset($_formatedOptionValue['full_view'])) : ?>
+                <dd<?= isset($_formattedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '' ?>>
+                    <?= $block->escapeHtml($_formattedOptionValue['value']) ?>
+                    <?php if (isset($_formattedOptionValue['full_view'])) : ?>
                         <dl class="item options tooltip content">
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                            <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                            <dd><?= $block->escapeHtml($_formattedOptionValue['full_view']) ?></dd>
                         </dl>
                     <?php endif; ?>
                 </dd>

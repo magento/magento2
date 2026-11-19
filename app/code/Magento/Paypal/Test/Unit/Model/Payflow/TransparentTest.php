@@ -115,6 +115,11 @@ class TransparentTest extends TestCase
             );
     }
 
+    public function testResponseValidatorAccessorsReturnSameInstance(): void
+    {
+        self::assertSame($this->subject->getResponseValidator(), $this->subject->getResponceValidator());
+    }
+
     /**
      * Check correct parent transaction ID for Payflow delayed capture.
      *

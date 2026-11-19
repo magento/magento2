@@ -142,7 +142,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getFormatedOptionValue($optionValue)
+    public function getFormattedOptionValue($optionValue)
     {
         $optionInfo = [];
 
@@ -193,6 +193,19 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         }
 
         return $result;
+    }
+
+    /**
+     * Accept option value and return its formatted view
+     *
+     * @param mixed $optionValue
+     * @return array
+     * @deprecated Use getFormattedOptionValue() instead.
+     * @see getFormattedOptionValue()
+     */
+    public function getFormatedOptionValue($optionValue)
+    {
+        return $this->getFormattedOptionValue($optionValue);
     }
 
     /**

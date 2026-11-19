@@ -176,4 +176,13 @@ class DefaultRendererTest extends TestCase
 
         $this->assertEquals($expectedResult, $this->block->getTotalAmount($this->itemMock));
     }
+
+    public function testFormattedOptionValueAccessorsReturnSameResult(): void
+    {
+        $optionValue = ['First', 'Second'];
+        $expected = ['value' => "First<br />\nSecond"];
+
+        self::assertSame($expected, $this->block->getFormattedOptionValue($optionValue));
+        self::assertSame($expected, $this->block->getFormatedOptionValue($optionValue));
+    }
 }

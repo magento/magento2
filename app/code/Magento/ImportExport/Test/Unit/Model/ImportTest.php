@@ -544,7 +544,7 @@ class ImportTest extends AbstractImportTestCase
 
         $this->assertFalse($this->import->validateSource($csvMock));
 
-        $logTrace = $this->import->getFormatedLogTrace();
+        $logTrace = $this->import->getFormattedLogTrace();
         $this->assertStringContainsString('Begin data validation', $logTrace);
         $this->assertStringContainsString('This file does not contain any data', $logTrace);
         $this->assertStringContainsString('There are no valid rows to import', $logTrace);
