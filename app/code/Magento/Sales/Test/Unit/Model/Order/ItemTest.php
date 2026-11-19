@@ -264,6 +264,23 @@ class ItemTest extends TestCase
     }
 
     /**
+     * Float noise left by subtracting decimal quantities must not count as qty to ship
+     *
+     * @return void
+     */
+    public function testGetSimpleQtyToShipIgnoresFloatNoise(): void
+    {
+        $this->model->setData([
+            'qty_ordered' => 0.9,
+            'qty_shipped' => 0.6,
+            'qty_canceled' => 0.3,
+            'qty_refunded' => 0,
+        ]);
+
+        $this->assertEquals(0, $this->model->getSimpleQtyToShip());
+    }
+
+    /**
      * Test different combinations of item qty setups
      *
      * @param array $options

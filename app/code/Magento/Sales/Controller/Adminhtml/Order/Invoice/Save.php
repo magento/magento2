@@ -102,7 +102,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         if (!isset($invoiceData['items']) || empty($invoiceData['items'])) {
             $orderItems = $invoice->getOrder()->getItems();
             foreach ($orderItems as $item) {
-                $itemArr[$item->getId()] = (int)$item->getQtyOrdered();
+                $itemArr[$item->getId()] = $item->getQtyOrdered();
             }
         }
         $shipment = $this->shipmentFactory->create(
