@@ -636,7 +636,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             } else {
                 $this->_source = $this->getSourceModel();
             }
-            $source = $this->_universalFactory->create($this->_source);
+            try {
+                $source = $this->_universalFactory->create($this->_source);
+            } catch (\ReflectionException $e) {
+                throw new LocalizedException(
+                    __('Source model "%1" not found for attribute "%2"', $this->_source, $this->getAttributeCode()),
+                    $e
+                );
+            }
             if (!$source) {
                 throw new LocalizedException(
                     __(
