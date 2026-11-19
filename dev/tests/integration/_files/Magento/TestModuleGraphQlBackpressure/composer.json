@@ -1,9 +1,6 @@
 {
     "name": "magento/module-test-graphql-backpressure",
     "description": "test graphql module",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~7.4.0||~8.0.0",
         "magento/framework": "*",
