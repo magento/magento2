@@ -15,6 +15,7 @@ use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
 use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Directory\Test\Fixture\CurrencyRate as CurrencyRateFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
@@ -38,6 +39,8 @@ use Magento\OfflinePayments\Model\Checkmo;
 
 /**
  * Test for placing an order for guest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderTest extends GraphQlAbstract
 {
@@ -158,6 +161,45 @@ class PlaceOrderTest extends GraphQlAbstract
         $order = $this->orderFactory->create();
         $order->loadByIncrementId($orderIncrementId);
         $this->assertNotEmpty($order->getEmailSent());
+    }
+
+    /**
+     * Shipping amount in the display currency must stay rounded after placeOrder
+     *
+     * Base currency USD, display currency EUR, rate 0.7067: flat rate 5.00 USD is 3.5335 EUR,
+     * which the quote totals round to 3.53.
+     */
+    #[
+        Config('currency/options/allow', 'USD,EUR'),
+        Config('currency/options/base', 'USD'),
+        Config('currency/options/default', 'EUR', 'store', 'default'),
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('carriers/flatrate/type', 'O', 'store', 'default'),
+        Config('carriers/flatrate/price', '5.00', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        DataFixture(CurrencyRateFixture::class, ['USD' => ['EUR' => '0.7067']]),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+    ]
+    public function testPlaceOrderKeepsRoundedShippingAmountInDisplayCurrency(): void
+    {
+        $cart = DataFixtureStorageManager::getStorage()->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
+
+        $response = $this->graphQlMutation($this->getQuery($maskedQuoteId));
+
+        $order = $this->orderFactory->create();
+        $order->loadByIncrementId($response['placeOrder']['orderV2']['number']);
+        self::assertEquals('EUR', $order->getOrderCurrencyCode());
+        self::assertEquals(5.00, (float) $order->getBaseShippingAmount());
+        self::assertEquals(3.53, (float) $order->getShippingAmount());
     }
 
     #[
