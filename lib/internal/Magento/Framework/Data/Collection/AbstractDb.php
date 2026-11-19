@@ -289,7 +289,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         'WIDTH_BUCKET' => 898, 'WINDOW' => 899, 'WITH' => 900, 'WITHIN' => 901, 'WITHIN_GROUP' => 902,
         'WITHOUT' => 903, 'WLM' => 904, 'WORK' => 905, 'WRITE' => 906, 'WRITETEXT' => 907,
         'XMLCAST' => 908, 'XMLEXISTS' => 909, 'XMLNAMESPACES' => 910, 'XOR' => 911, 'YEAR' => 912,
-        'YEAR_MONTH' => 913, 'YEARS' => 914, 'ZEROFILL' => 915, 'ZEROIFNULL' => 916, 'ZONE' => 917
+        'YEAR_MONTH' => 913, 'YEARS' => 914, 'ZEROFILL' => 915, 'ZEROIFNULL' => 916, 'ZONE' => 917,
+        // Recent MariaDB reserved parser keywords (unquoted use raises ERROR 1064):
+        // VECTOR (11.6), ST_COLLECT (11.8), CONVERSION and TO_DATE (12.2).
+        'VECTOR' => 918, 'ST_COLLECT' => 919, 'CONVERSION' => 920, 'TO_DATE' => 921
     ];
 
     /**
