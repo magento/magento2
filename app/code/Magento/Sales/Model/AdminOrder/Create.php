@@ -1791,6 +1791,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $requestScope = $request->getPostValue() ? 'order/account' : null;
         $data = $form->extractData($request, $requestScope);
         $data = $form->restoreData($data);
+        if (!array_key_exists(\Magento\Customer\Api\Data\CustomerInterface::TAXVAT, $accountData)) {
+            $data[\Magento\Customer\Api\Data\CustomerInterface::TAXVAT] = $customer->getTaxvat();
+        }
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
@@ -1907,6 +1910,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
         $data = $form->restoreData($data);
+        if (!array_key_exists(\Magento\Customer\Api\Data\CustomerInterface::TAXVAT, $this->getData('account') ?? [])) {
+            unset($data[\Magento\Customer\Api\Data\CustomerInterface::TAXVAT]);
+        }
         foreach ($data as $key => $value) {
             if ($value !== null) {
                 unset($data[$key]);
