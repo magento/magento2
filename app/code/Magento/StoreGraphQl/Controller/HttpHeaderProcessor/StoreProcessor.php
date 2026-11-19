@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
 
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Store\Api\StoreCookieManagerInterface;
@@ -98,13 +99,33 @@ class StoreProcessor implements HttpHeaderProcessorInterface
                 $this->logger->error($e->getMessage());
             }
         } elseif (!$this->isAlreadySet()) {
-            $storeCode = $this->httpRequest->getParam(
+            $requestedStore = $this->httpRequest->getParam(
                 StoreManagerInterface::PARAM_NAME,
                 $this->storeCookieManager->getStoreCodeFromCookie()
-            ) ?: $this->storeManager->getDefaultStoreView()->getCode();
+            );
+            $storeCode = $requestedStore
+                ? $this->getResolvedStoreCode()
+                : $this->storeManager->getDefaultStoreView()->getCode();
             $this->storeManager->setCurrentStore($storeCode);
             $this->updateContext($storeCode);
         }
+    }
+
+    /**
+     * Get the store StoreResolver resolved from the ___store parameter or the store cookie.
+     *
+     * The raw request value may be an array or a code StoreResolver replaced with a fallback; the admin store is
+     * accepted by StoreResolver when no run code restricts the allowed stores, but is not a storefront scope.
+     *
+     * @return string
+     */
+    private function getResolvedStoreCode(): string
+    {
+        $store = $this->storeManager->getStore();
+
+        return (int)$store->getId() === Store::DEFAULT_STORE_ID
+            ? $this->storeManager->getDefaultStoreView()->getCode()
+            : $store->getCode();
     }
 
     /**
