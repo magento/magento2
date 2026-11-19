@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Block\Navigation\Category;
 
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
@@ -52,6 +53,8 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
     public function testGetFiltersWithOutOfStockProduct(int $showOutOfStock, array $expectation): void
     {
         $this->updateConfigShowOutOfStockFlag($showOutOfStock);
+        // The flag decides which products get a price index row, its change in the admin invalidates the index.
+        $this->objectManager->get(PriceProcessor::class)->reindexAll();
         $this->getCategoryFiltersAndAssert(
             ['out-of-stock-product' => 'Option 1', 'in-stock-product' => 'Option 2'],
             ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
