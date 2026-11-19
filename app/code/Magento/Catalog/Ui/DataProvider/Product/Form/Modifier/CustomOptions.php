@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Form\Element\Hidden;
@@ -85,6 +87,8 @@ class CustomOptions extends AbstractModifier
     public const FIELD_IMAGE_SIZE_Y_NAME = 'image_size_y';
     public const FIELD_IS_DELETE = 'is_delete';
     public const FIELD_IS_USE_DEFAULT = 'is_use_default';
+    public const FIELD_IS_USE_DEFAULT_PRICE = 'is_use_default_price';
+    public const FIELD_STORE_PRICE_NAME = 'store_price';
     /**#@-*/
 
     /**#@+
@@ -144,12 +148,18 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
+     * @var CatalogHelper
+     */
+    private $catalogHelper;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param CatalogHelper|null $catalogHelper
      */
     public function __construct(
         LocatorInterface $locator,
@@ -157,7 +167,8 @@ class CustomOptions extends AbstractModifier
         ConfigInterface $productOptionsConfig,
         ProductOptionsPrice $productOptionsPrice,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ?CatalogHelper $catalogHelper = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -165,6 +176,7 @@ class CustomOptions extends AbstractModifier
         $this->productOptionsPrice = $productOptionsPrice;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->catalogHelper = $catalogHelper ?? ObjectManager::getInstance()->get(CatalogHelper::class);
     }
 
     /**
@@ -175,16 +187,23 @@ class CustomOptions extends AbstractModifier
     {
         $options = [];
         $productOptions = $this->locator->getProduct()->getOptions() ?: [];
+        $isStorePriceEditable = $this->isStorePriceEditable();
 
         /** @var \Magento\Catalog\Model\Product\Option $option */
         foreach ($productOptions as $index => $option) {
             $optionData = $option->getData();
             $optionData[static::FIELD_IS_USE_DEFAULT] = !$option->getData(static::FIELD_STORE_TITLE_NAME);
+            if ($isStorePriceEditable) {
+                $optionData[static::FIELD_IS_USE_DEFAULT_PRICE] = $this->isUseDefaultPrice($option);
+            }
             $options[$index] = $this->formatPriceByPath(static::FIELD_PRICE_NAME, $optionData);
             $values = $option->getValues() ?: [];
 
             foreach ($values as $value) {
                 $value->setData(static::FIELD_IS_USE_DEFAULT, !$value->getData(static::FIELD_STORE_TITLE_NAME));
+                if ($isStorePriceEditable) {
+                    $value->setData(static::FIELD_IS_USE_DEFAULT_PRICE, $this->isUseDefaultPrice($value));
+                }
             }
             /** @var \Magento\Catalog\Model\Product\Option $value */
             foreach ($values as $value) {
@@ -207,6 +226,60 @@ class CustomOptions extends AbstractModifier
                     ]
                 ]
             ]
+        );
+    }
+
+    /**
+     * Check if the price is taken from the default scope
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @return bool
+     */
+    private function isUseDefaultPrice(\Magento\Framework\DataObject $item): bool
+    {
+        return $item->getData(static::FIELD_STORE_PRICE_NAME) === null;
+    }
+
+    /**
+     * Check if option prices can differ between store views
+     *
+     * @return bool
+     */
+    private function isStorePriceEditable(): bool
+    {
+        return (bool)$this->locator->getProduct()->getStoreId() && !$this->catalogHelper->isPriceGlobal();
+    }
+
+    /**
+     * Add the "Use Default Value" control to the price field config on store view level
+     *
+     * @param array $priceFieldConfig
+     * @param bool $isSelectValue
+     * @return array
+     */
+    private function addPriceUseDefault(array $priceFieldConfig, bool $isSelectValue): array
+    {
+        if (!$this->isStorePriceEditable()) {
+            return $priceFieldConfig;
+        }
+
+        $imports = [
+            'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+            'isUseDefault' => '${ $.provider }:${ $.parentScope }.' . static::FIELD_IS_USE_DEFAULT_PRICE,
+        ];
+        $disableTmpl = ['optionId' => false, 'isUseDefault' => false];
+        if ($isSelectValue) {
+            $imports['optionTypeId'] = '${ $.provider }:${ $.parentScope }.option_type_id';
+            $disableTmpl['optionTypeId'] = false;
+        }
+        $imports['__disableTmpl'] = $disableTmpl;
+        $template = $isSelectValue
+            ? 'Magento_Catalog/form/element/helper/custom-option-type-service'
+            : 'Magento_Catalog/form/element/helper/custom-option-service';
+
+        return array_replace_recursive(
+            $priceFieldConfig,
+            ['arguments' => ['data' => ['config' => ['imports' => $imports, 'service' => ['template' => $template]]]]]
         );
     }
 
@@ -623,7 +696,7 @@ class CustomOptions extends AbstractModifier
                 ],
             ],
             'children' => [
-                static::FIELD_PRICE_NAME => $this->getPriceFieldConfig(10),
+                static::FIELD_PRICE_NAME => $this->addPriceUseDefault($this->getPriceFieldConfig(10), false),
                 static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(20),
                 static::FIELD_SKU_NAME => $this->getSkuFieldConfig(30),
                 static::FIELD_MAX_CHARACTERS_NAME => $this->getMaxCharactersFieldConfig(40),
@@ -698,7 +771,10 @@ class CustomOptions extends AbstractModifier
                             10,
                             $this->locator->getProduct()->getStoreId() ? $options : []
                         ),
-                        static::FIELD_PRICE_NAME => $this->getPriceFieldConfigForSelectType(20),
+                        static::FIELD_PRICE_NAME => $this->addPriceUseDefault(
+                            $this->getPriceFieldConfigForSelectType(20),
+                            true
+                        ),
                         static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_SKU_NAME => $this->getSkuFieldConfig(40),
                         static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(50),
