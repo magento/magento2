@@ -77,11 +77,10 @@ class DataObject implements \ArrayAccess
      */
     public function setData($key, $value = null)
     {
-        if ($key === (array)$key) {
+        if (is_array($key)) {
             $this->_data = $key;
         } else {
-            $key = $key ?? '';
-            $this->_data[$key] = $value;
+            $this->_data[$key ?? ''] = $value;
         }
         return $this;
     }
@@ -97,10 +96,10 @@ class DataObject implements \ArrayAccess
         if ($key === null) {
             $this->setData([]);
         } elseif (is_string($key)) {
-            if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
+            if (array_key_exists($key, $this->_data)) {
                 unset($this->_data[$key]);
             }
-        } elseif ($key === (array)$key) {
+        } elseif (is_array($key)) {
             foreach ($key as $element) {
                 $this->unsetData($element);
             }
@@ -130,22 +129,22 @@ class DataObject implements \ArrayAccess
             return $this->_data;
         }
 
-        if( $key === null) {
+        if ($key === null) {
             return null;
         }
 
         $data = $this->_data[$key] ?? null;
-        if ($data === null && $key !== null && strpos($key, '/') !== false) {
-           /* process a/b/c key as ['a']['b']['c'] */
+        if ($data === null && str_contains($key, '/')) {
+            /* process a/b/c key as ['a']['b']['c'] */
             $data = $this->getDataByPath($key);
         }
 
         if ($index !== null) {
-            if ($data === (array)$data) {
-                $data = isset($data[$index]) ? $data[$index] : null;
+            if (is_array($data)) {
+                $data = $data[$index] ?? null;
             } elseif (is_string($data)) {
                 $data = explode(PHP_EOL, $data);
-                $data = isset($data[$index]) ? $data[$index] : null;
+                $data = $data[$index] ?? null;
             } elseif ($data instanceof \Magento\Framework\DataObject) {
                 $data = $data->getData($index);
             } else {
@@ -169,7 +168,7 @@ class DataObject implements \ArrayAccess
 
         $data = $this->_data;
         foreach ($keys as $key) {
-            if ((array)$data === $data && isset($data[$key])) {
+            if (is_array($data) && isset($data[$key])) {
                 $data = $data[$key];
             } elseif ($data instanceof \Magento\Framework\DataObject) {
                 $data = $data->getDataByKey($key);
@@ -194,16 +193,12 @@ class DataObject implements \ArrayAccess
     /**
      * Get value from _data array without parse key
      *
-     * @param   string $key
+     * @param   string|null $key
      * @return  mixed
      */
     protected function _getData($key)
     {
-        $key = $key ?? '';
-        if (isset($this->_data[$key])) {
-            return $this->_data[$key];
-        }
-        return null;
+        return $this->_data[$key ?? ''] ?? null;
     }
 
     /**
@@ -261,13 +256,10 @@ class DataObject implements \ArrayAccess
             return $this->_data;
         }
 
+        $data = $this->_data;
         $result = [];
         foreach ($keys as $key) {
-            if (isset($this->_data[$key])) {
-                $result[$key] = $this->_data[$key];
-            } else {
-                $result[$key] = null;
-            }
+            $result[$key] = $data[$key] ?? null;
         }
         return $result;
     }
@@ -393,35 +385,26 @@ class DataObject implements \ArrayAccess
      */
     public function __call($method, $args)
     {
-        // Compare 3 first letters of the method name
-        switch ($method[0] . ($method[1] ?? '') . ($method[2] ?? '')) {
-            case 'get':
-                if (isset($args[0]) && $args[0] !== null) {
-                    return $this->getData(
-                        self::$_underscoreCache[$method] ?? $this->_underscore($method),
-                        $args[0]
-                    );
-                }
+        if (str_starts_with($method, 'get')) {
+            return $this->getData(
+                self::$_underscoreCache[$method] ?? $this->_underscore($method),
+                $args[0] ?? null
+            );
+        }
 
-                return $this->getData(
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method),
-                    $args[0] ?? null
-                );
-            case 'set':
-                return $this->setData(
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method),
-                    $args[0] ?? null
-                );
-            case 'uns':
-                return $this->unsetData(
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
-                );
-            case 'has':
-                return isset(
-                    $this->_data[
-                        self::$_underscoreCache[$method] ?? $this->_underscore($method)
-                    ]
-                );
+        if (str_starts_with($method, 'set')) {
+            return $this->setData(
+                self::$_underscoreCache[$method] ?? $this->_underscore($method),
+                $args[0] ?? null
+            );
+        }
+
+        if (str_starts_with($method, 'uns')) {
+            return $this->unsetData(self::$_underscoreCache[$method] ?? $this->_underscore($method));
+        }
+
+        if (str_starts_with($method, 'has')) {
+            return isset($this->_data[self::$_underscoreCache[$method] ?? $this->_underscore($method)]);
         }
 
         throw new \Magento\Framework\Exception\LocalizedException(
@@ -584,10 +567,7 @@ class DataObject implements \ArrayAccess
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        if (isset($this->_data[$offset])) {
-            return $this->_data[$offset];
-        }
-        return null;
+        return $this->_data[$offset] ?? null;
     }
 
     /**
