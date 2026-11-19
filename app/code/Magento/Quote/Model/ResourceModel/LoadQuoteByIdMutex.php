@@ -34,20 +34,23 @@ class LoadQuoteByIdMutex implements QuoteMutexInterface
 
         $connection = $this->quoteResourceModel->getConnection();
         $connection->beginTransaction();
-        $query = $connection->select()
-            ->from($this->quoteResourceModel->getMainTable())
-            ->where($connection->prepareSqlCondition($this->quoteResourceModel->getIdFieldName(), ['in' => $maskedIds]))
-            ->forUpdate(true);
-        $rows = $connection->fetchAll($query);
-        $quotes = [];
-        foreach ($rows as $data) {
-            $quote = $this->quoteFactory->create();
-            $quote->setData($data);
-            $quote->setOrigData();
-            $quotes[] = $quote;
-        }
-        $args[] = $quotes;
         try {
+            $query = $connection->select()
+                ->from($this->quoteResourceModel->getMainTable())
+                ->where($connection->prepareSqlCondition(
+                    $this->quoteResourceModel->getIdFieldName(),
+                    ['in' => $maskedIds]
+                ))
+                ->forUpdate(true);
+            $rows = $connection->fetchAll($query);
+            $quotes = [];
+            foreach ($rows as $data) {
+                $quote = $this->quoteFactory->create();
+                $quote->setData($data);
+                $quote->setOrigData();
+                $quotes[] = $quote;
+            }
+            $args[] = $quotes;
             $result = $callable(...$args);
             $connection->commit();
             return $result;
