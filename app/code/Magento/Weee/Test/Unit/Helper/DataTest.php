@@ -585,4 +585,74 @@ class DataTest extends TestCase
 
         $this->assertEquals($expected, $this->helperData->getBaseTotalAmounts($items));
     }
+
+    /**
+     * Configurable parent stores a copy of the child FPT. Counting both doubles the totals line.
+     *
+     * @return void
+     */
+    public function testGetTotalAmountsCountsConfigurableVariantOnce(): void
+    {
+        $applied = [[
+            'row_amount' => 1.0,
+            'base_row_amount' => 1.0,
+            'row_amount_incl_tax' => 1.0,
+            'base_row_amount_incl_tax' => 1.0,
+        ]];
+        $this->taxData->method('priceIncludesTax')->willReturn(true);
+        $this->serializerMock->method('unserialize')->willReturn($applied);
+
+        $parent = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getWeeeTaxApplied', 'getParentItem']
+        );
+        $child = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getWeeeTaxApplied', 'getParentItem']
+        );
+        $parent->method('getParentItem')->willReturn(null);
+        $parent->method('getWeeeTaxApplied')->willReturn('parent');
+        $child->method('getParentItem')->willReturn($parent);
+        $child->method('getWeeeTaxApplied')->willReturn('child');
+
+        $items = [$parent, $child];
+        $this->assertEquals(1.0, $this->helperData->getTotalAmounts($items));
+        $this->assertEquals(1.0, $this->helperData->getBaseTotalAmounts($items));
+    }
+
+    /**
+     * Quote configurable parents merge child FPT in getApplied(). The child is also in the item list.
+     *
+     * @return void
+     */
+    public function testGetTotalAmountsCountsQuoteConfigurableChildOnce(): void
+    {
+        $applied = [[
+            'row_amount' => 1.0,
+            'base_row_amount' => 1.0,
+            'row_amount_incl_tax' => 1.0,
+            'base_row_amount_incl_tax' => 1.0,
+        ]];
+        $this->taxData->method('priceIncludesTax')->willReturn(true);
+        $this->serializerMock->method('unserialize')->willReturn($applied);
+
+        $child = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getWeeeTaxApplied', 'getHasChildren', 'getParentItem']
+        );
+        $parent = $this->createPartialMockWithReflection(
+            QuoteItem::class,
+            ['getHasChildren', 'getChildren', 'getParentItem']
+        );
+        $parent->method('getHasChildren')->willReturn(true);
+        $parent->method('getChildren')->willReturn([$child]);
+        $parent->method('getParentItem')->willReturn(null);
+        $child->method('getHasChildren')->willReturn(false);
+        $child->method('getParentItem')->willReturn($parent);
+        $child->method('getWeeeTaxApplied')->willReturn('child');
+
+        $items = [$parent, $child];
+        $this->assertEquals(1.0, $this->helperData->getTotalAmounts($items));
+        $this->assertEquals(1.0, $this->helperData->getBaseTotalAmounts($items));
+    }
 }
