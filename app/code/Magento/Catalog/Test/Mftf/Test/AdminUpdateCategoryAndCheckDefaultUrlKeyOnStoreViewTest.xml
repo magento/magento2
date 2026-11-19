@@ -37,14 +37,18 @@
         </after>
 
         <!--Open Store Page -->
-        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="amOnAdminSystemStorePage"/>
 
         <!--Create Custom Store -->
-        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
-        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="selectCreateStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillStoreCode"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSaveStoreButton"/>
 
         <!--Create Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
@@ -58,22 +62,32 @@
         <!--Update Category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="updateCategoryName"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
+            <argument name="category" value="$category$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="updateCategoryName"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveUpdatedCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <seeInField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="seeCategoryUrlKey" userInput="{{SimpleRootSubCategory.name_lwr}}2" />
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToSearchEngineOptimization1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectSearchEngineOptimization1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad2"/>
+        <actionGroup ref="AdminAssertProperCategoryUrlActionGroup" stepKey="seeCategoryUrlKey">
+            <argument name="categoryUrlKey" value="{{SimpleRootSubCategory.name_lwr}}2"/>
+        </actionGroup>
         <!--Open Category in Store Front  Page-->
         <amOnPage url="/{{NewRootCategory.urlKey}}/{{_defaultCategory.urlKey}}.html" stepKey="seeTheCategoryInStoreFront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectSecondStoreToSwitchOn"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="selectSecondStoreToSwitchOn">
+            <argument name="storeName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeUpdatedCatergoryInStoreFront">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategoryOnStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(_defaultCategory.name)}}" stepKey="seeTheUpdatedCategoryTitle"/>
