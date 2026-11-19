@@ -79,7 +79,9 @@ class CustomerDownloadableProducts implements ResolverInterface
                     'downloadable/download/link',
                     ['id' => $purchasedProduct['link_hash'], '_secure' => true]
                 ),
-                'remaining_downloads' => $remainingDownloads
+                'remaining_downloads' => $remainingDownloads,
+                'product_name' => $purchasedProduct['product_name'],
+                'link_title' => $purchasedProduct['link_title']
             ];
         }
 
