@@ -67,6 +67,7 @@ class TranslitTest extends TestCase
                 $isIconv
             ],
             ['™', 'tm', 'tm', $isIconv],
+            ['Þór ſtaðr Ðiþ', 'thor stadr dith', 'thor stadr dith', $isIconv],
             ['লক্ষ্য এনালগ ওয়াচ টি ২০', 'laksoa enaalaga oyaoaca tai 20', 'laksoa enaalaga oyaoaca tai 20', $isIconv]
         ];
     }
