@@ -21,6 +21,9 @@
                 <meta_keyword>{{name}}</meta_keyword>
                 <meta_description>{{name}} {{description}}</meta_description>
             </fields_masks>
+            <fields_masks_api>
+                <enabled>0</enabled>
+            </fields_masks_api>
             <frontend>
                 <list_mode>grid-list</list_mode>
                 <grid_per_page_values>12,24,36</grid_per_page_values>

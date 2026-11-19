@@ -693,6 +693,8 @@ Advanced,Advanced
 "Use {{name}} as Product Name or {{sku}} as Product SKU placeholders","Use {{name}} as Product Name or {{sku}} as Product SKU placeholders"
 "Mask for Meta Description","Mask for Meta Description"
 "Use {{name}} and {{description}} as Product Name and Product Description placeholders","Use {{name}} and {{description}} as Product Name and Product Description placeholders"
+"Apply Meta Masks to Products Created Through Web API","Apply Meta Masks to Products Created Through Web API"
+"Uses the masks above to fill meta fields missing from REST and SOAP requests that create a product.","Uses the masks above to fill meta fields missing from REST and SOAP requests that create a product."
 "Recently Viewed/Compared Products","Recently Viewed/Compared Products"
 "Lifetime of products in Recently Viewed Widget","Lifetime of products in Recently Viewed Widget"
 "Lifetime of products in Recently Compared Widget","Lifetime of products in Recently Compared Widget"

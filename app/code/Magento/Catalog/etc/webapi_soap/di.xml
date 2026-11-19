@@ -24,6 +24,7 @@
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+        <plugin name="generate_product_fields_from_masks" type="Magento\Catalog\Plugin\GenerateProductFieldsFromMasks" />
     </type>
     <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
         <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
