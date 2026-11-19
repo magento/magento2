@@ -30,12 +30,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Default tax class for customers
      */
-    const CONFIG_DEFAULT_CUSTOMER_TAX_CLASS = 'tax/classes/default_customer_tax_class';
+    public const CONFIG_DEFAULT_CUSTOMER_TAX_CLASS = 'tax/classes/default_customer_tax_class';
 
     /**
      * Default tax class for products
      */
-    const CONFIG_DEFAULT_PRODUCT_TAX_CLASS = 'tax/classes/default_product_tax_class';
+    public const CONFIG_DEFAULT_PRODUCT_TAX_CLASS = 'tax/classes/default_product_tax_class';
 
     /**
      * Tax configuration object
@@ -52,8 +52,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_postCodeSubStringLength = 10;
 
     /**
-     * Json Helper
-     *
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
@@ -203,6 +201,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if necessary do product price conversion
+     *
      * If it necessary will be returned conversion type (minus or plus)
      *
      * @param  null|int|string|Store $store
@@ -574,8 +573,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  )
      * )
      *
-     * @param  \Magento\Sales\Model\Order|\Magento\Sales\Model\Order\Invoice
-     * |\Magento\Sales\Model\Order\Creditmemo $source
+     * @param  \Magento\Sales\Model\Order|Invoice|Creditmemo|null $source
      * @return array
      */
     public function getCalculatedTaxes($source)
@@ -594,9 +592,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $taxClassAmount = $this->calculateTaxForItems($source, $current);
         }
 
-        foreach ($taxClassAmount as $key => $tax) {
-            $taxClassAmount[$key]['tax_amount'] = $this->priceCurrency->round($tax['tax_amount']);
-            $taxClassAmount[$key]['base_tax_amount'] = $this->priceCurrency->round($tax['base_tax_amount']);
+        // Carry the rounding difference over to the next rate, so that the rows add up to the rounded tax total.
+        // Rates are walked by code, so that an order and its invoices show the same amounts in any row order.
+        $codes = array_keys($taxClassAmount);
+        sort($codes, SORT_STRING);
+        $deltas = ['tax_amount' => 0, 'base_tax_amount' => 0];
+        foreach ($codes as $key) {
+            foreach ($deltas as $field => $delta) {
+                if (!(float)$taxClassAmount[$key][$field]) {
+                    continue;
+                }
+                $amount = $taxClassAmount[$key][$field] + $delta;
+                $taxClassAmount[$key][$field] = $this->priceCurrency->round($amount);
+                $deltas[$field] = $amount - $taxClassAmount[$key][$field];
+            }
         }
 
         return array_values($taxClassAmount);
@@ -694,6 +703,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get the applied taxes of the order
+     *
      * @param  EntityInterface $current
      * @return array
      */
@@ -715,6 +726,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get the applied taxes of the invoice or credit memo items
+     *
      * @param  EntityInterface $order
      * @param  EntityInterface $salesItem
      * @return array
