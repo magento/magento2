@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Csp\Model\Policy\Renderer;
 
-use Magento\Csp\Api\Data\ModeConfiguredInterface;
 use Magento\Csp\Api\Data\PolicyInterface;
 use Magento\Csp\Api\ModeConfigManagerInterface;
 use Magento\Csp\Api\PolicyRendererInterface;
@@ -45,17 +44,19 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
             $header = 'Content-Security-Policy';
         }
         $value = $policy->getId() .' ' .$policy->getValue() .';';
-        if ($config->getReportUri() && !$response->getHeader('Report-To')) {
+        $reportUri = $config->getReportUri();
+        if ($reportUri && !$response->getHeader('Report-To')) {
             $reportToData = [
                 'group' => 'report-endpoint',
                 'max_age' => 10886400,
                 'endpoints' => [
-                    ['url' => $config->getReportUri()]
+                    ['url' => $reportUri]
                 ]
             ];
-            $value .= ' report-uri ' .$config->getReportUri() .';';
+            $value .= ' report-uri ' . $reportUri . ';';
             $value .= ' report-to '. $reportToData['group'] .';';
             $response->setHeader('Report-To', json_encode($reportToData), true);
+            $this->addReportingEndpoint($response, $reportToData['group'], $reportUri);
         }
         if ($existing = $response->getHeader($header)) {
             $value = $value .' ' .$existing->getFieldValue();
@@ -69,5 +70,30 @@ class SimplePolicyHeaderRenderer implements PolicyRendererInterface
     public function canRender(PolicyInterface $policy): bool
     {
         return true;
+    }
+
+    /**
+     * Add the CSP destination to the Reporting API's structured dictionary.
+     *
+     * @param HttpResponse $response
+     * @param string $group
+     * @param string $uri
+     * @return void
+     */
+    private function addReportingEndpoint(HttpResponse $response, string $group, string $uri): void
+    {
+        // An HTTP structured field string cannot contain non-ASCII bytes or control characters.
+        if (!preg_match('/\A[\x21-\x7E]+\z/', $uri)) {
+            return;
+        }
+
+        $value = $group . '=' . json_encode($uri, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+        $existing = $response->getHeader('Reporting-Endpoints');
+        if ($existing && $existing->getFieldValue() !== '') {
+            // A later dictionary member takes precedence when its key already exists.
+            $value .= ', ' . $existing->getFieldValue();
+        }
+
+        $response->setHeader('Reporting-Endpoints', $value, true);
     }
 }
