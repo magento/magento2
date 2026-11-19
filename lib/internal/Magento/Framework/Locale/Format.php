@@ -102,16 +102,22 @@ class Format implements \Magento\Framework\Locale\FormatInterface
                 $value = str_replace(',', '', $value);
             }
         } elseif ($separatorComa !== false) {
-            $locale = $this->_localeResolver->getLocale();
-            /**
-             * It's hard code for Japan locale.
-             * Comma separator uses as group separator: 4,000 saves as 4,000.00
-             */
-            $value = str_replace(
-                ',',
-                $locale === self::JAPAN_LOCALE_CODE ? '' : '.',
-                $value
-            );
+            /** Some currencies have a precision of 0 with no decimals. We shouldn't convert them as decimal points. */
+            if (substr_count($value, ',') === 1) {
+                $locale = $this->_localeResolver->getLocale();
+                /**
+                 * It's hard code for Japan locale.
+                 * Comma separator uses as group separator: 4,000 saves as 4,000.00
+                 * @ToDo: List all locales with no decimals in their currencies.
+                 */
+                $value = str_replace(
+                    ',',
+                    $locale === self::JAPAN_LOCALE_CODE ? '' : '.',
+                    $value
+                );
+            } else {
+                $value = str_replace(',', '', $value);
+            }
         }
 
         return (float)$value;
