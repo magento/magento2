@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Config;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection as ProductsAttributesCollection;
+use Magento\Framework\App\Area;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
@@ -88,22 +91,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test to confirm that we don't load cached configuration before attribute existed
+     * GraphQL configuration must not be loaded with dependencies from another area.
      *
      * @return void
-     * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoAppArea global
      */
-    public function testGraphQlConfigCacheShouldntBreakWhenLoadedByGlobalArea(): void
+    public function testGraphQlConfigCannotBeLoadedOutsideGraphQlArea(): void
     {
-        /*
-         * When Magento\Framework\GraphQl\Config\Data is loaded from area outside of graphql, and its cache doesn't
-         * currently exist, then it will load incorrect data and save it in its cache, which will then be used by
-         * Magento\Framework\GraphQl\Config\Data when it actually is in the graphql area.
-         * See AC-10465 for more details on this bug.
-         */
-        $this->markTestSkipped('Fix this in AC-10465');
-        $this->testAttributesChangeCleansGraphQlConfigCache();
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Configuration can only be loaded in the "graphql" area.');
+
+        $objectManager = Bootstrap::getObjectManager();
+        $this->assertSame(
+            Area::AREA_GLOBAL,
+            $objectManager->get(ScopeInterface::class)->getCurrentScope()
+        );
+        $objectManager->create('Magento\Framework\GraphQl\Config\Data');
     }
 
     /**
