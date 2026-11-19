@@ -8,15 +8,18 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\CatalogGraphQl\Model\Resolver\Category\DataProvider\Breadcrumbs as BreadcrumbsDataProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Retrieves breadcrumbs
  */
-class Breadcrumbs implements ResolverInterface
+class Breadcrumbs implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var BreadcrumbsDataProvider
@@ -24,12 +27,27 @@ class Breadcrumbs implements ResolverInterface
     private $breadcrumbsDataProvider;
 
     /**
+     * @var ValueFactory
+     */
+    private ValueFactory $valueFactory;
+
+    /**
+     * Category paths whose breadcrumbs are requested but not loaded yet
+     *
+     * @var array<string, string>
+     */
+    private array $pendingPaths = [];
+
+    /**
      * @param BreadcrumbsDataProvider $breadcrumbsDataProvider
+     * @param ValueFactory|null $valueFactory
      */
     public function __construct(
-        BreadcrumbsDataProvider $breadcrumbsDataProvider
+        BreadcrumbsDataProvider $breadcrumbsDataProvider,
+        ?ValueFactory $valueFactory = null
     ) {
         $this->breadcrumbsDataProvider = $breadcrumbsDataProvider;
+        $this->valueFactory = $valueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
     }
 
     /**
@@ -41,7 +59,25 @@ class Breadcrumbs implements ResolverInterface
             throw new LocalizedException(__('"path" value should be specified'));
         }
 
-        $breadcrumbsData = $this->breadcrumbsDataProvider->getData($value['path']);
-        return count($breadcrumbsData) ? $breadcrumbsData : null;
+        $path = (string)$value['path'];
+        $this->pendingPaths[$path] = $path;
+
+        return $this->valueFactory->create(
+            function () use ($path) {
+                $paths = $this->pendingPaths;
+                $this->pendingPaths = [];
+                $paths[$path] = $path;
+                $breadcrumbsData = $this->breadcrumbsDataProvider->getDataByPaths(array_values($paths))[$path];
+                return count($breadcrumbsData) ? $breadcrumbsData : null;
+            }
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->pendingPaths = [];
     }
 }
