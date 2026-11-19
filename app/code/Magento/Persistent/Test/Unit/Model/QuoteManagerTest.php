@@ -375,6 +375,10 @@ class QuoteManagerTest extends TestCase
             ->with(0)
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
+            ->method('setCustomerIsGuest')
+            ->with(true)
+            ->willReturn($this->quoteMock);
+        $this->quoteMock->expects($this->once())
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->exactly(2))
             ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
