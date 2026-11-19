@@ -10,7 +10,9 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter\SymfonyAdapters;
 use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisLuaHelper;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Predis\Response\Error;
 use Psr\Cache\CacheItemPoolInterface;
 use ReflectionClass;
 use ReflectionProperty;
@@ -254,6 +256,7 @@ class RedisTagAdapterTest extends TestCase
     public function testGarbageCollectMigratesLegacyIdsButKeepsTheLegacySet(): void
     {
         $redis = $this->makeRecordingRedis([
+            'scard' => 2,
             'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['live', 'gone']] : ['0', []],
         ]);
         $redis->pipe->execQueue = [[1, 0], [1]];
@@ -265,7 +268,7 @@ class RedisTagAdapterTest extends TestCase
             ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'gone'],
             $redis->argsOf('evalsha')[0]
         );
-        $this->assertSame([['cache:all_ids_migrated:ns_', '1']], $redis->argsOf('set'));
+        $this->assertSame([['cache:all_ids_migrated:ns_', '2']], $redis->argsOf('set'));
         $this->assertLegacySetUntouched($redis);
     }
 
@@ -278,19 +281,85 @@ class RedisTagAdapterTest extends TestCase
         $adapter->getIdsNotMatchingTags([]);
         $adapter->garbageCollect();
 
-        $this->assertSame([['cache:all_ids_migrated:ns_']], $redis->argsOf('exists'));
-        $legacyScans = array_filter($redis->argsOf('sscan'), fn (array $args) => $args[0] === 'cache:all_ids');
-        $this->assertCount(1, $legacyScans);
-        $this->assertSame([['cache:all_ids_migrated:ns_', '1']], $redis->argsOf('set'));
+        $this->assertSame([['cache:all_ids']], $redis->argsOf('scard'));
+        $this->assertSame([['cache:all_ids_migrated:ns_']], $redis->argsOf('get'));
+        $this->assertCount(1, $this->legacyScans($redis));
+        $this->assertSame([['cache:all_ids_migrated:ns_', '0']], $redis->argsOf('set'));
     }
 
-    public function testLegacySetIsNotReadWhenTheNamespaceIsMarkedAsMigrated(): void
+    public function testLegacySetIsNotReadWhileItsCardinalityMatchesTheMarker(): void
     {
-        $redis = $this->makeRecordingRedis(['exists' => 1, 'sscan' => ['0', []], 'smembers' => ['id_1']]);
+        $redis = $this->makeRecordingRedis(['scard' => 3, 'get' => '3', 'sscan' => ['0', []], 'smembers' => ['id_1']]);
 
         $this->assertSame(['id_1'], $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]));
         $this->assertSame([], $redis->argsOf('sscan'));
         $this->assertSame([], $redis->argsOf('set'));
+    }
+
+    public function testLegacySetIsScannedAgainWhenItsCardinalityChanged(): void
+    {
+        $redis = $this->makeRecordingRedis([
+            'scard' => 4,
+            'get' => '3',
+            'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['added']] : ['0', []],
+            'smembers' => ['added'],
+        ]);
+        $redis->pipe->execQueue = [[1], [1]];
+
+        $this->assertSame(['added'], $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]));
+        $this->assertCount(1, $this->legacyScans($redis));
+        $this->assertSame([['cache:all_ids:ns_', 'added']], $redis->argsOf('pipe:sadd'));
+        $this->assertSame([['cache:all_ids_migrated:ns_', '4']], $redis->argsOf('set'));
+    }
+
+    #[DataProvider('failedPipelineProvider')]
+    public function testFailedMigrationBatchWritesNoMarkerAndIsRetried(array $failedReplies): void
+    {
+        $redis = $this->makeRecordingRedis([
+            'scard' => 1,
+            'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['live']] : ['0', []],
+            'smembers' => ['live'],
+        ]);
+        $redis->pipe->execQueue = $failedReplies;
+
+        $failure = null;
+        try {
+            $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]);
+        } catch (\RuntimeException $e) {
+            $failure = $e;
+        }
+        $this->assertNotNull($failure, 'A failed pipeline must abort the migration');
+        $this->assertSame([], $redis->argsOf('set'));
+
+        $redis->pipe->execQueue = [[1], [1]];
+        $this->assertSame(['live'], $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]));
+        $this->assertCount(2, $this->legacyScans($redis));
+        $this->assertSame([['cache:all_ids_migrated:ns_', '1']], $redis->argsOf('set'));
+    }
+
+    /**
+     * @return array<string, array{array}>
+     */
+    public static function failedPipelineProvider(): array
+    {
+        return [
+            'EXISTS reply missing' => [[[]]],
+            'EXISTS failed (phpredis)' => [[[false]]],
+            'EXISTS failed (Predis)' => [[[new Error('ERR failure')]]],
+            'SADD failed' => [[[1], [false]]],
+            'SADD pipeline not executed' => [[[1], false]],
+        ];
+    }
+
+    /**
+     * SSCAN calls on the legacy all_ids set.
+     *
+     * @param OptimizedPredisClient $redis
+     * @return array
+     */
+    private function legacyScans(OptimizedPredisClient $redis): array
+    {
+        return array_filter($redis->argsOf('sscan'), fn (array $args) => $args[0] === 'cache:all_ids');
     }
 
     /**
@@ -302,7 +371,7 @@ class RedisTagAdapterTest extends TestCase
     private function assertLegacySetUntouched(OptimizedPredisClient $redis): void
     {
         foreach ($redis->calls as [$command, $arguments]) {
-            if (in_array($command, ['sscan', 'pipe:exists', 'evalsha'], true)) {
+            if (in_array($command, ['sscan', 'scard', 'pipe:exists', 'evalsha'], true)) {
                 continue;
             }
             $this->assertNotContains('cache:all_ids', (array)($arguments[0] ?? null), $command);
@@ -442,29 +511,7 @@ class RedisTagAdapterTest extends TestCase
             public array $calls = [];
         };
 
-        $pipeline = new class ($recorder) {
-            /** @var array */
-            public array $execQueue = [];
-
-            /** @var object */
-            private object $recorder;
-
-            public function __construct(object $recorder)
-            {
-                $this->recorder = $recorder;
-            }
-
-            public function __call($method, $args): static
-            {
-                $this->recorder->calls[] = ['pipe:' . strtolower((string)$method), $args];
-                return $this;
-            }
-
-            public function execute(): array
-            {
-                return array_shift($this->execQueue) ?? [];
-            }
-        };
+        $pipeline = $this->makeRecordingPipeline($recorder);
 
         return new class ($pipeline, $recorder, $returns) extends OptimizedPredisClient {
             /** @var object */
@@ -502,6 +549,11 @@ class RedisTagAdapterTest extends TestCase
                 return $this->__call('set', [$key, $value]);
             }
 
+            public function get($key)
+            {
+                return $this->__call('get', [$key]);
+            }
+
             public function __call($commandID, $arguments)
             {
                 $command = strtolower((string)$commandID);
@@ -526,6 +578,40 @@ class RedisTagAdapterTest extends TestCase
                 }
 
                 return $args;
+            }
+        };
+    }
+
+    /**
+     * Build a Predis-style pipeline that records queued commands and returns queued replies on execute().
+     *
+     * @param object $recorder
+     * @return object
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function makeRecordingPipeline(object $recorder): object
+    {
+        return new class ($recorder) {
+            /** @var array */
+            public array $execQueue = [];
+
+            /** @var object */
+            private object $recorder;
+
+            public function __construct(object $recorder)
+            {
+                $this->recorder = $recorder;
+            }
+
+            public function __call($method, $args): static
+            {
+                $this->recorder->calls[] = ['pipe:' . strtolower((string)$method), $args];
+                return $this;
+            }
+
+            public function execute(): array|false
+            {
+                return array_shift($this->execQueue) ?? [];
             }
         };
     }

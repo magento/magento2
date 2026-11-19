@@ -27,9 +27,9 @@ class RedisTagAdapterNamespaceTest extends TestCase
     private const LEGACY_IDS = ['a_live', 'a_tagged', 'a_gone', 'b_live', 'b_tagged'];
 
     /**
-     * @var \Redis
+     * @var \Redis|OptimizedPredisClient
      */
-    private \Redis $redis;
+    private \Redis|OptimizedPredisClient $redis;
 
     /**
      * @var string
@@ -43,12 +43,12 @@ class RedisTagAdapterNamespaceTest extends TestCase
     {
         parent::setUp();
 
-        if (!extension_loaded('redis')) {
-            $this->markTestSkipped('Redis extension is not loaded');
+        try {
+            $this->redis = extension_loaded('redis') ? $this->connect() : $this->connectPredis();
+            $this->redis->flushdb();
+        } catch (\Throwable $e) {
+            $this->markTestSkipped('Redis server is not available: ' . $e->getMessage());
         }
-
-        $this->redis = $this->connect();
-        $this->redis->flushDB();
     }
 
     /**
@@ -57,7 +57,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     protected function tearDown(): void
     {
         if (isset($this->redis)) {
-            $this->redis->flushDB();
+            $this->redis->flushdb();
         }
 
         parent::tearDown();
@@ -74,7 +74,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testGarbageCollectionKeepsIdsOfAnotherNamespace(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$poolB, $tagsB] = $this->createAdapters(self::NAMESPACE_B);
         [, $tagsA] = $this->createAdapters(self::NAMESPACE_A);
         $this->save($poolB, $tagsB, 'b_live', []);
@@ -89,7 +89,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testClearAllIndicesKeepsIdsOfAnotherNamespace(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$poolB, $tagsB] = $this->createAdapters(self::NAMESPACE_B);
         [$poolA, $tagsA] = $this->createAdapters(self::NAMESPACE_A);
         $this->save($poolA, $tagsA, 'a_live', []);
@@ -104,7 +104,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testIdsFromTheLegacyIdSetAreReadPerNamespaceBeforeGarbageCollection(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$tagsA, $tagsB] = $this->createUpgradedState();
 
         $this->assertSame(['a_live'], $tagsA->getIdsNotMatchingTags(['TAG']));
@@ -117,7 +117,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testGarbageCollectionAndFlushKeepTheLegacyIdSetForOtherNamespaces(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$tagsA, $tagsB] = $this->createUpgradedState();
 
         $tagsA->garbageCollect();
@@ -135,7 +135,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testLuaFlushKeepsTheLegacyIdSetAndEntriesOfAnotherNamespace(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$tagsA, $tagsB] = $this->createUpgradedState(true);
 
         $tagsA->clearAllIndices();
@@ -150,7 +150,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     #[DataProvider('clientProvider')]
     public function testLegacyIdSetIsReadOnlyOncePerNamespace(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$tagsA] = $this->createUpgradedState();
         $tagsA->getIdsNotMatchingTags([]);
         $this->assertSame(1, $this->redis->exists('cache:all_ids_migrated:' . self::NAMESPACE_A));
@@ -168,9 +168,25 @@ class RedisTagAdapterNamespaceTest extends TestCase
     }
 
     #[DataProvider('clientProvider')]
+    public function testLegacyIdSetIsScannedAgainWhenAnOlderWriterChangedIt(string $client): void
+    {
+        $this->useClient($client);
+        [$tagsA] = $this->createUpgradedState();
+        $tagsA->getIdsNotMatchingTags([]);
+        $this->assertSame('5', (string)$this->redis->get('cache:all_ids_migrated:' . self::NAMESPACE_A));
+
+        [$poolA, $laterTagsA] = $this->createAdapters(self::NAMESPACE_A);
+        $poolA->save($poolA->getItem('a_late')->set('payload-a_late'));
+        $this->redis->sAdd('cache:all_ids', 'a_late');
+
+        $this->assertEqualsCanonicalizing(['a_live', 'a_tagged', 'a_late'], $laterTagsA->getIdsNotMatchingTags([]));
+        $this->assertSame('6', (string)$this->redis->get('cache:all_ids_migrated:' . self::NAMESPACE_A));
+    }
+
+    #[DataProvider('clientProvider')]
     public function testCleanExpiredByTagKeepsEntriesWithoutExpiry(string $client): void
     {
-        $this->client = $client;
+        $this->useClient($client);
         [$pool, $tags] = $this->createAdapters(self::NAMESPACE_A, true);
         $this->save($pool, $tags, 'no_expiry', ['TAG']);
         $tagKey = 'cache:tags:' . self::NAMESPACE_A . 'TAG';
@@ -221,12 +237,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
      */
     private function createAdapters(string $namespace, bool $useLua = false): array
     {
-        $connection = $this->client === 'predis'
-            ? new OptimizedPredisClient(
-                ['host' => $this->getServer(), 'port' => 6379, 'database' => self::DATABASE],
-                ['exceptions' => false]
-            )
-            : $this->connect();
+        $connection = $this->client === 'predis' ? $this->connectPredis() : $this->connect();
         $pool = new RedisAdapter($connection, $namespace, 0);
 
         return [$pool, new RedisTagAdapter($pool, $namespace, $useLua)];
@@ -248,6 +259,33 @@ class RedisTagAdapterNamespaceTest extends TestCase
     }
 
     /**
+     * Select the client the adapters under test use; phpredis cases need the extension.
+     *
+     * @param string $client
+     * @return void
+     */
+    private function useClient(string $client): void
+    {
+        if ($client === 'phpredis' && !extension_loaded('redis')) {
+            $this->markTestSkipped('Redis extension is not loaded');
+        }
+        $this->client = $client;
+    }
+
+    /**
+     * Connect to the test Redis database with Predis.
+     *
+     * @return OptimizedPredisClient
+     */
+    private function connectPredis(): OptimizedPredisClient
+    {
+        return new OptimizedPredisClient(
+            ['host' => $this->getServer(), 'port' => 6379, 'database' => self::DATABASE],
+            ['exceptions' => false]
+        );
+    }
+
+    /**
      * Connect to the test Redis database.
      *
      * @return \Redis
@@ -255,11 +293,7 @@ class RedisTagAdapterNamespaceTest extends TestCase
     private function connect(): \Redis
     {
         $redis = new \Redis();
-        try {
-            $redis->connect($this->getServer(), 6379);
-        } catch (\RedisException $e) {
-            $this->markTestSkipped('Redis server is not available: ' . $e->getMessage());
-        }
+        $redis->connect($this->getServer(), 6379);
         $redis->select(self::DATABASE);
 
         return $redis;

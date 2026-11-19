@@ -34,7 +34,7 @@ class RedisTagAdapter implements TagAdapterInterface
     private const LEGACY_ALL_IDS_SET = 'cache:all_ids';
 
     /**
-     * Marks a namespace whose ids were taken over from the legacy set; it outlives flushes on purpose
+     * Holds the legacy set's cardinality when this namespace last took its ids over; it outlives flushes
      */
     private const LEGACY_MIGRATED_PREFIX = 'cache:all_ids_migrated:';
 
@@ -1272,16 +1272,20 @@ LUA;
     }
 
     /**
-     * Takes this namespace's ids over from the legacy all_ids set, once per namespace.
+     * Takes this namespace's ids over from the legacy all_ids set whenever that set has changed.
      *
      * The legacy set mixes ids of every namespace on the database: an id belongs to this namespace only
      * when its data key exists here, and an id without data here may still be live in another namespace,
      * so the legacy set is only read. Ids with data here are copied into the namespace's set; for the
      * others, index entries this namespace wrote before the upgrade are pruned (the prune keeps live data).
-     * The copy is idempotent, so concurrent first runs are harmless; the marker is written afterwards.
+     * The marker stores the legacy set's cardinality from before the scan: nodes still running the previous
+     * code during a rolling deploy keep changing the legacy set, and a changed cardinality triggers a new
+     * scan. The copy is idempotent, so concurrent scans are harmless. A failed batch throws before the
+     * marker is written, so the next call scans again.
      *
      * @param int $batchSize
      * @return void
+     * @throws \RuntimeException
      */
     private function migrateLegacyIds(int $batchSize): void
     {
@@ -1290,7 +1294,9 @@ LUA;
         }
 
         $markerKey = self::LEGACY_MIGRATED_PREFIX . $this->namespace;
-        if (!$this->redis->exists($markerKey)) {
+        $legacySize = (string)(int)$this->unwrapPredisReply($this->redis->scard(self::LEGACY_ALL_IDS_SET));
+        $migratedSize = $this->unwrapPredisReply($this->redis->get($markerKey));
+        if (!is_scalar($migratedSize) || (string)$migratedSize !== $legacySize) {
             foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {
                 [$expired, $live] = $this->splitByDataExistence(array_values($members));
                 if (!empty($live)) {
@@ -1298,16 +1304,42 @@ LUA;
                     foreach ($live as $id) {
                         $pipeline->sadd($this->allIdsKey(), $id);
                     }
-                    $this->executePipeline($pipeline);
+                    $this->executeCheckedPipeline($pipeline, count($live));
                 }
                 if (!empty($expired)) {
                     $this->pruneTagIndex($expired);
                 }
             }
-            $this->redis->set($markerKey, '1');
+            $this->redis->set($markerKey, $legacySize);
         }
 
         $this->legacyMigrated = true;
+    }
+
+    /**
+     * Executes a pipeline and fails unless every command returned a reply.
+     *
+     * The phpredis client reports a failed command as false inside the reply array, Predis (built with
+     * exceptions off) as an error object, and both may return a non-array for the whole pipeline.
+     *
+     * @param \Redis|object $pipeline
+     * @param int $expectedCount
+     * @return array
+     * @throws \RuntimeException
+     */
+    private function executeCheckedPipeline($pipeline, int $expectedCount): array
+    {
+        $replies = $this->executePipeline($pipeline);
+        if (!is_array($replies) || count($replies) !== $expectedCount) {
+            throw new \RuntimeException('Redis pipeline returned an unexpected number of replies');
+        }
+        foreach ($replies as $reply) {
+            if ($reply === false || $reply instanceof \Predis\Response\ErrorInterface) {
+                throw new \RuntimeException('Redis pipeline command failed');
+            }
+        }
+
+        return array_values($replies);
     }
 
     /**
@@ -1323,10 +1355,7 @@ LUA;
         foreach ($ids as $id) {
             $pipe->exists($dataPrefix . $id);
         }
-        $exists = $this->executePipeline($pipe);
-        if (!is_array($exists)) {
-            return [[], []];
-        }
+        $exists = $this->executeCheckedPipeline($pipe, count($ids));
 
         $expired = [];
         $live = [];
