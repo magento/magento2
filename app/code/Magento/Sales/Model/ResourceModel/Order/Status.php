@@ -6,12 +6,10 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection;
-use Psr\Log\LoggerInterface as LogWriter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\SalesSequence\Model\Manager;
-use \Magento\Sales\Model\ResourceModel\EntityAbstract;
-use \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Sales\Model\Order\StatusLabel;
 
 /**
  * Order status resource model
@@ -31,6 +29,25 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var string
      */
     protected $stateTable;
+
+    /**
+     * @var StatusLabel
+     */
+    private $statusLabel;
+
+    /**
+     * @param Context $context
+     * @param string|null $connectionName
+     * @param StatusLabel|null $statusLabel
+     */
+    public function __construct(
+        Context $context,
+        $connectionName = null,
+        ?StatusLabel $statusLabel = null
+    ) {
+        $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
+        parent::__construct($context, $connectionName);
+    }
 
     /**
      * Internal constructor
@@ -117,7 +134,17 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $this->getConnection()->insertMultiple($this->labelsTable, $data);
             }
         }
+        $this->statusLabel->clearCache();
         return parent::_afterSave($object);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->statusLabel->clearCache();
+        return parent::_afterDelete($object);
     }
 
     /**
