@@ -439,7 +439,91 @@ class QueueTest extends TestCase
         return [
             'dep deployed' => [true, false, 1],
             'dep waiting' => [false, false, 0],
-            'dep recursive' => [false, true, 2],
+            'dep started in the same pass, not finished yet' => [false, true, 1],
+        ];
+    }
+
+    /**
+     * A package whose dependency is started in the same pass waits until the dependency is deployed (#41705)
+     *
+     * The locale package comes first in the queue, so its dependency (the theme's default package) is started from
+     * inside assertAndExecute(). In parallel mode that only forks the dependency; the dependency is not deployed yet,
+     * so the locale package must not start in the same pass. A serial deployment finishes the dependency at once,
+     * so there the locale package does start.
+     *
+     * @param bool $dependencyFinishes whether deploying the dependency completes it (serial) or not yet (forked)
+     * @param array $expectedStarted
+     * @return void
+     * @covers ::assertAndExecute
+     * @covers ::executePackage
+     */
+    #[DataProvider('dependencyStartedInSamePassDataProvider')]
+    public function testPackageWaitsForDependencyStartedInSamePass(
+        bool $dependencyFinishes,
+        array $expectedStarted
+    ): void {
+        $queue = $this->createQueue();
+        $themeState = null;
+        $theme = $this->createMock(Package::class);
+        $theme->expects($this->any())->method('getPath')->willReturn('frontend/Vendor/theme/default');
+        $theme->expects($this->any())->method('getParent')->willReturn(null);
+        $theme->expects($this->any())->method('getState')->willReturnCallback(
+            static function () use (&$themeState) {
+                return $themeState;
+            }
+        );
+        $theme->expects($this->any())->method('getArea')->willReturn('frontend');
+        $theme->expects($this->any())->method('getLocale')->willReturn('en_US');
+        $theme->expects($this->any())->method('getFiles')->willReturn([]);
+        $theme->expects($this->any())->method('getPreProcessors')->willReturn([]);
+        $locale = $this->createPackageMock('frontend/Vendor/theme/en_US', null, $theme);
+
+        $started = [];
+        $this->appState->expects($this->any())->method('emulateAreaCode')->willReturnCallback(
+            static function () {
+            }
+        );
+        $this->deployPackageService->expects($this->any())->method('deploy')->willReturnCallback(
+            static function (Package $package) use (&$started, &$themeState, $dependencyFinishes) {
+                $started[] = $package->getPath();
+                if ($dependencyFinishes && $package->getPath() === 'frontend/Vendor/theme/default') {
+                    $themeState = Package::STATE_COMPLETED;
+                }
+            }
+        );
+
+        $packages = [
+            'frontend/Vendor/theme/en_US' => [
+                'package' => $locale,
+                'dependencies' => ['frontend/Vendor/theme/default' => $theme],
+            ],
+            'frontend/Vendor/theme/default' => ['package' => $theme, 'dependencies' => []],
+        ];
+        $this->invokeMethod(
+            $queue,
+            'assertAndExecute',
+            ['frontend/Vendor/theme/en_US', &$packages, $packages['frontend/Vendor/theme/en_US']]
+        );
+
+        $this->assertSame($expectedStarted, $started);
+    }
+
+    /**
+     * Data provider for testPackageWaitsForDependencyStartedInSamePass.
+     *
+     * @return array
+     */
+    public static function dependencyStartedInSamePassDataProvider(): array
+    {
+        return [
+            'dependency forked, not finished: the locale package waits' => [
+                false,
+                ['frontend/Vendor/theme/default'],
+            ],
+            'dependency finished at once: both start' => [
+                true,
+                ['frontend/Vendor/theme/default', 'frontend/Vendor/theme/en_US'],
+            ],
         ];
     }
 
