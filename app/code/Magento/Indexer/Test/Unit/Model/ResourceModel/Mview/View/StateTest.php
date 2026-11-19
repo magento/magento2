@@ -42,7 +42,7 @@ class StateTest extends TestCase
     /**
      * @given A checkpoint targets a specific view and version.
      * @when The resource builds the cursor update.
-     * @then The update requires that view to be working with an older version.
+     * @then The update requires that view to be working with a missing or older version.
      */
     public function testUpdateVersionIdIfWorkingUpdatesOnlyTheForwardCursor(): void
     {
@@ -57,7 +57,7 @@ class StateTest extends TestCase
                 [
                     'view_id = ?' => $viewId,
                     'status = ?' => StateInterface::STATUS_WORKING,
-                    'version_id < ?' => $versionId,
+                    '(version_id IS NULL OR version_id < ?)' => $versionId,
                 ]
             )
             ->willReturn(1);

@@ -109,12 +109,14 @@ class ResumeTest extends TestCase
     }
 
     /**
-     * @given Two pages complete before the third page fails.
+     * @given A view starts with a null or zero cursor and fails on its third page.
      * @when The view update is retried after the worker lock is released.
      * @then Processing resumes at the failed page with completed checkpoints retained.
      */
-    public function testUpdateResumesFromLastSuccessfullyProcessedBatch(): void
+    #[DataProvider('initialVersionProvider')]
+    public function testUpdateResumesFromLastSuccessfullyProcessedBatch(?int $initialVersion): void
     {
+        $this->state->setVersionId($initialVersion)->save();
         $calls = [];
         $successfulBatches = [];
         $runtimeVersions = [];
@@ -170,6 +172,14 @@ class ResumeTest extends TestCase
 
         $this->state->loadByView($this->changelog->getViewId());
         $this->assertSame(1000, (int)$this->state->getVersionId());
+    }
+
+    public static function initialVersionProvider(): array
+    {
+        return [
+            'zero initial cursor' => [0],
+            'null initial cursor' => [null],
+        ];
     }
 
     /**

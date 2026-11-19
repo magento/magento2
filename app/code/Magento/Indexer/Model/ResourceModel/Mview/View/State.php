@@ -33,7 +33,7 @@ class State extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             [
                 'view_id = ?' => $viewId,
                 'status = ?' => \Magento\Framework\Mview\View\StateInterface::STATUS_WORKING,
-                'version_id < ?' => $versionId,
+                '(version_id IS NULL OR version_id < ?)' => $versionId,
             ]
         );
     }
