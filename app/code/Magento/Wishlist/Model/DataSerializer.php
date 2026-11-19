@@ -113,7 +113,7 @@ class DataSerializer
             }
 
             try {
-                $this->cache->remove($token);
+                $this->cache->remove($cacheKey);
             } catch (Throwable $exception) {
                 $this->logger->error('Unable to remove cache: '.$exception);
             }
