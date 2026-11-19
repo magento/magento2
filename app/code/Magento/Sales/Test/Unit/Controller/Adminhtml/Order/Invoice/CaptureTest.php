@@ -17,7 +17,6 @@ use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Magento\Framework\DB\Transaction;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\ObjectManagerInterface;
@@ -25,19 +24,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Invoice\Capture;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CaptureTest extends TestCase
 {
-    use MockCreationTrait;
-
     /**
      * @var MockObject
      */
@@ -188,8 +183,6 @@ class CaptureTest extends TestCase
             ->with('invoice_id')
             ->willReturn($invoiceId);
 
-        $orderMock = $this->createPartialMockWithReflection(Order::class, ['setIsInProcess']);
-
         $this->invoiceManagement->expects($this->once())
             ->method('setCapture')
             ->with($invoiceId);
@@ -198,16 +191,11 @@ class CaptureTest extends TestCase
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
             ->willReturn($invoiceId);
-        $invoiceMock->expects($this->any())
-            ->method('getOrder')
-            ->willReturn($orderMock);
+        $invoiceMock->expects($this->never())
+            ->method('getOrder');
 
-        $transactionMock = $this->createMock(Transaction::class);
-        $transactionMock->method('addObject')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [$invoiceMock] => $transactionMock,
-                [$orderMock] => $transactionMock
-            });
+        $this->objectManagerMock->expects($this->never())
+            ->method('create');
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
@@ -220,11 +208,6 @@ class CaptureTest extends TestCase
         $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn($invoiceMock);
-
-        $this->objectManagerMock
-            ->method('create')
-            ->with(Transaction::class)
-            ->willReturn($transactionMock);
 
         $resultRedirect = $this->createMock(Redirect::class);
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);

@@ -34,14 +34,6 @@ class Capture extends View implements HttpGetActionInterface
         try {
             $invoiceManagement = $this->_objectManager->get(\Magento\Sales\Api\InvoiceManagementInterface::class);
             $invoiceManagement->setCapture($invoice->getEntityId());
-            $invoice->getOrder()->setIsInProcess(true);
-            $this->_objectManager->create(
-                \Magento\Framework\DB\Transaction::class
-            )->addObject(
-                $invoice
-            )->addObject(
-                $invoice->getOrder()
-            )->save();
             $this->messageManager->addSuccessMessage(__('The invoice has been captured.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
