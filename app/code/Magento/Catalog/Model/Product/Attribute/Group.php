@@ -12,8 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 class Group extends \Magento\Eav\Model\Entity\Attribute\Group
 {
     /**
-     * Attribute collection factory for Product
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_attributeCollectionFactory;
@@ -24,7 +22,6 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
     private $attributeSetUnassignValidator;
 
     /**
-     * Group constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
