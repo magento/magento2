@@ -361,6 +361,12 @@
         "gene/bluefoot": "*"
     },
     "extra": {
+        "magento-deploy-ignore": {
+            "*": [
+                "/setup",
+                "/update"
+            ]
+        },
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
             "components/jquery": [
@@ -378,7 +384,10 @@
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\Setup\\": [
+                "setup/src/Magento/Setup/",
+                "vendor/magento/magento2-base/setup/src/Magento/Setup/"
+            ],
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
