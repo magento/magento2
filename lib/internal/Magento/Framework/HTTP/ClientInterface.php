@@ -106,6 +106,58 @@ interface ClientInterface
     public function post($uri, $params);
 
     /**
+     * Make PUT request
+     *
+     * @param string $uri full uri
+     * @param array|string $params PUT fields array or string in case of JSON or XML data
+     * @return void
+     */
+    public function put($uri, $params = []);
+
+    /**
+     * Make DELETE request
+     *
+     * @param string $uri full uri
+     * @param array|string $params DELETE fields array or string in case of JSON or XML data
+     * @return void
+     */
+    public function delete($uri, $params = []);
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri full uri
+     * @param array|string $params PATCH fields array or string in case of JSON or XML data
+     * @return void
+     */
+    public function patch($uri, $params = []);
+
+    /**
+     * Make OPTIONS request
+     *
+     * @param string $uri full uri
+     * @param array|string $params OPTIONS fields
+     * @return void
+     */
+    public function options($uri, $params = []);
+
+    /**
+     * Make HEAD request
+     *
+     * @param string $uri full uri
+     * @return void
+     */
+    public function head($uri);
+
+    /**
+     * Make TRACE request
+     *
+     * @param string $uri full uri
+     * @return void
+     */
+    public function trace($uri);
+
+    /**
      * Get response headers
      *
      * @return array

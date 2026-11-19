@@ -276,6 +276,76 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
     }
 
     /**
+     * Make PUT request
+     *
+     * @param string $uri
+     * @param array|string $params use string in case of JSON or XML PUT request
+     * @return void
+     */
+    public function put($uri, $params = [])
+    {
+        $this->makeRequest("PUT", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make DELETE request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function delete($uri, $params = [])
+    {
+        $this->makeRequest("DELETE", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri
+     * @param array|string $params use string in case of JSON or XML PATCH request
+     * @return void
+     */
+    public function patch($uri, $params = [])
+    {
+        $this->makeRequest("PATCH", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make OPTIONS request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     */
+    public function options($uri, $params = [])
+    {
+        $this->makeRequest("OPTIONS", $this->parseUrl($uri), $params);
+    }
+
+    /**
+     * Make HEAD request
+     *
+     * @param string $uri
+     * @return void
+     */
+    public function head($uri)
+    {
+        $this->makeRequest("HEAD", $this->parseUrl($uri));
+    }
+
+    /**
+     * Make TRACE request
+     *
+     * @param string $uri
+     * @return void
+     */
+    public function trace($uri)
+    {
+        $this->makeRequest("TRACE", $this->parseUrl($uri));
+    }
+
+    /**
      * Get response headers
      *
      * @return array
