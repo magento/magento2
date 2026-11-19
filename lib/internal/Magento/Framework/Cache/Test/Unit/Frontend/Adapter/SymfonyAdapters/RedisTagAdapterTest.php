@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter\SymfonyAdapters;
 
 use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisLuaHelper;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
@@ -16,7 +17,7 @@ use ReflectionProperty;
 use stdClass;
 
 /**
- * Unit tests for RedisTagAdapter::getIdsMatchingTags()
+ * Unit tests for RedisTagAdapter
  *
  * Uses anonymous-class stubs injected via reflection (PHP 8.1+ allows setValue() on
  * private properties without setAccessible).
@@ -109,22 +110,166 @@ class RedisTagAdapterTest extends TestCase
         $this->assertFalse($state->sinterCalled, 'sinter must not be called when any set is empty');
     }
 
+    public function testGetIdsNotMatchingTagsDiffsTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis(['sdiff' => ['id_1']]);
+
+        $result = $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags(['tagA']);
+
+        $this->assertSame(['id_1'], $result);
+        $this->assertSame([['sdiff', ['cache:all_ids:ns_', 'cache:tags:ns_tagA']]], $redis->calls);
+    }
+
+    public function testGetIdsNotMatchingTagsWithoutTagsReadsTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis(['smembers' => ['id_1']]);
+
+        $result = $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]);
+
+        $this->assertSame(['id_1'], $result);
+        $this->assertSame([['smembers', ['cache:all_ids:ns_']]], $redis->calls);
+    }
+
+    public function testOnSaveWithTagsPassesTheNamespaceAllIdsSetToLua(): void
+    {
+        $redis = $this->makeRecordingRedis();
+
+        $this->createAdapter($redis, 'ns_')->onSave('id_1', ['tagA', 'tagB']);
+
+        $this->assertSame(
+            [
+                'sha',
+                0,
+                'ns_:id_1',
+                'id_1',
+                'cache:all_ids:ns_',
+                'cache:tags:',
+                'ns_',
+                'cache:id_tags:ns_id_1',
+                'tagA',
+                'tagB',
+            ],
+            $redis->argsOf('evalsha')[0]
+        );
+    }
+
+    public function testOnSaveWithoutTagsRegistersInTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis(['exists' => 1]);
+
+        $this->createAdapter($redis, 'ns_')->onSave('id_1', []);
+
+        $this->assertSame([['exists', ['ns_:id_1']], ['sadd', ['cache:all_ids:ns_', 'id_1']]], $redis->calls);
+    }
+
+    public function testDeleteByIdsPrunesTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis();
+        $pool = $this->createStub(CacheItemPoolInterface::class);
+        $pool->method('deleteItems')->willReturn(true);
+        $adapter = $this->createAdapter($redis, 'ns_');
+        (new ReflectionProperty(RedisTagAdapter::class, 'cachePool'))->setValue($adapter, $pool);
+
+        $this->assertTrue($adapter->deleteByIds(['id_1', 'id_2']));
+        $this->assertSame(
+            ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'id_1', 'id_2'],
+            $redis->argsOf('evalsha')[0]
+        );
+    }
+
+    public function testDeleteByIdsPipelinedFallbackRemovesFromTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis(['script' => new \RuntimeException('NOSCRIPT')]);
+        $redis->pipe->execQueue = [[['tagA']], []];
+        $adapter = $this->createAdapter($redis, 'ns_');
+
+        $adapter->deleteByIds(['id_1']);
+
+        $this->assertContains(['pipe:srem', ['cache:all_ids:ns_', 'id_1']], $redis->calls);
+        $this->assertContains(['pipe:srem', ['cache:tags:ns_tagA', 'id_1']], $redis->calls);
+    }
+
+    public function testCleanMatchingAnyTagsLuaPassesTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis(['eval' => 1, 'evalsha' => 2]);
+        $adapter = $this->createAdapter($redis, 'ns_');
+        (new ReflectionProperty(RedisTagAdapter::class, 'useLua'))->setValue($adapter, true);
+        (new ReflectionProperty(RedisTagAdapter::class, 'luaHelper'))->setValue(
+            $adapter,
+            new RedisLuaHelper($redis, true)
+        );
+
+        $this->assertTrue($adapter->cleanMatchingAnyTags(['tagA', 'tagB']));
+        $this->assertTrue($adapter->cleanMatchingAnyTagsWithScope(['tagA'], 'scope'));
+
+        $evalShaCalls = $redis->argsOf('evalsha');
+        $this->assertSame(
+            ['sha', 2, 'tagA', 'tagB', 'cache:tags:', 'ns_', 100, 'ns_:', 'cache:all_ids:ns_'],
+            $evalShaCalls[0]
+        );
+        $this->assertSame(
+            ['sha', 1, 'tagA', 'cache:tags:', 'ns_', 'scope', 'ns_:', 'cache:all_ids:ns_'],
+            $evalShaCalls[1]
+        );
+    }
+
+    public function testClearAllIndicesDeletesTheNamespaceAndLegacyAllIdsSets(): void
+    {
+        $redis = $this->makeRecordingRedis(['scan' => ['0', []]]);
+
+        $this->createAdapter($redis, 'ns_')->clearAllIndices();
+
+        $this->assertSame([[['cache:all_ids:ns_', 'cache:all_ids']]], $redis->argsOf('del'));
+    }
+
+    public function testGarbageCollectScansTheNamespaceAllIdsSet(): void
+    {
+        $redis = $this->makeRecordingRedis([
+            'sscan' => fn (string $key) => $key === 'cache:all_ids:ns_' ? ['0', ['gone']] : ['0', []],
+        ]);
+        $redis->pipe->execQueue = [[0]];
+
+        $this->assertSame(1, $this->createAdapter($redis, 'ns_')->garbageCollect());
+        $this->assertSame(['ns_:gone'], $redis->argsOf('pipe:exists')[0]);
+        $this->assertSame(
+            ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'gone'],
+            $redis->argsOf('evalsha')[0]
+        );
+    }
+
+    public function testGarbageCollectAdoptsLiveLegacyIdsAndDropsMissingOnes(): void
+    {
+        $redis = $this->makeRecordingRedis([
+            'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['live', 'gone']] : ['0', []],
+        ]);
+        $redis->pipe->execQueue = [[1, 0], [1, 1]];
+
+        $this->assertSame(1, $this->createAdapter($redis, 'ns_')->garbageCollect());
+        $this->assertSame(['ns_:live', 'ns_:gone'], array_merge(...$redis->argsOf('pipe:exists')));
+        $this->assertSame(
+            ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'gone'],
+            $redis->argsOf('evalsha')[0]
+        );
+        $this->assertSame([['cache:all_ids:ns_', 'live']], $redis->argsOf('pipe:sadd'));
+        $this->assertSame([['cache:all_ids', 'gone']], $redis->argsOf('pipe:srem'));
+    }
+
     /**
      * Create a RedisTagAdapter with an injected fake Redis client.
      *
      * ReflectionProperty::setValue() works on private properties without setAccessible()
      * in PHP 8.1+ (the method became a no-op).
      */
-    private function createAdapter(object $redisClient): RedisTagAdapter
+    private function createAdapter(object $redisClient, string $namespace = ''): RedisTagAdapter
     {
         $rc      = new ReflectionClass(RedisTagAdapter::class);
         $adapter = $rc->newInstanceWithoutConstructor();
 
         (new ReflectionProperty(RedisTagAdapter::class, 'redis'))->setValue($adapter, $redisClient);
-        (new ReflectionProperty(RedisTagAdapter::class, 'namespace'))->setValue($adapter, '');
+        (new ReflectionProperty(RedisTagAdapter::class, 'namespace'))->setValue($adapter, $namespace);
         (new ReflectionProperty(RedisTagAdapter::class, 'cachePool'))->setValue(
             $adapter,
-            $this->createMock(CacheItemPoolInterface::class)
+            $this->createStub(CacheItemPoolInterface::class)
         );
         (new ReflectionProperty(RedisTagAdapter::class, 'useLua'))->setValue($adapter, false);
         (new ReflectionProperty(RedisTagAdapter::class, 'useLuaOnGc'))->setValue($adapter, false);
@@ -221,5 +366,107 @@ class RedisTagAdapterTest extends TestCase
         };
 
         return [$redis, $state];
+    }
+
+    /**
+     * Build a Predis-compatible fake that records every command, including pipelined ones ("pipe:<cmd>").
+     *
+     * A return value may be a callable receiving the command arguments, or a Throwable to throw.
+     * SCRIPT LOAD returns "sha" unless overridden.
+     *
+     * @param array $returns Return value per lower-case command name
+     * @return OptimizedPredisClient
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function makeRecordingRedis(array $returns = []): OptimizedPredisClient
+    {
+        $returns += ['script' => 'sha'];
+
+        $recorder = new class {
+            /** @var array */
+            public array $calls = [];
+        };
+
+        $pipeline = new class ($recorder) {
+            /** @var array */
+            public array $execQueue = [];
+
+            /** @var object */
+            private object $recorder;
+
+            public function __construct(object $recorder)
+            {
+                $this->recorder = $recorder;
+            }
+
+            public function __call($method, $args): static
+            {
+                $this->recorder->calls[] = ['pipe:' . strtolower((string)$method), $args];
+                return $this;
+            }
+
+            public function execute(): array
+            {
+                return array_shift($this->execQueue) ?? [];
+            }
+        };
+
+        return new class ($pipeline, $recorder, $returns) extends OptimizedPredisClient {
+            /** @var object */
+            public object $pipe;
+
+            /** @var array */
+            public array $calls = [];
+
+            /** @var object */
+            private object $recorder;
+
+            /** @var array */
+            private array $returns;
+
+            public function __construct(object $pipe, object $recorder, array $returns)
+            {
+                $this->pipe = $pipe;
+                $this->recorder = $recorder;
+                $this->returns = $returns;
+                $this->calls = &$recorder->calls;
+            }
+
+            public function pipeline(...$_arguments)
+            {
+                return $this->pipe;
+            }
+
+            public function del($keys)
+            {
+                return $this->__call('del', [$keys]);
+            }
+
+            public function __call($commandID, $arguments)
+            {
+                $command = strtolower((string)$commandID);
+                if ($command !== 'script' && $command !== 'eval') {
+                    $this->recorder->calls[] = [$command, $arguments];
+                }
+                $result = $this->returns[$command] ?? null;
+                if ($result instanceof \Throwable) {
+                    throw $result;
+                }
+
+                return is_callable($result) ? $result(...$arguments) : $result;
+            }
+
+            public function argsOf(string $command): array
+            {
+                $args = [];
+                foreach ($this->recorder->calls as [$name, $arguments]) {
+                    if ($name === $command) {
+                        $args[] = $arguments;
+                    }
+                }
+
+                return $args;
+            }
+        };
     }
 }

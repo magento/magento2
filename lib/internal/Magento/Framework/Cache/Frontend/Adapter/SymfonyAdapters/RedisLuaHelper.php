@@ -60,9 +60,8 @@ for _, id in ipairs(ids) do
     if condition == "all" then
         should_delete = true
     elseif condition == "expired" then
-        -- Check if key expired (has TTL <= 0)
-        local ttl = redis.call('TTL', cache_key)
-        if ttl == -2 or ttl == -1 then
+        -- TTL -2: the key is gone (expired); -1: the key exists without an expiry and is live
+        if redis.call('TTL', cache_key) == -2 then
             should_delete = true
         end
     end
@@ -179,12 +178,11 @@ LUA;
     private const SCRIPT_CLEAR_ALL_INDICES = <<<'LUA'
 -- KEYS[1]: tag pattern (e.g., "cache:tags:69d_*")
 -- KEYS[2]: reverse index pattern (e.g., "cache:id_tags:69d_*")
--- KEYS[3]: all_ids set key (e.g., "cache:all_ids")
+-- KEYS[3..]: all_ids set keys (e.g., "cache:all_ids:69d_", "cache:all_ids")
 -- ARGV[1]: batch size for SCAN operations
 
 local tag_pattern = KEYS[1]
 local reverse_pattern = KEYS[2]
-local all_ids_key = KEYS[3]
 local batch_size = tonumber(ARGV[1]) or 1000
 
 local total_deleted = 0
@@ -218,10 +216,9 @@ total_deleted = total_deleted + delete_by_pattern(tag_pattern)
 -- Delete all reverse indices (cache:id_tags:*)
 total_deleted = total_deleted + delete_by_pattern(reverse_pattern)
 
--- Delete all_ids set
-if redis.call('EXISTS', all_ids_key) == 1 then
-    redis.call('DEL', all_ids_key)
-    total_deleted = total_deleted + 1
+-- Delete all_ids sets
+for i = 3, #KEYS do
+    total_deleted = total_deleted + redis.call('DEL', KEYS[i])
 end
 
 return total_deleted
@@ -413,13 +410,14 @@ LUA;
         // Build patterns
         $tagPattern = 'cache:tags:' . $namespace . '*';
         $reversePattern = 'cache:id_tags:' . $namespace . '*';
-        $allIdsKey = 'cache:all_ids';
+        $allIdsKey = 'cache:all_ids:' . $namespace;
+        $legacyAllIdsKey = 'cache:all_ids';
 
         try {
             $result = $this->evalShaScript(
                 $sha,
-                [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
-                3  // Number of KEYS
+                [$tagPattern, $reversePattern, $allIdsKey, $legacyAllIdsKey, $batchSize],
+                4  // Number of KEYS
             );
 
             return (int)$result;
@@ -428,8 +426,8 @@ LUA;
             try {
                 $result = $this->evalScript(
                     self::SCRIPT_CLEAR_ALL_INDICES,
-                    [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
-                    3
+                    [$tagPattern, $reversePattern, $allIdsKey, $legacyAllIdsKey, $batchSize],
+                    4
                 );
                 return (int)$result;
             } catch (\Throwable $e) {
