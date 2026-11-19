@@ -10,11 +10,13 @@ namespace Magento\Wishlist\Test\Unit\Helper;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
@@ -31,6 +33,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DataTest extends TestCase
 {
@@ -78,6 +81,12 @@ class DataTest extends TestCase
     /** @var  Session|MockObject */
     protected $customerSession;
 
+    /** @var  ScopeConfigInterface|MockObject */
+    protected $scopeConfig;
+
+    /** @var  EventManagerInterface|MockObject */
+    protected $eventManager;
+
     /**
      * Set up mock objects for tested class
      *
@@ -112,6 +121,16 @@ class DataTest extends TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->context->expects($this->once())
+            ->method('getScopeConfig')
+            ->willReturn($this->scopeConfig);
+
+        $this->eventManager = $this->createMock(EventManagerInterface::class);
+        $this->context->expects($this->once())
+            ->method('getEventManager')
+            ->willReturn($this->eventManager);
+
         $this->wishlistProvider = $this->createMock(WishlistProviderInterface::class);
 
         $this->coreRegistry = $this->createMock(Registry::class);
@@ -141,6 +160,89 @@ class DataTest extends TestCase
                 'postDataHelper' => $this->postDataHelper
             ]
         );
+    }
+
+    /**
+     * getItemCount() must not recalculate when nothing relevant changed since the last call,
+     * even though hasDisplayOutOfStockProducts() only reports whether the value was ever set.
+     *
+     * @return void
+     */
+    public function testGetItemCountUsesCachedValueWhenNothingChanged()
+    {
+        $this->scopeConfig->method('getValue')
+            ->willReturnMap(
+                [
+                    ['wishlist/wishlist_link/use_qty', 'store', false],
+                    ['cataloginventory/options/show_out_of_stock', 'store', true],
+                ]
+            );
+
+        $session = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getWishlistDisplayType',
+                'getDisplayOutOfStockProducts',
+                'hasWishlistItemCount',
+                'hasDisplayOutOfStockProducts',
+                'getWishlistItemCount',
+                'isLoggedIn',
+                'setWishlistItemCount',
+            ]
+        );
+        $session->method('getWishlistDisplayType')->willReturn(false);
+        $session->method('getDisplayOutOfStockProducts')->willReturn(true);
+        $session->method('hasWishlistItemCount')->willReturn(true);
+        $session->method('hasDisplayOutOfStockProducts')->willReturn(true);
+        $session->method('getWishlistItemCount')->willReturn(3);
+        $session->expects($this->never())->method('isLoggedIn');
+        $session->expects($this->never())->method('setWishlistItemCount');
+
+        $this->setPropertyValue($this->model, '_customerSession', $session);
+
+        $this->assertEquals(3, $this->model->getItemCount());
+    }
+
+    /**
+     * getItemCount() must still recalculate when the out-of-stock display setting changed,
+     * proving the remaining value comparison alone (without the removed existence check)
+     * correctly detects this case.
+     *
+     * @return void
+     */
+    public function testGetItemCountRecalculatesWhenOutOfStockDisplaySettingChanged()
+    {
+        $this->scopeConfig->method('getValue')
+            ->willReturnMap(
+                [
+                    ['wishlist/wishlist_link/use_qty', 'store', false],
+                    ['cataloginventory/options/show_out_of_stock', 'store', true],
+                ]
+            );
+
+        $session = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getWishlistDisplayType',
+                'getDisplayOutOfStockProducts',
+                'hasWishlistItemCount',
+                'hasDisplayOutOfStockProducts',
+                'getWishlistItemCount',
+                'isLoggedIn',
+                'setWishlistItemCount',
+            ]
+        );
+        $session->method('getWishlistDisplayType')->willReturn(false);
+        $session->method('getDisplayOutOfStockProducts')->willReturn(false);
+        $session->method('hasWishlistItemCount')->willReturn(true);
+        $session->method('hasDisplayOutOfStockProducts')->willReturn(false);
+        $session->method('getWishlistItemCount')->willReturn(5);
+        $session->expects($this->once())->method('isLoggedIn')->willReturn(false);
+        $session->expects($this->once())->method('setWishlistItemCount')->with(0);
+
+        $this->setPropertyValue($this->model, '_customerSession', $session);
+
+        $this->assertEquals(5, $this->model->getItemCount());
     }
 
     public function testGetAddToCartUrl()
