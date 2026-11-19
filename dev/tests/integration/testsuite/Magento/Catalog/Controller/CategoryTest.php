@@ -15,12 +15,16 @@ use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\Session;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -245,6 +249,36 @@ class CategoryTest extends AbstractController
         $this->assertEquals($newPaginationValue, $block->getLimit());
         $this->assertEquals($newPaginationValue, $this->session->getData(ToolbarModel::LIMIT_PARAM_NAME));
         $this->assertEquals($newPaginationValue, $this->httpContext->getValue(ToolbarModel::LIMIT_PARAM_NAME));
+    }
+
+    #[
+        Config('catalog/frontend/remember_pagination', 1),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataProvider('arrayToolbarParamDataProvider'),
+    ]
+    public function testViewIgnoresArrayToolbarParam(
+        string $param,
+        array $requestValue,
+        string $rememberedValue,
+        string $blockGetter
+    ): void {
+        $this->session->setData($param, $rememberedValue);
+        $this->getRequest()->setParams([$param => $requestValue]);
+        $categoryId = DataFixtureStorageManager::getStorage()->get('category')->getId();
+        $this->dispatch('catalog/category/view/id/' . $categoryId);
+        $block = $this->layout->getBlock('product_list_toolbar');
+        $this->assertNotFalse($block);
+        $this->assertEquals($rememberedValue, $block->$blockGetter());
+        $this->assertEquals($rememberedValue, $this->session->getData($param));
+    }
+
+    public static function arrayToolbarParamDataProvider(): array
+    {
+        return [
+            'limit' => [ToolbarModel::LIMIT_PARAM_NAME, ['12'], '24', 'getLimit'],
+            'mode' => [ToolbarModel::MODE_PARAM_NAME, ['grid'], 'list', 'getCurrentMode'],
+            'direction' => [ToolbarModel::DIRECTION_PARAM_NAME, ['asc'], 'desc', 'getCurrentDirection'],
+        ];
     }
 
     /**
