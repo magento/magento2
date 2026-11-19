@@ -192,7 +192,9 @@ class AddressTest extends TestCase
             ->willReturnSelf();
         $customerSelect->expects($this->once())->method('limitPage')->with(1, $pageSize);
         $connection->method('select')->willReturn($customerSelect);
-        $connection->method('fetchAssoc')->with($customerSelect)->willReturn([1 => $this->_customerData]);
+        $connection->method('fetchAssoc')->with($customerSelect)->willReturnCallback(
+            fn (): array => [1 => $this->_customerData]
+        );
 
         $customerEntity = $this->createPartialMockWithReflection(
             \Magento\Framework\Model\AbstractModel::class,
@@ -261,6 +263,25 @@ class AddressTest extends TestCase
         $this->_model->setWriter($writer);
         $this->_model->setParameters([]);
 
+        $this->_model->exportItem($this->createAddressItem());
+    }
+
+    public function testExportItemWithDeletedWebsite(): void
+    {
+        $this->_customerData['website_id'] = null;
+
+        $writer = $this->createPartialMock(AbstractAdapter::class, ['writeRow']);
+        $writer->expects($this->once())
+            ->method('writeRow')
+            ->with($this->callback(fn (array $row): bool => $row[Address::COLUMN_WEBSITE] === ''));
+        $this->_model->setWriter($writer);
+        $this->_model->setParameters([]);
+
+        $this->_model->exportItem($this->createAddressItem());
+    }
+
+    private function createAddressItem(): AbstractModel
+    {
         $item = $this->createPartialMockWithReflection(
             AbstractModel::class,
             ['getData', 'offsetGet', 'getParentId', 'getId', 'getRegionId']
@@ -284,7 +305,7 @@ class AddressTest extends TestCase
         $item->method('getId')->willReturn($this->_addressData['id']);
         $item->method('getRegionId')->willReturn(null);
         
-        $this->_model->exportItem($item);
+        return $item;
     }
 
     /**
