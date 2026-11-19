@@ -18,7 +18,6 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * Shopping cart item render block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
