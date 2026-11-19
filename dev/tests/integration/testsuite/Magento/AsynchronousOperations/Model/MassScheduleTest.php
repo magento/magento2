@@ -11,7 +11,9 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection as BulkCollection;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection as OperationCollection;
 use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Phrase;
@@ -165,6 +167,40 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
             $bulkCollection = $this->objectManager->create(BulkCollection::class);
             $this->assertEquals($bulksCount, $bulkCollection->getSize());
         }
+    }
+
+    /**
+     * Operations of a published bulk are stored exactly once, keyed by the position in the request.
+     *
+     * @return void
+     */
+    public function testPublishMassStoresEachOperationOnce(): void
+    {
+        $products = [
+            ['product' => self::getProduct()],
+            ['product' => self::getProduct()->setName('Simple Product 2')->setSku('unique-simple-product2')],
+        ];
+
+        $publisher = $this->createMock(BulkPublisherInterface::class);
+        $bulkManagement = $this->objectManager->create(BulkManagement::class, ['publisher' => $publisher]);
+        $massSchedule = $this->objectManager->create(MassSchedule::class, ['bulkManagement' => $bulkManagement]);
+
+        $result = $massSchedule->publishMass(
+            'async.magento.catalog.api.productrepositoryinterface.save.post',
+            $products
+        );
+        $this->assertFalse($result->isErrors());
+
+        $operations = array_values(
+            $this->objectManager->create(OperationCollection::class)
+                ->addFieldToFilter('bulk_uuid', ['eq' => $result->getBulkUuid()])
+                ->getItems()
+        );
+        $this->assertCount(count($products), $operations);
+        $this->assertEqualsCanonicalizing(
+            array_keys($products),
+            array_map(static fn (OperationInterface $operation) => (int) $operation->getId(), $operations)
+        );
     }
 
     /**
