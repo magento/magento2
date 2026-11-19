@@ -123,7 +123,33 @@ class AttributeFilterTest extends TestCase
                     'custom_attr' => new DataObject(
                         ['frontend_type' => 'frontend', 'backend_type' => 'backend',
                             'is_user_defined' => '1', 'is_required' => '0',
-                            'additional_data' => 'swatch_input_type: visual'
+                            'additional_data' => 'swatch_input_type: visual',
+                            'default_value' => '5'
+                        ]
+                    )
+                ]
+            ],
+            'test case for create new product with custom attribute without default value' => [
+                'requestProductData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                    'custom_attr' => ''
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                ],
+                'initialProductData' => [],
+                'attributeList' => [
+                    'custom_attr' => new DataObject(
+                        ['frontend_type' => 'frontend', 'backend_type' => 'int',
+                            'is_user_defined' => '1', 'is_required' => '0',
+                            'default_value' => null
                         ]
                     )
                 ]
