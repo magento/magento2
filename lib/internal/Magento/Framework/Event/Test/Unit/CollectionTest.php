@@ -1,8 +1,6 @@
 <?php
 /**
- * @category   Magento
- *
- * Copyright 2015 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -23,7 +21,7 @@ class CollectionTest extends TestCase
      */
     protected $collection;
 
-    /*
+    /**
      * Array of events in the collection
      *
      * @var array
