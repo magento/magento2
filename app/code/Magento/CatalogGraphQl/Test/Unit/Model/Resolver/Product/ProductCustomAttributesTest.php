@@ -727,4 +727,153 @@ class ProductCustomAttributesTest extends TestCase
         $this->assertCount(1, $result['items']);
         $this->assertSame('42', $result['items'][0]['value']);
     }
+
+    /**
+     * Only the requested attribute codes are returned, in the requested order, without duplicates.
+     *
+     * @return void
+     */
+    public function testResolveWithAttributeCodesReturnsRequestedCodesInOrder(): void
+    {
+        $this->mockEligibleAttributes(['description', 'color', 'size']);
+        $this->productDataProviderMock->expects($this->once())
+            ->method('getProductDataById')
+            ->willReturn(['description' => 'Desc', 'color' => 'Red', 'size' => 'XL']);
+        $this->mockAttributeValueFormatter();
+
+        $result = $this->resolveWithArgs(['attributeCodes' => ['size', 'description', 'size']]);
+
+        $this->assertSame(
+            [
+                ['code' => 'size', 'value' => 'XL'],
+                ['code' => 'description', 'value' => 'Desc']
+            ],
+            $result['items']
+        );
+        $this->assertSame([], $result['errors']);
+    }
+
+    /**
+     * Requested codes that are unknown or not eligible are reported after the filter errors.
+     *
+     * @return void
+     */
+    public function testResolveWithAttributeCodesReportsUnavailableCodes(): void
+    {
+        $filterError = ['type' => 'FILTER_NOT_FOUND', 'message' => 'Cannot filter by "foo".'];
+        $this->mockEligibleAttributes(['color'], [$filterError]);
+        $this->productDataProviderMock->method('getProductDataById')->willReturn(['color' => 'Red']);
+        $this->mockAttributeValueFormatter();
+
+        $result = $this->resolveWithArgs(['attributeCodes' => ['color', 'unknown_code']]);
+
+        $this->assertSame([['code' => 'color', 'value' => 'Red']], $result['items']);
+        $this->assertSame(
+            [
+                $filterError,
+                [
+                    'type' => 'ATTRIBUTE_NOT_FOUND',
+                    'message' => 'Attribute code "unknown_code" could not be found.'
+                ]
+            ],
+            $result['errors']
+        );
+    }
+
+    /**
+     * The product is not loaded when none of the requested codes is available.
+     *
+     * @return void
+     */
+    public function testResolveWithOnlyUnavailableAttributeCodesDoesNotLoadProduct(): void
+    {
+        $this->mockEligibleAttributes(['color']);
+        $this->productDataProviderMock->expects($this->never())->method('getProductDataById');
+        $this->getAttributeValueMock->expects($this->never())->method('execute');
+
+        $result = $this->resolveWithArgs(['attributeCodes' => ['unknown_code']]);
+
+        $this->assertSame([], $result['items']);
+        $this->assertCount(1, $result['errors']);
+        $this->assertSame('ATTRIBUTE_NOT_FOUND', $result['errors'][0]['type']);
+    }
+
+    /**
+     * An empty list of attribute codes returns all the eligible attributes, like an omitted argument.
+     *
+     * @return void
+     */
+    public function testResolveWithEmptyAttributeCodesReturnsAllEligibleAttributes(): void
+    {
+        $this->mockEligibleAttributes(['description', 'color']);
+        $this->productDataProviderMock->method('getProductDataById')
+            ->willReturn(['description' => 'Desc', 'color' => 'Red']);
+        $this->mockAttributeValueFormatter();
+
+        $result = $this->resolveWithArgs(['attributeCodes' => []]);
+
+        $this->assertSame(
+            [
+                ['code' => 'description', 'value' => 'Desc'],
+                ['code' => 'color', 'value' => 'Red']
+            ],
+            $result['items']
+        );
+        $this->assertSame([], $result['errors']);
+    }
+
+    /**
+     * Mock the eligible attributes returned by the filters
+     *
+     * @param string[] $codes
+     * @param array $errors
+     * @return void
+     */
+    private function mockEligibleAttributes(array $codes, array $errors = []): void
+    {
+        $this->productMock->method('getId')->willReturn(1);
+        $this->getFilteredAttributesMock->method('execute')->willReturn([
+            'items' => array_map(
+                function (string $code) {
+                    $attributeMock = $this->createMock(AttributeInterface::class);
+                    $attributeMock->method('getAttributeCode')->willReturn($code);
+                    return $attributeMock;
+                },
+                $codes
+            ),
+            'errors' => $errors
+        ]);
+        $this->filterCustomAttributeMock->method('execute')->willReturnArgument(0);
+    }
+
+    /**
+     * Mock the attribute value formatter to return the code and the raw value
+     *
+     * @return void
+     */
+    private function mockAttributeValueFormatter(): void
+    {
+        $this->getAttributeValueMock->method('execute')->willReturnCallback(
+            function (string $entityType, string $code, $value) {
+                return ['code' => $code, 'value' => $value];
+            }
+        );
+    }
+
+    /**
+     * Resolve the field for the product with the given arguments
+     *
+     * @param array $args
+     * @return array
+     */
+    private function resolveWithArgs(array $args): array
+    {
+        return $this->resolver->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->resolveInfoMock,
+            ['model' => $this->productMock],
+            $args
+        );
+    }
 }

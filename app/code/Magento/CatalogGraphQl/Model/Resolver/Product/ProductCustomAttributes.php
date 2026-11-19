@@ -106,7 +106,15 @@ class ProductCustomAttributes implements ResolverInterface
             $productCustomAttributes['items']
         );
 
-        $filteredAttributeCodes = $this->filterCustomAttribute->execute(array_flip($attributeCodes));
+        [$filteredAttributeCodes, $notFoundErrors] = $this->restrictToRequestedCodes(
+            $this->filterCustomAttribute->execute(array_flip($attributeCodes)),
+            $args['attributeCodes'] ?? []
+        );
+        $errors = array_merge($productCustomAttributes['errors'], $notFoundErrors);
+
+        if (empty($filteredAttributeCodes)) {
+            return ['items' => [], 'errors' => $errors];
+        }
 
         /** @var Product $product */
         $product = $value['model'];
@@ -159,7 +167,39 @@ class ProductCustomAttributes implements ResolverInterface
                 },
                 $customAttributes
             ),
-            'errors' => $productCustomAttributes['errors']
+            'errors' => $errors
         ];
+    }
+
+    /**
+     * Keep only the requested attribute codes, in the requested order, and report the ones that are not available
+     *
+     * A requested code is not available when it does not exist or is not eligible (not visible, static, excluded
+     * or rejected by the filters). No requested code means no restriction.
+     *
+     * @param array $filteredAttributeCodes eligible attribute codes as keys
+     * @param array $requestedCodes
+     * @return array
+     */
+    private function restrictToRequestedCodes(array $filteredAttributeCodes, array $requestedCodes): array
+    {
+        if (empty($requestedCodes)) {
+            return [$filteredAttributeCodes, []];
+        }
+
+        $restricted = [];
+        $errors = [];
+        foreach (array_unique(array_map('strval', $requestedCodes)) as $code) {
+            if (array_key_exists($code, $filteredAttributeCodes)) {
+                $restricted[$code] = $filteredAttributeCodes[$code];
+                continue;
+            }
+            $errors[] = [
+                'type' => 'ATTRIBUTE_NOT_FOUND',
+                'message' => (string) __('Attribute code "%code" could not be found.', ['code' => $code])
+            ];
+        }
+
+        return [$restricted, $errors];
     }
 }
