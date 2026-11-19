@@ -90,27 +90,44 @@ class Loader
         $excludeSet = array_flip($exclude);
 
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
-            try {
-                $parser = $this->parserFactory->create();
-                $parser->initErrorHandler();
-                $parser->loadXML($contents);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        'Invalid Document: %1%2 Error: %3',
-                        [$file, PHP_EOL, $e->getMessage()]
-                    ),
-                    $e
-                );
-            }
-
-            $data = $this->converter->convert($parser->getDom());
+            $data = $this->convertModuleConfig($file, $contents);
             $name = key($data);
             if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];
             }
         }
         return $this->sortBySequence($result);
+    }
+
+    public function loadModule(string $moduleName): ?array
+    {
+        $modulePath = $this->moduleRegistry->getPath(ComponentRegistrar::MODULE, $moduleName);
+        if ($modulePath === null) {
+            return null;
+        }
+        $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
+        $data = $this->convertModuleConfig($filePath, $this->filesystemDriver->fileGetContents($filePath));
+
+        return $data[$moduleName] ?? null;
+    }
+
+    private function convertModuleConfig(string $file, string $contents): array
+    {
+        try {
+            $parser = $this->parserFactory->create();
+            $parser->initErrorHandler();
+            $parser->loadXML($contents);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase(
+                    'Invalid Document: %1%2 Error: %3',
+                    [$file, PHP_EOL, $e->getMessage()]
+                ),
+                $e
+            );
+        }
+
+        return $this->converter->convert($parser->getDom());
     }
 
     /**
