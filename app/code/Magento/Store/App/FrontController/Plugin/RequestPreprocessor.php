@@ -6,7 +6,7 @@
 namespace Magento\Store\App\FrontController\Plugin;
 
 /**
- * Class RequestPreprocessor
+ * Redirects storefront requests that do not match the store base URL, or need HTTPS, to the right URL.
  */
 class RequestPreprocessor
 {
@@ -79,8 +79,13 @@ class RequestPreprocessor
                 // phpcs:disable Magento2.Functions.DiscouragedFunction
                 $uri = parse_url($baseUrl);
                 if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
+                    $urlParams = ['_nosid' => true];
+                    $query = $this->getQueryString($request);
+                    if ($query !== '') {
+                        $urlParams['_query'] = $query;
+                    }
                     $redirectUrl = $this->_url->getRedirectUrl(
-                        $this->_url->getDirectUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
+                        $this->_url->getDirectUrl(ltrim($request->getPathInfo(), '/'), $urlParams)
                     );
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
@@ -100,10 +105,24 @@ class RequestPreprocessor
     }
 
     /**
+     * Get the raw query string of the request, so the redirect keeps it unchanged.
+     *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return string
+     */
+    private function getQueryString(\Magento\Framework\App\RequestInterface $request): string
+    {
+        if (!$request instanceof \Magento\Framework\App\Request\Http) {
+            return '';
+        }
+
+        return (string)$request->getServer('QUERY_STRING');
+    }
+
+    /**
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated 100.1.0
      */
     private function getBaseUrlChecker()
     {
