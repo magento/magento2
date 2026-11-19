@@ -9,6 +9,8 @@ namespace Magento\Framework\GraphQl\Test\Unit\Query;
 
 use GraphQL\Error\Error;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlServerException;
 use Magento\Framework\GraphQl\Query\ErrorHandler;
@@ -54,6 +56,12 @@ class ErrorHandlerTest extends TestCase
     {
         $inputException = new GraphQlInputException(__('Input error'));
         $serverException = new GraphQlServerException(__('Server error'));
+        $aggregatedInputException = (new GraphQlInputException(__('Input error')))
+            ->addError(new LocalizedException(__('Child input error 1')))
+            ->addError(new LocalizedException(__('Child input error 2')));
+        $aggregatedServerException = (new InputException(__('Aggregate error')))
+            ->addError(__('Child error 1'))
+            ->addError(__('Child error 2'));
         return [
             [
                 [new Error('Error 1'), new Error('Error 2')], AppState::MODE_DEVELOPER, 2
@@ -73,6 +81,35 @@ class ErrorHandlerTest extends TestCase
             [
                 [new Error('Error 1', previous: $serverException)], AppState::MODE_DEVELOPER, 1
             ],
+            [
+                [new Error('Error 1', previous: $aggregatedInputException)], AppState::MODE_DEVELOPER, 0
+            ],
+            [
+                [new Error('Error 1', previous: $aggregatedServerException)], AppState::MODE_DEVELOPER, 3
+            ],
         ];
+    }
+
+    public function testHandleReportsAggregatedClientInputErrorsWithoutLogging(): void
+    {
+        $childErrors = [
+            new LocalizedException(__('Child input error 1')),
+            new LocalizedException(__('Child input error 2')),
+        ];
+        $exception = new GraphQlInputException(__('Input error'));
+        foreach ($childErrors as $childError) {
+            $exception->addError($childError);
+        }
+        $this->appStateMock->expects(self::atLeastOnce())
+            ->method('getMode')
+            ->willReturn(AppState::MODE_DEVELOPER);
+        $this->loggerMock->expects(self::never())->method('error');
+
+        $formattedErrors = $this->errorHandler->handle(
+            [new Error('Error 1', previous: $exception)],
+            fn ($error) => $error
+        );
+
+        self::assertSame($childErrors, $formattedErrors);
     }
 }
