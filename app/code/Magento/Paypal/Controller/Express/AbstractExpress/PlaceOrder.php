@@ -7,6 +7,7 @@
 namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
@@ -168,7 +169,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     protected function _processPaypalApiError($exception)
     {
-        $this->paymentFailures->handle((int)$this->_getCheckoutSession()->getQuoteId(), $exception->getMessage());
+        $this->notifyPaymentFailure((int)$this->_getCheckoutSession()->getQuoteId(), $exception->getMessage());
 
         switch ($exception->getCode()) {
             case ApiProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED:
@@ -197,6 +198,26 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             default:
                 $this->_redirectToCartAndShowError($exception->getUserMessage());
                 break;
+        }
+    }
+
+    /**
+     * Sends the payment failure notification for the session quote, if it still exists
+     *
+     * @param int $quoteId
+     * @param string $message
+     * @return void
+     */
+    private function notifyPaymentFailure(int $quoteId, string $message): void
+    {
+        if ($quoteId === 0) {
+            return;
+        }
+
+        try {
+            $this->paymentFailures->handle($quoteId, $message);
+        } catch (NoSuchEntityException) {
+            return;
         }
     }
 
