@@ -54,12 +54,32 @@ define([
                 } else {
                     this.resolveBillingAddress();
                 }
-            } else if (checkoutData.getShippingAddressFromData()) {
+            } else if (checkoutData.getShippingAddressFromData() && !this.isCustomerShippingAddressSelected()) {
                 address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             } else {
                 this.resolveShippingAddress();
             }
+        },
+
+        /**
+         * Check whether the customer selected one of their saved addresses as the shipping address.
+         *
+         * The shipping address form data is kept after the customer selects a saved address,
+         * so it must not be used for the estimation in that case.
+         *
+         * @return {Boolean}
+         */
+        isCustomerShippingAddressSelected: function () {
+            var selectedAddressKey = checkoutData.getSelectedShippingAddress();
+
+            if (!selectedAddressKey || selectedAddressKey === 'new-customer-address') {
+                return false;
+            }
+
+            return _.some(addressList(), function (address) {
+                return address.getKey() === selectedAddressKey;
+            });
         },
 
         /**
