@@ -6,14 +6,27 @@
  * All Rights Reserved.
  */
 
+// Security check: Block HTTP access for security and to prevent errors
+// This must be checked before any bootstrapping to prevent errors
+if (isset($_SERVER['REQUEST_METHOD'])) {
+    // This is a web request - block it completely
+    if (!headers_sent()) {
+        header('HTTP/1.1 403 Forbidden');
+        header('Content-Type: text/plain');
+    }
+    echo "Forbidden: This script is not intended for web access.\n";
+    echo "Use command line: php bin/magento cron:run\n";
+    exit(1);
+}
+
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 if (php_sapi_name() === 'cli') {
-    echo "You cannot run this from the command line." . PHP_EOL .
-        "Run \"php bin/magento cron:run\" instead." . PHP_EOL;
+    echo "Please use the recommended command instead:" . PHP_EOL .
+        "php bin/magento cron:run" . PHP_EOL;
     exit(1);
 } else {
     $opt = $_GET;
