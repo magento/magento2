@@ -368,6 +368,54 @@ class ProductRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Update downloadable links without sending samples keeps existing samples
+     *
+     * @return void
+     */
+    public function testUpdateDownloadableProductLinksWithOmittedSamplesKeepsSamples(): void
+    {
+        $response = $this->createDownloadableProduct();
+        $links = $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::PRODUCT_LINKS];
+
+        $productData = [
+            ProductInterface::SKU => self::PRODUCT_SKU,
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
+                self::PRODUCT_LINKS => $links,
+            ],
+        ];
+        $this->saveProduct($productData);
+
+        $extensionAttributes = $this->getProduct(self::PRODUCT_SKU)[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+        $this->assertCount(2, $extensionAttributes[self::PRODUCT_LINKS]);
+        $this->assertCount(2, $extensionAttributes[self::PRODUCT_SAMPLES]);
+    }
+
+    /**
+     * Update downloadable product with an explicitly empty sample list removes all samples
+     *
+     * @return void
+     */
+    public function testUpdateDownloadableProductWithEmptySamplesRemovesAllSamples(): void
+    {
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $this->markTestSkipped('SOAP cannot express an explicitly empty sample list.');
+        }
+        $this->createDownloadableProduct();
+
+        $productData = [
+            ProductInterface::SKU => self::PRODUCT_SKU,
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
+                self::PRODUCT_SAMPLES => [],
+            ],
+        ];
+        $this->saveProduct($productData);
+
+        $extensionAttributes = $this->getProduct(self::PRODUCT_SKU)[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
+        $this->assertEmpty($extensionAttributes[self::PRODUCT_SAMPLES] ?? []);
+        $this->assertCount(2, $extensionAttributes[self::PRODUCT_LINKS]);
+    }
+
+    /**
      * Update downloadable product, update two links and change file content
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
