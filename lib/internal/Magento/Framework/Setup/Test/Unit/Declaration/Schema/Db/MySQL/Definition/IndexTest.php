@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index as IndexDto;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -57,8 +58,10 @@ class IndexTest extends TestCase
      * @dataProvider toDefinitionDataProvider()
      */
     #[DataProvider('toDefinitionDataProvider')]
-    public function testToDefinition($name, $type, $columns, $expectedExpression)
+    public function testToDefinition($name, $type, $columns, $expectedExpression, $engine = 'innodb')
     {
+        $table = $this->createMock(Table::class);
+        $table->method('getEngine')->willReturn($engine);
         /** @var IndexDto|MockObject $index */
         $index = $this->getMockBuilder(IndexDto::class)
             ->disableOriginalConstructor()
@@ -71,6 +74,7 @@ class IndexTest extends TestCase
         $index->expects($this->any())->method('getName')->willReturn($name);
         $index->expects($this->any())->method('getIndexType')->willReturn($type);
         $index->expects($this->any())->method('getColumnNames')->willReturn($columns);
+        $index->expects($this->any())->method('getTable')->willReturn($table);
         $adapterMock->expects($this->any())
             ->method('quoteIdentifier')
             ->willReturnCallback(
@@ -114,6 +118,27 @@ class IndexTest extends TestCase
                 'type' => 'HASH',
                 'columns' => ['title'],
                 'expectedExpression' => "INDEX `ft_index` (`title`)"
+            ],
+            [
+                'name' => 'hash_index',
+                'type' => 'hash',
+                'columns' => ['title'],
+                'expectedExpression' => "INDEX `hash_index` USING HASH (`title`)",
+                'engine' => 'memory',
+            ],
+            [
+                'name' => 'btree_index',
+                'type' => 'btree',
+                'columns' => ['title'],
+                'expectedExpression' => "INDEX `btree_index` USING BTREE (`title`)",
+                'engine' => 'memory',
+            ],
+            [
+                'name' => 'ft_index',
+                'type' => IndexDto::FULLTEXT_INDEX,
+                'columns' => ['title'],
+                'expectedExpression' => "FULLTEXT INDEX `ft_index` (`title`)",
+                'engine' => 'memory',
             ],
         ];
     }

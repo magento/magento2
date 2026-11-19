@@ -24,6 +24,11 @@ class Index implements DbDefinitionProcessorInterface
     public const INDEX_KEY_NAME = 'INDEX';
 
     /**
+     * Storage engine, that supports only BTREE indexes.
+     */
+    private const INNODB_ENGINE = 'innodb';
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -47,13 +52,16 @@ class Index implements DbDefinitionProcessorInterface
         //There is no matter what connection to use -> so use default one
         $adapter = $this->resourceConnection->getConnection();
         $isFullText = $indexType === \Magento\Framework\Setup\Declaration\Schema\Dto\Index::FULLTEXT_INDEX;
+        //InnoDB stores every non-fulltext index as BTREE, other engines (e.g. MEMORY) need an explicit index type
+        $isUsingRequired = !$isFullText && $indexType
+            && $index->getTable()?->getEngine() !== self::INNODB_ENGINE;
         //index types, that are similar to MySQL ones, can just be uppercased.
         //[FULLTEXT ]INDEX `name` [USING [BTREE|HASH]] (columns)
         return sprintf(
             '%sINDEX %s%s (%s)',
             $isFullText ? 'FULLTEXT ' : '',
             $adapter->quoteIdentifier($index->getName()),
-            '', // placeholder for USING HASH|BTREE statement for non-fulltext indexes
+            $isUsingRequired ? ' USING ' . strtoupper($indexType) : '',
             implode(
                 ',',
                 array_map(
