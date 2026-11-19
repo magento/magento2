@@ -44,6 +44,11 @@ class Storage extends \Magento\Framework\DataObject
         = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
 
     /**
+     * Image header MIME types that getimagesize() and Framework\File\Mime report identically
+     */
+    private const HEADER_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
+
+    /**
      * Config object
      *
      * @var \Magento\Framework\App\Config\Element
@@ -461,6 +466,8 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Get the MIME type of a listed file, reusing the type found in the image header for local files
      *
+     * For other header types, such as PSD, getimagesize() names the type differently than Framework\File\Mime.
+     *
      * @param DriverInterface $driver
      * @param string $filename
      * @param array $itemStats
@@ -479,7 +486,9 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // Remote drivers report the Content-Type stored with the object, which may differ from the content.
-        if ($imageMimeType !== null && !$driver instanceof ExtendedDriverInterface) {
+        if (in_array($imageMimeType, self::HEADER_MIME_TYPES, true)
+            && !$driver instanceof ExtendedDriverInterface
+        ) {
             return $imageMimeType;
         }
 

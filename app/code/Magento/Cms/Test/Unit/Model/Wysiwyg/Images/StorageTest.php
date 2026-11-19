@@ -550,6 +550,70 @@ class StorageTest extends TestCase
     }
 
     /**
+     * The header MIME type is used only where getimagesize() and MIME detection name the type alike
+     *
+     * @param string $header
+     * @param string|null $detectedMimeType
+     * @param string $expectedMimeType
+     * @return void
+     */
+    #[DataProvider('imageHeaderMimeTypeDataProvider')]
+    public function testGetFilesCollectionUsesImageHeaderMimeTypeOnlyForMatchingTypes(
+        string $header,
+        ?string $detectedMimeType,
+        string $expectedMimeType
+    ): void {
+        $imageItem = $this->createFileItem('image.jpg', 'image.jpg');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->method('fileGetContents')->willReturn(base64_decode($header));
+        $this->mimeMock->expects($detectedMimeType === null ? $this->never() : $this->once())
+            ->method('getMimeType')
+            ->with('/webroot/pub/media/wysiwyg/image.jpg')
+            ->willReturn((string)$detectedMimeType);
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame($expectedMimeType, $imageItem->getMimeType());
+        $this->assertSame(1, $imageItem->getWidth());
+    }
+
+    /**
+     * Image headers under a .jpg name with the MIME type the listing must report
+     *
+     * @return array[]
+     */
+    public static function imageHeaderMimeTypeDataProvider(): array
+    {
+        return [
+            'jpeg' => ['/9j/wAALCAABAAEBAREA/9k=', null, 'image/jpeg'],
+            'png' => [
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgYGAAAAAEAAGj'
+                . 'ChXjAAAAAElFTkSuQmCC',
+                null,
+                'image/png'
+            ],
+            'gif' => [self::GIF_1X1, null, 'image/gif'],
+            'psd' => [
+                'OEJQUwABAAAAAAAAAAMAAAABAAAAAQAIAAMAAAAAAAAAAAAAAAAAAAAA',
+                'image/vnd.adobe.photoshop',
+                'image/vnd.adobe.photoshop'
+            ],
+            'bmp' => [
+                'Qk05AAAAAAAAADYAAAAoAAAAAQAAAAEAAAABABgAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+                'image/bmp',
+                'image/bmp'
+            ],
+            'tiff' => ['SUkqAAgAAAACAAABBAABAAAAAQAAAAEBBAABAAAAAQAAAAAAAAA=', 'image/tiff', 'image/tiff'],
+            'ico' => [
+                'AAABAAEAAQEAAAEAIAAoAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
+                'image/vnd.microsoft.icon',
+                'image/vnd.microsoft.icon'
+            ],
+        ];
+    }
+
+    /**
      * A file with an image extension but no readable image header falls back to MIME detection
      *
      * @return void
