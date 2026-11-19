@@ -780,6 +780,85 @@ class ProcessCronQueueObserverTest extends TestCase
     }
 
     /**
+     * A job whose lock is held elsewhere is reported once per run, while other jobs still run.
+     *
+     * @return void
+     */
+    public function testDispatchLogsBusyJobLockOncePerRun(): void
+    {
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        $busyJobLock = ProcessCronQueueObserver::LOCK_PREFIX . md5('test_group_test_job1');
+        $lockCalls = [];
+        $lockManager = $this->createStub(LockManagerInterface::class);
+        $lockManager->method('lock')->willReturnCallback(
+            function (string $name) use (&$lockCalls, $busyJobLock) {
+                $lockCalls[$name] = ($lockCalls[$name] ?? 0) + 1;
+                return $name !== $busyJobLock;
+            }
+        );
+        $lockManager->method('unlock')->willReturn(true);
+        (new \ReflectionProperty(ProcessCronQueueObserver::class, 'lockManager'))
+            ->setValue($this->cronQueueObserver, $lockManager);
+
+        $this->cacheMock->method('load')->willReturn($this->time + 10000000);
+        $this->scopeConfigMock->method('getValue')->willReturnMap(
+            [['system/cron/test_group/schedule_lifetime', ScopeInterface::SCOPE_STORE, null, 2 * 24 * 60]]
+        );
+        $this->consoleRequestMock->method('getParam')->willReturn('test_group');
+
+        $scheduleMethods = ['tryLockJob', '__wakeup', 'save', 'getResource', 'getJobCode', 'getScheduledAt'];
+        for ($i = 3; $i > 0; $i--) {
+            $busySchedule = $this->createPartialMockWithReflection(Schedule::class, $scheduleMethods);
+            $busySchedule->method('getJobCode')->willReturn('test_job1');
+            $busySchedule->method('getScheduledAt')->willReturn(date('Y-m-d H:i:s', $this->time - $i * 60));
+            $busySchedule->expects($this->never())->method('tryLockJob');
+            $busySchedule->expects($this->never())->method('save');
+            $this->scheduleCollectionMock->addItem($busySchedule);
+        }
+        $freeSchedule = $this->createPartialMockWithReflection(Schedule::class, $scheduleMethods);
+        $freeSchedule->method('getJobCode')->willReturn('test_job2');
+        $freeSchedule->method('getScheduledAt')->willReturn(date('Y-m-d H:i:s', $this->time - 60));
+        $freeSchedule->method('getResource')->willReturn($this->scheduleResourceMock);
+        $freeSchedule->expects($this->once())->method('tryLockJob')->willReturn(true);
+        $this->scheduleCollectionMock->addItem($freeSchedule);
+
+        $this->scheduleResourceMock->method('getConnection')
+            ->willReturn($this->createStub(AdapterInterface::class));
+        $this->retrierMock->method('execute')->willReturnCallback(
+            function ($callback) {
+                return $callback();
+            }
+        );
+
+        $jobConfig = ['instance' => 'CronJob', 'method' => 'execute'];
+        $this->configMock->method('getJobs')
+            ->willReturn(['test_group' => ['test_job1' => $jobConfig, 'test_job2' => $jobConfig]]);
+
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->method('create')->willReturn($scheduleMock);
+
+        $testCronJob = $this->createPartialMockWithReflection(\stdClass::class, ['execute']);
+        $testCronJob->expects($this->once())->method('execute')->with($freeSchedule);
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('CronJob')
+            ->willReturn($testCronJob);
+
+        $this->loggerMock->expects($this->once())
+            ->method('warning')
+            ->with('Could not acquire lock for cron job: test_job1');
+
+        $this->cronQueueObserver->execute($this->observerMock);
+
+        $this->assertSame(3 * ProcessCronQueueObserver::MAX_RETRIES, $lockCalls[$busyJobLock]);
+        $this->assertSame(Schedule::STATUS_SUCCESS, $freeSchedule->getStatus());
+    }
+
+    /**
      * Testing _generate(), iterate over saved cron jobs.
      *
      * @return void
