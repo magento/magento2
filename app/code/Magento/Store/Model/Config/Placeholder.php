@@ -6,13 +6,16 @@
 
 namespace Magento\Store\Model\Config;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Placeholder configuration values processor. Replace placeholders in configuration with config values
  */
 class Placeholder implements PlaceholderInterface
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
@@ -27,11 +30,11 @@ class Placeholder implements PlaceholderInterface
     protected $urlPlaceholder;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param string[] $urlPaths
      * @param string $urlPlaceholder
      */
-    public function __construct(\Magento\Framework\App\RequestInterface $request, $urlPaths, $urlPlaceholder)
+    public function __construct(RequestInterface $request, $urlPaths, $urlPlaceholder)
     {
         $this->request        = $request;
         $this->urlPaths       = $urlPaths;
@@ -43,6 +46,7 @@ class Placeholder implements PlaceholderInterface
      *
      * @param array $data
      * @return array
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(array $data = [])
@@ -71,6 +75,7 @@ class Placeholder implements PlaceholderInterface
      * @param array &$data
      * @param string $path
      * @return void
+     * @throws LocalizedException
      */
     protected function _processData(&$data, $path)
     {
@@ -90,30 +95,42 @@ class Placeholder implements PlaceholderInterface
      * @param string $value
      * @param array $data
      * @return string
+     * @throws LocalizedException
      */
     protected function _processPlaceholders($value, $data)
     {
         $placeholder = $this->_getPlaceholder($value);
-        if ($placeholder) {
-            $url = false;
-            if ($placeholder == 'unsecure_base_url') {
-                $url = $this->_getValue($this->urlPaths['unsecureBaseUrl'], $data);
-            } elseif ($placeholder == 'secure_base_url') {
-                $url = $this->_getValue($this->urlPaths['secureBaseUrl'], $data);
-            }
-
-            if ($url) {
-                $value = str_replace('{{' . $placeholder . '}}', $url, $value);
-            } elseif (strpos($value, (string)$this->urlPlaceholder) !== false) {
-                $distroBaseUrl = $this->request->getDistroBaseUrl();
-
-                $value = str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
-            }
-
-            if (null !== $this->_getPlaceholder($value)) {
-                $value = $this->_processPlaceholders($value, $data);
-            }
+        if (!$placeholder) {
+            return $value;
         }
+
+        $url = null;
+        if ($placeholder === 'unsecure_base_url') {
+            $url = $this->_getValue($this->urlPaths['unsecureBaseUrl'], $data);
+        } elseif ($placeholder === 'secure_base_url') {
+            $url = $this->_getValue($this->urlPaths['secureBaseUrl'], $data);
+        }
+
+        $originalValue = $value;
+
+        if ($url) {
+            $value = str_replace('{{' . $placeholder . '}}', $url, $value);
+        } elseif (str_contains((string) $value, (string) $this->urlPlaceholder)) {
+            $value = str_replace($this->urlPlaceholder, $this->request->getDistroBaseUrl(), $value);
+        } else {
+            $configPath = $placeholder === 'secure_base_url'
+                ? $this->urlPaths['secureBaseUrl']
+                : $this->urlPaths['unsecureBaseUrl'];
+            throw new LocalizedException(
+                __('Cannot resolve "{{%1}}" because "%2" is empty.', $placeholder, $configPath)
+            );
+        }
+
+        // Only recurse when the value changed; otherwise unresolved placeholders loop forever.
+        if ($value !== $originalValue && $this->_getPlaceholder($value) !== null) {
+            $value = $this->_processPlaceholders($value, $data);
+        }
+
         return $value;
     }
 
@@ -125,11 +142,14 @@ class Placeholder implements PlaceholderInterface
      */
     protected function _getPlaceholder($value)
     {
-        if (is_string($value) && preg_match('/{{(.*)}}.*/', $value, $matches)) {
+        if (!is_string($value) || $value === '') {
+            return null;
+        }
+        if (preg_match('/{{(.*)}}.*/', $value, $matches)) {
             $placeholder = $matches[1];
-            if ($placeholder == 'unsecure_base_url' ||
-                $placeholder == 'secure_base_url' ||
-                strpos($value, (string)$this->urlPlaceholder) !== false
+            if ($placeholder === 'unsecure_base_url' ||
+                $placeholder === 'secure_base_url' ||
+                str_contains($value, (string) $this->urlPlaceholder)
             ) {
                 return $placeholder;
             }
@@ -142,7 +162,7 @@ class Placeholder implements PlaceholderInterface
      *
      * @param string $path
      * @param array $data
-     * @return array|null
+     * @return array|string|null
      */
     protected function _getValue($path, array $data)
     {
