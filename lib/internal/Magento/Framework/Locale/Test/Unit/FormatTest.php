@@ -111,7 +111,7 @@ class FormatTest extends TestCase
      */
     public static function getPriceFormatDataProvider(): array
     {
-        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 && INTL_ICU_VERSION <= 78.1 ? '’' : '\'';
         return [
             ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
