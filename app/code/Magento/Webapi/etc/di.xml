@@ -8,6 +8,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Webapi\Model\ConfigInterface" type="Magento\Webapi\Model\Config" />
     <preference for="Magento\Framework\Webapi\Rest\RequestValidatorInterface" type="Magento\Framework\Webapi\Rest\RequestMethodValidator" />
+    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="entityArrayValidator" xsi:type="object">Magento\Framework\Webapi\Validator\EntityArrayValidator</item>
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\Webapi\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
