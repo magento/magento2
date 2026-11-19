@@ -39,6 +39,9 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
      *     1, // string|null: Parameter type
      *     2, // bool: whether this param is required
      *     3, // mixed: default value
+     *     4, // bool: whether this param is variadic
+     *     5, // optional sixth element, present and true only when a non-variadic
+     *        // optional object parameter is marked Autowire
      * );
      *
      * @param string $className

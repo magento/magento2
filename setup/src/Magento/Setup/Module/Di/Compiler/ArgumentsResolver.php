@@ -94,13 +94,16 @@ class ArgumentsResolver
         /** @var ConstructorArgument $constructorArgument */
         foreach ($constructor as $constructorArgument) {
             $argument = $this->getNonObjectArgument(null);
-            if (!$constructorArgument->isRequired()) {
+            if (!$constructorArgument->isRequired() && !$constructorArgument->isAutowire()) {
                 $argument = $this->getNonObjectArgument($constructorArgument->getDefaultValue());
             } elseif ($constructorArgument->getType()) {
                 $argument = $this->getInstanceArgument($constructorArgument->getType());
             }
 
-            if (isset($configuredArguments[$constructorArgument->getName()])) {
+            if (isset($configuredArguments[$constructorArgument->getName()])
+                || ($constructorArgument->isAutowire()
+                    && array_key_exists($constructorArgument->getName(), $configuredArguments))
+            ) {
                 $argument = $this->getConfiguredArgument(
                     $configuredArguments[$constructorArgument->getName()],
                     $constructorArgument
@@ -114,12 +117,16 @@ class ArgumentsResolver
     /**
      * Returns formatted configured argument
      *
-     * @param array $configuredArgument
+     * @param mixed $configuredArgument
      * @param ConstructorArgument $constructorArgument
      * @return mixed
      */
     private function getConfiguredArgument($configuredArgument, ConstructorArgument $constructorArgument)
     {
+        if ($configuredArgument === null) {
+            return $this->getNonObjectArgument(null);
+        }
+
         if ($constructorArgument->getType()) {
             $argument = $this->getConfiguredInstanceArgument($configuredArgument);
             return $argument;
@@ -192,17 +199,13 @@ class ArgumentsResolver
         $configuredArguments = $this->diContainerConfig->getArguments($instanceType);
         return array_map(
             function ($type) {
-                if (is_object($type)) {
-                    return;
-                }
-
                 if (is_array($type) && isset($type['instance'])) {
                     $type['instance'] = ltrim($type['instance'], '\\');
                 }
 
                 return $type;
             },
-            $configuredArguments
+            array_filter($configuredArguments, static fn ($type) => !is_object($type))
         );
     }
 

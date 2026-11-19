@@ -32,7 +32,7 @@ class Production extends AbstractFactory
             $argument = null;
             if (!empty($arguments) && (array_key_exists($paramName, $arguments))) {
                 $argument = $arguments[$paramName];
-            } elseif ($paramRequired) {
+            } elseif ($paramRequired || ($parameter[5] ?? false)) {
                 $argument = ['instance' => $paramType];
             } else {
                 $argument = $paramDefault;
