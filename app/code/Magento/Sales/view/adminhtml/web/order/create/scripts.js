@@ -57,6 +57,17 @@
                 }
             });
 
+            jQuery(document)
+                .off('click.orderCreateReload')
+                .on('click.orderCreateReload', '[data-role="order-load-shipping-rates"]', function (event) {
+                    event.preventDefault();
+                    this.loadShippingRates();
+                }.bind(this))
+                .on('click.orderCreateReload', '[data-role="order-load-payment-methods"]', function (event) {
+                    event.preventDefault();
+                    this.loadPaymentMethods();
+                }.bind(this));
+
             jQuery.async('#order-items', (function () {
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
