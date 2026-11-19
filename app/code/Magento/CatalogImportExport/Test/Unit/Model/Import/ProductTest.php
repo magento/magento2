@@ -921,6 +921,179 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
+     * @return void
+     */
+    public function testSaveProductToWebsitePhaseReadsExistingWebsitesWithOneQueryPerBunch(): void
+    {
+        $existingSkus = ['existing-a' => '7', 'existing-b' => '9'];
+        $this->skuStorageMock->method('has')->willReturnCallback(
+            fn ($sku) => isset($existingSkus[strtolower($sku)])
+        );
+        $this->skuStorageMock->method('get')->willReturnCallback(
+            fn ($sku) => isset($existingSkus[strtolower($sku)])
+                ? ['entity_id' => $existingSkus[strtolower($sku)]]
+                : null
+        );
+        $resource = $this->createMock(ResourceModel::class);
+        $resource->expects($this->once())
+            ->method('getWebsiteIdsByProductIds')
+            ->with([7, 9])
+            ->willReturn([7 => ['1', '3']]);
+        $this->_resourceFactory->method('create')->willReturn($resource);
+        $productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository->expects($this->never())->method('get');
+        $this->setPropertyValue($this->importProduct, 'productRepository', $productRepository);
+        $storeResolver = $this->createStub(StoreResolver::class);
+        $storeResolver->method('getWebsiteCodeToId')->willReturnMap([['base', 1], ['second', 2]]);
+        $this->setPropertyValue($this->importProduct, 'storeResolver', $storeResolver);
+        $bunch = [
+            [Product::COL_SKU => 'existing-a', Product::COL_PRODUCT_WEBSITES => ''],
+            [Product::COL_SKU => 'existing-a', Product::COL_STORE => 'default'],
+            [Product::COL_SKU => 'Existing-A', Product::COL_STORE => 'default'],
+            [Product::COL_SKU => 'existing-b'],
+            [Product::COL_SKU => 'new-sku', Product::COL_PRODUCT_WEBSITES => ''],
+            [Product::COL_SKU => 'with-websites', Product::COL_PRODUCT_WEBSITES => 'base,second'],
+        ];
+
+        $this->invokeMethod($this->importProduct, 'loadExistingWebsiteIds', [$bunch]);
+        foreach ($bunch as $rowData) {
+            $this->invokeMethod($this->importProduct, 'saveProductToWebsitePhase', [$rowData]);
+        }
+
+        $this->assertSame(
+            [
+                'existing-a' => [1 => true, 3 => true],
+                'Existing-A' => [1 => true, 3 => true],
+                'existing-b' => [],
+                'new-sku' => [],
+                'with-websites' => [1 => true, 2 => true],
+            ],
+            $this->getPropertyValue($this->importProduct, 'websitesCache')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveProductsLoadsExistingWebsitesOncePerBunch(): void
+    {
+        $existingSkus = ['existing-a' => '7', 'existing-b' => '9'];
+        $this->skuStorageMock->method('has')->willReturnCallback(
+            fn ($sku) => isset($existingSkus[strtolower($sku)])
+        );
+        $this->skuStorageMock->method('get')->willReturnCallback(
+            fn ($sku) => isset($existingSkus[strtolower($sku)])
+                ? ['entity_id' => $existingSkus[strtolower($sku)]]
+                : null
+        );
+        $this->skuProcessor->method('getNewSku')->willReturn(
+            ['type_id' => 'simple', 'attr_set_id' => 4, 'attr_set_code' => 'Default']
+        );
+        $resource = $this->createMock(ResourceModel::class);
+        $resource->expects($this->exactly(2))
+            ->method('getWebsiteIdsByProductIds')
+            ->willReturnMap([
+                [[7], [7 => ['1', '3']]],
+                [[7, 9], [9 => ['2']]],
+            ]);
+        $this->_resourceFactory->method('create')->willReturn($resource);
+        $productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $productRepository->expects($this->never())->method('get');
+        $this->productPropertiesMap['productRepository'] = $productRepository;
+        $mediaDirectory = $this->createStub(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->_filesystem->method('getDirectoryReadByPath')->willReturn($mediaDirectory);
+        $this->_mediaDirectory->method('getRelativePath')->willReturn('pub/media');
+        $this->_catalogData->method('isPriceGlobal')->willReturn(false);
+        $this->_dataSourceModel->method('getNextUniqueBunch')->willReturnOnConsecutiveCalls(
+            [
+                [Product::COL_SKU => 'existing-a', Product::COL_TYPE => 'simple'],
+                [Product::COL_SKU => 'Existing-A', Product::COL_STORE => 'default'],
+            ],
+            [
+                [Product::COL_SKU => 'existing-a', Product::COL_TYPE => 'simple'],
+                [Product::COL_SKU => 'existing-b', Product::COL_TYPE => 'simple'],
+            ],
+            null
+        );
+        $importProduct = $this->getMockBuilder(Product::class)
+            ->setConstructorArgs(
+                $this->objectManager->getConstructArguments(Product::class, $this->productPropertiesMap)
+            )
+            ->onlyMethods([
+                'validateRow',
+                'getExistingImages',
+                'getUrlKey',
+                'getStoreIdByCode',
+                'processRowCategories',
+                'saveProductEntity',
+                '_saveProductWebsites',
+                '_saveProductCategories',
+                '_saveProductTierPrices',
+                '_saveMediaGallery',
+                '_saveProductAttributes',
+            ])
+            ->getMock();
+        $this->setPropertyValue(
+            $importProduct,
+            'metadataPool',
+            $this->getPropertyValue($this->importProduct, 'metadataPool')
+        );
+        $productType = $this->createStub(AbstractType::class);
+        $productType->method('clearEmptyData')->willReturn([]);
+        $productType->method('prepareAttributesWithDefaultValueForSave')->willReturn([]);
+        $this->setPropertyValue($importProduct, '_productTypeModels', ['simple' => $productType]);
+        $importProduct->method('validateRow')->willReturn(true);
+        $importProduct->method('getExistingImages')->willReturn([]);
+        $importProduct->method('getUrlKey')->willReturn('');
+        $importProduct->method('getStoreIdByCode')->willReturn(1);
+        $importProduct->method('processRowCategories')->willReturn([]);
+        $savedWebsites = [];
+        $importProduct->expects($this->exactly(2))
+            ->method('_saveProductWebsites')
+            ->willReturnCallback(function (array $websiteData) use (&$savedWebsites, $importProduct) {
+                $savedWebsites[] = $websiteData;
+                return $importProduct;
+            });
+
+        $this->invokeMethod($importProduct, '_saveProducts');
+
+        $this->assertSame(
+            [
+                ['existing-a' => [1 => true, 3 => true], 'Existing-A' => [1 => true, 3 => true]],
+                ['existing-a' => [], 'existing-b' => [2 => true]],
+            ],
+            $savedWebsites
+        );
+        $this->assertSame(
+            [],
+            (new \ReflectionProperty(Product::class, 'existingWebsiteIds'))->getValue($importProduct)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadExistingWebsiteIdsSkipsQueryWithoutExistingSkus(): void
+    {
+        $this->skuStorageMock->method('has')->willReturnCallback(fn ($sku) => $sku === 'existing');
+        $resource = $this->createMock(ResourceModel::class);
+        $resource->expects($this->never())->method('getWebsiteIdsByProductIds');
+        $this->_resourceFactory->method('create')->willReturn($resource);
+        $this->setPropertyValue($this->importProduct, 'existingWebsiteIds', [5 => ['1']]);
+
+        $this->invokeMethod(
+            $this->importProduct,
+            'loadExistingWebsiteIds',
+            [[
+                [Product::COL_SKU => 'new-sku'],
+                [Product::COL_SKU => 'existing', Product::COL_PRODUCT_WEBSITES => 'base'],
+            ]]
+        );
+
+        $this->assertSame([], $this->getPropertyValue($this->importProduct, 'existingWebsiteIds'));
+    }
+
+    /**
      * Cover getProductCategories().
      *
      * @return void
