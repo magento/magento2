@@ -30,15 +30,34 @@ class SensitiveParameterTest extends TestCase
     private const INTERCEPTOR_CLASS = SensitiveSubject::class . '\\Interceptor';
 
     /**
+     * @var string|false
+     */
+    private $ignoreArgs;
+
+    /**
+     * Traces carry no arguments at all when zend.exception_ignore_args is On.
+     */
+    protected function setUp(): void
+    {
+        $this->ignoreArgs = ini_set('zend.exception_ignore_args', '0');
+    }
+
+    /**
+     * Restore the trace argument setting.
+     */
+    protected function tearDown(): void
+    {
+        if ($this->ignoreArgs !== false) {
+            ini_set('zend.exception_ignore_args', $this->ignoreArgs);
+        }
+    }
+
+    /**
      * Inspect real trace frames for exceptions from plugins and parent methods.
      */
     #[DataProvider('failureProvider')]
     public function testTraceRedactsArguments(string $failure, bool $callsParent): void
     {
-        if (filter_var(ini_get('zend.exception_ignore_args'), FILTER_VALIDATE_BOOLEAN)) {
-            $this->markTestSkipped('Trace redaction requires zend.exception_ignore_args to be Off.');
-        }
-
         $plugin = new Plugin();
         $pluginList = $this->createMock(PluginListInterface::class);
         $pluginList->method('getNext')->willReturnMap([
