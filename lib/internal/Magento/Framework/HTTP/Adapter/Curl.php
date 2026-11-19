@@ -175,6 +175,9 @@ class Curl implements AdapterInterface
         } elseif ($method === Request::METHOD_PUT) {
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
+        } elseif ($method === Request::METHOD_PATCH) {
+            curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'PATCH');
+            curl_setopt($this->_getResource(), CURLOPT_POSTFIELDS, $body);
         } elseif ($method === Request::METHOD_GET) {
             curl_setopt($this->_getResource(), CURLOPT_HTTPGET, true);
             curl_setopt($this->_getResource(), CURLOPT_CUSTOMREQUEST, 'GET');
