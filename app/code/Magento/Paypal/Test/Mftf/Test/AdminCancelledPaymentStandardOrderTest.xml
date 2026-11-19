@@ -57,7 +57,8 @@
         <!-- Login to PayPal in-context and verify order total on PayPal page-->
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" stepKey="loginToPayPal"/>
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
-        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <waitForPageLoad stepKey="waitForCheckoutSuccessPageLoadAfterPaypalPayment"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" time="120" stepKey="waitForOrderNumberToBeGrabbed"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Go to order page -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderedPage">

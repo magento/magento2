@@ -101,7 +101,7 @@ class Preview extends \Magento\Backend\Block\Widget
                 );
             }
             $template->setTemplateType($request->getParam('type'));
-            $template->setTemplateText($this->_maliciousCode->filter($rawText));
+            $template->setTemplateText($this->_maliciousCode->stripMaliciousExpressions($rawText));
             $template->setTemplateStyles($rawStyles);
         }
 

@@ -77,15 +77,28 @@ class ConditionsToSearchCriteriaMapper
      * Convert condition to filter group
      *
      * @param ConditionInterface $condition
+     * @param bool $isNegated
      * @return null|FilterGroup|Filter
      * @throws InputException
      */
-    private function mapConditionToFilterGroup(ConditionInterface $condition)
+    private function mapConditionToFilterGroup(ConditionInterface $condition, bool $isNegated)
     {
         if ($condition instanceof CombinedCondition) {
-            return $this->mapCombinedConditionToFilterGroup($condition);
+            return $this->mapCombinedConditionToFilterGroup($condition, $isNegated);
         } elseif ($condition instanceof SimpleCondition) {
-            return $this->mapSimpleConditionToFilterGroup($condition);
+            $filter = $this->mapSimpleConditionToFilterGroup($condition);
+            if ($isNegated) {
+                $this->reverseSqlOperatorInFilterRecursively($filter);
+                $backendType = $condition->getAttributeObject()->getBackendType();
+                if ($backendType && $backendType !== 'static') {
+                    // SQL negation alone excludes NULL values that can make the original condition false.
+                    $filter = $this->createCombinedFilterGroup(
+                        [$filter, $this->createFilter($condition->getAttribute(), '', '<=>')],
+                        'any'
+                    );
+                }
+            }
+            return $filter;
         }
 
         throw new InputException(
@@ -97,24 +110,22 @@ class ConditionsToSearchCriteriaMapper
      * Convert combined condition to filter group
      *
      * @param Combine $combinedCondition
+     * @param bool $isNegated
      * @return null|FilterGroup
      * @throws InputException
      */
-    private function mapCombinedConditionToFilterGroup(CombinedCondition $combinedCondition)
-    {
+    private function mapCombinedConditionToFilterGroup(
+        CombinedCondition $combinedCondition,
+        bool $isNegated = false
+    ) {
         $filters = [];
+        $negateChildren = $isNegated !== ((bool)$combinedCondition->getValue() === false);
 
         foreach ($combinedCondition->getConditions() as $condition) {
-            $filter = $this->mapConditionToFilterGroup($condition);
+            $filter = $this->mapConditionToFilterGroup($condition, $negateChildren);
 
             if ($filter === null) {
                 continue;
-            }
-
-            // This required to solve cases when condition is configured like:
-            // "If ALL/ANY of these conditions are FALSE" - we need to reverse SQL operator for this "FALSE"
-            if ((bool)$combinedCondition->getValue() === false) {
-                $this->reverseSqlOperatorInFilterRecursively($filter);
             }
 
             $filters[] = $filter;
@@ -124,7 +135,12 @@ class ConditionsToSearchCriteriaMapper
             return null;
         }
 
-        return $this->createCombinedFilterGroup($filters, $combinedCondition->getAggregator());
+        $aggregator = $combinedCondition->getAggregator();
+        if ($isNegated) {
+            $aggregator = $this->mapRuleAggregatorToSQLAggregator($aggregator) === 'AND' ? 'any' : 'all';
+        }
+
+        return $this->createCombinedFilterGroup($filters, $aggregator);
     }
 
     /**
@@ -196,6 +212,11 @@ class ConditionsToSearchCriteriaMapper
     private function reverseSqlOperatorInFilterRecursively($filter): void
     {
         if ($filter instanceof FilterGroup) {
+            $filter->setCombinationMode(
+                $filter->getCombinationMode() === FilterGroup::COMBINED_WITH_AND
+                    ? FilterGroup::COMBINED_WITH_OR
+                    : FilterGroup::COMBINED_WITH_AND
+            );
             foreach ($filter->getFilters() as &$currentFilter) {
                 $this->reverseSqlOperatorInFilterRecursively($currentFilter);
             }

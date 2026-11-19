@@ -20,46 +20,97 @@
             <group value="pr_exclude"/>
         </annotations>
         <before>
-            <createData entity="adminNoReportRole" stepKey="noReportUserRole"/>
-            <createData entity="adminNoReport" stepKey="noReportUser"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
+                <argument name="roleName" value="{{adminNoReportRole.rolename}}"/>
+                <argument name="userPassword" value="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
+                <argument name="resourceAccess" value="Custom"/>
+                <argument name="storeName" value="{{_defaultStoreGroup.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="dashboardAccess">
+                <argument name="resourceId" value="Magento_Backend::dashboard_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="salesOperationAccess">
+                <argument name="resourceId" value="Magento_Sales::sales_operation_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="catalogAccess">
+                <argument name="resourceId" value="Magento_Catalog::catalog_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="customerAccess">
+                <argument name="resourceId" value="Magento_Customer::customer_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="cartAccess">
+                <argument name="resourceId" value="Magento_Cart::cart_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="myaccountAccess">
+                <argument name="resourceId" value="Magento_Backend::myaccount_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="marketingAccess">
+                <argument name="resourceId" value="Magento_Backend::marketing_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="contentAccess">
+                <argument name="resourceId" value="Magento_Backend::content_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="storesAccess">
+                <argument name="resourceId" value="Magento_Backend::stores_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="revokeAnalyticsSettingsAccess">
+                <argument name="resourceId" value="Magento_Analytics::analytics_settings_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="convertAccess">
+                <argument name="resourceId" value="Magento_Backend::convert_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="extensionsAccess">
+                <argument name="resourceId" value="Magento_Backend::extensions_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="cacheAccess">
+                <argument name="resourceId" value="Magento_Backend::cache_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="systemOtherSettingsAccess">
+                <argument name="resourceId" value="Magento_Backend::system_other_settings_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="globalSearchAccess">
+                <argument name="resourceId" value="Magento_Backend::global_search_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="backupAccess">
+                <argument name="resourceId" value="Magento_Backup::backup_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="indexAccess">
+                <argument name="resourceId" value="Magento_Indexer::index_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="changeModeAccess">
+                <argument name="resourceId" value="Magento_Indexer::changeMode_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="userAclAccess">
+                <argument name="resourceId" value="Magento_User::acl_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveRole"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForCleanup"/>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteNoReportRole">
+                <argument name="roleName" value="{{adminNoReportRole.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNoReportUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfterCleanup"/>
         </after>
-        <amOnPage url="{{AdminUsersPage.url}}" stepKey="amOnAdminUsersPage"/>
-        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameSearch"/>
-        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad time="10" stepKey="wait1"/>
-        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="$$noReportUser.username$$" stepKey="seeFoundUsername"/>
-        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="clickFoundUsername"/>
-        <waitForPageLoad time="30" stepKey="wait2"/>
-        <seeInField selector="{{AdminEditUserSection.usernameTextField}}" userInput="$$noReportUser.username$$" stepKey="seeUsernameInField"/>
-        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
-
-        <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>
-        <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="$$noReportUserRole.rolename$$" stepKey="fillRoleNameSearch"/>
-        <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearchButtonUserRole"/>
-        <waitForPageLoad time="10" stepKey="wait3"/>
-        <see selector="{{AdminEditUserSection.roleNameInFirstRow}}" userInput="$$noReportUserRole.rolename$$" stepKey="seeFoundRoleName"/>
-        <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="clickFoundRoleName"/>
-        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad time="10" stepKey="wait4"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the user." stepKey="seeSuccess"/>
-
+        <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
+            <argument name="user" value="NewAdminUser"/>
+            <argument name="role" value="adminNoReportRole"/>
+        </actionGroup>
         <amOnPage url="{{AdminConfigPage.url}}" stepKey="amOnAdminConfig"/>
         <conditionalClick selector="{{AdminConfigSection.generalTab}}" dependentSelector="{{AdminConfigSection.generalTabOpened}}" visible="false" stepKey="openGeneralTabIfClosed"/>
         <scrollTo selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="scrollToMenuItem"/>
-        <!--<see stepKey="seeAdvancedReportingConfigMenuItem" selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" userInput="Advanced Reporting"/>-->
         <seeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="seeAdvancedReportingConfigMenuItem"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin2"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="amOnAdminLoginPage"/>
-        <fillField selector="{{AdminLoginFormSection.username}}" userInput="$$noReportUser.username$$" stepKey="fillUsernameNoReport"/>
-        <fillField selector="{{AdminLoginFormSection.password}}" userInput="$$noReportUser.password$$" stepKey="fillPasswordNoReport"/>
-        <click selector="{{AdminLoginFormSection.signIn}}" stepKey="clickOnSignIn2"/>
-        <waitForPageLoad time="10" stepKey="wait5"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
         <amOnPage url="{{AdminConfigPage.url}}" stepKey="amOnAdminConfig2"/>
         <conditionalClick selector="{{AdminConfigSection.generalTab}}" dependentSelector="{{AdminConfigSection.generalTabOpened}}" visible="false" stepKey="openGeneralTabIfClosed2"/>
         <dontSeeElementInDOM selector="{{AdminConfigAdvancedReportingSection.advancedReportingMenuItem}}" stepKey="dontSeeAdvancedReportingConfigMenuItem"/>
