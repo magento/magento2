@@ -122,22 +122,34 @@ class Transport implements TransportInterface
     private ?LoggerInterface $logger;
 
     /**
+     * Store the configuration is read for, null for the current store
+     *
+     * @var int|string|null
+     */
+    private $storeId;
+
+    /**
      * @param EmailMessageInterface $message Email message object
      * @param ScopeConfigInterface $scopeConfig Core store config
      * @param LoggerInterface|null $logger
+     * @param int|string|null $storeId Store whose configuration is used, defaults to the current store
      */
     public function __construct(
         EmailMessageInterface $message,
         ScopeConfigInterface $scopeConfig,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        int|string|null $storeId = null
     ) {
+        $this->storeId = $storeId;
         $this->isSetReturnPath = (int) $scopeConfig->getValue(
             self::XML_PATH_SENDING_SET_RETURN_PATH,
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $this->storeId
         );
         $this->returnPathValue = $scopeConfig->getValue(
             self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE,
+            $this->storeId
         );
         $this->message = $message;
         $this->scopeConfig = $scopeConfig;
@@ -152,7 +164,7 @@ class Transport implements TransportInterface
     public function getTransport(): SymfonyTransportInterface
     {
         if (!isset($this->symfonyTransport)) {
-            $transportType = $this->scopeConfig->getValue(self::XML_PATH_TRANSPORT, ScopeInterface::SCOPE_STORE);
+            $transportType = $this->getConfigValue(self::XML_PATH_TRANSPORT);
             if ($transportType === 'smtp') {
                 $this->symfonyTransport = $this->createSmtpTransport();
             } else {
@@ -170,12 +182,12 @@ class Transport implements TransportInterface
      */
     private function createSmtpTransport(): SymfonyTransportInterface
     {
-        $host = $this->scopeConfig->getValue(self::XML_PATH_HOST, ScopeInterface::SCOPE_STORE);
-        $port = (int) $this->scopeConfig->getValue(self::XML_PATH_PORT, ScopeInterface::SCOPE_STORE);
-        $username = $this->scopeConfig->getValue(self::XML_PATH_USERNAME, ScopeInterface::SCOPE_STORE);
-        $password = $this->scopeConfig->getValue(self::XML_PATH_PASSWORD, ScopeInterface::SCOPE_STORE);
-        $auth = $this->scopeConfig->getValue(self::XML_PATH_AUTH, ScopeInterface::SCOPE_STORE);
-        $ssl = $this->scopeConfig->getValue(self::XML_PATH_SSL, ScopeInterface::SCOPE_STORE);
+        $host = $this->getConfigValue(self::XML_PATH_HOST);
+        $port = (int) $this->getConfigValue(self::XML_PATH_PORT);
+        $username = $this->getConfigValue(self::XML_PATH_USERNAME);
+        $password = $this->getConfigValue(self::XML_PATH_PASSWORD);
+        $auth = $this->getConfigValue(self::XML_PATH_AUTH);
+        $ssl = $this->getConfigValue(self::XML_PATH_SSL);
 
         $options = [];
         if ($ssl === 'tls') {
@@ -212,6 +224,17 @@ class Transport implements TransportInterface
         }
 
         return $transport;
+    }
+
+    /**
+     * Read a store scoped configuration value for the store the message is sent for.
+     *
+     * @param string $path
+     * @return mixed
+     */
+    private function getConfigValue(string $path): mixed
+    {
+        return $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $this->storeId);
     }
 
     /**
