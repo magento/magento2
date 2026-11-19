@@ -77,6 +77,16 @@
     <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Catalog\Model\Theme\CustomerData\MessagesProvider"/>
     <preference for="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" type="Magento\Catalog\Model\Product\Attribute\IsFilterableManagement" />
+    <type name="Magento\Catalog\Model\Product\Attribute\FilterableAllowedInputTypes">
+        <arguments>
+            <argument name="inputTypes" xsi:type="array">
+                <item name="boolean" xsi:type="string">boolean</item>
+                <item name="select" xsi:type="string">select</item>
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="price" xsi:type="string">price</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidatorInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidator" />
     <preference for="Magento\Catalog\Model\ProductMutexInterface" type="Magento\Catalog\Model\ProductMutex" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
