@@ -48,20 +48,15 @@ class BreadcrumbsTest extends TestCase
         $this->resolver = new Breadcrumbs($this->dataProvider, $valueFactory);
     }
 
-    public function testBreadcrumbsOfAllResolvedCategoriesAreRequestedTogether(): void
+    public function testPendingPathsArePrefetchedTogetherAndEachCategoryUsesGetData(): void
     {
         $item = ['category_id' => 10];
+        $this->dataProvider->expects($this->once())
+            ->method('prefetch')
+            ->with(['1/2/10/11', '1/2/10/12', '1/2/13']);
         $this->dataProvider->expects($this->exactly(3))
-            ->method('getDataByPaths')
-            ->willReturnCallback(
-                function (array $paths) use ($item) {
-                    static $calls = 0;
-                    $expected = [['1/2/10/11', '1/2/10/12', '1/2/13'], ['1/2/10/12'], ['1/2/13']];
-                    $this->assertSame($expected[$calls++], $paths);
-                    $data = ['1/2/10/11' => [$item], '1/2/10/12' => [$item]];
-                    return array_merge(array_fill_keys($paths, []), $data);
-                }
-            );
+            ->method('getData')
+            ->willReturnMap([['1/2/10/11', [$item]], ['1/2/10/12', [$item]], ['1/2/13', []]]);
 
         $first = $this->resolve('1/2/10/11');
         $second = $this->resolve('1/2/10/12');
@@ -74,10 +69,8 @@ class BreadcrumbsTest extends TestCase
 
     public function testResetStateDropsPendingPaths(): void
     {
-        $this->dataProvider->expects($this->once())
-            ->method('getDataByPaths')
-            ->with(['1/2/10/12'])
-            ->willReturn(['1/2/10/12' => []]);
+        $this->dataProvider->expects($this->once())->method('prefetch')->with(['1/2/10/12']);
+        $this->dataProvider->expects($this->once())->method('getData')->with('1/2/10/12')->willReturn([]);
 
         $this->resolve('1/2/10/11');
         $this->resolver->_resetState();
@@ -86,7 +79,8 @@ class BreadcrumbsTest extends TestCase
 
     public function testPathIsRequired(): void
     {
-        $this->dataProvider->expects($this->never())->method('getDataByPaths');
+        $this->dataProvider->expects($this->never())->method('prefetch');
+        $this->dataProvider->expects($this->never())->method('getData');
         $this->expectException(LocalizedException::class);
         $this->resolver->resolve($this->field, null, $this->info, []);
     }

@@ -49,17 +49,17 @@ class BreadcrumbsTest extends TestCase
         $this->breadcrumbs = new Breadcrumbs($this->collectionFactory, new Uid(), $storeManager);
     }
 
-    public function testLoadsParentCategoriesOfAllPathsWithOneCollection(): void
+    public function testPrefetchLoadsParentCategoriesOfAllPathsWithOneCollection(): void
     {
         $this->expectCollections([10 => true, 11 => true, 12 => true, 20 => true]);
 
-        $result = $this->breadcrumbs->getDataByPaths(['1/2/10/11/12/13', '1/2/10/11/14', '1/2/20/21', '1/2/30']);
+        $this->breadcrumbs->prefetch(['1/2/10/11/12/13', '1/2/10/11/14', '1/2/20/21', '1/2/30']);
 
+        $this->assertSame([10, 11, 12], array_column($this->breadcrumbs->getData('1/2/10/11/12/13'), 'category_id'));
+        $this->assertSame([10, 11], array_column($this->breadcrumbs->getData('1/2/10/11/14'), 'category_id'));
+        $this->assertSame([20], array_column($this->breadcrumbs->getData('1/2/20/21'), 'category_id'));
+        $this->assertSame([], $this->breadcrumbs->getData('1/2/30'));
         $this->assertSame([[10, 11, 12, 20]], $this->loadedIds);
-        $this->assertSame([10, 11, 12], array_column($result['1/2/10/11/12/13'], 'category_id'));
-        $this->assertSame([10, 11], array_column($result['1/2/10/11/14'], 'category_id'));
-        $this->assertSame([20], array_column($result['1/2/20/21'], 'category_id'));
-        $this->assertSame([], $result['1/2/30']);
         $this->assertSame(
             [
                 'category_id' => 11,
@@ -69,7 +69,26 @@ class BreadcrumbsTest extends TestCase
                 'category_url_key' => 'category-11',
                 'category_url_path' => 'parent/category-11',
             ],
-            $result['1/2/10/11/14'][1]
+            $this->breadcrumbs->getData('1/2/10/11/14')[1]
+        );
+    }
+
+    public function testOrderDoesNotDependOnWhichBatchLoadedTheParents(): void
+    {
+        $this->expectCollections([10 => true, 20 => true, 30 => true]);
+
+        $this->breadcrumbs->prefetch(['1/2/30/31']);
+        $this->assertSame([20], array_column($this->breadcrumbs->getData('1/2/20/21'), 'category_id'));
+        $this->breadcrumbs->prefetch(['1/2/30/20/10/40']);
+
+        $this->assertSame([[30], [20], [10]], $this->loadedIds);
+        $this->assertSame(
+            [10, 20, 30],
+            array_column($this->breadcrumbs->getData('1/2/30/20/10/40'), 'category_id')
+        );
+        $this->assertSame(
+            [10, 20],
+            array_column($this->breadcrumbs->getData('1/2/10/20/22'), 'category_id')
         );
     }
 
@@ -77,12 +96,22 @@ class BreadcrumbsTest extends TestCase
     {
         $this->expectCollections([10 => true, 11 => false, 12 => true]);
 
-        $this->breadcrumbs->getDataByPaths(['1/2/10/11/13']);
+        $this->breadcrumbs->prefetch(['1/2/10/11/13']);
         $data = $this->breadcrumbs->getData('1/2/10/11/12/14');
         $this->assertSame([], $this->breadcrumbs->getData('1/2/11/15'));
 
         $this->assertSame([[10, 11], [12]], $this->loadedIds);
         $this->assertSame([10, 12], array_column($data, 'category_id'));
+    }
+
+    public function testPathsWithoutParentsRunNoQuery(): void
+    {
+        $this->expectCollections([]);
+
+        $this->breadcrumbs->prefetch(['1/2/3', '1/2']);
+
+        $this->assertSame([], $this->breadcrumbs->getData('1/2/3'));
+        $this->assertSame([], $this->loadedIds);
     }
 
     public function testCategoriesAreLoadedPerStore(): void
@@ -145,7 +174,7 @@ class BreadcrumbsTest extends TestCase
                                 );
                             }
                         }
-                        return new \ArrayIterator($items);
+                        return new \ArrayIterator(array_reverse($items));
                     }
                 );
                 return $collection;

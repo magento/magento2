@@ -33,7 +33,7 @@ class Breadcrumbs implements ResetAfterRequestInterface
     private StoreManagerInterface $storeManager;
 
     /**
-     * Breadcrumb items per store and category id in collection order; false marks an id the collection did not return
+     * Breadcrumb items per store and category id; false marks an id the collection did not return
      *
      * @var array<int, array<int, array|false>>
      */
@@ -65,34 +65,54 @@ class Breadcrumbs implements ResetAfterRequestInterface
      */
     public function getData(string $categoryPath): array
     {
-        return $this->getDataByPaths([$categoryPath])[$categoryPath];
-    }
-
-    /**
-     * Get breadcrumbs data of several category paths, loading the parent categories of all of them at once
-     *
-     * @param string[] $categoryPaths
-     * @return array<string, array> breadcrumbs data keyed by category path
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function getDataByPaths(array $categoryPaths): array
-    {
-        $storeId = (int)$this->storeManager->getStore()->getId();
-        $parentIdsByPath = [];
-        foreach ($categoryPaths as $categoryPath) {
-            $parentIdsByPath[$categoryPath] = array_slice(explode('/', (string)$categoryPath), 2, -1);
+        $parentCategoryIds = $this->getParentCategoryIds($categoryPath);
+        if (!count($parentCategoryIds)) {
+            return [];
         }
-        $this->loadBreadcrumbItems(array_merge([], ...array_values($parentIdsByPath)), $storeId);
 
-        $items = $this->breadcrumbItems[$storeId] ?? [];
+        $storeId = (int)$this->storeManager->getStore()->getId();
+        $this->loadBreadcrumbItems($parentCategoryIds, $storeId);
+        // Same order as the per-path collection without ORDER BY returned: primary key order
+        sort($parentCategoryIds, SORT_NUMERIC);
         $breadcrumbsData = [];
-        foreach ($parentIdsByPath as $categoryPath => $parentIds) {
-            $breadcrumbsData[$categoryPath] = array_values(
-                array_filter(array_intersect_key($items, array_flip($parentIds)))
-            );
+        foreach ($parentCategoryIds as $categoryId) {
+            $item = $this->breadcrumbItems[$storeId][(int)$categoryId] ?? false;
+            if ($item !== false) {
+                $breadcrumbsData[] = $item;
+            }
         }
 
         return $breadcrumbsData;
+    }
+
+    /**
+     * Load the parent categories of several category paths at once, so getData() serves them without a query
+     *
+     * @param string[] $categoryPaths
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function prefetch(array $categoryPaths): void
+    {
+        $categoryIds = [];
+        foreach ($categoryPaths as $categoryPath) {
+            $categoryIds[] = $this->getParentCategoryIds((string)$categoryPath);
+        }
+        $categoryIds = array_merge([], ...$categoryIds);
+        if (count($categoryIds)) {
+            $this->loadBreadcrumbItems($categoryIds, (int)$this->storeManager->getStore()->getId());
+        }
+    }
+
+    /**
+     * Get ids of the parent categories of a category path, without the root categories
+     *
+     * @param string $categoryPath
+     * @return string[]
+     */
+    private function getParentCategoryIds(string $categoryPath): array
+    {
+        return array_slice(explode('/', $categoryPath), 2, -1);
     }
 
     /**

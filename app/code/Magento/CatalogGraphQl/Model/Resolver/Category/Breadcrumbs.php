@@ -64,10 +64,12 @@ class Breadcrumbs implements ResolverInterface, ResetAfterRequestInterface
 
         return $this->valueFactory->create(
             function () use ($path) {
-                $paths = $this->pendingPaths;
-                $this->pendingPaths = [];
-                $paths[$path] = $path;
-                $breadcrumbsData = $this->breadcrumbsDataProvider->getDataByPaths(array_values($paths))[$path];
+                if ($this->pendingPaths) {
+                    $paths = array_values($this->pendingPaths);
+                    $this->pendingPaths = [];
+                    $this->breadcrumbsDataProvider->prefetch($paths);
+                }
+                $breadcrumbsData = $this->breadcrumbsDataProvider->getData($path);
                 return count($breadcrumbsData) ? $breadcrumbsData : null;
             }
         );
