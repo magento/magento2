@@ -109,6 +109,30 @@ class Vat
     }
 
     /**
+     * Get the customer groups that VAT validation assigns, as configured for the store
+     *
+     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @return int[]
+     */
+    public function getVatValidationGroupIds($store = null): array
+    {
+        $groupIds = [];
+        foreach ([
+            self::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP,
+            self::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP,
+            self::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
+            self::XML_PATH_CUSTOMER_VIV_ERROR_GROUP,
+        ] as $path) {
+            $groupId = $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $store);
+            if ($groupId !== null && $groupId !== '') {
+                $groupIds[] = (int)$groupId;
+            }
+        }
+
+        return array_values(array_unique($groupIds));
+    }
+
+    /**
      * Retrieve customer group ID based on his VAT number
      *
      * @param string $customerCountryCode

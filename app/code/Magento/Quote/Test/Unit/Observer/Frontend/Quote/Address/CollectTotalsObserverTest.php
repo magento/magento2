@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -17,6 +18,7 @@ use Magento\Customer\Helper\Address as CustomerAddress;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
@@ -26,6 +28,8 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -170,7 +174,8 @@ class CollectTotalsObserverTest extends TestCase
             $this->customerDataFactoryMock,
             $this->groupManagementMock,
             $this->addressRepository,
-            $this->customerSession
+            $this->customerSession,
+            $this->createMock(CustomerRepositoryInterface::class)
         );
     }
 
@@ -226,30 +231,102 @@ class CollectTotalsObserverTest extends TestCase
 
     public function testDispatchWithDefaultCustomerGroupId()
     {
+        $this->expectAddressWithoutVatId(2, null, $this->never());
+
+        /** Assertions */
+        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with(2);
+        $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
+        /** SUT execution */
+        $this->model->execute($this->observerMock);
+    }
+
+    /**
+     * @param int|null $accountGroupId null when the customer account no longer exists
+     * @param int $expectedGroupId
+     * @return void
+     */
+    #[DataProvider('vatAssignedQuoteGroupDataProvider')]
+    public function testDispatchWithoutVatIdReplacesGroupAssignedByVatValidation(
+        ?int $accountGroupId,
+        int $expectedGroupId
+    ): void {
+        $this->expectAddressWithoutVatId(4, $accountGroupId, $this->once());
+
+        /** Assertions */
+        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with($expectedGroupId);
+        /** SUT execution */
+        $this->model->execute($this->observerMock);
+    }
+
+    /**
+     * Account group of a customer whose quote is in the intra-union group 4, and the expected group
+     *
+     * @return array
+     */
+    public static function vatAssignedQuoteGroupDataProvider(): array
+    {
+        return [
+            'account in a group set by hand' => [2, 2],
+            'account in the default group' => [1, 1],
+            'account in the intra-union group' => [4, 1],
+            'account no longer exists' => [null, 1],
+        ];
+    }
+
+    /**
+     * Address without a VAT ID; default group 1, VAT validation assigns groups 1 and 4
+     *
+     * @param int $quoteGroupId
+     * @param int|null $accountGroupId null when the customer account no longer exists
+     * @param InvokedCount $accountLoads
+     * @return void
+     */
+    private function expectAddressWithoutVatId(
+        int $quoteGroupId,
+        ?int $accountGroupId,
+        InvokedCount $accountLoads
+    ): void {
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
             ->willReturn(true);
-
         $this->quoteAddressMock->expects($this->once())
             ->method('getCountryId')
             ->willReturn('customerCountryCode');
         $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn(null);
+        $this->customerMock->method('getId')->willReturn('1');
+        $this->quoteMock->method('getCustomerGroupId')->willReturn($quoteGroupId);
+        $this->quoteAddressMock->expects($this->once())->method('setPrevQuoteCustomerGroupId')->with($quoteGroupId);
+        $this->groupManagementMock->expects($this->once())
+            ->method('getDefaultGroup')
+            ->with($this->storeId)
+            ->willReturn($this->groupInterfaceMock);
+        $this->groupInterfaceMock->method('getId')->willReturn(1);
 
-        $this->quoteMock->expects($this->exactly(2))
-            ->method('getCustomerGroupId')
-            ->willReturn('customerGroupId');
-        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
+        $this->customerVatMock->expects($this->once())
+            ->method('getVatValidationGroupIds')
+            ->with($this->storeId)
+            ->willReturn([1, 4]);
+        $customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $loads = $customerRepositoryMock->expects($accountLoads)->method('getById')->with('1');
+        if ($accountGroupId === null) {
+            $loads->willThrowException(new NoSuchEntityException(__('No such entity.')));
+        } else {
+            $accountMock = $this->createMock(CustomerInterface::class);
+            $accountMock->method('getGroupId')->willReturn($accountGroupId);
+            $loads->willReturn($accountMock);
+        }
 
-        /** Assertions */
-        $this->quoteAddressMock->expects($this->once())
-            ->method('setPrevQuoteCustomerGroupId')
-            ->with('customerGroupId');
-        $this->customerDataFactoryMock->method('create')->willReturn($this->customerMock);
-
-        $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-        /** SUT execution */
-        $this->model->execute($this->observerMock);
+        $this->model = new CollectTotalsObserver(
+            $this->customerAddressMock,
+            $this->customerVatMock,
+            $this->vatValidatorMock,
+            $this->customerDataFactoryMock,
+            $this->groupManagementMock,
+            $this->addressRepository,
+            $this->customerSession,
+            $customerRepositoryMock
+        );
     }
 
     public function testDispatchWithCustomerCountryInEU()
