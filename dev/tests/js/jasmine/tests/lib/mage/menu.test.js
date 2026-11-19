@@ -72,6 +72,54 @@ define([
             });
         });
 
+        describe('Menu keyboard focus', function () {
+            var menuSelector = '#menu',
+                $menu;
+
+            beforeEach(function () {
+                $('body').append($(menuTmpl));
+                $menu = $(menuSelector).menu({
+                    delay: 0,
+                    showDelay: 0,
+                    hideDelay: 0
+                });
+            });
+
+            afterEach(function () {
+                $(menuSelector).remove();
+            });
+
+            it('Check that focused item gets ui-state-focus and loses it on blur', function () {
+                var instance = $menu.data('mage-menu'),
+                    $item = $menu.find('li.test-menu-item'),
+                    $link = $item.children('a');
+
+                instance.focus($.Event('keydown'), $item);
+
+                expect($link.hasClass('ui-state-active')).toBe(true);
+                expect($link.hasClass('ui-state-focus')).toBe(true);
+
+                instance.blur($.Event('keydown'));
+
+                expect($link.hasClass('ui-state-focus')).toBe(false);
+            });
+
+            it('Check that ui-state-focus moves with the focus', function () {
+                var instance = $menu.data('mage-menu'),
+                    $items = $menu.children('li').filter(function () {
+                        return $(this).children('a').length > 0;
+                    }),
+                    $first = $items.eq(0),
+                    $second = $items.eq(1);
+
+                instance.focus($.Event('keydown'), $first);
+                instance.focus($.Event('keydown'), $second);
+
+                expect($first.children('a').hasClass('ui-state-focus')).toBe(false);
+                expect($second.children('a').hasClass('ui-state-focus')).toBe(true);
+            });
+        });
+
         describe('Menu navigation', function () {
             var menuSelector = '#menu',
                 $menu;
