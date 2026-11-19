@@ -251,20 +251,46 @@ class RedisTagAdapterTest extends TestCase
         );
     }
 
-    public function testGarbageCollectPrunesLegacyIdsWithoutDataButKeepsTheLegacySet(): void
+    public function testGarbageCollectMigratesLegacyIdsButKeepsTheLegacySet(): void
     {
         $redis = $this->makeRecordingRedis([
             'sscan' => fn (string $key) => $key === 'cache:all_ids' ? ['0', ['live', 'gone']] : ['0', []],
         ]);
-        $redis->pipe->execQueue = [[1, 0]];
+        $redis->pipe->execQueue = [[1, 0], [1]];
 
         $this->assertSame(0, $this->createAdapter($redis, 'ns_')->garbageCollect());
         $this->assertSame(['ns_:live', 'ns_:gone'], array_merge(...$redis->argsOf('pipe:exists')));
+        $this->assertSame([['cache:all_ids:ns_', 'live']], $redis->argsOf('pipe:sadd'));
         $this->assertSame(
             ['sha', 0, 'cache:tags:', 'ns_', 'ns_:', 'cache:all_ids:ns_', 'gone'],
             $redis->argsOf('evalsha')[0]
         );
+        $this->assertSame([['cache:all_ids_migrated:ns_', '1']], $redis->argsOf('set'));
         $this->assertLegacySetUntouched($redis);
+    }
+
+    public function testLegacyIdsAreMigratedOncePerAdapterInstance(): void
+    {
+        $redis = $this->makeRecordingRedis(['sscan' => ['0', []], 'smembers' => []]);
+        $adapter = $this->createAdapter($redis, 'ns_');
+
+        $adapter->getIdsNotMatchingTags([]);
+        $adapter->getIdsNotMatchingTags([]);
+        $adapter->garbageCollect();
+
+        $this->assertSame([['cache:all_ids_migrated:ns_']], $redis->argsOf('exists'));
+        $legacyScans = array_filter($redis->argsOf('sscan'), fn (array $args) => $args[0] === 'cache:all_ids');
+        $this->assertCount(1, $legacyScans);
+        $this->assertSame([['cache:all_ids_migrated:ns_', '1']], $redis->argsOf('set'));
+    }
+
+    public function testLegacySetIsNotReadWhenTheNamespaceIsMarkedAsMigrated(): void
+    {
+        $redis = $this->makeRecordingRedis(['exists' => 1, 'sscan' => ['0', []], 'smembers' => ['id_1']]);
+
+        $this->assertSame(['id_1'], $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]));
+        $this->assertSame([], $redis->argsOf('sscan'));
+        $this->assertSame([], $redis->argsOf('set'));
     }
 
     /**
@@ -469,6 +495,11 @@ class RedisTagAdapterTest extends TestCase
             public function del($keys)
             {
                 return $this->__call('del', [$keys]);
+            }
+
+            public function set($key, $value, $expireResolution = null, $expireTTL = null, $flag = null)
+            {
+                return $this->__call('set', [$key, $value]);
             }
 
             public function __call($commandID, $arguments)

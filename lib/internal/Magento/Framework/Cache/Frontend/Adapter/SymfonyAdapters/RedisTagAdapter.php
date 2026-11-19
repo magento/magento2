@@ -34,6 +34,11 @@ class RedisTagAdapter implements TagAdapterInterface
     private const LEGACY_ALL_IDS_SET = 'cache:all_ids';
 
     /**
+     * Marks a namespace whose ids were taken over from the legacy set; it outlives flushes on purpose
+     */
+    private const LEGACY_MIGRATED_PREFIX = 'cache:all_ids_migrated:';
+
+    /**
      * Key prefix for the stale-cache regeneration lock (owned by SymfonyL2Cache).
      * Kept here because this adapter owns the raw Redis client and its type handling.
      */
@@ -309,6 +314,11 @@ LUA;
     private bool $useLuaOnGc;
 
     /**
+     * @var bool
+     */
+    private bool $legacyMigrated = false;
+
+    /**
      * @param CacheItemPoolInterface $cachePool
      * @param string $namespace Cache namespace/prefix
      * @param bool $useLua Enable Lua scripts for cache operations
@@ -563,7 +573,7 @@ LUA;
      */
     public function getIdsNotMatchingTags(array $tags): array
     {
-        $this->copyLiveLegacyIds(1000);
+        $this->migrateLegacyIds(1000);
 
         if (empty($tags)) {
             // Return all IDs if no tags specified
@@ -1247,12 +1257,7 @@ LUA;
     private function garbageCollectClientSide(int $batchSize): int
     {
         $batchSize = max(1, $batchSize);
-        foreach ($this->scanLegacyIds($batchSize) as [$expired]) {
-            // Index entries this namespace wrote for the id before the upgrade; the guarded prune keeps live data.
-            if (!empty($expired)) {
-                $this->pruneTagIndex($expired);
-            }
-        }
+        $this->migrateLegacyIds($batchSize);
 
         $removed = 0;
         foreach ($this->sscan($this->allIdsKey(), $batchSize) as $members) {
@@ -1267,39 +1272,42 @@ LUA;
     }
 
     /**
-     * Copies ids of this namespace from the legacy all_ids set into the namespace's own set
+     * Takes this namespace's ids over from the legacy all_ids set, once per namespace.
+     *
+     * The legacy set mixes ids of every namespace on the database: an id belongs to this namespace only
+     * when its data key exists here, and an id without data here may still be live in another namespace,
+     * so the legacy set is only read. Ids with data here are copied into the namespace's set; for the
+     * others, index entries this namespace wrote before the upgrade are pruned (the prune keeps live data).
+     * The copy is idempotent, so concurrent first runs are harmless; the marker is written afterwards.
      *
      * @param int $batchSize
      * @return void
      */
-    private function copyLiveLegacyIds(int $batchSize): void
+    private function migrateLegacyIds(int $batchSize): void
     {
-        foreach ($this->scanLegacyIds($batchSize) as [, $live]) {
-            if (empty($live)) {
-                continue;
-            }
-            $pipeline = $this->createPipeline();
-            foreach ($live as $id) {
-                $pipeline->sadd($this->allIdsKey(), $id);
-            }
-            $this->executePipeline($pipeline);
+        if ($this->legacyMigrated) {
+            return;
         }
-    }
 
-    /**
-     * Iterates the legacy all_ids set in batches split by whether the id has data in this namespace.
-     *
-     * The legacy set mixes ids of every namespace on the database: an id belongs to this namespace only
-     * when its data key exists here, and an id without data here may still be live in another namespace.
-     *
-     * @param int $batchSize
-     * @return \Generator<int, array{0: string[], 1: string[]}> [expired, live] per batch
-     */
-    private function scanLegacyIds(int $batchSize): \Generator
-    {
-        foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {
-            yield $this->splitByDataExistence(array_values($members));
+        $markerKey = self::LEGACY_MIGRATED_PREFIX . $this->namespace;
+        if (!$this->redis->exists($markerKey)) {
+            foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {
+                [$expired, $live] = $this->splitByDataExistence(array_values($members));
+                if (!empty($live)) {
+                    $pipeline = $this->createPipeline();
+                    foreach ($live as $id) {
+                        $pipeline->sadd($this->allIdsKey(), $id);
+                    }
+                    $this->executePipeline($pipeline);
+                }
+                if (!empty($expired)) {
+                    $this->pruneTagIndex($expired);
+                }
+            }
+            $this->redis->set($markerKey, '1');
         }
+
+        $this->legacyMigrated = true;
     }
 
     /**
