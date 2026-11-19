@@ -635,6 +635,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
 
             $selections = [];
+            $isEmptySelectionAllowed = false;
             $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
 
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
@@ -649,7 +650,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
 
-                if (empty($optionIds) && $isStrictProcessMode) {
+                if (empty($optionIds)
+                    && $isStrictProcessMode
+                    && !$this->canBeBoughtWithoutSelection($product)
+                ) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product option(s).'));
                 }
 
@@ -692,6 +696,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $selections = $selections->getItems();
                 } else {
                     $selections = [];
+                    $isEmptySelectionAllowed = $isStrictProcessMode
+                        && $this->canBeBoughtWithoutSelection($product);
                 }
             } else {
                 $product->setOptionsValidationFail(true);
@@ -708,7 +714,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
-            if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode) {
+            if ((is_array($selections) && count($selections) > 0)
+                || !$isStrictProcessMode
+                || $isEmptySelectionAllowed
+            ) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
                 if ($buyRequest->getBundleOptionsData()) {
@@ -790,6 +799,45 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $this->getSpecifyOptionMessage();
+    }
+
+    /**
+     * Check whether the bundle can be bought without any selection.
+     *
+     * Only a fixed price bundle without required options has a price of its own when no selection is made.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     */
+    private function canBeBoughtWithoutSelection($product): bool
+    {
+        if ((int)$product->getPriceType() !== Price::PRICE_TYPE_FIXED) {
+            return false;
+        }
+
+        foreach ($this->getOptionsCollection($product)->getItems() as $option) {
+            if ($option->getRequired()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check whether the buy request lacks a selection the bundle needs.
+     *
+     * An omitted bundle_option is always missing; an empty one is accepted only for a bundle
+     * that can be bought without selection.
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param mixed $bundleOption
+     * @return bool
+     */
+    private function isSelectionMissing($product, mixed $bundleOption): bool
+    {
+        return empty($bundleOption)
+            && (!is_array($bundleOption) || !$this->canBeBoughtWithoutSelection($product));
     }
 
     /**
@@ -1075,7 +1123,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $buyRequest = new \Magento\Framework\DataObject($this->serializer->unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
-        if (empty($bundleOption)) {
+        if ($this->isSelectionMissing($product, $bundleOption)) {
             throw new \Magento\Framework\Exception\LocalizedException($this->getSpecifyOptionMessage());
         }
 

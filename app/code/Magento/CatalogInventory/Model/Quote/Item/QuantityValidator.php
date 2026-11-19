@@ -128,7 +128,7 @@ class QuantityValidator
             foreach ($options as $option) {
                 $this->optionInitializer->initialize($option, $quoteItem, $qty);
             }
-        } else {
+        } elseif (!$product->isComposite()) {
             $this->stockItemInitializer->initialize($stockItem, $quoteItem, $qty);
         }
 
@@ -207,8 +207,8 @@ class QuantityValidator
                 $this->_removeErrorsFromQuoteAndItem($quoteItem, Data::ERROR_QTY);
             }
         } else {
-            if ($quoteItem->getParentItem() === null) {
-                $result = $quoteItem->getStockStateResult();
+            $result = $quoteItem->getStockStateResult();
+            if ($quoteItem->getParentItem() === null && $result !== null) {
                 if ($result->getHasError()) {
                     $this->addErrorInfoToQuote($result, $quoteItem);
                 } else {
