@@ -10,8 +10,6 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * EAV Entity Attribute Data Factory
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class AttributeDataFactory implements ResetAfterRequestInterface
 {
@@ -22,10 +20,7 @@ class AttributeDataFactory implements ResetAfterRequestInterface
     public const OUTPUT_FORMAT_ONELINE = 'oneline';
     public const OUTPUT_FORMAT_ARRAY = 'array';
 
-    // available only for multiply attributes
-    /**
-     * @var array
-     */
+    /** @var array available only for multiply attributes */
     protected $_dataModels = [];
 
     /**

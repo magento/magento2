@@ -9,8 +9,6 @@ use Laminas\Validator\InArray;
 
 /**
  * Validator for check input type value
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Validator extends InArray
 {
