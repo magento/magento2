@@ -44,18 +44,25 @@ class ProcessManager
     private AmqpConfigPool $amqpConfigPool;
 
     /**
+     * @var ProcessTitle
+     */
+    private ProcessTitle $processTitle;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Framework\Registry $registry
      * @param int|null $threadsCount
      * @param LoggerInterface|null $logger
      * @param AmqpConfigPool|null $amqpConfigPool
+     * @param ProcessTitle|null $processTitle
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         ?\Magento\Framework\Registry $registry = null,
         ?int $threadsCount = null,
         ?LoggerInterface $logger = null,
-        ?AmqpConfigPool $amqpConfigPool = null
+        ?AmqpConfigPool $amqpConfigPool = null,
+        ?ProcessTitle $processTitle = null
     ) {
         $this->resource = $resource;
         if (null === $registry) {
@@ -69,6 +76,7 @@ class ProcessManager
             LoggerInterface::class
         );
         $this->amqpConfigPool = $amqpConfigPool ?? ObjectManager::getInstance()->get(AmqpConfigPool::class);
+        $this->processTitle = $processTitle ?? ObjectManager::getInstance()->get(ProcessTitle::class);
     }
 
     /**
@@ -110,8 +118,10 @@ class ProcessManager
         $this->resource->closeConnection(null);
         $this->amqpConfigPool->closeConnections();
 
+        $processNumber = 0;
         $threadNumber = 0;
         foreach ($userFunctions as $userFunction) {
+            $processNumber++;
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $pid = pcntl_fork();
             if ($pid == -1) {
@@ -119,7 +129,7 @@ class ProcessManager
             } elseif ($pid) {
                 $this->executeParentProcess($threadNumber);
             } else {
-                $this->startChildProcess($userFunction);
+                $this->startChildProcess($userFunction, $processNumber);
             }
         }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -159,9 +169,12 @@ class ProcessManager
      * Start child process
      *
      * @param callable $userFunction
+     * @param int $processNumber
      */
-    private function startChildProcess(callable $userFunction)
+    private function startChildProcess(callable $userFunction, int $processNumber)
     {
+        $this->processTitle->setProcessContext($processNumber);
+
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $status = call_user_func($userFunction);
