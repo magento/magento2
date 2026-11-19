@@ -8,16 +8,26 @@ declare(strict_types=1);
 namespace Magento\Backend\Test\Unit\Console\Command;
 
 use Magento\Backend\Console\Command\CacheCleanCommand;
+use Magento\Framework\App\Cache\Frontend\Pool as FrontendPool;
+use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
 {
+    /** @var FrontendPool */
+    private $frontendPool;
+
     protected function setUp(): void
     {
         $this->cacheEventName = 'adminhtml_cache_flush_system';
         parent::setUp();
-        $this->command = new CacheCleanCommand($this->cacheManagerMock, $this->eventManagerMock);
+        $this->frontendPool = $this->createMock(FrontendPool::class);
+        $this->command = new CacheCleanCommand(
+            $this->cacheManagerMock,
+            $this->eventManagerMock,
+            $this->frontendPool
+        );
     }
 
     /**
@@ -40,10 +50,54 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
             $this->eventManagerMock->expects($this->never())->method('dispatch');
         }
 
+        if (empty($param['types'])) {
+            $this->expectAllMagentoFrontendsAreCleaned();
+        } else {
+            $this->frontendPool->expects($this->never())->method('rewind');
+        }
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
 
         $this->assertEquals($output, $commandTester->getDisplay());
+    }
+
+    /**
+     * @return array
+     */
+    public static function executeDataProvider(): array
+    {
+        return parent::executeDataProvider() + [
+            'explicit all types' => [
+                ['types' => ['A', 'B', 'C', 'full_page']],
+                ['A', 'B', 'C', 'full_page'],
+                true,
+                static::getExpectedExecutionOutput(['A', 'B', 'C', 'full_page']),
+            ],
+        ];
+    }
+
+    /**
+     * When no types are selected, all MAGE-scoped frontends must be cleaned,
+     * without directly flushing their underlying storage.
+     *
+     * @return void
+     */
+    private function expectAllMagentoFrontendsAreCleaned(): void
+    {
+        $defaultFrontend = $this->createMock(FrontendInterface::class);
+        $pageCacheFrontend = $this->createMock(FrontendInterface::class);
+        $defaultFrontend->expects($this->once())->method('clean');
+        $pageCacheFrontend->expects($this->once())->method('clean');
+        $defaultFrontend->expects($this->never())->method('getBackend');
+        $pageCacheFrontend->expects($this->never())->method('getBackend');
+
+        $this->frontendPool->expects($this->once())->method('rewind');
+        $this->frontendPool->expects($this->exactly(3))->method('valid')
+            ->willReturnOnConsecutiveCalls(true, true, false);
+        $this->frontendPool->expects($this->exactly(2))->method('current')
+            ->willReturnOnConsecutiveCalls($defaultFrontend, $pageCacheFrontend);
+        $this->frontendPool->expects($this->exactly(2))->method('next');
     }
 
     /**
