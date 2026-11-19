@@ -19,11 +19,6 @@ use Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderComposite;
 class Route extends AbstractEntityUrl implements ResolverInterface
 {
     /**
-     * @var EntityDataProviderComposite
-     */
-    private $entityDataProviderComposite;
-
-    /**
      * @param UrlFinderInterface $urlFinder
      * @param CustomUrlLocatorInterface $customUrlLocator
      * @param EntityDataProviderComposite $entityDataProviderComposite
@@ -32,11 +27,10 @@ class Route extends AbstractEntityUrl implements ResolverInterface
     public function __construct(
         UrlFinderInterface $urlFinder,
         CustomUrlLocatorInterface $customUrlLocator,
-        EntityDataProviderComposite $entityDataProviderComposite,
+        private readonly EntityDataProviderComposite $entityDataProviderComposite,
         Uid $idEncoder
     ) {
         parent::__construct($urlFinder, $customUrlLocator, $idEncoder);
-        $this->entityDataProviderComposite = $entityDataProviderComposite;
     }
 
     /**
