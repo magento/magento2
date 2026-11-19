@@ -207,30 +207,13 @@ class Collection extends \Magento\Framework\Data\Collection
             $interval['start'] = $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-01 00:00:00'));
         }
 
-        if ($dateStart->diff($dateEnd)->m == 0) {
-            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
-                $dateStart->setDate(
-                    $dateStart->format('Y'),
-                    $dateStart->format('m'),
-                    $dateEnd->format('d')
-                )->format(
-                    'Y-m-d 23:59:59'
-                )
-            );
+        if ($dateStart->format('Y-m') === $dateEnd->format('Y-m')) {
+            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc($dateEnd->format('Y-m-d 23:59:59'));
         } else {
-            // Transform the start date to UTC whilst preserving the date. This is required as getTimestamp()
-            // is in UTC which may result in a different month from the original start date due to time zones.
-            $dateStartUtc = (new \DateTime())->createFromFormat('d-m-Y g:i:s', $dateStart->format('d-m-Y 00:00:00'));
-            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc(
-                $dateStart->format('Y-m-' . date('t', $dateStartUtc->getTimestamp()) . ' 23:59:59')
-            );
+            $interval['end'] = $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-t 23:59:59'));
         }
 
-        $dateStart->modify('+1 month');
-
-        if ($dateStart->diff($dateEnd)->m == 0) {
-            $dateStart->setDate($dateStart->format('Y'), $dateStart->format('m'), 1);
-        }
+        $dateStart->modify('first day of next month');
 
         return $interval;
     }

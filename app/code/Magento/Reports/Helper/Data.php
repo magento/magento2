@@ -16,14 +16,14 @@ use Magento\Framework\Data\Collection;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const REPORT_PERIOD_TYPE_DAY = 'day';
+    public const REPORT_PERIOD_TYPE_DAY = 'day';
 
-    const REPORT_PERIOD_TYPE_MONTH = 'month';
+    public const REPORT_PERIOD_TYPE_MONTH = 'month';
 
-    const REPORT_PERIOD_TYPE_YEAR = 'year';
+    public const REPORT_PERIOD_TYPE_YEAR = 'year';
 
     /**
-     * Item factory
+     * Creates report interval items.
      *
      * @var \Magento\Reports\Model\ItemFactory
      */
@@ -67,6 +67,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             case self::REPORT_PERIOD_TYPE_MONTH:
                 $dateFormat = 'Y-m';
                 $dateInterval = new \DateInterval('P1M');
+                $dateStart->modify('first day of this month');
                 break;
             case self::REPORT_PERIOD_TYPE_YEAR:
                 $dateFormat = 'Y';
