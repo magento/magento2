@@ -12,7 +12,7 @@
                 comment="Template ID"/>
         <column xsi:type="varchar" name="template_code" nullable="false" length="150" comment="Template Name"/>
         <column xsi:type="text" name="template_text" nullable="false" comment="Template Content"/>
-        <column xsi:type="text" name="template_styles" nullable="true" comment="Templste Styles"/>
+        <column xsi:type="text" name="template_styles" nullable="true" comment="Template Styles"/>
         <column xsi:type="int" name="template_type" unsigned="true" nullable="true" identity="false"
                 comment="Template Type"/>
         <column xsi:type="varchar" name="template_subject" nullable="false" length="200" comment="Template Subject"/>
