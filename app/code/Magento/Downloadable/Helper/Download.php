@@ -6,6 +6,7 @@
 
 namespace Magento\Downloadable\Helper;
 
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\Mime;
@@ -111,6 +112,11 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     private $mime;
 
     /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param File $downloadableFile
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
@@ -118,6 +124,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param Filesystem\File\ReadFactory $fileReadFactory
      * @param Mime|null $mime
+     * @param DomainValidator|null $domainValidator
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -126,7 +133,8 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
-        ?Mime $mime = null
+        ?Mime $mime = null,
+        ?DomainValidator $domainValidator = null
     ) {
         parent::__construct($context);
         $this->_downloadableFile = $downloadableFile;
@@ -135,6 +143,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_session = $session;
         $this->fileReadFactory = $fileReadFactory;
         $this->mime = $mime ?? ObjectManager::getInstance()->get(Mime::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()->get(DomainValidator::class);
     }
 
     /**
@@ -262,11 +271,18 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         * check header for urls
         */
         if ($linkType === self::LINK_TYPE_URL) {
+            $context = stream_context_create(['http' => ['follow_location' => 0]]);
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $headers = array_change_key_case(get_headers($this->_resourceFile, 1), CASE_LOWER);
+            $headers = array_change_key_case(get_headers($this->_resourceFile, 1, $context), CASE_LOWER);
             if (isset($headers['location'])) {
-                $this->_resourceFile  = is_array($headers['location']) ? current($headers['location'])
+                $location = is_array($headers['location']) ? current($headers['location'])
                     : $headers['location'];
+                if (!$this->domainValidator->isValid($location)) {
+                    throw new \InvalidArgumentException(
+                        'Requested link redirects to a domain that is not in the list of downloadable domains'
+                    );
+                }
+                $this->_resourceFile = $location;
             }
         }
 
