@@ -307,7 +307,7 @@ class CreateCustomerV2Test extends GraphQlAbstract
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'A customer with the same email address already exists in an associated website.'
+            'A customer with the same email address (customer@example.com) already exists in an associated website.'
         );
 
         $existingCustomer = DataFixtureStorageManager::getStorage()->get('existing_customer');
