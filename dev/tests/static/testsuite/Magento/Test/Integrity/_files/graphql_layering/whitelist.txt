@@ -1,0 +1,12 @@
+# Known GraphQL dependencies in domain modules. Remove entries as dependencies are resolved.
+Magento_Bundle:Model/Product/BundleOptionDataProvider.php
+Magento_Customer:etc/graphql
+Magento_Eav:Model/Cache/AttributesFormIdentity.php
+Magento_Indexer:etc/graphql
+Magento_PageCache:etc/graphql
+Magento_Quote:etc/graphql
+Magento_QuoteBundleOptions:etc/graphql
+Magento_QuoteConfigurableOptions:etc/graphql
+Magento_QuoteDownloadableLinks:etc/graphql
+Magento_Wishlist:Model/Wishlist/Data/WishlistOutput.php
+Magento_Wishlist:etc/graphql
