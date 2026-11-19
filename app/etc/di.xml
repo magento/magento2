@@ -1110,6 +1110,7 @@
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
+                <item name="body" xsi:type="string">Magento\Framework\View\Page\Config\Reader\Body</item>
             </argument>
         </arguments>
     </virtualType>
