@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Quote\Model\Quote\Item;
@@ -22,11 +24,20 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected $quoteValidator = null;
 
     /**
-     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @var ManagerInterface
      */
-    public function __construct(\Magento\Quote\Model\QuoteValidator $quoteValidator)
-    {
+    private $eventManager;
+
+    /**
+     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @param ManagerInterface|null $eventManager
+     */
+    public function __construct(
+        \Magento\Quote\Model\QuoteValidator $quoteValidator,
+        ?ManagerInterface $eventManager = null
+    ) {
         $this->quoteValidator = $quoteValidator;
+        $this->eventManager = $eventManager ?? ObjectManager::getInstance()->get(ManagerInterface::class);
     }
 
     /**
@@ -88,7 +99,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected function _initItem($address, $item)
     {
         if ($item instanceof AddressItem) {
-            $quoteItem = $item->getAddress()->getQuote()->getItemById($item->getQuoteItemId());
+            $quoteItem = $this->resolveQuoteItem($item);
         } else {
             $quoteItem = $item;
         }
@@ -124,6 +135,19 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
+     * Resolve the quote item associated with an address item.
+     *
+     * @param AddressItem $item
+     * @return Item|false|null
+     */
+    private function resolveQuoteItem(AddressItem $item): Item|false|null
+    {
+        return $item->getQuoteItemId()
+            ? $item->getAddress()->getQuote()->getItemById($item->getQuoteItemId())
+            : $item->getQuoteItem();
+    }
+
+    /**
      * Processing calculation of row price for address item
      *
      * @param AddressItem|Item $item
@@ -151,17 +175,54 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     protected function _removeItem($address, $item)
     {
         if ($item instanceof Item) {
+            if (!$item->getId()) {
+                $this->markUnsavedItemDeleted($item);
+                return $this;
+            }
             $address->removeItem($item->getId());
             if ($address->getQuote()) {
                 $address->getQuote()->removeItem($item->getId());
             }
         } elseif ($item instanceof AddressItem) {
-            $address->removeItem($item->getId());
+            if ($item->getId()) {
+                $address->removeItem($item->getId());
+            } else {
+                $item->isDeleted(true);
+            }
             if ($address->getQuote()) {
-                $address->getQuote()->removeItem($item->getQuoteItemId());
+                if ($item->getQuoteItemId()) {
+                    $address->getQuote()->removeItem($item->getQuoteItemId());
+                } elseif ($item->getQuoteItem()) {
+                    $this->markUnsavedItemDeleted($item->getQuoteItem());
+                }
             }
         }
         return $this;
+    }
+
+    /**
+     * Mark an unsaved quote item and its related items as deleted.
+     *
+     * @param Item $item
+     * @return void
+     */
+    private function markUnsavedItemDeleted(Item $item): void
+    {
+        $quote = $item->getQuote();
+        if ($quote && (int)$quote->getItemsCount() === 1) {
+            $quote->setGiftMessageId(0);
+        }
+        $item->isDeleted(true);
+        if ($item->getHasChildren()) {
+            foreach ($item->getChildren() as $child) {
+                $child->isDeleted(true);
+            }
+        }
+        $parent = $item->getParentItem();
+        if ($parent) {
+            $parent->isDeleted(true);
+        }
+        $this->eventManager->dispatch('sales_quote_remove_item', ['quote_item' => $item]);
     }
 
     /**
