@@ -104,6 +104,8 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                     ) ? $option['print_value'] : $this->filterManager->stripTags(
                         $option['value']
                     );
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    $printValue = html_entity_decode((string)$printValue);
                     $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     $text = [];
