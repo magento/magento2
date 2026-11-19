@@ -214,6 +214,7 @@ class Repository implements ResetAfterRequestInterface
      * @param array $params
      * @return File
      * @throws LocalizedException
+     * @throws \UnexpectedValueException
      */
     public function createAsset($fileId, array $params = [])
     {
@@ -254,6 +255,7 @@ class Repository implements ResetAfterRequestInterface
      * Get current context for static view files
      *
      * @return \Magento\Framework\View\Asset\File\FallbackContext
+     * @throws \UnexpectedValueException
      */
     public function getStaticViewFileContext()
     {
@@ -413,6 +415,8 @@ class Repository implements ResetAfterRequestInterface
      *
      * @param string $fileId
      * @return string
+     * @throws LocalizedException
+     * @throws \UnexpectedValueException
      */
     public function getUrl($fileId)
     {
@@ -428,6 +432,8 @@ class Repository implements ResetAfterRequestInterface
      * @param string $fileId
      * @param array $params
      * @return string
+     * @throws LocalizedException
+     * @throws \UnexpectedValueException
      * @see getUrl()
      */
     public function getUrlWithParams($fileId, array $params)
