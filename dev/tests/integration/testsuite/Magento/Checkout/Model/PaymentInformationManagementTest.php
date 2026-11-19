@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Verifies that checkout rejects billing addresses belonging to other customers.
- * @suppressWarning(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 #[
     DataFixture(
