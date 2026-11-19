@@ -102,33 +102,20 @@ class CountryWithWebsites extends Table
         if (!$this->options) {
             $websiteIds = [];
 
-            if (!$this->shareConfig->isGlobalScope()) {
-                $allowedCountries = [];
+            $isGlobalScope = $this->shareConfig->isGlobalScope();
+            $customerId = $isGlobalScope ? $this->request->getParam('parent_id') : null;
 
-                foreach ($this->storeManager->getWebsites() as $website) {
-                    $countries = $this->allowedCountriesReader
-                        ->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId());
-                    $allowedCountries[] = $countries;
-
-                    foreach ($countries as $countryCode) {
-                        $websiteIds[$countryCode][] = $website->getId();
-                    }
-                }
-
-                $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
-            } else {
-                // Address can be added only for the allowed country list.
-                $websiteId = null;
-                $customerId = $this->request->getParam('parent_id') ?? null;
-                if ($customerId) {
-                    $customer = $this->customerRepository->getById($customerId);
-                    $websiteId = $customer->getWebsiteId();
-                }
-
+            if ($isGlobalScope && $customerId) {
+                $customer = $this->customerRepository->getById($customerId);
                 $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(
                     ScopeInterface::SCOPE_WEBSITE,
-                    $websiteId
+                    $customer->getWebsiteId()
                 );
+            } else {
+                [$allowedCountries, $websiteIds] = $this->getAllowedCountriesOfWebsites();
+                if ($isGlobalScope) {
+                    $websiteIds = [];
+                }
             }
 
             $this->options = $this->createCountriesCollection()
@@ -143,6 +130,29 @@ class CountryWithWebsites extends Table
         }
 
         return $this->options;
+    }
+
+    /**
+     * Collect allowed countries of all websites and the websites each country is allowed in
+     *
+     * @return array
+     */
+    private function getAllowedCountriesOfWebsites(): array
+    {
+        $allowedCountries = [];
+        $websiteIds = [];
+
+        foreach ($this->storeManager->getWebsites() as $website) {
+            $countries = $this->allowedCountriesReader
+                ->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $website->getId());
+            $allowedCountries[] = $countries;
+
+            foreach ($countries as $countryCode) {
+                $websiteIds[$countryCode][] = $website->getId();
+            }
+        }
+
+        return [array_unique(array_merge([], ...$allowedCountries)), $websiteIds];
     }
 
     /**
