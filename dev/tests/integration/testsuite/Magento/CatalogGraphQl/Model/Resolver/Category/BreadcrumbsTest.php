@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
+use GraphQL\Executor\Promise\Adapter\SyncPromise;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\CatalogGraphQl\Model\Resolver\Category\DataProvider\Breadcrumbs as BreadcrumbsDataProvider;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -23,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 
 #[
     CoversClass(Breadcrumbs::class),
+    CoversClass(BreadcrumbsDataProvider::class),
     AppArea(Area::AREA_GRAPHQL),
 ]
 class BreadcrumbsTest extends TestCase
@@ -48,52 +51,28 @@ class BreadcrumbsTest extends TestCase
     ]
     public function testBreadcrumbsOfAllCategoriesAreLoadedWithOneCollection(): void
     {
-        $topId = (int)DataFixtureStorageManager::getStorage()->get('top')->getId();
-        $tree = 'categoryList(filters: {ids: {eq: "' . $topId . '"}}) '
-            . '{ name children { name %1$s children { name %1$s } } }';
-        $breadcrumbs = 'breadcrumbs { category_id category_name category_level }';
-
-        [, $queriesWithoutBreadcrumbs] = $this->dispatch(sprintf($tree, ''));
-        [$output, $queriesWithBreadcrumbs] = $this->dispatch(sprintf($tree, $breadcrumbs));
-
-        $children = array_column($output['data']['categoryList'][0]['children'], null, 'name');
-        $this->assertSame(
-            [['category_id' => $topId, 'category_name' => 'Breadcrumbs Top', 'category_level' => 2]],
-            $children['Breadcrumbs A1']['breadcrumbs']
-        );
-        $this->assertCount(2, $children['Breadcrumbs A2']['children']);
-        foreach ($children['Breadcrumbs A2']['children'] as $child) {
-            $this->assertSame(
-                ['Breadcrumbs Top', 'Breadcrumbs A2'],
-                array_column($child['breadcrumbs'], 'category_name')
-            );
+        $storage = DataFixtureStorageManager::getStorage();
+        $categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $paths = [];
+        foreach (['a1', 'a2', 'b1', 'b2', 'b3', 'b4'] as $key) {
+            $paths[$key] = $categoryRepository->get((int)$storage->get($key)->getId())->getPath();
         }
-        $this->assertLessThanOrEqual(
-            2,
-            $queriesWithBreadcrumbs - $queriesWithoutBreadcrumbs,
-            'Breadcrumbs of 6 categories must be loaded with one collection (entity and attribute value selects)'
+        $resolver = $this->objectManager->create(
+            Breadcrumbs::class,
+            ['breadcrumbsDataProvider' => $this->objectManager->create(BreadcrumbsDataProvider::class)]
         );
-    }
-
-    /**
-     * Dispatch a GraphQL query and count the category entity selects it ran
-     *
-     * @param string $query
-     * @return array
-     */
-    private function dispatch(string $query): array
-    {
-        $request = $this->objectManager->create(Http::class);
-        $request->setPathInfo('/graphql');
-        $request->setMethod('POST');
-        $request->setContent(json_encode(['query' => '{ ' . $query . ' }']));
-        $request->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
+        $field = $this->createStub(Field::class);
+        $info = $this->createStub(ResolveInfo::class);
 
         $profiler = $this->objectManager->get(ResourceConnection::class)->getConnection()->getProfiler();
         $profiler->setEnabled(true);
         $profiler->clear();
         try {
-            $response = $this->objectManager->get(GraphQl::class)->dispatch($request);
+            $values = [];
+            foreach ($paths as $key => $path) {
+                $values[$key] = $resolver->resolve($field, null, $info, ['path' => $path]);
+            }
+            $breadcrumbs = array_map(fn ($value) => $this->getResolvedValue($value), $values);
             $categorySelects = 0;
             foreach ($profiler->getQueryProfiles(\Zend_Db_Profiler::SELECT) ?: [] as $queryProfile) {
                 if (str_contains($queryProfile->getQuery(), 'catalog_category_entity')) {
@@ -103,9 +82,38 @@ class BreadcrumbsTest extends TestCase
         } finally {
             $profiler->setEnabled(false);
         }
-        $output = $this->objectManager->get(SerializerInterface::class)->unserialize($response->getContent());
-        $this->assertArrayNotHasKey('errors', $output);
 
-        return [$output, $categorySelects];
+        $topId = (int)$storage->get('top')->getId();
+        $this->assertSame([$topId], array_map('intval', array_column($breadcrumbs['a1'], 'category_id')));
+        $this->assertSame(['Breadcrumbs Top'], array_column($breadcrumbs['a2'], 'category_name'));
+        $this->assertSame(['Breadcrumbs Top', 'Breadcrumbs A1'], array_column($breadcrumbs['b2'], 'category_name'));
+        $this->assertSame(['Breadcrumbs Top', 'Breadcrumbs A2'], array_column($breadcrumbs['b3'], 'category_name'));
+        $this->assertLessThanOrEqual(
+            2,
+            $categorySelects,
+            'Breadcrumbs of 6 categories must be loaded with one collection (entity and attribute value selects)'
+        );
+    }
+
+    /**
+     * Get the value a resolver returned, running deferred values the way the GraphQL executor does
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function getResolvedValue(mixed $value): mixed
+    {
+        if (!$value instanceof SyncPromise) {
+            return $value;
+        }
+        $result = null;
+        $value->then(
+            function ($resolved) use (&$result) {
+                $result = $resolved;
+            }
+        );
+        SyncPromise::runQueue();
+
+        return $result;
     }
 }
