@@ -81,6 +81,28 @@ class RedisLuaHelperTest extends TestCase
     }
 
     /**
+     * clearAllIndices() deletes the namespace's all_ids set, not the legacy set shared by all namespaces.
+     */
+    public function testClearAllIndicesPassesTheNamespaceAllIdsKey(): void
+    {
+        $redis = $this->createRedisMock();
+        $redis->method('eval')->willReturn(1);
+        $redis->method('script')->willReturn('sha');
+        $redis->expects($this->once())
+            ->method('evalSha')
+            ->with(
+                'sha',
+                ['cache:tags:px_*', 'cache:id_tags:px_*', 'cache:all_ids:px_', 1000],
+                3
+            )
+            ->willReturn(3);
+
+        $helper = new RedisLuaHelper($redis, true);
+
+        $this->assertSame(3, $helper->clearAllIndices('px_'));
+    }
+
+    /**
      * clearScriptCache() must not raise.
      */
     public function testClearScriptCacheDoesNotThrow(): void
