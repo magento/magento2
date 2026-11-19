@@ -17,7 +17,11 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
     {
         $this->cacheEventName = 'adminhtml_cache_flush_system';
         parent::setUp();
-        $this->command = new CacheCleanCommand($this->cacheManagerMock, $this->eventManagerMock);
+        $this->command = new CacheCleanCommand(
+            $this->cacheManagerMock,
+            $this->eventManagerMock,
+            $this->warmupRunnerMock
+        );
     }
 
     /**
@@ -40,6 +44,8 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
             $this->eventManagerMock->expects($this->never())->method('dispatch');
         }
 
+        $this->warmupRunnerMock->expects($this->never())->method('run');
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($param);
 
@@ -55,5 +61,27 @@ class CacheCleanCommandTest extends AbstractCacheManageCommandTestCase
     public static function getExpectedExecutionOutput(array $types)
     {
         return 'Cleaned cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
+    }
+
+    public function testExecuteWithWarmupOption(): void
+    {
+        $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn([
+            'A', 'B', 'C', 'full_page'
+        ]);
+        $this->cacheManagerMock->expects($this->once())->method('clean')->with(['A', 'B', 'C', 'full_page']);
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with($this->cacheEventName);
+        $this->warmupRunnerMock->expects($this->once())->method('run')->willReturnCallback(
+            function ($output) {
+                $output->writeln('warmup_output_marker');
+                return 1;
+            }
+        );
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['--warmup' => true]);
+
+        $display = $commandTester->getDisplay();
+        $this->assertStringContainsString('Cleaned cache types:', $display);
+        $this->assertStringContainsString('warmup_output_marker', $display);
     }
 }
