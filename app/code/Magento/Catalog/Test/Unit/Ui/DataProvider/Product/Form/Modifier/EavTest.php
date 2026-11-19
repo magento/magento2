@@ -394,6 +394,33 @@ class EavTest extends AbstractModifierTestCase
         $this->assertEquals($sourceData, $this->eav->modifyData([]));
     }
 
+    public function testGetProductTypeUsesSavedTypeForExistingProduct(): void
+    {
+        $this->productMock->setId(1);
+        $this->productMock->method('getTypeId')->willReturn('virtual');
+        $this->requestMock->method('getParam')->willReturnCallback(
+            static fn ($param, $default = null) => $param === 'type' ? 'simple' : $default
+        );
+
+        $this->assertSame('virtual', $this->invokeGetProductType());
+    }
+
+    public function testGetProductTypeUsesRequestTypeForNewProduct(): void
+    {
+        $this->productMock->setId(null);
+        $this->productMock->method('getTypeId')->willReturn('virtual');
+        $this->requestMock->method('getParam')->willReturnCallback(
+            static fn ($param, $default = null) => $param === 'type' ? 'simple' : $default
+        );
+
+        $this->assertSame('simple', $this->invokeGetProductType());
+    }
+
+    private function invokeGetProductType(): string
+    {
+        return (new \ReflectionClass($this->eav))->getMethod('getProductType')->invoke($this->eav);
+    }
+
     /**
      * @param int|null $productId
      * @param bool $productRequired
