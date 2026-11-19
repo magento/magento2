@@ -8,12 +8,16 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Catalog\Test\Fixture\ProductGlobalPriceStoreScopedDecimal;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -414,5 +418,38 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $item = $collection->getFirstItem();
         $this->assertSame(77.5, (float)$item->getPrice());
         $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
+    }
+
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, as: 'store'),
+        DataFixture(
+            AttributeFixture::class,
+            ['scope' => ProductAttributeInterface::SCOPE_STORE_TEXT, 'attribute_code' => 'store_only_value_attr'],
+            'attr'
+        ),
+        DataFixture(ProductFixture::class, as: 'p1'),
+    ]
+    public function testFilterOnStoreScopedAttributeWithoutDefaultValue(): void
+    {
+        $storeId = (int)$this->fixtures->get('store')->getId();
+        $productId = (int)$this->fixtures->get('p1')->getId();
+        $attributeId = (int)$this->fixtures->get('attr')->getAttributeId();
+        $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $resource->getConnection()->insert(
+            $resource->getTableName('catalog_product_entity_varchar'),
+            [
+                'attribute_id' => $attributeId,
+                'store_id' => $storeId,
+                'entity_id' => $productId,
+                'value' => 'store-only'
+            ]
+        );
+
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->addStoreFilter($storeId)->addAttributeToFilter('store_only_value_attr', 'store-only');
+
+        $this->assertSame([$productId], array_map('intval', $collection->getAllIds()));
     }
 }
