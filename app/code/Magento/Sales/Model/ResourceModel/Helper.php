@@ -75,4 +75,40 @@ class Helper extends \Magento\Framework\DB\Helper implements HelperInterface
 
         return $this;
     }
+
+    /**
+     * Update rating position only for the periods that contain the given dates
+     *
+     * @param string $aggregation One of BestsellersReport::AGGREGATION_XXX constants
+     * @param array $aggregationAliases
+     * @param string $mainTable
+     * @param string $aggregationTable
+     * @param array $periods Refreshed dates in Y-m-d format
+     * @return $this
+     */
+    public function getBestsellersReportUpdateRatingPosForPeriods(
+        $aggregation,
+        $aggregationAliases,
+        $mainTable,
+        $aggregationTable,
+        array $periods
+    ) {
+        if ($aggregation == $aggregationAliases['monthly']) {
+            $type = 'month';
+        } elseif ($aggregation == $aggregationAliases['yearly']) {
+            $type = 'year';
+        } else {
+            $type = 'day';
+        }
+        $this->_reportsResourceHelper->updateReportRatingPosForPeriods(
+            $this->_resource->getConnection('sales'),
+            $type,
+            'qty_ordered',
+            $mainTable,
+            $aggregationTable,
+            $periods
+        );
+
+        return $this;
+    }
 }

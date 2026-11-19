@@ -183,7 +183,10 @@ class BestsellersTest extends TestCase
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStores')->with(true)->willReturn([$store]);
 
-        $this->helper->expects($this->exactly(3))->method('getBestsellersReportUpdateRatingPos');
+        $this->helper->expects($this->once())->method('getBestsellersReportUpdateRatingPos');
+        $this->helper->expects($this->exactly(3))
+            ->method('getBestsellersReportUpdateRatingPosForPeriods')
+            ->with($this->anything(), $this->anything(), $this->anything(), $this->anything(), ['date1', 'date2']);
 
         $flag = $this->createMock(Flag::class);
         $flag->expects($this->once())->method('setReportFlagCode')->willReturn($flag);
@@ -210,6 +213,65 @@ class BestsellersTest extends TestCase
         );
 
         $this->report->aggregate($from, $to);
+
+        $updateRatingPos = new \ReflectionMethod($this->report, '_updateRatingPos');
+        $updateRatingPos->invoke($this->report, Bestsellers::AGGREGATION_DAILY);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testRatingPeriodsAreResetWhenRangedRatingUpdateFails(): void
+    {
+        $select = $this->createStub(Select::class);
+        foreach (['from', 'distinct', 'joinInner', 'joinLeft', 'where', 'group'] as $method) {
+            $select->method($method)->willReturnSelf();
+        }
+        $query = $this->createStub(\Zend_Db_Statement_Interface::class);
+        $query->method('fetchAll')->willReturn(['2025-01-20']);
+        $connection = $this->createStub(AdapterInterface::class);
+        $connection->method('select')->willReturn($select);
+        $connection->method('query')->willReturn($query);
+        $connection->method('getDatePartSql')->willReturn('DATE(`source_table`.`created_at`)');
+        $resource = $this->createStub(ResourceConnection::class);
+        $resource->method('getConnection')->willReturn($connection);
+        $this->context->method('getResources')->willReturn($resource);
+        $store = $this->createStub(StoreInterface::class);
+        $store->method('getId')->willReturn(1);
+        $this->storeManager->method('getStores')->willReturn([$store]);
+        $this->time->method('scopeDate')->willReturn($this->createStub(\DateTime::class));
+
+        $this->helper->expects($this->once())
+            ->method('getBestsellersReportUpdateRatingPosForPeriods')
+            ->willThrowException(new \RuntimeException('rating update failed'));
+        $this->helper->expects($this->once())->method('getBestsellersReportUpdateRatingPos');
+
+        $this->report = new Bestsellers(
+            $this->context,
+            $this->logger,
+            $this->time,
+            $this->flagFactory,
+            $this->validator,
+            $this->date,
+            $this->product,
+            $this->helper,
+            $this->connectionName,
+            [],
+            $this->storeManager
+        );
+
+        try {
+            $this->report->aggregate(new \DateTime('yesterday'), new \DateTime());
+            $this->fail('The rating update exception must propagate');
+        } catch (\RuntimeException $exception) {
+            $this->assertSame('rating update failed', $exception->getMessage());
+        }
+
+        $ratingPeriods = new \ReflectionProperty($this->report, 'ratingPeriods');
+        $this->assertNull($ratingPeriods->getValue($this->report));
+        $updateRatingPos = new \ReflectionMethod($this->report, '_updateRatingPos');
+        $updateRatingPos->invoke($this->report, Bestsellers::AGGREGATION_DAILY);
     }
 
     public function testClearByDateRange()
@@ -305,6 +367,7 @@ class BestsellersTest extends TestCase
         $this->storeManager->expects($this->once())->method('getStores')->with(true)->willReturn([$store]);
 
         $this->helper->expects($this->exactly(3))->method('getBestsellersReportUpdateRatingPos');
+        $this->helper->expects($this->never())->method('getBestsellersReportUpdateRatingPosForPeriods');
 
         $flag = $this->createMock(Flag::class);
         $flag->expects($this->once())->method('setReportFlagCode')->willReturn($flag);
@@ -375,7 +438,10 @@ class BestsellersTest extends TestCase
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStores')->with(true)->willReturn([$store]);
 
-        $this->helper->expects($this->exactly(3))->method('getBestsellersReportUpdateRatingPos');
+        $this->helper->expects($this->never())->method('getBestsellersReportUpdateRatingPos');
+        $this->helper->expects($this->exactly(3))
+            ->method('getBestsellersReportUpdateRatingPosForPeriods')
+            ->with($this->anything(), $this->anything(), $this->anything(), $this->anything(), $randomDates);
 
         $flag = $this->createMock(Flag::class);
         $flag->expects($this->once())->method('setReportFlagCode')->willReturn($flag);

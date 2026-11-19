@@ -56,6 +56,13 @@ class Bestsellers extends AbstractReport
     protected $storeManager;
 
     /**
+     * Dates refreshed by the running aggregate() call; null while no range is being refreshed
+     *
+     * @var string[]|null
+     */
+    private ?array $ratingPeriods = null;
+
+    /**
      * @param Context $context
      * @param LoggerInterface $logger
      * @param TimezoneInterface $localeDate
@@ -151,9 +158,14 @@ class Bestsellers extends AbstractReport
         $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
         $connection->query($insertQuery);
 
-        $this->_updateRatingPos(self::AGGREGATION_DAILY);
-        $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
-        $this->_updateRatingPos(self::AGGREGATION_YEARLY);
+        $this->ratingPeriods = $subSelect !== null ? $this->getRange($subSelect) : null;
+        try {
+            $this->_updateRatingPos(self::AGGREGATION_DAILY);
+            $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
+            $this->_updateRatingPos(self::AGGREGATION_YEARLY);
+        } finally {
+            $this->ratingPeriods = null;
+        }
         $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE);
 
         return $this;
@@ -286,6 +298,16 @@ class Bestsellers extends AbstractReport
             'monthly' => self::AGGREGATION_MONTHLY,
             'yearly' => self::AGGREGATION_YEARLY,
         ];
+        if ($this->ratingPeriods !== null) {
+            $this->_salesResourceHelper->getBestsellersReportUpdateRatingPosForPeriods(
+                $aggregation,
+                $aggregationAliases,
+                $this->getMainTable(),
+                $aggregationTable,
+                $this->ratingPeriods
+            );
+            return $this;
+        }
         $this->_salesResourceHelper->getBestsellersReportUpdateRatingPos(
             $aggregation,
             $aggregationAliases,
