@@ -152,6 +152,19 @@ class FileTest extends TestCase
     /**
      * @return void
      */
+    public function testGetContentPreservesWhitespace(): void
+    {
+        $content = "foo();\n// trailing comment\n";
+        $this->source->expects($this->once())
+            ->method('getContent')
+            ->with($this->object)
+            ->willReturn($content);
+        $this->assertSame($content, $this->object->getContent());
+    }
+
+    /**
+     * @return void
+     */
     public function testGetContentNotFound(): void
     {
         $this->expectException('Magento\Framework\View\Asset\File\NotFoundException');

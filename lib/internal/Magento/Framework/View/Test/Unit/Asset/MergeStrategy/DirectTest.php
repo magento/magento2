@@ -12,9 +12,12 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Math\Random;
+use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\MergeStrategy\Direct;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\Url\CssResolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -142,6 +145,36 @@ class DirectTest extends TestCase
         $this->staticDirMock->expects($this->once())
             ->method('renameFile')
             ->with('foo/result' . $uniqId, 'foo/result', $this->staticDirMock);
+
+        $this->model->merge($assets, $this->resultAssetMock);
+    }
+
+    public function testMergeJsFileEndingWithLineComment()
+    {
+        $uniqId = '_b3bf82fa6e140594420fa90982a8e877';
+        $this->resultAssetMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn('foo/result');
+        $this->resultAssetMock->expects($this->atLeastOnce())
+            ->method('getContentType')
+            ->willReturn('js');
+        $contents = ['first.js' => "first();\n// trailing comment\n", 'second.js' => "second();\n"];
+        $source = $this->createMock(Source::class);
+        $source->method('getContent')
+            ->willReturnCallback(fn (File $asset) => $contents[$asset->getFilePath()]);
+        $minification = $this->createMock(Minification::class);
+        $minification->method('addMinifiedSign')->willReturnArgument(0);
+        $context = $this->createMock(ContextInterface::class);
+        $assets = [];
+        foreach (array_keys($contents) as $filePath) {
+            $assets[] = new File($source, $context, $filePath, '', 'js', $minification);
+        }
+        $this->mathRandomMock->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($uniqId);
+        $this->staticDirMock->expects($this->once())
+            ->method('writeFile')
+            ->with('foo/result' . $uniqId, "first();\n// trailing comment\n;second();\n");
 
         $this->model->merge($assets, $this->resultAssetMock);
     }
