@@ -7,16 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Element\Template\File\Resolver;
 use Magento\Framework\View\Element\Template\File\Validator;
 use Magento\Framework\View\TemplateEngineInterface;
@@ -74,6 +80,26 @@ class TemplateTest extends TestCase
      */
     protected $appState;
 
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $cache;
+
+    /**
+     * @var CacheStateInterface|MockObject
+     */
+    private $cacheState;
+
+    /**
+     * @var Context
+     */
+    private Context $context;
+
+    /**
+     * @var LockManagerInterface|MockObject
+     */
+    private LockManagerInterface $lockManager;
+
     protected function setUp(): void
     {
         $this->resolver = $this->createMock(Resolver::class);
@@ -113,10 +139,19 @@ class TemplateTest extends TestCase
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');
+        $this->cache = $this->createMock(CacheInterface::class);
+        $this->cacheState = $this->createMock(CacheStateInterface::class);
+        $this->lockManager = $this->createMock(LockManagerInterface::class);
         $helper = new ObjectManager($this);
-        $this->block = $helper->getObject(
-            Template::class,
+        $this->context = $helper->getObject(
+            Context::class,
             [
+                'lockQuery' => new LockGuardedCacheLoader(
+                    $this->lockManager,
+                    deploymentConfig: $this->createMock(DeploymentConfig::class)
+                ),
+                'cache' => $this->cache,
+                'cacheState' => $this->cacheState,
                 'filesystem' => $this->filesystem,
                 'enginePool' => $this->templateEngine,
                 'resolver' => $this->resolver,
@@ -124,9 +159,12 @@ class TemplateTest extends TestCase
                 'appState' => $this->appState,
                 'logger' => $this->loggerMock,
                 'storeManager' => $storeManagerMock,
-                'urlBuilder' => $urlBuilderMock,
-                'data' => ['template' => 'template.phtml', 'module_name' => 'Fixture_Module']
+                'urlBuilder' => $urlBuilderMock
             ]
+        );
+        $this->block = new Template(
+            $this->context,
+            ['template' => 'template.phtml', 'module_name' => 'Fixture_Module']
         );
     }
 
@@ -196,6 +234,151 @@ class TemplateTest extends TestCase
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage($exception);
         $this->block->fetchView($template);
+    }
+
+    /**
+     * A failed render must not prevent a fresh block from rendering after its template is fixed.
+     */
+    public function testToHtmlDoesNotCacheFailedRenderAndRetriesWithFixedTemplate(): void
+    {
+        $output = '<h1>Template Contents</h1>';
+        $cacheKey = Template::CUSTOM_CACHE_KEY_PREFIX . 'probe';
+        $cachedData = false;
+        $this->block->setTemplate('wrong_template_path.phtml');
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $fixedBlock = new Template(
+            $this->context,
+            [
+                'template' => 'themedir/template.phtml',
+                'module_name' => 'Fixture_Module',
+                'cache_lifetime' => 3600,
+                'cache_key' => 'probe'
+            ]
+        );
+        $this->resolver->expects($this->exactly(2))
+            ->method('getTemplateFileName')
+            ->willReturnArgument(0);
+        $this->validator->expects($this->exactly(2))
+            ->method('isValid')
+            ->willReturnMap([['wrong_template_path.phtml', false], ['themedir/template.phtml', true]]);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->loggerMock->expects($this->once())->method('critical');
+        $this->templateEngine->expects($this->once())
+            ->method('render')
+            ->with($fixedBlock, 'themedir/template.phtml', [])
+            ->willReturn($output);
+        $this->cacheState->method('isEnabled')->with(Template::CACHE_GROUP)->willReturn(true);
+        $this->cache->expects($this->exactly(2))
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturnCallback(function () use (&$cachedData) {
+                return $cachedData;
+            });
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with($output, $cacheKey, $this->anything(), 3600)
+            ->willReturnCallback(function ($data) use (&$cachedData) {
+                $cachedData = $data;
+                return true;
+            });
+        $this->lockManager->expects($this->exactly(2))->method('lock')->with($cacheKey, 0)->willReturn(true);
+        $this->lockManager->expects($this->exactly(2))->method('unlock')->with($cacheKey);
+
+        $this->assertSame('', $this->block->toHtml());
+        $this->assertFalse($cachedData);
+        $this->assertSame($output, $fixedBlock->toHtml());
+        $this->assertSame($output, $cachedData);
+    }
+
+    /**
+     * Positive control for the guard above: a render that succeeded is still cached.
+     */
+    public function testToHtmlCachesSuccessfulRender(): void
+    {
+        $this->expectOutputString('');
+        $output = '<h1>Template Contents</h1>';
+        $template = 'themedir/template.phtml';
+        $cacheKey = Template::CUSTOM_CACHE_KEY_PREFIX . 'probe';
+        $this->block->setTemplate($template);
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->resolver->expects($this->once())->method('getTemplateFileName')->willReturnArgument(0);
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(true);
+        $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
+        $this->cacheState->method('isEnabled')->with(Template::CACHE_GROUP)->willReturn(true);
+        $this->cache->expects($this->once())->method('load')->with($cacheKey)->willReturn(false);
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with($output, $cacheKey, $this->anything(), 3600);
+        $this->lockManager->expects($this->once())->method('lock')->with($cacheKey, 0)->willReturn(true);
+        $this->lockManager->expects($this->once())->method('unlock')->with($cacheKey);
+
+        $this->assertSame($output, $this->block->toHtml());
+    }
+
+    /**
+     * A block that renders nothing by design keeps its existing behavior and is still cached, so it
+     * is not re-rendered on every request. This is what separates the guard from refusing to cache
+     * empty output in general.
+     */
+    public function testRenderThatIsEmptyByDesignIsStillCached()
+    {
+        $this->expectOutputString('');
+        $template = 'themedir/empty.phtml';
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(true);
+        $this->templateEngine->expects($this->once())->method('render')->willReturn('');
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with('', Template::CUSTOM_CACHE_KEY_PREFIX . 'probe', $this->anything(), 3600);
+
+        $this->assertEquals('', $this->block->fetchView($template));
+        $this->assertSame($this->block, $this->invokeSaveCache(''));
+    }
+
+    /**
+     * A block may render several templates. Once one of them has failed the rendering is incomplete,
+     * so the output is not cached even though it is no longer empty.
+     */
+    public function testRenderIsNotCachedWhenAnEarlierTemplateFailed()
+    {
+        $this->expectOutputString('');
+        $output = '<p>Rendered</p>';
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->method('isValid')
+            ->willReturnMap([['missing.phtml', false], ['themedir/template.phtml', true]]);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->loggerMock->expects($this->once())->method('critical');
+        $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->never())->method('save');
+
+        $this->assertEquals('', $this->block->fetchView('missing.phtml'));
+        $this->assertEquals($output, $this->block->fetchView('themedir/template.phtml'));
+        $this->assertFalse($this->invokeSaveCache($output));
+    }
+
+    /**
+     * @param string $data
+     * @return Template|false
+     */
+    private function invokeSaveCache($data)
+    {
+        return (new \ReflectionMethod(Template::class, '_saveCache'))->invoke($this->block, $data);
     }
 
     public function testSetTemplateContext()
