@@ -27,7 +27,7 @@ class IndexSwitcherProxy implements IndexSwitcherInterface
     /**
      * Instance name to create
      *
-     * @var string
+     * @var string[]
      */
     private $handlers;
 

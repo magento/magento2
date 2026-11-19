@@ -25,7 +25,7 @@ class StringBinary extends Column implements
     private $nullable;
 
     /**
-     * @var int
+     * @var string|null
      */
     private $default;
 

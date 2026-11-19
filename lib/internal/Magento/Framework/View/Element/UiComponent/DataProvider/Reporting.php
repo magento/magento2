@@ -20,7 +20,7 @@ class Reporting implements ReportingInterface
     protected $collectionFactory;
 
     /**
-     * @var array
+     * @var FilterPool
      */
     protected $filterPool;
 

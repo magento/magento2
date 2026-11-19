@@ -36,7 +36,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     private $currentTreePath;
 
     /**
-     * @var OpednDialogUrl
+     * @var OpenDialogUrl
      */
     private $openDialogUrl;
 

@@ -46,7 +46,7 @@ class Category extends DataObject
     private $string;
 
     /**
-     * @var SearchCriteriaBuilder|void
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
