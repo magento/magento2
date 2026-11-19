@@ -90,6 +90,11 @@ class RequestPreprocessor
                     $response = $this->_responseFactory->create();
                     $response->setRedirect($redirectUrl, $redirectCode);
                     $response->setNoCacheHeaders();
+                    $redirectHost = parse_url($redirectUrl, PHP_URL_HOST);
+                    $requestHost = $request->getHttpHost();
+                    if ($redirectHost && $requestHost && strcasecmp($redirectHost, $requestHost) !== 0) {
+                        $this->removeSessionCookie();
+                    }
                     return $response;
                 }
             }
@@ -97,6 +102,39 @@ class RequestPreprocessor
         $request->setDispatched(false);
 
         return $proceed($request);
+    }
+
+    /**
+     * Remove only the PHP session cookie queued before the canonical redirect.
+     *
+     * @return void
+     */
+    private function removeSessionCookie(): void
+    {
+        if (headers_sent()) {
+            return;
+        }
+
+        $sessionName = session_name();
+        $otherCookies = [];
+        $sessionCookieQueued = false;
+        foreach (headers_list() as $header) {
+            if (preg_match('/^Set-Cookie:[ \t]*([^=]+)=/i', $header, $matches)) {
+                if ($matches[1] === $sessionName) {
+                    $sessionCookieQueued = true;
+                } else {
+                    $otherCookies[] = $header;
+                }
+            }
+        }
+
+        if ($sessionCookieQueued) {
+            // PHP can remove Set-Cookie by header name only.
+            header_remove('Set-Cookie');
+            foreach ($otherCookies as $header) {
+                header($header, false);
+            }
+        }
     }
 
     /**
