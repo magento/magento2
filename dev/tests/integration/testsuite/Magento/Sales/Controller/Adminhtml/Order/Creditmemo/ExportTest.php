@@ -40,13 +40,15 @@ class ExportTest extends ExportBase
      * @param string $format
      * @param bool $addIdToUrl
      * @param string $namespace
+     * @param string $createdAtHeader
      * @return void
      */
     #[DataProvider('exportCreditmemoDataProvider')]
     public function testExportCreditmemo(
         string $format,
         bool $addIdToUrl,
-        string $namespace
+        string $namespace,
+        string $createdAtHeader
     ): void {
         $order = $this->getOrder('200000001');
         $url = $this->getExportUrl($format, $addIdToUrl ? (int)$order->getId() : null);
@@ -60,7 +62,7 @@ class ExportTest extends ExportBase
         $this->assertNotFalse($exportedCreditmemo);
         $this->assertEquals(
             $this->prepareDate($creditmemo->getCreatedAt(), 'America/Chicago'),
-            $exportedCreditmemo['Created']
+            $exportedCreditmemo[$createdAtHeader]
         );
         $this->assertEquals(
             $this->prepareDate($order->getCreatedAt(), 'America/Chicago'),
@@ -78,21 +80,25 @@ class ExportTest extends ExportBase
                 'format' => ExportBase::CSV_FORMAT,
                 'addIdToUrl' => false,
                 'namespace' => 'sales_order_creditmemo_grid',
+                'createdAtHeader' => 'Credit Memo Date',
             ],
             'creditmemo_grid_in_csv_from_order_view' => [
                 'format' => ExportBase::CSV_FORMAT,
                 'addIdToUrl' => true,
                 'namespace' => 'sales_order_view_creditmemo_grid',
+                'createdAtHeader' => 'Created',
             ],
             'creditmemo_grid_in_xml' => [
                 'format' => ExportBase::XML_FORMAT,
                 'addIdToUrl' => false,
                 'namespace' => 'sales_order_creditmemo_grid',
+                'createdAtHeader' => 'Credit Memo Date',
             ],
             'creditmemo_grid_in_xml_from_order_view' => [
                 'format' => ExportBase::XML_FORMAT,
                 'addIdToUrl' => true,
                 'namespace' => 'sales_order_view_creditmemo_grid',
+                'createdAtHeader' => 'Created',
             ],
         ];
     }
