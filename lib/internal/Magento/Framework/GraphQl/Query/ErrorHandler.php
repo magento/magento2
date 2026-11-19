@@ -82,6 +82,9 @@ class ErrorHandler implements ErrorHandlerInterface
             return;
         }
 
-        $this->logger->error($error);
+        $this->logger->error(
+            'GraphQL request failed with an error of the {errorCategory} category',
+            ['errorCategory' => $category, 'exception' => $error]
+        );
     }
 }
