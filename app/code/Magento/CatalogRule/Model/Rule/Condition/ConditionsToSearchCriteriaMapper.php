@@ -245,6 +245,8 @@ class ConditionsToSearchCriteriaMapper
             'nlike' => 'like',
             'in' => 'nin',
             'nin' => 'in',
+            'is_null' => 'notnull',
+            'notnull' => 'is_null',
         ];
 
         if (!array_key_exists($filter->getConditionType(), $operatorsMap)) {
@@ -320,7 +322,7 @@ class ConditionsToSearchCriteriaMapper
             '!{}' => 'nlike', // does not contains
             '()' => 'in',    // is one of
             '!()' => 'nin',   // is not one of
-            '<=>' => 'is_null'
+            '<=>' => 'is_null',
         ];
 
         if (!array_key_exists($ruleOperator, $operatorsMap)) {

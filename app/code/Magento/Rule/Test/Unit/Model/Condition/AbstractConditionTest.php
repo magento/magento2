@@ -99,6 +99,8 @@ class AbstractConditionTest extends TestCase
             [1, '>=', 0, false],
             [0, '<', [1], false],
 
+            // Without grid/multiselect input type, !{} + array needle hits isArrayOperatorType mismatch.
+            // Empty product values with grid input type are covered in validateAttributeArrayInputTypeDataProvider.
             [[1], '!{}', [], false],
             [[1], '!{}', [1], false],
             [[1], '!{}', [0], false],
@@ -186,10 +188,17 @@ class AbstractConditionTest extends TestCase
             [1, '{}', 1, false, 'grid'],
             [1, '!{}', [1, 2, 3], false, 'grid'],
             [1, '!{}', [], false, 'grid'],
-            [[1], '!{}', [], false, 'grid'],
+            [[1], '!{}', [], true, 'grid'],
             [[1], '{}', null, false, 'grid'],
             [null, '{}', null, true, 'input'],
             [null, '!{}', null, false, 'input'],
+
+            // is undefined (condition needle is ignored)
+            [null, '<=>', null, true, 'select'],
+            [null, '<=>', '', true, 'select'],
+            [null, '<=>', 1, false, 'select'],
+            [null, '<=>', [], true, 'multiselect'],
+            [null, '<=>', [1], false, 'multiselect'],
             [null, '{}', [1], false, 'input'],
 
             [[1, 2, 3], '()', 1, true, 'select'],
