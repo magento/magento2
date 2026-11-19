@@ -7,7 +7,11 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
+use Magento\Catalog\Test\Fixture\AttributeSet as AttributeSetFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute as CustomerAttributeFixture;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
@@ -15,6 +19,7 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -27,6 +32,7 @@ use Magento\Framework\Exception\StateException;
  *
  * @see \Magento\Catalog\Model\ResourceModel\Product
  * @see \Magento\Catalog\Model\ResourceModel\AbstractResource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends TestCase
 {
@@ -273,5 +279,48 @@ class ProductTest extends TestCase
             (((int)$currentTableStatusAfterSecondAttrSave['Auto_increment']) + 1),
             (int) $currentTableStatusAfterThirdAttrSave['Auto_increment']
         );
+    }
+
+    /**
+     * Checks that switching the attribute set ignores attributes of another entity type linked to the old set.
+     */
+    #[
+        DataFixture(AttributeSetFixture::class, as: 'attribute_set'),
+        DataFixture(
+            CustomerAttributeFixture::class,
+            ['entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER],
+            'customer_attribute'
+        ),
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
+    public function testChangeAttributeSetWithForeignEntityTypeAttributeInOldSet(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $this->productRepository->get($fixtures->get('product')->getSku(), true, 0, true);
+        $customerAttribute = $fixtures->get('customer_attribute');
+        $resource = $this->objectManager->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $groupId = $connection->fetchOne(
+            $connection->select()
+                ->from($resource->getTableName('eav_attribute_group'), 'attribute_group_id')
+                ->where('attribute_set_id = ?', $product->getAttributeSetId())
+                ->limit(1)
+        );
+        $connection->insert(
+            $resource->getTableName('eav_entity_attribute'),
+            [
+                'entity_type_id' => $customerAttribute->getEntityTypeId(),
+                'attribute_set_id' => $product->getAttributeSetId(),
+                'attribute_group_id' => $groupId,
+                'attribute_id' => $customerAttribute->getAttributeId(),
+            ]
+        );
+
+        $newAttributeSetId = (int)$fixtures->get('attribute_set')->getAttributeSetId();
+        $product->setAttributeSetId($newAttributeSetId);
+        $this->productRepository->save($product);
+
+        $product = $this->productRepository->get($product->getSku(), false, null, true);
+        $this->assertSame($newAttributeSetId, (int)$product->getAttributeSetId());
     }
 }

@@ -430,6 +430,10 @@ class AttributeManagementTest extends TestCase
             ->method('setAttributeSetFilter')
             ->with(88)
             ->willReturnSelf();
+        $this->attributeCollectionMock->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.entity_type_id', 88)
+            ->willReturnSelf();
         $attributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $this->attributeCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->attributeCollectionMock->expects($this->once())->method('getItems')->willReturn([$attributeMock]);
