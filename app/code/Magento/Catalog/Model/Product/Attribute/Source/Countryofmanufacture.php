@@ -92,4 +92,17 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
         }
         return $options;
     }
+
+    /**
+     * Retrieve option text without the empty country placeholder.
+     *
+     * @param string|int|null $value
+     * @return string|bool
+     */
+    public function getOptionText($value)
+    {
+        $result = parent::getOptionText($value);
+
+        return $result === ' ' ? '' : $result;
+    }
 }
