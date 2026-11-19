@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Ups\Model;
 
 use GuzzleHttp\Exception\GuzzleException;
-use Laminas\Http\Client;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -182,6 +181,11 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     private $deferredProxyFactory;
 
     /**
+     * @var ClientFactory
+     */
+    private $httpClientFactory;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param RateErrorFactory $rateErrorFactory
      * @param LoggerInterface $logger
@@ -253,6 +257,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
         $this->upsAuth = $upsAuth;
+        $this->httpClientFactory = $httpClientFactory;
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->deferredProxyFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
@@ -601,12 +606,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                 if (!$url) {
                     $url = $this->_defaultCgiGatewayUrl;
                 }
-                $client = new Client();
-                $client->setUri($url);
-                $client->setOptions(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterGet($params);
-                $response = $client->send();
-                $responseBody = $response->getBody();
+                $client = $this->httpClientFactory->create();
+                $client->setTimeout(30);
+                $client->get($url . (str_contains($url, '?') ? '&' : '?') . http_build_query($params));
+                $responseBody = $client->getBody();
 
                 $debugData['result'] = $responseBody;
                 $this->_setCachedQuotes($params, $responseBody);
