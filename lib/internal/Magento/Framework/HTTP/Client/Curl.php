@@ -3,7 +3,6 @@
  * Copyright 2011 Adobe
  * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Client;
@@ -16,6 +15,17 @@ namespace Magento\Framework\HTTP\Client;
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
+    /**
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html
+     */
+    private const HTTP_METHODS_WITH_PAYLOAD = [
+        'POST',
+        'PUT',
+        'PATCH',
+        'OPTIONS',
+        'DELETE'
+    ];
+
     /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
@@ -222,6 +232,8 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param string $uri uri relative to host, ex. "/index.php"
      * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.1
      */
     public function get($uri)
     {
@@ -238,11 +250,107 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * @param array|string $params
      * @return void
      *
-     * @see \Magento\Framework\HTTP\Client#post($uri, $params)
+     * @see \Magento\Framework\HTTP\Client::post($uri, $params)
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.3
      */
     public function post($uri, $params)
     {
         $this->makeRequest("POST", $uri, $params);
+    }
+
+    /**
+     * Make PUT request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.4
+     */
+    public function put(string $uri, string|array $params): void
+    {
+        $this->makeRequest("PUT", $uri, $params);
+    }
+
+    /**
+     * Make DELETE request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.5
+     */
+    public function delete($uri, array|string $params = []): void
+    {
+        $this->makeRequest("DELETE", $uri, $params);
+    }
+
+    /**
+     * Make PATCH request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/info/rfc5789
+     */
+    public function patch(string $uri, array|string $params): void
+    {
+        $this->makeRequest("PATCH", $uri, $params);
+    }
+
+    /**
+     * Make OPTIONS request
+     *
+     * @param string $uri
+     * @param array|string $params
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.7
+     */
+    public function options(string $uri, array|string $params = []): void
+    {
+        $this->makeRequest("OPTIONS", $uri, $params);
+    }
+
+    /**
+     * Make HEAD request
+     *
+     * @param string $uri
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.2
+     */
+    public function head(string $uri): void
+    {
+        $this->makeRequest("HEAD", $uri);
+    }
+
+    /**
+     * Make TRACE request
+     *
+     * @param string $uri
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.8
+     */
+    public function trace(string $uri): void
+    {
+        $this->makeRequest("TRACE", $uri);
+    }
+
+    /**
+     * Make CONNECT request
+     *
+     * @param string $uri
+     * @return void
+     *
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.6
+     */
+    public function connect(string $uri): void
+    {
+        $this->makeRequest("CONNECT", $uri);
     }
 
     /**
@@ -358,13 +466,24 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         $this->_ch = curl_init();
         $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
         $this->curlOption(CURLOPT_URL, $uri);
-        if ($method == 'POST') {
-            $this->curlOption(CURLOPT_POST, 1);
+
+        if (in_array($method, self::HTTP_METHODS_WITH_PAYLOAD)) {
             $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
-        } elseif ($method == "GET") {
-            $this->curlOption(CURLOPT_HTTPGET, 1);
-        } else {
-            $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
+        }
+
+        switch ($method) {
+            case 'POST':
+                $this->curlOption(CURLOPT_POST, 1);
+                break;
+            case 'PUT':
+                $this->curlOption(CURLOPT_PUT, 1);
+                break;
+            case "GET":
+                $this->curlOption(CURLOPT_HTTPGET, 1);
+                break;
+            default:
+                $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
+                break;
         }
 
         if (count($this->_headers)) {
