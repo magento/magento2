@@ -9,8 +9,10 @@ namespace Magento\OfflineShipping\Test\Unit\Model\Carrier;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Model\Carrier\Tablerate;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate as TablerateResource;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
@@ -19,7 +21,6 @@ use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Sales\Model\Order\Item;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\Callback;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -208,6 +209,68 @@ class TablerateTest extends TestCase
         $this->assertEquals($rate['cost'], $returnCost);
         $this->assertEquals($method, $returnMethod);
         $this->assertEquals($result, $returnResult);
+    }
+
+    /**
+     * Virtual children of a ship-separately bundle must be excluded from both package values
+     *
+     * @return void
+     */
+    public function testCollectRatesExcludesVirtualBundleChildrenFromPackageValues(): void
+    {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->willReturnCallback(fn ($path) => $path !== 'carriers/tablerate/include_virtual_price');
+
+        $bundle = $this->createItemMock(false, 70);
+        $physicalChild = $this->createItemMock(false, 30, $bundle);
+        $virtualChild = $this->createItemMock(true, 40, $bundle);
+        $bundle->method('getHasChildren')->willReturn(true);
+        $bundle->method('isShipSeparately')->willReturn(true);
+        $bundle->method('getChildren')->willReturn([$physicalChild, $virtualChild]);
+
+        $request = new RateRequest();
+        $request->setAllItems([$bundle, $physicalChild, $virtualChild])
+            ->setPackageValue(70)
+            ->setPackageValueWithDiscount(70)
+            ->setPackageQty(2);
+
+        $packageValues = [];
+        $tablerate = $this->createMock(TablerateResource::class);
+        $tablerate->method('getRate')->willReturnCallback(
+            function (RateRequest $rateRequest) use (&$packageValues) {
+                $packageValues = [$rateRequest->getPackageValue(), $rateRequest->getPackageValueWithDiscount()];
+                return [];
+            }
+        );
+        $this->tablerateFactoryMock->method('create')->willReturn($tablerate);
+        $this->resultFactoryMock->method('create')->willReturn($this->createMock(Result::class));
+
+        $this->model->collectRates($request);
+
+        $this->assertEquals([30, 30], $packageValues);
+    }
+
+    /**
+     * Creates a cart item mock
+     *
+     * @param bool $isVirtual
+     * @param float $baseRowTotal
+     * @param MockObject|null $parentItem
+     * @return MockObject
+     */
+    private function createItemMock(bool $isVirtual, float $baseRowTotal, ?MockObject $parentItem = null): MockObject
+    {
+        $product = $this->createPartialMock(Product::class, ['isVirtual']);
+        $product->method('isVirtual')->willReturn($isVirtual);
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getHasChildren', 'getChildren', 'getProduct', 'getParentItem', 'isShipSeparately', 'getBaseRowTotal']
+        );
+        $item->method('getProduct')->willReturn($product);
+        $item->method('getParentItem')->willReturn($parentItem);
+        $item->method('getBaseRowTotal')->willReturn($baseRowTotal);
+
+        return $item;
     }
 
     /**
