@@ -1196,18 +1196,21 @@ XMLRequest;
             [
                 'deferred' => new CallbackDeferred(
                     function () use ($httpResponse, $debugData) {
-                        $responseResult = null;
                         $jsonResponse = '';
                         try {
                             $responseResult = $httpResponse->get();
+                            $debugData['result'] = [
+                                'error' => $responseResult->getBody(),
+                                'code' => $responseResult->getStatusCode(),
+                            ];
+                            if ($responseResult->getStatusCode() < 400) {
+                                $jsonResponse = $responseResult->getBody();
+                                $debugData['result'] = $jsonResponse;
+                            }
                         } catch (HttpException $e) {
                             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                             $this->_logger->critical($e);
                         }
-                        if ($responseResult) {
-                            $jsonResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
-                        }
-                        $debugData['result'] = $jsonResponse;
                         $this->_debug($debugData);
 
                         return $this->_parseRestResponse($jsonResponse);
