@@ -382,7 +382,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 $info = $this->_getTierPriceInfo($prices);
             }
 
-            $html = implode('<br />', $info);
+            $html = implode('<br>', $info);
         }
         return $html;
     }
