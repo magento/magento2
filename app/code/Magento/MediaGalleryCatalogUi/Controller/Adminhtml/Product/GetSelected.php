@@ -71,7 +71,7 @@ class GetSelected extends Action implements HttpGetActionInterface
                 $options[] = [
                     'value' => $product->getId(),
                     'label' => $product->getName(),
-                    'is_active' => $product->getSatus(),
+                    'is_active' => $product->getStatus(),
                     'path' => $product->getSku()
                 ];
             } catch (\Exception $e) {
