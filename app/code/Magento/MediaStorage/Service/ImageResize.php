@@ -447,7 +447,7 @@ class ImageResize
                 $image->setWatermarkPosition($imageParams['watermark_position']);
             }
 
-            if ($imageParams['watermark_image_opacity'] !== null) {
+            if (!in_array($imageParams['watermark_image_opacity'], [null, ''], true)) {
                 $image->setWatermarkImageOpacity($imageParams['watermark_image_opacity']);
             }
 
