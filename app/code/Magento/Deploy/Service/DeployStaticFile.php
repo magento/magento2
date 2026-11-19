@@ -134,13 +134,40 @@ class DeployStaticFile
      */
     public function readFile(string $fileName, string $filePath): bool|string
     {
-        $fileName = $this->minification->addMinifiedSign($fileName);
-        $relativePath = $filePath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName);
+        $relativePath = $this->getDeployedPath($fileName, $filePath);
         if ($this->pubStaticDir->isFile($relativePath)) {
             return $this->pubStaticDir->readFile($relativePath);
         } else {
             return false;
         }
+    }
+
+    /**
+     * Check if a resolved file exists in pub static directory
+     *
+     * @param string $fileName
+     * @param string $filePath
+     * @return bool
+     */
+    public function fileExists(string $fileName, string $filePath): bool
+    {
+        return $this->pubStaticDir->isFile($this->getDeployedPath($fileName, $filePath));
+    }
+
+    /**
+     * Check if a path relative to a package directory stays inside that package
+     *
+     * @see \Magento\Framework\App\Filesystem\DirectoryResolver::validatePath()
+     * @param string $path
+     * @param string $packagePath
+     * @return bool
+     */
+    public function isInPackage(string $path, string $packagePath): bool
+    {
+        $packageRoot = rtrim($this->pubStaticDir->getAbsolutePath($packagePath), '/');
+        $realPath = $this->pubStaticDir->getDriver()->getRealPathSafety($packageRoot . '/' . $path);
+
+        return str_starts_with($realPath, $packageRoot . '/');
     }
 
     /**
@@ -182,10 +209,9 @@ class DeployStaticFile
      */
     public function copyFile(string $fileName, string $sourcePath, string $targetPath): bool
     {
-        $fileName = $this->minification->addMinifiedSign($fileName);
         return $this->pubStaticDir->copyFile(
-            $sourcePath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName),
-            $targetPath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName)
+            $this->getDeployedPath($fileName, $sourcePath),
+            $this->getDeployedPath($fileName, $targetPath)
         );
     }
 
@@ -217,6 +243,23 @@ class DeployStaticFile
         $relativePath = $filePath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName);
 
         return $this->tmpDir->writeFile($relativePath, $content);
+    }
+
+    /**
+     * Get the path the asset pipeline publishes a file to in the given package
+     *
+     * The minified sign is added to the full path, as \Magento\Framework\View\Asset\File::getPath() does, because
+     * minification exclude patterns and the area are matched against it.
+     *
+     * @param string $fileName
+     * @param string $packagePath
+     * @return string
+     */
+    private function getDeployedPath(string $fileName, string $packagePath): string
+    {
+        return $this->minification->addMinifiedSign(
+            $packagePath . DIRECTORY_SEPARATOR . $this->resolveFile($fileName)
+        );
     }
 
     /**

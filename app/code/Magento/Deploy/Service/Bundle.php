@@ -136,6 +136,7 @@ class Bundle
 
         // delete all previously created bundle files
         $bundle->clear();
+        $this->excludedCache = [];
         $files = [];
         $mapFilePath = $area . '/' . $theme . '/' . $locale . '/' . RepositoryMap::RESULT_MAP_NAME;
         if ($this->pubStaticDir->isFile($mapFilePath)) {
@@ -143,10 +144,12 @@ class Bundle
             $resultMap = $this->pubStaticDir->readFile($mapFilePath);
             if ($resultMap) {
                 $files = json_decode($resultMap, true);
+                ksort($files);
             }
         } else {
             $packageDir = $this->pubStaticDir->getAbsolutePath($area . '/' . $theme . '/' . $locale);
             $files = $this->utilityFiles->getFiles([$packageDir], '*.*');
+            sort($files);
         }
 
         foreach ($files as $filePath => $sourcePath) {
@@ -170,7 +173,9 @@ class Bundle
             }
             $contentType = $contentType['extension'];
 
-            if ($this->hasMinVersion($filePath) || $this->isExcluded($filePath, $area, $theme)) {
+            if ($this->hasMinVersion($filePath, $area . '/' . $theme . '/' . $locale)
+                || $this->isExcluded($filePath, $area, $theme)
+            ) {
                 continue;
             }
 
@@ -183,9 +188,10 @@ class Bundle
      * Check if file is minified version or there is a minified version of the file
      *
      * @param string $filePath
+     * @param string $packagePath
      * @return bool
      */
-    private function hasMinVersion($filePath)
+    private function hasMinVersion($filePath, $packagePath)
     {
         if (in_array($filePath, $this->excludedCache)) {
             return true;
@@ -196,7 +202,7 @@ class Bundle
             $this->excludedCache[] = str_replace(".min.{$info['extension']}", ".{$info['extension']}", $filePath);
         } else {
             $pathToMinVersion = $info['dirname'] . '/' . $info['filename'] . '.min.' . $info['extension'];
-            if ($this->pubStaticDir->isExist($pathToMinVersion)) {
+            if ($this->pubStaticDir->isExist($packagePath . '/' . $pathToMinVersion)) {
                 $this->excludedCache[] = $filePath;
                 return true;
             }
