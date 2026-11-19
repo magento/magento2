@@ -122,7 +122,7 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
      */
     public function buildBatch(Select $select, string $columnName, bool $hasCustomGrouping): iterable
     {
-        $rows = $this->resourceConnection->getConnection()->fetchAll($select);
+        $rows = $this->fetchPageRows($select);
         if (!$rows) {
             return [];
         }
@@ -142,6 +142,35 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                 'can_checkpoint' => !$hasCustomGrouping,
             ],
         ]);
+    }
+
+    /**
+     * Read a page after lower changelog versions have committed or rolled back.
+     *
+     * @param Select $select
+     * @return array
+     */
+    private function fetchPageRows(Select $select): array
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $lockSuffix = $select->getPart(Select::FOR_UPDATE) ? '' : ' LOCK IN SHARE MODE';
+        $sql = $select->assemble() . $lockSuffix;
+        $bind = $select->getBind();
+
+        if ($connection->getTransactionLevel() > 0) {
+            return $connection->fetchAll($sql, $bind);
+        }
+
+        $connection->beginTransaction();
+        try {
+            $rows = $connection->fetchAll($sql, $bind);
+            $connection->commit();
+        } catch (\Throwable $exception) {
+            $connection->rollBack();
+            throw $exception;
+        }
+
+        return $rows;
     }
 
     /**

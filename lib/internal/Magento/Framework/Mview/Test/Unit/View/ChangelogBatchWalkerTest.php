@@ -78,7 +78,11 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->changelog->method('getColumnName')->willReturn('entity_id');
         $this->idsContext->method('getSelectBuilder')->willReturn($this->idsSelectBuilder);
 
-        $this->select->method('getPart')->willReturnCallback(fn (): array => $this->groupedColumns);
+        $this->select->method('assemble')->willReturn('SELECT entity_id FROM mview_cl WHERE entity_id = :entity');
+        $this->select->method('getBind')->willReturn(['entity' => 4]);
+        $this->select->method('getPart')->willReturnCallback(
+            fn (string $part) => $part === Select::GROUP ? $this->groupedColumns : false
+        );
         foreach (['columns', 'group', 'order', 'reset'] as $method) {
             $this->select->method($method)->willReturnSelf();
         }
@@ -265,16 +269,52 @@ class ChangelogBatchWalkerTest extends TestCase
     }
 
     /**
-     * @given The select has no remaining rows.
-     * @when The batch builder fetches the page.
-     * @then It returns an empty array without calling the factory.
+     * @given A page query has a bound parameter and returns no rows.
+     * @when The batch builder sends the locking read to the adapter.
+     * @then It forwards the binding and returns an empty array.
      */
     public function testBuildBatchReturnsEmptyIterableWhenNoRowsRemain(): void
     {
-        $this->connection->expects($this->once())->method('fetchAll')->with($this->select)->willReturn([]);
+        $this->connection->expects($this->once())->method('fetchAll')->with(
+            'SELECT entity_id FROM mview_cl WHERE entity_id = :entity LOCK IN SHARE MODE',
+            ['entity' => 4]
+        )->willReturn([]);
         $this->batchFactory->expects($this->never())->method('create');
 
         $this->assertSame([], $this->walker->buildBatch($this->select, 'entity_id', false));
+    }
+
+    /**
+     * @given The caller already owns an open database transaction.
+     * @when The batch builder fetches a changelog page.
+     * @then The builder leaves transaction control with the caller.
+     */
+    public function testBuildBatchLeavesCallerTransactionOpen(): void
+    {
+        $this->connection->method('getTransactionLevel')->willReturn(1);
+        $this->connection->expects($this->never())->method('beginTransaction');
+        $this->connection->expects($this->never())->method('commit');
+        $this->connection->expects($this->never())->method('rollBack');
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn([]);
+
+        $this->assertSame([], $this->walker->buildBatch($this->select, 'entity_id', false));
+    }
+
+    /**
+     * @given A changelog page read fails after the walker opens a transaction.
+     * @when The builder fetches the page.
+     * @then The builder rolls back and propagates the failure.
+     */
+    public function testBuildBatchRollsBackAfterReadFailure(): void
+    {
+        $failure = new \RuntimeException('Changelog read failed');
+        $this->connection->expects($this->once())->method('beginTransaction');
+        $this->connection->expects($this->once())->method('fetchAll')->willThrowException($failure);
+        $this->connection->expects($this->once())->method('rollBack');
+        $this->connection->expects($this->never())->method('commit');
+
+        $this->expectExceptionObject($failure);
+        $this->walker->buildBatch($this->select, 'entity_id', false);
     }
 
     /**
@@ -315,7 +355,7 @@ class ChangelogBatchWalkerTest extends TestCase
             ['product_id' => '4', 'custom_metadata' => 'second', 'max_version_id' => '22'],
             ['product_id' => '9', 'custom_metadata' => 'third', 'max_version_id' => '40'],
         ];
-        $this->connection->expects($this->once())->method('fetchAll')->with($this->select)->willReturn($rows);
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn($rows);
         $this->batchFactory->expects($this->once())->method('create')->with([
             'data' => ['ids' => ['4', '4', '9'], 'max_version_id' => 40, 'can_checkpoint' => true],
         ])->willReturnCallback(static fn (array $arguments): ChangelogBatch => new ChangelogBatch($arguments['data']));

@@ -9,6 +9,9 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ResourceConnection\ConnectionFactory;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Mview\ActionFactory;
@@ -109,14 +112,12 @@ class ResumeTest extends TestCase
     }
 
     /**
-     * @given A view starts with a null or zero cursor and fails on its third page.
+     * @given Two pages complete before the third page fails.
      * @when The view update is retried after the worker lock is released.
      * @then Processing resumes at the failed page with completed checkpoints retained.
      */
-    #[DataProvider('initialVersionProvider')]
-    public function testUpdateResumesFromLastSuccessfullyProcessedBatch(?int $initialVersion): void
+    public function testUpdateResumesFromLastSuccessfullyProcessedBatch(): void
     {
-        $this->state->setVersionId($initialVersion)->save();
         $calls = [];
         $successfulBatches = [];
         $runtimeVersions = [];
@@ -174,12 +175,103 @@ class ResumeTest extends TestCase
         $this->assertSame(1000, (int)$this->state->getVersionId());
     }
 
-    public static function initialVersionProvider(): array
+    /**
+     * @given A newly subscribed view has a null cursor and five pending changes.
+     * @when The view updates in pages of two and a fresh view instance runs again.
+     * @then All five changes are processed once and the persisted cursor reaches version five.
+     */
+    public function testNewSubscriptionProcessesAllPagesFromNullCursor(): void
     {
-        return [
-            'zero initial cursor' => [0],
-            'null initial cursor' => [null],
-        ];
+        $this->changelog->drop();
+        $this->state->delete();
+        $objectManager = Bootstrap::getObjectManager();
+        $this->state = $objectManager->create(StateInterface::class);
+        $calls = [];
+        $action = $this->createStub(ActionInterface::class);
+        $action->method('execute')->willReturnCallback(static function (array $ids) use (&$calls): void {
+            $calls[] = array_map('intval', $ids);
+        });
+        $view = $this->createView($action, 2);
+        $view->subscribe();
+        $viewId = $this->changelog->getViewId();
+        $checkpoint = $objectManager->create(StateInterface::class)->loadByView($viewId);
+        $this->assertSame(StateInterface::MODE_ENABLED, $checkpoint->getMode());
+        $this->assertNull($checkpoint->getVersionId());
+
+        $this->resource->getConnection()->insertArray(
+            $this->resource->getTableName($this->changelog->getName()),
+            ['entity_id'],
+            [[1], [2], [3], [4], [5]]
+        );
+        $view->update();
+        $this->assertSame([[1, 2], [3, 4], [5]], $calls);
+        $checkpoint->loadByView($viewId);
+        $this->assertSame(5, (int)$checkpoint->getVersionId());
+
+        $calls = [];
+        $this->createView($action, 2)->setState($checkpoint)->update();
+        $this->assertSame([], $calls);
+    }
+
+    /**
+     * @given A writer holds a lower changelog version open while a higher version is committed.
+     * @when The view updates before the writer commits and retries afterward.
+     * @then The first update leaves the cursor untouched and the retry processes both entities.
+     */
+    public function testUpdateWaitsForLowerUncommittedVersion(): void
+    {
+        $reader = $this->resource->getConnection();
+        $table = $this->resource->getTableName($this->changelog->getName());
+        $reader->truncateTable($table);
+        $objectManager = Bootstrap::getObjectManager();
+        $connectionConfig = $objectManager->get(DeploymentConfig::class)->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
+        );
+        $writer = $objectManager->get(ConnectionFactory::class)->create($connectionConfig);
+        $timeout = (int)$reader->fetchOne('SELECT @@SESSION.innodb_lock_wait_timeout');
+        $calls = [];
+        $action = $this->createStub(ActionInterface::class);
+        $action->method('execute')->willReturnCallback(function (array $ids) use (&$calls, $reader): void {
+            $this->assertSame(0, $reader->getTransactionLevel(), 'Release page locks before executing the action.');
+            $calls[] = array_map('intval', $ids);
+        });
+        $view = $this->createView($action, 2);
+
+        try {
+            $this->assertSame($reader->fetchOne('SELECT DATABASE()'), $writer->fetchOne('SELECT DATABASE()'));
+            $this->assertNotSame(
+                $reader->fetchOne('SELECT CONNECTION_ID()'),
+                $writer->fetchOne('SELECT CONNECTION_ID()')
+            );
+            $reader->query('SET SESSION innodb_lock_wait_timeout = 1');
+            $writer->beginTransaction();
+            $writer->insert($table, ['entity_id' => 101]);
+            $reader->insert($table, ['entity_id' => 202]);
+            $this->assertSame(2, (int)$view->getChangelog()->getVersion());
+
+            try {
+                $view->update();
+                $this->fail('The update must wait for the uncommitted lower version.');
+            } catch (LockWaitException) {
+                $this->assertSame([], $calls);
+                $this->assertSame(0, $reader->getTransactionLevel());
+                $this->state->loadByView($view->getId());
+                $this->assertSame(0, (int)$this->state->getVersionId());
+                $this->assertSame(StateInterface::STATUS_IDLE, $this->state->getStatus());
+            }
+
+            $writer->commit();
+            $view->update();
+            $this->assertSame([[101, 202]], $calls);
+            $this->state->loadByView($view->getId());
+            $this->assertSame(2, (int)$this->state->getVersionId());
+        } finally {
+            if ($writer->getTransactionLevel() > 0) {
+                $writer->rollBack();
+            }
+            $writer->closeConnection();
+            $reader->query('SET SESSION innodb_lock_wait_timeout = ' . $timeout);
+        }
     }
 
     /**
@@ -418,7 +510,7 @@ class ResumeTest extends TestCase
             $arguments['changelogBatchWalkerFactory'] = $factory;
         }
         $view = $objectManager->create(View::class, $arguments);
-        $view->setId($this->changelog->getViewId());
+        $view->load($this->changelog->getViewId());
         $view->setState($this->state);
         return $view;
     }
