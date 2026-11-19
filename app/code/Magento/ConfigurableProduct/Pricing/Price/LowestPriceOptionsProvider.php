@@ -9,12 +9,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Retrieve list of products where each product contains lower price than others at least for one possible price type
  */
-class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
+class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var ResourceConnection
@@ -41,7 +42,7 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
      *
      * @var array
      */
-    private $linkedProductMap;
+    private $linkedProductMap = [];
 
     /**
      * @param ResourceConnection $resourceConnection
@@ -82,5 +83,17 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
                 ->getItems();
         }
         return $this->linkedProductMap[$key];
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * The map retains loaded child product collections for the lifetime of the process, so release it between
+     * requests/batches to keep long-running consumers (application server, queue consumers, feed generation CLI)
+     * from accumulating stale product models.
+     */
+    public function _resetState(): void
+    {
+        $this->linkedProductMap = [];
     }
 }
