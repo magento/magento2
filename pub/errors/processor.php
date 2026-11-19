@@ -233,6 +233,7 @@ class Processor
     {
         $this->pageTitle = 'Error 404: Not Found';
         $this->_response->setHttpResponseCode(404);
+        $this->_response->setNoCacheHeaders();
         $this->_response->setBody($this->_renderPage('404.phtml'));
         return $this->_response;
     }
