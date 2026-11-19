@@ -5,7 +5,8 @@
  * All Rights Reserved.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\MessageQueue\PublisherPool">
         <arguments>
             <argument name="publishers" xsi:type="array">
@@ -52,9 +53,17 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MysqlMq\Model\Driver\Bulk\ExchangeFactory" type="Magento\MysqlMq\Model\Driver\ExchangeFactory">
+    <virtualType name="Magento\MysqlMq\Model\Driver\Bulk\ExchangeFactory"
+                 type="Magento\MysqlMq\Model\Driver\ExchangeFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">\Magento\MysqlMq\Model\Driver\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\MessageQueue\Topology\CompositeSynchronizer">
+        <arguments>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="db" xsi:type="object">Magento\MysqlMq\Model\Queue\Synchronizer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

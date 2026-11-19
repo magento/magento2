@@ -78,22 +78,46 @@ class TopologyInstaller
     public function install()
     {
         try {
-            foreach ($this->topologyConfig->getQueues() as $queue) {
-                if ($this->connectionTypeResolver->getConnectionType($queue->getConnection()) != 'amqp') {
-                    continue;
-                }
-                $amqpConfig = $this->configPool->get($queue->getConnection());
-                $this->queueInstaller->install($amqpConfig->getChannel(), $queue);
-            }
-            foreach ($this->topologyConfig->getExchanges() as $exchange) {
-                if ($this->connectionTypeResolver->getConnectionType($exchange->getConnection()) != 'amqp') {
-                    continue;
-                }
-                $amqpConfig = $this->configPool->get($exchange->getConnection());
-                $this->exchangeInstaller->install($amqpConfig->getChannel(), $exchange);
-            }
+            $this->declareTopology();
         } catch (\Exception $e) {
             $this->logger->error("AMQP topology installation failed: {$e->getMessage()}\n{$e->getTraceAsString()}");
         }
+    }
+
+    /**
+     * Declare Amqp Exchanges, Queues and bind them, propagating broker failures to the caller.
+     *
+     * @return string[]
+     * @throws \Exception
+     */
+    public function declareTopology(): array
+    {
+        $applied = [];
+        foreach ($this->topologyConfig->getQueues() as $queue) {
+            if ($this->connectionTypeResolver->getConnectionType($queue->getConnection()) != 'amqp') {
+                continue;
+            }
+            $amqpConfig = $this->configPool->get($queue->getConnection());
+            $this->queueInstaller->install($amqpConfig->getChannel(), $queue);
+            $applied[] = sprintf(
+                'Queue "%s" is in place on connection "%s".',
+                $queue->getName(),
+                $queue->getConnection()
+            );
+        }
+        foreach ($this->topologyConfig->getExchanges() as $exchange) {
+            if ($this->connectionTypeResolver->getConnectionType($exchange->getConnection()) != 'amqp') {
+                continue;
+            }
+            $amqpConfig = $this->configPool->get($exchange->getConnection());
+            $this->exchangeInstaller->install($amqpConfig->getChannel(), $exchange);
+            $applied[] = sprintf(
+                'Exchange "%s" is in place on connection "%s".',
+                $exchange->getName(),
+                $exchange->getConnection()
+            );
+        }
+
+        return $applied;
     }
 }
