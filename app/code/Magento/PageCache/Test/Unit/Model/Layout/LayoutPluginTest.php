@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\Layout;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Laminas\Http\Header\HeaderInterface;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Response\Http;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
@@ -32,7 +31,7 @@ class LayoutPluginTest extends TestCase
     private $model;
 
     /**
-     * @var ResponseInterface|MockObject
+     * @var Http|MockObject
      */
     private $responseMock;
 
@@ -42,7 +41,7 @@ class LayoutPluginTest extends TestCase
     private $layoutMock;
 
     /**
-     * @var ScopeConfigInterface|MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
@@ -138,10 +137,15 @@ class LayoutPluginTest extends TestCase
 
         $this->configMock->expects($this->any())->method('getType')->willReturn($configCacheType);
 
+        // When FPC is off for a cacheable layout, revoke may inspect Cache-Control.
+        $this->responseMock->method('getHeader')->willReturn(false);
+
         if ($layoutIsCacheable && $cacheState) {
             $this->responseMock->expects($this->once())->method('setHeader')->with('X-Magento-Tags', $expectedTags);
+            $this->responseMock->expects($this->never())->method('setNoCacheHeaders');
         } else {
             $this->responseMock->expects($this->never())->method('setHeader');
+            $this->responseMock->expects($this->never())->method('setNoCacheHeaders');
         }
         $output = $this->model->afterGetOutput($this->layoutMock, $html);
         $this->assertSame($output, $html);
@@ -187,5 +191,123 @@ class LayoutPluginTest extends TestCase
                 100,
             ],
         ];
+    }
+
+    /**
+     * Issue #40281: public headers set while FPC was on must be revoked when FPC is off at getOutput.
+     */
+    public function testAfterGetOutputRevokesPublicHeadersWhenFullPageCacheDisabledMidRequest(): void
+    {
+        $html = 'html';
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
+
+        $cacheControlHeader = $this->createMock(HeaderInterface::class);
+        $cacheControlHeader->method('getFieldValue')
+            ->willReturn('public, max-age=86400, s-maxage=86400');
+
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($cacheControlHeader);
+        $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->assertSame($html, $this->model->afterGetOutput($this->layoutMock, $html));
+    }
+
+    /**
+     * Do not force no-cache when response was never marked public.
+     */
+    public function testAfterGetOutputDoesNotRevokeWhenNoPublicHeadersPresent(): void
+    {
+        $html = 'html';
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
+
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn(false);
+        $this->responseMock->expects($this->never())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->assertSame($html, $this->model->afterGetOutput($this->layoutMock, $html));
+    }
+
+    /**
+     * Private/no-store Cache-Control must not be rewritten when FPC is disabled.
+     */
+    public function testAfterGetOutputDoesNotRevokeNonPublicCacheControl(): void
+    {
+        $html = 'html';
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
+
+        $cacheControlHeader = $this->createMock(HeaderInterface::class);
+        $cacheControlHeader->method('getFieldValue')
+            ->willReturn('no-store, no-cache, must-revalidate, max-age=0');
+
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($cacheControlHeader);
+        $this->responseMock->expects($this->never())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->assertSame($html, $this->model->afterGetOutput($this->layoutMock, $html));
+    }
+
+    /**
+     * Align with Kernel::process(): bare "public" without s-maxage is not treated as FPC-storeable.
+     */
+    public function testAfterGetOutputDoesNotRevokePublicWithoutSMaxAge(): void
+    {
+        $html = 'html';
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn(true);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
+
+        $cacheControlHeader = $this->createMock(HeaderInterface::class);
+        $cacheControlHeader->method('getFieldValue')->willReturn('public, max-age=86400');
+
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($cacheControlHeader);
+        $this->responseMock->expects($this->never())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->assertSame($html, $this->model->afterGetOutput($this->layoutMock, $html));
+    }
+
+    /**
+     * Full race sequence: public headers while FPC is on, then revoke when FPC is off at getOutput.
+     *
+     * @see https://github.com/magento/magento2/issues/40281
+     */
+    public function testAfterGenerateElementsThenDisableFpcThenAfterGetOutputRevokesInOneSequence(): void
+    {
+        $html = 'html';
+        $ttl = 86400;
+
+        $this->layoutMock->method('isCacheable')->willReturn(true);
+        $this->maintenanceModeMock->method('isOn')->willReturn(false);
+        $this->configMock->method('getTtl')->willReturn($ttl);
+        $this->configMock->method('isEnabled')->willReturnOnConsecutiveCalls(true, false);
+
+        $this->responseMock->expects($this->once())->method('setPublicHeaders')->with($ttl);
+
+        $cacheControlHeader = $this->createMock(HeaderInterface::class);
+        $cacheControlHeader->method('getFieldValue')
+            ->willReturn('public, max-age=86400, s-maxage=86400');
+        $this->responseMock->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($cacheControlHeader);
+        $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->model->afterGenerateElements($this->layoutMock);
+        $this->assertSame($html, $this->model->afterGetOutput($this->layoutMock, $html));
     }
 }
