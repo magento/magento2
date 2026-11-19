@@ -1294,7 +1294,11 @@ LUA;
         }
 
         $markerKey = self::LEGACY_MIGRATED_PREFIX . $this->namespace;
-        $legacySize = (string)(int)$this->unwrapPredisReply($this->redis->scard(self::LEGACY_ALL_IDS_SET));
+        $legacyCount = $this->unwrapPredisReply($this->redis->scard(self::LEGACY_ALL_IDS_SET));
+        if (!is_numeric($legacyCount)) {
+            throw new \RuntimeException('Redis SCARD on the legacy cache id set failed.');
+        }
+        $legacySize = (string)(int)$legacyCount;
         $migratedSize = $this->unwrapPredisReply($this->redis->get($markerKey));
         if (!is_scalar($migratedSize) || (string)$migratedSize !== $legacySize) {
             foreach ($this->sscan(self::LEGACY_ALL_IDS_SET, $batchSize) as $members) {

@@ -296,6 +296,21 @@ class RedisTagAdapterTest extends TestCase
         $this->assertSame([], $redis->argsOf('set'));
     }
 
+    public function testFailedLegacyCardinalityReadAbortsWithoutMarker(): void
+    {
+        $redis = $this->makeRecordingRedis(['scard' => false, 'sscan' => ['0', []], 'smembers' => []]);
+        $caught = null;
+        try {
+            $this->createAdapter($redis, 'ns_')->getIdsNotMatchingTags([]);
+        } catch (\RuntimeException $exception) {
+            $caught = $exception;
+        }
+
+        $this->assertInstanceOf(\RuntimeException::class, $caught);
+        $this->assertSame([], $redis->argsOf('sscan'));
+        $this->assertSame([], $redis->argsOf('set'));
+    }
+
     public function testLegacySetIsScannedAgainWhenItsCardinalityChanged(): void
     {
         $redis = $this->makeRecordingRedis([
@@ -504,7 +519,7 @@ class RedisTagAdapterTest extends TestCase
      */
     private function makeRecordingRedis(array $returns = []): OptimizedPredisClient
     {
-        $returns += ['script' => 'sha'];
+        $returns += ['script' => 'sha', 'scard' => 0];
 
         $recorder = new class {
             /** @var array */
