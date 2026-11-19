@@ -9,8 +9,15 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryAttentionModalSection">
-        <element name="attentionModalHeader" type="block" parameterized="true" selector="//h1[contains(text(), '{{headerText}}')]"/>
-        <element name="attentionModalContent" type="block" parameterized="true" selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[text()='Could not {{action}} directories: {{folderName}}']"/>
+        <element name="attentionModalHeader" type="block" parameterized="true"
+                 selector="//h1[contains(text(), '{{headerText}}')]"/>
+        <element name="attentionModalContent" type="block" parameterized="true"
+                 selector="//aside[contains(@class,'_show')]//div[@data-role='content']
+                           //div[text()='Could not {{action}} directories: {{folderName}}']"/>
+        <element name="restrictedFolderContent" type="block" parameterized="true"
+                 selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[
+                           contains(text(), 'Could not create directories: {{folderName}}.')
+                           and contains(text(), 'You can create folders only inside these folders: ')]"/>
         <element name="attentionModalOkButton" type="button" selector="//button/span[contains(text(),'OK')]"/>
     </section>
 </sections>
