@@ -846,9 +846,16 @@ class Store extends AbstractExtensibleModel implements
     {
         $configValue = $this->getConfig(self::XML_PATH_PRICE_SCOPE);
         if ($configValue == self::PRICE_SCOPE_GLOBAL) {
-            return $this->_config->getValue(Currency::XML_PATH_CURRENCY_BASE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+            return $this->_config->getValue(
+                Currency::XML_PATH_CURRENCY_BASE,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            );
         }
-        return $this->getConfig(Currency::XML_PATH_CURRENCY_BASE);
+        return $this->_config->getValue(
+            Currency::XML_PATH_CURRENCY_BASE,
+            ScopeInterface::SCOPE_WEBSITE,
+            $this->getWebsiteId()
+        );
     }
 
     /**
