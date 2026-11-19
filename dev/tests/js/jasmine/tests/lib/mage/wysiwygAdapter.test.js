@@ -138,4 +138,94 @@ define([
             runTests(decodedHtml, encodedHtml);
         });
     });
+
+    describe('wysiwygAdapter - preserving empty inline elements (icon fonts)', function () {
+        /**
+         * Builds a fake schema element rule that reports whether it was preserved.
+         *
+         * @return {Object}
+         */
+        function buildRule() {
+            return {
+                removeEmpty: true
+            };
+        }
+
+        /**
+         * Fake editor exposing "on" and a schema with i/em/span rules.
+         *
+         * @return {Object}
+         */
+        function buildFakeEditor() {
+            var rules = {
+                i: buildRule(),
+                em: buildRule(),
+                span: buildRule()
+            };
+
+            return {
+                handlers: {},
+
+                /**
+                 * @param {String} event
+                 * @param {Function} callback
+                 */
+                on: function (event, callback) {
+                    this.handlers[event] = callback;
+                },
+                schema: {
+
+                    /**
+                     * @param {String} tagName
+                     * @return {Object}
+                     */
+                    getElementRule: function (tagName) {
+                        return rules[tagName];
+                    }
+                }
+            };
+        }
+
+        beforeEach(function () {
+            obj.initialize('wysiwyg-test-id', {
+                tinymce: {
+                    plugins: '',
+                    toolbar: '',
+                    'content_css': ''
+                }
+            });
+        });
+
+        it('clears removeEmpty for i/em/span once PreInit fires', function () {
+            var editor = buildFakeEditor(),
+                settings = obj.getSettings();
+
+            settings.setup(editor);
+
+            expect(typeof editor.handlers.PreInit).toEqual('function');
+
+            // Not yet applied: PreInit hasn't fired.
+            expect(editor.schema.getElementRule('i').removeEmpty).toEqual(true);
+
+            editor.handlers.PreInit();
+
+            expect(editor.schema.getElementRule('i').removeEmpty).toEqual(false);
+            expect(editor.schema.getElementRule('em').removeEmpty).toEqual(false);
+            expect(editor.schema.getElementRule('span').removeEmpty).toEqual(false);
+        });
+
+        it('does not throw when a tag has no schema rule', function () {
+            var editor = buildFakeEditor(),
+                settings = obj.getSettings();
+
+            editor.schema.getElementRule = function () {
+                return undefined;
+            };
+            settings.setup(editor);
+
+            expect(function () {
+                editor.handlers.PreInit();
+            }).not.toThrow();
+        });
+    });
 });
