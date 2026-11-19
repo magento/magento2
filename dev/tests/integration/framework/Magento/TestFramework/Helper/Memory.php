@@ -21,7 +21,7 @@ class Memory
      * Warning: it is important to maintain the exact order of letters in this literal,
      * as it is used to convert string with units to bytes
      */
-    const MEMORY_UNITS = 'BKMGTPE';
+    public const MEMORY_UNITS = 'BKMGTPE';
 
     /**
      * @var \Magento\Framework\Shell
@@ -50,7 +50,7 @@ class Memory
     {
         $pid = getmypid();
         try {
-            // fall back to the Unix command line
+            // try procfs first, then the Unix command line
             $result = $this->_getUnixProcessMemoryUsage($pid);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // try to use the Windows command line
@@ -70,6 +70,11 @@ class Memory
     protected function _getUnixProcessMemoryUsage($pid)
     {
         // RSS - resident set size, the non-swapped physical memory
+        $status = is_numeric($pid) ? $this->readProcStatus((int)$pid) : null;
+        if ($status !== null && preg_match('/^VmRSS:\h*(\d+)\h+kB\h*$/m', $status, $matches)) {
+            return self::convertToBytes($matches[1] . 'k');
+        }
+
         $command = 'ps --pid %s --format rss --no-headers';
         if ($this->isMacOS()) {
             $command = 'ps -p %s -o rss=';
@@ -78,6 +83,30 @@ class Memory
         $result = $output . 'k';
         // kilobytes
         return self::convertToBytes($result);
+    }
+
+    /**
+     * Read process status when procfs is available.
+     *
+     * @param int $pid
+     * @return string|null
+     */
+    protected function readProcStatus(int $pid): ?string
+    {
+        $path = sprintf('/proc/%d/status', $pid);
+        // File checks and reads can warn under open_basedir restrictions or if the process exits between calls.
+        set_error_handler(static function (): bool {
+            return true;
+        }, E_WARNING | E_NOTICE);
+        try {
+            if (!is_readable($path)) {
+                return null;
+            }
+            $status = file_get_contents($path);
+            return $status === false ? null : $status;
+        } finally {
+            restore_error_handler();
+        }
     }
 
     /**
