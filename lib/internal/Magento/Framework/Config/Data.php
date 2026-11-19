@@ -5,8 +5,9 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Represents loaded and cached configuration data, should be used to gain access to different types
@@ -71,6 +72,16 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $serializer;
 
     /**
+     * @var string|null
+     */
+    private $expectedArea;
+
+    /**
+     * @var ScopeInterface|null
+     */
+    private $configScope;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -78,6 +89,9 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
      * @param array|null $cacheTags
+     * @param string|null $expectedArea
+     * @param ScopeInterface|null $configScope
+     * @throws LocalizedException
      */
     public function __construct(
         ReaderInterface $reader,
@@ -85,11 +99,15 @@ class Data implements \Magento\Framework\Config\DataInterface
         $cacheId,
         ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
+        ?string $expectedArea = null,
+        ?ScopeInterface $configScope = null,
     ) {
         $this->reader = $reader;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->expectedArea = $expectedArea;
+        $this->configScope = $configScope;
         if ($cacheTags) {
             $this->cacheTags = $cacheTags;
         }
@@ -103,6 +121,8 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     protected function initData()
     {
+        $this->assertExpectedArea();
+
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
@@ -156,6 +176,8 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     public function reset()
     {
+        $this->assertExpectedArea();
+
         $this->cache->remove($this->cacheId);
         $this->_data = [];
         $configData = $this->reader->read();
@@ -173,5 +195,25 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function __debugInfo()
     {
         return [];
+    }
+
+    /**
+     * Ensure area-specific configuration is not loaded from a different area.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function assertExpectedArea(): void
+    {
+        if ($this->expectedArea === null) {
+            return;
+        }
+
+        $configScope = $this->configScope ?? ObjectManager::getInstance()->get(ScopeInterface::class);
+        if ($configScope->getCurrentScope() !== $this->expectedArea) {
+            throw new LocalizedException(
+                __('Configuration can only be loaded in the "%1" area.', $this->expectedArea)
+            );
+        }
     }
 }
