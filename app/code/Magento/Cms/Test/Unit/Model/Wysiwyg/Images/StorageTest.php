@@ -22,6 +22,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -195,8 +196,8 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getDriver'
-        )->willReturn(
-            $this->driverMock
+        )->willReturnCallback(
+            fn () => $this->driverMock
         );
 
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
@@ -514,6 +515,115 @@ class StorageTest extends TestCase
                     )
             ],
         ];
+    }
+
+    /**
+     * Local images get their dimensions from the file header, not from the whole file content
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws FileSystemException
+     */
+    public function testGetFilesCollectionReadsLocalImageSizeWithoutFileContents(): void
+    {
+        $imagePath = tempnam(sys_get_temp_dir(), 'wysiwyg');
+        file_put_contents($imagePath, $this->getPngContent(7, 5));
+        $this->driverMock = $this->createPartialMock(FilesystemDriverFile::class, ['stat', 'fileGetContents']);
+        $this->driverMock->expects($this->never())->method('fileGetContents');
+
+        try {
+            $imageItem = $this->getFilesCollectionItem($imagePath);
+        } finally {
+            unlink($imagePath);
+        }
+
+        $this->assertSame(7, $imageItem->getWidth());
+        $this->assertSame(5, $imageItem->getHeight());
+    }
+
+    /**
+     * Remote images get their dimensions from the stored metadata
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws FileSystemException
+     */
+    public function testGetFilesCollectionReadsRemoteImageSizeFromMetadata(): void
+    {
+        $imagePath = '/webroot/pub/media/wysiwyg/image.png';
+        $this->driverMock = $this->createMock(ExtendedDriverInterface::class);
+        $this->driverMock->expects($this->once())
+            ->method('getMetadata')
+            ->with($imagePath)
+            ->willReturn(['extra' => ['image-width' => '800', 'image-height' => '600']]);
+        $this->driverMock->expects($this->never())->method('fileGetContents');
+
+        $imageItem = $this->getFilesCollectionItem($imagePath);
+
+        $this->assertSame(800, $imageItem->getWidth());
+        $this->assertSame(600, $imageItem->getHeight());
+    }
+
+    /**
+     * Remote images without stored dimensions are measured from their content
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws FileSystemException
+     */
+    public function testGetFilesCollectionReadsRemoteImageSizeFromContentWithoutMetadata(): void
+    {
+        $imagePath = '/webroot/pub/media/wysiwyg/image.png';
+        $this->driverMock = $this->createMock(ExtendedDriverInterface::class);
+        $this->driverMock->method('getMetadata')->willReturn(['size' => 1024]);
+        $this->driverMock->expects($this->once())
+            ->method('fileGetContents')
+            ->with($imagePath)
+            ->willReturn($this->getPngContent(3, 2));
+
+        $imageItem = $this->getFilesCollectionItem($imagePath);
+
+        $this->assertSame(3, $imageItem->getWidth());
+        $this->assertSame(2, $imageItem->getHeight());
+    }
+
+    /**
+     * Run getFilesCollection() over a single image file and return its collection item
+     *
+     * @param string $imagePath
+     * @return DataObject
+     * @throws LocalizedException
+     * @throws FileSystemException
+     */
+    private function getFilesCollectionItem(string $imagePath): DataObject
+    {
+        $imageItem = new DataObject(['filename' => $imagePath, 'basename' => 'image.png']);
+        $storageCollectionMock = $this->createStub(StorageCollection::class);
+        $storageCollectionMock->method('setCollectDirs')->willReturnSelf();
+        $storageCollectionMock->method('setCollectFiles')->willReturnSelf();
+        $storageCollectionMock->method('setCollectRecursively')->willReturnSelf();
+        $storageCollectionMock->method('setOrder')->willReturnSelf();
+        $storageCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([$imageItem]));
+        $this->storageCollectionFactoryMock->method('create')->willReturn($storageCollectionMock);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024, 'mimetype' => 'image/png']);
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/wysiwyg', 'image');
+
+        return $imageItem;
+    }
+
+    /**
+     * Build the leading bytes of a PNG file, enough for its dimensions to be read
+     *
+     * @param int $width
+     * @param int $height
+     * @return string
+     */
+    private function getPngContent(int $width, int $height): string
+    {
+        $header = pack('NN', $width, $height) . "\x08\x02\x00\x00\x00";
+
+        return "\x89PNG\r\n\x1a\n" . pack('N', 13) . 'IHDR' . $header . pack('N', crc32('IHDR' . $header));
     }
 
     /**
