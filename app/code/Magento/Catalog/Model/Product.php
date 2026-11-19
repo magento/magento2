@@ -1182,7 +1182,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return array|double
+     * @return string
      * @since 102.0.6
      */
     public function getFormattedPrice()
@@ -1193,7 +1193,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return array|double
+     * @return string
      *
      * @deprecated 102.0.6
      * @see getFormattedPrice()
