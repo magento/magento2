@@ -209,6 +209,11 @@ class HelperTest extends TestCase
      * @param array $linkTypes
      * @param array $expectedLinks
      * @param array|null $tierPrice
+     * @param bool|null $isReadOnlyRelatedItems
+     * @param bool|null $isReadOnlyUpSellItems
+     * @param bool $ignoreLinksFlag
+     * @param array|null $storedTierPrice tier prices loaded with the product
+     * @param array|null $expectedTierPrice
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -223,8 +228,15 @@ class HelperTest extends TestCase
         $tierPrice = null,
         $isReadOnlyRelatedItems = null,
         $isReadOnlyUpSellItems = null,
-        $ignoreLinksFlag = false
+        $ignoreLinksFlag = false,
+        $storedTierPrice = null,
+        $expectedTierPrice = null
     ) {
+        if ($storedTierPrice !== null) {
+            $this->productMock->method('getId')->willReturn(5);
+            $this->productMock->setWebsiteIds([1]);
+            $this->productMock->setOrigData('tier_price', $storedTierPrice);
+        }
         $this->productMock->setData('related_readonly', $isReadOnlyRelatedItems);
         $this->productMock->setData('upsell_readonly', $isReadOnlyUpSellItems);
         $this->productLinksMock->method('initializeLinks')->willReturn($this->productMock);
@@ -343,7 +355,7 @@ class HelperTest extends TestCase
         }
         $resultLinks = [];
 
-        $this->assertEquals($tierPrice ?: [], $this->productMock->getData('tier_price'));
+        $this->assertEquals($expectedTierPrice ?? ($tierPrice ?: []), $this->productMock->getData('tier_price'));
 
         foreach ($productLinks as $link) {
             $this->assertInstanceOf(ProductLink::class, $link);
@@ -392,6 +404,26 @@ class HelperTest extends TestCase
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
                 'expectedLinks' => [],
                 'tierPrice' => [1, 2, 3],
+            ],
+            'tier price of an unassigned website kept (#38099)' => [
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
+                'links' => [],
+                'linkTypes' => ['related', 'upsell', 'crosssell'],
+                'expectedLinks' => [],
+                'tierPrice' => [['website_id' => '0', 'cust_group' => '0', 'price_qty' => '2', 'price' => '30']],
+                'isReadOnlyRelatedItems' => null,
+                'isReadOnlyUpSellItems' => null,
+                'ignoreLinksFlag' => false,
+                'storedTierPrice' => [
+                    ['website_id' => '9', 'cust_group' => '0', 'price_qty' => '1.0000', 'price' => '33.0000'],
+                    ['website_id' => '1', 'cust_group' => '0', 'price_qty' => '1.0000', 'price' => '31.0000'],
+                ],
+                'expectedTierPrice' => [
+                    ['website_id' => '0', 'cust_group' => '0', 'price_qty' => '2', 'price' => '30'],
+                    ['website_id' => '9', 'cust_group' => '0', 'price_qty' => '1.0000', 'price' => '33.0000'],
+                ],
             ],
             [
                 'isSingleStore' => false,
