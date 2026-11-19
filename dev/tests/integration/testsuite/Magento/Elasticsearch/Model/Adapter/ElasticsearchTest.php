@@ -16,6 +16,7 @@ use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -147,6 +148,66 @@ class ElasticsearchTest extends TestCase
         $this->reindex();
         $propertiesAfter = $this->getIndexMapping($storeId);
         $this->assertEquals($propertiesBefore, $propertiesAfter);
+    }
+
+    /**
+     * A full reindex must not switch the alias to an index that another reindex deleted in the meantime
+     *
+     * Process A prepares a new index, process B prepares its own one (deleting A's index as a leftover) and
+     * switches the alias to it. A's next bulk request makes the search engine create A's index again, without
+     * the Magento settings and mapping. A must not switch the alias to that index.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDbIsolation disabled
+     */
+    public function testUpdateAliasKeepsAliasWhenPreparedIndexWasReplaced(): void
+    {
+        $storeId = (int)$this->storeManager->getDefaultStoreView()->getId();
+        $mappedIndexerId = 'product';
+        $this->reindex();
+        $document = [1 => ['sku' => 'simple', 'name' => 'Simple Product']];
+
+        /** @var Elasticsearch $processA */
+        $processA = $this->objectManager->create(Elasticsearch::class);
+        /** @var Elasticsearch $processB */
+        $processB = $this->objectManager->create(Elasticsearch::class);
+
+        $processA->cleanIndex($storeId, $mappedIndexerId);
+        $indexOfA = $this->getPreparedIndex($processA, $storeId);
+
+        $processB->cleanIndex($storeId, $mappedIndexerId);
+        $indexOfB = $this->getPreparedIndex($processB, $storeId);
+        $this->assertFalse($this->client->indexExists($indexOfA), 'Process B did not delete the index of process A.');
+        $processB->addDocs($document, $storeId, $mappedIndexerId);
+        $processB->updateAlias($storeId, $mappedIndexerId);
+        $this->newIndex = $indexOfA;
+
+        $processA->addDocs($document, $storeId, $mappedIndexerId);
+        $exception = null;
+        try {
+            $processA->updateAlias($storeId, $mappedIndexerId);
+        } catch (LocalizedException $e) {
+            $exception = $e;
+        }
+
+        $this->assertEquals($indexOfB, $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId));
+        $this->assertTrue($this->client->indexExists($indexOfB));
+        $this->assertNotNull($exception, 'Switching the alias to a replaced index must fail.');
+        $this->assertFalse($this->client->indexExists($indexOfA), 'The index created again by addDocs() is left.');
+    }
+
+    /**
+     * Get the name of the index an adapter prepared for a store
+     *
+     * @param Elasticsearch $adapter
+     * @param int $storeId
+     * @return string
+     */
+    private function getPreparedIndex(Elasticsearch $adapter, int $storeId): string
+    {
+        $property = new \ReflectionProperty(Elasticsearch::class, 'preparedIndex');
+
+        return $property->getValue($adapter)[$storeId];
     }
 
     /**
