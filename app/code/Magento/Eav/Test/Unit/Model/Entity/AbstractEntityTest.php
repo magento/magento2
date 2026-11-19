@@ -373,4 +373,31 @@ class AbstractEntityTest extends TestCase
 
         $model->save($object);
     }
+
+    public function testSaveAttributeUpdatesStaticAttributeInEntityTable()
+    {
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->expects($this->once())
+            ->method('update')
+            ->with('customer_entity', ['group_id' => 3], ['entity_id = ?' => 5]);
+        $connection->expects($this->never())->method('beginTransaction');
+
+        $attribute = $this->createMock(AbstractAttribute::class);
+        $attribute->method('isStatic')->willReturn(true);
+        $attribute->method('isValueEmpty')->willReturn(false);
+        $attribute->method('getBackend')->willReturn($this->createMock(AbstractBackend::class));
+
+        $model = $this->createPartialMock(
+            AbstractEntity::class,
+            ['getConnection', 'getAttribute', 'getEntityTable', 'getLinkField']
+        );
+        $model->method('getConnection')->willReturn($connection);
+        $model->method('getAttribute')->with('group_id')->willReturn($attribute);
+        $model->method('getEntityTable')->willReturn('customer_entity');
+        $model->method('getLinkField')->willReturn('entity_id');
+
+        $object = new DataObject(['entity_id' => 5, 'group_id' => 3]);
+
+        $this->assertSame($model, $model->saveAttribute($object, 'group_id'));
+    }
 }
