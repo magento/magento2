@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Json\Encoder;
 use Magento\Framework\Message\AbstractMessage;
 use Magento\Framework\Phrase;
+use Magento\Framework\Search\Request\NonExistingRequestNameException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Webapi\ErrorProcessor;
@@ -313,7 +314,22 @@ class ErrorProcessorTest extends TestCase
                 WebapiException::HTTP_INTERNAL_ERROR,
                 'Internal Error. Details are available in Magento log file. Report ID:',
                 [],
-            ]
+            ],
+            'NonExistingRequestNameException' => [
+                new NonExistingRequestNameException(
+                    (string)new Phrase("Request name '%1' doesn't exist.", ['catalog_view_container_invalid'])
+                ),
+                WebapiException::HTTP_NOT_FOUND,
+                // Still non-LocalizedException: message masked outside developer mode; HTTP stays 404
+                'Internal Error. Details are available in Magento log file. Report ID:',
+                [],
+            ],
+            'InvalidArgumentException' => [
+                new \InvalidArgumentException('Invalid argument provided'),
+                WebapiException::HTTP_BAD_REQUEST,
+                'Internal Error. Details are available in Magento log file. Report ID:',
+                [],
+            ],
         ];
     }
 
