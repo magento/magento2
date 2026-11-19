@@ -118,6 +118,54 @@ class InputParamsResolverTest extends TestCase
         $this->assertEquals($requestData, $this->getModel(true)->resolve());
     }
 
+    #[DataProvider('xmlContentTypeDataProvider')]
+    public function testResolveAsyncBulkRenumbersXmlItems(string $contentType): void
+    {
+        $requestData = [
+            'item_0' => ['customer' => ['email' => 'a@example.com']],
+            'item_1' => ['customer' => ['email' => 'b@example.com']],
+        ];
+        $expected = [
+            0 => ['customer' => ['email' => 'a@example.com']],
+            1 => ['customer' => ['email' => 'b@example.com']],
+        ];
+        $this->mockBulkRoute();
+        $this->requestMock->method('getHttpMethod')
+            ->willReturn(Request::HTTP_METHOD_POST);
+        $this->requestMock->method('getContentType')
+            ->willReturn($contentType);
+        $this->requestMock->expects($this->once())
+            ->method('getRequestData')
+            ->willReturn($requestData);
+        $this->serviceInputProcessorMock->expects($this->exactly(2))
+            ->method('process')
+            ->willReturnArgument(2);
+
+        $model = $this->getModel(true);
+        $this->assertSame($expected, $model->resolve());
+        $this->assertSame($expected, $model->getInputData());
+    }
+
+    public static function xmlContentTypeDataProvider(): array
+    {
+        return [['application/xml'], ['text/xml'], ['application/xhtml+xml']];
+    }
+
+    public function testResolveAsyncBulkRejectsJsonObjectBody(): void
+    {
+        $this->mockBulkRoute();
+        $this->requestMock->method('getHttpMethod')
+            ->willReturn(Request::HTTP_METHOD_POST);
+        $this->requestMock->method('getContentType')
+            ->willReturn('application/json');
+        $this->requestMock->expects($this->once())
+            ->method('getRequestData')
+            ->willReturn(['item_0' => ['param1' => 'value1'], 'item_1' => ['param1' => 'value1']]);
+        $this->expectException(\Magento\Framework\Webapi\Exception::class);
+        $this->expectExceptionMessage('Request body must be an array');
+        $this->getModel(true)->resolve();
+    }
+
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -143,6 +191,21 @@ class InputParamsResolverTest extends TestCase
             [['str' => [], 1 => []], 'Request body must be an array'],
             [['str' => [], 0 => [], 1 => []], 'Request body must be an array'],
         ];
+    }
+
+    private function mockBulkRoute(): void
+    {
+        $routeMock = $this->createMock(Route::class);
+        $routeMock->method('getServiceClass')
+            ->willReturn('serviceClass');
+        $routeMock->method('getServiceMethod')
+            ->willReturn('serviceMethod');
+        $routeMock->method('getParameters')
+            ->willReturn([]);
+        $this->paramsOverriderMock->method('override')
+            ->willReturnArgument(0);
+        $this->webapiInputParamsResolverMock->method('getRoute')
+            ->willReturn($routeMock);
     }
 
     private function getModel(bool $isBulk = false): InputParamsResolver
