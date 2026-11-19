@@ -17,27 +17,15 @@ use Magento\Swatches\Model\Swatch;
 class SwatchDataProvider
 {
     /**
-     * @var SwatchData
-     */
-    private $swatchHelper;
-
-    /**
-     * @var SwatchesMedia
-     */
-    private $swatchMediaHelper;
-
-    /**
      * SwatchDataProvider constructor.
      *
      * @param SwatchData $swatchHelper
      * @param SwatchesMedia $swatchMediaHelper
      */
     public function __construct(
-        SwatchData $swatchHelper,
-        SwatchesMedia $swatchMediaHelper
+        private readonly SwatchData $swatchHelper,
+        private readonly SwatchesMedia $swatchMediaHelper
     ) {
-        $this->swatchHelper = $swatchHelper;
-        $this->swatchMediaHelper = $swatchMediaHelper;
     }
 
     /**
