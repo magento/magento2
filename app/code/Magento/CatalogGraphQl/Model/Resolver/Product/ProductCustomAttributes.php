@@ -106,40 +106,26 @@ class ProductCustomAttributes implements ResolverInterface
             $productCustomAttributes['items']
         );
 
-        $filteredAttributeCodes = $this->filterCustomAttribute->execute(array_flip($attributeCodes));
+        [$filteredAttributeCodes, $notFoundErrors] = $this->restrictToRequestedCodes(
+            $this->filterCustomAttribute->execute(array_flip($attributeCodes)),
+            $args['attributeCodes'] ?? []
+        );
+        $errors = array_merge($productCustomAttributes['errors'], $notFoundErrors);
+
+        if (empty($filteredAttributeCodes)) {
+            return ['items' => [], 'errors' => $errors];
+        }
 
         /** @var Product $product */
         $product = $value['model'];
         $productData = $this->productDataProvider->getProductDataById((int)$product->getId());
 
+        // Explicitly requested attributes are returned even without value
+        $keepEmpty = !empty($args['attributeCodes']);
         $customAttributes = [];
-        foreach ($filteredAttributeCodes as $attributeCode => $value) {
-            if (!array_key_exists($attributeCode, $productData)) {
-                continue;
-            }
-            $attributeValue = $productData[$attributeCode] ?? "";
-            if ($attributeValue instanceof DataObject) {
-                $attributeValue = $attributeValue->getData($attributeCode);
-            }
+        foreach (array_keys($filteredAttributeCodes) as $attributeCode) {
+            $attributeValue = $this->getScalarValue($productData, (string) $attributeCode, $product, $keepEmpty);
             if ($attributeValue === null) {
-                continue;
-            }
-            if (is_array($attributeValue)) {
-                $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
-                    ? json_encode($attributeValue)
-                    : implode(',', $attributeValue);
-            }
-            if (!is_scalar($attributeValue)) {
-                // Only strings/numbers allowed after normalization; skip any other types
-                $this->logger->warning(
-                    'Skipped product custom attribute due to unsupported value type',
-                    [
-                        'attribute_code' => $attributeCode,
-                        'product_id' => (int) $product->getId(),
-                        'sku' => $product->getSku(),
-                        'value_type' => get_debug_type($attributeValue)
-                    ]
-                );
                 continue;
             }
             $customAttributes[] = [
@@ -159,7 +145,90 @@ class ProductCustomAttributes implements ResolverInterface
                 },
                 $customAttributes
             ),
-            'errors' => $productCustomAttributes['errors']
+            'errors' => $errors
         ];
+    }
+
+    /**
+     * Get the product value of an attribute as a scalar, or null when the attribute must be skipped
+     *
+     * An attribute without value is skipped, or returned as an empty string when $keepEmpty is true. A value that
+     * cannot be converted to a scalar is always skipped and logged.
+     *
+     * @param array $productData
+     * @param string $attributeCode
+     * @param Product $product
+     * @param bool $keepEmpty
+     * @return string|int|float|bool|null
+     */
+    private function getScalarValue(
+        array $productData,
+        string $attributeCode,
+        Product $product,
+        bool $keepEmpty
+    ): string|int|float|bool|null {
+        $empty = $keepEmpty ? '' : null;
+        if (!array_key_exists($attributeCode, $productData)) {
+            return $empty;
+        }
+        $attributeValue = $productData[$attributeCode] ?? "";
+        if ($attributeValue instanceof DataObject) {
+            $attributeValue = $attributeValue->getData($attributeCode);
+        }
+        if ($attributeValue === null) {
+            return $empty;
+        }
+        if (is_array($attributeValue)) {
+            $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
+                ? json_encode($attributeValue)
+                : implode(',', $attributeValue);
+        }
+        if (!is_scalar($attributeValue)) {
+            // Only strings/numbers allowed after normalization; skip any other types
+            $this->logger->warning(
+                'Skipped product custom attribute due to unsupported value type',
+                [
+                    'attribute_code' => $attributeCode,
+                    'product_id' => (int) $product->getId(),
+                    'sku' => $product->getSku(),
+                    'value_type' => get_debug_type($attributeValue)
+                ]
+            );
+            return null;
+        }
+
+        return $attributeValue;
+    }
+
+    /**
+     * Keep only the requested attribute codes, in the requested order, and report the ones that are not available
+     *
+     * A requested code is not available when it does not exist or is not eligible (not visible, static, excluded
+     * or rejected by the filters). No requested code means no restriction.
+     *
+     * @param array $filteredAttributeCodes eligible attribute codes as keys
+     * @param array $requestedCodes
+     * @return array
+     */
+    private function restrictToRequestedCodes(array $filteredAttributeCodes, array $requestedCodes): array
+    {
+        if (empty($requestedCodes)) {
+            return [$filteredAttributeCodes, []];
+        }
+
+        $restricted = [];
+        $errors = [];
+        foreach (array_unique(array_map('strval', $requestedCodes)) as $code) {
+            if (array_key_exists($code, $filteredAttributeCodes)) {
+                $restricted[$code] = $filteredAttributeCodes[$code];
+                continue;
+            }
+            $errors[] = [
+                'type' => 'ATTRIBUTE_NOT_FOUND',
+                'message' => (string) __('Attribute code "%code" could not be found.', ['code' => $code])
+            ];
+        }
+
+        return [$restricted, $errors];
     }
 }
