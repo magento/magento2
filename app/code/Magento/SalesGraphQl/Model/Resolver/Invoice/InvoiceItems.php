@@ -67,6 +67,7 @@ class InvoiceItems implements ResolverInterface
         $invoiceModel = $value['model'];
         /** @var OrderInterface $parentOrderModel */
         $parentOrderModel = $value['order'];
+        $this->orderItemProvider->addOrder($parentOrderModel);
 
         return $this->valueFactory->create(
             $this->getInvoiceItems($parentOrderModel, $invoiceModel->getItems())
