@@ -62,6 +62,11 @@ class DummyTestCase extends \PHPUnit\Framework\TestCase
      */
     private static $_testPrivateStatic;
 
+    /**
+     * @var array
+     */
+    public static $testStaticArray = ['kept'];
+
     public function testDummy()
     {
         $this->testPublic = 'public';

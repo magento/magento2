@@ -18,7 +18,11 @@ class TypedDummyTestCase extends \PHPUnit\Framework\TestCase
     private \stdClass $typed;
 
     /**
+     * Assigned in testDummy(). TestCase::__construct() is final, and a new-expression
+     * property default is a fatal error on PHP 8.5.
+     *
      * @var \stdClass
+     * @phpstan-ignore property.uninitializedReadonly
      */
     private readonly \stdClass $fixed;
 
@@ -50,5 +54,21 @@ class TypedDummyTestCase extends \PHPUnit\Framework\TestCase
         $this->typed = new \stdClass();
         $this->fixed = new \stdClass();
         $this->bareItems = ['set'];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNullable(): ?string
+    {
+        return $this->nullable;
+    }
+
+    /**
+     * @return array
+     */
+    public function getItems(): array
+    {
+        return $this->items;
     }
 }

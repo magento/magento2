@@ -28,7 +28,8 @@ class TestCasePropertiesTest extends TestCase
         '_testPropertyArray' => ['name' => '_testPropertyArray', 'is_static' => false],
         'testPublicStatic' => ['name' => 'testPublicStatic', 'is_static' => true],
         '_testProtectedStatic' => ['name' => '_testProtectedStatic', 'is_static' => true],
-        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true]
+        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true],
+        'testStaticArray' => ['name' => 'testStaticArray', 'is_static' => true],
     ];
 
     /**
@@ -92,10 +93,28 @@ class TestCasePropertiesTest extends TestCase
 
         $this->assertSame($typed, $reflection->getProperty('typed')->getValue($dummy));
         $this->assertSame($fixed, $reflection->getProperty('fixed')->getValue($dummy));
-        $this->assertNull($reflection->getProperty('nullable')->getValue($dummy));
+        $this->assertNull($dummy->getNullable());
         $this->assertNull($reflection->getProperty('untyped')->getValue($dummy));
-        $this->assertSame([], $reflection->getProperty('items')->getValue($dummy));
+        $this->assertSame([], $dummy->getItems());
         $this->assertSame([], $reflection->getProperty('bareItems')->getValue($dummy));
+    }
+
+    /**
+     * Static properties are not cleared here. StaticProperties owns that backup.
+     *
+     * @param string $propertyName
+     * @return array|string
+     */
+    private function staticFixtureValue(string $propertyName): array|string
+    {
+        $values = [
+            'testPublicStatic' => 'static public',
+            '_testProtectedStatic' => 'static protected',
+            '_testPrivateStatic' => 'static private',
+            'testStaticArray' => ['kept'],
+        ];
+
+        return $values[$propertyName];
     }
 
     /**
@@ -108,7 +127,7 @@ class TestCasePropertiesTest extends TestCase
         foreach (array_keys($this->fixtureProperties) as $propertyName) {
             $property = $reflectionClass->getProperty($propertyName);
             if ($property->isStatic()) {
-                $this->assertNull($property->getValue());
+                $this->assertSame($this->staticFixtureValue($propertyName), $property->getValue());
             } else {
                 $this->assertNull($property->getValue($dummy));
             }

@@ -51,6 +51,10 @@ class TestCaseProperties
             $reflectionClass = new \ReflectionClass($test);
             $properties = $reflectionClass->getProperties();
             foreach ($properties as $property) {
+                if ($property->isStatic() || !$this->canResetProperty($property)) {
+                    continue;
+                }
+
                 if ($property->isInitialized($test)) {
                     $value = $property->getValue($test);
                     if (is_object($value) && method_exists($value, '__destruct') &&
@@ -59,26 +63,23 @@ class TestCaseProperties
                     }
                 }
 
-                if (!$this->canResetProperty($property)) {
-                    continue;
-                }
-
                 $property->setValue($test, $this->resetValue($property));
             }
         }
     }
 
     /**
-     * Readonly properties and typed properties that reject null cannot be cleared.
+     * Static, readonly, and non-nullable typed properties cannot be cleared.
      *
      * Array properties are the exception: they are reset to an empty array.
+     * Static properties are restored by StaticProperties.
      *
      * @param \ReflectionProperty $property
      * @return bool
      */
     private function canResetProperty(\ReflectionProperty $property): bool
     {
-        if ($property->isReadOnly()) {
+        if ($property->isStatic() || $property->isReadOnly()) {
             return false;
         }
         if (!$property->hasType()) {
