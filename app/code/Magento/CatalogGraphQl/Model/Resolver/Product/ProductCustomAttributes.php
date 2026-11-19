@@ -120,34 +120,12 @@ class ProductCustomAttributes implements ResolverInterface
         $product = $value['model'];
         $productData = $this->productDataProvider->getProductDataById((int)$product->getId());
 
+        // Explicitly requested attributes are returned even without value
+        $keepEmpty = !empty($args['attributeCodes']);
         $customAttributes = [];
-        foreach ($filteredAttributeCodes as $attributeCode => $value) {
-            if (!array_key_exists($attributeCode, $productData)) {
-                continue;
-            }
-            $attributeValue = $productData[$attributeCode] ?? "";
-            if ($attributeValue instanceof DataObject) {
-                $attributeValue = $attributeValue->getData($attributeCode);
-            }
+        foreach (array_keys($filteredAttributeCodes) as $attributeCode) {
+            $attributeValue = $this->getScalarValue($productData, (string) $attributeCode, $product, $keepEmpty);
             if ($attributeValue === null) {
-                continue;
-            }
-            if (is_array($attributeValue)) {
-                $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
-                    ? json_encode($attributeValue)
-                    : implode(',', $attributeValue);
-            }
-            if (!is_scalar($attributeValue)) {
-                // Only strings/numbers allowed after normalization; skip any other types
-                $this->logger->warning(
-                    'Skipped product custom attribute due to unsupported value type',
-                    [
-                        'attribute_code' => $attributeCode,
-                        'product_id' => (int) $product->getId(),
-                        'sku' => $product->getSku(),
-                        'value_type' => get_debug_type($attributeValue)
-                    ]
-                );
                 continue;
             }
             $customAttributes[] = [
@@ -169,6 +147,57 @@ class ProductCustomAttributes implements ResolverInterface
             ),
             'errors' => $errors
         ];
+    }
+
+    /**
+     * Get the product value of an attribute as a scalar, or null when the attribute must be skipped
+     *
+     * An attribute without value is skipped, or returned as an empty string when $keepEmpty is true. A value that
+     * cannot be converted to a scalar is always skipped and logged.
+     *
+     * @param array $productData
+     * @param string $attributeCode
+     * @param Product $product
+     * @param bool $keepEmpty
+     * @return string|int|float|bool|null
+     */
+    private function getScalarValue(
+        array $productData,
+        string $attributeCode,
+        Product $product,
+        bool $keepEmpty
+    ): string|int|float|bool|null {
+        $empty = $keepEmpty ? '' : null;
+        if (!array_key_exists($attributeCode, $productData)) {
+            return $empty;
+        }
+        $attributeValue = $productData[$attributeCode] ?? "";
+        if ($attributeValue instanceof DataObject) {
+            $attributeValue = $attributeValue->getData($attributeCode);
+        }
+        if ($attributeValue === null) {
+            return $empty;
+        }
+        if (is_array($attributeValue)) {
+            $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
+                ? json_encode($attributeValue)
+                : implode(',', $attributeValue);
+        }
+        if (!is_scalar($attributeValue)) {
+            // Only strings/numbers allowed after normalization; skip any other types
+            $this->logger->warning(
+                'Skipped product custom attribute due to unsupported value type',
+                [
+                    'attribute_code' => $attributeCode,
+                    'product_id' => (int) $product->getId(),
+                    'sku' => $product->getSku(),
+                    'value_type' => get_debug_type($attributeValue)
+                ]
+            );
+            return null;
+        }
+
+        return $attributeValue;
     }
 
     /**

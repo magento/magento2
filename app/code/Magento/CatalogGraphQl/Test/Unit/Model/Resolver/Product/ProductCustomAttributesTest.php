@@ -781,6 +781,46 @@ class ProductCustomAttributesTest extends TestCase
     }
 
     /**
+     * Requested attributes without value are returned with an empty value, in the requested order.
+     *
+     * @return void
+     */
+    public function testResolveWithAttributeCodesReturnsRequestedAttributesWithoutValue(): void
+    {
+        $this->mockEligibleAttributes(['description', 'color', 'size']);
+        $this->productDataProviderMock->method('getProductDataById')
+            ->willReturn(['description' => 'Desc', 'color' => null]);
+        $this->mockAttributeValueFormatter();
+
+        $result = $this->resolveWithArgs(['attributeCodes' => ['size', 'color', 'description']]);
+
+        $this->assertSame(
+            [
+                ['code' => 'size', 'value' => ''],
+                ['code' => 'color', 'value' => ''],
+                ['code' => 'description', 'value' => 'Desc']
+            ],
+            $result['items']
+        );
+    }
+
+    /**
+     * Without attributeCodes, attributes without value are still skipped.
+     *
+     * @return void
+     */
+    public function testResolveWithoutAttributeCodesSkipsAttributesWithoutValue(): void
+    {
+        $this->mockEligibleAttributes(['description', 'size']);
+        $this->productDataProviderMock->method('getProductDataById')->willReturn(['description' => 'Desc']);
+        $this->mockAttributeValueFormatter();
+
+        $result = $this->resolveWithArgs([]);
+
+        $this->assertSame([['code' => 'description', 'value' => 'Desc']], $result['items']);
+    }
+
+    /**
      * The product is not loaded when none of the requested codes is available.
      *
      * @return void

@@ -37,7 +37,8 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
         $result = [];
         $selectedValues = explode(',', $value);
         foreach ($attribute->getOptions() as $option) {
-            if (!in_array($option->getValue(), $selectedValues)) {
+            // The empty option added by the source model is not a selectable value
+            if ((string) $option->getValue() === '' || !in_array($option->getValue(), $selectedValues)) {
                 continue;
             }
             $result[] = [

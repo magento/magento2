@@ -127,7 +127,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of media gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
     custom_attributesV2(
         filters: AttributeFilterInput @doc(description: "Identifies which custom attributes to return, based on attribute metadata.")
-        attributeCodes: [ID!] @doc(description: "The codes of the custom attributes to return, in this order. Combined with `filters`. Codes that are unknown or not eligible are reported in `errors`. If omitted or empty, all eligible attributes are returned.")
+        attributeCodes: [ID!] @doc(description: "The codes of the custom attributes to return, in this order. Combined with `filters`. A requested attribute without value on the product is returned with an empty value. Codes that are unknown or not eligible are reported in `errors`. If omitted or empty, all eligible attributes with a value are returned.")
     ): ProductCustomAttributes @doc(description: "Product custom attributes.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductCustomAttributes")
 }
 

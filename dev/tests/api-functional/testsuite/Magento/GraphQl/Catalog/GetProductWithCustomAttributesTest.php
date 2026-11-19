@@ -67,6 +67,24 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         'multiselect_custom_attribute_option_2'
     ),
     DataFixture(
+        Attribute::class,
+        [
+            'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            'attribute_code' => 'product_custom_attribute_without_value'
+        ],
+        'varchar_custom_attribute_without_value'
+    ),
+    DataFixture(
+        MultiselectAttribute::class,
+        [
+            'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            'source_model' => Table::class,
+            'backend_model' => ArrayBackend::class,
+            'attribute_code' => 'product_custom_attribute_multiselect_without_value'
+        ],
+        'multiselect_custom_attribute_without_value'
+    ),
+    DataFixture(
         ProductFixture::class,
         [
             'custom_attributes' => [
@@ -371,6 +389,39 @@ QUERY;
                         'message' => 'Attribute code "sku" could not be found.'
                     ]
                 ]
+            ],
+            $response['products']['items'][0]['custom_attributesV2']
+        );
+    }
+
+    public function testGetProductCustomAttributesByCodesReturnsAttributesWithoutValue()
+    {
+        $varcharCode = $this->varcharCustomAttribute->getAttributeCode();
+
+        $response = $this->graphQlQuery(
+            $this->getCustomAttributesByCodesQuery(
+                'attributeCodes: ["product_custom_attribute_without_value", '
+                . "\"product_custom_attribute_multiselect_without_value\", \"{$varcharCode}\"]"
+            )
+        );
+
+        $this->assertEquals(
+            [
+                'items' => [
+                    [
+                        'code' => 'product_custom_attribute_without_value',
+                        'value' => ''
+                    ],
+                    [
+                        'code' => 'product_custom_attribute_multiselect_without_value',
+                        'selected_options' => []
+                    ],
+                    [
+                        'code' => $varcharCode,
+                        'value' => 'test_value'
+                    ]
+                ],
+                'errors' => []
             ],
             $response['products']['items'][0]['custom_attributesV2']
         );
