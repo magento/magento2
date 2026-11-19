@@ -20,11 +20,10 @@ use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
+use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -58,12 +57,6 @@ class DiCompileCommandTest extends TestCase
 
     /** @var  ComponentRegistrar|MockObject */
     private $componentRegistrarMock;
-
-    /** @var  OutputInterface|MockObject */
-    private $outputMock;
-
-    /** @var OutputFormatter */
-    private $outputFormatter;
 
     /** @var Filesystem\Io\File|MockObject */
     private $fileMock;
@@ -108,10 +101,6 @@ class DiCompileCommandTest extends TestCase
             [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path (1)/to/library/two']],
         ]);
 
-        $this->outputFormatter = new OutputFormatter();
-        $this->outputMock = $this->createMock(OutputInterface::class);
-        $this->outputMock->method('getFormatter')
-            ->willReturn($this->outputFormatter);
         $this->fileMock = $this->getMockBuilder(Filesystem\Io\File::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -174,14 +163,14 @@ class DiCompileCommandTest extends TestCase
             );
         $this->componentRegistrarMock->expects($this->exactly(2))->method('getPaths');
 
-        $progressBar = new ProgressBar($this->outputMock);
-
         $this->objectManagerMock->expects($this->once())->method('configure');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
             ->with(ProgressBar::class)
-            ->willReturn($progressBar);
+            ->willReturnCallback(
+                fn (string $type, array $arguments): ProgressBar => new ProgressBar(...$arguments)
+            );
 
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR,
@@ -202,12 +191,46 @@ class DiCompileCommandTest extends TestCase
                 }
             });
 
-        $this->managerMock->expects($this->once())->method('process');
+        $proxiesOperation = $this->createMock(OperationInterface::class);
+        $proxiesOperation->method('getName')->willReturn('Proxies code generation');
+        $interceptorsOperation = $this->createMock(OperationInterface::class);
+        $interceptorsOperation->method('getName')->willReturn('Interceptors generation');
+
+        $this->managerMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(
+                function (
+                    ?\Closure $beforeCallback = null,
+                    ?\Closure $afterCallback = null
+                ) use (
+                    $proxiesOperation,
+                    $interceptorsOperation
+                ): void {
+                    foreach ([$proxiesOperation, $interceptorsOperation] as $operation) {
+                        if ($beforeCallback) {
+                            $beforeCallback($operation);
+                        }
+                        usleep(50000);
+                        if ($afterCallback) {
+                            $afterCallback($operation);
+                        }
+                    }
+                }
+            );
         $tester = new CommandTester($this->command);
         $tester->execute([]);
+        $display = $tester->getDisplay();
+        $this->assertStringStartsWith(
+            'Compilation was started.' . PHP_EOL . 'Proxies code generation... 1/9',
+            $display
+        );
+        $this->assertStringContainsString('Interceptors generation... 2/9', $display);
+        $this->assertStringNotContainsString('Proxies code generation... 2/9', $display);
+        $this->assertStringNotContainsString('%message%', $display);
+        $this->assertStringNotContainsString(PHP_EOL . PHP_EOL, $display);
         $this->assertContains(
             'Generated code and dependency injection configuration successfully.',
-            explode(PHP_EOL, $tester->getDisplay())
+            explode(PHP_EOL, $display)
         );
         $this->assertSame(DiCompileCommand::NAME, $this->command->getName());
     }
