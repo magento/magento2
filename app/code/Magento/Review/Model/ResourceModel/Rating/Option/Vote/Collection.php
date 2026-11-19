@@ -76,6 +76,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Set filter by multiple review ids
+     *
+     * @param int[] $reviewIds
+     * @return $this
+     */
+    public function setReviewsFilter(array $reviewIds)
+    {
+        $this->getSelect()->where('main_table.review_id IN (?)', $reviewIds, \Zend_Db::INT_TYPE);
+        return $this;
+    }
+
+    /**
+     * Populate the collection with pre-loaded vote items
+     *
+     * Marks the collection as loaded so that iterating or counting it
+     * does not trigger a redundant database query.
+     *
+     * @param \Magento\Review\Model\Rating\Option\Vote[] $votes
+     * @return $this
+     */
+    public function setLoadedVotes(array $votes)
+    {
+        foreach ($votes as $vote) {
+            $this->addItem($vote);
+        }
+        $this->_setIsLoaded();
+        return $this;
+    }
+
+    /**
      * Set EntityPk filter
      *
      * @param int $entityId
@@ -147,7 +177,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 'main_table.rating_id = store.rating_id AND ' . $condition
             );
         }
-        $connection->fetchAll($this->getSelect());
         return $this;
     }
 
