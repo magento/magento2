@@ -223,15 +223,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
     {
         if (isset($postData['product']['media_gallery']['images'])) {
             $removedImagesAmount = 0;
+            $removedImages = [];
             foreach ($postData['product']['media_gallery']['images'] as $image) {
                 if (!empty($image['removed'])) {
                     $removedImagesAmount++;
+                    $removedImages[] = $image['value_id'];
                 }
             }
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
                 $product = $this->productRepository->getById($productId, false, null, true);
                 $images = $product->getMediaGallery('images');
+                foreach ($images as $key => $imageItem) {
+                    if (in_array($imageItem['value_id'], $removedImages)) {
+                        unset($images[$key]);
+                    }
+                }
                 if (is_array($images) && $expectedImagesAmount != count($images)) {
                     $this->messageManager->addNoticeMessage(
                         __('The image cannot be removed as it has been assigned to the other image role')
