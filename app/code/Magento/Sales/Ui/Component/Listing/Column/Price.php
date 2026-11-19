@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\Store;
@@ -82,7 +83,12 @@ class Price extends Column
                     $itemStoreId = $item['store_id'] ?? '';
                     $storeId = $itemStoreId && is_numeric($itemStoreId) ? $itemStoreId :
                         $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID);
-                    $store = $this->storeManager->getStore($storeId);
+                    try {
+                        $store = $this->storeManager->getStore($storeId);
+                    } catch (NoSuchEntityException) {
+                        // The row may belong to a deleted store view
+                        $store = $this->storeManager->getStore(Store::DEFAULT_STORE_ID);
+                    }
                     $currencyCode = $store->getBaseCurrency()->getCurrencyCode();
                 }
                 $basePurchaseCurrency = $this->currency->load($currencyCode);
