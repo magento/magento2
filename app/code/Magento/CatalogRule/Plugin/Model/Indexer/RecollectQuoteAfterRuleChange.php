@@ -36,4 +36,32 @@ class RecollectQuoteAfterRuleChange
     {
         $this->quoteResourceModel->markQuotesRecollect($ids);
     }
+
+    /**
+     * Recollect quote on product ids after rule change applied in the "Update on Save" indexer mode.
+     *
+     * @param Price $subject
+     * @param void $result
+     * @param array $ids
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterExecuteList(Price $subject, $result, array $ids)
+    {
+        $this->quoteResourceModel->markQuotesRecollect($ids);
+    }
+
+    /**
+     * Recollect quote on product id after rule change applied in the "Update on Save" indexer mode.
+     *
+     * @param Price $subject
+     * @param void $result
+     * @param int $id
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterExecuteRow(Price $subject, $result, $id)
+    {
+        $this->quoteResourceModel->markQuotesRecollect([$id]);
+    }
 }
