@@ -10,7 +10,9 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryAttentionModalSection">
         <element name="attentionModalHeader" type="block" parameterized="true" selector="//h1[contains(text(), '{{headerText}}')]"/>
-        <element name="attentionModalContent" type="block" parameterized="true" selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[text()='Could not {{action}} directories: {{folderName}}']"/>
+        <element name="attentionModalContent" type="block" parameterized="true" selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[text()='Could not {{action}} directories: {{folderName}}, You are allowed to create folders only in: wysiwyg,catalog/category folders']"/>
+        <element name="attentionModalContentDeleteAction" type="block" parameterized="true" selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[text()='Could not delete directories: {{folderName}}']"/>
+
         <element name="attentionModalOkButton" type="button" selector="//button/span[contains(text(),'OK')]"/>
     </section>
 </sections>
