@@ -18,6 +18,7 @@ use Magento\Framework\Message\ManagerInterface;
  * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
+ * @method \Magento\Backend\Model\Auth\Session unsUser()
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
@@ -260,8 +261,13 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function processLogin()
     {
-        if ($this->getUser()) {
+        $user = $this->getUser();
+        if ($user) {
+            // regenerateId() persists the current session data under the pre-login ID before switching,
+            // so the user must not be in it yet, otherwise the old ID stays authenticated.
+            $this->unsUser();
             $this->regenerateId();
+            $this->setUser($user);
 
             if ($this->_backendUrl->useSecretKey()) {
                 $this->_backendUrl->renewSecretUrls();
