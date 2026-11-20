@@ -36,13 +36,16 @@ class SelectedPaymentMethod implements ResolverInterface
 
         try {
             $methodTitle = $payment->getMethodInstance()->getTitle();
+            $orderPlaceRedirectUrl = $payment->getOrderPlaceRedirectUrl() ?: null;
         } catch (LocalizedException $e) {
             $methodTitle = '';
+            $orderPlaceRedirectUrl = null;
         }
 
         return [
             'code' => $payment->getMethod() ?? '',
             'title' => $methodTitle,
+            'order_place_redirect_url' => $orderPlaceRedirectUrl,
             'purchase_order_number' => $payment->getPoNumber(),
         ];
     }
