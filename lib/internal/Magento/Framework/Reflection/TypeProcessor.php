@@ -56,6 +56,24 @@ class TypeProcessor
     private $nameFinder;
 
     /**
+     * @var NativeTypeResolver|null
+     */
+    private $nativeTypeResolver;
+
+    /**
+     * Get the native type resolver.
+     *
+     * @return NativeTypeResolver
+     */
+    private function getNativeTypeResolver(): NativeTypeResolver
+    {
+        if ($this->nativeTypeResolver === null) {
+            $this->nativeTypeResolver = new NativeTypeResolver();
+        }
+        return $this->nativeTypeResolver;
+    }
+
+    /**
      * The getter function to get the new NameFinder dependency
      *
      * @return NameFinder
@@ -223,9 +241,10 @@ class TypeProcessor
             if ($returnMetadata['description']) {
                 $description = $returnMetadata['description'];
             } else {
-                $description = $this->getNameFinder()->getFieldDescriptionFromGetterDescription(
-                    $methodReflection->getDocBlock()->getShortDescription()
-                );
+                $description = $methodReflection->getDocBlock()
+                    ? $this->getNameFinder()->getFieldDescriptionFromGetterDescription(
+                        $methodReflection->getDocBlock()->getShortDescription()
+                    ) : '';
             }
             $this->_types[$typeName]['parameters'][$fieldName] = [
                 'type' => $this->register($returnMetadata['type']),
@@ -299,6 +318,22 @@ class TypeProcessor
     public function getGetterReturnType($methodReflection)
     {
         $returnAnnotation = $this->getMethodReturnAnnotation($methodReflection);
+        if ($returnAnnotation === null) {
+            $nativeReturn = $this->getNativeTypeResolver()->resolveReturn($methodReflection);
+            if ($nativeReturn !== null) {
+                return $nativeReturn;
+            }
+            throw new \InvalidArgumentException(
+                sprintf(
+                    $methodReflection->getDocBlock()
+                        ? 'Method\'s return type must be specified using @return annotation. See %1$s::%2$s()'
+                        : 'Return type of %1$s::%2$s() is unknown. '
+                            . 'Declare a native return type or add a @return annotation.',
+                    $methodReflection->getDeclaringClass()->getName(),
+                    $methodReflection->getName()
+                )
+            );
+        }
         $types = $returnAnnotation->getTypes();
         $returnType = null;
         foreach ($types as $type) {
@@ -328,7 +363,7 @@ class TypeProcessor
     {
         $exceptions = [];
         $methodDocBlock = $methodReflection->getDocBlock();
-        if ($methodDocBlock->hasTag('throws')) {
+        if ($methodDocBlock && $methodDocBlock->hasTag('throws')) {
             $throwsTypes = $methodDocBlock->getTags('throws');
             if (is_array($throwsTypes)) {
                 /** @var $throwsType \Laminas\Code\Reflection\DocBlock\Tag\ThrowsTag */
@@ -537,6 +572,7 @@ class TypeProcessor
      */
     public function getParamType(ParameterReflection $param)
     {
+        $this->getNativeTypeResolver()->assertNamedParameter($param);
         $type = $param->detectType();
         if ($type === 'null') {
             throw new \LogicException(
@@ -552,6 +588,17 @@ class TypeProcessor
         if ($type === 'array') {
             // try to determine class, if it's array of objects
             $paramDocBlock = $this->getParamDocBlockTag($param);
+            if ($paramDocBlock === null) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Parameter "$%3$s" of %1$s::%2$s() declares "array" without an item type. '
+                        . 'Add a @param annotation such as Foo[] $%3$s.',
+                        $param->getDeclaringClass()->getName(),
+                        $param->getDeclaringFunction()->getName(),
+                        $param->getName()
+                    )
+                );
+            }
             $paramTypes = $paramDocBlock->getTypes();
             $paramType = array_shift($paramTypes);
 
@@ -702,8 +749,8 @@ class TypeProcessor
      */
     public function getParamDescription(ParameterReflection $param)
     {
-        $paramDocBlock = $this->getParamDocBlockTag($param);
-        return $paramDocBlock->getDescription();
+        $paramDocBlock = $this->getParamDocBlockTag($param, true);
+        return $paramDocBlock === null ? '' : $paramDocBlock->getDescription();
     }
 
     /**
@@ -866,8 +913,7 @@ class TypeProcessor
      * Parses `return` annotation from reflection method.
      *
      * @param MethodReflection $methodReflection
-     * @return ReturnTag
-     * @throws \InvalidArgumentException if doc block is empty or `@return` annotation doesn't exist
+     * @return ReturnTag|null
      */
     private function getMethodReturnAnnotation(MethodReflection $methodReflection)
     {
@@ -900,50 +946,68 @@ class TypeProcessor
                         break;
                     }
                 }
-
-                // throw an exception if even implemented interface doesn't have return annotations
-                // @phpstan-ignore-next-line as $returnAnnotations can be empty
-                if (empty($returnAnnotations)) {
-                    throw new \InvalidArgumentException(
-                        "Method's return type must be specified using @return annotation. "
-                        . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodName}()"
-                    );
-                }
             }
         }
 
-        return $returnAnnotations;
+        return $returnAnnotations ?: null;
     }
 
     /**
      * Parses `return` annotation from doc block.
      *
      * @param MethodReflection $methodReflection
-     * @return ReturnTag
+     * @return ReturnTag|false
      */
     private function getReturnFromDocBlock(MethodReflection $methodReflection)
     {
         $methodDocBlock = $methodReflection->getDocBlock();
-        if (!$methodDocBlock) {
-            throw new \InvalidArgumentException(
-                "Each method must have a doc block. "
-                . "See {$methodReflection->getDeclaringClass()->getName()}::{$methodReflection->getName()}()"
-            );
-        }
-        return current($methodDocBlock->getTags('return'));
+        return $methodDocBlock ? current($methodDocBlock->getTags('return')) : false;
     }
 
     /**
      * Gets method's param doc block.
      *
      * @param ParameterReflection $param
-     * @return ParamTag
+     * @param bool $forDescription
+     * @return ParamTag|null
      */
-    private function getParamDocBlockTag(ParameterReflection $param): ParamTag
+    private function getParamDocBlockTag(ParameterReflection $param, bool $forDescription = false): ?ParamTag
     {
         $docBlock = $param->getDeclaringFunction()
             ->getDocBlock();
+        if (!$docBlock) {
+            return null;
+        }
         $paramsTag = $docBlock->getTags('param');
-        return $paramsTag[$param->getPosition()];
+        if (count($paramsTag) >= $param->getDeclaringFunction()->getNumberOfParameters()) {
+            return $paramsTag[$param->getPosition()];
+        }
+        foreach ($paramsTag as $tag) {
+            if ($tag->getVariableName() === '$' . $param->getName()) {
+                return $tag;
+            }
+        }
+        $positionalTag = $paramsTag[$param->getPosition()] ?? null;
+        if ($forDescription && $positionalTag !== null && $this->isTagForOtherParameter($positionalTag, $param)) {
+            return null;
+        }
+        return $positionalTag;
+    }
+
+    /**
+     * Check whether a positional tag belongs to another parameter of the method.
+     *
+     * @param ParamTag $tag
+     * @param ParameterReflection $param
+     * @return bool
+     */
+    private function isTagForOtherParameter(ParamTag $tag, ParameterReflection $param): bool
+    {
+        foreach ($param->getDeclaringFunction()->getParameters() as $parameter) {
+            if ($tag->getVariableName() === '$' . $parameter->getName()) {
+                return $parameter->getName() !== $param->getName();
+            }
+        }
+        return false;
     }
 }

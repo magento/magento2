@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\TestFramework\Unit\Autoloader\GeneratedClassesAutoloader;
 
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/TestHelper.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
@@ -91,5 +92,42 @@ class PhpScannerTest extends TestCase
             ['\\' . \Magento\Eav\Api\Data\AttributeExtensionInterface::class],
             $result
         );
+    }
+
+    public function testCollectNativeExtensionAttributes(): void
+    {
+        $fixtureDir = $this->testDir . '/app/code/Magento/SomeModule/Api/Data/';
+        require_once $fixtureDir . 'DocumentedExtensibleInterface.php';
+        require_once $fixtureDir . 'NativeExtensibleInterface.php';
+
+        $expectedNative = [
+            '\\Magento\\SomeModule\\Api\\Data\\NativeExtensibleExtensionInterface',
+            '\\Magento\\SomeModule\\Api\\Data\\NativeExtensibleExtension',
+            '\\Magento\\SomeModule\\Api\\Data\\NativeExtensibleExtensionFactory',
+        ];
+        $expectedDocumented = [
+            '\\Magento\\SomeModule\\Api\\Data\\DocumentedExtensibleExtensionInterface',
+            '\\Magento\\SomeModule\\Api\\Data\\DocumentedExtensibleExtension',
+            '\\Magento\\SomeModule\\Api\\Data\\DocumentedExtensibleExtensionFactory',
+        ];
+        $removedAutoloaders = [];
+        foreach (spl_autoload_functions() as $autoloader) {
+            if (is_array($autoloader) && $autoloader[0] instanceof GeneratedClassesAutoloader) {
+                spl_autoload_unregister($autoloader);
+                $removedAutoloaders[] = $autoloader;
+            }
+        }
+
+        try {
+            $documented = $this->scanner->collectEntities([$fixtureDir . 'DocumentedExtensibleInterface.php']);
+            $native = $this->scanner->collectEntities([$fixtureDir . 'NativeExtensibleInterface.php']);
+
+            self::assertSame($expectedDocumented, $documented);
+            self::assertSame($expectedNative, $native);
+        } finally {
+            foreach ($removedAutoloaders as $autoloader) {
+                spl_autoload_register($autoloader, true, false);
+            }
+        }
     }
 }
