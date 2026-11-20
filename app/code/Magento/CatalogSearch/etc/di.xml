@@ -262,4 +262,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Search\Model\Query">
+        <plugin name="catalogsearch_skip_query_logging_for_bots"
+                type="Magento\CatalogSearch\Plugin\Search\SkipQueryLoggingForBots" sortOrder="1"/>
+    </type>
+    <type name="Magento\CatalogSearch\Plugin\Search\SkipQueryLoggingForBots">
+        <arguments>
+            <argument name="visitor" xsi:type="object">Magento\Customer\Model\Visitor\Proxy</argument>
+        </arguments>
+    </type>
 </config>
