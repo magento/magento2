@@ -10,6 +10,7 @@ namespace Magento\Paypal\Test\Unit\Model\Api;
 use Magento\Customer\Helper\Address;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\LocalizedExceptionFactory;
 use Magento\Framework\HTTP\Adapter\Curl;
@@ -336,5 +337,67 @@ class NvpTest extends TestCase
         $this->expectExceptionMessageMatches('/Something went wrong while processing your order/');
 
         $this->model->call('DoExpressCheckout', ['data' => 'some data']);
+    }
+
+    /**
+     * @param array $addressData
+     * @param string $expectedShipToName
+     */
+    #[DataProvider('formatShipToNameDataProvider')]
+    public function testFormatShipToName(array $addressData, string $expectedShipToName): void
+    {
+        $address = new DataObject($addressData);
+        $method = new \ReflectionMethod(Nvp::class, 'formatShipToName');
+        $this->assertEquals($expectedShipToName, $method->invoke($this->model, $address));
+    }
+
+    /**
+     * @return array
+     */
+    public static function formatShipToNameDataProvider(): array
+    {
+        return [
+            'prefix must not be included in ship to name' => [
+                ['prefix' => 'Mr.', 'firstname' => 'John', 'lastname' => 'Doe'],
+                'John Doe',
+            ],
+            'middle name and suffix must not be included in ship to name' => [
+                [
+                    'prefix' => 'Mr.',
+                    'firstname' => 'John',
+                    'middlename' => 'Michael',
+                    'lastname' => 'Doe',
+                    'suffix' => 'Jr.',
+                ],
+                'John Doe',
+            ],
+        ];
+    }
+
+    /**
+     * Test that shipping name exported to PayPal excludes address prefix
+     */
+    public function testImportAddressesExportsFirstAndLastNameOnly(): void
+    {
+        $billingAddress = new DataObject([
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'country_id' => 'US',
+        ]);
+        $shippingAddress = new DataObject([
+            'prefix' => 'Mr.',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'country_id' => 'US',
+        ]);
+
+        $this->model->setBillingAddress($billingAddress);
+        $this->model->setAddress($shippingAddress);
+        $this->model->setSuppressShipping(false);
+
+        $method = new \ReflectionMethod(Nvp::class, '_importAddresses');
+        $result = $method->invoke($this->model, []);
+
+        $this->assertEquals('John Doe', $result['SHIPTONAME']);
     }
 }

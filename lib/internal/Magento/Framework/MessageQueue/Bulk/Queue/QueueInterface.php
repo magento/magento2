@@ -14,6 +14,8 @@ use Magento\Framework\MessageQueue\QueueInterface as BaseQueueInterface;
  * Interface for interaction with bulk message queue.
  *
  * @api
+ * @deprecated
+ * @see \Magento\Framework\MessageQueue\Bulk\ExchangeInterface
  */
 interface QueueInterface
 {

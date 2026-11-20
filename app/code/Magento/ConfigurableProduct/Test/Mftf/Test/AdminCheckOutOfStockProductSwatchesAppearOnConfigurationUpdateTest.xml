@@ -39,6 +39,7 @@
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="selectAndDeleteProducts"/>
             <waitForElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
             <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+            <waitForPageLoad stepKey="waitForPageToLoadAfterFiltersClearing"/>
             <!-- Delete color attribute -->
             <actionGroup ref="DeleteProductAttributeByCodeActionGroup" stepKey="deleteColorAttribute">
                 <argument name="attribute_code" value="{{colorProductAttributeWithOptions.default_label}}"/>

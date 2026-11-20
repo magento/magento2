@@ -43,6 +43,8 @@ class FreeShipping implements FreeShippingInterface
         $this->calculator->initFromQuote($quote);
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setFreeShipping(0);
+        $billingAddress = $quote->getBillingAddress();
+        $billingAddress->setFreeShipping(0);
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount()) {

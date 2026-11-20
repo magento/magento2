@@ -140,6 +140,51 @@ class MaliciousCodeTest extends TestCase
         ];
     }
 
+    #[DataProvider('stripMaliciousExpressionsDataProvider')]
+    public function testStripMaliciousExpressions($input, $stripped, $preserved)
+    {
+        $output = $this->filter->stripMaliciousExpressions($input);
+
+        foreach ($stripped as $expression) {
+            $this->assertStringNotContainsString($expression, $output);
+        }
+        foreach ($preserved as $expression) {
+            $this->assertStringContainsString($expression, $output);
+        }
+    }
+
+    public static function stripMaliciousExpressionsDataProvider()
+    {
+        return [
+            'variables' => [
+                'Tag is removed <script>SomeScript</script>
+                Tag is removed <meta>SomeMeta</meta>
+                Tag is removed <link>SomeLink</link>
+                Tag is removed <frame>SomeFrame</frame>
+                Tag is removed <iframe>SomeIFrame</iframe>
+                Tag is removed <object>SomeObject</object>
+                <img
+                    {{if logo_width}}
+                        width="{{var logo_width}}"
+                    {{else}}
+                        width="180"
+                    {{/if}}
+
+                    {{if logo_height}}
+                        height="{{var logo_height}}"
+                    {{/if}}
+
+                    src="{{var logo_url}}"
+                    alt="{{var logo_alt}}"
+                    border="0"
+                />',
+                ['<script>', '<meta>', '<link>','<frame>','<iframe>','<object>'],
+                ['{{var logo_url}}', '{{var logo_alt}}', '{{var logo_height}}']
+            ],
+
+        ];
+    }
+
     /**
      * Ensure that custom filtration regular expressions are applied.
      */

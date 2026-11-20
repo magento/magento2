@@ -34,6 +34,7 @@
             <!-- Clear filters: URL re-write, product -->
             <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteEditPage"/>
             <conditionalClick selector="{{AdminUrlRewriteIndexSection.clearFiltersButton}}" dependentSelector="{{AdminUrlRewriteIndexSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+            <waitForPageLoad stepKey="waitForPageToLoadAfterClearingFilters"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <!-- Delete the category and product -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

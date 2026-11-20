@@ -6,6 +6,8 @@
 namespace Magento\ImportExport\Model\Export\Adapter;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\Write;
 
 /**
@@ -16,6 +18,8 @@ use Magento\Framework\Filesystem\File\Write;
  */
 class Csv extends AbstractAdapter
 {
+    private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
+
     /**
      * Field delimiter.
      *
@@ -38,7 +42,29 @@ class Csv extends AbstractAdapter
     protected $_fileHandler;
 
     /**
+     * @var bool
+     */
+    private bool $fileExport = false;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param string|null $destination
+     * @param string $destinationDirectoryCode
+     * @param bool $fileExport
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        $destination = null,
+        $destinationDirectoryCode = DirectoryList::VAR_IMPORT_EXPORT,
+        bool $fileExport = false
+    ) {
+        $this->fileExport = $fileExport;
+        parent::__construct($filesystem, $destination, $destinationDirectoryCode);
+    }
+
+    /**
      * Object destructor
+     *
      * @since 100.3.5
      */
     public function __destruct()
@@ -55,6 +81,7 @@ class Csv extends AbstractAdapter
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
+            $this->_fileHandler = null;
             $this->resolveDestination();
         }
     }
@@ -142,5 +169,29 @@ class Csv extends AbstractAdapter
             $this->_enclosure
         );
         return $this;
+    }
+
+    /**
+     * Return CSV contents, or a completion marker in file-export mode.
+     *
+     * Ensure buffered writes are flushed before inspecting the completed file.
+     *
+     * @return string
+     */
+    public function getContents()
+    {
+        if ($this->_fileHandler) {
+            $this->_fileHandler->flush();
+            $this->_fileHandler->close();
+            $this->_fileHandler = null;
+        }
+
+        if ($this->fileExport) {
+            return $this->_directoryHandle->stat($this->_destination)['size'] > 0
+                ? self::RESULT_WRITTEN_TO_FILE
+                : '';
+        }
+
+        return parent::getContents();
     }
 }

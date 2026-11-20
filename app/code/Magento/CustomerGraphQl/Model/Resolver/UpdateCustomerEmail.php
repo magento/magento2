@@ -51,6 +51,7 @@ class UpdateCustomerEmail implements ResolverInterface
      * @param UpdateCustomerAccount $updateCustomerAccount
      * @param ExtractCustomerData $extractCustomerData
      * @param EmailNotificationInterface|null $emailNotification
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         GetCustomer $getCustomer,
@@ -90,7 +91,6 @@ class UpdateCustomerEmail implements ResolverInterface
         }
 
         $customer = $this->getCustomer->execute($context);
-        $customerOriginalEmail = $customer->getEmail();
         $customer->setData('ignore_validation_flag', true);
         $this->updateCustomerAccount->execute(
             $customer,
@@ -99,11 +99,6 @@ class UpdateCustomerEmail implements ResolverInterface
                 'password' => $args['password'] ?? null
             ],
             $context->getExtensionAttributes()->getStore()
-        );
-        $this->emailNotification->credentialsChanged(
-            $customer,
-            $customerOriginalEmail,
-            false
         );
         return ['customer' => $this->extractCustomerData->execute($customer)];
     }

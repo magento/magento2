@@ -33,6 +33,7 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

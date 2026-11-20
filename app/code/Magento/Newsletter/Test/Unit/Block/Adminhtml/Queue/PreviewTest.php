@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
@@ -100,6 +101,13 @@ class PreviewTest extends TestCase
         $context->expects($this->once())->method('getAppState')
             ->willReturn($appState);
 
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+        $context->expects($this->once())->method('getAuthorization')
+            ->willReturn($authorization);
+
         $backendSession = $this->createMock(Session::class);
 
         $context->expects($this->once())
@@ -158,7 +166,7 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->willReturn($store);
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn('');
         $result = $this->preview->toHtml();

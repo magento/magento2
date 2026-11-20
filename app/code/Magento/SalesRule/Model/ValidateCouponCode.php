@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\DataObjectFactory;
-use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
 
@@ -18,11 +18,13 @@ class ValidateCouponCode
      * @param CouponFactory $couponFactory
      * @param DataObjectFactory $objectFactory
      * @param UsageFactory $usageFactory
+     * @param OrderEditUsageOffset $orderEditUsageOffset
      */
     public function __construct(
         private readonly CouponFactory $couponFactory,
         private readonly DataObjectFactory $objectFactory,
-        private readonly UsageFactory $usageFactory
+        private readonly UsageFactory $usageFactory,
+        private readonly OrderEditUsageOffset $orderEditUsageOffset
     ) {
     }
 
@@ -31,9 +33,10 @@ class ValidateCouponCode
      *
      * @param string[] $couponCodes
      * @param int|null $customerId
+     * @param CartInterface|null $quote
      * @return string[]
      */
-    public function execute(array $couponCodes, ?int $customerId = null): array
+    public function execute(array $couponCodes, ?int $customerId = null, ?CartInterface $quote = null): array
     {
         $validCouponCodes = [];
         foreach ($couponCodes as $code) {
@@ -42,7 +45,7 @@ class ValidateCouponCode
             }
             $coupon = $this->couponFactory->create()->load($code, 'code');
 
-            if (!$this->isCouponValid($coupon, $customerId)) {
+            if (!$this->isCouponValid($coupon, $customerId, $quote)) {
                 continue;
             }
             if (isset($validCouponCodes[$coupon->getRuleId()])) {
@@ -58,20 +61,70 @@ class ValidateCouponCode
      *
      * @param CouponInterface $coupon
      * @param int|null $customerId
+     * @param CartInterface|null $quote
      * @return bool
      */
-    private function isCouponValid(CouponInterface $coupon, ?int $customerId = null): bool
-    {
+    private function isCouponValid(
+        CouponInterface $coupon,
+        ?int $customerId = null,
+        ?CartInterface $quote = null
+    ): bool {
         if (!$coupon->getId()) {
             return false;
         }
 
-        if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
+        $orderEditOffset = $this->getOrderEditOffset($quote, $coupon);
+        if ($this->isTotalUsageLimitReached($coupon, $orderEditOffset)) {
             return false;
         }
 
+        return !$this->isPerCustomerUsageLimitReached($coupon, $customerId, $orderEditOffset);
+    }
+
+    /**
+     * Resolve order-edit usage offset for a coupon rule.
+     *
+     * @param CartInterface|null $quote
+     * @param CouponInterface $coupon
+     * @return int
+     */
+    private function getOrderEditOffset(?CartInterface $quote, CouponInterface $coupon): int
+    {
+        if (!$coupon->getRuleId()) {
+            return 0;
+        }
+
+        return $this->orderEditUsageOffset->getOffsetForRuleId((int)$coupon->getRuleId(), $quote);
+    }
+
+    /**
+     * Check whether coupon total usage limit is reached.
+     *
+     * @param CouponInterface $coupon
+     * @param int $orderEditOffset
+     * @return bool
+     */
+    private function isTotalUsageLimitReached(CouponInterface $coupon, int $orderEditOffset): bool
+    {
+        return (bool)($coupon->getUsageLimit()
+            && $coupon->getTimesUsed() - $orderEditOffset >= $coupon->getUsageLimit());
+    }
+
+    /**
+     * Check whether coupon per-customer usage limit is reached.
+     *
+     * @param CouponInterface $coupon
+     * @param int|null $customerId
+     * @param int $orderEditOffset
+     * @return bool
+     */
+    private function isPerCustomerUsageLimitReached(
+        CouponInterface $coupon,
+        ?int $customerId,
+        int $orderEditOffset
+    ): bool {
         if (!$customerId || !$coupon->getUsagePerCustomer()) {
-            return true;
+            return false;
         }
 
         $couponUsage = $this->objectFactory->create();
@@ -80,11 +133,8 @@ class ValidateCouponCode
             $customerId,
             $coupon->getId()
         );
-        if ($couponUsage->getCouponId() &&
-            $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
-        ) {
-            return false;
-        }
-        return true;
+
+        return (bool)($couponUsage->getCouponId()
+            && $couponUsage->getTimesUsed() - $orderEditOffset >= $coupon->getUsagePerCustomer());
     }
 }

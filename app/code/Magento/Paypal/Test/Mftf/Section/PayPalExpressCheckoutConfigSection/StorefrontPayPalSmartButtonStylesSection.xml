@@ -9,7 +9,7 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontPayPalSmartButtonStylesSection">
         <element name="label" type="text" selector="//div[contains(@class, 'paypal-button-number-0')]//div[@class='paypal-button-label-container']"/>
-        <element name="labelText" type="text" selector="//div[contains(@class, 'paypal-button-number-0')]//div[@class='paypal-button-label-container']//span[@class='paypal-button-text' and contains(text(), '{{label}}')]" parameterized="true"/>
+        <element name="labelText" type="text" selector="//div[contains(@class, 'paypal-button-number-0')]//div[@class='paypal-button-label-container']//span[contains(@class,'paypal-button-text') and contains(text(), '{{label}}')]" parameterized="true"/>
         <element name="layout" type="text" selector=".paypal-button-layout-{{layout}}" parameterized="true"/>
         <element name="size" type="text" selector="[data-size='{{size}}']" parameterized="true"/>
         <element name="shape" type="text" selector=".paypal-button-shape-{{shape}}" parameterized="true"/>

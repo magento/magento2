@@ -6,8 +6,6 @@
 
 /**
  * Attribute form apply element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 

@@ -40,10 +40,14 @@
             </tr>
         <?php endif; ?>
 
-        <?php if ((float)$item->getQtyCanceled()): ?>
+        <?php $canceledItemQty = $block->getData('canceled_item_qty'); ?>
+        <?php $canceledQty = $canceledItemQty
+            ? (float) $canceledItemQty->getDisplayCanceledQty($item)
+            : (float) $item->getQtyCanceled(); ?>
+        <?php if ($canceledQty): ?>
             <tr>
                 <th><?= $escaper->escapeHtml(__('Canceled')); ?></th>
-                <td><?= (float) $item->getQtyCanceled() ?></td>
+                <td><?= /* @noEscape */ $canceledQty ?></td>
             </tr>
         <?php endif; ?>
 

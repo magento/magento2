@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Email\Model\TemplateFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
@@ -75,7 +76,6 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-
         $storeId = 1;
         $designConfigData = [];
 
@@ -93,20 +93,16 @@ class PreviewTest extends TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->request = $this->createMock(Http::class);
-
         $this->maliciousCode = $this->createPartialMock(
             MaliciousCode::class,
             ['filter']
         );
-
         $this->template->expects($this->once())
             ->method('getProcessedTemplate')
             ->with([])
             ->willReturn(self::MALICIOUS_TEXT);
-
         $this->template->method('getDesignConfig')
             ->willReturn(new DataObject($designConfigData));
-
         $emailFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
             ->method('create')
@@ -116,7 +112,6 @@ class PreviewTest extends TestCase
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $design = $this->createMock(DesignInterface::class);
         $store = $this->createPartialMock(Store::class, ['getId']);
-
         $store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
@@ -143,9 +138,22 @@ class PreviewTest extends TestCase
             )
             ->willReturn($this->template->getProcessedTemplate());
 
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->expects($this->any())
+            ->method('isAllowed')
+            ->willReturn(true);
+
         $context = $this->createPartialMock(
             Context::class,
-            ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
+            [
+                'getRequest',
+                'getEventManager',
+                'getScopeConfig',
+                'getDesignPackage',
+                'getStoreManager',
+                'getAppState',
+                'getAuthorization'
+            ]
         );
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManage);
@@ -153,6 +161,7 @@ class PreviewTest extends TestCase
         $context->expects($this->any())->method('getDesignPackage')->willReturn($design);
         $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
+        $context->expects($this->any())->method('getAuthorization')->willReturn($authorization);
         $objects = [
             [
                 JsonHelper::class,
@@ -192,7 +201,7 @@ class PreviewTest extends TestCase
             ->method('getDesignConfig');
         $this->storeManager->expects($this->atLeastOnce())
             ->method('getDefaultStoreView');
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->with($requestParamMap[1][2])
             ->willReturn(self::MALICIOUS_TEXT);

@@ -238,10 +238,35 @@ class RealTest extends TestCase
             $expectedData['precision'] = $expectedPrecision;
             $expectedData['scale'] = $expectedScale;
         }
-        $this->unsignedMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
-        $this->nullableMock->expects($this->any())->method('fromDefinition')->willReturnArgument(0);
+        $this->unsignedMock->expects($this->once())->method('fromDefinition')->willReturnArgument(0);
+        $this->nullableMock->expects($this->once())->method('fromDefinition')->willReturnArgument(0);
         $result = $this->real->fromDefinition(['definition' => $definition]);
         $this->assertEquals($expectedData, $result);
+    }
+
+    /**
+     * Test that unsigned flag is correctly extracted from bare double/float definitions.
+     *
+     * @param string $definition
+     * @param bool $expectedUnsigned
+     * @dataProvider unsignedDefinitionDataProvider()
+     */
+    #[DataProvider('unsignedDefinitionDataProvider')]
+    public function testFromDefinitionUnsigned(string $definition, bool $expectedUnsigned)
+    {
+        $unsigned = new Unsigned();
+        $real = $this->objectManager->getObject(
+            Real::class,
+            [
+                'nullable' => $this->nullableMock,
+                'unsigned' => $unsigned,
+                'resourceConnection' => $this->resourceConnectionMock,
+                'comment' => $this->commentMock,
+            ]
+        );
+        $this->nullableMock->expects($this->once())->method('fromDefinition')->willReturnArgument(0);
+        $result = $real->fromDefinition(['definition' => $definition]);
+        $this->assertSame($expectedUnsigned, $result['unsigned']);
     }
 
     /**
@@ -258,6 +283,21 @@ class RealTest extends TestCase
             ['double(10, 6)', 10, 6],
             ['double', false, false],
             ['double(10)', false, false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function unsignedDefinitionDataProvider()
+    {
+        return [
+            'double unsigned without precision' => ['double unsigned', true],
+            'double without unsigned' => ['double', false],
+            'float unsigned without precision' => ['float unsigned', true],
+            'float without unsigned' => ['float', false],
+            'double unsigned with precision' => ['double(10, 6) unsigned', true],
+            'decimal unsigned without precision' => ['decimal unsigned', true],
         ];
     }
 }

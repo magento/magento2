@@ -149,7 +149,10 @@
             "SALES_ORDER_QUOTE_ID": true,
             "SALES_ORDER_UPDATED_AT": true,
             "SALES_ORDER_SEND_EMAIL": true,
-            "SALES_ORDER_EMAIL_SENT": true
+            "SALES_ORDER_EMAIL_SENT": true,
+            "SALES_ORDER_CUSTOMER_EMAIL_CUSTOMER_IS_GUEST_STORE_ID": true,
+            "IDX_D32F76D98C68946A46B97C3B7F947694": true,
+            "IDX_18A5E37AE96198B3DC8AE085102BE843": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -1124,11 +1127,13 @@
             "product_name": true,
             "product_price": true,
             "qty_ordered": true,
-            "rating_pos": true
+            "rating_pos": true,
+            "period_month": true
         },
         "index": {
             "SALES_BESTSELLERS_AGGREGATED_DAILY_STORE_ID": true,
-            "SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID": true
+            "SALES_BESTSELLERS_AGGREGATED_DAILY_PRODUCT_ID": true,
+            "SALES_BESTSELLERS_AGGRED_DAILY_STORE_ID_PERIOD_MONTH_PRD_ID": true
         },
         "constraint": {
             "PRIMARY": true,

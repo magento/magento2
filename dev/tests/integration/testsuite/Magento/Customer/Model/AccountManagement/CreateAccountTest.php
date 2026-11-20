@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\EmailNotification;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Email\Model\ResourceModel\Template\CollectionFactory as TemplateCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -22,12 +23,20 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -117,6 +126,11 @@ class CreateAccountTest extends TestCase
     private $templateCollectionFactory;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private DataFixtureStorage $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -134,6 +148,7 @@ class CreateAccountTest extends TestCase
         $this->encryptor = $this->objectManager->get(EncryptorInterface::class);
         $this->mutableScopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
         $this->templateCollectionFactory = $this->objectManager->get(TemplateCollectionFactory::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
         parent::setUp();
     }
 
@@ -248,6 +263,8 @@ class CreateAccountTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer_welcome_email_template.php
      * @return void
      */
@@ -270,6 +287,8 @@ class CreateAccountTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer_welcome_no_password_email_template.php
      * @magentoConfigFixture current_store customer/create_account/email_identity support
      * @return void
@@ -290,6 +309,8 @@ class CreateAccountTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_email_template.php
      * @magentoConfigFixture current_website customer/create_account/confirm 1
      * @magentoConfigFixture current_store customer/create_account/email_identity custom1
@@ -314,6 +335,8 @@ class CreateAccountTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer_confirmed_email_template.php
      * @magentoConfigFixture current_store customer/create_account/email_identity custom1
      * @magentoConfigFixture current_website customer/create_account/confirm 1
@@ -341,6 +364,9 @@ class CreateAccountTest extends TestCase
     /**
      * Assert that when you create customer account via admin, link with "set password" is send to customer email.
      *
+     * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @return void
      */
     public function testSendEmailWithSetPasswordLink(): void
@@ -360,6 +386,9 @@ class CreateAccountTest extends TestCase
     }
 
     /**
+     * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @return void
      */
@@ -379,7 +408,15 @@ class CreateAccountTest extends TestCase
 
     /**
      * @return void
+     * @throws InputException
+     * @throws InputMismatchException
+     * @throws LocalizedException
      */
+    #[
+        DbIsolation(true),
+        AppIsolation(true),
+        AppArea('frontend'),
+    ]
     public function testCreateNewCustomerWithPasswordHash(): void
     {
         $customerData = $expectedCustomerData = [
@@ -408,6 +445,9 @@ class CreateAccountTest extends TestCase
     /**
      * Customer has two addresses one of it is allowed in website and second is not
      *
+     * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @magentoDataFixture Magento/Store/_files/websites_different_countries.php
@@ -424,6 +464,12 @@ class CreateAccountTest extends TestCase
             ->setRegionId(null);
         $customerData->getAddresses()[1]->setIsDefaultBilling(true);
         $customerData->getAddresses()[1]->setIsDefaultShipping(true);
+        foreach ($customerData->getAddresses() as $address) {
+            $address->setId(null);
+            $address->setCustomerId(null);
+        }
+        $customerData->setDefaultBilling(null);
+        $customerData->setDefaultShipping(null);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
         $password = $this->random->getRandomString(8);
         $passwordHash = $this->encryptor->getHash($password, true);
@@ -445,6 +491,8 @@ class CreateAccountTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
@@ -460,6 +508,9 @@ class CreateAccountTest extends TestCase
         ];
         unset($expectedCustomerData[CustomerInterface::ID]);
         $customerEntity = $this->populateCustomerEntity($existingCustomer->__toArray(), $customerData);
+        $customerEntity->setDefaultBilling(null);
+        $customerEntity->setDefaultShipping(null);
+        $customerEntity->setAddresses([]);
 
         $customerAfter = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertGreaterThan(0, $customerAfter->getId());
@@ -484,6 +535,8 @@ class CreateAccountTest extends TestCase
         $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
         $expectedInBefore = [
+            'default_billing',
+            'default_shipping',
             'email',
             'firstname',
             'id',
@@ -508,7 +561,14 @@ class CreateAccountTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
+    #[
+        DbIsolation(true),
+        AppIsolation(true),
+        AppArea('frontend'),
+    ]
     public function testCreateCustomerInServiceVsInModel(): void
     {
         $password = '_aPassword1';
@@ -570,7 +630,13 @@ class CreateAccountTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
+    #[
+        DbIsolation(true),
+        AppIsolation(true),
+        AppArea('frontend'),
+    ]
     public function testCreateNewCustomer(): void
     {
         $customerData = $expectedCustomerData = [
@@ -611,6 +677,9 @@ class CreateAccountTest extends TestCase
         ];
         unset($expectedCustomerData[CustomerInterface::ID]);
         $customerEntity = $this->populateCustomerEntity($customerData, [], $customerEntity);
+        $customerEntity->setDefaultBilling(null);
+        $customerEntity->setDefaultShipping(null);
+        $customerEntity->setAddresses([]);
 
         $customer = $this->accountManagement->createAccount($customerEntity, '_aPassword1');
         $this->assertNotEmpty($customer->getId());
@@ -625,6 +694,9 @@ class CreateAccountTest extends TestCase
      * Test for create customer account for second website (with existing email for default website)
      * with global account scope config.
      *
+     * @magentoAppArea frontend
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store customer/account_share/scope 0
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php

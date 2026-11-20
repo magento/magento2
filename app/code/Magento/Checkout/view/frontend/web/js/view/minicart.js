@@ -15,70 +15,11 @@ define([
 ], function (Component, customerData, $, ko, _) {
     'use strict';
 
-    var sidebarInitialized = false,
-        addToCartCalls = 0,
-        miniCart;
-
-    miniCart = $('[data-block=\'minicart\']');
-
-    /**
-     * @return {Boolean}
-     */
-    function initSidebar() {
-        if (miniCart.data('mageSidebar')) {
-            miniCart.sidebar('update');
-        }
-
-        if (!$('[data-role=product-item]').length) {
-            return false;
-        }
-        miniCart.trigger('contentUpdated');
-
-        if (sidebarInitialized) {
-            return false;
-        }
-        sidebarInitialized = true;
-        miniCart.sidebar({
-            'targetElement': 'div.block.block-minicart',
-            'url': {
-                'checkout': window.checkout.checkoutUrl,
-                'update': window.checkout.updateItemQtyUrl,
-                'remove': window.checkout.removeItemUrl,
-                'loginUrl': window.checkout.customerLoginUrl,
-                'isRedirectRequired': window.checkout.isRedirectRequired
-            },
-            'button': {
-                'checkout': '#top-cart-btn-checkout',
-                'remove': '#mini-cart a.action.delete',
-                'close': '#btn-minicart-close'
-            },
-            'showcart': {
-                'parent': 'span.counter',
-                'qty': 'span.counter-number',
-                'label': 'span.counter-label'
-            },
-            'minicart': {
-                'list': '#mini-cart',
-                'content': '#minicart-content-wrapper',
-                'qty': 'div.items-total',
-                'subtotal': 'div.subtotal span.price',
-                'maxItemsVisible': window.checkout.minicartMaxItemsVisible
-            },
-            'item': {
-                'qty': ':input.cart-item-qty',
-                'button': ':button.update-cart-item'
-            },
-            'confirmMessage': $.mage.__('Are you sure you would like to remove this item from the shopping cart?')
-        });
-    }
-
-    miniCart.on('dropdowndialogopen', function () {
-        initSidebar();
-    });
-
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         maxItemsToDisplay: window.checkout.maxItemsToDisplay,
+        minicartSelector: '[data-block="minicart"]',
+        addToCartCalls: 0,
         cart: {},
 
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
@@ -91,14 +32,13 @@ define([
 
             this.update(cartData());
             cartData.subscribe(function (updatedCart) {
-                addToCartCalls--;
-                this.isLoading(addToCartCalls > 0);
-                sidebarInitialized = false;
+                this.addToCartCalls--;
+                this.isLoading(this.addToCartCalls > 0);
                 this.update(updatedCart);
-                initSidebar();
+                this.initSidebar();
             }, this);
-            $('[data-block="minicart"]').on('contentLoading', function () {
-                addToCartCalls++;
+            $(this.minicartSelector).on('contentLoading', function () {
+                self.addToCartCalls++;
                 self.isLoading(true);
             });
 
@@ -109,18 +49,78 @@ define([
                 customerData.reload(['cart'], false);
             }
 
+            $(this.minicartSelector).on('dropdowndialogopen', function () {
+                self.initSidebar();
+            });
+
             return this._super();
         },
         //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
         isLoading: ko.observable(false),
-        initSidebar: initSidebar,
+
+        /**
+         * Initialize sidebar
+         *
+         * @return {Boolean}
+         */
+        initSidebar: function () {
+            var miniCart = $(this.minicartSelector);
+
+            if (!$('[data-role=product-item]').length) {
+                return false;
+            }
+
+            miniCart.each(function () {
+                var $element = $(this);
+
+                if ($element.data('mageSidebar')) {
+                    $element.sidebar('update');
+                } else {
+                    $element.sidebar({
+                        'targetElement': 'div.block.block-minicart',
+                        'url': {
+                            'checkout': window.checkout.checkoutUrl,
+                            'update': window.checkout.updateItemQtyUrl,
+                            'remove': window.checkout.removeItemUrl,
+                            'loginUrl': window.checkout.customerLoginUrl,
+                            'isRedirectRequired': window.checkout.isRedirectRequired
+                        },
+                        'button': {
+                            'checkout': '#top-cart-btn-checkout',
+                            'remove': '#mini-cart a.action.delete',
+                            'close': '#btn-minicart-close'
+                        },
+                        'showcart': {
+                            'parent': 'span.counter',
+                            'qty': 'span.counter-number',
+                            'label': 'span.counter-label'
+                        },
+                        'minicart': {
+                            'list': '#mini-cart',
+                            'content': '#minicart-content-wrapper',
+                            'qty': 'div.items-total',
+                            'subtotal': 'div.subtotal span.price',
+                            'maxItemsVisible': window.checkout.minicartMaxItemsVisible
+                        },
+                        'item': {
+                            'qty': ':input.cart-item-qty',
+                            'button': ':button.update-cart-item'
+                        },
+                        'confirmMessage': $.mage.__(
+                            'Are you sure you would like to remove this item from the shopping cart?'
+                        )
+                    });
+                }
+                $element.trigger('contentUpdated');
+            });
+        },
 
         /**
          * Close mini shopping cart.
          */
         closeMinicart: function () {
-            $('[data-block="minicart"]').find('[data-role="dropdownDialog"]').dropdownDialog('close');
+            $(this.minicartSelector).find('[data-role="dropdownDialog"]').dropdownDialog('close');
         },
 
         /**

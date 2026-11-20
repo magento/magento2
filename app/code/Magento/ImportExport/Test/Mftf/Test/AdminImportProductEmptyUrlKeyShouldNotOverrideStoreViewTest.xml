@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductEmptyUrlKeyShouldNotOverrideStoreViewTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Empty url_key in store-scoped CSV row must not override global URL key"/>
+            <description value="Empty url_key in store row should inherit default (global) value."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4038"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAustraliaWebsite">
+                <argument name="newWebsiteName" value="Australia"/>
+                <argument name="websiteCode" value="aus"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createAustraliaStore">
+                <argument name="website" value="Australia"/>
+                <argument name="storeGroupName" value="{{australiaStoreGroupImportUrlKey.name}}"/>
+                <argument name="storeGroupCode" value="{{australiaStoreGroupImportUrlKey.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createAustraliaStoreView">
+                <argument name="StoreGroup" value="australiaStoreGroupImportUrlKey"/>
+                <argument name="customStore" value="australiaStoreViewImportUrlKey"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteImportedProduct">
+                <argument name="sku" value="mftf_urlkey_import_simple"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteAustraliaWebsite">
+                <argument name="websiteName" value="Australia"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProductWithStoreRowEmptyUrlKey">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_product_empty_url_key_second_store_row.csv"/>
+            <argument name="importNoticeMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 2, checked entities: 1, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openImportedProduct">
+            <argument name="productSku" value="mftf_urlkey_import_simple"/>
+        </actionGroup>
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToAustraliaStoreView">
+            <argument name="storeViewName" value="{{australiaStoreViewImportUrlKey.name}}"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitAfterStoreSwitch"/>
+        <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>
+        <waitForLoadingMaskToDisappear stepKey="waitAfterSeoSectionOpen"/>
+        <seeCheckboxIsChecked selector="{{AdminProductSEOSection.useDefaultUrl}}" stepKey="assertUrlKeyUsesDefaultScopeValue"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="mftf-url-key-store-inherit-import" stepKey="assertUrlKeyFieldShowsInheritedValue"/>
+    </test>
+</tests>

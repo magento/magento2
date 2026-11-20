@@ -12,6 +12,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Charset\DefaultCharsetCollationMap;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
@@ -76,6 +77,32 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * Maximum number of connection retries
      */
     public const MAX_CONNECTION_RETRIES = 10;
+
+    /**
+     * Fallback init statement when DB version cannot be determined (utf8mb4 for MySQL 8.0.29+).
+     */
+    private const DEFAULT_CHARSET_INIT_STATEMENT = 'SET NAMES utf8mb4 COLLATE utf8mb4_general_ci';
+
+    /**
+     * Default charset init statement based on DB version (DefaultCharsetCollationMap). Fallback when version unknown.
+     *
+     * @return string e.g. "SET NAMES utf8mb4 COLLATE utf8mb4_general_ci"
+     */
+    private function getDefaultCharsetInitStatement(): string
+    {
+        try {
+            $result = $this->_connection->query('SELECT @@version');
+            if ($result !== false) {
+                $row = $result->fetch(\PDO::FETCH_NUM);
+                if (!empty($row[0])) {
+                    return DefaultCharsetCollationMap::getInitStatementFromVersionString((string) $row[0]);
+                }
+            }
+        } catch (\Throwable $e) {
+            return self::DEFAULT_CHARSET_INIT_STATEMENT;
+        }
+        return self::DEFAULT_CHARSET_INIT_STATEMENT;
+    }
 
     /**
      * Default class name for a DB statement.
@@ -306,6 +333,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             1205 => LockWaitException::class,
             // SQLSTATE[40001]: Serialization failure: 1213 Deadlock found when trying to get lock
             1213 => DeadlockException::class,
+            // SQLSTATE[HY000]: General error: 1020 Record has changed since last read (MariaDB
+            // innodb_snapshot_isolation, ON by default since 11.6.2 - MDEV-35124). Resolved by
+            // restarting the transaction, same as a deadlock, so it is retried the same way.
+            1020 => DeadlockException::class,
             // SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry
             1062 => DuplicateException::class,
             // SQLSTATE[42S02]: Base table or view not found: 1146
@@ -496,7 +527,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         if (strpos($this->_config['host'], '/') !== false) {
             $this->_config['unix_socket'] = $this->_config['host'];
-            unset($this->_config['host']);
+            // Keep a host in the config: mysqlnd routes "localhost" through
+            // unix_socket, and unsetting the key made every reconnect on the
+            // same adapter throw "No host configured to connect".
+            $this->_config['host'] = 'localhost';
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }
@@ -525,6 +559,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             foreach ($statements as $statement) {
                 $this->_query($statement);
             }
+        } else {
+            // Default init statement from DB version (DefaultCharsetCollationMap) when env.php has no initStatements
+            $this->_query($this->getDefaultCharsetInitStatement());
         }
 
         if (!$this->_connectionFlagsSet) {
@@ -550,10 +587,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private function getMysqlConstant(string $constantName): int
     {
-        if(version_compare(PHP_VERSION, '8.4') < 0){
+        if (version_compare(PHP_VERSION, '8.4') < 0) {
             return constant('PDO::MYSQL_' . $constantName);
-        }
-        else{
+        } else {
             return constant('Pdo\Mysql::' . $constantName);
         }
     }
@@ -954,7 +990,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         foreach ($parts as $i => $part) {
             // strings
-            if (($part === "'" || $part === '"') && ($i === 0 || $parts[$i-1] !== '\\')) {
+            if (($part === "'" || $part === '"') && $this->countPrecedingBackslashes($parts, $i) % 2 === 0) {
                 if ($q === false) {
                     $q = $part;
                 } elseif ($q === $part) {
@@ -991,6 +1027,25 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
 
         return $stmts;
+    }
+
+    /**
+     * Count consecutive backslash delimiters immediately preceding the given position.
+     *
+     * A quote delimiter is escaped only when preceded by an odd number of backslashes.
+     *
+     * @param string[] $parts
+     * @param int $index
+     * @return int
+     */
+    private function countPrecedingBackslashes(array $parts, int $index): int
+    {
+        $count = 0;
+        for ($position = $index - 1; $position >= 0 && $parts[$position] === '\\'; $position--) {
+            $count++;
+        }
+
+        return $count;
     }
 
     /**

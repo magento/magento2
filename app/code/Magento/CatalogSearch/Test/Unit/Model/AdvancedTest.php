@@ -184,6 +184,36 @@ class AdvancedTest extends TestCase
                     'currentCurrencyCode' => 'GBP',
                     'baseCurrencyCode' => 'USD'
                 ],
+                'color_select_without_label' => [
+                    'attributes' => [
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'color_select',
+                            ['value' => 'red'],
+                            'color',
+                            'Color',
+                            'select',
+                            'static'
+                        )
+                    ],
+                    'values' => ['color' => 'red'],
+                    'currentCurrencyCode' => 'GBP',
+                    'baseCurrencyCode' => 'USD'
+                ],
+                'color_multiselect_without_label' => [
+                    'attributes' => [
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'color_multiselect',
+                            ['value' => 'Color'],
+                            'color',
+                            'Color',
+                            'multiselect',
+                            'static'
+                        )
+                    ],
+                    'values' => ['color' => [100 => 'red', 200 => 'blue']],
+                    'currentCurrencyCode' => 'GBP',
+                    'baseCurrencyCode' => 'USD'
+                ],
             ],
             self::addFiltersPriceDataProvider()
         );

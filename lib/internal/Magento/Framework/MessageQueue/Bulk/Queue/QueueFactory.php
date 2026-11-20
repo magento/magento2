@@ -13,6 +13,8 @@ use Magento\Framework\MessageQueue\ConnectionTypeResolver;
  * Factory class for @see QueueInterface
  *
  * @api
+ * @deprecated
+ * @see \Magento\Framework\MessageQueue\Bulk\ExchangeFactory
  */
 class QueueFactory implements QueueFactoryInterface
 {
@@ -53,6 +55,7 @@ class QueueFactory implements QueueFactoryInterface
     /**
      * @inheritdoc
      */
+    #[\Deprecated('Bulk queue is implemented through exchanges.')]
     public function create(string $queueName, string $connectionName): QueueInterface
     {
         $connectionType = $this->connectionTypeResolver->getConnectionType($connectionName);

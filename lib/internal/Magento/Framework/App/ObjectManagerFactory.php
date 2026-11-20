@@ -199,6 +199,7 @@ class ObjectManagerFactory
                 'parameters' => ['backendPrefixes' => [
                     'Magento\Framework\Cache\Backend\\',
                     'Magento\Framework\Cache\Frontend\Adapter\Symfony\\',
+                    'Zend_Cache_Backend_',
                     'Cm_Cache_Backend_'
                 ]],
             ];

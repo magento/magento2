@@ -55,6 +55,9 @@
             <actionGroup ref="SetAdminAccountActionGroup" stepKey="resetAdminLocale">
                 <argument name="InterfaceLocaleByValue" value="en_US"/>
             </actionGroup>
+            <!-- Clear filters on products grid -->
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <!-- Delete configurable product -->
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createColorAttribute" stepKey="deleteColorAttribute"/>

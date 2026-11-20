@@ -45,17 +45,4 @@ class ConfigPool
         }
         return $this->pool[$connectionName];
     }
-
-    /**
-     * Close all opened connections.
-     *
-     * @return void
-     */
-    public function closeConnections(): void
-    {
-        foreach ($this->pool as $config) {
-            $connection = $config->getConnection();
-            $connection?->disconnect();
-        }
-    }
 }

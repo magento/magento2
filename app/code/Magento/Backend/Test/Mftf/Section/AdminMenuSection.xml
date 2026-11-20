@@ -26,5 +26,12 @@
 
         <!-- Navigate menu selectors -->
         <element name="menuItem" type="button" selector="li[data-ui-id='menu-{{dataUiId}}']" parameterized="true" timeout="30"/>
+        <element name="submenuGroupTitle" type="text" selector="//li[@data-ui-id='menu-{{menuItemDataUiId}}']//strong[@class='submenu-group-title']" parameterized="true"/>
+        <element name="submenuTitle" type="text" selector="//strong[@role='presentation']//span[text()='{{titleContainsText}}']" parameterized="true"/>
+        <element name="systemOtherSetting" type="text" selector="//li[@data-ui-id='menu-magento-adminnotification-system-adminnotification']//parent::ul/parent::div/preceding-sibling::strong[@role='presentation']//span[text()='Other Settings']"/>
+        <element name="storesOtherSetting" type="text" selector="//li[@data-ui-id='menu-magento-reward-customer-reward']//parent::ul/parent::div/preceding-sibling::strong[@role='presentation']//span[text()='Other Settings']"/>
+        <element name="reportsPrivateSales" type="text" selector="//li[@data-ui-id='menu-magento-reports-report']//strong/span[text()='Private Sales']"/>
+        <element name="marketingPrivateSales" type="text" selector="//li[@id='menu-magento-backend-marketing']//strong/span[text()='Private Sales']"/>
+        <element name="storesInventory" type="text" selector="//li[@data-ui-id='menu-magento-inventoryadminui-source']//parent::ul/parent::div/preceding-sibling::strong[@role='presentation']//span[text()='Inventory']"/>
     </section>
 </sections>

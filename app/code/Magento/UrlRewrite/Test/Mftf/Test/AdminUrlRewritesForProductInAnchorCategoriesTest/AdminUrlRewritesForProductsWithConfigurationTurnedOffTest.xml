@@ -38,6 +38,7 @@
             <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
         </after>
 
         <!-- 1. Log in to Admin -->

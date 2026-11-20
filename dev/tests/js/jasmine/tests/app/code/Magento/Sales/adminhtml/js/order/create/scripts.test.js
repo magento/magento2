@@ -153,7 +153,7 @@ define([
             try {
                 injector.clean();
                 injector.remove();
-            } catch (e) {
+            } catch (e) { //eslint-disable-line no-unused-vars
             }
             $(formEl).off().remove();
             formEl = undefined;
@@ -369,6 +369,100 @@ define([
                         ]
                     }
                 );
+            });
+        });
+
+        describe('_calcProductPrice', function () {
+            var confirmedContainer, originalProductConfigure, originalDollar;
+
+            beforeEach(function () {
+                originalProductConfigure = window.productConfigure;
+                originalDollar = window.$;
+
+                // Simulate the hidden confirmed-blocks container that configure.js manages
+                confirmedContainer = document.createElement('div');
+                confirmedContainer.id = 'product_composite_configure_confirmed';
+                document.body.appendChild(confirmedContainer);
+
+                // Mirror Prototype.js $(): string → getElementById, element → pass-through.
+                // Form.Element.getValue calls $(element) with a DOM element internally,
+                // so the mock must handle both argument types.
+                window.$ = function (idOrElement) {
+                    if (typeof idOrElement === 'string') {
+                        return document.getElementById(idOrElement);
+                    }
+
+                    return idOrElement;
+                };
+
+                init();
+            });
+
+            afterEach(function () {
+                window.productConfigure = originalProductConfigure;
+                window.$ = originalDollar;
+
+                if (confirmedContainer && confirmedContainer.parentNode) {
+                    confirmedContainer.parentNode.removeChild(confirmedContainer);
+                }
+
+                confirmedContainer = undefined;
+            });
+
+            /**
+             * Builds a confirmed block div containing a qty text input and a hidden price input.
+             * Mirrors the markup produced by grouped.phtml for each associated simple product.
+             */
+            function makeGroupedBlock(blockId, simpleProductId, qty, unitPrice) {
+                var block = document.createElement('div'),
+                    qtyInput = document.createElement('input'),
+                    priceInput = document.createElement('input');
+
+                block.id = blockId;
+
+                qtyInput.type = 'text';
+                qtyInput.id = 'super_group[' + simpleProductId + ']';
+                qtyInput.value = String(qty);
+                block.appendChild(qtyInput);
+
+                priceInput.type = 'hidden';
+                priceInput.value = '1';
+                priceInput.setAttribute('price', String(unitPrice));
+                priceInput.setAttribute('qtyId', 'super_group[' + simpleProductId + ']');
+                priceInput.setAttribute('summarizePrice', '1');
+                block.appendChild(priceInput);
+
+                return block;
+            }
+
+            it('returns price for own confirmed block when two grouped products share a simple product', function () {
+                var block1 = makeGroupedBlock('confirmed-block-grouped-01', 1, 3, 100),
+                    block2 = makeGroupedBlock('confirmed-block-grouped-02', 1, 2, 100);
+
+                // Both blocks are in the DOM simultaneously — this is the collision scenario.
+                // block1 was confirmed first and appears before block2 in document order.
+                confirmedContainer.appendChild(block1);
+                confirmedContainer.appendChild(block2);
+
+                // productConfigure points at the second product (Grouped 02)
+                window.productConfigure = { confirmedCurrentId: 'confirmed-block-grouped-02' };
+
+                // Expected: $100 × 2 = $200 (qty from block2)
+                // Bug behaviour before fix: $100 × 3 = $300 (qty from block1, first getElementById match)
+                expect(order._calcProductPrice()).toBe(200);
+            });
+
+            it('returns price for the first confirmed block when it is the current one', function () {
+                var block1 = makeGroupedBlock('confirmed-block-grouped-01', 1, 3, 100),
+                    block2 = makeGroupedBlock('confirmed-block-grouped-02', 1, 2, 100);
+
+                confirmedContainer.appendChild(block1);
+                confirmedContainer.appendChild(block2);
+
+                window.productConfigure = { confirmedCurrentId: 'confirmed-block-grouped-01' };
+
+                // Expected: $100 × 3 = $300
+                expect(order._calcProductPrice()).toBe(300);
             });
         });
 

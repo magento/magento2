@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDatepickerPositionedRelativeToInputActionGroup">
+        <annotations>
+            <description>Clicks the datepicker calendar icon and asserts it is positioned relative to the associated input field.</description>
+        </annotations>
+        <arguments>
+            <argument name="calendarIconSelector" type="string"/>
+            <argument name="inputXPathSelector" type="string"/>
+            <argument name="datePickerWidgetSelector" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{calendarIconSelector}}" stepKey="waitForDatepickerCalendarIcon"/>
+        <click selector="{{calendarIconSelector}}" stepKey="clickDatepickerCalendarIcon"/>
+        <waitForElementVisible selector="{{datePickerWidgetSelector}}" stepKey="waitForDatepickerWidget"/>
+        <!-- Position thresholds derived from input and datepicker dimensions at runtime. -->
+        <executeJS function="
+            var input = document.evaluate(
+                &quot;{{inputXPathSelector}}&quot;,
+                document,
+                null,
+                XPathResult.FIRST_ORDERED_NODE_TYPE,
+                null
+            ).singleNodeValue;
+            var datepicker = document.querySelector(&quot;{{datePickerWidgetSelector}}&quot;);
+
+            if (!input) {
+                return 'Date input field not found';
+            }
+            if (!datepicker) {
+                return 'Datepicker widget not found';
+            }
+
+            var inputRect = input.getBoundingClientRect();
+            var datepickerRect = datepicker.getBoundingClientRect();
+            var horizontalTolerance = Math.max(20, inputRect.width * 0.4);
+            var verticalTopTolerance = Math.max(5, inputRect.height * 0.3);
+            var maxBelowInput = datepickerRect.height + Math.max(10, inputRect.height * 0.25);
+            var horizontalAligned = Math.abs(datepickerRect.left - inputRect.left) &lt; horizontalTolerance;
+            var verticalNear = datepickerRect.top &gt;= inputRect.top - verticalTopTolerance
+                &amp;&amp; datepickerRect.top &lt;= inputRect.bottom + maxBelowInput;
+
+            return (horizontalAligned &amp;&amp; verticalNear)
+                ? 'Datepicker is correctly positioned relative to input'
+                : 'Datepicker is mispositioned relative to input';
+        " stepKey="checkDatepickerPositionRelativeToInput"/>
+        <assertStringContainsString stepKey="assertDatepickerPositionedCorrectly">
+            <expectedResult type="string">Datepicker is correctly positioned relative to input</expectedResult>
+            <actualResult type="variable">$checkDatepickerPositionRelativeToInput</actualResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

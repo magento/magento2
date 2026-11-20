@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -179,7 +180,7 @@ class ShipOrderTest extends TestCase
                 'notifierInterface' => $this->notifierInterfaceMock,
                 'logger' => $this->loggerMock,
                 'orderRegistrar' => $this->orderRegistrarMock,
-                'orderMutex' => new OrderMutex($this->resourceConnectionMock)
+                'orderMutex' => new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0)),
             ]
         );
     }

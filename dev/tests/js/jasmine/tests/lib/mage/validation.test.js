@@ -8,6 +8,12 @@ define([
 ], function ($) {
     'use strict';
 
+    beforeEach(function () {
+        window.wysiwygValidationConfig = {
+            allowUtf8mb4: true
+        };
+    });
+
     describe('Testing credit card validation', function () {
         it('Card type matches credit card number', function () {
             expect($.validator.methods['validate-cc-type-select'].call(
@@ -1218,6 +1224,77 @@ define([
         });
     });
 
+    describe('Testing malformed Unicode policy', function () {
+        it('rejects data containing unpaired surrogate characters', function () {
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '\uD83Dtest', null
+            )).toEqual(false);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'test\uDD35', null
+            )).toEqual(false);
+        });
+
+        it('approves data containing valid utf8mb4 characters including emojis', function () {
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'emoji 😀 test', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'испытание', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'δοκιμή', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'اختبار', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'מִבְחָן', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'परीक्षण', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '测试', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'テスト', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '테스트', null
+            )).toEqual(true);
+        });
+    });
+
+    describe('Testing WYSIWYG character validation policy', function () {
+        it('approves valid utf8mb4 characters when storage supports utf8mb4', function () {
+            window.wysiwygValidationConfig.allowUtf8mb4 = true;
+
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, 'испытание', null
+            )).toEqual(true);
+        });
+
+        it('rejects utf8mb4 characters when storage does not support utf8mb4', function () {
+            window.wysiwygValidationConfig.allowUtf8mb4 = false;
+
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(false);
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, 'испытание', null
+            )).toEqual(true);
+        });
+    });
+
     describe('Testing validate-forbidden-extensions', function () {
         it('validate-forbidden-extensions', function () {
             var el1 = $('<input type="text" value="" ' +
@@ -1235,6 +1312,33 @@ define([
                 .call($.validator.prototype, 'php,html', el1, null)).toEqual(false);
             expect($.validator.methods['validate-forbidden-extensions']
                 .call($.validator.prototype, 'html,php', el1, null)).toEqual(false);
+        });
+    });
+
+    describe('Testing errorPlacement for datepicker field', function () {
+        it('places the error next to the calendar button when one is present', function () {
+            var wrapper = $('<div/>'),
+                element = $('<input type="text" class="_has-datepicker"/>'),
+                button = $('<button type="button"/>'),
+                error = $('<div class="mage-error"/>');
+
+            wrapper.append(element).append(button);
+
+            $.mage.validation.prototype.options.errorPlacement.call({}, error, element);
+
+            expect(button.next().is(error)).toEqual(true);
+        });
+
+        it('falls back to placing the error next to the field itself when there is no calendar button', function () {
+            var wrapper = $('<div/>'),
+                element = $('<input type="text" class="_has-datepicker"/>'),
+                error = $('<div class="mage-error"/>');
+
+            wrapper.append(element);
+
+            $.mage.validation.prototype.options.errorPlacement.call({}, error, element);
+
+            expect(element.next().is(error)).toEqual(true);
         });
     });
 });

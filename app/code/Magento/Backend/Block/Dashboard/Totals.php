@@ -72,8 +72,7 @@ class Totals extends Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $firstPeriod = array_key_first($this->period->getDatePeriods());
-        $period = $this->getRequest()->getParam('period', $firstPeriod);
+        $period = $this->period->resolvePeriod($this->getRequest()->getParam('period'));
 
         /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(

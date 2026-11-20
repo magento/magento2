@@ -18,7 +18,10 @@
             <argument name="stateForFPT" type="string"/>
             <argument name="valueForFPT" type="string"/>
         </arguments>
-        
+
+        <!-- Offset scroll clears sticky .page-actions._fixed (same pattern as Tax admin config y=-80, Sales order grid y=-100) -->
+        <scrollTo selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" x="0" y="-100" stepKey="scrollToAddFptButton"/>
+        <waitForElementClickable selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="waitForAddFptButtonClickable"/>
         <click selector="{{AdminProductAddFPTValueSection.addFPT(FPTAttributeCode)}}" stepKey="clickAddFPTButton1"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <selectOption selector="{{AdminProductAddFPTValueSection.selectCountryForFPT(FPTAttributeCode)}}" userInput="{{countryForFPT}}" stepKey="selectcountryForFPT"/>

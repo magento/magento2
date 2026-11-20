@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Config\Model\ResourceModel\Config as CoreConfig;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http;
@@ -26,6 +28,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -107,6 +113,32 @@ class ForgotPasswordPostTest extends AbstractController
         $this->dateTimeFactory = $this->objectManager->get(DateTimeFactory::class);
         $this->customerResource = $this->objectManager->get(CustomerResource::class);
         $this->random = $this->objectManager->get(Random::class);
+    }
+
+    /**
+     * Guest quote is preserved after submitting forgot password (session is not destroyed).
+     *
+     * @return void
+     */
+    #[
+        Config('customer/password/limit_password_reset_requests_method', 0, ScopeInterface::SCOPE_STORE),
+        Config('customer/captcha/enable', 0, ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testGuestQuotePreservedAfterForgotPasswordPost(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $checkoutSession = $this->objectManager->get(CheckoutSession::class);
+        $quoteBefore = $checkoutSession->getQuote();
+        $quoteIdBefore = $quoteBefore->getId();
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['email' => $customer->getEmail()]);
+        $this->dispatch('customer/account/forgotPasswordPost');
+
+        $this->assertRedirect($this->stringContains('customer/account/'));
+        $quoteAfter = $checkoutSession->getQuote();
+        $this->assertEquals($quoteIdBefore, $quoteAfter->getId());
     }
 
     /**

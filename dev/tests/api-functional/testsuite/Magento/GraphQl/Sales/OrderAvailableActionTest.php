@@ -67,7 +67,7 @@ class OrderAvailableActionTest extends GraphQlAbstract
     private $orderRepository;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws LocalizedException
      */
     protected function setUp(): void

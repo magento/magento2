@@ -80,11 +80,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $productValues  = $this->_entityAttributeValues[$model->getId()];
 
-        if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
+        if (!array_key_exists($storeId, $productValues) && !array_key_exists($defaultStoreId, $productValues)) {
             return $this;
         }
 
-        $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
+        $value = array_key_exists($storeId, $productValues)
+            ? $productValues[$storeId]
+            : $productValues[$defaultStoreId];
 
         $value = $this->_prepareDatetimeValue($value, $model);
         $value = $this->_prepareMultiselectValue($value, $model);
@@ -126,7 +128,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     {
         $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {
-            $value = strlen($value) ? explode(',', $value) : [];
+            $value = strlen((string) $value) ? explode(',', $value) : [];
         }
 
         return $value;

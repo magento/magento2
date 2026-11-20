@@ -27,6 +27,11 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageForCleanup">
+                <argument name="customerId" value="$createCustomer.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTabForCleanup"/>
+            <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerAddressGridFiltersAfterSearch"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

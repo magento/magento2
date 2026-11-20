@@ -9,6 +9,7 @@ namespace Magento\Directory\Model\ResourceModel\Country;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Directory\Helper\Data;
 
 /**
  * Country Resource Collection
@@ -294,20 +295,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     private function addDefaultCountryToOptions(array &$options)
     {
-        $defaultCountry = [];
-        foreach ($this->storeManager->getWebsites() as $website) {
-            $defaultCountryConfig = $this->_scopeConfig->getValue(
-                \Magento\Directory\Helper\Data::XML_PATH_DEFAULT_COUNTRY,
-                ScopeInterface::SCOPE_WEBSITES,
-                $website
-            ) ?? '';
-            $defaultCountry[$defaultCountryConfig][] = $website->getId();
-        }
+        $defaultCountry = $this->_scopeConfig->getValue(
+            Data::XML_PATH_DEFAULT_COUNTRY,
+            ScopeInterface::SCOPE_WEBSITES,
+            $this->storeManager->getWebsite()
+        );
 
         foreach ($options as $key => $option) {
-            if (isset($defaultCountry[$option['value']])) {
-                $options[$key]['is_default'] = !empty($defaultCountry[$option['value']]);
-            }
+            $options[$key]['is_default'] = $defaultCountry === $option['value'];
         }
     }
 

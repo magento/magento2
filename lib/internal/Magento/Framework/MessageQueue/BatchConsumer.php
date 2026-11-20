@@ -111,7 +111,7 @@ class BatchConsumer implements ConsumerInterface
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->getConsumerConfig()->getConsumer($consumerName)->getConnection();
+        $connectionName = $this->consumerConfig->getConsumer($consumerName)->getConnection();
 
         $queue = $this->queueRepository->get($connectionName, $queueName);
         $merger = $this->mergerFactory->create($consumerName);
@@ -179,11 +179,6 @@ class BatchConsumer implements ConsumerInterface
     private function getAllMessages(QueueInterface $queue)
     {
         $messages = [];
-        $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->consumerConfig->getConsumer($consumerName)->getConnection();
-        if ($connectionName === 'stomp') {
-            $queue->subscribeQueue();
-        }
         while ($message = $queue->dequeue()) {
             $messages[] = $message;
         }
@@ -200,11 +195,6 @@ class BatchConsumer implements ConsumerInterface
     private function getMessages(QueueInterface $queue, $count)
     {
         $messages = [];
-        $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->consumerConfig->getConsumer($consumerName)->getConnection();
-        if ($connectionName === 'stomp') {
-            $queue->subscribeQueue();
-        }
         for ($i = $count; $i > 0; $i--) {
             $message = $queue->dequeue();
             if ($message === null) {
@@ -277,24 +267,6 @@ class BatchConsumer implements ConsumerInterface
             }
         }
         return [$toProcess, $toAcknowledge];
-    }
-
-    /**
-     * Get consumer config.
-     *
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
-     *
-     * @return ConsumerConfig
-     *
-     * @deprecated 103.0.0 Use constructor injection instead.
-     * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface
-     */
-    private function getConsumerConfig()
-    {
-        if ($this->consumerConfig === null) {
-            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
-        }
-        return $this->consumerConfig;
     }
 
     /**

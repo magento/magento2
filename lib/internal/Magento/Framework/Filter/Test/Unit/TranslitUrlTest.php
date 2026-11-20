@@ -9,8 +9,8 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 class TranslitUrlTest extends TestCase
 {
@@ -64,6 +64,9 @@ class TranslitUrlTest extends TestCase
             ['™', 'tm', 'tm', $isIconv],
             ['ñandú', 'nandu', 'nandu', $isIconv],
             ['ÑANDÚ', 'nandu', 'nandu', $isIconv],
+            ['Anémonas do Japão', 'anemonas-do-japao', 'anemonas-do-japao', $isIconv],
+            ['Pão de Açúcar', 'pao-de-acucar', 'pao-de-acucar', $isIconv],
+            ['Êxito', 'exito', 'exito', $isIconv],
         ];
     }
 }

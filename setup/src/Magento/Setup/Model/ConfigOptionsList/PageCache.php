@@ -20,9 +20,13 @@ use Magento\Setup\Validator\RedisConnectionValidator;
 class PageCache implements ConfigOptionsListInterface
 {
     public const INPUT_VALUE_PAGE_CACHE_REDIS = 'redis';
-    public const CONFIG_VALUE_PAGE_CACHE_REDIS = 'redis';
+    public const CONFIG_VALUE_PAGE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
     public const INPUT_VALUE_PAGE_CACHE_VALKEY = 'valkey';
-    public const CONFIG_VALUE_PAGE_CACHE_VALKEY = 'valkey';
+    public const CONFIG_VALUE_PAGE_CACHE_VALKEY = \Magento\Framework\Cache\Backend\Valkey::class;
+    public const INPUT_VALUE_PAGE_CACHE_SYMFONY_REDIS = 'symfony_redis';
+    public const CONFIG_VALUE_PAGE_CACHE_SYMFONY_REDIS = 'redis';
+    public const INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY = 'symfony_valkey';
+    public const CONFIG_VALUE_PAGE_CACHE_SYMFONY_VALKEY = 'valkey';
 
     public const INPUT_KEY_PAGE_CACHE_BACKEND = 'page-cache';
     public const INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER = 'page-cache-redis-server';
@@ -79,35 +83,49 @@ class PageCache implements ConfigOptionsListInterface
      */
     private $validPageCacheOptions = [
         self::INPUT_VALUE_PAGE_CACHE_REDIS,
-        self::INPUT_VALUE_PAGE_CACHE_VALKEY
+        self::INPUT_VALUE_PAGE_CACHE_VALKEY,
+        self::INPUT_VALUE_PAGE_CACHE_SYMFONY_REDIS,
+        self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY
     ];
 
     /**
      * @var array
      */
     private $inputKeyToConfigPathMap = [
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE => self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_DATABASE =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB =>
             self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERIALIZER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERIALIZER =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
     ];
 
     /**
      * @var array
      */
     private $inputKeyToValkeyConfigPathMap = [
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE => self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB =>
             self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERIALIZER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERIALIZER =>
+            self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
     ];
 
     /**
@@ -246,18 +264,31 @@ class PageCache implements ConfigOptionsListInterface
         }
 
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
-            if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_REDIS) {
-                $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, self::CONFIG_VALUE_PAGE_CACHE_REDIS);
+            if (in_array($options[self::INPUT_KEY_PAGE_CACHE_BACKEND], [
+                self::INPUT_VALUE_PAGE_CACHE_REDIS,
+                self::INPUT_VALUE_PAGE_CACHE_SYMFONY_REDIS,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_PAGE_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] === self::INPUT_VALUE_PAGE_CACHE_SYMFONY_REDIS
+                        ? self::CONFIG_VALUE_PAGE_CACHE_SYMFONY_REDIS
+                        : self::CONFIG_VALUE_PAGE_CACHE_REDIS
+                );
                 $this->setDefaultRedisConfig($deploymentConfig, $configData);
-            } elseif ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_VALKEY) {
-                $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, self::CONFIG_VALUE_PAGE_CACHE_VALKEY);
+            } elseif (in_array($options[self::INPUT_KEY_PAGE_CACHE_BACKEND], [
+                self::INPUT_VALUE_PAGE_CACHE_VALKEY,
+                self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_PAGE_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] === self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY
+                        ? self::CONFIG_VALUE_PAGE_CACHE_SYMFONY_VALKEY
+                        : self::CONFIG_VALUE_PAGE_CACHE_VALKEY
+                );
                 $this->setDefaultValkeyConfig($deploymentConfig, $configData);
             } else {
                 $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND, $options[self::INPUT_KEY_PAGE_CACHE_BACKEND]);
             }
-        } else {
-            // If no backend specified, set igbinary as default serializer for file backend
-            $this->setDefaultFileConfig($deploymentConfig, $configData);
         }
 
         $this->applyCacheBackendConfig($options, $configData);
@@ -276,7 +307,10 @@ class PageCache implements ConfigOptionsListInterface
     private function applyCacheBackendConfig(array $options, ConfigData $configData): void
     {
         if (isset($options[self::INPUT_KEY_PAGE_CACHE_BACKEND])) {
-            $map = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] === self::INPUT_VALUE_PAGE_CACHE_VALKEY
+            $map = in_array($options[self::INPUT_KEY_PAGE_CACHE_BACKEND], [
+                self::INPUT_VALUE_PAGE_CACHE_VALKEY,
+                self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY,
+            ], true)
                 ? $this->inputKeyToValkeyConfigPathMap
                 : $this->inputKeyToConfigPathMap;
 
@@ -298,8 +332,12 @@ class PageCache implements ConfigOptionsListInterface
         $selectedBackend = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND] ?? null;
         $currentBackend = $deploymentConfig->get(PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND);
 
-        if (in_array($selectedBackend, [self::INPUT_VALUE_PAGE_CACHE_REDIS,
-            self::INPUT_VALUE_PAGE_CACHE_VALKEY], true)) {
+        if (in_array($selectedBackend, [
+            self::INPUT_VALUE_PAGE_CACHE_REDIS,
+            self::INPUT_VALUE_PAGE_CACHE_VALKEY,
+            self::INPUT_VALUE_PAGE_CACHE_SYMFONY_REDIS,
+            self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY,
+        ], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
                 $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
             }
@@ -329,24 +367,27 @@ class PageCache implements ConfigOptionsListInterface
     private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $config = [];
-        if ($options[self::INPUT_KEY_PAGE_CACHE_BACKEND] == self::INPUT_VALUE_PAGE_CACHE_VALKEY
+        if (in_array($options[self::INPUT_KEY_PAGE_CACHE_BACKEND], [
+            self::INPUT_VALUE_PAGE_CACHE_VALKEY,
+            self::INPUT_VALUE_PAGE_CACHE_SYMFONY_VALKEY,
+        ], true)
             || $options[Cache::INPUT_KEY_CACHE_BACKEND] == Cache::INPUT_VALUE_CACHE_VALKEY) {
             $config['host'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
                 $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERVER)
             );
 
-              $config['port'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT] ?? $deploymentConfig->get(
-                  self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
-                  $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT)
-              );
+            $config['port'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT] ?? $deploymentConfig->get(
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
+                $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT)
+            );
 
-              $config['db'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE] ?? $deploymentConfig->get(
-                  self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
-                  $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE)
-              );
+            $config['db'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE] ?? $deploymentConfig->get(
+                self::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE,
+                $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_DATABASE)
+            );
 
-              $config['password'] =
+            $config['password'] =
                 $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD] ?? $deploymentConfig->get(
                     self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
                     $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD)
@@ -385,6 +426,12 @@ class PageCache implements ConfigOptionsListInterface
     private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends have no such option and
+            // ignore it), so it is not forced by default. It is still written when the operator passes
+            // it explicitly (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
         }
 
@@ -401,33 +448,12 @@ class PageCache implements ConfigOptionsListInterface
     private function setDefaultValkeyConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToValkeyConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends ignore it); not forced
+            // by default — written only when explicitly provided (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
-        }
-
-        return $configData;
-    }
-
-    /**
-     * Set default configuration for file backend (enables igbinary by default)
-     *
-     * When no backend is specified, Magento defaults to file cache for page cache.
-     * This method ensures igbinary serializer is enabled for optimal performance.
-     *
-     * Benefits of igbinary for page cache:
-     * - 70% faster serialization/deserialization
-     * - 58% smaller cache files
-     * - Critical for page cache (large HTML data)
-     * - Graceful fallback if extension not available
-     *
-     * @param DeploymentConfig $deploymentConfig
-     * @param ConfigData $configData
-     * @return ConfigData
-     */
-    private function setDefaultFileConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
-    {
-        // Set igbinary as default serializer for file backend if not already configured
-        if (!$deploymentConfig->get(self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER)) {
-            $configData->set(self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER, 'igbinary');
         }
 
         return $configData;

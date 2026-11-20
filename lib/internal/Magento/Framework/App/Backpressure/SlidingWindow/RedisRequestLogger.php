@@ -24,6 +24,11 @@ class RedisRequestLogger implements RequestLoggerInterface
     public const BACKPRESSURE_LOGGER_REDIS = 'redis';
 
     /**
+     * Identifier for Valkey Logger type
+     */
+    public const BACKPRESSURE_LOGGER_VALKEY = 'valkey';
+
+    /**
      * Default prefix id
      */
     private const DEFAULT_PREFIX_ID = 'reqlog';

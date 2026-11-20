@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <test name="CheckoutSriWithQuickStrategyTest">
+        <annotations>
+            <features value="Csp"/>
+            <stories value="Subresource Integrity"/>
+            <title value="Verify all internal JS files have SRI attributes on checkout with QUICK deployment strategy"/>
+            <description value="Deploy static content with quick strategy and verify that all internal JS files on checkout page have valid SRI attributes"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-SRI-QUICK"/>
+            <group value="csp"/>
+            <group value="csp_sri_strategies"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Clean static content and cache -->
+            <magentoCLI command="cache:flush" stepKey="flushCacheBefore"/>
+            <!-- Deploy with QUICK strategy - multiple locales -->
+            <magentoCLI command="setup:static-content:deploy en_US en_GB de_DE fr_FR es_ES it_IT pt_BR ja_JP zh_Hans_CN ko_KR -s quick -f" stepKey="deployStaticContentQuick" timeout="600"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeploy"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Add product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoad"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForShippingTab"/>
+
+        <!-- Verify window.sriHashes has entries -->
+        <executeJS function="return window.sriHashes ? Object.keys(window.sriHashes).length : 0;" stepKey="getSriHashCount"/>
+        <assertGreaterThan stepKey="assertSriHashesNotEmpty">
+            <actualResult type="variable">getSriHashCount</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertGreaterThan>
+
+        <!-- Verify all internal non-minified JS files have valid SRI attributes -->
+        <executeJS function="var staticUrl = require.toUrl('').replace(/[^/]*$/, ''); var scripts = document.querySelectorAll('script[src]'); var withSri = 0; var withoutSri = 0; scripts.forEach(function(script) { var src = script.getAttribute('src'); if (src &amp;&amp; src.indexOf(staticUrl) !== -1 &amp;&amp; src.indexOf('.min.js') === -1) { var integrity = script.getAttribute('integrity'); if (integrity &amp;&amp; integrity.indexOf('sha256-') === 0) { withSri++; } else { withoutSri++; } } }); return withoutSri === 0;" stepKey="validateSriAttributes"/>
+        <assertTrue stepKey="assertAllJsHaveValidSri">
+            <actualResult type="variable">validateSriAttributes</actualResult>
+        </assertTrue>
+
+        <!-- Log counts for debugging -->
+        <executeJS function="var staticUrl = require.toUrl('').replace(/[^/]*$/, ''); var scripts = document.querySelectorAll('script[src]'); var withSri = 0; scripts.forEach(function(script) { var src = script.getAttribute('src'); if (src &amp;&amp; src.indexOf(staticUrl) !== -1 &amp;&amp; src.indexOf('.min.js') === -1) { if (script.getAttribute('integrity')) { withSri++; } } }); return withSri;" stepKey="getScriptsWithSri"/>
+        <comment userInput="Scripts with SRI: {$getScriptsWithSri}" stepKey="logScriptsWithSri"/>
+    </test>
+
+</tests>
+

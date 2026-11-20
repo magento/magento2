@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
+use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -21,6 +22,7 @@ use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteAddressValidationService;
 use Magento\Quote\Model\ShippingAddressManagement;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -173,6 +175,7 @@ class ShippingAddressManagementTest extends TestCase
         $this->scopeConfigMock
             ->expects($saveInAddressBook ? $this->once() : $this->never())
             ->method('getValue')
+            ->with(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY, ScopeInterface::SCOPE_WEBSITE)
             ->willReturn($showCompany);
         $this->addressValidatorMock
             ->expects($this->once())

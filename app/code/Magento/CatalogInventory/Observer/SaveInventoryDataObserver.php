@@ -152,6 +152,7 @@ class SaveInventoryDataObserver implements ObserverInterface
     private function getStockData(Product $product)
     {
         $stockData = $product->getStockData();
+        unset($stockData['qty_correction']);
         $stockData['product_id'] = $product->getId();
 
         if (!isset($stockData['website_id'])) {

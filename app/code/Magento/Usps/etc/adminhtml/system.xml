@@ -201,6 +201,7 @@
                 <field id="allowed_methods" translate="label" type="multiselect" sortOrder="130" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Allowed Methods</label>
                     <source_model>Magento\Usps\Model\Source\Method</source_model>
+                    <backend_model>Magento\Usps\Model\Config\Backend\XmlAllowedMethods</backend_model>
                     <can_be_empty>1</can_be_empty>
                     <depends>
                         <field id="usps_type">USPS_XML</field>
@@ -209,6 +210,7 @@
                 <field id="rest_allowed_methods" translate="label" type="multiselect" sortOrder="130" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Allowed Methods</label>
                     <source_model>Magento\Usps\Model\Source\RestMethod</source_model>
+                    <backend_model>Magento\Usps\Model\Config\Backend\RestAllowedMethods</backend_model>
                     <can_be_empty>1</can_be_empty>
                     <depends>
                         <field id="usps_type">USPS_REST</field>

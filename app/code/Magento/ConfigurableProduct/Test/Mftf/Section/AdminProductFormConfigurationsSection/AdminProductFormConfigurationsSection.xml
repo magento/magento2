@@ -64,5 +64,9 @@
         <element name="evenProduct" type="text" selector="//tr[@class='data-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
         <element name="oddProduct" type="text" selector="//tr[@class='data-row _odd-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
         <element name="nextPageArrow" type="text" selector="(//*[@class='action-next'])[2]"/>
+        <element name="variationRowImageFileInput" type="file" selector="//*[@data-index='configurable-matrix'][1]//tbody//tr[contains(@class,'data-row')][{{row}}]//td[@data-index='thumbnail_image_container']//input[@type='file']" parameterized="true" timeout="30"/>
+        <element name="variationRowUploadedImage" type="text" selector="//*[@data-index='configurable-matrix'][1]//tbody//tr[contains(@class,'data-row')][{{row}}]//td[@data-index='thumbnail_image_container']//img[contains(@class,'file-uploader-image')]" parameterized="true" timeout="60"/>
+        <element name="summaryDisassociatedPerPageMenuToggle" type="button" selector="//div[contains(@class,'fieldset-wrapper')][.//span[normalize-space(.)='Disassociated Products']]//button[contains(@class,'selectmenu-toggle')]" timeout="30"/>
+        <element name="summaryDisassociatedPerPageOption30" type="button" selector="//div[contains(@class,'fieldset-wrapper')][.//span[normalize-space(.)='Disassociated Products']]//button[contains(@class,'selectmenu-item-action')][normalize-space(.)='30']" timeout="30"/>
     </section>
 </sections>

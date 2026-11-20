@@ -31,12 +31,15 @@
                 <field key="name">Simple2</field>
                 <field key="price">10</field>
             </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
+            <actionGroup ref="AdminResetFilterInCategoryGridActionGroup" stepKey="resetCategoryGridFiltersAfterTest"/>
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createSubTestCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createTestCategory" stepKey="deleteMainCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Reindex invalidated indices after product attribute has been created/deleted -->
@@ -63,7 +66,6 @@
         </actionGroup>
 
         <!--Goto Category in admin side and do validation for single Product visibility validation-->
-        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">

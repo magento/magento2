@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\Json\EncoderInterface;
@@ -75,14 +76,23 @@ class GalleryTest extends TestCase
     private $urlBuilder;
 
     /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private ScopeConfigInterface $_scopeConfig;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->registry = $this->createMock(Registry::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->context = $this->createConfiguredMock(
             Context::class,
-            ['getRegistry' => $this->registry]
+            [
+                'getRegistry' => $this->registry,
+                'getScopeConfig' => $this->_scopeConfig
+            ]
         );
 
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
@@ -106,6 +116,9 @@ class GalleryTest extends TestCase
     public function testGetGalleryImagesJsonWithLabel(): void
     {
         $this->prepareGetGalleryImagesJsonMocks();
+        $this->_scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with(Store::XML_PATH_STORE_IN_URL);
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
         $this->assertEquals('product_page_image_small_url', $decodedJson[0]['thumb']);

@@ -60,7 +60,7 @@ Extension developers can interact with the Magento_Customer module. For more inf
 
 [The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Customer module.
 
-A lot of functionality in the module is on JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins/) to extend it.
+A lot of functionality in the module is on JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins) to extend it.
 
 ### Events
 
@@ -327,6 +327,16 @@ For more information about a layout, see the [Layout documentation](https://deve
     - get customer group attribute source
 
 For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
+
+#### Partial customer updates through REST
+
+`PUT /V1/customers/:customerId` preserves the existing address book when `customer.addresses` is omitted,
+without saving each address. The response still includes the stored addresses and default address IDs.
+Explicit address lists retain the repository's synchronization behavior, including deleting all addresses
+when an empty list is supplied.
+
+Account-only updates no longer trigger address-save events or plugins. Integrations that need address
+validation or address-save side effects must explicitly submit the addresses or use the customer address API.
 
 ### UI components
 

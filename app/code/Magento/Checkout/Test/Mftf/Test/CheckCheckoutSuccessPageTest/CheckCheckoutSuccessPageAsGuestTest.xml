@@ -39,6 +39,7 @@
             <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
                 <argument name="actionLabel" value="Cancel"/>
             </actionGroup>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="resetOrdersFilterAfterCancelling"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>

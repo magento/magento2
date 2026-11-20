@@ -118,6 +118,10 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">page</item>
+                    <item name="utf8mb4Target" xsi:type="array">
+                        <item name="table" xsi:type="string">cms_page</item>
+                        <item name="column" xsi:type="string">content</item>
+                    </item>
                 </item>
             </argument>
             <settings>

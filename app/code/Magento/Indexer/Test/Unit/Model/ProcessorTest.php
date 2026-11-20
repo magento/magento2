@@ -321,6 +321,68 @@ class ProcessorTest extends TestCase
     }
 
     /**
+     * When a dependent indexer appears before its dependency in the iteration order (simulating the
+     * staging-cron race), the dependent must be skipped for this cron cycle so it runs only after
+     * the dependency has been rebuilt.
+     */
+    public function testReindexAllInvalidSkipsIndexerWithInvalidDependency(): void
+    {
+        // feed_indexer is listed first to simulate the race where the loop reaches it
+        // before dep_indexer has had a chance to run.
+        $indexers = [
+            'feed_indexer' => [
+                'indexer_id'   => 'feed_indexer',
+                'shared_index' => null,
+                'dependencies' => ['dep_indexer'],
+            ],
+            'dep_indexer' => [
+                'indexer_id'   => 'dep_indexer',
+                'shared_index' => null,
+                'dependencies' => [],
+            ],
+        ];
+
+        $this->configMock->expects($this->once())->method('getIndexers')->willReturn($indexers);
+        $this->configMock->method('getIndexer')->willReturnMap([
+            ['feed_indexer', $indexers['feed_indexer']],
+            ['dep_indexer',  $indexers['dep_indexer']],
+        ]);
+
+        // feed_indexer: INVALID, but dependency is also INVALID → must be skipped
+        $feedState = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $feedState->expects($this->exactly(2))->method('getStatus')
+            ->willReturn(StateInterface::STATUS_INVALID);
+        $feedIndexer = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $feedIndexer->method('getState')->willReturn($feedState);
+        $feedIndexer->expects($this->never())->method('reindexAll');
+
+        // dep_indexer as loaded inside hasPendingDependencies: INVALID → block the feed
+        $depPendingState = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $depPendingState->expects($this->once())->method('getStatus')
+            ->willReturn(StateInterface::STATUS_INVALID);
+        $depPending = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $depPending->method('getState')->willReturn($depPendingState);
+
+        // dep_indexer in the main loop: INVALID → runs → becomes VALID
+        $depMainState = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
+        $depMainState->expects($this->exactly(3))->method('getStatus')
+            ->willReturnOnConsecutiveCalls(
+                StateInterface::STATUS_INVALID,
+                StateInterface::STATUS_INVALID,
+                StateInterface::STATUS_VALID
+            );
+        $depMain = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
+        $depMain->method('getState')->willReturn($depMainState);
+        $depMain->expects($this->once())->method('reindexAll');
+
+        // create() call order: feed (main loop), dep (hasPendingDependencies), dep (main loop)
+        $this->indexerFactoryMock->method('create')
+            ->willReturnOnConsecutiveCalls($feedIndexer, $depPending, $depMain);
+
+        $this->model->reindexAllInvalid();
+    }
+
+    /**
      * @return array
      */
     public static function sharedIndexDataProvider(): array
@@ -363,13 +425,13 @@ class ProcessorTest extends TestCase
                 ],
                 'executedSharedIndexers' => []
             ],
-            'With dependencies and some indexers is invalid' => [
+            'With shared index and some indexers are invalid' => [
                 'indexers' => [
                     'indexer_1' => [
                         'indexer_id' => 'indexer_1',
                         'title' => 'Title_indexer_1',
                         'shared_index' => null,
-                        'dependencies' => ['indexer_2', 'indexer_3']
+                        'dependencies' => []
                     ],
                     'indexer_2' => [
                         'indexer_id' => 'indexer_2',
@@ -387,7 +449,7 @@ class ProcessorTest extends TestCase
                         'indexer_id' => 'indexer_4',
                         'title' => 'Title_indexer_4',
                         'shared_index' => null,
-                        'dependencies' => ['indexer_1']
+                        'dependencies' => []
                     ]
                 ],
                 'indexerStates' => [

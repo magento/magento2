@@ -123,13 +123,12 @@ class ManagerTest extends TestCase
         $frontendFoo->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBar->expects($this->once())->method('getBackend')->willReturn($backendOne);
         $frontendBaz->expects($this->once())->method('getBackend')->willReturn($backendTwo);
-        // Manager calls clean() on frontend only once per unique backend
-        // frontendFoo cleaned (backendOne first time)
-        // frontendBar skipped (backendOne already flushed)
-        // frontendBaz cleaned (backendTwo first time)
-        $frontendFoo->expects($this->once())->method('clean');
-        $frontendBar->expects($this->never())->method('clean');
-        $frontendBaz->expects($this->once())->method('clean');
+        // Manager calls clean() on the backend (not the frontend) only once per unique backend,
+        // so a tag-scoped frontend clean() cannot leave an untagged local tier behind.
+        // backendOne cleaned once (shared by frontendFoo and frontendBar)
+        // backendTwo cleaned once (frontendBaz)
+        $backendOne->expects($this->once())->method('clean');
+        $backendTwo->expects($this->once())->method('clean');
         $this->model->flush($cacheTypes);
     }
 

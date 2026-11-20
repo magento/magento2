@@ -19,8 +19,6 @@ $customer->setWebsiteId(1)
     ->setMiddlename('A')
     ->setLastname('Smith')
     ->setSuffix('Esq.')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
     ->setTaxvat('12')
     ->setGender(0);
 $repository->save($customer, 'password');

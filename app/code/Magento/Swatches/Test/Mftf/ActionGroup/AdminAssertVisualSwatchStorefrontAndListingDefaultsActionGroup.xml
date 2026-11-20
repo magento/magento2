@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertVisualSwatchStorefrontAndListingDefaultsActionGroup">
+        <annotations>
+            <description>After Visual Swatch is selected: assert default No on preview image and use-product-image fields; open storefront properties via opener; assert Visible on Catalog Pages on Storefront is No; expand Advanced if Used in Product Listing is not visible (wizard iframe); assert Used in Product Listing default is No.</description>
+        </annotations>
+        <arguments>
+            <argument name="storefrontOpenerSelector" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" stepKey="waitUpdatePreviewImageField"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.UseProductImageForSwatch}}" stepKey="waitUseProductImageForSwatchField"/>
+        <seeOptionIsSelected selector="{{AttributePropertiesSection.UpdateProductPreviewImage}}" userInput="No" stepKey="assertUpdateProductPreviewImageDefaultNo"/>
+        <seeOptionIsSelected selector="{{AttributePropertiesSection.UseProductImageForSwatch}}" userInput="No" stepKey="assertUseProductImageForSwatchDefaultNo"/>
+        <waitForElementClickable selector="{{storefrontOpenerSelector}}" stepKey="waitStorefrontPropertiesOpener"/>
+        <click selector="{{storefrontOpenerSelector}}" stepKey="openStorefrontProperties"/>
+        <waitForElementVisible selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" stepKey="waitVisibleOnCatalogPagesField"/>
+        <seeOptionIsSelected selector="{{StorefrontPropertiesSection.visibleOnCatalogPagesOnStorefront}}" userInput="No" stepKey="assertVisibleOnCatalogPagesDefaultNo"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" visible="false" stepKey="expandAdvancedIfUseInProductListingNotVisible"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" stepKey="waitUseInProductListingField"/>
+        <seeOptionIsSelected selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="No" stepKey="assertUseInProductListingDefaultNo"/>
+    </actionGroup>
+</actionGroups>

@@ -30,5 +30,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmProductDelete"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="record(s) have been deleted." stepKey="seeSuccessMessage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFiltersAfterBundleProductDelete"/>
+        <waitForPageLoad stepKey="waitForPageReloadAfterFilterClearing"/>
     </actionGroup>
 </actionGroups>

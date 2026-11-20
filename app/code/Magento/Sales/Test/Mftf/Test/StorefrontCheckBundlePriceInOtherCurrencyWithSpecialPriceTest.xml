@@ -46,6 +46,7 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct1"/>
             </createData>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFiltersBefore"/>
             <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToBundleProduct">
                 <argument name="product" value="$$createBundleProduct$$"/>
             </actionGroup>

@@ -497,4 +497,8 @@
         <data key="option2">2</data>
         <data key="option3">3</data>
     </entity>
+    <entity name="ProductWeightMoreInformationAttribute" type="productAttributeAssertion">
+        <data key="attributeLabel">Weight</data>
+        <data key="attributeValue">2.000000 lbs</data>
+    </entity>
 </entities>

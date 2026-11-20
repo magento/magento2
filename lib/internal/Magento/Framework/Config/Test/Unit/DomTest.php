@@ -131,6 +131,13 @@ class DomTest extends TestCase
                 'xsi:type',
                 'attributes_merged.xml',
             ],
+            'numeric zero id attribute value preserves existing nodes (issue #36861)' => [
+                'numeric_id_zero.xml',
+                'numeric_id_zero_new.xml',
+                ['/root/item' => 'name'],
+                null,
+                'numeric_id_zero_merged.xml',
+            ],
         ];
     }
 
@@ -150,9 +157,6 @@ class DomTest extends TestCase
     #[DataProvider('validateDataProvider')]
     public function testValidate($xml, array $expectedErrors)
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $actualErrors = [];
 
         $dom = new Dom($xml, $this->validationStateMock, [], null, null);
@@ -204,9 +208,6 @@ class DomTest extends TestCase
 
     public function testValidateUnknownError()
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new Dom($xml, $this->validationStateMock);
@@ -224,9 +225,6 @@ class DomTest extends TestCase
     public function testValidateDomDocumentThrowsException()
     {
         $this->expectException('Magento\Framework\Config\Dom\ValidationSchemaException');
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new Dom($xml, $this->validationStateMock);

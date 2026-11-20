@@ -17,7 +17,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Group;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
@@ -46,6 +45,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -137,7 +137,7 @@ class EavTest extends AbstractModifierTestCase
      * @var SearchCriteria|MockObject
      */
     private $searchCriteriaMock;
-    
+
     /**
      * @var SearchResultsInterface|MockObject
      */
@@ -338,16 +338,10 @@ class EavTest extends AbstractModifierTestCase
         );
     }
 
-    public function testModifyData()
+    #[TestWith([1, [1 => ['product' => [ProductAttributeInterface::CODE_PRICE => '19.99']]]])]
+    #[TestWith([null, []])]
+    public function testModifyData(?int $productId, array $sourceData): void
     {
-        $sourceData = [
-            '1' => [
-                'product' => [
-                    ProductAttributeInterface::CODE_PRICE => '19.99'
-                ]
-            ]
-        ];
-
         $this->attributeCollectionFactoryMock->expects($this->once())->method('create')
             ->willReturn($this->attributeCollectionMock);
 
@@ -355,20 +349,20 @@ class EavTest extends AbstractModifierTestCase
 
         $this->locatorMock->method('getProduct')->willReturn($this->productMock);
 
-        $this->productMock->setId(1);
+        $this->productMock->setId($productId);
         $this->productMock->setAttributeSetId(4);
         $this->productMock->setData(ProductAttributeInterface::CODE_PRICE, '19.9900');
 
         $this->searchCriteriaBuilderMock->expects($this->any())->method('addFilter')
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->method('create')->willReturn($this->searchCriteriaMock);
-        
+
         // Create separate search results for attribute groups (not attributes!)
         $groupSearchResultsMock = $this->createMock(SearchResultsInterface::class);
         $this->attributeGroupMock->method('getAttributeGroupCode')->willReturn('product-details');
         $groupSearchResultsMock->method('getItems')->willReturn([$this->attributeGroupMock]);
         $this->attributeGroupRepositoryMock->method('getList')->willReturn($groupSearchResultsMock);
-        
+
         $this->sortOrderBuilderMock->expects($this->once())->method('setField')
             ->willReturnSelf();
         $this->sortOrderBuilderMock->expects($this->once())->method('setAscendingDirection')
@@ -389,7 +383,8 @@ class EavTest extends AbstractModifierTestCase
         $this->eavAttributeMock->setData('attribute_group_code', 'product-details');
         $this->eavAttributeMock->expects($this->once())->method('getApplyTo')
             ->willReturn([]);
-        $this->eavAttributeMock->expects($this->once())->method('getFrontendInput')
+        $this->eavAttributeMock->expects($productId ? self::once() : self::never())
+            ->method('getFrontendInput')
             ->willReturn('price');
         $this->eavAttributeMock->method('getAttributeCode')->willReturn(ProductAttributeInterface::CODE_PRICE);
 

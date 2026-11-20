@@ -1,0 +1,3 @@
+sku,store_view_code,attribute_set_code,product_type,categories,product_websites,name,description,short_description,weight,product_online,tax_class_name,visibility,price,url_key
+mftf_urlkey_import_simple,,Default,simple,Default Category,"base,aus",Mftf Url Key Store Inherit Import,desc,short,1,1,Taxable Goods,"Catalog, Search",19.99,mftf-url-key-store-inherit-import
+mftf_urlkey_import_simple,store_view_aus,Default,simple,,aus,,,,,Taxable Goods,,,,

@@ -73,7 +73,7 @@ class UpdateCartItems
             $quantity = (float)$item['quantity'];
 
             if ($quantity <= 0.0) {
-                $this->cartItemRepository->deleteById((int)$cart->getId(), $itemId);
+                $cart->removeItem($itemId);
             } else {
                 $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
             }

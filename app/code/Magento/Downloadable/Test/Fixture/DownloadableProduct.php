@@ -16,11 +16,16 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomains;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadableProduct extends Product
 {
     private const DEFAULT_DATA = [
@@ -47,6 +52,12 @@ class DownloadableProduct extends Product
     private const DOMAINS = ['example.com','www.example.com'];
 
     /**
+     * Name of the lock guarding concurrent read-modify-write access to the downloadable domains
+     * whitelist in env.php (see Magento\Downloadable\Model\DomainManager).
+     */
+    private const DOMAIN_LOCK_NAME = 'downloadable_domains';
+
+    /**
      * DownloadableProduct constructor
      *
      * @param ServiceFactory $serviceFactory
@@ -56,6 +67,8 @@ class DownloadableProduct extends Product
      * @param DirectoryList $directoryList
      * @param Link $link
      * @param File $file
+     * @param DomainManagerInterface $domainManager
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         private readonly ServiceFactory $serviceFactory,
@@ -65,7 +78,8 @@ class DownloadableProduct extends Product
         private readonly DirectoryList $directoryList,
         private readonly Link $link,
         private readonly File $file,
-        private readonly DomainManagerInterface $domainManager
+        private readonly DomainManagerInterface $domainManager,
+        private readonly LockManagerInterface $lockManager
     ) {
         parent::__construct($serviceFactory, $dataProcessor, $dataMerger, $productRepository);
     }
@@ -78,14 +92,24 @@ class DownloadableProduct extends Product
      */
     public function apply(array $data = []): ?DataObject
     {
-        $this->domainManager->addDomains(self::DOMAINS);
+        $this->lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::addDomains($this->domainManager, self::DOMAINS);
+        } finally {
+            $this->lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
 
         return parent::apply($this->prepareData($data));
     }
 
     public function revert(DataObject $data): void
     {
-        $this->domainManager->removeDomains(self::DOMAINS);
+        $this->lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::removeDomains($this->domainManager, self::DOMAINS);
+        } finally {
+            $this->lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
         parent::revert($data);
     }
 
@@ -125,25 +149,50 @@ class DownloadableProduct extends Product
         $links = [];
         foreach ($data['extension_attributes']['downloadable_product_links'] as $link) {
 
-            if ($link['link_type'] == 'url') {
-                $link['link_url'] = 'http://example.com/downloadable.txt';
-                $link['link_file'] = '';
-            } else {
-                $link['link_file'] = $this->generateDownloadableLink($link['link_file'] ?? 'test-' . uniqid() . '.txt');
-                $link['link_url'] = '';
-            }
-
-            $links[] = [
+            $linkType = $link['link_type'] ?? 'file';
+            $linkData = [
                 'id' => null,
                 'title' => $link['title'] ?? 'Test Link%uniqid%',
                 'price' => $link['price'] ?? 0,
-                'link_type' => $link['link_type'] ?? 'file',
-                'link_url' => $link['link_url'],
-                'link_file' => $link['link_file'],
+                'link_type' => $linkType,
                 'is_shareable' => $link['is_shareable'] ?? 0,
                 'number_of_downloads' => $link['number_of_downloads'] ?? 5,
                 'sort_order' => $link['sort_order'] ?? 10,
             ];
+
+            if ($linkType === 'url') {
+                $linkData['link_url'] = $link['link_url'] ?? 'http://example.com/downloadable.txt';
+            } else {
+                $fileName = $link['link_file'] ?? 'test-' . uniqid() . '.txt';
+                $fileName = basename(ltrim($fileName, '/'));
+                if ($fileName === '') {
+                    $fileName = 'test-' . uniqid() . '.txt';
+                }
+                $linkData['link_file_content'] = $link['link_file_content'] ?? [
+                    'name' => $fileName,
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    'file_data' => base64_encode('This is a temporary text file.'),
+                ];
+            }
+
+            if (($link['sample_type'] ?? null) === 'url') {
+                $linkData['sample_type'] = 'url';
+                $linkData['sample_url'] = $link['sample_url'] ?? 'http://example.com/downloadable_sample.txt';
+            } elseif (($link['sample_type'] ?? null) === 'file') {
+                $sampleFileName = $link['sample_file'] ?? ('sample-' . uniqid() . '.txt');
+                $sampleFileName = basename(ltrim($sampleFileName, '/'));
+                if ($sampleFileName === '') {
+                    $sampleFileName = 'sample-' . uniqid() . '.txt';
+                }
+                $linkData['sample_type'] = 'file';
+                $linkData['sample_file_content'] = $link['sample_file_content'] ?? [
+                    'name' => $sampleFileName,
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    'file_data' => base64_encode('This is a temporary sample file.'),
+                ];
+            }
+
+            $links[] = $linkData;
         }
 
         return $links;

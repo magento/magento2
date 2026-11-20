@@ -11,6 +11,8 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Model\GuestItemRepository;
 use Magento\GiftMessage\Model\ItemRepository;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,6 +37,11 @@ class GuestCartRepositoryTest extends TestCase
      */
     protected $quoteIdMaskFactoryMock;
 
+    /**
+     * @var GetGuestCart|MockObject
+     */
+    private $getGuestCartMock;
+
     protected function setUp(): void
     {
         $this->repositoryMock = $this->createMock(ItemRepository::class);
@@ -44,9 +51,13 @@ class GuestCartRepositoryTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
+        $this->getGuestCartMock = $this->createMock(GetGuestCart::class);
+        $this->getGuestCartMock->method('execute')->willReturn($this->createMock(Quote::class));
+
         $this->model = new GuestItemRepository(
             $this->repositoryMock,
-            $this->quoteIdMaskFactoryMock
+            $this->quoteIdMaskFactoryMock,
+            $this->getGuestCartMock
         );
     }
 
@@ -70,7 +81,7 @@ class GuestCartRepositoryTest extends TestCase
             ->method('load')
             ->with($cartId, 'masked_id')
             ->willReturnSelf();
-        $quoteIdMaskMock->expects($this->once())
+        $quoteIdMaskMock->expects($this->any())
             ->method('getQuoteId')
             ->willReturn($quoteId);
 
@@ -105,8 +116,7 @@ class GuestCartRepositoryTest extends TestCase
             ->method('load')
             ->with($cartId, 'masked_id')
             ->willReturnSelf();
-        $quoteIdMaskMock->expects($this->once())
-            ->method('getQuoteId')
+        $quoteIdMaskMock->method('getQuoteId')
             ->willReturn($quoteId);
 
         /** @var MessageInterface|MockObject $messageMock */

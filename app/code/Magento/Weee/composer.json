@@ -19,7 +19,8 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-bundle": "*"
     },
     "suggest": {
         "magento/module-bundle": "*",

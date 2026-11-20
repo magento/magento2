@@ -42,6 +42,9 @@
             <!-- Delete created attribute set -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <!-- Logout from admin -->
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Step 1, 2: Go to System > Import and select products entity type -->

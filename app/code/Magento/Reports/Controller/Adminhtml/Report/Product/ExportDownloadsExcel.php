@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -9,6 +9,7 @@ namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Reports\Block\Adminhtml\Product\Downloads\Grid;
 use Magento\Reports\Controller\Adminhtml\Report\Product;
 
 /**
@@ -23,7 +24,7 @@ class ExportDownloadsExcel extends Product
      *
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Reports::report_products';
+    public const ADMIN_RESOURCE = 'Magento_Reports::downloads';
 
     /**
      * Export products downloads report to XLS format
@@ -34,7 +35,7 @@ class ExportDownloadsExcel extends Product
     {
         $fileName = 'products_downloads.xml';
         $content = $this->_view->getLayout()->createBlock(
-            \Magento\Reports\Block\Adminhtml\Product\Downloads\Grid::class
+            Grid::class
         )->setSaveParametersInSession(
             true
         )->getExcel(

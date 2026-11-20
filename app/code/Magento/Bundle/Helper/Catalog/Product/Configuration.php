@@ -20,6 +20,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Helper for fetching properties by product configuration item
@@ -60,12 +61,18 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     private $taxHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param Context $context
      * @param ProductConfiguration $productConfiguration
      * @param Data $pricingHelper
      * @param Escaper $escaper
      * @param Json|null $serializer
      * @param TaxPrice|null $taxHelper
+     * @param PriceCurrencyInterface|null $priceCurrency
      */
     public function __construct(
         Context              $context,
@@ -73,7 +80,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         Data                 $pricingHelper,
         Escaper              $escaper,
         ?Json                 $serializer = null,
-        ?TaxPrice $taxHelper = null
+        ?TaxPrice $taxHelper = null,
+        ?PriceCurrencyInterface $priceCurrency = null,
     ) {
         $this->productConfiguration = $productConfiguration;
         $this->pricingHelper = $pricingHelper;
@@ -81,6 +89,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
         $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(TaxPrice::class);
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
         parent::__construct($context);
     }
 
@@ -197,26 +206,24 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         $qty = $this->getSelectionQty($item->getProduct(), $bundleSelection->getSelectionId()) * 1;
         if ($qty) {
             $selectionPrice = $this->getSelectionFinalPrice($item, $bundleSelection);
-
+            $convertedSelectionPrice = $this->priceCurrency->convertAndRound($selectionPrice);
             $displayCartPricesBoth = $this->taxHelper->displayCartPricesBoth();
             if ($displayCartPricesBoth) {
                 $selectionFinalPrice =
                     $this->taxHelper
-                        ->getTaxPrice($product, $selectionPrice, true);
+                        ->getTaxPrice($product, $convertedSelectionPrice, true);
                 $selectionFinalPriceExclTax =
                     $this->taxHelper
-                        ->getTaxPrice($product, $selectionPrice, false);
+                        ->getTaxPrice($product, $convertedSelectionPrice, false);
             } else {
-                $selectionFinalPrice = $this->taxHelper->getTaxPrice($item->getProduct(), $selectionPrice);
+                $selectionFinalPrice = $this->taxHelper->getTaxPrice($item->getProduct(), $convertedSelectionPrice);
             }
             $option['value'][] = $qty . ' x '
                 . $this->escaper->escapeHtml($bundleSelection->getName())
                 . ' '
-                . $this->pricingHelper->currency(
-                    $selectionFinalPrice
-                )
+                . $this->priceCurrency->format($selectionFinalPrice)
                 . ($displayCartPricesBoth ? ' ' . __('Excl. tax:') . ' '
-                    . $this->pricingHelper->currency(
+                    . $this->priceCurrency->format(
                         $selectionFinalPriceExclTax
                     ) : '');
             $option['has_html'] = true;

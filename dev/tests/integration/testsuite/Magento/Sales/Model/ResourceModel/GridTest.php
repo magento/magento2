@@ -67,37 +67,96 @@ class GridTest extends TestCase
         //refresh data without cached updated_at
         $this->lastUpdateTimeCache->remove($constructorArgs['gridTableName']);
         $this->assertEmpty($this->lastUpdateTimeCache->get($constructorArgs['gridTableName']));
-        sleep(1);
-        $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
+        $stamp = '2026-01-01 12:00:00';
+        $data['created_at'] = $data['updated_at'] = $stamp;
         $connection->update(
             $constructorArgs['mainTableName'],
             $data,
             sprintf('%s = %d', $orderIdField, $order->getEntityId())
         );
+        $indexerProjection = $this->fetchGridIndexerProjection(
+            $grid,
+            $constructorArgs['mainTableName'],
+            $orderIdField,
+            (int)$order->getEntityId()
+        );
+        $this->assertNotEmpty($indexerProjection);
         $grid->refreshBySchedule();
 
         $select = $connection->select()
             ->from($constructorArgs['gridTableName'], ['created_at', 'updated_at'])
             ->where($orderIdField, $order->getEntityId());
         $gridData = $connection->fetchRow($select);
-        $this->assertEquals($data, $gridData);
+        $this->assertGridTimestampsMatch($indexerProjection, $gridData);
 
         //refresh data with cached updated_at
         $this->assertNotEmpty($this->lastUpdateTimeCache->get($constructorArgs['gridTableName']));
-        sleep(1);
-        $data['created_at'] = $data['updated_at'] = date('Y-m-d H:i:s');
+        $stamp = '2026-01-01 12:00:10';
+        $data['created_at'] = $data['updated_at'] = $stamp;
         $connection->update(
             $constructorArgs['mainTableName'],
             $data,
             sprintf('%s = %d', $orderIdField, $order->getEntityId())
         );
+        $indexerProjection = $this->fetchGridIndexerProjection(
+            $grid,
+            $constructorArgs['mainTableName'],
+            $orderIdField,
+            (int)$order->getEntityId()
+        );
+        $this->assertNotEmpty($indexerProjection);
         $grid->refreshBySchedule();
 
         $select = $connection->select()
             ->from($constructorArgs['gridTableName'], ['created_at', 'updated_at'])
             ->where($orderIdField, $order->getEntityId());
         $gridData = $connection->fetchRow($select);
-        $this->assertEquals($data, $gridData);
+        $this->assertGridTimestampsMatch($indexerProjection, $gridData);
+    }
+
+    /**
+     * Grid timestamps must preserve the fetched source projection.
+     *
+     * @param array $indexerProjection
+     * @param mixed $gridData
+     * @return void
+     */
+    private function assertGridTimestampsMatch(
+        array $indexerProjection,
+        mixed $gridData
+    ): void {
+        $this->assertIsArray($gridData);
+        $this->assertArrayHasKey('created_at', $gridData);
+        $this->assertArrayHasKey('updated_at', $gridData);
+
+        $this->assertSame($indexerProjection['updated_at'], $gridData['updated_at']);
+        $this->assertSame($indexerProjection['created_at'], $gridData['created_at']);
+    }
+
+    /**
+     * Timestamps Grid::refreshBySchedule pulls from main.
+     *
+     * @param Grid $grid
+     * @param string $mainTableName
+     * @param string $idField Bare column present in data provider (entity_id/order_id etc.)
+     * @param int $entityId Identifier value matched against $mainTableName.$idField
+     * @return array
+     */
+    private function fetchGridIndexerProjection(
+        Grid $grid,
+        string $mainTableName,
+        string $idField,
+        int $entityId
+    ): array {
+        $connection = $grid->getConnection();
+        $row = $connection->fetchRow(
+            $grid->getGridOriginSelect()->where(
+                sprintf('%s.%s = ?', $mainTableName, $idField),
+                $entityId
+            )
+        );
+
+        return \is_array($row) ? $row : [];
     }
 
     /**
@@ -143,8 +202,11 @@ class GridTest extends TestCase
      * @param string $orderIdIndex
      */
     #[DataProvider('shipmentGridDataProvider')]
-    public function testSalesShipmentGridOrderIdFieldIndex(array $constructorArgs, string $orderIdField, string $orderIdIndex)
-    {
+    public function testSalesShipmentGridOrderIdFieldIndex(
+        array $constructorArgs,
+        string $orderIdField,
+        string $orderIdIndex
+    ) {
         $constructorArgs['orderIdField'] = $constructorArgs['mainTableName'] . '.' . $orderIdField;
         $constructorArgs['columns'] = [
             $orderIdField => $constructorArgs['orderIdField'],

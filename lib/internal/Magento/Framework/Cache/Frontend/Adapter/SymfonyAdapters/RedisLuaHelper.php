@@ -7,27 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters;
 
-use InvalidArgumentException;
+use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
+use Predis\Client as PredisClient;
 
 /**
- * Redis Lua script helper for advanced atomic operations
- *
- * Provides Lua script functionality for operations that benefit from
- * server-side execution and true atomicity beyond what pipelines offer.
+ * Provides Redis Lua helpers for advanced atomic operations beyond pipelines.
+ * Supports both phpredis and Predis by normalizing their different EVAL signatures.
+ * Enables atomic tag-index pruning with use_lua=1 across both drivers.
  */
 class RedisLuaHelper
 {
+    use RedisScriptEvalTrait;
+
     /**
      * Redis connection
      *
-     * @var mixed Redis connection object
+     * @var \Redis|\RedisCluster|PredisClient|OptimizedPredisClient
      */
-    private $redis;
-
-    /**
-     * @var array
-     */
-    private array $scriptShas = [];
+    private \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis;
 
     /**
      * @var bool Whether Lua scripts are enabled
@@ -42,7 +39,8 @@ class RedisLuaHelper
      */
     private const SCRIPT_CLEAN_BY_TAG_CONDITIONAL = <<<'LUA'
 -- KEYS[1]: tag set key (e.g., "cache:tags:69d_config")
--- KEYS[2]: namespace prefix (e.g., "69d_")
+-- KEYS[2]: data key prefix for the actual cache item (e.g., "69d_:"); a non-empty namespace
+--          must be suffixed with ':' here to match the real stored key (see PHP dataKeyPrefix())
 -- ARGV[1]: current timestamp (for TTL checks)
 -- ARGV[2]: condition type ("expired"|"all")
 
@@ -232,19 +230,13 @@ LUA;
     /**
      * Constructor
      *
-     * Note: Uses untyped parameter to avoid DI compilation issues with PHP extension classes
-     *
-     * @param mixed $redis Redis connection from Symfony RedisAdapter
+     * @param \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis Connection from Symfony RedisAdapter
      * @param bool $enabled Whether Lua scripts are enabled
      */
-    public function __construct($redis, bool $enabled = true)
-    {
-        // Runtime type check using get_class to avoid referencing Redis class directly
-        // This prevents DI compilation errors with PHP extension classes
-        if (!is_object($redis) || get_class($redis) !== 'Redis') {
-            throw new InvalidArgumentException('Redis connection must be an instance of Redis');
-        }
-
+    public function __construct(
+        \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis,
+        bool $enabled = true
+    ) {
         $this->redis = $redis;
         $this->enabled = $enabled;
     }
@@ -262,9 +254,9 @@ LUA;
 
         try {
             // Test if Lua is supported
-            $this->redis->eval('return 1', [], 0);
+            $this->evalScript('return 1', [], 0);
             return true;
-        } catch (\RedisException $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }
@@ -286,19 +278,19 @@ LUA;
             return 0;
         }
 
-        $sha = $this->loadScript(self::SCRIPT_CLEAN_BY_TAG_CONDITIONAL);
+        $sha = $this->loadLuaScript(self::SCRIPT_CLEAN_BY_TAG_CONDITIONAL);
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->evalShaScript(
                 $sha,
                 [$tagKey, $prefix, time(), $condition],
                 2  // Number of KEYS
             );
 
             return (int)$result;
-        } catch (\RedisException $e) {
-            // Fallback: script not loaded, try eval
-            return (int)$this->redis->eval(
+        } catch (\Throwable $e) {
+            // Fallback: script not loaded (NOSCRIPT), run the full script
+            return (int)$this->evalScript(
                 self::SCRIPT_CLEAN_BY_TAG_CONDITIONAL,
                 [$tagKey, $prefix, time(), $condition],
                 2
@@ -329,21 +321,21 @@ LUA;
             return false;
         }
 
-        $sha = $this->loadScript(self::SCRIPT_ATOMIC_SAVE_WITH_TAGS);
+        $sha = $this->loadLuaScript(self::SCRIPT_ATOMIC_SAVE_WITH_TAGS);
 
         $argv = array_merge([$value, $ttl], $newTagKeys);
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->evalShaScript(
                 $sha,
                 array_merge([$cacheKey, $reverseIndexKey], $argv),
                 2  // Number of KEYS
             );
 
             return (bool)$result;
-        } catch (\RedisException $e) {
-            // Fallback: script not loaded
-            return (bool)$this->redis->eval(
+        } catch (\Throwable $e) {
+            // Fallback: script not loaded (NOSCRIPT), run the full script
+            return (bool)$this->evalScript(
                 self::SCRIPT_ATOMIC_SAVE_WITH_TAGS,
                 array_merge([$cacheKey, $reverseIndexKey], $argv),
                 2
@@ -368,7 +360,7 @@ LUA;
             return [0, 0];
         }
 
-        $sha = $this->loadScript(self::SCRIPT_GARBAGE_COLLECT);
+        $sha = $this->loadLuaScript(self::SCRIPT_GARBAGE_COLLECT);
 
         $totalDeleted = 0;
         $iterations = 0;
@@ -376,7 +368,7 @@ LUA;
 
         do {
             try {
-                $result = $this->redis->evalSha(
+                $result = $this->evalShaScript(
                     $sha,
                     [$pattern, $tagPrefix, $batchSize, $cursor],
                     2  // Number of KEYS
@@ -391,7 +383,7 @@ LUA;
                 if ($iterations >= 100) {
                     break;
                 }
-            } catch (\RedisException $e) {
+            } catch (\Throwable $e) {
                 // Fallback or break on error
                 break;
             }
@@ -416,7 +408,7 @@ LUA;
             return 0;
         }
 
-        $sha = $this->loadScript(self::SCRIPT_CLEAR_ALL_INDICES);
+        $sha = $this->loadLuaScript(self::SCRIPT_CLEAR_ALL_INDICES);
 
         // Build patterns
         $tagPattern = 'cache:tags:' . $namespace . '*';
@@ -424,61 +416,26 @@ LUA;
         $allIdsKey = 'cache:all_ids';
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->evalShaScript(
                 $sha,
                 [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
                 3  // Number of KEYS
             );
 
             return (int)$result;
-        } catch (\RedisException $e) {
+        } catch (\Throwable $e) {
             // Fallback: run script directly
             try {
-                $result = $this->redis->eval(
+                $result = $this->evalScript(
                     self::SCRIPT_CLEAR_ALL_INDICES,
                     [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
                     3
                 );
                 return (int)$result;
-            } catch (\RedisException $e) {
+            } catch (\Throwable $e) {
                 // Script execution failed
                 return 0;
             }
         }
-    }
-
-    /**
-     * Load script and return SHA1
-     *
-     * @param string $script
-     * @return string SHA1 of the script
-     */
-    private function loadScript(string $script): string
-    {
-        $hash = hash('sha256', $script);
-
-        if (isset($this->scriptShas[$hash])) {
-            return $this->scriptShas[$hash];
-        }
-
-        try {
-            $sha = $this->redis->script('load', $script);
-            $this->scriptShas[$hash] = $sha;
-            return $sha;
-        } catch (\RedisException $e) {
-            throw new \RuntimeException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
-        }
-    }
-
-    /**
-     * Clear all cached script SHAs
-     *
-     * Call this if Redis SCRIPT FLUSH is executed
-     *
-     * @return void
-     */
-    public function clearScriptCache(): void
-    {
-        $this->scriptShas = [];
     }
 }

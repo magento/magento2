@@ -493,6 +493,176 @@ define([
             });
         });
 
+        describe('"disposableCustomerData" extender', function () {
+            var knockout;
+
+            beforeEach(function (done) {
+                clearLocalStorage();
+
+                injector.require([
+                    'ko',
+                    'Magento_Customer/js/customer-data'
+                ], function (ko, Constr) {
+                    knockout = ko;
+                    obj = Constr;
+                    obj.initStorage();
+                    done();
+                });
+            });
+
+            afterEach(function () {
+                jasmine.clock().uninstall();
+            });
+
+            it('Keeps the section when its data_id changed after the cleanup was scheduled', function () {
+                var observable,
+                    result;
+
+                jasmine.clock().install();
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 100,
+                    cart: 5
+                });
+
+                observable = knockout.observable({}).extend({
+                    disposableCustomerData: 'messages'
+                });
+
+                // triggers the subscriber, scheduling the 3s cleanup with data_id = 100
+                observable({
+                    'data_id': 100
+                });
+
+                // fresh messages arrive before the timeout fires, bumping the data_id
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 200,
+                    cart: 5
+                });
+
+                jasmine.clock().tick(3000);
+
+                result = $.cookieStorage.get('section_data_ids') || {};
+                expect(result.hasOwnProperty('messages')).toBe(true);
+            });
+
+            it('Drops the section when its data_id is unchanged when the cleanup fires', function () {
+                var observable,
+                    result;
+
+                jasmine.clock().install();
+                $.cookieStorage.set('section_data_ids', {
+                    messages: 100,
+                    cart: 5
+                });
+
+                observable = knockout.observable({}).extend({
+                    disposableCustomerData: 'messages'
+                });
+
+                observable({
+                    'data_id': 100
+                });
+
+                jasmine.clock().tick(3000);
+
+                result = $.cookieStorage.get('section_data_ids') || {};
+                expect(result.hasOwnProperty('messages')).toBe(false);
+                expect(result.hasOwnProperty('cart')).toBe(true);
+            });
+        });
+
+        describe('Storage namespace recovery', function () {
+            var storageJQuery,
+                storageGetJSON;
+
+            beforeEach(function () {
+                storageJQuery = $;
+                $ = jQuery;
+                storageGetJSON = $.getJSON;
+                obj.initStorage();
+                setupLocalStorage({
+                    customer: {data_id: 100, content: {}},
+                    cart: {data_id: 200, content: {}}
+                });
+            });
+
+            afterEach(function () {
+                $.getJSON = storageGetJSON;
+                $ = storageJQuery;
+            });
+
+            [null, 'null'].forEach(function (namespaceValue) {
+                var state = namespaceValue === null ? 'missing' : 'JSON-null';
+
+                function resetNamespace(name) {
+                    if (namespaceValue === null) {
+                        window.localStorage.removeItem(name);
+                    } else {
+                        window.localStorage.setItem(name, namespaceValue);
+                    }
+                }
+
+                it('Completes invalidation with a ' + state + ' cache namespace', function () {
+                    resetNamespace('mage-cache-storage');
+
+                    obj.invalidate(['customer', 'cart']);
+
+                    expect($.localStorage.get('mage-cache-storage')).toEqual({});
+                    expect($.localStorage.get('mage-cache-storage-section-invalidation')).toEqual({
+                        customer: true,
+                        cart: true
+                    });
+                    expect($.cookieStorage.get('section_data_ids')).toEqual({
+                        customer: 1100,
+                        cart: 1200
+                    });
+                });
+
+                it('Completes updates with ' + state + ' cache and invalidation namespaces', function () {
+                    var customer = {data_id: 300, fullname: 'Test Customer'},
+                        cart = {data_id: 400, summary_count: 1};
+
+                    resetNamespace('mage-cache-storage');
+                    resetNamespace('mage-cache-storage-section-invalidation');
+                    $.getJSON = jasmine.createSpy().and.returnValue($.Deferred().resolve({
+                        customer: customer,
+                        cart: cart
+                    }).promise());
+
+                    obj.reload(['customer', 'cart']);
+
+                    expect($.localStorage.get('mage-cache-storage')).toEqual({
+                        customer: customer,
+                        cart: cart
+                    });
+                    expect($.localStorage.get('mage-cache-storage-section-invalidation')).toEqual({});
+                    expect(obj.get('customer')()).toEqual(customer);
+                    expect(obj.get('cart')()).toEqual(cart);
+                    expect($.cookieStorage.get('section_data_ids')).toEqual({
+                        customer: 300,
+                        cart: 400
+                    });
+                });
+
+                it('Allows array removal from a ' + state + ' namespace', function () {
+                    var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+
+                    resetNamespace('mage-cache-storage');
+
+                    expect(storage.remove(['customer', 'cart'])).toBe(true);
+                    expect(storage.get()).toEqual({});
+                });
+            });
+
+            it('Preserves unrelated sections when removing from an existing namespace', function () {
+                obj.invalidate(['customer']);
+
+                expect($.localStorage.get('mage-cache-storage')).toEqual({
+                    cart: {data_id: 200, content: {}}
+                });
+            });
+        });
+
         describe('"invalidated" method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('invalidate')).toBeDefined();
