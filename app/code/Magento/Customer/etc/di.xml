@@ -144,20 +144,18 @@
                 <item name="bot" xsi:type="string">bot</item>
                 <item name="spider" xsi:type="string">spider</item>
                 <item name="crawl" xsi:type="string">crawl</item>
-                <item name="slurp" xsi:type="string">slurp</item>
                 <item name="google" xsi:type="string">google</item>
                 <item name="facebook" xsi:type="string">facebook</item>
                 <item name="meta_external" xsi:type="string">meta-external</item>
-                <item name="bingpreview" xsi:type="string">bingpreview</item>
                 <item name="lighthouse" xsi:type="string">lighthouse</item>
                 <item name="headlesschrome" xsi:type="string">headlesschrome</item>
-                <item name="python" xsi:type="string">python-</item>
+                <item name="python" xsi:type="string">python</item>
                 <item name="curl" xsi:type="string">curl/</item>
                 <item name="wget" xsi:type="string">wget/</item>
                 <item name="go_http_client" xsi:type="string">go-http-client</item>
                 <item name="scrapy" xsi:type="string">scrapy</item>
-                <item name="whatsapp" xsi:type="string">whatsapp</item>
                 <item name="chatgpt" xsi:type="string">chatgpt</item>
+                <item name="claude" xsi:type="string">claude</item>
             </argument>
         </arguments>
     </type>
