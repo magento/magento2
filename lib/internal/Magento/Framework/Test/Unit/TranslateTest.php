@@ -237,9 +237,6 @@ class TranslateTest extends TestCase
 
         // _loadModuleTranslation()
         $modules = ['some_module', 'other_module', 'another_module', 'current_module'];
-        $this->request->expects($this->any())
-            ->method('getControllerModule')
-            ->willReturn('current_module');
         $this->moduleList->expects($this->once())->method('getNames')->willReturn($modules);
         $moduleData = [
             'module original' => 'module translated',
@@ -446,5 +443,46 @@ class TranslateTest extends TestCase
             ->willReturn($themeId);
 
         $this->viewDesign->expects($this->any())->method('getDesignTheme')->willReturn($designTheme);
+    }
+
+    /**
+     * Module translations are merged in module sequence order regardless of the controller module,
+     * so a single dictionary is cached per locale/area/scope/theme.
+     *
+     * @return void
+     */
+    public function testLoadModuleTranslationIgnoresControllerModule(): void
+    {
+        $this->expectsSetConfig('Magento/luma');
+        $this->request->expects($this->never())->method('getControllerModule');
+        $this->moduleList->method('getNames')->willReturn(['current_module', 'first_module', 'last_module']);
+        $this->modulesReader->method('getModuleDir')
+            ->willReturnMap(
+                [
+                    ['i18n', 'current_module', '/app/current_module'],
+                    ['i18n', 'first_module', '/app/first_module'],
+                    ['i18n', 'last_module', '/app/last_module'],
+                ]
+            );
+        $this->fileDriver->method('isExists')
+            ->willReturnCallback(fn ($file) => str_starts_with($file, '/app/'));
+        $this->csvParser->method('getDataPairs')
+            ->willReturnMap(
+                [
+                    ['/app/current_module/en_US.csv', 0, 1, ['phrase' => 'current module translation']],
+                    ['/app/first_module/en_US.csv', 0, 1, ['phrase' => 'first module translation']],
+                    ['/app/last_module/en_US.csv', 0, 1, ['phrase' => 'last module translation']],
+                ]
+            );
+        $this->packDictionary->method('getDictionary')->willReturn([]);
+        $this->viewFileSystem->method('getLocaleFileName')->willReturn('/theme/en_US.csv');
+        $this->resource->method('getTranslationArray')->willReturn([]);
+        $cacheId = 'translate_en_US_frontend_frontendCode_Magento/luma';
+        $this->cache->expects($this->once())->method('load')->with($cacheId)->willReturn(false);
+        $this->cache->expects($this->once())->method('save')->with($this->anything(), $cacheId);
+
+        $this->translate->loadData('frontend');
+
+        $this->assertSame(['phrase' => 'last module translation'], $this->translate->getData());
     }
 }
