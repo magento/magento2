@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for OperationRepository
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OperationRepositoryTest extends TestCase
 {
