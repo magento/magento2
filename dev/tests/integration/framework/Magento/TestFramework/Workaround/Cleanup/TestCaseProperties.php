@@ -49,22 +49,33 @@ class TestCaseProperties
 
         foreach ($tests as $test) {
             $reflectionClass = new \ReflectionClass($test);
-            $properties = $reflectionClass->getProperties();
-            foreach ($properties as $property) {
+            foreach ($reflectionClass->getProperties() as $property) {
                 if ($property->isStatic() || !$this->canResetProperty($property)) {
                     continue;
                 }
 
-                if ($property->isInitialized($test)) {
-                    $value = $property->getValue($test);
-                    if (is_object($value) && method_exists($value, '__destruct') &&
-                        is_callable([$value, '__destruct'])) {
-                        $value->__destruct();
-                    }
-                }
-
+                $this->destroyInitializedObject($test, $property);
                 $property->setValue($test, $this->resetValue($property));
             }
+        }
+    }
+
+    /**
+     * Call __destruct on an initialized object property before it is cleared.
+     *
+     * @param object $test
+     * @param \ReflectionProperty $property
+     * @return void
+     */
+    private function destroyInitializedObject(object $test, \ReflectionProperty $property): void
+    {
+        if (!$property->isInitialized($test)) {
+            return;
+        }
+
+        $value = $property->getValue($test);
+        if (is_object($value) && method_exists($value, '__destruct') && is_callable([$value, '__destruct'])) {
+            $value->__destruct();
         }
     }
 
