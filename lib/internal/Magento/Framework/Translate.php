@@ -183,7 +183,6 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
             self::CONFIG_LOCALE_KEY => null,
             self::CONFIG_SCOPE_KEY => null,
             self::CONFIG_THEME_KEY => null,
-            self::CONFIG_MODULE_KEY => null,
         ];
     }
 
@@ -244,9 +243,6 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         if (!isset($this->_config[self::CONFIG_THEME_KEY])) {
             $this->_config[self::CONFIG_THEME_KEY] = $this->_viewDesign->getDesignTheme()->getThemePath();
         }
-        if (!isset($this->_config[self::CONFIG_MODULE_KEY])) {
-            $this->_config[self::CONFIG_MODULE_KEY] = $this->getControllerModuleName();
-        }
         return $this;
     }
 
@@ -292,11 +288,9 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
      */
     protected function _loadModuleTranslation()
     {
-        $currentModule = $this->getControllerModuleName();
-        $allModulesExceptCurrent = array_diff($this->_moduleList->getNames(), [$currentModule]);
-
-        $this->loadModuleTranslationByModulesList($allModulesExceptCurrent);
-        $this->loadModuleTranslationByModulesList([$currentModule]);
+        // Merge in module sequence order, same as the JS dictionary (js-translation.json), so a single dictionary
+        // is built and cached per locale/area/scope/theme instead of one per controller module.
+        $this->loadModuleTranslationByModulesList($this->_moduleList->getNames());
         return $this;
     }
 
@@ -555,7 +549,6 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         $_cacheId .= '_' . $this->_config[self::CONFIG_AREA_KEY];
         $_cacheId .= '_' . $this->_config[self::CONFIG_SCOPE_KEY];
         $_cacheId .= '_' . $this->_config[self::CONFIG_THEME_KEY];
-        $_cacheId .= '_' . $this->_config[self::CONFIG_MODULE_KEY];
 
         $this->_cacheId = $_cacheId;
         return $_cacheId;
