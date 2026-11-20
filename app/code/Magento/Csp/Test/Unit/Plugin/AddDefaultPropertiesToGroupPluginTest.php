@@ -100,6 +100,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $assetMock->method('getPath')->willReturn('frontend/Magento/luma/en_US/js/file.js');
 
         $subjectMock = $this->createMock(GroupedCollection::class);
@@ -124,6 +125,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(false);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $subjectMock = $this->createMock(GroupedCollection::class);
 
         $this->hashResolverMock->expects($this->never())->method('getHashByPath');
@@ -142,6 +144,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $assetMock->method('getPath')->willReturn('unknown/file.js');
 
         $subjectMock = $this->createMock(GroupedCollection::class);
@@ -151,6 +154,8 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
 
         $this->assertArrayNotHasKey('attributes', $result[1]);
+        $this->assertArrayHasKey('_sri_fallback_group', $result[1]);
+        $this->assertNotEmpty($result[1]['_sri_fallback_group']);
     }
 
     /**
@@ -162,6 +167,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $assetMock->method('getPath')->willReturn('file.js');
 
         $subjectMock = $this->createMock(GroupedCollection::class);
@@ -185,6 +191,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(AssetInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $subjectMock = $this->createMock(GroupedCollection::class);
 
         $this->hashResolverMock->expects($this->never())->method('getHashByPath');
@@ -192,6 +199,26 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
 
         $this->assertArrayNotHasKey('attributes', $result[1]);
+    }
+
+    /**
+     * Test non-JS local assets (such as CSS) are skipped so merging is preserved
+     */
+    public function testBeforeGetFilteredPropertiesSkipsNonJsAssets(): void
+    {
+        $this->requestMock->method('getFullActionName')->willReturn('checkout_index_index');
+        $this->actionMock->method('isPaymentPageAction')->willReturn(true);
+
+        $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('css');
+        $subjectMock = $this->createMock(GroupedCollection::class);
+
+        $this->hashResolverMock->expects($this->never())->method('getHashByPath');
+
+        $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
+
+        $this->assertArrayNotHasKey('attributes', $result[1]);
+        $this->assertArrayNotHasKey('_sri_fallback_group', $result[1]);
     }
 
     /**
@@ -216,6 +243,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $subjectMock = $this->createMock(GroupedCollection::class);
 
         $this->hashResolverMock->expects($this->never())->method('getHashByPath');
@@ -234,6 +262,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $this->actionMock->method('isPaymentPageAction')->willReturn(true);
 
         $assetMock = $this->createMock(LocalInterface::class);
+        $assetMock->method('getContentType')->willReturn('js');
         $assetMock->method('getPath')->willReturn('file.js');
 
         $subjectMock = $this->createMock(GroupedCollection::class);
@@ -253,5 +282,35 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
 
         $this->assertArrayNotHasKey('attributes', $result[1]);
+        $this->assertArrayHasKey('_sri_fallback_group', $result[1]);
+        $this->assertNotEmpty($result[1]['_sri_fallback_group']);
+    }
+
+    /**
+     * Test that distinct assets receive distinct fallback group IDs
+     */
+    public function testBeforeGetFilteredPropertiesGeneratesDistinctFallbackGroupsForDifferentAssets(): void
+    {
+        $this->requestMock->method('getFullActionName')->willReturn('checkout_index_index');
+        $this->actionMock->method('isPaymentPageAction')->willReturn(true);
+
+        $assetMock1 = $this->createMock(LocalInterface::class);
+        $assetMock1->method('getContentType')->willReturn('js');
+        $assetMock1->method('getPath')->willReturn('unknown/file1.js');
+
+        $assetMock2 = $this->createMock(LocalInterface::class);
+        $assetMock2->method('getContentType')->willReturn('js');
+        $assetMock2->method('getPath')->willReturn('unknown/file2.js');
+
+        $subjectMock = $this->createMock(GroupedCollection::class);
+
+        $this->hashResolverMock->method('getHashByPath')->willReturn(null);
+
+        $result1 = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock1, []);
+        $result2 = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock2, []);
+
+        $this->assertArrayHasKey('_sri_fallback_group', $result1[1]);
+        $this->assertArrayHasKey('_sri_fallback_group', $result2[1]);
+        $this->assertNotSame($result1[1]['_sri_fallback_group'], $result2[1]['_sri_fallback_group']);
     }
 }
