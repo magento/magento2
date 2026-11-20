@@ -80,7 +80,9 @@ class CatalogProductViewObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_VIEW)) {
+        if ($this->_customerVisitor->isRequestLoggingSkipped()
+            || !$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_VIEW)
+        ) {
             return;
         }
 

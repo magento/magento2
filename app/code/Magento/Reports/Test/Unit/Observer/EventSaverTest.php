@@ -148,4 +148,26 @@ class EventSaverTest extends TestCase
             ->willReturn(self::STUB_VISITOR_ID);
         $this->eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, null);
     }
+
+    /**
+     * Test that no event is saved when request logging is skipped (e.g. bots)
+     */
+    public function testSaveSkippedForIgnoredUserAgent()
+    {
+        $visitorMock = $this->createMock(Visitor::class);
+        $visitorMock->method('isRequestLoggingSkipped')->willReturn(true);
+        $eventFactoryMock = $this->createMock(EventFactory::class);
+        $eventFactoryMock->expects($this->never())->method('create');
+
+        $eventSaver = new EventSaver(
+            $this->createMock(StoreManagerInterface::class),
+            $eventFactoryMock,
+            $this->customerSessionMock,
+            $visitorMock
+        );
+        $eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, null);
+
+        // satisfy expectations configured in setUp()
+        $this->eventSaver->save(self::STUB_EVENT_TYPE_ID, self::STUB_OBJECT_ID, self::STUB_CUSTOMER_ID);
+    }
 }

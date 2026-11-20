@@ -42,6 +42,8 @@ class Visitor extends AbstractModel
     private const SECONDS_24_HOURS = 86400;
 
     /**
+     * Case-insensitive substrings of the User-Agent for which request logging is skipped
+     *
      * @var string[]
      */
     protected $ignoredUserAgents;
@@ -140,12 +142,31 @@ class Visitor extends AbstractModel
     protected function _construct()
     {
         $this->_init(ResourceModel\Visitor::class);
-        $userAgent = $this->httpHeader->getHttpUserAgent();
-        if ($this->ignoredUserAgents) {
-            if (in_array($userAgent, $this->ignoredUserAgents)) {
-                $this->skipRequestLogging = true;
+        $userAgent = (string)$this->httpHeader->getHttpUserAgent();
+        if ($userAgent === '') {
+            return;
+        }
+        $regex = $this->getIgnoredUserAgentsRegex();
+        if ($regex !== '' && preg_match($regex, $userAgent) === 1) {
+            $this->skipRequestLogging = true;
+        }
+    }
+
+    /**
+     * Build a single case-insensitive regex from the ignored User-Agent substrings
+     *
+     * @return string
+     */
+    private function getIgnoredUserAgentsRegex(): string
+    {
+        $parts = [];
+        foreach ($this->ignoredUserAgents as $pattern) {
+            if (is_string($pattern) && $pattern !== '') {
+                $parts[] = preg_quote($pattern, '/');
             }
         }
+
+        return $parts ? '/' . implode('|', array_unique($parts)) . '/i' : '';
     }
 
     /**
@@ -158,6 +179,16 @@ class Visitor extends AbstractModel
     {
         $this->skipRequestLogging = (bool)$skipRequestLogging;
         return $this;
+    }
+
+    /**
+     * Check whether request logging (visitor, reports, search terms) is skipped for the current request, e.g. bots
+     *
+     * @return bool
+     */
+    public function isRequestLoggingSkipped(): bool
+    {
+        return $this->skipRequestLogging;
     }
 
     /**
