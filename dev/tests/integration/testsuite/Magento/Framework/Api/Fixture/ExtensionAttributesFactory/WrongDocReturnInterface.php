@@ -10,6 +10,8 @@ namespace Magento\Framework\Api\TestFixture;
 interface WrongDocReturnInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
+     * Retrieve extension attributes.
+     *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
     public function getExtensionAttributes(): WrongDocReturnExtensionInterface;

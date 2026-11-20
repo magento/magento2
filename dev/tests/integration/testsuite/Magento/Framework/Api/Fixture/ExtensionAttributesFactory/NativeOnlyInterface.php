@@ -9,5 +9,6 @@ namespace Magento\Framework\Api\TestFixture;
 
 interface NativeOnlyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    // phpcs:ignore Magento2.Annotation.MethodAnnotationStructure.NoCommentBlock
     public function getExtensionAttributes(): NativeOnlyExtensionInterface;
 }

@@ -21,9 +21,16 @@ use PHPUnit\Framework\TestCase;
  */
 class NativeTypeResolverTest extends TestCase
 {
-    #[DataProvider('acceptedScalarReturnProvider')]
-    #[DataProvider('acceptedClassReturnProvider')]
-    #[DataProvider('acceptedSpecialReturnProvider')]
+    public static function acceptedReturnProvider(): array
+    {
+        return [
+            ...self::acceptedScalarReturnProvider(),
+            ...self::acceptedClassReturnProvider(),
+            ...self::acceptedSpecialReturnProvider(),
+        ];
+    }
+
+    #[DataProvider('acceptedReturnProvider')]
     public function testResolveAcceptedReturn(string $class, string $method, ?array $expected): void
     {
         self::assertSame(

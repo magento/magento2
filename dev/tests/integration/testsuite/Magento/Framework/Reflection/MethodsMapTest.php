@@ -47,7 +47,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMethodsMapForNativeOnlyInterface(): void
     {
-        require_once __DIR__ . '/_files/NativeDataInterface.php';
+        require_once __DIR__ . '/Fixture/NativeDataInterface.php';
 
         $expected = [
             'getId' => ['type' => 'int', 'isRequired' => true, 'description' => '', 'parameterCount' => 0],

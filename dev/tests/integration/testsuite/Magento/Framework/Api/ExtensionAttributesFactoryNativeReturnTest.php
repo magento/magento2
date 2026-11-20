@@ -14,7 +14,7 @@ class ExtensionAttributesFactoryNativeReturnTest extends \PHPUnit\Framework\Test
     #[DataProvider('getterReturnTypeProvider')]
     public function testGetterReturnType(string $fixtureName, bool $accepted): void
     {
-        require_once __DIR__ . '/_files/ExtensionAttributesFactory/' . $fixtureName . 'Interface.php';
+        require_once __DIR__ . '/Fixture/ExtensionAttributesFactory/' . $fixtureName . 'Interface.php';
         $interfaceName = 'Magento\\Framework\\Api\\TestFixture\\' . $fixtureName . 'Interface';
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $factory = new ExtensionAttributesFactory($objectManager);

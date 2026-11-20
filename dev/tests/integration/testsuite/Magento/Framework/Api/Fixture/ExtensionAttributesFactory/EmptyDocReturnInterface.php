@@ -10,6 +10,8 @@ namespace Magento\Framework\Api\TestFixture;
 interface EmptyDocReturnInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
+     * Retrieve extension attributes.
+     *
      * @return
      */
     public function getExtensionAttributes(): EmptyDocReturnExtensionInterface;
