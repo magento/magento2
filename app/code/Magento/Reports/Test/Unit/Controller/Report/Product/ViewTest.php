@@ -14,6 +14,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Reports\Controller\Report\Product\View;
+use Magento\Reports\Model\Event;
+use Magento\Reports\Model\Product\Index\Viewed;
 use Magento\Reports\Model\Product\Index\ViewedFactory;
 use Magento\Reports\Model\ReportStatus;
 use Magento\Reports\Observer\EventSaver;
@@ -21,6 +23,9 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ViewTest extends TestCase
 {
     /**
@@ -50,24 +55,24 @@ class ViewTest extends TestCase
 
     protected function setUp(): void
     {
-        $request = $this->createMock(RequestInterface::class);
-        $request->method('getParam')->with('product_id')->willReturn('42');
-        $context = $this->createMock(Context::class);
+        $request = $this->createStub(RequestInterface::class);
+        $request->method('getParam')->willReturnMap([['product_id', null, '42']]);
+        $context = $this->createStub(Context::class);
         $context->method('getRequest')->willReturn($request);
 
-        $result = $this->createMock(Json::class);
+        $result = $this->createStub(Json::class);
         $result->method('setData')->willReturnSelf();
-        $jsonFactory = $this->createMock(JsonFactory::class);
+        $jsonFactory = $this->createStub(JsonFactory::class);
         $jsonFactory->method('create')->willReturn($result);
 
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->createStub(StoreInterface::class);
         $store->method('getId')->willReturn(1);
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->createStub(StoreManagerInterface::class);
         $storeManager->method('getStore')->willReturn($store);
 
-        $this->reportStatus = $this->createMock(ReportStatus::class);
+        $this->reportStatus = $this->createStub(ReportStatus::class);
         $this->reportStatus->method('isReportEnabled')->willReturn(true);
-        $this->visitor = $this->createMock(Visitor::class);
+        $this->visitor = $this->createStub(Visitor::class);
         $this->viewedFactory = $this->createMock(ViewedFactory::class);
         $this->eventSaver = $this->createMock(EventSaver::class);
 
@@ -76,7 +81,7 @@ class ViewTest extends TestCase
             $jsonFactory,
             $this->reportStatus,
             $storeManager,
-            $this->createMock(Session::class),
+            $this->createStub(Session::class),
             $this->visitor,
             $this->viewedFactory,
             $this->eventSaver
@@ -88,6 +93,26 @@ class ViewTest extends TestCase
         $this->visitor->method('isIgnoredUserAgent')->willReturn(true);
         $this->viewedFactory->expects($this->never())->method('create');
         $this->eventSaver->expects($this->never())->method('save');
+
+        $this->controller->execute();
+    }
+
+    public function testExecuteRecordsViewForRegularUserAgent(): void
+    {
+        $this->visitor->method('isIgnoredUserAgent')->willReturn(false);
+        $this->visitor->method('getId')->willReturn(7);
+
+        $viewed = $this->createMock(Viewed::class);
+        $viewed->expects($this->once())
+            ->method('setData')
+            ->with(['product_id' => '42', 'store_id' => 1, 'visitor_id' => 7])
+            ->willReturnSelf();
+        $viewed->expects($this->once())->method('save')->willReturnSelf();
+        $viewed->expects($this->once())->method('calculate')->willReturnSelf();
+        $this->viewedFactory->expects($this->once())->method('create')->willReturn($viewed);
+        $this->eventSaver->expects($this->once())
+            ->method('save')
+            ->with(Event::EVENT_PRODUCT_VIEW, '42');
 
         $this->controller->execute();
     }
