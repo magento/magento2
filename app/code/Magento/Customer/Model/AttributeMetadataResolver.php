@@ -154,6 +154,9 @@ class AttributeMetadataResolver
                 array_walk(
                     $options,
                     function (&$item) {
+                        if (isset($item['label']) && is_string($item['label'])) {
+                            $item['label'] = (string)__($item['label']);
+                        }
                         $item['__disableTmpl'] = ['label' => true];
                     }
                 );

@@ -15,6 +15,8 @@ use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -75,10 +77,16 @@ class AttributeMetadataResolverTest extends TestCase
     private $attribute;
 
     /**
+     * @var RendererInterface
+     */
+    private $defaultRenderer;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
+        $this->defaultRenderer = Phrase::getRenderer();
         $this->countryWithWebsiteSource = $this->createPartialMock(
             CountryWithWebsites::class,
             ['getAllOptions']
@@ -122,6 +130,14 @@ class AttributeMetadataResolverTest extends TestCase
             $this->groupManagement, // @phpstan-ignore argument.type
             $this->attributeWebsiteRequired
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        Phrase::setRenderer($this->defaultRenderer);
     }
 
     /**
@@ -175,5 +191,58 @@ class AttributeMetadataResolverTest extends TestCase
         $meta = $this->model->getAttributesMeta($this->attribute, $entityType, $allowToShowHiddenAttributes);
         $this->assertArrayHasKey('default', $meta['arguments']['data']['config']);
         $this->assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
+    }
+
+    /**
+     * Option labels of an attribute with a source are translated like the attribute label.
+     *
+     * @return void
+     */
+    public function testGetAttributesMetaTranslatesOptionLabels(): void
+    {
+        $renderer = $this->createStub(RendererInterface::class);
+        $renderer->method('render')->willReturnCallback(
+            fn (array $source, array $arguments) => end($source) === 'Male'
+                ? 'Translated Male'
+                : $this->defaultRenderer->render($source, $arguments)
+        );
+        Phrase::setRenderer($renderer);
+        $label = new Phrase('Already a phrase');
+        $source = new class ($label) {
+            /**
+             * @param Phrase $label
+             */
+            public function __construct(private Phrase $label)
+            {
+            }
+
+            /**
+             * @return array
+             */
+            public function getAllOptions(): array
+            {
+                return [
+                    ['value' => '', 'label' => ' '],
+                    ['value' => '1', 'label' => 'Male'],
+                    ['value' => '2', 'label' => 'Female'],
+                    ['value' => '3', 'label' => $this->label],
+                ];
+            }
+        };
+        $this->attribute->method('usesSource')->willReturn(true); // @phpstan-ignore method.notFound
+        $this->attribute->method('getAttributeCode')->willReturn('gender'); // @phpstan-ignore method.notFound
+        $this->attribute->method('getSource')->willReturn($source); // @phpstan-ignore method.notFound
+        $this->eavValidationRules->method('build')->willReturn([]); // @phpstan-ignore method.notFound
+
+        $meta = $this->model->getAttributesMeta($this->attribute, $this->createStub(Type::class), false);
+
+        $options = $meta['arguments']['data']['config']['options'];
+        $this->assertSame(' ', $options[0]['label']);
+        $this->assertSame('Translated Male', $options[1]['label']);
+        $this->assertSame('Female', $options[2]['label']);
+        $this->assertSame($label, $options[3]['label']);
+        foreach ($options as $option) {
+            $this->assertSame(['label' => true], $option['__disableTmpl']);
+        }
     }
 }
