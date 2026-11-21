@@ -438,7 +438,7 @@ define([
                 if ($widget.inProductList) {
                     $widget.productForm.append(input);
                     input = '';
-                    listLabel = 'aria-label="' + $('<i></i>').text(item.label).html() + '"';
+                    listLabel = 'aria-label="' + _.escape(item.label) + '"';
                 } else {
                     listLabel = 'aria-labelledby="' + controlLabelId + '"';
                 }
@@ -572,11 +572,11 @@ define([
                 id = this.id;
                 type = parseInt(optionConfig[id].type, 10);
                 value = optionConfig[id].hasOwnProperty('value') ?
-                    $('<i></i>').text(optionConfig[id].value).html() : '';
-                thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
+                    _.escape(optionConfig[id].value) : '';
+                thumb = optionConfig[id].hasOwnProperty('thumb') ? _.escape(optionConfig[id].thumb) : '';
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
                 height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
-                label = this.label ? $('<i></i>').text(this.label).html() : '';
+                label = this.label ? _.escape(this.label) : '';
                 attr =
                     ' id="' + controlId + '-item-' + id + '"' +
                     ' index="' + index + '"' +

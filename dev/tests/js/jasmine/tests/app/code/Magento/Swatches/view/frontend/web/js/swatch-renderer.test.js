@@ -94,6 +94,40 @@ define([
             expect(html.style.width).toEqual(swathImageWidth + 'px');
         });
 
+        it('check that quotes in a text swatch label and value do not break the option attributes', function () {
+            var label = 'SIZE 14 (35/36") LONG <b>&\'',
+                value = '13" 4\'',
+                textWidget = new SwatchRenderer({
+                    classes: {
+                        optionClass: 'swatch-option'
+                    },
+                    jsonSwatchConfig: {
+                        1: {
+                            2: {
+                                type: 0,
+                                value: value,
+                                thumb: '/media/13" 4\'.png'
+                            }
+                        }
+                    },
+                    jsonSwatchImageSizeConfig: {}
+                }),
+                option = $(textWidget._RenderSwatchOptions({
+                    id: 1,
+                    options: [{
+                        id: optionId,
+                        label: label,
+                        products: [1]
+                    }]
+                }, 'option-label-control-id-1'))[0];
+
+            expect(option.getAttribute('data-option-label')).toEqual(label);
+            expect(option.getAttribute('aria-label')).toEqual(label);
+            expect(option.getAttribute('data-option-tooltip-value')).toEqual(value);
+            expect(option.textContent).toEqual(value);
+            expect(option.getAttribute('data-option-tooltip-thumb')).toEqual('/media/13" 4\'.png');
+        });
+
         it('check udate price method', function () {
             var productBlock, parentsResultMap, findResultMap;
 
