@@ -149,21 +149,34 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             return;
         }
 
-        if ($this->_persistentData->isEnabled() &&
-            !$this->_persistentSession->isPersistent() &&
-            !$this->_customerSession->isLoggedIn() &&
-            $this->_checkoutSession->getQuoteId() &&
-            // persistent session does not expire on onepage checkout page
-            !$this->isRequestFromCheckoutPage($this->request)
-        ) {
-            $flags = $this->getQuoteFlags();
-            // Only expire an active persistent quote; expiring an inactive one would reactivate it via QuoteManager
-            if ($flags['is_active'] && $flags['is_persistent']) {
-                $this->_eventManager->dispatch('persistent_session_expired');
-                $this->quoteManager->expire();
-                $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
-            }
+        if ($this->shouldExpirePersistentQuote()) {
+            $this->_eventManager->dispatch('persistent_session_expired');
+            $this->quoteManager->expire();
+            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
         }
+    }
+
+    /**
+     * Whether the current persistent quote should be expired.
+     *
+     * Only an active persistent quote may be expired; expiring an inactive one would reactivate it via QuoteManager.
+     *
+     * @return bool
+     */
+    private function shouldExpirePersistentQuote(): bool
+    {
+        if (!$this->_persistentData->isEnabled()
+            || $this->_persistentSession->isPersistent()
+            || $this->_customerSession->isLoggedIn()
+            || !$this->_checkoutSession->getQuoteId()
+            // persistent session does not expire on onepage checkout page
+            || $this->isRequestFromCheckoutPage($this->request)
+        ) {
+            return false;
+        }
+
+        $flags = $this->getQuoteFlags();
+        return $flags['is_active'] && $flags['is_persistent'];
     }
 
     /**
