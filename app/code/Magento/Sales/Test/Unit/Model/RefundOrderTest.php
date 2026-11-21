@@ -11,6 +11,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
@@ -133,8 +135,14 @@ class RefundOrderTest extends TestCase
      */
     private $validationMessagesMock;
 
+    /**
+     * @var RendererInterface
+     */
+    private $defaultRenderer;
+
     protected function setUp(): void
     {
+        $this->defaultRenderer = Phrase::getRenderer();
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->creditmemoDocumentFactoryMock = $this->createMock(CreditmemoDocumentFactory::class);
@@ -169,6 +177,11 @@ class RefundOrderTest extends TestCase
             $this->loggerMock,
             new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0))
         );
+    }
+
+    protected function tearDown(): void
+    {
+        Phrase::setRenderer($this->defaultRenderer);
     }
 
     /**
@@ -270,6 +283,14 @@ class RefundOrderTest extends TestCase
     public function testDocumentValidationException()
     {
         $this->expectException('Magento\Sales\Api\Exception\DocumentValidationExceptionInterface');
+        $this->expectExceptionMessage("Translated Creditmemo Document Validation Error(s):\nerror1\nerror2");
+        $renderer = $this->createStub(RendererInterface::class);
+        $renderer->method('render')->willReturnCallback(
+            fn (array $source, array $arguments) => end($source) === 'Creditmemo Document Validation Error(s):'
+                ? 'Translated Creditmemo Document Validation Error(s):'
+                : $this->defaultRenderer->render($source, $arguments)
+        );
+        Phrase::setRenderer($renderer);
         $orderId = 1;
         $items = [$this->creditmemoItemCreationMock];
         $notify = true;

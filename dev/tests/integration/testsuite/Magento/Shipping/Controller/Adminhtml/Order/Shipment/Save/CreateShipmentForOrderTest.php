@@ -9,6 +9,8 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment\Save;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\AbstractShipmentControllerTest;
 use Magento\Framework\Escaper;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -212,6 +214,39 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
         $this->performShipmentCreationRequest($postData);
         $this->assertCreateShipmentRequestWithError(
             "Shipment Document Validation Error(s):\nYou can't create a shipment without products.",
+            "admin/order_shipment/new/order_id/{$orderId}"
+        );
+    }
+
+    /**
+     * Assert that the header of the shipment validation error is translated.
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
+     *
+     * @return void
+     */
+    public function testShipmentValidationErrorHeaderIsTranslated(): void
+    {
+        $orderId = $this->getOrder('100000001')->getEntityId();
+        $postData = [
+            'order_id' => $orderId,
+            'shipment' => ['items' => [678678 => 4]],
+        ];
+        $defaultRenderer = Phrase::getRenderer();
+        $renderer = $this->createStub(RendererInterface::class);
+        $renderer->method('render')->willReturnCallback(
+            fn (array $source, array $arguments) => end($source) === 'Shipment Document Validation Error(s):'
+                ? 'Translated Shipment Document Validation Error(s):'
+                : $defaultRenderer->render($source, $arguments)
+        );
+        Phrase::setRenderer($renderer);
+        try {
+            $this->performShipmentCreationRequest($postData);
+        } finally {
+            Phrase::setRenderer($defaultRenderer);
+        }
+        $this->assertCreateShipmentRequestWithError(
+            "Translated Shipment Document Validation Error(s):\nYou can't create a shipment without products.",
             "admin/order_shipment/new/order_id/{$orderId}"
         );
     }
