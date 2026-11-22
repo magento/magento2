@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Framework\View\Asset\MergeStrategy\Direct.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectTest extends TestCase
 {
