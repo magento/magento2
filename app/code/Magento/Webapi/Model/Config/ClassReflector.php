@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Webapi\Model\Config;
