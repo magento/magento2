@@ -206,6 +206,14 @@ class SelectTest extends TestCase
                 'optionText' => null,
                 'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
             ],
+            'comma-separated value with no known option returns empty array' => [
+                'optionText' => [],
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
+            'comma-separated value with known options returns labels' => [
+                'optionText' => ['Label'],
+                'expectedResult' => true,
+            ],
             'valid label passes' => [
                 'optionText' => 'Label',
                 'expectedResult' => true,
