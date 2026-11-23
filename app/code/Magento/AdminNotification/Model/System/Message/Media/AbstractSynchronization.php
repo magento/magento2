@@ -36,7 +36,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
      */
     public function __construct(\Magento\MediaStorage\Model\File\Storage\Flag $fileStorage)
     {
-        $this->_syncFlag = $fileStorage->loadSelf();
+        $this->_syncFlag = $fileStorage;
     }
 
     /**
@@ -64,6 +64,7 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
     public function isDisplayed()
     {
         if (null === $this->_isDisplayed) {
+            $this->loadSyncFlag();
             $output = $this->_shouldBeDisplayed();
             if ($output) {
                 $this->_syncFlag->setState(\Magento\MediaStorage\Model\File\Storage\Flag::STATE_NOTIFIED);
@@ -82,5 +83,15 @@ abstract class AbstractSynchronization implements \Magento\Framework\Notificatio
     public function getSeverity()
     {
         return \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR;
+    }
+
+    /**
+     * Load the synchronization flag unless the flag instance shared by the messages is loaded already
+     */
+    private function loadSyncFlag(): void
+    {
+        if ($this->_syncFlag->getOrigData() === null) {
+            $this->_syncFlag = $this->_syncFlag->loadSelf();
+        }
     }
 }
