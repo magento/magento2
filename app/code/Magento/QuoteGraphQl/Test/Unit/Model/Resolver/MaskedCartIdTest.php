@@ -130,6 +130,24 @@ class MaskedCartIdTest extends TestCase
         $this->maskedCartId->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
     }
 
+    public function testResolveReturnsMaskedIdAlreadyResolvedForTheCart(): void
+    {
+        $this->valueMock = ['model' => $this->quoteMock, 'masked_id' => 'maskedCartId'];
+        $this->quoteIdToMaskedQuoteId->expects($this->never())->method('execute');
+        $this->quoteIdMaskFactory->expects($this->never())->method('create');
+        $this->quoteIdMaskResourceModelMock->expects($this->never())->method('save');
+
+        $this->assertSame(
+            'maskedCartId',
+            $this->maskedCartId->resolve(
+                $this->fieldMock,
+                $this->contextMock,
+                $this->resolveInfoMock,
+                $this->valueMock
+            )
+        );
+    }
+
     /**
      * @return void
      * @throws \Exception

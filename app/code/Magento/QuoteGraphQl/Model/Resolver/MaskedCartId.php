@@ -62,6 +62,9 @@ class MaskedCartId implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        if (!empty($value['masked_id'])) {
+            return (string)$value['masked_id'];
+        }
         /** @var Quote $cart */
         $cart = $value['model'];
         $cartId = (int) $cart->getId();
