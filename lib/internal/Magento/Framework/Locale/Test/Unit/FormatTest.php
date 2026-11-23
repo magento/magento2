@@ -111,7 +111,8 @@ class FormatTest extends TestCase
      */
     public static function getPriceFormatDataProvider(): array
     {
-        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
+        $swissGroupSymbol = (new \NumberFormatter('de_CH@currency=CHF', \NumberFormatter::CURRENCY))
+            ->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         return [
             ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],
