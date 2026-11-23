@@ -41,7 +41,7 @@ class ConfigTest extends TestCase
         'RWF', 'SHP', 'STD', 'SAR', 'RSD', 'SCR', 'SLL', 'SGD', 'SKK', 'SBD',
         'SOS', 'ZAR', 'KRW', 'LKR', 'SDG', 'SRD', 'SZL', 'SEK', 'CHF', 'SYP',
         'TWD', 'TJS', 'TZS', 'THB', 'TOP', 'TTD', 'TND', 'TMM', 'USD', 'UGX',
-        'UAH', 'AED', 'UYU', 'UZS', 'VUV', 'VEB', 'VEF', 'VND', 'CHE', 'CHW',
+        'UAH', 'AED', 'UYU', 'UZS', 'VUV', 'VEB', 'VEF', 'VED', 'VND', 'CHE', 'CHW',
         'XOF', 'WST', 'YER', 'ZMK', 'ZWD', 'TRY', 'AZM', 'ROL', 'TRL', 'XPF',
     ];
 

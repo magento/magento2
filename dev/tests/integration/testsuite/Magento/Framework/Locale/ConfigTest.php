@@ -54,4 +54,12 @@ class ConfigTest extends TestCase
         $values = array_column($options, 'value');
         $this->assertContains('XCG', $values);
     }
+
+    public function testVenezuelanBolivarDigitalExists()
+    {
+        $options = $this->currency->toOptionArray();
+        $values = array_column($options, 'value');
+        $this->assertContains('VED', $values);
+        $this->assertContains('VEF', $values);
+    }
 }
