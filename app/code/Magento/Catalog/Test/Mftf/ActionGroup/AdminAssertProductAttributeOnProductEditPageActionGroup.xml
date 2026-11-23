@@ -21,6 +21,8 @@
         <executeJS function="return document.evaluate(&quot;{{AdminProductFormSection.attributeTab}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
         <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
         <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToAttributesTab"/>
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" x="0" y="-100" stepKey="scrollToAttributesTabBelowStickyHeader"/>
+        <waitForElementClickable selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForAttributesTabClickable"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductFormSection.attributeTabOpened}}" visible="false" stepKey="clickToOpen"/>
         <comment userInput="BIC workaround" stepKey="scrollToAttributeTab"/>
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(attributeLabel)}}" stepKey="seeAttributeLabelInProductForm"/>

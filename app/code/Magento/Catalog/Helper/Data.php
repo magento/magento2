@@ -525,7 +525,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $store = $this->_storeManager->getStore($store);
-        if ($this->_taxConfig->needPriceConversion($store)) {
+        if ($priceIncludesTax !== null || $this->_taxConfig->needPriceConversion($store)) {
             if ($priceIncludesTax === null) {
                 $priceIncludesTax = $this->_taxConfig->priceIncludesTax($store);
             }
