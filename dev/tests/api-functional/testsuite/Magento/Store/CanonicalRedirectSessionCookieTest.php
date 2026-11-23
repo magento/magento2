@@ -32,8 +32,8 @@ class CanonicalRedirectSessionCookieTest extends WebapiAbstract
         foreach ([[], ['Cookie: PHPSESSID=canonical-redirect-session']] as $headers) {
             $response = $client->get($path, [], $headers);
             self::assertSame(301, $response['meta']['http_code']);
-            self::assertStringContainsString(
-                'Location: https://canonical-redirect.example/' . $path,
+            self::assertMatchesRegularExpression(
+                '~^Location: https://canonical-redirect\.example/(?:index\.php/)?' . preg_quote($path, '~') . '\r?$~m',
                 $response['header']
             );
             self::assertNotContains('PHPSESSID', array_column($response['cookies'], 'name'));

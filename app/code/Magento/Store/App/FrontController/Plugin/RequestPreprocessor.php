@@ -6,7 +6,7 @@
 namespace Magento\Store\App\FrontController\Plugin;
 
 /**
- * Class RequestPreprocessor
+ * Redirects storefront requests to the canonical base URL or HTTPS before dispatch.
  */
 class RequestPreprocessor
 {
@@ -90,9 +90,7 @@ class RequestPreprocessor
                     $response = $this->_responseFactory->create();
                     $response->setRedirect($redirectUrl, $redirectCode);
                     $response->setNoCacheHeaders();
-                    $redirectHost = parse_url($redirectUrl, PHP_URL_HOST);
-                    $requestHost = $request->getHttpHost();
-                    if ($redirectHost && $requestHost && strcasecmp($redirectHost, $requestHost) !== 0) {
+                    if ($this->isCrossHostRedirect($redirectUrl, $request)) {
                         $this->removeSessionCookie();
                     }
                     return $response;
@@ -102,6 +100,23 @@ class RequestPreprocessor
         $request->setDispatched(false);
 
         return $proceed($request);
+    }
+
+    /**
+     * Check whether the redirect points to a different hostname.
+     *
+     * @param string $redirectUrl
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return bool
+     */
+    private function isCrossHostRedirect(
+        string $redirectUrl,
+        \Magento\Framework\App\RequestInterface $request
+    ): bool {
+        $redirectHost = parse_url($redirectUrl, PHP_URL_HOST);
+        $requestHost = $request->getHttpHost();
+
+        return $redirectHost && $requestHost && strcasecmp($redirectHost, $requestHost) !== 0;
     }
 
     /**
@@ -141,7 +156,8 @@ class RequestPreprocessor
      * Gets base URL checker.
      *
      * @return \Magento\Store\Model\BaseUrlChecker
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Use constructor injection for the base URL checker.
+     * @see \Magento\Store\Model\BaseUrlChecker
      */
     private function getBaseUrlChecker()
     {
