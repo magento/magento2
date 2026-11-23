@@ -727,7 +727,7 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
         $typeId = (string)$object->getTypeId();
         if ($typeId !== ''
             && $typeId !== (string)$object->getOrigData('type_id')
-            && !$this->productTypeConfig->getType($typeId)
+            && !array_key_exists($typeId, $this->productTypeConfig->getAll())
         ) {
             return ['type_id' => sprintf('Invalid product type "%s"', $typeId)];
         }

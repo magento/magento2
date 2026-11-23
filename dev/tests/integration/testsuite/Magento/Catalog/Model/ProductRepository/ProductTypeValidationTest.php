@@ -16,6 +16,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,6 +55,41 @@ class ProductTypeValidationTest extends TestCase
             $this->assertStringContainsString('nonsense', $exception->getMessage());
         }
         $this->assertSame('simple', $this->storedTypeId($sku));
+    }
+
+    /**
+     * The type config is a nested array read by "/"-separated paths, so a type_id containing "/" can resolve to a
+     * value below a declared type instead of to a type.
+     *
+     * @param string $typeId
+     */
+    #[DataProvider('typeIdsResolvingIntoTypeConfigProvider')]
+    #[DataFixture(ProductFixture::class, as: 'product')]
+    public function testUpdateWithTypeIdResolvingIntoTypeConfigIsRejected(string $typeId): void
+    {
+        $sku = $this->fixtures->get('product')->getSku();
+        $product = $this->productRepository->get($sku, true, 0, true);
+        $product->setTypeId($typeId);
+
+        try {
+            $this->productRepository->save($product);
+            $this->fail('A product with type "' . $typeId . '" was saved');
+        } catch (CouldNotSaveException $exception) {
+            $this->assertStringContainsString($typeId, $exception->getMessage());
+        }
+        $this->assertSame('simple', $this->storedTypeId($sku));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function typeIdsResolvingIntoTypeConfigProvider(): array
+    {
+        return [
+            'simple/name' => ['simple/name'],
+            'simple/model' => ['simple/model'],
+            'virtual/label' => ['virtual/label'],
+        ];
     }
 
     public function testCreateWithUnknownTypeIsRejected(): void
