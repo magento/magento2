@@ -23,6 +23,11 @@
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set {{DisablePayflowProConfigData.path}} {{DisablePayflowProConfigData.value}}" stepKey="disablePayflowPro"/>
+            <actionGroup ref="AdminDisableAllConflictingPayPalMethodsActionGroup" stepKey="disableConflictingPayPalMethods"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisablingConflictingPayPalMethods">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
@@ -34,10 +39,11 @@
             <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         </before>
         <after>
-            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
-            <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
-            <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedProExpress"/>
+            <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountry"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableConfigData.path}} {{StorefrontPaypalDisableConfigData.value}}" stepKey="disablePayPalExpress"/>
+            <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disableWPSExpress"/>
+            <magentoCLI command="config:set {{DisableHostedProConfigData.path}} {{DisableHostedProConfigData.value}}" stepKey="disableHostedProExpress"/>
+            <magentoCLI command="config:set {{DisablePayflowProConfigData.path}} {{DisablePayflowProConfigData.value}}" stepKey="disablePayflowProAfterTest"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

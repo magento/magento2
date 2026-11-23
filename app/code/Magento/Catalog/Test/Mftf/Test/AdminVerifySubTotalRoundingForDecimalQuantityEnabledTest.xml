@@ -93,9 +93,11 @@
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openStorefrontOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderEntityId"/>
         <!-- Step 5: In admin check order details total in created order and verify no subtotal rounding issues for decimal enabled product -->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="$grabOrderEntityId"/>
         </actionGroup>
         <actionGroup ref="AdminAssertTotalsOnOrderViewPageActionGroup" stepKey="checkSubtotal">
             <argument name="subtotal" value="$10.34"/>
