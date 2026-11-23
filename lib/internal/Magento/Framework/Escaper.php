@@ -18,6 +18,11 @@ use Exception;
 class Escaper
 {
     /**
+     * XML_HTML_UNKNOWN_TAG from libxml2; 2.9.x reports HTML5 and custom elements with it, newer versions may not
+     */
+    private const LIBXML_HTML_UNKNOWN_TAG = 801;
+
+    /**
      * HTML special characters flag
      * @var int
      */
@@ -92,12 +97,7 @@ class Escaper
                 $allowedTags = $this->filterProhibitedTags($allowedTags);
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
-                set_error_handler(
-                    function ($errorNumber, $errorString) {
-                        // phpcs:ignore Magento2.Exceptions.DirectThrow
-                        throw new \InvalidArgumentException($errorString, $errorNumber);
-                    }
-                );
+                set_error_handler($this->handleLoadHtmlError(...));
                 $data = $this->prepareUnescapedCharacters($data);
                 $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
                 $string = mb_encode_numericentity(
@@ -141,6 +141,27 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Throw on errors raised while loading HTML, except for element names libxml does not know
+     *
+     * @param int $errorNumber
+     * @param string $errorString
+     * @throws \InvalidArgumentException
+     */
+    private function handleLoadHtmlError(int $errorNumber, string $errorString): bool
+    {
+        $libxmlError = libxml_get_last_error();
+        if ($errorNumber === E_WARNING
+            && $libxmlError !== false
+            && $libxmlError->code === self::LIBXML_HTML_UNKNOWN_TAG
+            && str_contains($errorString, trim($libxmlError->message))
+        ) {
+            return true;
+        }
+        // phpcs:ignore Magento2.Exceptions.DirectThrow
+        throw new \InvalidArgumentException($errorString, $errorNumber);
     }
 
     /**
