@@ -10,8 +10,10 @@ namespace Magento\CatalogInventory\Plugin;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Observer\ParentItemProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Around plugin for MassUpdate product attribute via product grid.
@@ -20,6 +22,8 @@ use Magento\CatalogInventory\Observer\ParentItemProcessorInterface;
  */
 class MassUpdateProductAttribute
 {
+    private const PRODUCT_BATCH_SIZE = 500;
+
     /**
      * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
@@ -66,6 +70,11 @@ class MassUpdateProductAttribute
     private $productRepository;
 
     /**
+     * @var ProductCollectionFactory
+     */
+    private readonly ProductCollectionFactory $productCollectionFactory;
+
+    /**
      * @var array
      */
     private $useConfigFieldMap = [
@@ -82,6 +91,7 @@ class MassUpdateProductAttribute
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param ProductRepositoryInterface $productRepository
      * @param ParentItemProcessorInterface[] $parentItemProcessorPool
+     * @param ProductCollectionFactory|null $productCollectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -93,7 +103,8 @@ class MassUpdateProductAttribute
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         ProductRepositoryInterface $productRepository,
-        array $parentItemProcessorPool = []
+        array $parentItemProcessorPool = [],
+        ?ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -104,6 +115,8 @@ class MassUpdateProductAttribute
         $this->messageManager = $messageManager;
         $this->productRepository = $productRepository;
         $this->parentItemProcessorPool = $parentItemProcessorPool;
+        $this->productCollectionFactory = $productCollectionFactory
+            ?? ObjectManager::getInstance()->get(ProductCollectionFactory::class);
     }
 
     /**
@@ -175,17 +188,20 @@ class MassUpdateProductAttribute
      */
     private function updateInventoryInProducts($productIds, $websiteId, $inventoryData): void
     {
-        foreach ($productIds as $productId) {
-            $product = $this->productRepository->getById($productId);
-            $stockItemDo = $this->stockRegistry->getStockItem($productId, $websiteId);
-            if (!$stockItemDo->getProductId()) {
-                $inventoryData['product_id'] = $productId;
+        foreach (array_chunk((array)$productIds, self::PRODUCT_BATCH_SIZE) as $productIdsBatch) {
+            $products = $this->productCollectionFactory->create()->addIdFilter($productIdsBatch);
+            foreach ($productIdsBatch as $productId) {
+                $product = $products->getItemById($productId) ?? $this->productRepository->getById($productId);
+                $stockItemDo = $this->stockRegistry->getStockItem($productId, $websiteId);
+                if (!$stockItemDo->getProductId()) {
+                    $inventoryData['product_id'] = $productId;
+                }
+                $stockItemId = $stockItemDo->getId();
+                $this->dataObjectHelper->populateWithArray($stockItemDo, $inventoryData, StockItemInterface::class);
+                $stockItemDo->setItemId($stockItemId);
+                $this->stockItemRepository->save($stockItemDo);
+                $this->processParents($product);
             }
-            $stockItemId = $stockItemDo->getId();
-            $this->dataObjectHelper->populateWithArray($stockItemDo, $inventoryData, StockItemInterface::class);
-            $stockItemDo->setItemId($stockItemId);
-            $this->stockItemRepository->save($stockItemDo);
-            $this->processParents($product);
         }
         $this->stockIndexerProcessor->reindexList($productIds);
     }
