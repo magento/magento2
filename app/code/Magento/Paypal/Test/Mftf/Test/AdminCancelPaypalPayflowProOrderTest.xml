@@ -55,7 +55,9 @@
         <!-- Checkout select Credit Card (Payflow Pro) and place order-->
         <reloadPage stepKey="refreshThePage"/>
         <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
-        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForElementVisible selector="{{PayFlowCreditCardSection.paymentMethod}}" time="60" stepKey="waitForPayflowProPaymentMethodVisible"/>
+        <waitForElementClickable selector="{{PayFlowCreditCardSection.paymentMethod}}" stepKey="waitForPayflowProPaymentMethodClickable"/>
+        <click selector="{{PayFlowCreditCardSection.paymentMethod}}" stepKey="selectCheckmoPaymentMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
         <!--Fill Card Data  and place an order-->
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
