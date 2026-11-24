@@ -299,6 +299,11 @@
             <column name="state"/>
             <column name="created_at"/>
         </index>
+        <index referenceId="SALES_ORDER_CUSTOMER_EMAIL_CUSTOMER_IS_GUEST_STORE_ID" indexType="btree">
+            <column name="customer_email"/>
+            <column name="customer_is_guest"/>
+            <column name="store_id"/>
+        </index>
         <index referenceId="SALES_ORDER_LIFETIME_COVER" indexType="btree">
             <column name="status"/>
             <column name="state"/>
