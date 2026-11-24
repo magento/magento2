@@ -12,6 +12,8 @@ use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
 use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
 use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
 use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Attribute as ProductAttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
@@ -20,6 +22,7 @@ use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurable
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -1246,5 +1249,101 @@ class DiscountTest extends TestCase
         $this->assertEquals(0.0, $discounts['bundle']);
         $this->assertEquals(465.0, $discounts['operator']);
         $this->assertEquals(0.0, $discounts['cover']);
+    }
+
+    /**
+     * Scenario: Increase a dynamically priced bundle's quantity with a parent-only tag and a percentage rule.
+     * Expected: Eligible child quantities receive the full percentage and quote totals remain reconciled.
+     */
+    #[
+        AppIsolation(true),
+        DataFixture(ProductAttributeFixture::class, ['is_used_for_promo_rules' => true], 'tag'),
+        DataFixture(
+            ProductFixture::class,
+            ['price' => 1.55, 'extension_attributes' => ['stock_item' => ['qty' => 1000]]],
+            'simple'
+        ),
+        DataFixture(
+            BundleSelectionFixture::class,
+            ['sku' => '$simple.sku$', 'qty' => 10, 'can_change_quantity' => 1],
+            'selection'
+        ),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$selection$']], 'option'),
+        DataFixture(BundleProductFixture::class, ['_options' => ['$option$'], 'price_type' => 0], 'bundle'),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => '$tag.attribute_code$', 'operator' => '!{}', 'value' => 'bundle'],
+            'condition'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            [
+                'simple_action' => Rule::BY_PERCENT_ACTION,
+                'discount_amount' => 15,
+                'discount_qty' => null,
+                'actions' => ['$condition$'],
+            ],
+            'rule'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart')
+    ]
+    public function testIncreaseBundleQuantityPreservesPercentageDiscount(): void
+    {
+        $attributeCode = $this->fixtures->get('tag')->getAttributeCode();
+        $bundle = $this->fixtures->get('bundle');
+        $bundle->setData($attributeCode, 'bundle');
+        $this->objectManager->get(ProductRepositoryInterface::class)->save($bundle);
+        $this->assertSame(
+            'bundle',
+            $this->objectManager->get(ProductRepositoryInterface::class)
+                ->getById($bundle->getId(), false, null, true)->getData($attributeCode),
+            'The bundle fixture must persist its tag before adding it to the cart.'
+        );
+
+        $this->objectManager->create(AddBundleProductToCart::class)->apply(
+            [
+                'cart_id' => $this->fixtures->get('cart')->getId(),
+                'product_id' => $bundle->getId(),
+                'selections' => [[['product_id' => $this->fixtures->get('simple')->getId(), 'qty' => 10]]],
+                'qty' => 1,
+            ]
+        );
+        $quote = $this->quoteRepository->get($this->fixtures->get('cart')->getId());
+        $parent = $quote->getAllVisibleItems()[0];
+        $this->assertEquals(15.50, $quote->getBaseSubtotal());
+        $this->assertEquals(-2.33, $quote->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEmpty($parent->getChildren()[0]->getProduct()->getData($attributeCode));
+
+        $quote->updateItem($parent->getId(), new DataObject(['qty' => 10]));
+        $this->quoteRepository->save($quote);
+        $quote = $this->objectManager->create(CartRepositoryInterface::class)->get($quote->getId());
+        $quote->setTotalsCollectedFlag(false);
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $parent = $quote->getAllVisibleItems()[0];
+        $child = $parent->getChildren()[0];
+        $address = $quote->getShippingAddress();
+        $this->assertEquals(10, $parent->getQty());
+        $this->assertEquals(10, $child->getQty());
+        $this->assertEquals($parent->getQty() * $child->getQty(), $child->getTotalQty());
+        $this->assertEquals(155.00, $quote->getBaseSubtotal());
+        $this->assertEqualsWithDelta(
+            $quote->getBaseSubtotal() + $address->getBaseTaxAmount()
+                + $address->getBaseShippingAmount() + $address->getBaseDiscountAmount(),
+            $quote->getBaseGrandTotal(),
+            0.0001
+        );
+        $this->assertEqualsWithDelta(
+            -$child->getBaseDiscountAmount(),
+            $address->getBaseDiscountAmount(),
+            0.0001
+        );
+        $this->assertEquals(0, $parent->getBaseDiscountAmount());
+        $this->assertEquals(
+            23.25,
+            -$address->getBaseDiscountAmount(),
+            'The percentage discount must use the child quantity multiplied by the parent quantity.'
+        );
     }
 }
