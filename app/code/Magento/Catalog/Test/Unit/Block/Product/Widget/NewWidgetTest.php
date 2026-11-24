@@ -13,6 +13,7 @@ use Magento\Catalog\Block\Product\Widget\Html\Pager;
 use Magento\Catalog\Block\Product\Widget\NewWidget;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Directory\Model\Currency;
@@ -690,5 +691,50 @@ class NewWidgetTest extends TestCase
                 'expectedResult' => 0
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAddToCartPostParams(): void
+    {
+        $url = 'http://localhost/checkout/cart/add/uenc/aHR0cHM6Ly8v/product/1/';
+        $productId = 42;
+        $uenc = 'encoded-url';
+        $urlHelper = $this->createMock(UrlHelper::class);
+        $urlHelper->expects($this->once())
+            ->method('getEncodedUrl')
+            ->with($url)
+            ->willReturn($uenc);
+        $productMock = $this->createMock(Product::class);
+        $productMock->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($productId);
+        $block = $this->getMockBuilder(NewWidget::class)
+            ->setConstructorArgs([
+                $this->context,
+                $this->createMock(CollectionFactory::class),
+                $this->createMock(\Magento\Catalog\Model\Product\Visibility::class),
+                $this->createMock(Context::class),
+                [],
+                $this->createMock(Json::class),
+                $urlHelper,
+            ])
+            ->onlyMethods(['getAddToCartUrl'])
+            ->getMock();
+        $block->expects($this->once())
+            ->method('getAddToCartUrl')
+            ->with($productMock, ['_escape' => false])
+            ->willReturn($url);
+        $this->assertSame(
+            [
+                'action' => $url,
+                'data' => [
+                    'product' => $productId,
+                    'uenc' => $uenc,
+                ],
+            ],
+            $block->getAddToCartPostParams($productMock)
+        );
     }
 }
