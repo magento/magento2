@@ -20,10 +20,9 @@ class LiveCodeTest extends TestCase
 {
     private const FILE_EXTENSION = 'xml';
 
-    /**
-     * @var string
-     */
-    private static $reportDir = '';
+    protected static string $reportDir = '';
+
+    protected string $rulesetDir = 'Magento';
 
     /**
      * Setup basics for all tests
@@ -49,7 +48,7 @@ class LiveCodeTest extends TestCase
         if (!file_exists($reportFile)) {
             touch($reportFile);
         }
-        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer($this->rulesetDir, $reportFile, new Wrapper());
         $codeSniffer->setExtensions([self::FILE_EXTENSION]);
         $fileList =  $this->isFullScan() ? array_column(Files::init()->getXmlFiles(), '0')
             : PHPCodeTest::getWhitelist([self::FILE_EXTENSION]);
