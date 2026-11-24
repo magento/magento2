@@ -32,7 +32,7 @@
         </after>
         <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
         <!-- search Admin Data Grid By Keyword -->
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="$$secondCustomer.email$$" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -43,7 +43,7 @@
         <!-- Select all from dropdown -->
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
         <!-- Clear searching By Keyword-->
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersAfterSearch"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFiltersAfterSearch"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterSearchRemoved"/>
         <!-- Check if selection has bee removed -->
         <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerCheckboxIsUnchecked"/>
