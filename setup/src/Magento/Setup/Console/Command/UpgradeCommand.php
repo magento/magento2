@@ -133,9 +133,8 @@ class UpgradeCommand extends AbstractSetupCommand
             new InputOption(
                 DryRunLogger::INPUT_KEY_DRY_RUN_MODE,
                 null,
-                InputOption::VALUE_OPTIONAL,
-                'Magento Installation will be run in dry-run mode',
-                false
+                InputOption::VALUE_NONE,
+                'Magento Installation will be run in dry-run mode'
             )
         ];
         $this->setName(self::NAME)
