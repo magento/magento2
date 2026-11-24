@@ -456,7 +456,7 @@ define([
                         }
 
                         return $.mage.__('Video cant be shown due to the following reason: ') +
-                            $.unique(errorsMessage).join(', ');
+                            Array.from(new Set(errorsMessage)).join(', ');
                     };
 
                     if (data.error && [400, 402, 403].indexOf(data.error.code) !== -1) {
@@ -539,16 +539,17 @@ define([
                         id +
                         '&part=snippet,contentDetails&key=' +
                         this.options.youtubeKey + '&alt=json&callback=?';
-                    $.getJSON(googleapisUrl,
-                        {
+                    $.ajax({
+                        url: googleapisUrl,
+                        dataType: 'jsonp',
+                        data: {
                             format: 'json'
                         },
-                        $.proxy(_onYouTubeLoaded, self)
-                    ).fail(
-                        function () {
+                        success: $.proxy(_onYouTubeLoaded, self),
+                        error: function () {
                             self._onRequestError('Video not found');
                         }
-                    );
+                    });
                 } else if (type === 'vimeo') {
                     $.ajax({
                         url: 'https://vimeo.com/api/oembed.json',
