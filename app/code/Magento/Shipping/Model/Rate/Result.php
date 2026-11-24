@@ -163,6 +163,8 @@ class Result
                 'title' => $rate->getMethodTitle(),
                 'price' => $rate->getPrice(),
                 'price_formatted' => $currencyFilter->filter($rate->getPrice()),
+                'cost' => $rate->getCost(),
+                'cost_formatted' => $currencyFilter->filter($rate->getCost()),
             ];
         }
         return $rates;
@@ -224,6 +226,7 @@ class Result
         if ($packageCount > 1) {
             foreach ($this->_rates as $rate) {
                 $rate->setPrice($rate->getPrice() * $packageCount);
+                $rate->setCost($rate->getCost() * $packageCount);
             }
         }
 
