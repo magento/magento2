@@ -948,7 +948,8 @@ jobs:
               if any(r.match(match_fp) for r in blacklist):
                   continue
               result.append(fp)
-          print('\n'.join(result))
+          for fp in result:
+              print(fp)
           PYEOF
           )
 
@@ -1011,13 +1012,24 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const prNumber = context.payload.pull_request.number;
-            // Fetch the current PR body via REST API — the webhook payload snapshot
-            // (context.payload.pull_request.body) is frozen at trigger time and misses
-            // description edits made after the last push.
-            const { data: pr } = await github.rest.pulls.get({
-              owner, repo, pull_number: prNumber,
-            });
-            const body = pr.body || '';
+            const authenticationMessage = 'Authentication failed. A repository administrator must renew the configured credential.';
+            let authenticationFailed = false;
+            let body;
+            try {
+              const { data: pr } = await github.rest.pulls.get({
+                owner, repo, pull_number: prNumber,
+              });
+              body = pr.body || '';
+            } catch (e) {
+              const httpStatus = e.status || (e.response && e.response.status) || 0;
+              if (httpStatus !== 401) {
+                core.setFailed('Unable to read the current pull request description. Linked validation could not be completed.');
+                return;
+              }
+              authenticationFailed = true;
+              body = context.payload.pull_request.body || '';
+              core.warning(`${authenticationMessage} Using the triggering event description, which may omit links added after the event. The latest description could not be verified.`);
+            }
             // Only scan the "Related Pull Requests" section, up to the placeholder comment.
             const sectionMatch = body.match(
               /###\s*Related Pull Requests\s*\n([\s\S]*?)(?=<!-- related pull request placeholder -->|\n###|$)/i
@@ -1046,6 +1058,11 @@ jobs:
 
             if (links.length === 0) {
               core.info('No linked PR URLs found in the Related Pull Requests section. Skipping aggregate gate.');
+              return;
+            }
+
+            if (authenticationFailed) {
+              core.setFailed(`${authenticationMessage} Linked pull requests could not be validated.`);
               return;
             }
 
@@ -1129,7 +1146,7 @@ jobs:
                   gateStatus: isTransient ? `api unavailable (${httpStatus})` : 'error',
                   failedSteps: [],
                   result: isTransient ? 'PENDING' : 'FAIL',
-                  error: isTransient ? null : shortMsg,
+                  error: isTransient ? null : httpStatus === 401 ? authenticationMessage : shortMsg,
                 });
               }
             }
