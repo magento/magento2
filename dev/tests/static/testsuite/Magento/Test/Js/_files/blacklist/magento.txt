@@ -8,6 +8,8 @@ app/code/Magento/Sales/view/adminhtml/web/order/create/scripts.js
 app/code/Magento/Shipping/view/adminhtml/web/order/packaging.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/magento-swagger.js
 app/code/Magento/AdminAdobeIms/view/adminhtml/web/js/loadicons.js
+app/code/Magento/PageBuilder/view/base/web/js/resource/slick/slick.js
+app/code/Magento/SharedCatalog/view/adminhtml/web/js/jstree/jstree.js
 lib/web/mage/adminhtml/tools.js
 lib/web/mage/adminhtml/varienLoader.js
 lib/web/magnifier/magnifier.js
@@ -26,14 +28,17 @@ lib/web/jquery/jquery-ui.js
 lib/web/jquery/**/*.js
 lib/web/knockoutjs/**/*.js
 lib/web/js-cookie/js.cookie.js
+lib/web/jquery.js
 
 // MINIFIED FILES
 app/code/**/*.min.js
+app/code/Magento/PageBuilder/view/base/web/js/resource/slick/slick.min.js
 lib/web/legacy-build.min.js
 lib/web/hugerte/**/*.js
 lib/web/hugerte/***/*.js
 lib/web/jquery/uppy/dist/uppy.min.js
 lib/web/chartjs/Chart.min.js
+lib/web/jquery/jquery.min.js
 
 // TEST
 vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*
