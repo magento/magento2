@@ -5,7 +5,7 @@
 
 /* eslint max-nested-callbacks: 0 */
 
-define(['squire', 'ko', 'jquery', 'jquery/validate'], function (Squire, ko, $) {
+define(['squire', 'ko', 'jquery', 'jquery/validate', 'mage/validation'], function (Squire, ko, $) {
     'use strict';
 
     describe('Magento_Checkout/js/view/form/element/email', function () {

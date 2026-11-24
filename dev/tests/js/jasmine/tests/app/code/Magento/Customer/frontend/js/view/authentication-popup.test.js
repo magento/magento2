@@ -4,7 +4,7 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
-define(['squire', 'ko', 'jquery'], function (Squire, ko, $) {
+define(['squire', 'ko', 'jquery', 'mage/validation'], function (Squire, ko, $) {
     'use strict';
 
     var injector = new Squire(),

@@ -4,7 +4,7 @@
  */
 
 /* eslint max-nested-callbacks: 0 */
-define(['squire', 'jquery'], function (Squire, $) {
+define(['squire', 'jquery', 'mage/validation'], function (Squire, $) {
     'use strict';
 
     describe('Magento_Checkout/js/view/authentication', function () {
