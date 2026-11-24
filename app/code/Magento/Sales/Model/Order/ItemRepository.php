@@ -151,7 +151,7 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
     public function delete(OrderItemInterface $entity)
     {
         $this->metadata->getMapper()->delete($entity);
-        unset($this->registry[$entity->getEntityId()]);
+        unset($this->registry[$entity->getItemId()]);
         return true;
     }
 
@@ -180,9 +180,9 @@ class ItemRepository implements OrderItemRepositoryInterface, ResetAfterRequestI
         }
 
         $this->metadata->getMapper()->save($entity);
-        $entityId = $entity->getEntityId() ?? '';
-        $this->registry[$entityId] = $entity;
-        return $this->registry[$entityId];
+        $itemId = $entity->getItemId() ?? '';
+        $this->registry[$itemId] = $entity;
+        return $this->registry[$itemId];
     }
 
     /**
