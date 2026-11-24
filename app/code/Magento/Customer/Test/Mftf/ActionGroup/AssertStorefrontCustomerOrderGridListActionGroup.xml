@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCustomerOrderGridListActionGroup">
+        <annotations>
+            <description>Assert the storefront customer order history grid shows the expected orders.</description>
+        </annotations>
+        <arguments>
+            <argument name="expectedRowCount" type="string" defaultValue="15"/>
+        </arguments>
+
+        <seeElement
+                selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}"
+                stepKey="seeMyOrdersSectionAfterPaging"/>
+        <dontSee
+                selector="{{StorefrontOrderInformationMainSection.emptyMessage}}"
+                userInput="You have placed no orders."
+                stepKey="dontSeeEmptyOrdersMessage"/>
+        <seeNumberOfElements
+                selector="{{StorefrontCustomerOrderSection.rowsInColumn('id')}}"
+                userInput="{{expectedRowCount}}"
+                stepKey="seeOrderGridRowCount"/>
+    </actionGroup>
+</actionGroups>
