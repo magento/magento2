@@ -14,5 +14,6 @@
         <remove keyForRemoval="clickNext"/>
         <remove keyForRemoval="waitForNextButtonClickable"/>
         <conditionalClick selector="{{PayPalPaymentSection.nextButton}}" dependentSelector="{{PayPalPaymentSection.nextButton}}" visible="true" after="fillEmail" stepKey="clickNextIfVisible"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.password}}" time="60" stepKey="waitForPasswordField"/>
     </actionGroup>
 </actionGroups>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreatePayPalAdvancedOrderAndRefundWithRetryActionGroup">
+        <annotations>
+            <description>Purchase and refund up to eleven sandbox orders, stopping on the first successful refund. Only the PayPal 10001-Internal Error permits another order.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="optionLabel" type="string"/>
+        </arguments>
+        <helper class="Magento\Paypal\Test\Mftf\Helper\PayPalAdvancedRefundHelper"
+                method="purchaseAndRefundWithRetry" stepKey="purchaseAndRefundWithBoundedRetry">
+            <!-- MFTF resolves helper section references before page references; keep this argument first. -->
+            <argument name="selectorsJson">{
+                "productOption": "{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}",
+                "productQty": "{{StorefrontProductPageSection.qtyInput}}",
+                "addToCart": "{{StorefrontProductActionSection.addToCart}}",
+                "addToCartDisabled": "{{StorefrontProductActionSection.addToCartDisabled}}",
+                "addingToCart": "{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}",
+                "addedToCart": "{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}",
+                "storefrontSuccess": "{{StorefrontMessagesSection.success}}",
+                "proceedToCheckout": "{{CheckoutCartSummarySection.proceedToCheckout}}",
+                "shippingNext": "{{CheckoutShippingMethodsSection.next}}",
+                "paymentMethod": "{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}",
+                "continuePayPal": "{{CheckoutPaymentSection.ContinuePayPalBtn}}",
+                "email": "{{PayPalPaymentSection.email}}",
+                "next": "{{PayPalPaymentSection.nextButton}}",
+                "password": "{{PayPalPaymentSection.password}}",
+                "usePassword": "{{PayPalPaymentSection.usePasswordInsteadButton}}",
+                "login": "{{PayPalPaymentSection.loginBtn}}",
+                "approve": "{{PayPalPaymentSection.paypalSubmitBtn}}",
+                "checkoutSuccess": "{{CheckoutSuccessMainSection.success}}",
+                "orderLink": "{{CheckoutSuccessMainSection.orderLink}}",
+                "invoice": "{{AdminOrderDetailsMainActionsSection.invoice}}",
+                "pageTitle": "{{AdminHeaderSection.pageTitle}}",
+                "submitInvoice": "{{AdminInvoiceMainActionsSection.submitInvoice}}",
+                "success": "{{AdminMessagesSection.success}}",
+                "error": "{{AdminMessagesSection.error}}",
+                "invoiceTab": "{{AdminOrderDetailsMainActionsSection.invoiceTab}}",
+                "viewInvoice": "{{AdminOrderInvoicesTabSection.viewInvoice}}",
+                "creditMemo": "{{AdminInvoiceTotalSection.creditMemosButton}}",
+                "refundQty": "{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}",
+                "updateRefundQty": "{{AdminCreditMemoItemsSection.updateQty}}",
+                "refund": "{{AdminInvoiceMainActionsSection.submitNewRefundFromInvoice}}"
+            }</argument>
+            <argument name="productUrl">{{StorefrontProductPage.url(product.custom_attributes[url_key])}}</argument>
+            <argument name="cartUrl">{{CheckoutCartPage.url}}</argument>
+            <argument name="adminOrderUrl">{{AdminOrderDetailsPage.url}}</argument>
+            <argument name="productName">{{product.name}}</argument>
+            <argument name="optionLabel">{{optionLabel}}</argument>
+            <argument name="paypalEmail">magento/PAYPAL_LOGIN</argument>
+            <argument name="paypalPassword">magento/PAYPAL_PWD</argument>
+        </helper>
+    </actionGroup>
+</actionGroups>
