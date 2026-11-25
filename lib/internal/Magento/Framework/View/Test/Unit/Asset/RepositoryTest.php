@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
@@ -370,6 +371,30 @@ class RepositoryTest extends TestCase
         );
     }
 
+    #[DataProvider('baseUrlDataProvider')]
+    public function testFallbackContextsAreCachedByBaseUrl(string $firstUrl, string $secondUrl): void
+    {
+        $contexts = [
+            $firstUrl => $this->createStub(File\FallbackContext::class),
+            $secondUrl => $this->createStub(File\FallbackContext::class),
+        ];
+        $this->urlMock->expects($this->exactly(4))
+            ->method('getBaseUrl')
+            ->with(['_type' => UrlInterface::URL_TYPE_STATIC, '_secure' => false])
+            ->willReturnOnConsecutiveCalls($firstUrl, $secondUrl, $firstUrl, $secondUrl);
+        $this->httpMock->method('isSecure')->willReturn(false);
+        $this->fallbackFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnCallback(function (array $arguments) use ($contexts) {
+                $this->assertArrayHasKey($arguments['baseUrl'], $contexts);
+                return $contexts[$arguments['baseUrl']];
+            });
+
+        foreach ([$firstUrl, $secondUrl, $firstUrl, $secondUrl] as $url) {
+            $this->assertSame($contexts[$url], $this->repository->getStaticViewFileContext());
+        }
+    }
+
     /**
      * @param string $filePath
      * @param string $resultFilePath
@@ -463,6 +488,53 @@ class RepositoryTest extends TestCase
             $assetMock,
             $this->repository->createArbitrary('test/file.js', 'dir/path', 'dirType', 'static')
         );
+    }
+
+    #[DataProvider('baseUrlDataProvider')]
+    public function testFileContextsAreCachedByBaseUrl(string $firstUrl, string $secondUrl): void
+    {
+        $contexts = [
+            $firstUrl => $this->createStub(File\Context::class),
+            $secondUrl => $this->createStub(File\Context::class),
+        ];
+        $this->urlMock->expects($this->exactly(4))
+            ->method('getBaseUrl')
+            ->with(['_type' => UrlInterface::URL_TYPE_STATIC])
+            ->willReturnOnConsecutiveCalls($firstUrl, $secondUrl, $firstUrl, $secondUrl);
+        $this->contextFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnCallback(function (array $arguments) use ($contexts) {
+                $this->assertSame(DirectoryList::STATIC_VIEW, $arguments['baseDirType']);
+                $this->assertSame('email', $arguments['contextPath']);
+                $this->assertArrayHasKey($arguments['baseUrl'], $contexts);
+                return $contexts[$arguments['baseUrl']];
+            });
+        $this->fileFactoryMock->expects($this->exactly(4))
+            ->method('create')
+            ->willReturnCallback(function (array $arguments) {
+                $asset = $this->createStub(File::class);
+                $asset->method('getContext')->willReturn($arguments['context']);
+                return $asset;
+            });
+
+        foreach ([$firstUrl, $secondUrl, $firstUrl, $secondUrl] as $url) {
+            $asset = $this->repository->createArbitrary('logo_email.png', 'email');
+            $this->assertSame($contexts[$url], $asset->getContext());
+        }
+    }
+
+    public static function baseUrlDataProvider(): array
+    {
+        return [
+            'different websites' => [
+                'https://website1.example.test/static/',
+                'https://website2.example.test/static/',
+            ],
+            'different schemes' => [
+                'http://website.example.test/static/',
+                'https://website.example.test/static/',
+            ],
+        ];
     }
 
     /**

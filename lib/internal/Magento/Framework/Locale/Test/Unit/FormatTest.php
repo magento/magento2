@@ -101,8 +101,15 @@ class FormatTest extends TestCase
 
         $this->currency->method('getCode')->willReturn($currencyCode);
         $result = $this->formatModel->getPriceFormat($localeCode);
-        $intersection = array_intersect_assoc($result, $expectedResult);
-        $this->assertCount(count($expectedResult), $intersection);
+        foreach ($expectedResult as $key => $expected) {
+            $this->assertArrayHasKey($key, $result);
+            if (is_array($expected)) {
+                // Some symbols differ between ICU versions; any listed value is accepted.
+                $this->assertContains($result[$key], $expected);
+            } else {
+                $this->assertSame($expected, $result[$key]);
+            }
+        }
     }
 
     /**
@@ -111,7 +118,8 @@ class FormatTest extends TestCase
      */
     public static function getPriceFormatDataProvider(): array
     {
-        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
+        // ICU 59.1+ uses U+2019 for de_CH grouping; newer ICU (e.g. 78.x) returns ASCII apostrophe again.
+        $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? ['’', '\''] : '\'';
         return [
             ['en_US', 'USD', ['decimalSymbol' => '.', 'groupSymbol' => ',']],
             ['de_DE', 'EUR', ['decimalSymbol' => ',', 'groupSymbol' => '.']],

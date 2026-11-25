@@ -349,6 +349,57 @@ class ProductTest extends TestCase
         $this->assertFalse($this->product->validate($this->productModel));
     }
 
+    #[DataProvider('storeScopedAttributeValuesDataProvider')]
+    public function testValidateRespectsStoreScopedAttributeValues(
+        string $frontendInput,
+        string $operator,
+        array $storeValues,
+        string $originalValue,
+        bool $expectedResult
+    ): void {
+        $attributeCode = 'discount';
+        $productId = '123';
+        $model = $this->createPartialMockWithReflection(
+            ProductModel::class,
+            ['getId', 'getStoreId', 'getResource']
+        );
+        $model->method('getId')->willReturn($productId);
+        $model->method('getStoreId')->willReturn(2);
+        $model->method('getResource')->willReturn($this->productResource);
+        $model->setData($attributeCode, $originalValue);
+
+        $this->config->method('getAttribute')->willReturn($this->eavAttributeResource);
+        $this->productResource->method('getAttribute')->willReturn($this->eavAttributeResource);
+        $this->eavAttributeResource->method('isScopeGlobal')->willReturn(false);
+        $this->eavAttributeResource->method('getBackendType')
+            ->willReturn($frontendInput === 'multiselect' ? 'text' : 'int');
+        $this->eavAttributeResource->method('getFrontendInput')->willReturn($frontendInput);
+
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())->method('getAllAttributeValues')
+            ->with($attributeCode)
+            ->willReturn([$productId => $storeValues]);
+
+        $this->product->setData('attribute', $attributeCode);
+        $this->product->setData('value', '32');
+        $this->product->setData('operator', $operator);
+        $this->product->collectValidatedAttributes($collection);
+
+        $this->assertSame($expectedResult, $this->product->validate($model));
+        $this->assertSame($originalValue, $model->getData($attributeCode));
+    }
+
+    public static function storeScopedAttributeValuesDataProvider(): array
+    {
+        return [
+            'dropdown explicit NULL overrides default' => ['select', '==', [0 => '32', 2 => null], '36', false],
+            'dropdown explicit NULL without default' => ['select', '==', [2 => null], '32', false],
+            'dropdown absent override inherits default' => ['select', '==', [0 => '32'], '36', true],
+            'multiselect explicit NULL overrides default' => ['multiselect', '{}', [0 => '32', 2 => null], '36', false],
+            'multiselect absent override inherits default' => ['multiselect', '{}', [0 => '32'], '36', true],
+        ];
+    }
+
     /**
      * @return array
      */

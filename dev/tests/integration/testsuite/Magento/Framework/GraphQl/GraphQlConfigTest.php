@@ -20,6 +20,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Test of schema configuration reading and parsing
+ *
+ * @magentoAppArea graphql
  */
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 {

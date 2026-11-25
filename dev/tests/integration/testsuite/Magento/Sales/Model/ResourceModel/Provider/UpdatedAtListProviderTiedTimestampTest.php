@@ -20,27 +20,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Reproduces the tied-timestamp grid-sync bug in
- * \Magento\Sales\Model\ResourceModel\Provider\UpdatedAtListProvider::getIds.
+ * Covers cutoff eligibility and avoiding rewrites of already-synced equal timestamps.
  *
- * On production we observed 57 orders where sales_order.status had
- * advanced (e.g. to "complete") but sales_order_grid.status was still
- * stuck on an earlier workflow step (e.g. "submitted_to_is" / "processing").
- * In every case sales_order.updated_at and sales_order_grid.updated_at were
- * byte-identical down to the second.
- *
- * Root cause: the async grid-sync cron runs UpdatedAtListProvider::getIds(),
- * whose JOIN condition is `main.updated_at > grid.updated_at`. With
- * TIMESTAMP(0) (whole-second) precision, multiple writes to the same order
- * within one second collapse to the same value. If the cron happens to fire
- * between two such writes, grid.updated_at gets set equal to main.updated_at
- * and the strict `>` comparison locks the row out of every subsequent run.
- *
- * The fix introduces a 1-second cutoff buffer: the provider selects rows whose
- * main.updated_at is at or before the cutoff, and Grid::refreshBySchedule()
- * writes that cutoff value (not main.updated_at) into grid.updated_at. This ensures
- * grid.updated_at is always strictly less than any subsequent same-second
- * write, breaking the tie permanently.
+ * Timestamp comparisons alone cannot detect differing data with identical timestamps.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -86,16 +68,7 @@ class UpdatedAtListProviderTiedTimestampTest extends TestCase
     }
 
     /**
-     * Prevention test: the buffer-based fix must keep the cron away from
-     * rows whose calendar second has not yet closed.
-     *
-     * The prod bug fires when the cron syncs a row mid-workflow and a
-     * subsequent same-second write to that row leaves main.updated_at
-     * unchanged (TIMESTAMP(0) precision collapses sub-second writes).
-     * The fix introduces a 1-second cutoff in
-     * UpdatedAtListProvider::getIds: only rows whose updated_at is
-     * <= (now - 1s) are considered. Rows updated within the last second
-     * are treated as in-flight and skipped.
+     * Rows newer than the eligibility cutoff must be deferred.
      *
      * Test sequence:
      *   1. Settle the fixture order (set updated_at to 5s ago) so the
@@ -106,10 +79,6 @@ class UpdatedAtListProviderTiedTimestampTest extends TestCase
      *   4. Run the cron again.
      *   5. Assert the grid row is unchanged — the cron must have
      *      skipped the in-flight row.
-     *
-     * Fails on the unpatched vendor (no buffer; the cron picks up the
-     * fresh row and over-writes the grid). Passes after the buffer is
-     * in place.
      *
      * @magentoConfigFixture default/dev/grid/async_indexing 1
      * @magentoDataFixture Magento/Sales/_files/order.php
@@ -176,13 +145,8 @@ class UpdatedAtListProviderTiedTimestampTest extends TestCase
      * Regression guard against over-fetch.
      *
      * When sales_order and sales_order_grid are genuinely in sync — same
-     * status, tied updated_at — the cron must NOT touch the grid row. A
-     * naive fix that simply changes `>` to `>=` everywhere would re-project
-     * every order on every cron tick, causing pointless DB load.
-     *
-     * This test passes on both the unpatched vendor code and the patched
-     * code. It exists to fail any future "fix" that loses the targeted
-     * status-mismatch predicate from the JOIN.
+     * status, tied updated_at — the cron must NOT touch the grid row.
+     * Selecting equal timestamps would repeatedly re-project already-synced rows.
      *
      * @magentoConfigFixture default/dev/grid/async_indexing 1
      * @magentoDataFixture Magento/Sales/_files/order.php

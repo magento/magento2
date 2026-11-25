@@ -16,6 +16,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
@@ -278,5 +279,136 @@ class WriterTest extends TestCase
             ->willReturn(true);
 
         $this->object->saveConfig([ConfigFilePool::APP_ENV => ['key' => 'value']]);
+    }
+
+    public function testSaveConfigUsesAtomicRenameWhenDirectoryWriteIsConcreteWrite(): void
+    {
+        $configFiles = [ConfigFilePool::APP_CONFIG => 'config.php'];
+        $updatedData = [ConfigFilePool::APP_CONFIG => ['key' => 'value']];
+        $formatted = ['formatted'];
+
+        /** @var Write|Mock $atomicDirWrite */
+        $atomicDirWrite = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isExist', 'stat', 'writeFile', 'changePermissions', 'renameFile'])
+            ->getMock();
+
+        $tmpPathMatcher = $this->callback(
+            static fn (string $path): bool => preg_match('/^config\.php\.[^.]+\.tmp$/', $path) === 1
+        );
+
+        $this->deploymentConfig->expects($this->once())
+            ->method('resetData');
+        $this->configFilePool->expects($this->once())
+            ->method('getPaths')
+            ->willReturn($configFiles);
+        $this->reader->expects($this->once())
+            ->method('load')
+            ->with(ConfigFilePool::APP_CONFIG)
+            ->willReturn([]);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('config.php')
+            ->willReturn([]);
+        $this->formatter->expects($this->once())
+            ->method('format')
+            ->with($updatedData[ConfigFilePool::APP_CONFIG], [])
+            ->willReturn($formatted);
+
+        $atomicDirWrite->expects($this->once())
+            ->method('isExist')
+            ->with('config.php')
+            ->willReturn(true);
+        $atomicDirWrite->expects($this->once())
+            ->method('stat')
+            ->with('config.php')
+            ->willReturn(['mode' => 33188]);
+        $atomicDirWrite->expects($this->once())
+            ->method('writeFile')
+            ->with($tmpPathMatcher, $formatted, 'w+', false);
+        $atomicDirWrite->expects($this->once())
+            ->method('changePermissions')
+            ->with($tmpPathMatcher, 0644);
+        $atomicDirWrite->expects($this->once())
+            ->method('renameFile')
+            ->with($tmpPathMatcher, 'config.php');
+
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($atomicDirWrite);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('');
+
+        $this->object->saveConfig($updatedData);
+    }
+
+    public function testSaveConfigAtomicWriteCleansTemporaryFileOnFailure(): void
+    {
+        $this->expectException(FileSystemException::class);
+        $this->expectExceptionMessage('The "env.php" deployment config file isn\'t writable.');
+
+        $configFiles = [ConfigFilePool::APP_ENV => 'env.php'];
+        $updatedData = [ConfigFilePool::APP_ENV => ['key' => 'value']];
+        $formatted = ['formatted'];
+        $writeException = new FileSystemException(new Phrase('rename failed'));
+
+        /** @var Write|Mock $atomicDirWrite */
+        $atomicDirWrite = $this->getMockBuilder(Write::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isExist', 'writeFile', 'renameFile', 'delete'])
+            ->getMock();
+
+        $tmpPathMatcher = $this->callback(
+            static fn (string $path): bool => preg_match('/^env\.php\.[^.]+\.tmp$/', $path) === 1
+        );
+
+        $this->configFilePool->expects($this->once())
+            ->method('getPaths')
+            ->willReturn($configFiles);
+        $this->reader->expects($this->once())
+            ->method('load')
+            ->with(ConfigFilePool::APP_ENV)
+            ->willReturn([]);
+        $this->commentParserMock->expects($this->once())
+            ->method('execute')
+            ->with('env.php')
+            ->willReturn([]);
+        $this->formatter->expects($this->once())
+            ->method('format')
+            ->with($updatedData[ConfigFilePool::APP_ENV], [])
+            ->willReturn($formatted);
+        $this->deploymentConfig->expects($this->never())
+            ->method('resetData');
+
+        $atomicDirWrite->expects($this->exactly(2))
+            ->method('isExist')
+            ->willReturnCallback(
+                static fn (string $path): bool => $path === 'env.php' ? false : preg_match('/^env\.php\./', $path) === 1
+            );
+        $atomicDirWrite->expects($this->once())
+            ->method('writeFile')
+            ->with($tmpPathMatcher, $formatted, 'w+', false);
+        $atomicDirWrite->expects($this->once())
+            ->method('renameFile')
+            ->with($tmpPathMatcher, 'env.php')
+            ->willThrowException($writeException);
+        $atomicDirWrite->expects($this->once())
+            ->method('delete')
+            ->with($tmpPathMatcher);
+
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($atomicDirWrite);
+        $this->filesystem->expects($this->never())
+            ->method('getDirectoryRead');
+
+        $this->object->saveConfig($updatedData);
     }
 }
