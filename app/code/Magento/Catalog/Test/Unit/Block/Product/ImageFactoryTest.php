@@ -98,7 +98,7 @@ class ImageFactoryTest extends TestCase
             ->method('create')
             ->with(Image::class, $expected)
             ->willReturn($imageBlock);
-        $this->scopeConfig->expects(self::once())->method('isSetFlag')->with(Store::XML_PATH_STORE_IN_URL);
+        $this->scopeConfig->expects(self::never())->method('isSetFlag');
         $actual = $this->model->create($product, 'image_id', $data['custom_attributes']);
         self::assertInstanceOf(Image::class, $actual);
     }
