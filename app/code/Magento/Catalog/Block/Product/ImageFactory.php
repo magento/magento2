@@ -179,7 +179,7 @@ class ImageFactory
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
                 'image_url' => $imageAsset->getUrl() .
                     (
-                        $isPlaceholder && $this->scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL) ?
+                        $this->scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL) && $isPlaceholder ?
                         '?' . StoreManagerInterface::PARAM_NAME . '=' . $product->getStore()->getCode() : ''
                     ),
                 'width' => $imageMiscParams['image_width'],
