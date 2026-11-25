@@ -116,9 +116,7 @@ class GalleryTest extends TestCase
     public function testGetGalleryImagesJsonWithLabel(): void
     {
         $this->prepareGetGalleryImagesJsonMocks();
-        $this->_scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with(Store::XML_PATH_STORE_IN_URL);
+        $this->_scopeConfig->expects($this->never())->method('isSetFlag');
         $json = $this->model->getGalleryImagesJson();
         $decodedJson = json_decode($json, true);
         $this->assertEquals('product_page_image_small_url', $decodedJson[0]['thumb']);
