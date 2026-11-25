@@ -34,6 +34,7 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
+use Magento\Usps\Model\ShippingMethodManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -152,7 +153,8 @@ class CarrierTest extends TestCase
             'carrierHelper' => $carrierHelper,
             'productCollectionFactory' => $productCollectionFactory,
             'dataHelper' => $this->dataHelper,
-            'proxyDeferredFactory' => $this->proxyDeferredFactory
+            'proxyDeferredFactory' => $this->proxyDeferredFactory,
+            'shippingMethodManager' => new ShippingMethodManager()
         ];
         $this->carrier = $this->objectManager->getObject(Carrier::class, $arguments);
     }
@@ -166,6 +168,19 @@ class CarrierTest extends TestCase
     public function testGetCodeBool()
     {
         $this->assertFalse($this->carrier->getCode('test_code'));
+    }
+
+    public function testRestMethodsOfferSinglePieceSeparatelyFromFiveDigit(): void
+    {
+        $methods = $this->carrier->getCode('rest_method');
+
+        foreach (['LIBRARY_MAIL', 'MEDIA_MAIL'] as $mailClass) {
+            $fiveDigitCode = $mailClass . '_MACHINABLE_5-DIGIT';
+            $singlePieceCode = $mailClass . '_MACHINABLE_SINGLE-PIECE';
+            $this->assertArrayHasKey($fiveDigitCode, $methods);
+            $this->assertArrayHasKey($singlePieceCode, $methods);
+            $this->assertNotSame($methods[$fiveDigitCode], $methods[$singlePieceCode]);
+        }
     }
 
     public function testReturnOfShipment()
