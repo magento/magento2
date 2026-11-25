@@ -155,8 +155,9 @@ class ImageFactory
 
         $imageMiscParams = $this->imageParamsBuilder->build($viewImageConfig);
         $originalFilePath = $product->getData($imageMiscParams['image_type']);
+        $isPlaceholder = $originalFilePath === null || $originalFilePath === 'no_selection';
 
-        if ($originalFilePath === null || $originalFilePath === 'no_selection') {
+        if ($isPlaceholder) {
             $imageAsset = $this->viewAssetPlaceholderFactory->create(
                 [
                     'type' => $imageMiscParams['image_type']
@@ -178,7 +179,7 @@ class ImageFactory
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
                 'image_url' => $imageAsset->getUrl() .
                     (
-                        $this->scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL) ?
+                        $isPlaceholder && $this->scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL) ?
                         '?' . StoreManagerInterface::PARAM_NAME . '=' . $product->getStore()->getCode() : ''
                     ),
                 'width' => $imageMiscParams['image_width'],
