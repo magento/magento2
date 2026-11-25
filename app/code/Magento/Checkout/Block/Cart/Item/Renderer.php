@@ -370,7 +370,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @return array
      */
-    public function getFormatedOptionValue($optionValue)
+    public function getFormattedOptionValue($optionValue)
     {
         /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
         $helper = $this->_productConfig;
@@ -379,6 +379,19 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
             'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
         ];
         return $helper->getFormattedOptionValue($optionValue, $params);
+    }
+
+    /**
+     * Accept option value and return its formatted view
+     *
+     * @param string|array $optionValue
+     * @return array
+     * @deprecated Use getFormattedOptionValue() instead.
+     * @see getFormattedOptionValue()
+     */
+    public function getFormatedOptionValue($optionValue)
+    {
+        return $this->getFormattedOptionValue($optionValue);
     }
 
     /**

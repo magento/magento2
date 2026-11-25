@@ -70,14 +70,14 @@
                     <?php foreach ($_options as $_option): ?>
                         <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                         <?php if (!$block->getPrintStatus()): ?>
-                            <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                                <?= /* @noEscape */ $_formatedOptionValue['value'] ?>
-                                <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                            <?php $_formattedOptionValue = $block->getFormattedOptionValue($_option) ?>
+                            <dd<?php if (isset($_formattedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
+                                <?= /* @noEscape */ $_formattedOptionValue['value'] ?>
+                                <?php if (isset($_formattedOptionValue['full_view'])): ?>
                                     <div class="tooltip content">
                                         <dl class="item options">
                                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                            <dd><?= /* @noEscape */ $_formatedOptionValue['full_view'] ?></dd>
+                                            <dd><?= /* @noEscape */ $_formattedOptionValue['full_view'] ?></dd>
                                         </dl>
                                     </div>
                                 <?php endif; ?>

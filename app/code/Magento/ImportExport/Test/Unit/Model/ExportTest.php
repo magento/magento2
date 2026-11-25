@@ -174,8 +174,17 @@ class ExportTest extends TestCase
         $this->model->export();
         $this->assertStringContainsString(
             'Exported 2 rows',
-            var_export($this->model->getFormatedLogTrace(), true)
+            var_export($this->model->getFormattedLogTrace(), true)
         );
+    }
+
+    public function testFormattedLogTraceAccessorsReturnSameResult(): void
+    {
+        $this->model->addLogComment('Message');
+        $expected = "1: Message\n";
+
+        self::assertSame($expected, $this->model->getFormattedLogTrace());
+        self::assertSame($expected, $this->model->getFormatedLogTrace());
     }
 
     /**
