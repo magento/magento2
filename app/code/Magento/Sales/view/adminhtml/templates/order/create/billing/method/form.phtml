@@ -80,7 +80,7 @@ script;
 script;
     else:
         $scriptString .= <<<script
-            payment.switchMethod('{$escaper->escapeJs($currentSelectedMethod)}');
+            payment.switchMethod('{$escaper->escapeJs($currentSelectedMethod)}', true);
 script;
     endif;
     $scriptString .= <<<script

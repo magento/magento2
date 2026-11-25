@@ -18,8 +18,10 @@ use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Rate\Result;
@@ -29,6 +31,7 @@ use Magento\Usps\Model\Carrier;
 use Magento\Usps\Model\ShipmentService;
 use Magento\Usps\Model\ShippingMethodManager;
 use Magento\Usps\Model\UspsPaymentAuthToken;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -1388,6 +1391,211 @@ class ShipmentServiceTest extends TestCase
         $this->assertSame(0.25, $list[1]['packageDescription']['weight']);
         $this->assertSame('90034', $list[0]['originZIPCode']);
         $this->assertSame('94545', $list[0]['destinationZIPCode']);
+    }
+
+    #[DataProvider('serviceIdentityDataProvider')]
+    public function testQuoteParsingPreservesServiceIdentity(
+        array $allowedMethods,
+        array $rates,
+        array $expectedCosts,
+        bool $multiplePackages = false
+    ): void {
+        $carrier = $this->createStub(Carrier::class);
+        $methodFactory = $this->createStub(MethodFactory::class);
+        $this->shipmentService = new ShipmentService(
+            $this->rateFactoryMock,
+            $methodFactory,
+            $this->rateErrorFactoryMock,
+            $this->productCollectionFactoryMock,
+            $this->carrierHelperMock,
+            $this->loggerMock,
+            $this->uspsPaymentAuthTokenMock,
+            new ShippingMethodManager(),
+            $this->httpClientMock,
+            $this->proxyDeferredFactoryMock
+        );
+        $this->shipmentService->setCarrierModel($carrier);
+        $carrier->method('getConfigData')->willReturnMap([
+            ['rest_allowed_methods', implode(',', $allowedMethods)],
+            ['title', 'USPS'],
+            ['specificerrmsg', 'Unavailable'],
+        ]);
+        $carrier->method('getMethodPrice')->willReturnArgument(0);
+        $priceCurrency = $this->createStub(PriceCurrencyInterface::class);
+        $priceCurrency->method('round')->willReturnArgument(0);
+        $methodFactory->method('create')
+            ->willReturnCallback(static fn () => new Method($priceCurrency));
+        $this->rateErrorFactoryMock->expects($expectedCosts === [] ? $this->once() : $this->never())
+            ->method('create')
+            ->willReturn($this->createMock(Error::class));
+        $result = $this->createMock(Result::class);
+        $this->rateFactoryMock->expects($this->once())->method('create')->willReturn($result);
+        $actualCosts = [];
+        $result->expects($this->exactly(max(1, count($expectedCosts))))
+            ->method('append')
+            ->willReturnCallback(static function ($rate) use (&$actualCosts, $result) {
+                if ($rate instanceof Method) {
+                    $actualCosts[$rate->getMethod()] = $rate->getCost();
+                }
+                return $result;
+            });
+
+        $response = ['rates' => $rates];
+        if ($multiplePackages) {
+            $method = new \ReflectionMethod(ShipmentService::class, 'parseMergedJsonResponsesIntoResult');
+            $method->invoke($this->shipmentService, [$response, $response]);
+        } else {
+            $this->shipmentService->_parseJsonResponse($response);
+        }
+
+        ksort($expectedCosts);
+        ksort($actualCosts);
+        $this->assertSame($expectedCosts, $actualCosts);
+    }
+
+    public static function serviceIdentityDataProvider(): array
+    {
+        return array_merge(self::parcelServiceIdentityDataProvider(), self::mailServiceIdentityDataProvider());
+    }
+
+    public static function parcelServiceIdentityDataProvider(): array
+    {
+        $groundCode = 'USPS_GROUND_ADVANTAGE_MACHINABLE_SINGLE-PIECE';
+        $priorityCode = 'PRIORITY_MAIL_MACHINABLE_SINGLE-PIECE';
+        $holidayCode = 'PRIORITY_MAIL_EXPRESS_LEGAL_FLAT_RATE_ENVELOPE_HOLIDAY_DELIVERY';
+        $groundRate = [
+            'description' => 'USPS Ground Advantage Machinable Single-piece',
+            'mailClass' => 'USPS_GROUND_ADVANTAGE',
+            'processingCategory' => 'MACHINABLE',
+            'rateIndicator' => 'SP',
+            'destinationEntryFacilityType' => 'NONE',
+            'price' => 8.39,
+        ];
+        $priorityRate = array_replace($groundRate, [
+            'description' => 'Priority Mail Machinable Single-piece',
+            'mailClass' => 'PRIORITY_MAIL',
+            'price' => 9.50,
+        ]);
+        $groundCubic = array_replace($groundRate, [
+            'description' => 'USPS Ground Advantage Cubic',
+            'rateIndicator' => 'CP',
+            'price' => 7.85,
+        ]);
+        $cases = [
+            'single-piece prices exclude cheaper cubic and destination-entry services' => [
+                [$groundCode, $priorityCode],
+                [
+                    $groundRate,
+                    $priorityRate,
+                    $groundCubic,
+                    array_replace($groundCubic, ['rateIndicator' => 'P5']),
+                    array_replace($priorityRate, [
+                        'description' => 'Priority Mail Cubic',
+                        'rateIndicator' => 'CP',
+                        'price' => 9.46,
+                    ]),
+                    array_replace($priorityRate, [
+                        'description' => 'Priority Mail Open and Distribute',
+                        'destinationEntryFacilityType' => 'DDU',
+                        'price' => 9.10,
+                    ]),
+                ],
+                [$groundCode => 8.39, $priorityCode => 9.50],
+            ],
+            'complete metadata identifies a renamed service' => [
+                [$groundCode],
+                [array_replace($groundRate, ['description' => 'Renamed Ground Advantage service'])],
+                [$groundCode => 8.39],
+            ],
+            'canonical description without optional metadata' => [
+                [$groundCode],
+                [['description' => $groundRate['description'], 'price' => 8.39]],
+                [$groundCode => 8.39],
+            ],
+            'canonical description with partial metadata' => [
+                [$groundCode],
+                [[
+                    'description' => $groundRate['description'],
+                    'mailClass' => $groundRate['mailClass'],
+                    'price' => 8.39,
+                ]],
+                [$groundCode => 8.39],
+            ],
+            'unidentified variant fills only a selected service without an exact rate' => [
+                [$groundCode, $priorityCode],
+                [
+                    $groundRate,
+                    $groundCubic,
+                    array_replace($priorityRate, [
+                        'description' => 'Priority Mail Cubic',
+                        'rateIndicator' => 'CP',
+                        'price' => 9.46,
+                    ]),
+                ],
+                [$groundCode => 8.39, $priorityCode => 9.46],
+            ],
+            'multi-package totals exclude cheaper cubic quotes' => [
+                [$groundCode],
+                [$groundRate, $groundCubic],
+                [$groundCode => 16.78],
+                true,
+            ],
+            'description matching an unregistered selected method code' => [
+                [$holidayCode],
+                [[
+                    'description' => 'Priority Mail Express Legal Flat Rate Envelope Holiday Delivery',
+                    'mailClass' => 'PRIORITY_MAIL_EXPRESS',
+                    'processingCategory' => 'FLATS',
+                    'rateIndicator' => 'E7',
+                    'destinationEntryFacilityType' => 'NONE',
+                    'price' => 27.50,
+                ]],
+                [$holidayCode => 27.50],
+            ],
+        ];
+
+        return $cases;
+    }
+
+    public static function mailServiceIdentityDataProvider(): array
+    {
+        $cases = [];
+        foreach (['LIBRARY_MAIL' => 4.87, 'MEDIA_MAIL' => 5.13] as $mailClass => $price) {
+            $title = $mailClass === 'LIBRARY_MAIL' ? 'Library Mail' : 'Media Mail';
+            $legacyCode = $mailClass . '_MACHINABLE_5-DIGIT';
+            $singlePieceCode = $mailClass . '_MACHINABLE_SINGLE-PIECE';
+            $singlePieceRate = [
+                'description' => $title . ' Machinable Single-piece',
+                'mailClass' => $mailClass,
+                'processingCategory' => 'MACHINABLE',
+                'rateIndicator' => 'SP',
+                'destinationEntryFacilityType' => 'NONE',
+                'price' => $price,
+            ];
+            $legacyDescription = $mailClass === 'LIBRARY_MAIL' ? $title : $title . ' Machinable 5-digit';
+            $legacyRate = array_replace($singlePieceRate, [
+                'description' => $legacyDescription,
+                'rateIndicator' => '5D',
+                'price' => 10.00,
+            ]);
+            $cases[$mailClass . ' five-digit and single-piece prices remain separate'] = [
+                [$legacyCode, $singlePieceCode],
+                [$singlePieceRate, $legacyRate],
+                [$legacyCode => 10.00, $singlePieceCode => $price],
+            ];
+            $cases[$mailClass . ' five-digit selection keeps single-piece rate when five-digit is not returned'] = [
+                [$legacyCode],
+                [$singlePieceRate],
+                [$legacyCode => $price],
+            ];
+            $cases[$mailClass . ' legacy description without optional metadata'] = [
+                [$legacyCode],
+                [['description' => $legacyDescription, 'price' => 10.00]],
+                [$legacyCode => 10.00],
+            ];
+        }
+
+        return $cases;
     }
 
     /**

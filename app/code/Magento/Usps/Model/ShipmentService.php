@@ -534,11 +534,33 @@ class ShipmentService
             return $costArr;
         }
         $shippingRates = $this->getShippingOptions($response);
+        $fallbackRates = [];
         foreach ($shippingRates as $shippingRate) {
             foreach ($shippingRate as $rateElement) {
-                if (is_array($rateElement)) {
-                    $this->processShippingRateForItem($rateElement, $costArr);
+                if (!is_array($rateElement)
+                    || (empty($rateElement['productName']) && empty($rateElement['description']))
+                ) {
+                    continue;
                 }
+                $methodCode = $this->getShippingMethodCode($rateElement);
+                if ($methodCode !== null) {
+                    $this->processShippingRateForItem($rateElement, $methodCode, $costArr);
+                } elseif (!empty($rateElement['mailClass'])) {
+                    $fallbackRates[] = $rateElement;
+                }
+            }
+        }
+        // Another variant of the same mail class is used only when USPS returned no rate for the selected service
+        $unmatchedMethodCodes = array_values(
+            array_diff(array_keys($this->getRestAllowedMethods()), array_keys($costArr))
+        );
+        foreach ($fallbackRates as $rateElement) {
+            $methodCode = $this->shippingMethodManager->findAllowedMethodByMailClass(
+                $rateElement['mailClass'],
+                $unmatchedMethodCodes
+            );
+            if ($methodCode !== null) {
+                $this->processShippingRateForItem($rateElement, $methodCode, $costArr);
             }
         }
         uasort(
@@ -588,45 +610,70 @@ class ShipmentService
      * Processing rate for ship element
      *
      * @param array $rateElement
+     * @param string $methodCode
      * @param array $costArr
      */
     private function processShippingRateForItem(
         array $rateElement,
+        string $methodCode,
         array &$costArr
     ): void {
-        if (empty($rateElement['productName']) && empty($rateElement['description'])) {
+        $methodTitle = $this->shippingMethodManager->getMethodTitle($methodCode);
+        // Use totalPrice if available, otherwise use price
+        $cost = isset($rateElement['totalPrice']) ?
+            (float)$rateElement['totalPrice'] : (float)$rateElement['price'];
+        // Keep lowest price when multiple API variants map to same method (e.g. Media Mail)
+        if (isset($costArr[$methodCode]) && $costArr[$methodCode]['price'] <= $cost) {
             return;
         }
-        $productName = $rateElement['description'];
-        $methodCode = strtoupper(substr($this->replaceSpaceWithUnderscore($productName), 0, 120));
-        $allowedMethods = $this->getRestAllowedMethods();
-        $allowedMethodCodes = array_keys($allowedMethods);
+        $costArr[$methodCode] = [
+            'price' => $cost,
+            'code' => $methodCode,
+            'productName' => $methodTitle
+        ];
+    }
 
-        if (!in_array($methodCode, $allowedMethodCodes)) {
-            $rateMailClass = $rateElement['mailClass'] ?? '';
-            if ($rateMailClass) {
-                $methodCode = $this->shippingMethodManager->findAllowedMethodByMailClass(
-                    $rateMailClass,
-                    $allowedMethodCodes
-                );
-            }
+    /**
+     * Match service identity without assuming optional response metadata is present.
+     *
+     * @param array $rateElement
+     * @return string|null
+     */
+    private function getShippingMethodCode(array $rateElement): ?string
+    {
+        $description = $rateElement['description'] ?? $rateElement['productName'];
+        $methodCode = strtoupper(substr($this->replaceSpaceWithUnderscore($description), 0, 120));
+        $allowedCodes = array_keys($this->getRestAllowedMethods());
+        if (in_array($methodCode, $allowedCodes, true)) {
+            return $methodCode;
         }
+        $matchingMethods = [];
 
-        if ($methodCode && in_array($methodCode, $allowedMethodCodes)) {
-            $methodTitle = $this->shippingMethodManager->getMethodTitle($methodCode);
-            // Use totalPrice if available, otherwise use price
-            $cost = isset($rateElement['totalPrice']) ?
-                (float)$rateElement['totalPrice'] : (float)$rateElement['price'];
-            // Keep lowest price when multiple API variants map to same method (e.g. Media Mail)
-            if (isset($costArr[$methodCode]) && $costArr[$methodCode]['price'] <= $cost) {
-                return;
-            }
-            $costArr[$methodCode] = [
-                'price' => $cost,
-                'code' => $methodCode,
-                'productName' => $methodTitle
+        foreach ($allowedCodes as $allowedCode) {
+            $identity = [
+                'mailClass' => $this->shippingMethodManager->getMethodMailClass($allowedCode),
+                'processingCategory' => $this->shippingMethodManager->getMethodProcessingCategory($allowedCode),
+                'rateIndicator' => $this->shippingMethodManager->getRateIndicator($allowedCode),
+                'destinationEntryFacilityType' =>
+                    $this->shippingMethodManager->getMethodDestinationEntryFacilityType($allowedCode),
             ];
+            $providedIdentity = array_filter(
+                array_intersect_key($rateElement, $identity),
+                static fn ($value) => $value !== null && $value !== ''
+            );
+            if (array_diff_assoc($providedIdentity, $identity)) {
+                continue;
+            }
+            $canonicalDescription = $this->shippingMethodManager->getMethodDescription($allowedCode);
+            if ($canonicalDescription !== null && strcasecmp($description, $canonicalDescription) === 0) {
+                return $allowedCode;
+            }
+            if (count($providedIdentity) === count($identity)) {
+                $matchingMethods[] = $allowedCode;
+            }
         }
+
+        return count($matchingMethods) === 1 ? $matchingMethods[0] : null;
     }
 
     /**

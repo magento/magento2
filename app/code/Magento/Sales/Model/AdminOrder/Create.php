@@ -1186,6 +1186,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
 
+        if ($product->isDisabled()) {
+            $this->messageManager->addErrorMessage(__('This product is out of stock.'));
+            throw new LocalizedException(__('This product is disabled.'));
+        }
+
         $item = $this->quoteInitializer->init($this->getQuote(), $product, $config);
 
         if (is_string($item)) {

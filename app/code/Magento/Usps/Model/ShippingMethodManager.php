@@ -32,10 +32,26 @@ class ShippingMethodManager
             'processing_category' => "MACHINABLE",
             'destination_entry_facility_type' => "NONE"
         ],
+        "LIBRARY_MAIL_MACHINABLE_SINGLE-PIECE" => [
+            'description' => "Library Mail Machinable Single-piece",
+            'title' => "Library Mail Single-piece",
+            'rate_indicator' => "SP",
+            'mail_class' => "LIBRARY_MAIL",
+            'processing_category' => "MACHINABLE",
+            'destination_entry_facility_type' => "NONE"
+        ],
         "MEDIA_MAIL_MACHINABLE_5-DIGIT" => [
             'description' => "Media Mail Machinable 5-digit",
             'title' => "Media Mail",
             'rate_indicator' => "5D",
+            'mail_class' => "MEDIA_MAIL",
+            'processing_category' => "MACHINABLE",
+            'destination_entry_facility_type' => "NONE"
+        ],
+        "MEDIA_MAIL_MACHINABLE_SINGLE-PIECE" => [
+            'description' => "Media Mail Machinable Single-piece",
+            'title' => "Media Mail Single-piece",
+            'rate_indicator' => "SP",
             'mail_class' => "MEDIA_MAIL",
             'processing_category' => "MACHINABLE",
             'destination_entry_facility_type' => "NONE"
@@ -355,6 +371,18 @@ class ShippingMethodManager
     {
         $methodCode = strtoupper($methodCode);
         return $this->shippingMethods[$methodCode]['title'] ?? null;
+    }
+
+    /**
+     * Get the canonical description independently of legacy method codes.
+     *
+     * @param string $methodCode
+     * @return string|null
+     */
+    public function getMethodDescription(string $methodCode): ?string
+    {
+        $methodCode = strtoupper($methodCode);
+        return $this->shippingMethods[$methodCode]['description'] ?? null;
     }
 
     /**
