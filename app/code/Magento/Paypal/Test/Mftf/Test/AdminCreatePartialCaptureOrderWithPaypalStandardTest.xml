@@ -91,10 +91,10 @@
         <!--Open invoice tab and verify the invoice is present-->
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" />
-        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid"/>
+        <waitForText selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid"/>
         <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="waitForClickToViewInvoiceRow"/>
         <conditionalClick selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" dependentSelector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" visible="true" stepKey="clickToViewInvoiceRow"/>
-        <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="{$grabOrderNumber}" stepKey="seeOrderIdOnInvoice" />
+        <waitForText selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="{$grabOrderNumber}" stepKey="seeOrderIdOnInvoice" />
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openAgainOrderPage">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
