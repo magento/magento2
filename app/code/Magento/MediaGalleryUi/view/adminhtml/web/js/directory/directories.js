@@ -177,7 +177,7 @@ define([
          */
         setInActive: function () {
             this.selectedFolder(null);
-            $(this.deleteButtonSelector).attr('disabled', true).addClass('disabled');
+            $(this.deleteButtonSelector).attr('disabled', 'disabled').addClass('disabled');
         },
 
         /**
