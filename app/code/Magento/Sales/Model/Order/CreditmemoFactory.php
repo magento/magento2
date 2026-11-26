@@ -138,7 +138,7 @@ class CreditmemoFactory
 
             $qty = min(
                 $this->getQtyToRefund($orderItem, $qtyList, $invoiceRefundLimitsQtyList),
-                $invoiceItem->getQty()
+                (float)$invoiceItem->getQty()
             );
             $totalQty += $qty;
             $item = $this->convertor->itemToCreditmemoItem($orderItem);

@@ -38,7 +38,7 @@ class CartFixedDiscountTest extends TestCase
     private ScopeConfigInterface $scopeConfig;
 
     /**
-     * @inhertidoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

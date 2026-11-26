@@ -64,6 +64,9 @@
                 <argument name="tags" value=""/>
             </actionGroup>
 
+            <!-- Clear filter product listing grid -->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters" after="flushCache"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters" after="goToProductCatalogPageBeforeClearFilters"/>
             <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
             <comment userInput="BIC workaround" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage"/>

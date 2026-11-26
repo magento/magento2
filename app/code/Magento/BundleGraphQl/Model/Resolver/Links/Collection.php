@@ -10,12 +10,14 @@ namespace Magento\BundleGraphQl\Model\Resolver\Links;
 use Magento\Bundle\Model\Selection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as LinkCollection;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Zend_Db_Select_Exception;
 
 /**
@@ -52,19 +54,37 @@ class Collection implements ResetAfterRequestInterface
     private $uidEncoder;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var CatalogHelper
+     */
+    private $catalogHelper;
+
+    /**
      * @param CollectionFactory $linkCollectionFactory
      * @param EnumLookup $enumLookup
      * @param Uid|null $uidEncoder
+     * @param StoreManagerInterface|null $storeManager
+     * @param CatalogHelper|null $catalogHelper
      */
     public function __construct(
         CollectionFactory $linkCollectionFactory,
         EnumLookup $enumLookup,
-        ?Uid $uidEncoder = null
+        ?Uid $uidEncoder = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CatalogHelper $catalogHelper = null
     ) {
         $this->linkCollectionFactory = $linkCollectionFactory;
         $this->enumLookup = $enumLookup;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
             ->get(Uid::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
+        $this->catalogHelper = $catalogHelper ?: ObjectManager::getInstance()
+            ->get(CatalogHelper::class);
     }
 
     /**
@@ -121,6 +141,12 @@ class Collection implements ResetAfterRequestInterface
         /** @var LinkCollection $linkCollection */
         $linkCollection = $this->linkCollectionFactory->create();
         $linkCollection->setOptionIdsFilter($this->optionIds);
+
+        if (!$this->catalogHelper->isPriceGlobal()) {
+            $websiteId = (int)$this->storeManager->getStore()->getWebsiteId();
+            $linkCollection->joinPrices($websiteId);
+        }
+
         $field = 'parent_product_id';
         foreach ($linkCollection->getSelect()->getPart('from') as $tableAlias => $data) {
             if ($data['tableName'] == $linkCollection->getTable('catalog_product_bundle_selection')) {

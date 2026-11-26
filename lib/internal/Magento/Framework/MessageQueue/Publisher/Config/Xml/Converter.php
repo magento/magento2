@@ -46,7 +46,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $publisherConfig \DOMElement */
         foreach ($source->getElementsByTagName('publisher') as $publisherConfig) {
             $topic = $this->getAttributeValue($publisherConfig, 'topic');
-            $queueName = $this->getAttributeValue($publisherConfig, 'queue');
 
             $connections = [];
             /** @var \DOMNode $connectionConfig */
@@ -82,7 +81,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);
             $result[$topic] = [
                 'topic' => $topic,
-                'queue' => $queueName,
                 'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 'connections' => $connections,
 

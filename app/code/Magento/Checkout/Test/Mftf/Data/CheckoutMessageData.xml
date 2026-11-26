@@ -17,4 +17,7 @@
     <entity name="RequestedQtyNotAvailableMessageData">
         <data key="message">The requested qty. is not available</data>
     </entity>
+    <entity name="InvalidCityCharsetErrorMessageData">
+        <data key="message">Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' ’ . , &amp; ( )</data>
+    </entity>
 </entities>

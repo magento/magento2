@@ -33,6 +33,7 @@ use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
+use Magento\GraphQl\Model\GraphQl\RequestConfiguration;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
 
@@ -41,6 +42,7 @@ use Magento\GraphQl\Model\Query\Logger\LoggerPool;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
@@ -127,6 +129,11 @@ class GraphQl implements FrontControllerInterface
     private $queryParser;
 
     /**
+     * @var int
+     */
+    private int $maxRequestBodySize;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -142,7 +149,9 @@ class GraphQl implements FrontControllerInterface
      * @param LoggerPool|null $loggerPool
      * @param AreaList|null $areaList
      * @param QueryParser|null $queryParser
+     * @param RequestConfiguration|null $requestConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         Response $response,
@@ -159,7 +168,8 @@ class GraphQl implements FrontControllerInterface
         ?LogData $logDataHelper = null,
         ?LoggerPool $loggerPool = null,
         ?AreaList $areaList = null,
-        ?QueryParser $queryParser = null
+        ?QueryParser $queryParser = null,
+        ?RequestConfiguration $requestConfiguration = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -176,6 +186,9 @@ class GraphQl implements FrontControllerInterface
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
         $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+        $requestConfiguration = $requestConfiguration
+            ?: ObjectManager::getInstance()->get(RequestConfiguration::class);
+        $this->maxRequestBodySize = $requestConfiguration->getMaxRequestBodySize();
     }
 
     /**
@@ -284,6 +297,7 @@ class GraphQl implements FrontControllerInterface
      * @param RequestInterface $request
      * @return array
      * @throws SyntaxError
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getDataFromRequest(RequestInterface $request): array
     {
@@ -291,6 +305,11 @@ class GraphQl implements FrontControllerInterface
         /** @var Http $request */
         if ($request->isPost() && $request->getContent()) {
             $content = $request->getContent();
+            if ($this->maxRequestBodySize > 0 && strlen($content) > $this->maxRequestBodySize) {
+                throw new GraphQlInputException(
+                    __('Request body is too large.')
+                );
+            }
             try {
                 $data = $this->jsonSerializer->unserialize($content);
             } catch (\InvalidArgumentException) {

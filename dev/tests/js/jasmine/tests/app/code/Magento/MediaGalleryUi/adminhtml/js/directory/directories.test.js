@@ -82,7 +82,7 @@ define([
             componentInstance.setInActive();
 
             expect(componentInstance.selectedFolder).toHaveBeenCalledWith(null);
-            expect(deleteButtonMock.attr).toHaveBeenCalledWith('disabled', true);
+            expect(deleteButtonMock.attr).toHaveBeenCalledWith('disabled', 'disabled');
             expect(deleteButtonMock.addClass).toHaveBeenCalledWith('disabled');
         });
 

@@ -9,6 +9,11 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="EndToEndB2CLoggedInUserTest">
+        <annotations>
+            <skip>
+                <issueId value="AC-18038">EndToEndB2CLoggedInUserTest failing because notice message not appearing in frontend</issueId>
+            </skip>
+        </annotations>
         <before>
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>

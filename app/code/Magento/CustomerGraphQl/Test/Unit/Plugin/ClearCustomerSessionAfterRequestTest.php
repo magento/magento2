@@ -4,6 +4,8 @@
  * All Rights Reserved.
  */
 
+declare(strict_types=1);
+
 namespace Magento\CustomerGraphQl\Test\Unit\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
@@ -33,27 +35,27 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
     private UserContextInterface $userContextMock;
 
     /**
-     * @var Session|MockObject
-     */
-    private Session $sessionMock;
-
-    /**
      * @var CustomerRepository|MockObject
      */
     private CustomerRepository $customerRepositoryMock;
 
     /**
-     * @var AddUserInfoToContext
+     * @var Session|MockObject
+     */
+    private Session $sessionMock;
+
+    /**
+     * @var AddUserInfoToContext|MockObject
      */
     private AddUserInfoToContext $addUserInfoToContextMock;
 
     /**
-     * @var GraphQl
+     * @var GraphQl|MockObject
      */
     private GraphQl $graphQlMock;
 
     /**
-     * @var ResponseInterface
+     * @var ResponseInterface|MockObject
      */
     private ResponseInterface $responseMock;
 
@@ -65,8 +67,8 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
     protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(UserContextInterface::class);
-        $this->sessionMock = $this->createMock(Session::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepository::class);
+        $this->sessionMock = $this->createMock(Session::class);
         $this->addUserInfoToContextMock = $this->createMock(AddUserInfoToContext::class);
         $this->graphQlMock = $this->createMock(GraphQl::class);
         $this->responseMock = $this->createMock(ResponseInterface::class);
@@ -80,35 +82,57 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
         );
     }
 
-    /**
-     * Test after dispatch plugin
-     */
-    public function testAfterDispatch(): void
+    public function testAfterDispatchSkipsGuestRequests(): void
     {
-        $this->addUserInfoToContextMock
-            ->expects($this->once())
+        $this->userContextMock->expects($this->once())
+            ->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_GUEST);
+        $this->userContextMock->expects($this->never())
+            ->method('getUserId');
+        $this->addUserInfoToContextMock->expects($this->never())
             ->method('getLoggedInCustomerData');
+        $this->sessionMock->expects($this->never())
+            ->method('setCustomerId');
+        $this->sessionMock->expects($this->never())
+            ->method('setCustomerGroupId');
 
-        $this->clearCustomerSessionAfterRequest->afterDispatch($this->graphQlMock, $this->responseMock);
+        $this->assertSame(
+            $this->responseMock,
+            $this->clearCustomerSessionAfterRequest->afterDispatch($this->graphQlMock, $this->responseMock)
+        );
     }
 
-    /**
-     * Test after dispatch plugin for logged in customer
-     */
     public function testAfterDispatchForLoggedInCustomer(): void
     {
+        $this->userContextMock->expects($this->once())
+            ->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->userContextMock->expects($this->once())
+            ->method('getUserId')
+            ->willReturn(1);
         $this->addUserInfoToContextMock
             ->expects($this->once())
             ->method('getLoggedInCustomerData')
             ->willReturn($this->customerMock);
         $this->customerMock
             ->expects($this->once())
-            ->method('getId');
+            ->method('getId')
+            ->willReturn(1);
         $this->customerMock
             ->expects($this->once())
-            ->method('getGroupId');
+            ->method('getGroupId')
+            ->willReturn(3);
+        $this->sessionMock->expects($this->once())
+            ->method('setCustomerId')
+            ->with(1);
+        $this->sessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(3);
 
-        $this->clearCustomerSessionAfterRequest->afterDispatch($this->graphQlMock, $this->responseMock);
+        $this->assertSame(
+            $this->responseMock,
+            $this->clearCustomerSessionAfterRequest->afterDispatch($this->graphQlMock, $this->responseMock)
+        );
     }
 
     protected function tearDown(): void
@@ -116,8 +140,8 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
         unset(
             $this->clearCustomerSessionAfterRequest,
             $this->userContextMock,
-            $this->sessionMock,
             $this->customerRepositoryMock,
+            $this->sessionMock,
             $this->addUserInfoToContextMock,
             $this->graphQlMock,
             $this->responseMock,

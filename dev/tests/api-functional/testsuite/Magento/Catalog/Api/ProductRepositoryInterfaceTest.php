@@ -39,6 +39,8 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomains;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -56,6 +58,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     private const SERVICE_NAME = 'catalogProductRepositoryV1';
     private const SERVICE_VERSION = 'V1';
     private const RESOURCE_PATH = '/V1/products';
+
+    /**
+     * Name of the lock guarding concurrent read-modify-write access to the downloadable domains
+     * whitelist in env.php (see Magento\Downloadable\Model\DomainManager).
+     */
+    private const DOMAIN_LOCK_NAME = 'downloadable_domains';
 
     private const KEY_TIER_PRICES = 'tier_prices';
     private const KEY_SPECIAL_PRICE = 'special_price';
@@ -118,7 +126,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->urlRewriteCollectionFactory = $objectManager->get(UrlRewriteCollectionFactory::class);
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['example.com']);
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::addDomains($domainManager, ['example.com']);
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     /**
@@ -132,7 +147,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['example.com']);
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
+            DownloadableDomains::removeDomains($domainManager, ['example.com']);
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     /**
@@ -176,14 +198,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * Test get() method with invalid sku
+     * Test get() method with invalid SKUs
+     *
+     * @param string $invalidSku SKU that must not exist in the catalog
      */
-    public function testGetNoSuchEntityException()
+    #[DataProvider('getNotExistingProductSkuDataProvider')]
+    public function testGetNoSuchEntityException(string $invalidSku): void
     {
-        $invalidSku = '(nonExistingSku)';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $invalidSku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . rawurlencode($invalidSku),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -208,6 +232,20 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
+    }
+
+    /**
+     * Non-existent SKUs for {@see testGetNoSuchEntityException}
+     *
+     * @return array<string, array{string}>
+     */
+    public static function getNotExistingProductSkuDataProvider(): array
+    {
+        return [
+            'Non-existent SKU with parentheses' => ['(nonExistingSku)'],
+            'Non-existent SKU with numeric-looking token' => ['123abc'],
+            'Random missing SKU' => ['missing-product-webapi-bad-ref'],
+        ];
     }
 
     /**
@@ -2213,14 +2251,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->_markTestAsRestOnly(
             'Test skipped due to known issue with SOAP. NULL value is cast to corresponding attribute type.'
         );
-        
+
         $fixtures = DataFixtureStorageManager::getStorage();
         $defaultValueProcessor = Bootstrap::getObjectManager()->get(DefaultValueProcessor::class);
         $sku = $fixtures->get('p1')->getSku();
         $store2 = $fixtures->get('store_view_2');
-        
+
         $productData = $this->getProduct($sku, $store2->getCode());
-        
+
         // Update1: Update product in store view 2 without media_gallery_entries
         $update1 = $productData;
         unset($update1['media_gallery_entries']);
@@ -2263,7 +2301,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, $image['disabled_use_default']);
         $this->assertEquals(1, $image['position_use_default']);
     }
-    
+
     /**
      * @return string
      */

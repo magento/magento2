@@ -18,7 +18,7 @@
             <testCaseId value="AC-5262"/>
             <group value="cloud"/>
             <skip>
-                <issueId value="AC-15476">Skipped because of AC bug</issueId>
+                <issueId value="AC-17362">Skipped because of AC bug</issueId>
             </skip>
         </annotations>
         <before>

@@ -45,7 +45,7 @@ define(['squire'], function (Squire) {
         try {
             injector.clean();
             injector.remove();
-        } catch (e) {}
+        } catch {}
     });
 
     describe('Magento_Checkout/js/view/minicart', function () {
@@ -93,6 +93,62 @@ define(['squire'], function (Squire) {
 
                 expect(obj.getCartParam('items').length).toBe(2);
                 expect(JSON.stringify(obj.getCartParam('items'))).toBe(expectedResult);
+            });
+        });
+
+        describe('"minicartSelector" property', function () {
+            it('Has default minicart selector.', function () {
+                expect(obj.minicartSelector).toBe('[data-block="minicart"]');
+            });
+
+            it('Can be overridden via config.', function (done) {
+                injector.require(['Magento_Checkout/js/view/minicart'], function (Constr) {
+                    var customObj = new Constr({
+                        provider: 'provName',
+                        name: '',
+                        index: '',
+                        minicartSelector: '[data-block="minicart-footer"]',
+                        cart: {},
+                        itemRenderer: {}
+                    });
+
+                    expect(customObj.minicartSelector).toBe('[data-block="minicart-footer"]');
+                    done();
+                });
+            });
+        });
+
+        describe('"addToCartCalls" property', function () {
+            it('Is an instance-level property initialized to 0.', function () {
+                expect(obj.addToCartCalls).toBe(0);
+            });
+
+            it('Each instance maintains its own counter.', function (done) {
+                injector.require(['Magento_Checkout/js/view/minicart'], function (Constr) {
+                    var secondObj = new Constr({
+                        provider: 'provName',
+                        name: '',
+                        index: '',
+                        cart: {},
+                        itemRenderer: {}
+                    });
+
+                    obj.addToCartCalls = 5;
+                    expect(secondObj.addToCartCalls).toBe(0);
+                    done();
+                });
+            });
+        });
+
+        describe('"initSidebar" method', function () {
+            it('Is defined as an instance method.', function () {
+                expect(typeof obj.initSidebar).toBe('function');
+            });
+        });
+
+        describe('"closeMinicart" method', function () {
+            it('Is defined as an instance method.', function () {
+                expect(typeof obj.closeMinicart).toBe('function');
             });
         });
     });

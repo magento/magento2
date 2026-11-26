@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\EntitySpecificHandlesList;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 
@@ -180,6 +181,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $cacheLifetime;
 
     /**
+     * @var EntitySpecificHandlesList
+     */
+    private EntitySpecificHandlesList $entitySpecificHandlesList;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -196,6 +202,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param LayoutCacheKeyInterface|null $layoutCacheKey
      * @param SerializerInterface|null $serializer
      * @param int|null $cacheLifetime
+     * @param EntitySpecificHandlesList|null $entitySpecificHandlesList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -212,7 +219,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $cacheSuffix = '',
         ?LayoutCacheKeyInterface $layoutCacheKey = null,
         ?SerializerInterface $serializer = null,
-        ?int $cacheLifetime = null
+        ?int $cacheLifetime = null,
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
@@ -228,6 +236,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->cacheLifetime = $cacheLifetime ?? self::DEFAULT_CACHE_LIFETIME;
+        $this->entitySpecificHandlesList = $entitySpecificHandlesList
+            ?: ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
     }
 
     /**
@@ -993,8 +1003,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     public function getCacheId()
     {
         $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
+        $handles = $this->getHandles();
+        $entitySpecificHandles = $this->entitySpecificHandlesList->getHandles();
+        if (!empty($entitySpecificHandles)) {
+            $entitySpecificHandles = array_flip($entitySpecificHandles);
+            $handles = array_values(
+                array_filter(
+                    $handles,
+                    function (string $handle) use ($entitySpecificHandles): bool {
+                        return !isset($entitySpecificHandles[$handle]) || (bool)$this->getDbUpdateString($handle);
+                    }
+                )
+            );
+        }
         // phpcs:ignore Magento2.Security.InsecureFunction
-        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
+        return $this->generateCacheId(md5(implode('|', array_merge($handles, $layoutCacheKeys))));
     }
 
     /**

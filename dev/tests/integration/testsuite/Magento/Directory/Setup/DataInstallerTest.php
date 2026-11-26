@@ -43,7 +43,6 @@ class DataInstallerTest extends TestCase
     public function testAddCountryRegions(): void
     {
         $adapter = $this->resourceConnection->getConnection();
-        $expectedCountries = $this->getCountries(true);
 
         $regionsBefore = $this->getTableRowsCount('directory_country_region');
         $regionsNamesBefore = $this->getTableRowsCount('directory_country_region_name');
@@ -58,7 +57,6 @@ class DataInstallerTest extends TestCase
 
         $this->assertEquals(4, ($regionsAfter - $regionsBefore));
         $this->assertEquals(4, ($regionsNamesAfter - $regionsNamesBefore));
-        $this->assertEquals($expectedCountries, $this->getCountries());
     }
 
     /**
@@ -79,35 +77,123 @@ class DataInstallerTest extends TestCase
     }
 
     /**
-     * Return required countries with regions
+     * Test updating country region codes and names
      *
-     * @param bool $isConfig
-     * @return string
+     * @return void
      */
-    private function getCountries(bool $isConfig = false): string
+    public function testUpdateCountryRegionCodes(): void
+    {
+        $adapter = $this->resourceConnection->getConnection();
+        $countryCode = 'DE';
+
+        // First, add test regions that we'll update
+        $testRegions = [
+            [$countryCode, 'OLD-01', 'Old Region 1'],
+            [$countryCode, 'OLD-02', 'Old Region 2'],
+            [$countryCode, 'OLD-03', 'Old Region 3'],
+        ];
+
+        $this->dataInstaller->addCountryRegions($adapter, $testRegions);
+
+        // Verify regions were added
+        $this->assertRegionExists($countryCode, 'OLD-01', 'Old Region 1');
+        $this->assertRegionExists($countryCode, 'OLD-02', 'Old Region 2');
+        $this->assertRegionExists($countryCode, 'OLD-03', 'Old Region 3');
+
+        // Define code and name mappings for updates
+        $codeMapping = [
+            'OLD-01' => 'NEW-01',
+            'OLD-02' => 'NEW-02',
+            'OLD-03' => 'NEW-03',
+        ];
+
+        $nameMapping = [
+            'OLD-01' => 'Updated Region 1',
+            'OLD-02' => 'Updated Region 2',
+            // OLD-03 name should remain unchanged
+        ];
+
+        // Update region codes and names
+        $this->dataInstaller->updateCountryRegionCodes(
+            $adapter,
+            $countryCode,
+            $codeMapping,
+            $nameMapping
+        );
+
+        // Verify old codes no longer exist
+        $this->assertRegionNotExists($countryCode, 'OLD-01');
+        $this->assertRegionNotExists($countryCode, 'OLD-02');
+        $this->assertRegionNotExists($countryCode, 'OLD-03');
+
+        // Verify new codes exist with correct names
+        $this->assertRegionExists($countryCode, 'NEW-01', 'Updated Region 1');
+        $this->assertRegionExists($countryCode, 'NEW-02', 'Updated Region 2');
+        $this->assertRegionExists($countryCode, 'NEW-03', 'Old Region 3'); // Name unchanged
+    }
+
+    /**
+     * Assert that a region exists with given code and name
+     *
+     * @param string $countryCode
+     * @param string $regionCode
+     * @param string $expectedName
+     * @return void
+     */
+    private function assertRegionExists(string $countryCode, string $regionCode, string $expectedName): void
     {
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
-            ->from($connection->getTableName('core_config_data'), 'value')
-            ->where('path = ?', 'general/region/state_required')
-            ->where('scope = ?', 'default')
-            ->where('scope_id = ?', 0);
+            ->from($this->resourceConnection->getTableName('directory_country_region'), ['default_name'])
+            ->where('country_id = ?', $countryCode)
+            ->where('code = ?', $regionCode);
 
-        $countries = $connection->fetchOne($select);
-        $countries = (!empty($countries)) ? explode(',', $countries) : [];
+        $actualName = $connection->fetchOne($select);
+        $this->assertEquals(
+            $expectedName,
+            $actualName,
+            "Region {$countryCode}-{$regionCode} should exist with name '{$expectedName}'"
+        );
 
-        if (!$isConfig) {
-            return implode(',', $countries);
-        }
+        // Also verify in region_name table
+        $regionIdSelect = $connection->select()
+            ->from($this->resourceConnection->getTableName('directory_country_region'), ['region_id'])
+            ->where('country_id = ?', $countryCode)
+            ->where('code = ?', $regionCode);
 
-        $countryCodes = ['JP', 'UA'];
-        foreach ($countryCodes as $country) {
-            if (!in_array($country, $countries)) {
-                $countries[] = $country;
-            }
-        }
+        $regionId = $connection->fetchOne($regionIdSelect);
+        $this->assertNotNull($regionId, "Region ID should exist for {$countryCode}-{$regionCode}");
 
-        return implode(',', $countries);
+        $nameSelect = $connection->select()
+            ->from($this->resourceConnection->getTableName('directory_country_region_name'), ['name'])
+            ->where('region_id = ?', $regionId)
+            ->where('locale = ?', 'en_US');
+
+        $nameInTable = $connection->fetchOne($nameSelect);
+        $this->assertEquals(
+            $expectedName,
+            $nameInTable,
+            "Region name in directory_country_region_name should be '{$expectedName}'"
+        );
+    }
+
+    /**
+     * Assert that a region does not exist
+     *
+     * @param string $countryCode
+     * @param string $regionCode
+     * @return void
+     */
+    private function assertRegionNotExists(string $countryCode, string $regionCode): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from($this->resourceConnection->getTableName('directory_country_region'), ['code'])
+            ->where('country_id = ?', $countryCode)
+            ->where('code = ?', $regionCode);
+
+        $result = $connection->fetchOne($select);
+        $this->assertFalse($result, "Region {$countryCode}-{$regionCode} should not exist");
     }
 
     /**

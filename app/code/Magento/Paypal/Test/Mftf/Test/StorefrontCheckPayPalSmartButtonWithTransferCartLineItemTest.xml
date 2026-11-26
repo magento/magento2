@@ -29,6 +29,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteCustomer"/>
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteSimpleProduct"/>

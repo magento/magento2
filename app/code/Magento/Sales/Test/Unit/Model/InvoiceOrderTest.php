@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
@@ -161,7 +162,7 @@ class InvoiceOrderTest extends TestCase
             $this->invoiceOrderValidatorMock,
             $this->notifierInterfaceMock,
             $this->loggerMock,
-            new OrderMutex($this->resourceConnectionMock)
+            new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0))
         );
     }
 

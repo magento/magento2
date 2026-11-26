@@ -175,14 +175,26 @@ class ValidatorInfoTest extends TestCase
      */
     private function getOptionValue(?string $fileName = 'magento_small_image.jpg'): array
     {
-        $file = $this->config->getBaseTmpMediaPath() . '/' . $fileName;
-        $filePath = $this->mediaDirectory->getAbsolutePath($file);
+        $quoteFile = 'custom_options/quote/' . $fileName;
+        $orderFile = 'custom_options/order/' . $fileName;
+        $quoteFilePath = $this->mediaDirectory->getAbsolutePath($quoteFile);
+
+        if (!$this->mediaDirectory->isFile($quoteFile)) {
+            $driver = $this->mediaDirectory->getDriver();
+            $driver->createDirectory(dirname($quoteFilePath));
+            $sourceFile = INTEGRATION_TESTS_DIR . '/testsuite/Magento/Catalog/_files/' . $fileName;
+            if (file_exists($sourceFile)) {
+                $driver->filePutContents($quoteFilePath, file_get_contents($sourceFile));
+            } else {
+                $driver->filePutContents($quoteFilePath, '');
+            }
+        }
 
         return [
             'title' => 'test.jpg',
-            'quote_path' => $file,
-            'order_path' => $file,
-            'secret_key' => substr(hash('sha256', $this->mediaDirectory->readFile($filePath)), 0, 20)
+            'quote_path' => $quoteFile,
+            'order_path' => $orderFile,
+            'secret_key' => substr(hash('sha256', $this->mediaDirectory->readFile($quoteFilePath)), 0, 20)
         ];
     }
 
@@ -192,12 +204,18 @@ class ValidatorInfoTest extends TestCase
      */
     private function copyFileToTmpMedia(string $source): void
     {
-        $destination = $this->mediaDirectory->getAbsolutePath(
-            $this->config->getBaseTmpMediaPath() . DIRECTORY_SEPARATOR . basename($source)
+        $quoteDestination = $this->mediaDirectory->getAbsolutePath(
+            'custom_options/quote/' . basename($source)
+        );
+        $orderDestination = $this->mediaDirectory->getAbsolutePath(
+            'custom_options/order/' . basename($source)
         );
 
         $driver = $this->mediaDirectory->getDriver();
-        $driver->createDirectory(dirname($destination));
-        $driver->filePutContents($destination, file_get_contents($source));
+        $driver->createDirectory(dirname($quoteDestination));
+        $driver->createDirectory(dirname($orderDestination));
+        $fileContents = file_get_contents($source);
+        $driver->filePutContents($quoteDestination, $fileContents);
+        $driver->filePutContents($orderDestination, $fileContents);
     }
 }

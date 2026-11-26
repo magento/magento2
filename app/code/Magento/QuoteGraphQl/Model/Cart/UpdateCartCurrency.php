@@ -61,10 +61,10 @@ class UpdateCartCurrency
                 );
             }
             $cart->setStoreId($storeId);
-            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency());
-            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency());
+            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency()->getCode());
+            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency()->getCode());
         } elseif ($cart->getQuoteCurrencyCode() !== $currentCartCurrencyCode) {
-            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
+            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency()->getCode());
         } else {
             return $cart;
         }

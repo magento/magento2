@@ -62,6 +62,15 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    protected function tearDown(): void
+    {
+        // Reset shared inline state for other tests. Do not call resume() here: if suspend() was never
+        // invoked, resume() sets isEnabled from null storedStatus and disables inline for the rest of the run.
+        if ($this->state !== null) {
+            $this->state->enable();
+        }
+    }
+
     public function testIsAllowed()
     {
         $this->assertTrue($this->_model->isAllowed());
@@ -90,25 +99,60 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $originalText
-     * @param string $expectedText
+     * @param string|array $originalText
+     * @param string|array $expectedText For plain text, exact expected body. For HTML cases, kept for the
+     *        historical two-argument provider shape; assertions use structural checks (golden file removed).
      */
     #[DataProvider('processResponseBodyDataProvider')]
     public function testProcessResponseBody($originalText, $expectedText)
     {
-        $actualText = $originalText;
-        $this->_model->processResponseBody($actualText, false);
-        $this->markTestSkipped('Bug MAGE-2494');
+        if (is_array($originalText)) {
+            $body = $originalText;
+            $this->_model->processResponseBody($body, false);
+            $this->assertIsArray($expectedText);
+            $this->assertCount(count($expectedText), $body);
+            $this->assertIsString($body[0]);
+            $this->assertProcessedHtmlInlineBody($body[0]);
+            return;
+        }
 
-        $expected = new \DOMDocument();
-        $expected->preserveWhiteSpace = false;
-        $expected->loadHTML($expectedText);
+        $snapshotBeforeProcessing = $originalText;
+        $body = $originalText;
+        $this->_model->processResponseBody($body, false);
 
-        $actual = new \DOMDocument();
-        $actual->preserveWhiteSpace = false;
-        $actual->loadHTML($actualText);
+        if (!str_contains($snapshotBeforeProcessing, '<html')) {
+            $this->assertSame($expectedText, $body);
+            return;
+        }
 
-        $this->assertEquals($expected, $actual);
+        $this->assertIsString($body);
+        $this->assertProcessedHtmlInlineBody($body);
+    }
+
+    /**
+     * Assert HTML was processed for inline translation (markers replaced, UI hooks present).
+     *
+     * Full-document string equality is not used: static URLs, JSON shape, and injected assets change across releases.
+     *
+     * @param string $html
+     */
+    private function assertProcessedHtmlInlineBody(string $html): void
+    {
+        $this->assertStringNotContainsString(
+            '{{{',
+            $html,
+            'Inline translation template markers should be replaced in the HTML output.'
+        );
+        $this->assertStringContainsString('data-translate', $html);
+        $this->assertStringContainsString('translate-inline-title', $html);
+        $this->assertStringContainsString('shown_0', $html);
+        $this->assertStringContainsString('some_title_shown_1_in_div', $html);
+        $this->assertStringContainsString('shown_2', $html);
+        $this->assertMatchesRegularExpression(
+            '/translate-dialog|translateInline|mage\/translate-inline/',
+            $html,
+            'Expected translate-inline UI wiring (dialog, script, or stylesheet).'
+        );
     }
 
     /**
@@ -117,12 +161,11 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     public static function processResponseBodyDataProvider()
     {
         $originalText = file_get_contents(__DIR__ . '/_files/_inline_page_original.html');
-        $expectedText = file_get_contents(__DIR__ . '/_files/_inline_page_expected.html');
 
         return [
             'plain text' => ['text with no translations and tags', 'text with no translations and tags'],
-            'html string' => [$originalText, $expectedText],
-            'html array' => [[$originalText], [$expectedText]]
+            'html string' => [$originalText, $originalText],
+            'html array' => [[$originalText], [$originalText]],
         ];
     }
 }

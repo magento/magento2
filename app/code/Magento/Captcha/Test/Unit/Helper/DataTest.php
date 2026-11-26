@@ -87,7 +87,8 @@ class DataTest extends TestCase
         )->method(
             'create'
         )->with(
-            'Zend'
+            'Zend',
+            'user_create'
         )->willReturn(
             new DefaultModel(
                 $this->createMock(SessionManager::class),
@@ -100,6 +101,33 @@ class DataTest extends TestCase
         );
 
         $this->assertInstanceOf(DefaultModel::class, $this->helper->getCaptcha('user_create'));
+    }
+
+    /**
+     * @covers \Magento\Captcha\Helper\Data::getCaptcha
+     */
+    public function testGetCaptchaWithNullFormId()
+    {
+        $this->configMock->expects($this->once())
+            ->method('getValue')
+            ->with('customer/captcha/type')
+            ->willReturn('zend');
+
+        $this->factoryMock->expects($this->once())
+            ->method('create')
+            ->with('Zend', $this->identicalTo(''))
+            ->willReturn(
+                new DefaultModel(
+                    $this->createMock(SessionManager::class),
+                    $this->createMock(Data::class),
+                    $this->createPartialMock(LogFactory::class, ['create']),
+                    '',                       // null formId coalesced to ''
+                    $this->createMock(Random::class),
+                    $this->createMock(UserContextInterface::class)
+                )
+            );
+
+        $this->assertInstanceOf(DefaultModel::class, $this->helper->getCaptcha(null));
     }
 
     /**

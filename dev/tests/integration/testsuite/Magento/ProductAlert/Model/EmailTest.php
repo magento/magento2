@@ -9,14 +9,19 @@ namespace Magento\ProductAlert\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\View;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use Magento\TestFramework\Fixture\Config as Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\ObjectManager;
@@ -67,6 +72,11 @@ class EmailTest extends TestCase
     private $customerRepository;
 
     /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -81,6 +91,7 @@ class EmailTest extends TestCase
         $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
 
         $this->_emailModel = $this->_objectManager->create(Email::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -207,5 +218,38 @@ class EmailTest extends TestCase
         $from = $this->transportBuilder->getSentMessage()->getFrom()[0];
         $this->assertEquals('Fixture Store Owner', $from->getName());
         $this->assertEquals('fixture.store.owner@example.com', $from->getEmail());
+    }
+
+    #[
+        Config('system/smtp/disable', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, as: 'customer'),
+    ]
+    public function testEmailNotExpectedToBeSent()
+    {
+        $transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
+
+        $isEmailSent = false;
+        $transportBuilderMock->setOnMessageSentCallback(
+            function () use (&$isEmailSent) {
+                $isEmailSent = true;
+            }
+        );
+
+        $website = $this->_objectManager->create(Website::class);
+        $website->load(1);
+        $this->_emailModel->setWebsite($website);
+
+        $customer = $this->fixtures->get('customer');
+        $customerData = $this->customerRepository->getById($customer->getId());
+        $this->_emailModel->setCustomerData($customerData);
+
+        $product = $this->fixtures->get('product');
+        $this->_emailModel->addPriceProduct($product);
+        $this->_emailModel->addStockProduct($product);
+
+        $this->_emailModel->send();
+
+        $this->assertFalse($isEmailSent, 'Email is not expected to be sent');
     }
 }

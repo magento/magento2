@@ -18,22 +18,23 @@ define([
         confirmSpy = jasmine.createSpy('confirm'),
         tmpl = '<form id="edit_form" action="/">' +
                 '<section id="order-methods">' +
-                    '<div id="order-billing_method"></div>' +
+                    '<div id="order-billing_method">' +
+                        '<div id="order-billing_method_form">' +
+                            '<input id="p_method_payment1" type="radio" name="payment[method]" value="payment1"/>' +
+                            '<fieldset id="payment_form_payment1">' +
+                                '<input type="number" name="payment[cc_number]"/>' +
+                                '<input type="number" name="payment[cc_cid]"/>' +
+                            '</fieldset>' +
+                            '<input id="p_method_payment2" type="radio" name="payment[method]" value="payment2"/>' +
+                            '<fieldset id="payment_form_payment2">' +
+                                '<input type="number" name="payment[cc_number]"/>' +
+                                '<input type="number" name="payment[cc_cid]"/>' +
+                            '</fieldset>' +
+                            '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
+                        '</div>' +
+                    '</div>' +
                     '<div id="order-shipping_method"></div>' +
                 '</section>' +
-                '<div id="order-billing_method_form">' +
-                    '<input id="p_method_payment1" type="radio" name="payment[method]" value="payment1"/>' +
-                    '<fieldset id="payment_form_payment1">' +
-                        '<input type="number" name="payment[cc_number]"/>' +
-                        '<input type="number" name="payment[cc_cid]"/>' +
-                    '</fieldset>' +
-                    '<input id="p_method_payment2" type="radio" name="payment[method]" value="payment2"/>' +
-                    '<fieldset id="payment_form_payment2">' +
-                        '<input type="number" name="payment[cc_number]"/>' +
-                        '<input type="number" name="payment[cc_cid]"/>' +
-                    '</fieldset>' +
-                    '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
-                '</div>' +
             '<button id="submit_order_top_button" type="button">Submit Order</button>' +
             '</form>';
 
@@ -100,7 +101,15 @@ define([
     function init(config) {
         config = config || {};
         order = new window.AdminOrder({});
-        $(formEl).validate({});
+        $(formEl).validate({
+            ignore: '',
+            errorClass: 'mage-error',
+            messages: {
+                'order[has_payment]': {
+                    required: 'This is a required field.'
+                }
+            }
+        });
         $(formEl).find(':radio[value="payment1"]').testPaymentMethodA({
             code: 'payment1',
             orderSaveUrl: '/admin/sales/order/create/payment_method/payment1',
@@ -153,7 +162,7 @@ define([
             try {
                 injector.clean();
                 injector.remove();
-            } catch (e) {
+            } catch (e) { //eslint-disable-line no-unused-vars
             }
             $(formEl).off().remove();
             formEl = undefined;
@@ -258,6 +267,63 @@ define([
             expect(order.loadArea).toHaveBeenCalled();
         });
 
+        describe('Order validation messages', function () {
+            beforeEach(function () {
+                order = new window.AdminOrder({});
+                $('<div id="order-message">' +
+                    '<div class="message-error">This product is disabled.</div>' +
+                    '<div class="message-warning">This product is out of stock.</div>' +
+                    '</div>').appendTo(formEl);
+            });
+
+            it('clears stale errors and warnings when revalidation returns no messages', function () {
+                order.loadAreaResponseHandler({message: ''});
+
+                expect($('#order-message').html()).toBe('');
+            });
+
+            it('preserves the rejection message during automatic payment initialization', function () {
+                order.loadAreaResponseHandler({message: ''}, true);
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+                expect($('#order-message').text()).toContain('This product is out of stock.');
+            });
+
+            it('replaces stale messages with current validation errors during payment initialization', function () {
+                order.loadAreaResponseHandler({
+                    message: '<div class="message-error">The requested quantity is not available.</div>'
+                }, true);
+
+                expect($('#order-message').text()).toBe('The requested quantity is not available.');
+            });
+
+            it('leaves messages unchanged if the response does not include the message area', function () {
+                order.loadAreaResponseHandler({});
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+            });
+
+            it('clears stale messages when the administrator explicitly selects a payment method', function () {
+                spyOn(Ajax, 'Request').and.callFake(function (url, options) {
+                    options.onSuccess({responseText: '{"message": ""}'});
+                });
+
+                order.switchPaymentMethod('payment1');
+
+                expect($('#order-message').html()).toBe('');
+            });
+
+            it('passes message preservation through the automatic payment request', function () {
+                spyOn(Ajax, 'Request').and.callFake(function (url, options) {
+                    options.onSuccess({responseText: '{"message": ""}'});
+                });
+
+                order.switchPaymentMethod('payment1', true);
+
+                expect($('#order-message').text()).toContain('This product is disabled.');
+            });
+        });
+
         describe('Testing the process customer group change', function () {
             it('and confirm method is called', function () {
                 init();
@@ -275,6 +341,165 @@ define([
         });
 
         describe('submit()', function () {
+            var originalRequiredEntryRule;
+
+            beforeEach(function () {
+                originalRequiredEntryRule = $.validator.classRuleSettings['required-entry'];
+                $.validator.addClassRules('required-entry', {
+                    required: true
+                });
+            });
+
+            afterEach(function () {
+                if (typeof originalRequiredEntryRule === 'undefined') {
+                    delete $.validator.classRuleSettings['required-entry'];
+                } else {
+                    $.validator.classRuleSettings['required-entry'] = originalRequiredEntryRule;
+                }
+                originalRequiredEntryRule = undefined;
+            });
+
+            ['free', 'payment1', 'payment2'].forEach(function (method) {
+                it('blocks submission after resetting payment method ' + method, function () {
+                    init({
+                        method: method
+                    });
+                    $.ajax = jasmine.createSpy('$.ajax');
+
+                    order.resetPaymentMethod();
+                    order.submit();
+
+                    expect($.ajax).not.toHaveBeenCalled();
+                    expect($(formEl).valid()).toBeFalse();
+                    expect($('#order-billing_method label.mage-error').text()).toBe('This is a required field.');
+                    expect($('#submit_order_top_button').prop('disabled')).toBeFalse();
+                });
+            });
+
+            it('reloads payment methods with shipping rates after an address change', function () {
+                var paymentForm;
+
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: 'free'
+                });
+                $(formEl).find(':radio[value="free"]').attr('checked', 'checked');
+                paymentForm = $('#order-billing_method').html();
+                $(formEl).append(
+                    '<div id="order-billing_address">' +
+                        '<input id="order-billing_address_customer_address_id" ' +
+                            'name="order[billing_address][customer_address_id]" value="1"/>' +
+                        '<input id="order-billing_address_telephone" ' +
+                            'name="order[billing_address][telephone]" value="1234567890"/>' +
+                    '</div>' +
+                    '<div id="order-shipping_address">' +
+                        '<input id="order-shipping_address_customer_address_id" ' +
+                            'name="order[shipping_address][customer_address_id]" value="1"/>' +
+                        '<input id="order-shipping_address_telephone" ' +
+                            'name="order[shipping_address][telephone]" value="1234567890"/>' +
+                    '</div>'
+                );
+                order.billingAddressContainer = 'order-billing_address';
+                order.shippingAddressContainer = 'order-shipping_address';
+                order.shippingAsBilling = true;
+                order.bindAddressFields(order.billingAddressContainer);
+                $.ajax.calls.reset();
+
+                $('#order-billing_address_telephone').val('9876543210').trigger('change');
+                order.submit();
+
+                expect($.ajax).not.toHaveBeenCalled();
+                expect($(formEl).valid()).toBeFalse();
+
+                spyOn(order, 'loadArea').and.callFake(function (areas) {
+                    order.loadingAreas = areas.slice();
+                    order.loadAreaResponseHandler({
+                        billing_method: paymentForm,
+                        shipping_method: '<input type="radio" name="order[shipping_method]" ' +
+                            'value="flatrate_flatrate" checked="checked"/>'
+                    });
+                });
+                order.loadShippingRates();
+                order.submit();
+
+                expect(order.loadArea).toHaveBeenCalledWith(
+                    ['shipping_method', 'billing_method', 'totals'],
+                    true,
+                    jasmine.objectContaining({
+                        'order[billing_address][telephone]': '9876543210',
+                        'collect_shipping_rates': 1
+                    })
+                );
+                expect($(formEl).find(':radio[value="free"]').prop('checked')).toBeTrue();
+                expect($(formEl).valid()).toBeTrue();
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
+                    url: '/admin/sales/order/create',
+                    data: jasmine.arrayContaining([{
+                        name: 'payment[method]',
+                        value: 'free'
+                    }])
+                }));
+            });
+
+            it('requires a new selection when the reloaded payment methods exclude the previous method', function () {
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: 'free'
+                });
+                order.billingAddressContainer = 'edit_form';
+                order.shippingAsBilling = true;
+                order.resetPaymentMethod();
+                $.ajax.calls.reset();
+                spyOn(order, 'loadArea').and.callFake(function (areas) {
+                    order.loadingAreas = areas.slice();
+                    order.loadAreaResponseHandler({
+                        billing_method: '<input type="radio" name="payment[method]" ' +
+                            'value="payment1" class="required-entry"/>' +
+                            '<input type="radio" name="payment[method]" ' +
+                            'value="payment2" class="required-entry"/>'
+                    });
+                });
+
+                order.loadShippingRates();
+                order.submit();
+
+                expect($(formEl).find('[name="order[has_payment]"]').length).toBe(0);
+                expect($(formEl).valid()).toBeFalse();
+                expect($.ajax).not.toHaveBeenCalled();
+            });
+
+            it('allows submission after payment methods are reloaded and selected', function () {
+                var paymentForm;
+
+                init({
+                    method: 'payment1'
+                });
+                paymentForm = $('#order-billing_method').html();
+                $.ajax = jasmine.createSpy('$.ajax');
+                order.resetPaymentMethod();
+                order.submit();
+                expect($.ajax).not.toHaveBeenCalled();
+
+                order.loadingAreas = ['billing_method'];
+                order.loadAreaResponseHandler({
+                    billing_method: paymentForm
+                });
+                $(formEl).find(':radio[value="free"]').prop('checked', true);
+                order.switchPaymentMethod('free');
+                order.submit();
+
+                expect($(formEl).find('[name="order[has_payment]"]').length).toBe(0);
+                expect($(formEl).valid()).toBeTrue();
+                expect($.ajax).toHaveBeenCalledTimes(1);
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining({
+                    url: '/admin/sales/order/create',
+                    data: [{
+                        name: 'payment[method]',
+                        value: 'free'
+                    }]
+                }));
+            });
+
             function testSubmit(currentPaymentMethod, paymentMethod, ajaxParams) {
                 $.ajax = jasmine.createSpy('$.ajax');
                 init({
@@ -369,6 +594,100 @@ define([
                         ]
                     }
                 );
+            });
+        });
+
+        describe('_calcProductPrice', function () {
+            var confirmedContainer, originalProductConfigure, originalDollar;
+
+            beforeEach(function () {
+                originalProductConfigure = window.productConfigure;
+                originalDollar = window.$;
+
+                // Simulate the hidden confirmed-blocks container that configure.js manages
+                confirmedContainer = document.createElement('div');
+                confirmedContainer.id = 'product_composite_configure_confirmed';
+                document.body.appendChild(confirmedContainer);
+
+                // Mirror Prototype.js $(): string → getElementById, element → pass-through.
+                // Form.Element.getValue calls $(element) with a DOM element internally,
+                // so the mock must handle both argument types.
+                window.$ = function (idOrElement) {
+                    if (typeof idOrElement === 'string') {
+                        return document.getElementById(idOrElement);
+                    }
+
+                    return idOrElement;
+                };
+
+                init();
+            });
+
+            afterEach(function () {
+                window.productConfigure = originalProductConfigure;
+                window.$ = originalDollar;
+
+                if (confirmedContainer && confirmedContainer.parentNode) {
+                    confirmedContainer.parentNode.removeChild(confirmedContainer);
+                }
+
+                confirmedContainer = undefined;
+            });
+
+            /**
+             * Builds a confirmed block div containing a qty text input and a hidden price input.
+             * Mirrors the markup produced by grouped.phtml for each associated simple product.
+             */
+            function makeGroupedBlock(blockId, simpleProductId, qty, unitPrice) {
+                var block = document.createElement('div'),
+                    qtyInput = document.createElement('input'),
+                    priceInput = document.createElement('input');
+
+                block.id = blockId;
+
+                qtyInput.type = 'text';
+                qtyInput.id = 'super_group[' + simpleProductId + ']';
+                qtyInput.value = String(qty);
+                block.appendChild(qtyInput);
+
+                priceInput.type = 'hidden';
+                priceInput.value = '1';
+                priceInput.setAttribute('price', String(unitPrice));
+                priceInput.setAttribute('qtyId', 'super_group[' + simpleProductId + ']');
+                priceInput.setAttribute('summarizePrice', '1');
+                block.appendChild(priceInput);
+
+                return block;
+            }
+
+            it('returns price for own confirmed block when two grouped products share a simple product', function () {
+                var block1 = makeGroupedBlock('confirmed-block-grouped-01', 1, 3, 100),
+                    block2 = makeGroupedBlock('confirmed-block-grouped-02', 1, 2, 100);
+
+                // Both blocks are in the DOM simultaneously — this is the collision scenario.
+                // block1 was confirmed first and appears before block2 in document order.
+                confirmedContainer.appendChild(block1);
+                confirmedContainer.appendChild(block2);
+
+                // productConfigure points at the second product (Grouped 02)
+                window.productConfigure = { confirmedCurrentId: 'confirmed-block-grouped-02' };
+
+                // Expected: $100 × 2 = $200 (qty from block2)
+                // Bug behaviour before fix: $100 × 3 = $300 (qty from block1, first getElementById match)
+                expect(order._calcProductPrice()).toBe(200);
+            });
+
+            it('returns price for the first confirmed block when it is the current one', function () {
+                var block1 = makeGroupedBlock('confirmed-block-grouped-01', 1, 3, 100),
+                    block2 = makeGroupedBlock('confirmed-block-grouped-02', 1, 2, 100);
+
+                confirmedContainer.appendChild(block1);
+                confirmedContainer.appendChild(block2);
+
+                window.productConfigure = { confirmedCurrentId: 'confirmed-block-grouped-01' };
+
+                // Expected: $100 × 3 = $300
+                expect(order._calcProductPrice()).toBe(300);
             });
         });
 

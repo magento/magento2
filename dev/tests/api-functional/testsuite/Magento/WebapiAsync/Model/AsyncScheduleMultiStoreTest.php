@@ -152,6 +152,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
                 ['data' => $product['product']]
             );
             $this->productRepository->save($productModel);
+            sleep(5);
         } catch (\Exception $e) {
             $this->fail("Precondition failed: product was not created.");
         }
@@ -177,6 +178,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $product['product'][ProductInterface::TYPE_ID] = 'virtual';
 
         $response = $this->updateProductAsync($product, $sku, $storeCode);
+        sleep(5);
 
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);

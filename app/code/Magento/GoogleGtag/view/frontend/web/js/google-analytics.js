@@ -62,6 +62,7 @@ define([
                     purchaseObject['items'] = config.ordersTrackingData.products;
                     gtag('event', 'purchase', purchaseObject);
                 }
+                window.gtag = gtag;
             }
         }
     }

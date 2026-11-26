@@ -5,6 +5,7 @@
 
  define([
     'jquery',
+    'underscore',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'mage/template',
@@ -14,7 +15,7 @@
     'prototype',
     'Magento_Catalog/catalog/product/composite/configure',
     'Magento_Ui/js/lib/view/utils/async'
-], function (jQuery, confirm, alert, template, shippingTemplate, paymentTemplate) {
+], function (jQuery, _, confirm, alert, template, shippingTemplate, paymentTemplate) {
 
     window.AdminOrder = new Class.create();
 
@@ -482,7 +483,7 @@
 
             data['collect_shipping_rates'] = 1;
             this.isShippingMethodReseted = false;
-            this.loadArea(['shipping_method', 'totals'], true, data);
+            this.loadArea(['shipping_method', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -512,7 +513,7 @@
             return false;
         },
 
-        switchPaymentMethod: function(method){
+        switchPaymentMethod: function(method, preserveMessages){
             if (this.paymentMethod !== method) {
                 jQuery('#edit_form')
                     .off('submitOrder')
@@ -524,7 +525,7 @@
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['items', 'card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data, null, preserveMessages);
         },
 
         setPaymentMethod: function (method) {
@@ -783,11 +784,27 @@
                 var getPrice = function (elm) {
                     var optQty = 1;
                     if (elm.hasAttribute('qtyId')) {
-                        if (!$(elm.getAttribute('qtyId')).value) {
-                            return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
+                        var qtyId = elm.getAttribute('qtyId'),
+                            confirmedBlock = $(productConfigure.confirmedCurrentId),
+                            qtyEl = null,
+                            qtyInputs, j;
+
+                        if (confirmedBlock) {
+                            qtyInputs = confirmedBlock.getElementsByTagName('input');
+
+                            for (j = 0; j < qtyInputs.length; j++) {
+                                if (qtyInputs[j].id === qtyId) {
+                                    qtyEl = qtyInputs[j];
+                                    break;
+                                }
+                            }
                         }
+
+                        if (!qtyEl || !qtyEl.value) {
+                            return 0;
+                        }
+
+                        optQty = parseFloat(qtyEl.value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;
@@ -1197,9 +1214,10 @@
             }
         },
 
-        loadArea: function (area, indicator, params, callback) {
+        loadArea: function (area, indicator, params, callback, preserveMessages) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
+
             if (area) {
                 area = this.prepareArea(area);
                 url += 'block/' + area;
@@ -1215,7 +1233,7 @@
                     loaderArea: indicator,
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
-                        this.loadAreaResponseHandler(response);
+                        this.loadAreaResponseHandler(response, preserveMessages);
                         if (callback instanceof Function) {
                             callback();
                         }
@@ -1237,7 +1255,7 @@
             return deferred.promise();
         },
 
-        loadAreaResponseHandler: function (response) {
+        loadAreaResponseHandler: function (response, preserveMessages) {
             if (response.error) {
                 alert({
                     content: response.message
@@ -1262,7 +1280,7 @@
             for (var i = 0; i < this.loadingAreas.length; i++) {
                 var id = this.loadingAreas[i];
                 if ($(this.getAreaId(id))) {
-                    if ((id in response) && id !== 'message' || response[id]) {
+                    if (id in response && (id !== 'message' || !preserveMessages || response[id])) {
                         $(this.getAreaId(id)).update(response[id]);
                     }
                     if ($(this.getAreaId(id)).callback) {
@@ -1496,6 +1514,7 @@
                 country: $(parameters.countryElementId).value,
                 vat: $(parameters.vatElementId).value
             };
+            var escapedVat = _.escape(params.vat);
 
             if (this.storeId !== false) {
                 params.store_id = this.storeId;
@@ -1516,7 +1535,7 @@
                             if (true === response.valid) {
                                 message = parameters.vatValidMessage;
                             } else if (true === response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                             } else {
                                 message = parameters.vatValidationFailedMessage;
                             }
@@ -1531,7 +1550,7 @@
                                     groupActionRequired = 'change';
                                 }
                             } else if (response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                                 groupActionRequired = 'inform';
                             } else {
                                 message = parameters.vatValidationFailedMessage;

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql as PdoMysqlAdapter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Select;
@@ -163,6 +164,66 @@ class MysqlTest extends TestCase
         $sql .= "INSERT INTO test(id) VALUES (1); ";
         $sql .= "SELECT COUNT(*) AS _num FROM test; ";
         $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($sql);
+    }
+
+    /**
+     * Multiple statements must be detected, including when the statement separator follows a
+     * backslash-terminated string literal.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('stackedQueriesDataProvider')]
+    public function testStackedQueriesAreBlocked(string $sql): void
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Multiple queries can\'t be executed. Run a single query and try again.');
+
+        $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function stackedQueriesDataProvider(): array
+    {
+        return [
+            'plain multiple statements' => ["SELECT 1; SELECT 2;"],
+            'separator after backslash-terminated literal' => ["SELECT '\\\\'; SELECT 1"],
+        ];
+    }
+
+    /**
+     * A single statement must not be split when it contains a semicolon inside a string literal
+     * quoted with doubled backslashes.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('singleQueryWithSpecialCharactersDataProvider')]
+    public function testSingleQueryWithSpecialCharactersIsNotBlocked(string $sql): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_query']);
+        $adapter->expects($this->once())
+            ->method('_query')
+            ->with($sql);
+
+        $adapter->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function singleQueryWithSpecialCharactersDataProvider(): array
+    {
+        return [
+            'semicolon inside literal quoted with doubled backslashes' => [
+                "SELECT * FROM test WHERE path IN ('foo\\\\', 'a;b')",
+            ],
+            'backslash-terminated literal then semicolon in another literal' => [
+                "SELECT * FROM test WHERE path IN ('x\\\\', 'p;q')",
+            ],
+        ];
     }
 
     /**
@@ -1059,6 +1120,27 @@ class MysqlTest extends TestCase
             [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
             [new \Exception()],
         ];
+    }
+
+    /**
+     * MariaDB error 1020 (record changed since last read, under innodb_snapshot_isolation) is resolved by
+     * restarting the transaction, so the adapter must surface it as a DeadlockException to be retried.
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testSnapshotIsolationErrorIsWrappedAsDeadlock(): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+
+        $pdoException = new \PDOException('Record has changed since last read');
+        $pdoException->errorInfo = [1 => 1020];
+        $queryExecutor = static function () use ($pdoException) {
+            throw $pdoException;
+        };
+
+        $this->expectException(DeadlockException::class);
+        $this->invokeModelMethod($adapter, 'performQuery', [$queryExecutor]);
     }
 
     public function testDestruct(): void

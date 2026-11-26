@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+use Magento\Customer\Block\Address\Renderer\DefaultRenderer;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Address\Config;
 use Magento\Customer\Model\Address\Config\Reader;
@@ -15,11 +16,17 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for config function.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -44,6 +51,14 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->model = $this->createModel();
+    }
+
+    /**
+     * @param class-string<Config> $configClass
+     */
+    private function createModel(string $configClass = Config::class): Config
+    {
         $cacheId = 'cache_id';
         $objectManagerHelper = new ObjectManager($this);
         $this->storeMock = $this->createMock(Store::class);
@@ -52,13 +67,8 @@ class ConfigTest extends TestCase
         $readerMock = $this->createMock(Reader::class);
         $cacheMock = $this->createMock(CacheInterface::class);
         $storeManagerMock = $this->createMock(StoreManager::class);
-        $storeManagerMock->expects(
-            $this->once()
-        )->method(
-            'getStore'
-        )->willReturn(
-            $this->storeMock
-        );
+        $storeManagerMock->method('getStore')
+            ->willReturnCallback(fn ($store = null) => $store ?? $this->storeMock);
 
         $this->addressHelperMock = $this->createMock(Address::class);
 
@@ -89,8 +99,8 @@ class ConfigTest extends TestCase
         $serializerMock->method('unserialize')
             ->willReturn($fixtureConfigData);
 
-        $this->model = $objectManagerHelper->getObject(
-            Config::class,
+        return $objectManagerHelper->getObject(
+            $configClass,
             [
                 'reader' => $readerMock,
                 'cache' => $cacheMock,
@@ -101,6 +111,17 @@ class ConfigTest extends TestCase
                 'addressHelper' => $this->addressHelperMock,
             ]
         );
+    }
+
+    /**
+     * @return MockObject&\Magento\Customer\Block\Address\Renderer\RendererInterface
+     */
+    private function createRendererMock(): MockObject
+    {
+        $rendererMock = $this->createMock(\Magento\Customer\Block\Address\Renderer\RendererInterface::class);
+        $rendererMock->method('setType')->willReturnSelf();
+
+        return $rendererMock;
     }
 
     public function testGetStore()
@@ -158,5 +179,104 @@ class ConfigTest extends TestCase
         $expectedResult = [$firstExpected, $secondExpected];
 
         $this->assertEquals($expectedResult, $this->model->getFormats());
+    }
+
+    public function testGetFormatsUsesXmlPathConstantForScopeConfig(): void
+    {
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $capturedPaths = [];
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnCallback(function (string $path) use (&$capturedPaths): string {
+                $capturedPaths[] = $path;
+                return 'formatValue';
+            });
+
+        $this->addressHelperMock->expects($this->exactly(2))
+            ->method('getRenderer')
+            ->with(DefaultRenderer::class)
+            ->willReturn($this->createRendererMock());
+
+        $this->model->getFormats();
+
+        $this->assertSame(
+            [
+                Config::XML_PATH_ADDRESS_TEMPLATE . 'format_one',
+                Config::XML_PATH_ADDRESS_TEMPLATE . 'format_two',
+            ],
+            $capturedPaths
+        );
+    }
+
+    public function testGetFormatsUsesSubclassXmlPathConstantForScopeConfig(): void
+    {
+        $model = $this->createModel(ConfigTesting::class);
+        $model->setStore($this->storeMock);
+
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $capturedPaths = [];
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->willReturnCallback(function (string $path) use (&$capturedPaths): string {
+                $capturedPaths[] = $path;
+                return 'formatValue';
+            });
+
+        $this->addressHelperMock->expects($this->exactly(2))
+            ->method('getRenderer')
+            ->with(ConfigTesting::DEFAULT_ADDRESS_RENDERER)
+            ->willReturn($this->createRendererMock());
+
+        $model->getFormats();
+
+        $this->assertSame(
+            [
+                ConfigTesting::XML_PATH_ADDRESS_TEMPLATE . 'format_one',
+                ConfigTesting::XML_PATH_ADDRESS_TEMPLATE . 'format_two',
+            ],
+            $capturedPaths
+        );
+    }
+
+    public function testGetFormatByCodeUsesSubclassDefaultRenderer(): void
+    {
+        $model = $this->createModel(ConfigTesting::class);
+        $model->setStore($this->storeMock);
+
+        $this->storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
+
+        $this->scopeConfigMock->method('getValue')->willReturn('formatValue');
+
+        $this->addressHelperMock->expects($this->atLeastOnce())
+            ->method('getRenderer')
+            ->with(ConfigTesting::DEFAULT_ADDRESS_RENDERER)
+            ->willReturn($this->createRendererMock());
+
+        $format = $model->getFormatByCode('unknown_format_code');
+
+        $this->assertSame('default', $format->getCode());
+    }
+
+    public function testGetFormatsPassesStoreScopeToScopeConfig(): void
+    {
+        $this->storeMock->expects($this->once())->method('getId')->willReturn(1);
+
+        $this->scopeConfigMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->with(
+                $this->logicalOr(
+                    Config::XML_PATH_ADDRESS_TEMPLATE . 'format_one',
+                    Config::XML_PATH_ADDRESS_TEMPLATE . 'format_two'
+                ),
+                ScopeInterface::SCOPE_STORE,
+                $this->storeMock
+            )
+            ->willReturn('formatValue');
+
+        $this->addressHelperMock->method('getRenderer')->willReturn($this->createRendererMock());
+
+        $this->model->getFormats();
     }
 }

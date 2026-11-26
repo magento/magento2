@@ -29,3 +29,11 @@ $mediaDirectory->getDriver()->filePutContents(
     file_get_contents(__DIR__ . '/magento_small_image.jpg')
 );
 // Copying the image to target dir is not necessary because during product save, it will be moved there from tmp dir
+
+$customOptionsQuotePath = 'custom_options/quote/magento_small_image.svg';
+$customOptionsQuoteFilePath = $mediaDirectory->getAbsolutePath($customOptionsQuotePath);
+$mediaDirectory->create(dirname($customOptionsQuotePath));
+$mediaDirectory->getDriver()->filePutContents(
+    $customOptionsQuoteFilePath,
+    file_get_contents(__DIR__ . '/magento_small_image.jpg')
+);

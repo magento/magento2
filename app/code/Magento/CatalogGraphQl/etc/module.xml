@@ -17,6 +17,8 @@
             <module name="Magento_Config"/>
             <module name="Magento_StoreGraphQl"/>
             <module name="Magento_EavGraphQl"/>
+            <module name="Magento_Customer"/>
+            <module name="Magento_Tax"/>
         </sequence>
     </module>
 </config>

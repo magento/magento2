@@ -25,6 +25,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
@@ -233,37 +234,74 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         try {
             $constructor = $class->getMethod('__construct');
         } catch (\ReflectionException $e) {
-            $constructor = null;
-        }
-
-        if ($constructor === null) {
             return [];
         }
 
-        $res = [];
-        $parameters = $constructor->getParameters();
-        foreach ($parameters as $parameter) {
-            if (isset($data[$parameter->getName()])) {
-                $parameterType = $this->typeProcessor->getParamType($parameter);
+        return $this->getConstructorArguments($constructor, $data);
+    }
 
-                // Allow only simple types or Api Data Objects
-                if (!($this->typeProcessor->isTypeSimple($parameterType)
-                    || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
-                )) {
-                    continue;
-                }
-
-                try {
-                    $res[$parameter->getName()] = $this->convertValue($data[$parameter->getName()], $parameterType);
-                } catch (\ReflectionException $e) {
-                    // Parameter was not correclty declared or the class is uknown.
-                    // By not returing the contructor value, we will automatically fall back to the "setters" way.
-                    continue;
-                }
+    /**
+     * Build constructor arguments from input data.
+     *
+     * @param MethodReflection $constructor
+     * @param array $data
+     * @return array
+     */
+    private function getConstructorArguments(MethodReflection $constructor, array $data): array
+    {
+        $result = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $parameterValue = $this->getConstructorParameterValue($parameter, $data);
+            if ($parameterValue === null) {
+                continue;
             }
+
+            $result[$parameter->getName()] = $parameterValue;
         }
 
-        return $res;
+        return $result;
+    }
+
+    /**
+     * Resolve a constructor parameter value from input data.
+     *
+     * @param \ReflectionParameter $parameter
+     * @param array $data
+     * @return mixed|null
+     * @throws LocalizedException
+     */
+    private function getConstructorParameterValue(\ReflectionParameter $parameter, array $data)
+    {
+        $parameterName = $parameter->getName();
+
+        if (isset($data[$parameterName])) {
+            $parameterValue = $data[$parameterName];
+        } else {
+            $snakeCaseParameterName =
+                SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
+
+            if (!isset($data[$snakeCaseParameterName])) {
+                return null;
+            }
+
+            $parameterValue = $data[$snakeCaseParameterName];
+        }
+
+        $parameterType = $this->typeProcessor->getParamType($parameter);
+        if (!(
+            $this->typeProcessor->isTypeSimple($parameterType)
+            || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+        )) {
+            return null;
+        }
+
+        try {
+            return $this->convertValue($parameterValue, $parameterType);
+        } catch (\ReflectionException $e) {
+            // Parameter was not correctly declared or the class is unknown.
+            // By not returning the constructor value, we will automatically fall back to the "setters" way.
+            return null;
+        }
     }
 
     /**
@@ -299,10 +337,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // Primary method: assign to constructor parameters
         $constructorArgs = $this->getConstructorData($className, $data);
         $object = $this->objectManager->create($className, $constructorArgs);
+        $constructorArgSnakeCaseMap = [];
+        foreach (array_keys($constructorArgs) as $constructorArgName) {
+            $constructorArgSnakeCaseMap[SimpleDataObjectConverter::camelCaseToSnakeCase($constructorArgName)] = true;
+        }
 
         // Secondary method: fallback to setter methods
         foreach ($data as $propertyName => $value) {
-            if (isset($constructorArgs[$propertyName])) {
+            if (isset($constructorArgs[$propertyName]) || isset($constructorArgSnakeCaseMap[$propertyName])) {
                 continue;
             }
 

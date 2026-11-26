@@ -24,7 +24,7 @@
        </before>
         <after>
             <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearUrlRewriteFilter"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
             <deleteData createDataKey="category" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
