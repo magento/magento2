@@ -19,6 +19,7 @@
         <element name="itemName" type="text" selector="//p[contains(@class,'CartDropdown_line') and text()='{{productName}}']" parameterized="true"/>
         <element name="paypalSubmitBtn" type="text" selector="//button[(@id='one-time-cta' and @data-atomic-wait-domain='xo') or @data-testid='submit-button-initial' or @data-id='payment-submit-btn']"/>
         <element name="nextButton" type="button" selector="//button[normalize-space(text())='Next']"/>
+        <element name="loginSpinner" type="block" selector=".spinnerWithLockIcon"/>
         <element name="continueButton" type="button" selector=".continueButton"/>
         <element name="userName" type="text" selector="#reviewUserInfo"/>
         <element name="notYouLink" type="input" selector="#backToInputEmailLink"/>

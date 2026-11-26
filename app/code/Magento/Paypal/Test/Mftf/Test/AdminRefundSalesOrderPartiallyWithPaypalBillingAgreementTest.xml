@@ -96,6 +96,7 @@
         <!-- Step 4&5: Refund created order & Click OK button-->
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
         <!--Create Credit Memo-->
+        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="waitForCreditMemoButtonToBeClicked"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreditMemo"/>
         <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonToBeClicked"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmCreditMemo"/>
@@ -105,6 +106,7 @@
         <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
         <!--Step 6: Create Refund Button -->
         <waitForElementVisible selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="waitForSuccesMessagea"/>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="waitForRefundOfflineButtonToBeClicked"/>
         <click selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="clickRefundOffline"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
             <argument name="status" value="Processing"/>
@@ -112,6 +114,7 @@
         <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryTab"/>
         <waitForText selector="{{AdminOrderCommentsTabSection.orderComments}}" userInput="{{BillingAgreement.refund_note}}" stepKey="seeOrderHistoryPrice"/>
         <!--Step 7: Go to Credit Memo Tab -->
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="waitForCreditMemoTabToBeClicked"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.creditMemoView}}" stepKey="seeCreditMemoViewButton"/>
         <click selector="{{CheckoutPaymentSection.creditMemoView}}" stepKey="clickCreditMemoViewButton"/>
@@ -132,4 +135,3 @@
         </actionGroup>
     </test>
 </tests>
-
