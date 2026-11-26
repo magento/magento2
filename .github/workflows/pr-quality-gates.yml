@@ -143,6 +143,7 @@ jobs:
           # Verify required CI files are not removed in this PR
           required=(
             .github/workflows/pr-quality-gates.yml
+            .github/scripts/check_copyright_pr.php
             .github/scripts/copyright-template.txt
           )
           missing=false
@@ -623,11 +624,32 @@ jobs:
           filtered_less=$(mktemp)
           python3 - /tmp/changed_less.txt /tmp/less_blacklist.txt "$filtered_less" <<'PYEOF'
           import fnmatch, sys
+
+          NON_MODULE_DIRS = {
+              'app', 'lib', 'dev', 'pub', 'setup', 'vendor', '.github',
+              'bin', 'generated', 'var', 'build', 'node_modules',
+          }
+
+          def matching_paths(fp):
+              paths = [fp]
+              prefix = 'app/code/Magento/'
+              if fp.startswith(prefix):
+                  paths.append(fp[len(prefix):])
+              else:
+                  first = fp.split('/')[0]
+                  if first and first[0].isupper() and first not in NON_MODULE_DIRS:
+                      paths.append(prefix + fp)
+              return paths
+
           with open(sys.argv[2]) as f:
               patterns = [l.strip() for l in f if l.strip() and not l.strip().startswith('//')]
           with open(sys.argv[1]) as f:
               files = [l.strip() for l in f if l.strip()]
-          filtered = [fp for fp in files if not any(fnmatch.fnmatch(fp, p) for p in patterns)]
+          filtered = []
+          for fp in files:
+              paths = matching_paths(fp)
+              if not any(fnmatch.fnmatch(path, p) for p in patterns for path in paths):
+                  filtered.append(fp)
           with open(sys.argv[3], 'w') as out:
               out.write('\n'.join(filtered) + ('\n' if filtered else ''))
           PYEOF
@@ -929,11 +951,16 @@ jobs:
               'bin', 'generated', 'var', 'build', 'node_modules',
           }
 
-          def whitelist_path(fp):
-              first = fp.split('/')[0]
-              if first and first[0].isupper() and first not in NON_MODULE_DIRS:
-                  return 'app/code/Magento/' + fp
-              return fp
+          def matching_paths(fp):
+              paths = [fp]
+              prefix = 'app/code/Magento/'
+              if fp.startswith(prefix):
+                  paths.append(fp[len(prefix):])
+              else:
+                  first = fp.split('/')[0]
+                  if first and first[0].isupper() and first not in NON_MODULE_DIRS:
+                      paths.append(prefix + fp)
+              return paths
 
           with open(sys.argv[1]) as f:
               files = [l.strip() for l in f if l.strip()]
@@ -942,10 +969,10 @@ jobs:
 
           result = []
           for fp in files:
-              match_fp = whitelist_path(fp)
-              if whitelist and not any(r.match(match_fp) for r in whitelist):
+              paths = matching_paths(fp)
+              if whitelist and not any(r.match(path) for r in whitelist for path in paths):
                   continue
-              if any(r.match(match_fp) for r in blacklist):
+              if any(r.match(path) for r in blacklist for path in paths):
                   continue
               result.append(fp)
           for fp in result:
