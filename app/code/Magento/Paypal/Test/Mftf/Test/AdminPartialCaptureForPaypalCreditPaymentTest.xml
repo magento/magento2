@@ -24,6 +24,9 @@
                 <field key="price">125.15</field>
             </createData>
         </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
         <remove keyForRemoval="addProductToCart"/>
         <remove keyForRemoval="assertOrderDetails"/>
         <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addItemToCart" before="goToCheckout">
@@ -66,6 +69,7 @@
         <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
         <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClickingBackButton"/>
         <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
             <argument name="transactionType" value="capture"/>
             <argument name="transitionTypeStatus" value="No"/>

@@ -72,10 +72,11 @@
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSearchResult" time="10"/>
-        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny"/>
-        <!-- Retry deselection only while the button is enabled: lazy filterChips resolution can abort it (ACP2E-4605). -->
-        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryUnselectIfDeleteButtonStillActive"/>
-        <waitForPageLoad stepKey="waitForRetryUnselect"/>
+        <!-- Re-clicking an already selected node is a no-op in jsTree 3.3.x (allow_reselect=false), so the folder is
+             deselected deterministically by removing the path filter via 'Clear all' (clearFiltersHandle -> setInActive). -->
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" stepKey="waitForClearAllFilters"/>
+        <click selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" stepKey="clearAllFilters"/>
+        <waitForPageLoad stepKey="waitForClearAllFiltersToApply"/>
         <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsDisabled"/>
 
         <!-- Step4.2 Delete Folder is enabled post selecting folder -->
@@ -89,17 +90,9 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny2"/>
-        <!-- Retry: the app's directoryTree.js lazily resolves its filterChips uiRegistry component (ACP2E-4605);
-             if that component isn't ready yet when the deselect click fires, the deselect handler throws and
-             the button never disables. Re-clicking the same folder node is a no-op once the deselect already
-             succeeded (button stays disabled) and only re-attempts the deselect when it's still needed.
-             Gated on disabledDeleteFolderButton being NOT visible (not activeDeleteFolderButton being visible -
-             that selector matches the button element regardless of its disabled state, so it is always visible
-             and would have made this retry fire unconditionally, re-selecting an already-successfully-deselected
-             folder instead of skipping). -->
-        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderInTree(AdminMediaGalleryFolderData.name)}}" dependentSelector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" visible="false" stepKey="retryDeselectIfDeleteButtonStillActive"/>
-        <waitForPageLoad stepKey="waitForRetryDeselect"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" stepKey="waitForClearAllFilters2"/>
+        <click selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" stepKey="clearAllFilters2"/>
+        <waitForPageLoad stepKey="waitForClearAllFiltersToApply2"/>
         <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" time="30" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
 
         <!-- Step5 Select folder to delete -->
