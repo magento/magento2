@@ -9,7 +9,8 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\Address\CreateCustomerAddress as CreateCustomerAddressModel;
 use Magento\CustomerGraphQl\Model\Customer\Address\ExtractCustomerAddressData;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -32,15 +33,24 @@ class CreateCustomerAddress implements ResolverInterface
     private $extractCustomerAddressData;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param CreateCustomerAddressModel $createCustomerAddress
      * @param ExtractCustomerAddressData $extractCustomerAddressData
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         CreateCustomerAddressModel $createCustomerAddress,
-        ExtractCustomerAddressData $extractCustomerAddressData
+        ExtractCustomerAddressData $extractCustomerAddressData,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->createCustomerAddress = $createCustomerAddress;
         $this->extractCustomerAddressData = $extractCustomerAddressData;
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -54,9 +64,7 @@ class CreateCustomerAddress implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         if (empty($args['input']) || !is_array($args['input'])) {
             throw new GraphQlInputException(__('"input" value should be specified'));

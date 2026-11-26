@@ -9,7 +9,8 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\Address\DeleteCustomerAddress as DeleteCustomerAddressModel;
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -32,15 +33,24 @@ class DeleteCustomerAddress implements ResolverInterface
     private $deleteCustomerAddress;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param GetCustomerAddress $getCustomerAddress
      * @param DeleteCustomerAddressModel $deleteCustomerAddress
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         GetCustomerAddress $getCustomerAddress,
-        DeleteCustomerAddressModel $deleteCustomerAddress
+        DeleteCustomerAddressModel $deleteCustomerAddress,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->getCustomerAddress = $getCustomerAddress;
         $this->deleteCustomerAddress = $deleteCustomerAddress;
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -54,9 +64,7 @@ class DeleteCustomerAddress implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         $address = $this->getCustomerAddress->execute((int)$args['id'], $context->getUserId());
         $this->deleteCustomerAddress->execute($address);

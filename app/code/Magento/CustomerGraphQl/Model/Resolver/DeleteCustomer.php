@@ -9,8 +9,9 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\DeleteCustomer as DeleteCustomerModel;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Registry;
@@ -37,18 +38,27 @@ class DeleteCustomer implements ResolverInterface
     private $registry;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param DeleteCustomerModel $deleteCustomer
      * @param Registry $registry
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         GetCustomer $getCustomer,
         DeleteCustomerModel $deleteCustomer,
-        Registry $registry
+        Registry $registry,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->getCustomer = $getCustomer;
         $this->deleteCustomer = $deleteCustomer;
         $this->registry = $registry;
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -62,9 +72,7 @@ class DeleteCustomer implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
         $isSecure = $this->registry->registry('isSecureArea');
 
         $this->registry->unregister('isSecureArea');

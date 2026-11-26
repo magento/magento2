@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -25,12 +26,21 @@ class RevokeCustomerToken implements ResolverInterface
     private $customerTokenService;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param CustomerTokenServiceInterface $customerTokenService
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
-        CustomerTokenServiceInterface $customerTokenService
+        CustomerTokenServiceInterface $customerTokenService,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->customerTokenService = $customerTokenService;
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -44,9 +54,7 @@ class RevokeCustomerToken implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         return ['result' => $this->customerTokenService->revokeCustomerAccessToken($context->getUserId())];
     }

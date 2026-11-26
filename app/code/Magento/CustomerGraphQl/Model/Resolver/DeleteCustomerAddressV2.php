@@ -9,8 +9,9 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\Address\DeleteCustomerAddressV2 as DeleteAddress;
 use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddressV2;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Uid;
@@ -20,17 +21,26 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 class DeleteCustomerAddressV2 implements ResolverInterface
 {
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private readonly ValidateCustomerAuthorization $validateCustomerAuthorization;
+
+    /**
      * DeleteCustomerAddressV2 Constructor
      *
      * @param GetCustomerAddressV2 $getCustomerAddress
      * @param DeleteAddress $deleteCustomerAddress
      * @param Uid $uidEncoder
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         private readonly GetCustomerAddressV2 $getCustomerAddress,
         private readonly DeleteAddress        $deleteCustomerAddress,
-        private readonly Uid                  $uidEncoder
+        private readonly Uid                  $uidEncoder,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -44,9 +54,7 @@ class DeleteCustomerAddressV2 implements ResolverInterface
         ?array $args = null
     ): bool {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         if (empty($args['uid'])) {
             throw new GraphQlInputException(__('Address "uid" value must be specified'));

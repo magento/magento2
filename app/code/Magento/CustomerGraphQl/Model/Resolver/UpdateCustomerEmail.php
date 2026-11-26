@@ -12,9 +12,9 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerAccount;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface as ResolverContext;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -47,23 +47,32 @@ class UpdateCustomerEmail implements ResolverInterface
     private $emailNotification;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param UpdateCustomerAccount $updateCustomerAccount
      * @param ExtractCustomerData $extractCustomerData
      * @param EmailNotificationInterface|null $emailNotification
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         GetCustomer $getCustomer,
         UpdateCustomerAccount $updateCustomerAccount,
         ExtractCustomerData $extractCustomerData,
-        ?EmailNotificationInterface $emailNotification = null
+        ?EmailNotificationInterface $emailNotification = null,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->getCustomer = $getCustomer;
         $this->updateCustomerAccount = $updateCustomerAccount;
         $this->extractCustomerData = $extractCustomerData;
         $this->emailNotification = $emailNotification
             ?? ObjectManager::getInstance()->get(EmailNotificationInterface::class);
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -86,9 +95,7 @@ class UpdateCustomerEmail implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         $customer = $this->getCustomer->execute($context);
         $customer->setData('ignore_validation_flag', true);
