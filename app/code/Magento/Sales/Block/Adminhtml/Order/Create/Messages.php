@@ -30,12 +30,12 @@ class Messages extends \Magento\Framework\View\Element\Messages
         }
         $items = $itemsBlock->getItems();
         foreach ($items as $item) {
-            if ($item->getHasError()) {
-                $messageCollection = $this->getMessageCollection();
-                foreach ($messageCollection->getItems() as $blockMessage) {
-                    if ($item->getMessage(true) === $blockMessage->getText()) {
-                        /* Remove duplicated messages.*/
-                        $messageCollection->deleteMessageByIdentifier($blockMessage->getIdentifier());
+            // Disabled items are removed on quote reload, so their global errors must remain available.
+            if ($item->getHasError() && !$item->getProduct()->isDisabled()) {
+                $messageCollection = $this->collectionFactory->create();
+                foreach ($this->getMessageCollection()->getItems() as $blockMessage) {
+                    if ($item->getMessage(true) !== $blockMessage->getText()) {
+                        $messageCollection->addMessage($blockMessage);
                     }
                 }
                 $this->setMessages($messageCollection);

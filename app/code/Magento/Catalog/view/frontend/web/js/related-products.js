@@ -149,7 +149,7 @@ define([
                 parent = $(elements[0]).parent();
             }
             while (elements.length) {
-                child = elements.splice(Math.floor(Math.random() *  elements.length), 1)[0];
+                child = Array.prototype.splice.call(elements, Math.floor(Math.random() *  elements.length), 1)[0];
                 lastSibling = parent.find('[data-shuffle-group="' + $(child).data('shuffle-group') + '"]').last();
                 lastSibling.after(child);
             }
