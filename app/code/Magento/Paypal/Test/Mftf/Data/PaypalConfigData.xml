@@ -321,6 +321,14 @@
         <data key="path">payment/payflow_link/active</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisablePayflowProConfigData">
+        <data key="path">payment/payflowpro/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisableHostedProConfigData">
+        <data key="path">payment/hosted_pro/active</data>
+        <data key="value">0</data>
+    </entity>
       <entity name="StorefrontPaypalPayflowProSalePaymentActionOptionConfigData">
         <data key="path">payment/payflowpro/payment_action</data>
         <data key="scope_id">1</data>

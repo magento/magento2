@@ -88,6 +88,8 @@
         <!-- Place order -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPayflowProDeclineOrRedirect"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.placeOrder}}" dependentSelector="{{CheckoutPaymentSection.errormessage}}" visible="true" stepKey="retryPlaceOrderIfPayflowProDeclined"/>
         <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
         <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
 
