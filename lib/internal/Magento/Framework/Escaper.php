@@ -18,9 +18,12 @@ use Exception;
 class Escaper
 {
     /**
-     * XML_HTML_UNKNOWN_TAG from libxml2; 2.9.x reports HTML5 and custom elements with it, newer versions may not
+     * libxml2 errors raised for markup that is still parsed correctly, mapped to the PHP error level they arrive as
+     *
+     * XML_HTML_UNKNOWN_TAG (801): 2.9.x reports HTML5, custom and namespaced elements with it.
+     * XML_NS_ERR_UNDEFINED_NAMESPACE (201): 2.9.10 and older also report the prefix of a namespaced element.
      */
-    private const LIBXML_HTML_UNKNOWN_TAG = 801;
+    private const IGNORED_LIBXML_ERRORS = [801 => E_WARNING, 201 => E_NOTICE];
 
     /**
      * HTML special characters flag
@@ -144,7 +147,7 @@ class Escaper
     }
 
     /**
-     * Throw on errors raised while loading HTML, except for element names libxml does not know
+     * Throw on errors raised while loading HTML, except for unknown or namespaced element names
      *
      * @param int $errorNumber
      * @param string $errorString
@@ -153,9 +156,8 @@ class Escaper
     private function handleLoadHtmlError(int $errorNumber, string $errorString): bool
     {
         $libxmlError = libxml_get_last_error();
-        if ($errorNumber === E_WARNING
-            && $libxmlError !== false
-            && $libxmlError->code === self::LIBXML_HTML_UNKNOWN_TAG
+        if ($libxmlError !== false
+            && (self::IGNORED_LIBXML_ERRORS[$libxmlError->code] ?? null) === $errorNumber
             && str_contains($errorString, trim($libxmlError->message))
         ) {
             return true;
