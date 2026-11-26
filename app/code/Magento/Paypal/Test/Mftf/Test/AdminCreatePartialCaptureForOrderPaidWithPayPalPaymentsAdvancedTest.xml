@@ -91,31 +91,6 @@
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
                 <argument name="Customer" value="$createCustomer$"/>
             </actionGroup>
-            <!-- Navigate to configurable product page -->
-            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
-                <argument name="product" value="$$createConfigProduct$$"/>
-            </actionGroup>
-            <!-- Select configurable product option -->
-            <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectOption1"/>
-            <!-- Add product to cart with qty 1 -->
-            <fillField userInput="1" selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="fillProductQty"/>
-            <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartFromStorefrontProductPage">
-                <argument name="productName" value="$createConfigProduct.name$"/>
-            </actionGroup>
-            <!-- Go to checkout -->
-            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
-            <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-            <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
-            <!-- Select PayPal Payments Advanced payment method -->
-            <waitForElementClickable selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="waitForPayPalRadioButton"/>
-            <click selector="{{AdminConfigurepaymentsAdvancedSection.payflowEdition}}" stepKey="selectPaypalPayment"/>
-            <waitForElementClickable selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="waitForPayPalBtn"/>
-            <click selector="{{CheckoutPaymentSection.ContinuePayPalBtn}}" stepKey="clickPayPalBtn"/>
-            <actionGroup ref="StorefrontLoginToPayPalExpressCheckoutPayFlowEditionActionGroup" stepKey="loginToPayPal"/>
-            <!-- Submit payment on PayPal site -->
-            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="submitAdvancedPayment"/>
-            <!-- Assert Order success -->
-            <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccessPayPalAdvanced"/>
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePaymentAdvancedSolution.path}} {{DisablePaymentAdvancedSolution.value}}" stepKey="disablePaymentAdvanced"/>
@@ -130,29 +105,9 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <!-- Step 1,2: Go to Sales > Orders and open Order from Preconditions -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
-        </actionGroup>
-        <!-- Step 3: Go to Invoices tab and open created invoice -->
-        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
-        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoiceIntoOrder"/>
-        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoiceTab"/>
-        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpened"/>
-        <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="clickViewInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoicePageToBeLoaded"/>
-        <!-- Step 4: Click Credit Memo button -->
-        <actionGroup ref="AdminStartToCreateCreditMemoFromInvoicePageActionGroup" stepKey="clickOnCreditMemoFromInvoiceTab"/>
-        <!-- Step 5: Reduce the qty to invoice of configurable product 1 from 1 to 0 and click Update Qty's button -->
-        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="waitToItemToRefundTextField"/>
-        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="0" stepKey="reduceRefundQuantity"/>
-        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="waitToClickUpdateQuantity"/>
-        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
-        <waitForPageLoad stepKey="waitForQuantityApplied"/>
-        <!-- Step 6: Click Refund button -->
-        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo">
-            <argument name="refundButton" value="{{AdminInvoiceMainActionsSection.submitNewRefundFromInvoice}}"/>
+        <actionGroup ref="AdminCreatePayPalAdvancedOrderAndRefundWithRetryActionGroup" stepKey="purchaseAndRefundWithRetry">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
         </actionGroup>
         <!-- Verify "You created the credit memo" message is displayed -->
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>

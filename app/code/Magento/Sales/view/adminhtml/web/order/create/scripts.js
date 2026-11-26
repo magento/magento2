@@ -483,7 +483,7 @@
 
             data['collect_shipping_rates'] = 1;
             this.isShippingMethodReseted = false;
-            this.loadArea(['shipping_method', 'totals'], true, data);
+            this.loadArea(['shipping_method', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -513,7 +513,7 @@
             return false;
         },
 
-        switchPaymentMethod: function(method){
+        switchPaymentMethod: function(method, preserveMessages){
             if (this.paymentMethod !== method) {
                 jQuery('#edit_form')
                     .off('submitOrder')
@@ -525,7 +525,7 @@
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['items', 'card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data, null, preserveMessages);
         },
 
         setPaymentMethod: function (method) {
@@ -1214,9 +1214,10 @@
             }
         },
 
-        loadArea: function (area, indicator, params, callback) {
+        loadArea: function (area, indicator, params, callback, preserveMessages) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
+
             if (area) {
                 area = this.prepareArea(area);
                 url += 'block/' + area;
@@ -1232,7 +1233,7 @@
                     loaderArea: indicator,
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
-                        this.loadAreaResponseHandler(response);
+                        this.loadAreaResponseHandler(response, preserveMessages);
                         if (callback instanceof Function) {
                             callback();
                         }
@@ -1254,7 +1255,7 @@
             return deferred.promise();
         },
 
-        loadAreaResponseHandler: function (response) {
+        loadAreaResponseHandler: function (response, preserveMessages) {
             if (response.error) {
                 alert({
                     content: response.message
@@ -1279,7 +1280,7 @@
             for (var i = 0; i < this.loadingAreas.length; i++) {
                 var id = this.loadingAreas[i];
                 if ($(this.getAreaId(id))) {
-                    if ((id in response) && id !== 'message' || response[id]) {
+                    if (id in response && (id !== 'message' || !preserveMessages || response[id])) {
                         $(this.getAreaId(id)).update(response[id]);
                     }
                     if ($(this.getAreaId(id)).callback) {

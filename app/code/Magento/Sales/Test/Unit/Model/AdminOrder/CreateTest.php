@@ -32,6 +32,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\AdminOrder\Create;
+use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
@@ -118,6 +119,11 @@ class CreateTest extends TestCase
     private ManagerInterface $messageManager;
 
     /**
+     * @var Initializer|MockObject
+     */
+    private Initializer $quoteInitializer;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -177,6 +183,7 @@ class CreateTest extends TestCase
 
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->quoteInitializer = $this->createMock(Initializer::class);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             Create::class,
@@ -192,8 +199,40 @@ class CreateTest extends TestCase
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'quoteRepository' => $this->quoteRepository,
                 'quoteFactory' => $this->quoteFactory,
+                'quoteInitializer' => $this->quoteInitializer,
             ]
         );
+    }
+
+    public function testAddProductRejectsDisabledProductBeforeQuoteInsertion(): void
+    {
+        $product = $this->createMock(Product::class);
+        $product->method('isDisabled')->willReturn(true);
+        $this->quoteInitializer->expects($this->never())->method('init');
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__('This product is out of stock.'));
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('This product is disabled.');
+
+        $this->adminOrderCreate->addProduct($product);
+    }
+
+    public function testAddProductAddsEnabledProduct(): void
+    {
+        $product = $this->createMock(Product::class);
+        $product->method('isDisabled')->willReturn(false);
+        $quote = $this->createMock(Quote::class);
+        $item = $this->createMock(Item::class);
+        $this->adminOrderCreate->setQuote($quote);
+        $this->quoteInitializer->expects($this->once())
+            ->method('init')
+            ->with($quote, $product, $this->isInstanceOf(DataObject::class))
+            ->willReturn($item);
+        $item->expects($this->once())->method('checkData');
+
+        $this->assertSame($this->adminOrderCreate, $this->adminOrderCreate->addProduct($product));
     }
 
     /**
