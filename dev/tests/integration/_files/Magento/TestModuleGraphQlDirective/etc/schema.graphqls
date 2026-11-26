@@ -1,0 +1,20 @@
+# Copyright 2026 Adobe
+# All Rights Reserved.
+
+type Query {
+    testDirectiveScopes: [TestDirectiveScope]
+        @resolver(class: "Magento\\TestModuleGraphQlDirective\\Model\\Resolver\\DirectiveScopes")
+        @testScope(name: "catalog")
+        @testScope(name: "customer", tags: ["read", "write"])
+        @cache(cacheable: false)
+        @doc(description: "Return the testScope directives declared on this field.")
+    testDirectiveWithoutScope: [TestDirectiveScope]
+        @resolver(class: "Magento\\TestModuleGraphQlDirective\\Model\\Resolver\\DirectiveScopes")
+        @cache(cacheable: false)
+        @doc(description: "Field without any testScope directive.")
+}
+
+type TestDirectiveScope @doc(description: "One occurrence of the testScope directive.") {
+    name: String @doc(description: "The name argument of the directive.")
+    tags: [String] @doc(description: "The tags argument of the directive.")
+}
