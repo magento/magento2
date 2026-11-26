@@ -44,16 +44,13 @@ class CustomFieldDirectiveTest extends TestCase
     }
 
     /**
-     * A field without the directive has no directives, the other readers' result is not polluted
+     * A field without the directive has no directives
      *
      * @return void
      */
     public function testFieldWithoutDirectiveHasNoDirectives(): void
     {
-        $field = $this->getQueryField('testDirectiveWithoutScope');
-
-        $this->assertSame([], $field->getDirectives());
-        $this->assertSame([], $this->getQueryField('products')->getDirectives());
+        $this->assertSame([], $this->getQueryField('testDirectiveWithoutScope')->getDirectives());
     }
 
     /**

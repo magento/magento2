@@ -1,6 +1,8 @@
 # Copyright 2026 Adobe
 # All Rights Reserved.
 
+directive @testScope(name: String!, tags: [String]) repeatable on FIELD_DEFINITION
+
 type Query {
     testDirectiveScopes: [TestDirectiveScope]
         @resolver(class: "Magento\\TestModuleGraphQlDirective\\Model\\Resolver\\DirectiveScopes")
