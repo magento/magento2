@@ -41,7 +41,9 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     public function load()
     {
         if ($this->directory->isReadable($this->fileName)) {
-            return $this->directory->readFile($this->fileName);
+            // The version is a URL path segment: a trailing newline in a file written by a deploy
+            // script (e.g. "date +%s > deployed_version.txt") would end up in every static URL.
+            return trim($this->directory->readFile($this->fileName));
         }
         return false;
     }
