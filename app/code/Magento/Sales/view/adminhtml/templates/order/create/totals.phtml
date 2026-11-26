@@ -58,6 +58,9 @@ function notifyCustomerUpdate() {
     if (!sendEmailCheckbox || !notifyCustomerCheckbox)
         return;
     notifyCustomerCheckbox.disabled = !sendEmailCheckbox.checked;
+    if (notifyCustomerCheckbox.disabled) {
+        notifyCustomerCheckbox.checked = false;
+    }
 }
 //]]>
 
