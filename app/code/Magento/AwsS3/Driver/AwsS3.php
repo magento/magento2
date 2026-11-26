@@ -55,6 +55,13 @@ class AwsS3 implements RemoteDriverInterface
     private $streams = [];
 
     /**
+     * Paths opened with a mode that can write. Stays true if any open of the path could write.
+     *
+     * @var array
+     */
+    private $writable = [];
+
+    /**
      * @var string
      */
     private $objectUrl;
@@ -874,13 +881,15 @@ class AwsS3 implements RemoteDriverInterface
         foreach ($this->streams as $path => $stream) {
             // phpcs:ignore
             if (stream_get_meta_data($stream)['uri'] === $meta['uri']) {
-                if (isset($meta['seekable']) && $meta['seekable']) {
-                    // rewind the file pointer to make sure the full content of the file is saved
-                    $this->fileSeek($resource, 0);
+                if (!empty($this->writable[$path])) {
+                    if (isset($meta['seekable']) && $meta['seekable']) {
+                        // rewind the file pointer to make sure the full content of the file is saved
+                        $this->fileSeek($resource, 0);
+                    }
+                    $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
                 }
-                $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
                 // Remove path from streams after
-                unset($this->streams[$path]);
+                unset($this->streams[$path], $this->writable[$path]);
 
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
                 return fclose($stream);
@@ -900,6 +909,9 @@ class AwsS3 implements RemoteDriverInterface
             throw new FileSystemException(new Phrase('Invalid file open mode "%1".', [$mode]));
         }
         $path = $this->normalizeRelativePath($path, true);
+        $this->writable[$path] = ($this->writable[$path] ?? false)
+            || $_mode !== 'r'
+            || str_contains($mode, '+');
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
