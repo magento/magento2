@@ -50,6 +50,30 @@ class FileTest extends TestCase
         $this->assertEquals('123', $this->object->load());
     }
 
+    public function testLoadTrimsWhitespace()
+    {
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(true);
+        $this->directory->expects($this->once())
+            ->method('readFile')
+            ->with('fixture_file.txt')
+            ->willReturn("1764166800\n");
+        $this->assertSame('1764166800', $this->object->load());
+    }
+
+    public function testLoadNotReadable()
+    {
+        $this->directory->expects($this->once())
+            ->method('isReadable')
+            ->with('fixture_file.txt')
+            ->willReturn(false);
+        $this->directory->expects($this->never())
+            ->method('readFile');
+        $this->assertFalse($this->object->load());
+    }
+
     public function testSave()
     {
         $this->directory
