@@ -66,6 +66,7 @@ class FieldFactory
                 'arguments' => $arguments,
                 'cache' => isset($fieldData['cache']) ? $fieldData['cache'] : [],
                 'deprecated' => isset($fieldData['deprecated']) ? $fieldData['deprecated'] : [],
+                'directives' => isset($fieldData['directives']) ? $fieldData['directives'] : [],
             ]
         );
     }
