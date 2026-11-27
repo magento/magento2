@@ -33,6 +33,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method int getCustomerGroupId()
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Validator extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
@@ -480,42 +481,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $baseDiscountAmount = $rule->getDiscountAmount();
                     break;
                 case Rule::CART_FIXED_ACTION:
-                    $cartRules = $address->getCartFixedRules();
-                    $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $quote->getStore());
-                    $isAppliedToShipping = (int) $rule->getApplyToShipping();
-                    $ruleId = $rule->getId() ?? '';
-                    if (!isset($cartRules[$ruleId])) {
-                        $cartRules[$ruleId] = $rule->getDiscountAmount();
-                    }
-                    if ($cartRules[$ruleId] > 0) {
-                        $shippingQuoteAmount = (float) $address->getShippingAmount();
-                        $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
-                        $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
-                        if ($isAppliedToShipping) {
-                            $quoteBaseSubtotal = ($quote->getIsMultiShipping() && $isMultiShipping) ?
-                                $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
-                                $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
-                                    $address,
-                                    $quoteBaseSubtotal,
-                                    $shippingQuoteAmount
-                                );
-                            $discountAmount = $this->cartFixedDiscountHelper->
-                            getShippingDiscountAmount(
-                                $rule,
-                                $shippingQuoteAmount,
-                                $quoteBaseSubtotal
-                            );
-                            $baseDiscountAmount = $discountAmount;
-                        } else {
-                            $discountAmount = min($shippingQuoteAmount, $quoteAmount);
-                            $baseDiscountAmount = min(
-                                $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
-                                $cartRules[$ruleId]
-                            );
-                        }
-                        $cartRules[$ruleId] -= $baseDiscountAmount;
-                    }
-                    $address->setCartFixedRules($cartRules);
+                    [$discountAmount, $baseDiscountAmount] = $this->processCartFixedShippingAmount(
+                        $address,
+                        $quote,
+                        $rule,
+                        (float) $shippingAmount,
+                        (float) $baseShippingAmount
+                    );
                     break;
                 case Rule::BUY_X_GET_Y_ACTION:
                     $allQtyDiscount = $this->getDiscountQtyAllItemsBuyXGetYAction($quote, $rule);
@@ -560,6 +532,93 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
         return $this;
+    }
+
+    /**
+     * Apply cart-fixed rule discount to shipping for one address.
+     *
+     * Single shipping: remaining quote balance capped by shipping tax-basis amounts.
+     * Multi shipping: legacy proportional share of full rule amount.
+     *
+     * @param Address $address
+     * @param Quote $quote
+     * @param Rule $rule
+     * @param float $shippingAmount Shipping amount for discount (quote currency)
+     * @param float $baseShippingAmount Shipping amount for discount (base currency)
+     * @return array{0: float, 1: float} [quote currency discount, base currency discount]
+     */
+    private function processCartFixedShippingAmount(
+        Address $address,
+        Quote $quote,
+        Rule $rule,
+        float $shippingAmount,
+        float $baseShippingAmount
+    ): array {
+        $discountAmount = 0.0;
+        $baseDiscountAmount = 0.0;
+        $cartRules = $address->getCartFixedRules();
+        if (!is_array($cartRules)) {
+            $cartRules = [];
+        }
+        $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $quote->getStore());
+        $isAppliedToShipping = (int) $rule->getApplyToShipping();
+        $ruleId = $rule->getId() ?? '';
+        $isMultiShipping = $quote->getIsMultiShipping()
+            && $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
+
+        if (!isset($cartRules[$ruleId])) {
+            $cartRules[$ruleId] = $this->cartFixedDiscountHelper->getCartFixedShippingRuleBalance(
+                $quote,
+                $rule,
+                $ruleId,
+                $isMultiShipping
+            );
+        }
+        if ($cartRules[$ruleId] > 0) {
+            $shippingQuoteAmount = (float) $address->getShippingAmount();
+            if ($isAppliedToShipping) {
+                if ($isMultiShipping) {
+                    // HEAD multi path: proportional share of full rule.
+                    $quoteBaseSubtotal = $this->cartFixedDiscountHelper
+                        ->getQuoteTotalsForMultiShipping($quote);
+                    $discountAmount = $this->cartFixedDiscountHelper->getShippingDiscountAmount(
+                        $rule,
+                        $shippingQuoteAmount,
+                        $quoteBaseSubtotal
+                    );
+                    $baseDiscountAmount = $discountAmount;
+                } else {
+                    // Single-ship: remaining balance + tax-basis cap.
+                    [$discountAmount, $baseDiscountAmount] = $this->cartFixedDiscountHelper
+                        ->calculateSingleShippingCartFixedDiscount(
+                            $quote,
+                            (float) $cartRules[$ruleId],
+                            $shippingAmount,
+                            $baseShippingAmount,
+                            (float) $address->getShippingDiscountAmount(),
+                            (float) $address->getBaseShippingDiscountAmount()
+                        );
+                }
+            } else {
+                // HEAD else branch (dead when apply-to-shipping is filtered above; keep for BC).
+                $discountAmount = min($shippingQuoteAmount, $quoteAmount);
+                $baseDiscountAmount = min(
+                    $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
+                    $cartRules[$ruleId]
+                );
+            }
+            $cartRules[$ruleId] -= $baseDiscountAmount;
+        }
+        $address->setCartFixedRules($cartRules);
+        if (!$isMultiShipping) {
+            $this->cartFixedDiscountHelper->syncQuoteCartFixedRuleBalance(
+                $quote,
+                $ruleId,
+                (float) ($cartRules[$ruleId] ?? 0)
+            );
+        }
+
+        return [(float) $discountAmount, (float) $baseDiscountAmount];
     }
 
     /**
