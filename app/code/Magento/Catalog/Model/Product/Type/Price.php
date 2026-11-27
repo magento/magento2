@@ -538,7 +538,7 @@ class Price implements ResetAfterRequestInterface
      *
      * @param Product $product
      *
-     * @return array|float
+     * @return string
      * @since 102.0.6
      */
     public function getFormattedPrice($product)
@@ -550,7 +550,7 @@ class Price implements ResetAfterRequestInterface
      * Get formatted by currency product price
      *
      * @param Product $product
-     * @return array || float
+     * @return string
      *
      * @deprecated 102.0.6
      * @see getFormattedPrice()
