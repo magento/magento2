@@ -55,4 +55,14 @@ class CustomerTest extends TestCase
 
         $this->assertSame($result, $this->block->customerLoggedIn($isLoggedIn));
     }
+
+    /**
+     * The block must not be private so it stays part of the full page cache instead of being
+     * rendered through a per-page /page_cache/block/render AJAX request. Login state is served
+     * through the X-Magento-Vary cache variant and the customer-data section.
+     */
+    public function testBlockIsNotScopePrivate()
+    {
+        $this->assertFalse($this->block->isScopePrivate());
+    }
 }
