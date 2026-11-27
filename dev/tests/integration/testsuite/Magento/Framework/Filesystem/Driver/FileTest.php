@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,6 +31,11 @@ class FileTest extends TestCase
      * @var String
      */
     private $generatedPath;
+
+    /**
+     * @var int|null
+     */
+    private $originalUmask;
 
     /**
      * Returns relative path for the test.
@@ -60,6 +66,10 @@ class FileTest extends TestCase
      */
     protected function tearDown(): void
     {
+        if ($this->originalUmask !== null) {
+            umask($this->originalUmask);
+            $this->originalUmask = null;
+        }
         $this->removeGeneratedDirectory();
     }
 
@@ -183,6 +193,91 @@ class FileTest extends TestCase
     {
         $path = $this->absolutePath . 'foo/file_four.txt';
         $this->assertEquals(true, $this->driver->deleteFile($path));
+    }
+
+    /**
+     * Renamed files must not receive execute bits; content must be preserved.
+     *
+     * @param int $umask
+     * @param bool $stateful
+     * @param int $expectedMode
+     * @return void
+     * @throws FileSystemException
+     */
+    #[DataProvider('renameFilePermissionsDataProvider')]
+    public function testRenameFileAppliesFilePermissions(int $umask, bool $stateful, int $expectedMode): void
+    {
+        $driver = new File($stateful);
+        $driver->createDirectory($this->generatedPath);
+        $source = $this->generatedPath . '/source.txt';
+        $target = $this->generatedPath . '/target.txt';
+        $driver->filePutContents($source, 'file content');
+        $driver->changePermissions($source, 0600);
+
+        $this->originalUmask = umask($umask);
+        self::assertTrue($driver->rename($source, $target));
+
+        self::assertFalse($driver->isExists($source));
+        self::assertSame('file content', $driver->fileGetContents($target));
+        clearstatcache(true, $target);
+        self::assertSame(sprintf('%04o', $expectedMode), sprintf('%04o', fileperms($target) & 0777));
+    }
+
+    /**
+     * @return array
+     */
+    public static function renameFilePermissionsDataProvider(): array
+    {
+        return [
+            'umask 0022' => [0022, false, 0644],
+            'umask 0027' => [0027, false, 0640],
+            'umask 0022, stateful' => [0022, true, 0644],
+            'umask 0027, stateful' => [0027, true, 0640],
+        ];
+    }
+
+    /**
+     * Renamed directories keep the execute bits needed to traverse them.
+     *
+     * @param int $umask
+     * @param bool $stateful
+     * @param int $expectedMode
+     * @return void
+     * @throws FileSystemException
+     */
+    #[DataProvider('renameDirectoryPermissionsDataProvider')]
+    public function testRenameDirectoryAppliesDirectoryPermissions(
+        int $umask,
+        bool $stateful,
+        int $expectedMode
+    ): void {
+        $driver = new File($stateful);
+        $source = $this->generatedPath . '/source';
+        $target = $this->generatedPath . '/target';
+        $driver->createDirectory($source);
+        $driver->filePutContents($source . '/file.txt', 'file content');
+        $driver->changePermissions($source, 0700);
+
+        $this->originalUmask = umask($umask);
+        self::assertTrue($driver->rename($source, $target));
+
+        self::assertFalse($driver->isExists($source));
+        self::assertSame('file content', $driver->fileGetContents($target . '/file.txt'));
+        clearstatcache(true, $target);
+        self::assertSame(sprintf('%04o', $expectedMode), sprintf('%04o', fileperms($target) & 0777));
+    }
+
+    /**
+     * @return array
+     */
+    public static function renameDirectoryPermissionsDataProvider(): array
+    {
+        return [
+            'umask 0022' => [0022, false, 0755],
+            'umask 0027' => [0027, false, 0750],
+            'umask 0022, stateful' => [0022, true, 0755],
+            'umask 0027, stateful' => [0027, true, 0750],
+        ];
     }
 
     /**
