@@ -49,18 +49,25 @@ class ConfigManager implements ModeConfigManagerInterface
     private $modeConfiguredFactory;
 
     /**
+     * @var ReportUriValidator
+     */
+    private ReportUriValidator $reportUriValidator;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param Store $store
      * @param State $state
      * @param Http|null $request
      * @param ModeConfiguredFactory|null $modeConfiguredFactory
+     * @param ReportUriValidator|null $reportUriValidator
      */
     public function __construct(
         ScopeConfigInterface $config,
         Store $store,
         State $state,
         ?Http $request = null,
-        ?ModeConfiguredFactory $modeConfiguredFactory = null
+        ?ModeConfiguredFactory $modeConfiguredFactory = null,
+        ?ReportUriValidator $reportUriValidator = null
     ) {
         $this->config = $config;
         $this->storeModel = $store;
@@ -70,6 +77,8 @@ class ConfigManager implements ModeConfigManagerInterface
             ?? ObjectManager::getInstance()->get(Http::class);
         $this->modeConfiguredFactory = $modeConfiguredFactory
             ?? ObjectManager::getInstance()->get(ModeConfiguredFactory::class);
+        $this->reportUriValidator = $reportUriValidator
+            ?? ObjectManager::getInstance()->get(ReportUriValidator::class);
     }
 
     /**
@@ -108,7 +117,7 @@ class ConfigManager implements ModeConfigManagerInterface
             );
         }
 
-        $reportUri = $this->config->getValue(
+        $reportUri = (string)$this->config->getValue(
             sprintf(
                 'csp/mode/%s_%s/report_uri',
                 $configArea,
@@ -118,9 +127,9 @@ class ConfigManager implements ModeConfigManagerInterface
             $this->storeModel->getStore()
         );
 
-        if (empty($reportUri)) {
+        if (!$this->reportUriValidator->isValid($reportUri)) {
             // Fallback to default configuration.
-            $reportUri = $this->config->getValue(
+            $reportUri = (string)$this->config->getValue(
                 'csp/mode/' . $configArea .'/report_uri',
                 ScopeInterface::SCOPE_STORE,
                 $this->storeModel->getStore()
@@ -129,7 +138,7 @@ class ConfigManager implements ModeConfigManagerInterface
 
         return $this->modeConfiguredFactory->create([
             'reportOnly' => (bool) $reportOnly,
-            'reportUri' => !empty($reportUri) ? (string)$reportUri : null
+            'reportUri' => $this->reportUriValidator->isValid($reportUri) ? $reportUri : null
         ]);
     }
 }
