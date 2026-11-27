@@ -34,6 +34,15 @@
                             <argument name="header_css_class" xsi:type="string">col-id</argument>
                         </arguments>
                     </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.sort_order" as="sort_order">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Priority</argument>
+                            <argument name="index" xsi:type="string">sort_order</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="column_css_class" xsi:type="string">col-priority</argument>
+                            <argument name="header_css_class" xsi:type="string">col-priority</argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="promo.catalog.grid.columnSet.name" as="name">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Rule</argument>
