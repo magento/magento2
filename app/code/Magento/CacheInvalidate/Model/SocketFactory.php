@@ -9,6 +9,9 @@ namespace Magento\CacheInvalidate\Model;
 
 /**
  * Factory for the \Laminas\Http\Client\Adapter\Socket
+ *
+ * @deprecated Purge requests use the core HTTP client factory.
+ * @see \Magento\Framework\HTTP\Client\CurlFactory
  */
 class SocketFactory
 {
