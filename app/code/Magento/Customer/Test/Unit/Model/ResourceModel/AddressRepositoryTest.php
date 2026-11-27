@@ -139,6 +139,7 @@ class AddressRepositoryTest extends TestCase
                 'updateData',
                 'setCustomer',
                 'getCountryModel',
+                'sanitize',
                 'validate',
                 'save',
                 'getDataModel',
@@ -200,6 +201,9 @@ class AddressRepositoryTest extends TestCase
         $this->address->expects($this->once())
             ->method('setCustomer')
             ->with($this->customer);
+        $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
         $this->address->expects($this->once())
             ->method('validate')
             ->willReturn(true);
@@ -268,6 +272,9 @@ class AddressRepositoryTest extends TestCase
         $this->address->expects($this->once())
             ->method('setStoreId');
         $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
+        $this->address->expects($this->once())
             ->method('validate')
             ->willReturn(true);
         $this->address->expects($this->once())
@@ -335,6 +342,9 @@ class AddressRepositoryTest extends TestCase
         $this->address->expects($this->never())
             ->method('setStoreId');
         $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
+        $this->address->expects($this->once())
             ->method('validate')
             ->willReturn(true);
         $this->address->expects($this->once())
@@ -386,6 +396,9 @@ class AddressRepositoryTest extends TestCase
             ->method('updateData')
             ->with($customerAddress);
         $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
+        $this->address->expects($this->once())
             ->method('validate')
             ->willReturn($errors);
 
@@ -425,6 +438,9 @@ class AddressRepositoryTest extends TestCase
             ->method('getRegionId')
             ->willReturn(null);
         $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
+        $this->address->expects($this->once())
             ->method('validate')
             ->willReturn($errors);
 
@@ -462,6 +478,9 @@ class AddressRepositoryTest extends TestCase
         $this->address->expects($this->never())
             ->method('getRegion')
             ->willReturn('');
+        $this->address->expects($this->once())
+            ->method('sanitize')
+            ->willReturn($this->address);
         $this->address->expects($this->once())
             ->method('validate')
             ->willReturn($errors);
