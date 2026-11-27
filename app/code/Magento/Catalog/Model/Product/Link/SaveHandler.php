@@ -91,6 +91,8 @@ class SaveHandler
 
         if (count($productLinks) > 0) {
             foreach ($entity->getProductLinks() as $link) {
+                // The SKU may have been regenerated to stay unique after the link was built.
+                $link->setSku($entity->getSku());
                 $this->productLinkRepository->save($link);
             }
         }
