@@ -14,19 +14,15 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class StoreUrl implements ItemProviderInterface
 {
     /**
-     * Sitemap item factory
-     *
      * @var SitemapItemInterfaceFactory
      */
     private $itemFactory;
 
     /**
-     * Config reader
-     *
      * @var ConfigReaderInterface
      */
     private $configReader;
-    
+
     /**
      * StoreUrlSitemapItemResolver constructor.
      *
@@ -46,12 +42,23 @@ class StoreUrl implements ItemProviderInterface
      */
     public function getItems($storeId)
     {
-        $items[] = $this->itemFactory->create([
+        $items[] = $this->itemFactory->create($this->getItemData($storeId));
+
+        return $items;
+    }
+
+    /**
+     * Get constructor arguments for the sitemap item factory.
+     *
+     * @param int $storeId
+     * @return array
+     */
+    public function getItemData($storeId)
+    {
+        return [
             'url' => '',
             'priority' => $this->configReader->getPriority($storeId),
             'changeFrequency' => $this->configReader->getChangeFrequency($storeId),
-        ]);
-
-        return $items;
+        ];
     }
 }
