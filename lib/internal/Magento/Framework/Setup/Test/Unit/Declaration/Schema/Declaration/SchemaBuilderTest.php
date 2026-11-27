@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\SchemaBuilder;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationComposite;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Timestamp;
@@ -24,6 +25,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -50,17 +52,17 @@ class SchemaBuilderTest extends TestCase
     private $elementFactoryMock;
 
     /**
-     * @var BooleanUtils|MockObject
+     * @var BooleanUtils|Stub
      */
     private $booleanUtilsMock;
 
     /**
-     * @var Sharding|MockObject
+     * @var Sharding|Stub
      */
     private $shardingMock;
 
     /**
-     * @var ValidationComposite|MockObject
+     * @var ValidationComposite|Stub
      */
     private $validationCompositeMock;
 
@@ -70,7 +72,7 @@ class SchemaBuilderTest extends TestCase
     private $resourceConnectionMock;
 
     /**
-     * @var SqlVersionProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var SqlVersionProvider|Stub
      */
     private $sqlVersionProvider;
 
@@ -79,21 +81,13 @@ class SchemaBuilderTest extends TestCase
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->booleanUtilsMock = $this->getMockBuilder(BooleanUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->shardingMock = $this->getMockBuilder(Sharding::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->validationCompositeMock = $this->getMockBuilder(ValidationComposite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->booleanUtilsMock = $this->createStub(BooleanUtils::class);
+        $this->shardingMock = $this->createStub(Sharding::class);
+        $this->validationCompositeMock = $this->createStub(ValidationComposite::class);
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sqlVersionProvider = $this->getMockBuilder(SqlVersionProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->sqlVersionProvider = $this->createStub(SqlVersionProvider::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -104,6 +98,7 @@ class SchemaBuilderTest extends TestCase
                 'sharding' => $this->shardingMock,
                 'validationComposite' => $this->validationCompositeMock,
                 'resourceConnection' => $this->resourceConnectionMock,
+                'elementNameResolver' => $this->createStub(ElementNameResolver::class),
                 'sqlVersionProvider' => $this->sqlVersionProvider
             ]
         );
@@ -366,7 +361,7 @@ class SchemaBuilderTest extends TestCase
         $resourceConnectionMock->expects(self::exactly(6))
             ->method('getTableName')
             ->willReturnCallback(
-                function($arg1) {
+                function ($arg1) {
                     if ($arg1 == 'first_table') {
                         return 'first_table';
                     } elseif ($arg1 == 'second_table') {
@@ -376,5 +371,118 @@ class SchemaBuilderTest extends TestCase
             );
         $this->model->addTablesData($tablesData);
         $this->model->build($schema);
+    }
+
+    public function testBuildDropsIndexCoveredByUniqueConstraintWithSameName(): void
+    {
+        $table = $this->createTable('some_table');
+        $firstColumn = $this->createIntegerColumn('first_column', $table);
+        $secondColumn = $this->createIntegerColumn('second_column', $table);
+        $index = $this->createIndex('SOME_TABLE_FIRST_COLUMN_SECOND_COLUMN', $table, [$firstColumn, $secondColumn]);
+        $unique = new Internal(
+            'SOME_TABLE_FIRST_COLUMN_SECOND_COLUMN',
+            'unique',
+            $table,
+            'SOME_TABLE_FIRST_COLUMN_SECOND_COLUMN',
+            [$firstColumn, $secondColumn]
+        );
+        $this->elementFactoryMock->expects(self::exactly(5))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($table, $firstColumn, $secondColumn, $index, $unique);
+        $this->resourceConnectionMock->expects(self::never())->method('getTableName');
+
+        $this->model->addTablesData(
+            $this->getCollidingTableData(['first_column', 'second_column'], ['first_column', 'second_column'])
+        );
+        $this->model->build($this->createSchema());
+
+        self::assertSame([], $table->getIndexes());
+        self::assertSame(['SOME_TABLE_FIRST_COLUMN_SECOND_COLUMN' => $unique], $table->getConstraints());
+    }
+
+    /**
+     * @return array
+     */
+    public static function unresolvableNameCollisionProvider(): array
+    {
+        return [
+            'fulltext index' => ['fulltext', ['first_column', 'second_column'], ['first_column', 'second_column']],
+            'hash index' => ['hash', ['first_column', 'second_column'], ['first_column', 'second_column']],
+            'different columns joined to the same name' => [
+                'btree',
+                ['first_column_second', 'column'],
+                ['first_column', 'second_column'],
+            ],
+        ];
+    }
+
+    #[DataProvider('unresolvableNameCollisionProvider')]
+    public function testBuildRejectsUnresolvableIndexNameCollision(
+        string $indexType,
+        array $indexColumnNames,
+        array $uniqueColumnNames
+    ): void {
+        $name = 'SOME_TABLE_FIRST_COLUMN_SECOND_COLUMN';
+        $table = $this->createTable('some_table');
+        $columns = [];
+        foreach (array_unique(array_merge($indexColumnNames, $uniqueColumnNames)) as $columnName) {
+            $columns[$columnName] = $this->createIntegerColumn($columnName, $table);
+        }
+        $pick = static fn (array $names): array => array_map(static fn (string $n) => $columns[$n], $names);
+        $index = new Index($name, 'index', $table, $pick($indexColumnNames), $indexType, $name);
+        $unique = new Internal($name, 'unique', $table, $name, $pick($uniqueColumnNames));
+        $this->elementFactoryMock->expects(self::exactly(count($columns) + 3))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...[$table, ...array_values($columns), $index, $unique]);
+        $this->resourceConnectionMock->expects(self::never())->method('getTableName');
+
+        $this->model->addTablesData(
+            $this->getCollidingTableData($indexColumnNames, $uniqueColumnNames, $indexType)
+        );
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('resolve to the same database name "' . $name . '"');
+        $this->model->build($this->createSchema());
+    }
+
+    private function getCollidingTableData(
+        array $indexColumnNames,
+        array $uniqueColumnNames,
+        string $indexType = 'btree'
+    ): array {
+        $columns = [];
+        foreach (array_unique(array_merge($indexColumnNames, $uniqueColumnNames)) as $columnName) {
+            $columns[$columnName] = ['name' => $columnName, 'type' => 'int', 'padding' => 10];
+        }
+
+        return [
+            'some_table' => [
+                'name' => 'some_table',
+                'resource' => 'default',
+                'column' => $columns,
+                'index' => [
+                    'SOME_TABLE_INDEX' => [
+                        'referenceId' => 'SOME_TABLE_INDEX',
+                        'indexType' => $indexType,
+                        'column' => $indexColumnNames,
+                    ],
+                ],
+                'constraint' => [
+                    'SOME_TABLE_UNQ' => [
+                        'referenceId' => 'SOME_TABLE_UNQ',
+                        'type' => 'unique',
+                        'column' => $uniqueColumnNames,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function createSchema(): Schema
+    {
+        $resourceConnectionMock = $this->createStub(ResourceConnection::class);
+        $resourceConnectionMock->method('getTableName')->willReturnArgument(0);
+
+        return $this->objectManagerHelper->getObject(Schema::class, ['resourceConnection' => $resourceConnectionMock]);
     }
 }
