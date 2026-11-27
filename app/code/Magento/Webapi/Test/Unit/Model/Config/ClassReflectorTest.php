@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -54,6 +54,38 @@ class ClassReflectorTest extends TestCase
             ['generateRandomString' => ['method' => 'generateRandomString']]
         );
         $this->assertEquals(['generateRandomString' => $this->_getSampleReflectionData()], $data);
+    }
+
+    public function testReflectMethodWithoutDocBlock(): void
+    {
+        $reflector = new ClassReflector(new TypeProcessor());
+
+        $data = $reflector->reflectClassMethods(
+            UndocumentedServiceForClassReflector::class,
+            ['execute' => ['method' => 'execute']]
+        );
+
+        self::assertSame('', $data['execute']['documentation']);
+        self::assertSame([], $data['execute']['interface']['out']['throws'] ?? []);
+        self::assertSame('string', $data['execute']['interface']['out']['parameters']['result']['type']);
+    }
+
+    public function testReflectMethodWithPartialParameterDocumentation(): void
+    {
+        $reflector = new ClassReflector(new TypeProcessor());
+
+        $data = $reflector->reflectClassMethods(
+            PartialDocBlockServiceForClassReflector::class,
+            ['save' => ['method' => 'save']]
+        );
+
+        self::assertSame(
+            [
+                'id' => ['type' => 'int', 'required' => true, 'documentation' => ''],
+                'items' => ['type' => 'string[]', 'required' => true, 'documentation' => 'Items to save'],
+            ],
+            $data['save']['interface']['in']['parameters']
+        );
     }
 
     public function testExtractMethodData()

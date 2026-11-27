@@ -13,6 +13,7 @@ use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeCaster;
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Reflection\Test\Unit\Fixture\NativeTypes;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -210,5 +211,46 @@ class MethodsMapTest extends TestCase
                 false,
             ],
         ];
+    }
+
+    public function testNativeOnlyInterfaceMap(): void
+    {
+        $expected = [
+            'getId' => ['type' => 'int', 'isRequired' => true, 'description' => '', 'parameterCount' => 0],
+            'getName' => ['type' => 'string', 'isRequired' => false, 'description' => '', 'parameterCount' => 0],
+        ];
+        $documented = [
+            'getId' => ['type' => 'int', 'isRequired' => true, 'description' => null, 'parameterCount' => 0],
+            'getName' => ['type' => 'string', 'isRequired' => false, 'description' => null, 'parameterCount' => 0],
+        ];
+        $this->serializerMock->expects($this->exactly(2))->method('serialize')->willReturn('serialized map');
+        self::assertSame($expected, $this->object->getMethodsMap(NativeTypes\NativeDataInterface::class));
+        self::assertSame($documented, $this->object->getMethodsMap(NativeTypes\DocumentedDataInterface::class));
+    }
+
+    public function testCachedMapIsReturnedWithoutReflection(): void
+    {
+        $interface = 'MissingNativeTypesInterface';
+        $expected = [
+            'getId' => ['type' => 'int', 'isRequired' => true, 'description' => null, 'parameterCount' => 0],
+        ];
+        $key = MethodsMap::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . '-' . hash('md5', $interface);
+        $cache = $this->createMock(FrontendInterface::class);
+        $cache->expects($this->once())->method('load')->with($key)->willReturn('cached map');
+        $cache->expects($this->never())->method('save');
+        $processor = $this->createMock(TypeProcessor::class);
+        $processor->expects($this->never())->method('getGetterReturnType');
+        $map = new MethodsMap(
+            $cache,
+            $processor,
+            $this->createStub(AttributeTypeResolverInterface::class),
+            $this->createStub(FieldNamer::class)
+        );
+        $serializer = $this->createMock(SerializerInterface::class);
+        $serializer->expects($this->once())->method('unserialize')->with('cached map')->willReturn($expected);
+        $serializer->expects($this->never())->method('serialize');
+        (new ObjectManager($this))->setBackwardCompatibleProperty($map, 'serializer', $serializer);
+        self::assertSame($expected, $map->getMethodsMap($interface));
+        self::assertSame($expected, $map->getMethodsMap($interface));
     }
 }

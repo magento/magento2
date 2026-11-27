@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Webapi\Model\Config;
@@ -131,10 +131,7 @@ class ClassReflector
 
         $docBlock = $methodReflection->getDocBlock();
         if (!$docBlock) {
-            throw new \LogicException(
-                'The docBlock of the method ' .
-                $method->getDeclaringClass()->getName() . '::' . $method->getName() . ' is empty.'
-            );
+            return '';
         }
         return $this->_typeProcessor->getDescription($docBlock);
     }

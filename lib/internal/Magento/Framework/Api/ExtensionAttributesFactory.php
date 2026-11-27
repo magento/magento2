@@ -11,7 +11,7 @@ namespace Magento\Framework\Api;
  */
 class ExtensionAttributesFactory
 {
-    const EXTENSIBLE_INTERFACE_NAME = \Magento\Framework\Api\ExtensibleDataInterface::class;
+    public const EXTENSIBLE_INTERFACE_NAME = \Magento\Framework\Api\ExtensibleDataInterface::class;
 
     /**
      * Object Manager instance
@@ -62,9 +62,15 @@ class ExtensionAttributesFactory
         $extensionInterfaceName = $extensionClassName . 'Interface';
 
         /** Ensure that proper return type of getExtensionAttributes() method is specified */
-        $methodDocBlock = $methodReflection->getDocComment();
+        $methodDocBlock = (string) $methodReflection->getDocComment();
         $pattern = "/@return\s+" . str_replace('\\', '\\\\', $extensionInterfaceName) . "/";
-        if (!preg_match($pattern, $methodDocBlock)) {
+        $hasExpectedReturnType = preg_match($pattern, $methodDocBlock);
+        if (!$hasExpectedReturnType && !preg_match('/@return\b/', $methodDocBlock)) {
+            $returnType = $methodReflection->getReturnType();
+            $hasExpectedReturnType = $returnType instanceof \ReflectionNamedType
+                && ltrim($returnType->getName(), '\\') === ltrim($extensionInterfaceName, '\\');
+        }
+        if (!$hasExpectedReturnType) {
             throw new \LogicException(
                 "Method 'getExtensionAttributes' must be overridden in the interfaces "
                 . "which extend '" . self::EXTENSIBLE_INTERFACE_NAME . "'. "
