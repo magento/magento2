@@ -4,13 +4,13 @@
  * All Rights Reserved.
  */
 
-// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
-/* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var $viewModel uploadResizeConfigValue */
-/** @var \Magento\Framework\Escaper $escaper */
+use Magento\ConfigurableProduct\ViewModel\UploadResizeConfigValue;
 
-use Magento\ConfigurableProduct\ViewModel\uploadResizeConfigValue;
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+/** @var \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var UploadResizeConfigValue $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
 
 $viewModel = $block->getViewModel();
 ?>
