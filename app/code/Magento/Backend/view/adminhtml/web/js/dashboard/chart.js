@@ -108,6 +108,13 @@ define([
                     }]
                 },
                 options: {
+                    transitions: {
+                        attach: {
+                            animation: {
+                                duration: 0
+                            }
+                        }
+                    },
                     legend: {
                         onClick: this.handleChartLegendClick,
                         position: 'bottom'
