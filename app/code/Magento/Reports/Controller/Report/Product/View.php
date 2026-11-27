@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Reports\Controller\Report\Product;
 
-use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -59,7 +59,9 @@ class View implements HttpPostActionInterface
     {
         $result = $this->resultJsonFactory->create();
 
-        if ($this->reportStatus->isReportEnabled((string)Event::EVENT_PRODUCT_VIEW)) {
+        if (!$this->customerVisitor->isRequestLoggingSkipped()
+            && $this->reportStatus->isReportEnabled((string)Event::EVENT_PRODUCT_VIEW)
+        ) {
             $productId = $this->request->getParam('product_id');
 
             $viewData['product_id'] = $productId;

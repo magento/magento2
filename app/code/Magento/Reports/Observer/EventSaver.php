@@ -7,6 +7,8 @@ namespace Magento\Reports\Observer;
 
 /**
  * Reports Event observer model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class EventSaver
 {
@@ -59,6 +61,10 @@ class EventSaver
      */
     public function save($eventTypeId, $objectId, $subjectId = null, $subtype = 0)
     {
+        if ($this->_customerVisitor->isRequestLoggingSkipped()) {
+            return;
+        }
+
         if ($subjectId === null) {
             if ($this->_customerSession->isLoggedIn()) {
                 $subjectId = $this->_customerSession->getCustomerId();

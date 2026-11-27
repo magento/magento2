@@ -13,12 +13,14 @@ use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\Header;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit Tests to cover Visitor Model
@@ -189,5 +191,52 @@ class VisitorTest extends TestCase
             ->with($this->visitor)
             ->willReturnSelf();
         $this->visitor->clean();
+    }
+
+    /**
+     * @param string $userAgent
+     * @param bool $expected
+     */
+    #[DataProvider('ignoredUserAgentsDataProvider')]
+    public function testIgnoredUserAgents(string $userAgent, bool $expected): void
+    {
+        $httpHeaderMock = $this->createMock(Header::class);
+        $httpHeaderMock->method('getHttpUserAgent')->willReturn($userAgent);
+        $this->sessionMock->expects($expected ? $this->never() : $this->any())->method('getVisitorData');
+
+        $visitor = $this->objectManagerHelper->getObject(
+            VisitorModel::class,
+            [
+                'registry' => $this->registryMock,
+                'session' => $this->sessionMock,
+                'resource' => $this->visitorResourceModelMock,
+                'httpHeader' => $httpHeaderMock,
+                'ignoredUserAgents' => ['bot', 'Crawl', 'meta-external', 'curl/', '', null],
+                'requestSafety' => $this->httpRequestMock,
+            ]
+        );
+
+        $this->assertSame($expected, $visitor->isRequestLoggingSkipped());
+        $visitor->initByRequest(null);
+    }
+
+    /**
+     * @return array
+     */
+    public static function ignoredUserAgentsDataProvider(): array
+    {
+        return [
+            'googlebot' => ['Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)', true],
+            'case insensitive' => ['Mozilla/5.0 (compatible; AhrefsCRAWLER/1.0)', true],
+            'meta agent' => ['meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters)', true],
+            'curl' => ['curl/8.5.0', true],
+            'regex chars are escaped' => ['Mozilla/5.0 curl.8', false],
+            'browser' => [
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                    . 'Chrome/131.0 Safari/537.36',
+                false
+            ],
+            'empty user agent' => ['', false],
+        ];
     }
 }

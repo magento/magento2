@@ -10,6 +10,8 @@ use Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CatalogProductCompareAddProductObserver implements ObserverInterface
 {
@@ -69,7 +71,9 @@ class CatalogProductCompareAddProductObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_COMPARE)) {
+        if ($this->_customerVisitor->isRequestLoggingSkipped()
+            || !$this->reportStatus->isReportEnabled(Event::EVENT_PRODUCT_COMPARE)
+        ) {
             return;
         }
         $productId = $observer->getEvent()->getProduct()->getId();
