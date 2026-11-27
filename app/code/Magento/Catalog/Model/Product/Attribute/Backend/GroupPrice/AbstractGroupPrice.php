@@ -232,11 +232,15 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
         // validate currency
         $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, 'default');
         $rates = $this->_getWebsiteCurrencyRates();
+        // A price of a website the product is not assigned to cannot clash with an All Websites price.
+        $websiteIds = array_map('intval', (array)$object->getWebsiteIds());
         foreach ($priceRows as $priceRow) {
             if (!empty($priceRow['delete'])) {
                 continue;
             }
-            if ($priceRow['website_id'] == 0) {
+            if ($priceRow['website_id'] == 0
+                || ($websiteIds && !in_array((int)$priceRow['website_id'], $websiteIds, true))
+            ) {
                 continue;
             }
 

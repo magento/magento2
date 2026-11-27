@@ -17,6 +17,9 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -145,6 +148,63 @@ class TierpriceTest extends TestCase
             });
         $this->storeManager->expects($this->once())->method('getWebsites')->willReturn([]);
         $this->assertTrue($this->tierprice->validate($object));
+    }
+
+    /**
+     * A website price clashes with an All Websites price of the same group and quantity only on an assigned website
+     *
+     * @param array $productWebsiteIds
+     * @param bool $expectDuplicate
+     * @return void
+     */
+    #[DataProvider('websitePriceAndAllWebsitesPriceDataProvider')]
+    public function testValidateWebsitePriceAgainstAllWebsitesPrice(array $productWebsiteIds, bool $expectDuplicate)
+    {
+        $this->attribute->setName('tier_price');
+        $this->attribute->setIsScopeGlobal(false);
+        $object = $this->createPartialMock(Product::class, ['getWebsiteIds', 'getStoreId']);
+        $object->method('getWebsiteIds')->willReturn($productWebsiteIds);
+        $object->method('getStoreId')->willReturn(0);
+        $object->setData(
+            'tier_price',
+            [
+                ['website_id' => 0, 'cust_group' => 0, 'price_qty' => 1, 'price' => 30],
+                ['website_id' => 2, 'cust_group' => 0, 'price_qty' => 1, 'price' => 33],
+            ]
+        );
+        $this->localeFormat->method('getNumber')->willReturnArgument(0);
+        $config = $this->createMock(ScopeConfigInterface::class);
+        $config->method('getValue')->willReturn('USD');
+        $website = $this->createPartialMock(Website::class, ['getId', 'getBaseCurrencyCode']);
+        $website->method('getId')->willReturn(2);
+        $website->method('getBaseCurrencyCode')->willReturn('USD');
+        $this->storeManager->method('getWebsites')->willReturn([$website]);
+        $tierprice = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice::class,
+            [
+                '_attribute' => $this->attribute,
+                'localeFormat' => $this->localeFormat,
+                '_storeManager' => $this->storeManager,
+                'config' => $config,
+            ]
+        );
+
+        if ($expectDuplicate) {
+            $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+            $this->expectExceptionMessage('We found a duplicate website, tier price, customer group and quantity.');
+        }
+        $this->assertTrue($tierprice->validate($object));
+    }
+
+    /**
+     * @return array
+     */
+    public static function websitePriceAndAllWebsitesPriceDataProvider(): array
+    {
+        return [
+            'website assigned: duplicate' => [[1, 2], true],
+            'website unassigned (#38099): allowed' => [[1], false],
+        ];
     }
 
     /**
