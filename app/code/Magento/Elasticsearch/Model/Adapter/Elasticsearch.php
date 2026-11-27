@@ -6,7 +6,6 @@
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Exception;
 use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
@@ -124,7 +123,8 @@ class Elasticsearch
      * @var array
      */
     private $responseErrorExceptionList = [
-        'elasticsearchMissing404' => Missing404Exception::class
+        // Class of the Elasticsearch 7 client, which is not always installed
+        'elasticsearchMissing404' => 'Elasticsearch\Common\Exceptions\Missing404Exception'
     ];
 
     /**
@@ -501,6 +501,21 @@ class Elasticsearch
         $oldIndex = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
         if ($oldIndex == $this->preparedIndex[$storeId]) {
             $oldIndex = '';
+        } elseif (!$this->hasMagentoMapping($this->preparedIndex[$storeId])) {
+            $this->deleteReplacedIndex($this->preparedIndex[$storeId]);
+            throw new LocalizedException(
+                $oldIndex
+                    ? __(
+                        'The search index "%1" was deleted by another reindex process or has no Magento mapping. '
+                        . 'The alias still points to "%2".',
+                        $this->preparedIndex[$storeId],
+                        $oldIndex
+                    )
+                    : __(
+                        'The search index "%1" was deleted by another reindex process or has no Magento mapping.',
+                        $this->preparedIndex[$storeId]
+                    )
+            );
         }
 
         $this->client->updateAlias(
@@ -520,6 +535,47 @@ class Elasticsearch
         }
 
         return $this;
+    }
+
+    /**
+     * Check that an index still has the mapping prepareIndex() gave it.
+     *
+     * Another reindex process may delete the index, and a later bulk request then makes the search engine create
+     * it again with a dynamic mapping only.
+     *
+     * @param string $indexName
+     * @return bool
+     */
+    private function hasMagentoMapping(string $indexName): bool
+    {
+        try {
+            if (!$this->client->indexExists($indexName)) {
+                return false;
+            }
+            $mapping = $this->client->getMapping(['index' => $indexName]);
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+            return false;
+        }
+
+        return $this->arrayManager->findPath('dynamic_templates', $mapping) !== null;
+    }
+
+    /**
+     * Delete an index that a bulk request created again after another reindex process deleted it.
+     *
+     * @param string $indexName
+     * @return void
+     */
+    private function deleteReplacedIndex(string $indexName): void
+    {
+        try {
+            if ($this->client->indexExists($indexName)) {
+                $this->client->deleteIndex($indexName);
+            }
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+        }
     }
 
     /**
