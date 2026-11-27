@@ -49,10 +49,10 @@ class SqlVersionProviderTest extends TestCase
         string $expectedSuffixKey
     ): void {
         $adapter = $this->createMock(AdapterInterface::class);
-        $adapter->expects($this->exactly(2))->method('fetchPairs')->willReturn(
+        $adapter->expects($this->once())->method('fetchPairs')->willReturn(
             ['version' => $sqlExactVersion]
         );
-        $this->resourceConnection->expects($this->any())
+        $this->resourceConnection->expects($this->once())
             ->method('getConnection')
             ->willReturn($adapter);
 
@@ -60,6 +60,74 @@ class SqlVersionProviderTest extends TestCase
             $expectedSuffixKey,
             $this->sqlVersionProvider->getMariaDbSuffixKey()
         );
+    }
+
+    public function testFetchPairsIsCalledOnceForRepeatedCallsOnSameResource(): void
+    {
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->expects($this->once())
+            ->method('fetchPairs')
+            ->willReturn(['version' => '10.6.11']);
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnection')
+            ->with(ResourceConnection::DEFAULT_CONNECTION)
+            ->willReturn($adapter);
+
+        $this->sqlVersionProvider->getSqlVersion();
+        $this->sqlVersionProvider->isMariaDbEngine();
+        $this->sqlVersionProvider->getMariaDbSuffixKey();
+        $this->sqlVersionProvider->isMysqlGte8029();
+    }
+
+    public function testFetchPairsIsCalledOncePerDistinctResource(): void
+    {
+        $defaultAdapter = $this->createMock(AdapterInterface::class);
+        $defaultAdapter->expects($this->once())
+            ->method('fetchPairs')
+            ->willReturn(['version' => '10.6.11']);
+        $customAdapter = $this->createMock(AdapterInterface::class);
+        $customAdapter->expects($this->once())
+            ->method('fetchPairs')
+            ->willReturn(['version' => '10.6.11']);
+        $this->resourceConnection->expects($this->exactly(2))
+            ->method('getConnection')
+            ->willReturnMap([
+                [ResourceConnection::DEFAULT_CONNECTION, $defaultAdapter],
+                ['custom', $customAdapter],
+            ]);
+
+        $reflection = new \ReflectionClass($this->sqlVersionProvider);
+        $fetchSqlVersion = $reflection->getMethod('fetchSqlVersion');
+
+        $this->assertSame(
+            '10.6.11',
+            $fetchSqlVersion->invoke($this->sqlVersionProvider, ResourceConnection::DEFAULT_CONNECTION)
+        );
+        $this->assertSame(
+            '10.6.11',
+            $fetchSqlVersion->invoke($this->sqlVersionProvider, ResourceConnection::DEFAULT_CONNECTION)
+        );
+        $this->assertSame(
+            '10.6.11',
+            $fetchSqlVersion->invoke($this->sqlVersionProvider, 'custom')
+        );
+    }
+
+    public function testResetStateClearsMemoizedVersion(): void
+    {
+        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter->expects($this->exactly(2))
+            ->method('fetchPairs')
+            ->willReturn(['version' => '10.6.11']);
+        $this->resourceConnection->expects($this->exactly(2))
+            ->method('getConnection')
+            ->willReturn($adapter);
+
+        $this->assertSame('10.6.', $this->sqlVersionProvider->getSqlVersion());
+
+        $this->sqlVersionProvider->_resetState();
+
+        $this->assertSame('10.6.', $this->sqlVersionProvider->getSqlVersion());
     }
 
     /**
