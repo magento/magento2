@@ -10,14 +10,19 @@ namespace Magento\Ups\Test\Unit\Model;
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
+use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\Method;
+use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Simplexml\Element;
@@ -273,6 +278,132 @@ class CarrierTest extends TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->error, $this->model->collectRates($request));
+    }
+
+    /**
+     * @param string $gatewayUrl
+     * @param string $expectedUrlPrefix
+     * @return void
+     */
+    #[DataProvider('cgiGatewayUrlDataProvider')]
+    public function testGetCgiQuotesUsesHttpClient(string $gatewayUrl, string $expectedUrlPrefix): void
+    {
+        $config = [
+            'carriers/ups/type' => 'UPS',
+            'carriers/ups/gateway_url' => $gatewayUrl,
+            'carriers/ups/allowed_methods' => 'GND',
+            'carriers/ups/title' => 'UPS',
+        ];
+        $this->scope->method('getValue')
+            ->willReturnCallback(static fn ($path) => $config[$path] ?? null);
+        $this->configHelper->method('getCode')->willReturnMap([['method', 'GND', 'Ground']]);
+
+        $httpClientFactory = $this->createMock(ClientFactory::class);
+        $httpClientFactory->expects($this->once())->method('create')->willReturn($this->httpClient);
+        $this->httpClient->expects($this->once())->method('setTimeout')->with(30);
+        $this->httpClient->expects($this->once())->method('get')->with(
+            $expectedUrlPrefix . 'accept_UPS_license_agreement=yes&10_action=4&13_product=GND'
+            . '&14_origCountry=US&15_origPostal=90230&origCity=Los+Angeles+%26+County'
+            . '&19_destPostal=11236&22_destCountry=US&23_weight=2&47_rate_chart=Daily+Pickup'
+            . '&48_container=CP&49_residential=RES&weight_std=lbs'
+        );
+        $responseBody = '3%GND%US%90230%US%11236%2%0%12.50';
+        $this->httpClient->expects($this->once())->method('getBody')->willReturn($responseBody);
+
+        $localeFormat = $this->createMock(FormatInterface::class);
+        $localeFormat->method('getNumber')->willReturnMap([['12.50', 12.5]]);
+        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $priceCurrency->method('round')->willReturnMap([[12.5, 12.5]]);
+        $method = $this->helper->getObject(Method::class, ['priceCurrency' => $priceCurrency]);
+        $rateMethodFactory = $this->createMock(MethodFactory::class);
+        $rateMethodFactory->expects($this->once())->method('create')->willReturn($method);
+
+        $model = $this->getMockBuilder(Carrier::class)
+            ->setConstructorArgs(array_values($this->helper->getConstructArguments(Carrier::class, [
+                'scopeConfig' => $this->scope,
+                'configHelper' => $this->configHelper,
+                'httpClientFactory' => $httpClientFactory,
+                'localeFormat' => $localeFormat,
+                'rateFactory' => $this->getRateFactory(),
+                'rateMethodFactory' => $rateMethodFactory,
+            ])))
+            ->onlyMethods(['_getCachedQuotes', '_setCachedQuotes'])
+            ->getMock();
+        $model->expects($this->once())->method('_getCachedQuotes')->willReturn(null);
+        $model->expects($this->once())->method('_setCachedQuotes')->with($this->anything(), $responseBody);
+        $model->setRawRequest(new DataObject([
+            'action' => '4',
+            'product' => 'GND',
+            'orig_country' => 'US',
+            'orig_postal' => '90230',
+            'orig_city' => 'Los Angeles & County',
+            'dest_postal' => '11236-1234',
+            'dest_country' => 'US',
+            'weight' => 2,
+            'pickup' => ['label' => 'Daily Pickup'],
+            'container' => 'CP',
+            'dest_type' => 'RES',
+            'unit_measure' => 'LBS',
+        ]));
+
+        $getQuotes = new \ReflectionMethod(Carrier::class, '_getQuotes');
+        $result = $getQuotes->invoke($model);
+
+        $this->assertSame($this->rate, $result);
+        $this->assertSame([$method], $result->getAllRates());
+        $this->assertSame('ups', $method->getCarrier());
+        $this->assertSame('GND', $method->getMethod());
+        $this->assertSame('Ground', $method->getMethodTitle());
+        $this->assertSame(12.5, $method->getCost());
+        $this->assertSame(12.5, $method->getPrice());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetCgiQuotesHandlesHttpClientException(): void
+    {
+        $config = [
+            'carriers/ups/type' => 'UPS',
+            'carriers/ups/gateway_url' => 'https://example.com/rates',
+        ];
+        $this->scope->method('getValue')
+            ->willReturnCallback(static fn ($path) => $config[$path] ?? null);
+
+        $httpClientFactory = $this->createMock(ClientFactory::class);
+        $httpClientFactory->expects($this->once())->method('create')->willReturn($this->httpClient);
+        $this->httpClient->expects($this->once())->method('setTimeout')->with(30);
+        $this->httpClient->expects($this->once())->method('get')
+            ->willThrowException(new \RuntimeException('Transport error'));
+        $this->httpClient->expects($this->never())->method('getBody');
+
+        $model = $this->getMockBuilder(Carrier::class)
+            ->setConstructorArgs(array_values($this->helper->getConstructArguments(Carrier::class, [
+                'scopeConfig' => $this->scope,
+                'httpClientFactory' => $httpClientFactory,
+            ])))
+            ->onlyMethods(['_getCachedQuotes', '_setCachedQuotes', '_parseCgiResponse'])
+            ->getMock();
+        $model->expects($this->once())->method('_getCachedQuotes')->willReturn(null);
+        $model->expects($this->never())->method('_setCachedQuotes');
+        $model->expects($this->once())->method('_parseCgiResponse')->with('')->willReturn($this->rate);
+        $model->setRawRequest(new DataObject(['pickup' => ['label' => 'Daily Pickup']]));
+
+        $getQuotes = new \ReflectionMethod(Carrier::class, '_getQuotes');
+
+        $this->assertSame($this->rate, $getQuotes->invoke($model));
+    }
+
+    /**
+     * @return array
+     */
+    public static function cgiGatewayUrlDataProvider(): array
+    {
+        return [
+            'default gateway' => ['', 'https://www.ups.com/using/services/rave/qcostcgi.cgi?'],
+            'configured gateway' => ['https://example.com/rates', 'https://example.com/rates?'],
+            'existing query' => ['https://example.com/rates?mode=cgi', 'https://example.com/rates?mode=cgi&'],
+        ];
     }
 
     /**
