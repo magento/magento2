@@ -68,10 +68,14 @@ class ExtractQuoteAddressData
                 'customer_notes' => $address->getCustomerNotes(),
                 'custom_attributes' => array_map(
                     function (AttributeInterface $attribute) {
+                        $value = $attribute->getValue() ?? '';
+                        if (is_array($value)) {
+                            $value = implode(',', $value);
+                        }
                         return $this->getAttributeValue->execute(
                             'customer_address',
                             $attribute->getAttributeCode(),
-                            $attribute->getValue()
+                            (string)$value
                         );
                     },
                     $address->getCustomAttributes() ?? []
