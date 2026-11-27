@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+
 /**
  * Application state flags.
  * Can be used to retrieve current application mode and current area.
@@ -67,6 +69,11 @@ class State
     private $areaList;
 
     /**
+     * @var ConfigLoaderInterface
+     */
+    private $configLoader;
+
+    /**
      * Application modes
      */
     public const MODE_DEVELOPER = 'developer';
@@ -78,13 +85,16 @@ class State
     /**
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param string $mode
+     * @param ConfigLoaderInterface $configLoader
      * @throws \LogicException
      */
     public function __construct(
         \Magento\Framework\Config\ScopeInterface $configScope,
-        $mode = self::MODE_DEFAULT
+        $mode = self::MODE_DEFAULT,
+        ConfigLoaderInterface $configLoader = null
     ) {
         $this->_configScope = $configScope;
+        $this->configLoader = $configLoader ?? ObjectManager::getInstance()->get(ConfigLoaderInterface::class);
         switch ($mode) {
             case self::MODE_DEVELOPER:
             case self::MODE_PRODUCTION:
@@ -135,6 +145,10 @@ class State
         }
         $this->_configScope->setCurrentScope($code);
         $this->_areaCode = $code;
+
+        ObjectManager::getInstance()->configure(
+            $this->configLoader->load($code)
+        );
     }
 
     /**
