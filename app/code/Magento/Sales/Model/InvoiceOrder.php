@@ -12,7 +12,9 @@ use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\InvoiceOrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
@@ -217,11 +219,15 @@ class InvoiceOrder implements InvoiceOrderInterface
         }
         try {
             $order = $this->paymentAdapter->pay($order, $invoice, $capture);
-            $order->setState(
-                $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
-            );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
+            if ($order->getState() !== Order::STATE_PAYMENT_REVIEW) {
+                $order->setState(
+                    $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
+                );
+                $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            }
+            if ((int) $invoice->getState() !== Invoice::STATE_OPEN) {
+                $invoice->setState(Invoice::STATE_PAID);
+            }
             $this->invoiceRepository->save($invoice);
             $this->orderRepository->save($order);
         } catch (\Exception $e) {

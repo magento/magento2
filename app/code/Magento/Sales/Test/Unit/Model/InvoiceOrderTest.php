@@ -219,9 +219,12 @@ class InvoiceOrderTest extends TestCase
             ->method('setState')
             ->with(Order::STATE_PROCESSING)
             ->willReturnSelf();
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->exactly(2))
             ->method('getState')
             ->willReturn(Order::STATE_PROCESSING);
+        $this->invoiceMock->expects($this->once())
+            ->method('getState')
+            ->willReturn(Invoice::STATE_PAID);
         $this->configMock->expects($this->once())
             ->method('getStateDefaultStatus')
             ->with(Order::STATE_PROCESSING)
@@ -247,6 +250,72 @@ class InvoiceOrderTest extends TestCase
                 ->method('notify')
                 ->with($this->orderMock, $this->invoiceMock, $this->invoiceCommentCreationMock);
         }
+        $this->invoiceMock->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn(2);
+
+        $this->assertEquals(
+            2,
+            $this->invoiceOrder->execute(
+                $orderId,
+                $capture,
+                $items,
+                $notify,
+                $appendComment,
+                $this->invoiceCommentCreationMock,
+                $this->invoiceCreationArgumentsMock
+            )
+        );
+    }
+
+    public function testOrderInvoiceKeepsPaymentReviewOnPendingCapture()
+    {
+        $orderId = 1;
+        $capture = true;
+        $items = [1 => 2];
+        $notify = false;
+        $appendComment = false;
+        $this->mockConnection($orderId);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($this->orderMock);
+        $this->invoiceDocumentFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->invoiceMock);
+        $this->invoiceOrderValidatorMock->expects($this->once())
+            ->method('validate')
+            ->willReturn($this->errorMessagesMock);
+        $this->errorMessagesMock->expects($this->once())
+            ->method('hasMessages')
+            ->willReturn(false);
+        $this->paymentAdapterMock->expects($this->once())
+            ->method('pay')
+            ->with($this->orderMock, $this->invoiceMock, $capture)
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())
+            ->method('getState')
+            ->willReturn(Order::STATE_PAYMENT_REVIEW);
+        $this->invoiceMock->expects($this->once())
+            ->method('getState')
+            ->willReturn(Invoice::STATE_OPEN);
+        $this->orderStateResolverMock->expects($this->never())
+            ->method('getStateForOrder');
+        $this->orderMock->expects($this->never())
+            ->method('setState');
+        $this->orderMock->expects($this->never())
+            ->method('setStatus');
+        $this->configMock->expects($this->never())
+            ->method('getStateDefaultStatus');
+        $this->invoiceMock->expects($this->never())
+            ->method('setState');
+        $this->invoiceRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->invoiceMock)
+            ->willReturn($this->invoiceMock);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
+            ->willReturn($this->orderMock);
         $this->invoiceMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(2);
