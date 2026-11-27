@@ -188,4 +188,31 @@ class LayoutPluginTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * Verify that when FPC is disabled mid-request (between afterGenerateElements and afterGetOutput),
+     * the previously set public cache headers are revoked with no-cache headers.
+     *
+     * @return void
+     */
+    public function testAfterGetOutputRevokesPublicHeadersWhenFpcDisabledMidRequest(): void
+    {
+        $maxAge = 180;
+        $callCount = 0;
+
+        $this->layoutMock->method('isCacheable')->willReturn(true);
+        $this->maintenanceModeMock->method('isOn')->willReturn(false);
+        $this->configMock->method('getTtl')->willReturn($maxAge);
+        $this->configMock->method('isEnabled')->willReturnCallback(function () use (&$callCount) {
+            $callCount++;
+            return $callCount <= 1;
+        });
+
+        $this->responseMock->expects($this->once())->method('setPublicHeaders')->with($maxAge);
+        $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
+        $this->responseMock->expects($this->never())->method('setHeader');
+
+        $this->model->afterGenerateElements($this->layoutMock);
+        $this->model->afterGetOutput($this->layoutMock, 'html');
+    }
 }
