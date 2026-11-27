@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerStockAlertUnsubscribeAllTest">
+        <annotations>
+            <features value="ProductAlert"/>
+            <stories value="Customer product alerts account page"/>
+            <title value="Customer can unsubscribe from all stock alerts on My Product Alerts"/>
+            <description value="Subscribe to stock alerts on two products, use Unsubscribe from all stock alerts, verify list is empty"/>
+            <severity value="MAJOR"/>
+            <group value="product_alert"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleOutOfStockProduct" stepKey="createProduct1"/>
+            <createData entity="SimpleOutOfStockProduct" stepKey="createProduct2"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 1" stepKey="enableStockAlert"/>
+            <magentoCLI command="config:set catalog/productalert/allow_price 0" stepKey="disablePriceAlert"/>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="showOutOfStock"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 0" stepKey="restoreStockAlert"/>
+            <magentoCLI command="config:set catalog/productalert/allow_price 0" stepKey="restorePriceAlert"/>
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="restoreShowOutOfStock"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct1">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSubscribeProductStockAlertActionGroup" stepKey="subscribeStock1"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2">
+            <argument name="productUrl" value="$$createProduct2.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSubscribeProductStockAlertActionGroup" stepKey="subscribeStock2"/>
+        <actionGroup ref="StorefrontOpenCustomerProductAlertsPageActionGroup" stepKey="openProductAlertsPage"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.pageTitle}}" userInput="My Product Alerts" stepKey="seeTitle"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.stockAlertsTable}}" stepKey="seeStockTable"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.stockAlertsTable}}" userInput="$$createProduct1.name$$" stepKey="seeProduct1InList"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.stockAlertsTable}}" userInput="$$createProduct2.name$$" stepKey="seeProduct2InList"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.stockUnsubscribeAllLink}}" stepKey="seeUnsubscribeAllLink"/>
+        <actionGroup ref="StorefrontUnsubscribeAllStockAlertsActionGroup" stepKey="unsubscribeAllStock"/>
+        <see userInput="You will no longer receive stock alerts." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="StorefrontOpenCustomerProductAlertsPageActionGroup" stepKey="reopenProductAlertsPage"/>
+        <dontSeeElement selector="{{StorefrontCustomerProductAlertsSection.stockAlertsTable}}" stepKey="tableGoneAfterUnsubscribeAll"/>
+        <dontSeeElement selector="{{StorefrontCustomerProductAlertsSection.stockUnsubscribeAllLink}}" stepKey="unsubscribeAllLinkGone"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.emptyMessage}}" userInput="You have no stock alert subscriptions." stepKey="seeEmptyStockMessage"/>
+    </test>
+</tests>
