@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Creditmemo\Total\Tax;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as ResourceInvoice;
+use Magento\Tax\Model\Config as TaxConfig;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -918,6 +919,96 @@ class TaxTest extends TestCase
             ],
         ];
         return $result;
+    }
+
+    /**
+     * A shipping refund entered including tax adds up to the entered amount (magento/magento2#39644).
+     *
+     * Shipping 149 + 19% = 177.31; 75.00 including tax is refunded. The shipping collector leaves 63.03 without
+     * tax and 75.00 with it; the proportional shipping tax rounds to 11.98, which would make 75.01.
+     *
+     * @param bool $displayShippingInclTax
+     * @param bool $againstInvoice
+     * @param float $expectedShippingTax
+     * @return void
+     */
+    #[DataProvider('shippingRefundInclTaxDataProvider')]
+    public function testShippingRefundEnteredInclTaxAddsUp(
+        bool $displayShippingInclTax,
+        bool $againstInvoice,
+        float $expectedShippingTax
+    ) {
+        $taxConfig = $this->createMock(TaxConfig::class);
+        $taxConfig->method('displaySalesShippingInclTax')->willReturn($displayShippingInclTax);
+        $model = new Tax($this->resourceInvoice, [], $taxConfig);
+
+        $this->order->setData(
+            [
+                'shipping_amount' => 149,
+                'base_shipping_amount' => 149,
+                'shipping_tax_amount' => 28.31,
+                'base_shipping_tax_amount' => 28.31,
+                'shipping_incl_tax' => 177.31,
+                'base_shipping_incl_tax' => 177.31,
+                'shipping_refunded' => 0,
+                'base_shipping_refunded' => 0,
+                'tax_invoiced' => 28.31,
+                'base_tax_invoiced' => 28.31,
+            ]
+        );
+        $this->creditmemo->method('getAllItems')->willReturn([]);
+        $this->creditmemo->method('isLast')->willReturn(false);
+        $this->creditmemo->method('roundPrice')->willReturnCallback(
+            static fn ($price) => round($price, 2)
+        );
+        if ($againstInvoice) {
+            $this->invoice->setData(
+                [
+                    'tax_amount' => 28.31,
+                    'base_tax_amount' => 28.31,
+                    'shipping_tax_amount' => 28.31,
+                    'base_shipping_tax_amount' => 28.31,
+                ]
+            );
+        }
+        $this->creditmemo->method('getInvoice')->willReturn($againstInvoice ? $this->invoice : null);
+        $this->creditmemo->setData(
+            [
+                'shipping_amount' => 63.03,
+                'base_shipping_amount' => 63.03,
+                'shipping_incl_tax' => 75.00,
+                'base_shipping_incl_tax' => 75.00,
+                'grand_total' => 63.03,
+                'base_grand_total' => 63.03,
+            ]
+        );
+
+        $model->collect($this->creditmemo);
+
+        $this->assertEqualsWithDelta($expectedShippingTax, $this->creditmemo->getShippingTaxAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(
+            $expectedShippingTax,
+            $this->creditmemo->getBaseShippingTaxAmount(),
+            self::EPSILON
+        );
+        $this->assertEqualsWithDelta(
+            63.03 + $expectedShippingTax,
+            $this->creditmemo->getGrandTotal(),
+            self::EPSILON
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function shippingRefundInclTaxDataProvider(): array
+    {
+        return [
+            'shipping shown including tax: tax is the difference, total 75.00' => [true, false, 11.97],
+            'shipping shown excluding tax: proportional tax as before' => [false, false, 11.98],
+            'refund against an invoice, shipping shown including tax' => [true, true, 11.97],
+            'refund against an invoice, shipping shown excluding tax' => [false, true, 11.98],
+        ];
     }
 
     /**
