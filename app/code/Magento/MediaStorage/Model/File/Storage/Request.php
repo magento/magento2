@@ -21,7 +21,7 @@ class Request
      */
     public function __construct(HttpRequest $request)
     {
-        $this->pathInfo = str_replace('..', '', ltrim($request->getPathInfo(), '/'));
+        $this->pathInfo = ltrim($request->getPathInfo(), '/');
     }
 
     /**
