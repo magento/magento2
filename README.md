@@ -39,7 +39,7 @@ Our [Community](https://opensource.magento.com/) is large and diverse, and our p
 We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Adobe has granted the Community Maintainers permission to accept, merge, and reject pull requests, as well as review issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production.
 
 - [Learn more about the Maintainer role](https://developer.adobe.com/commerce/contributor/guides/maintainers/)
-- [Maintainer's Handbook](https://developer.adobe.com/commerce/contributor/guides/maintainers/handbook/)
+- [Maintainer's Handbook](https://developer.adobe.com/commerce/contributor/guides/maintainers/handbook)
 
 [![](https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png)](https://developer.adobe.com/commerce/contributor/guides/maintainers/)
 
@@ -57,7 +57,7 @@ We use labels in the GitHub issues and pull requests to help the participants re
 
 ## Security
 
-[Security](https://developer.adobe.com/commerce/php/architecture/basics/security/) is one of the highest priorities at Adobe. To learn more about reporting security concerns, visit the [Adobe Bug Bounty Program](https://hackerone.com/adobe).
+[Security](https://developer.adobe.com/commerce/php/architecture/basics/security) is one of the highest priorities at Adobe. To learn more about reporting security concerns, visit the [Adobe Bug Bounty Program](https://hackerone.com/adobe).
 
 Stay up-to-date on the latest security news and patches by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
