@@ -12,17 +12,31 @@
         <annotations>
             <description>Clicks on 'FROM' and 'TO' From Date Picker.Verify the calendar UI does not show any button text after selecting date.</description>
         </annotations>
+        <!--
+            The advice span is toggled by the grid's own date-validation JS around the
+            calendar close action, so a separate waitForElement + see pair can race: the
+            span can appear and disappear between the two round-trips. Read its text in a
+            single executeJS call to remove that race.
+        -->
         <!-- Verify From Date Picker Does Not Show Button Text -->
         <click selector="{{OrderReportMainSection.fromDatePicker}}" stepKey="clickFromDatePicker"/>
         <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker1"/>
         <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton1"/>
         <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton1"/>
-        <see selector="{{OrderReportMainSection.fromDatePickerText}}" userInput="" stepKey="seeAssertNoFromButtonTextMessage"/>
+        <executeJS function="var el = document.querySelector(&quot;{{OrderReportMainSection.fromDatePickerText}}&quot;); return el ? el.textContent.trim() : '';" stepKey="fromDatePickerAdviceText"/>
+        <assertEquals stepKey="seeAssertNoFromButtonTextMessage">
+            <actualResult type="variable">fromDatePickerAdviceText</actualResult>
+            <expectedResult type="string"></expectedResult>
+        </assertEquals>
         <!-- Verify To Date Picker Does Not Show Button Text -->
         <click selector="{{OrderReportMainSection.toDatePicker}}" stepKey="clickToDatePicker"/>
         <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker2"/>
         <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton2"/>
         <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton2"/>
-        <see selector="{{OrderReportMainSection.toDatePickerText}}" userInput="" stepKey="seeAssertNoToButtonTextMessage"/>
+        <executeJS function="var el = document.querySelector(&quot;{{OrderReportMainSection.toDatePickerText}}&quot;); return el ? el.textContent.trim() : '';" stepKey="toDatePickerAdviceText"/>
+        <assertEquals stepKey="seeAssertNoToButtonTextMessage">
+            <actualResult type="variable">toDatePickerAdviceText</actualResult>
+            <expectedResult type="string"></expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>
