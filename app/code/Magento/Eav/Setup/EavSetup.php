@@ -1347,6 +1347,42 @@ class EavSetup
         return $this;
     }
 
+    /**
+     * Remove attribute from group
+     *
+     * Unlike addAttributeToGroup(), an unknown group is not replaced with the default group of the set.
+     * Nothing is removed when the group, the attribute or the assignment does not exist.
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param int|string $groupId
+     * @param int|string $attributeId
+     * @return $this
+     * @throws LocalizedException
+     */
+    public function removeAttributeFromGroup($entityTypeId, $setId, $groupId, $attributeId)
+    {
+        $entityTypeId = $this->getEntityTypeId($entityTypeId);
+        $setId = $this->getAttributeSetId($entityTypeId, $setId);
+        $groupId = $this->getAttributeGroup($entityTypeId, $setId, $groupId, 'attribute_group_id');
+        $attributeId = $this->getAttributeId($entityTypeId, $attributeId);
+        if (!is_numeric($groupId) || !is_numeric($attributeId)) {
+            return $this;
+        }
+
+        $this->setup->getConnection()->delete(
+            $this->setup->getTable('eav_entity_attribute'),
+            [
+                'entity_type_id = ?' => (int)$entityTypeId,
+                'attribute_set_id = ?' => (int)$setId,
+                'attribute_group_id = ?' => (int)$groupId,
+                'attribute_id = ?' => (int)$attributeId,
+            ]
+        );
+
+        return $this;
+    }
+
     /******************* BULK INSTALL *****************/
 
     /**
