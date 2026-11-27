@@ -48,7 +48,7 @@ class FileLock implements LockManagerInterface
 
     /**
      * @param FileDriver $fileDriver The file driver
-     * @param string $path The path to the locks storage folder
+     * @param string $path Absolute path or path relative to the application root for the locks storage folder
      * @throws RuntimeException Throws RuntimeException if $path is empty
      *         or cannot create the directory for locks
      */
@@ -59,6 +59,12 @@ class FileLock implements LockManagerInterface
         }
 
         $this->fileDriver = $fileDriver;
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $path = str_replace('\\', '/', $path);
+        }
+        if (!preg_match('#^(/|[A-Za-z]:/|[A-Za-z][A-Za-z0-9+.\-]*://)#', $path)) {
+            $path = BP . '/' . $path;
+        }
         $this->path = rtrim($path, '/') . '/';
 
         try {
