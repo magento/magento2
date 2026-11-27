@@ -101,7 +101,6 @@ class Toolbar
      */
     public function getCurrentPage()
     {
-        $page = (int) $this->request->getParam(self::PAGE_PARM_NAME);
-        return $page ?: 1;
+        return max(1, (int) $this->request->getParam(self::PAGE_PARM_NAME));
     }
 }
