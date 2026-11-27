@@ -68,12 +68,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function getIdTags(string $id): array
     {
-        $file = $this->getReverseFile($id);
-        if (!file_exists($file)) {
-            return [];
-        }
-        $content = @file_get_contents($file);
-        return $content === false ? [] : $this->parseIds($content);
+        return $this->parseIds($this->readFileLocked($this->getReverseFile($id)));
     }
 
     /**
@@ -126,18 +121,69 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function getTagIds(string $tag): array
     {
-        $file = $this->getTagFile($tag);
+        return $this->parseIds($this->readFileLocked($this->getTagFile($tag)));
+    }
 
-        if (!file_exists($file)) {
-            return [];
+    /**
+     * Read an index file under a shared lock, so a concurrent rewrite in mutateFileLocked() is never seen half done.
+     * Reopens the file when it was unlinked and recreated while waiting for the lock, like mutateFileLocked().
+     * When the filesystem does not support locks, the file is read without one, as before.
+     *
+     * @param string $file
+     * @return string Empty string when the file does not exist or cannot be read
+     */
+    private function readFileLocked(string $file): string
+    {
+        for ($attempt = 0; $attempt < self::MUTATE_MAX_ATTEMPTS; $attempt++) {
+            $content = $this->readCurrentFile($file);
+            if ($content !== null) {
+                return $content;
+            }
         }
 
-        $content = @file_get_contents($file);
-        if ($content === false) {
-            return [];
+        return '';
+    }
+
+    /**
+     * Read a file under a shared lock; null when the file was replaced while waiting for the lock
+     *
+     * @param string $file
+     * @return string|null
+     */
+    private function readCurrentFile(string $file): ?string
+    {
+        $fp = @fopen($file, 'r');
+        if ($fp === false) {
+            return '';
         }
 
-        return $this->parseIds($content);
+        try {
+            if (flock($fp, LOCK_SH) && !$this->isHandleCurrent($fp, $file)) {
+                return null;
+            }
+
+            return (string)stream_get_contents($fp);
+        } finally {
+            // Closing the handle releases the shared lock.
+            fclose($fp);
+        }
+    }
+
+    /**
+     * Whether an open handle still points to the file on disk (it was not unlinked or replaced after fopen())
+     *
+     * @param resource $fp
+     * @param string $file
+     * @return bool
+     */
+    private function isHandleCurrent($fp, string $file): bool
+    {
+        clearstatcache(true, $file);
+        $held = @fstat($fp);
+        $onDisk = @stat($file);
+
+        return $held !== false && $onDisk !== false
+            && $held['ino'] === $onDisk['ino'] && $held['dev'] === $onDisk['dev'];
     }
 
     /**
@@ -200,11 +246,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
             }
 
             // Verifies the locked handle still matches the file on disk; if stale or unlinked, reopens and retries.
-            clearstatcache(true, $file);
-            $held = @fstat($fp);
-            $onDisk = @stat($file);
-            if ($held === false || $onDisk === false
-                || $held['ino'] !== $onDisk['ino'] || $held['dev'] !== $onDisk['dev']) {
+            if (!$this->isHandleCurrent($fp, $file)) {
                 flock($fp, LOCK_UN);
                 fclose($fp);
                 continue;
