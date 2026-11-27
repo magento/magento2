@@ -46,6 +46,11 @@ class DbSchemaTest extends TestCase
                 'catalog_product_index_price_tmp',
                 'CAT_PRD_IDX_PRICE_TMP_ENTT_ID_CSTR_GROUP_ID_WS_ID',
                 ['entity_id', 'customer_group_id', 'website_id']
+            ],
+            [
+                'catalog_product_entity_decimal',
+                'CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID_STORE_ID',
+                ['attribute_id', 'store_id']
             ]
         ];
     }
