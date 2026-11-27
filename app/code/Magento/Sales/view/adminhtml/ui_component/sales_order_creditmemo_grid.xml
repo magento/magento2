@@ -86,7 +86,7 @@
             <settings>
                 <filter>dateRange</filter>
                 <dataType>date</dataType>
-                <label translate="true">Created</label>
+                <label translate="true">Credit Memo Date</label>
             </settings>
         </column>
         <column name="order_increment_id">

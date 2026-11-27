@@ -60,7 +60,7 @@ class ExportTest extends ExportBase
         $this->assertNotFalse($exportedCreditmemo);
         $this->assertEquals(
             $this->prepareDate($creditmemo->getCreatedAt(), 'America/Chicago'),
-            $exportedCreditmemo['Created']
+            $exportedCreditmemo['Credit Memo Date']
         );
         $this->assertEquals(
             $this->prepareDate($order->getCreatedAt(), 'America/Chicago'),
