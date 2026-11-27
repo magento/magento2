@@ -15,7 +15,7 @@ use \Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class SwatchLayerFilterItemResolver implements TypeResolverInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resolveType(array $data) : string
     {
