@@ -136,19 +136,7 @@ class State
                 }
             }
 
-            $subject = $parentItem && $parentItem->getProductType() === Type::TYPE_BUNDLE
-            && $parentItem->getProduct()
-            && $parentItem->getProduct()->getShipmentType() == AbstractType::SHIPMENT_TOGETHER
-                ? $parentItem
-                : $item;
-
-            $qtyOrdered = (int) $subject->getQtyOrdered();
-            $qtyCanceled = (int) $subject->getQtyCanceled();
-            $qtyShipped  = (int) $subject->getQtyShipped();
-            $qtyRefunded = (int) $subject->getQtyRefunded();
-
-            $openQty = $qtyOrdered - $qtyCanceled - $qtyShipped - $qtyRefunded;
-            if ($openQty > 0) {
+            if ($item->getSimpleQtyToShip() > 0) {
                 return false;
             }
         }

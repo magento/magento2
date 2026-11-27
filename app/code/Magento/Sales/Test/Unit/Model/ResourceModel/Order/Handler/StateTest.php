@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Handler\State;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -300,55 +301,6 @@ class StateTest extends TestCase
         $this->subject->check($order);
     }
 
-    public function testSubjectChoosesParentWhenSecondEvaluationMatchesBundleShippedTogether(): void
-    {
-        /** @var Order|MockObject $order */
-        $order = $this->createOrderMock();
-
-        $config = $this->getMockBuilder(Config::class)
-            ->onlyMethods(['getStateDefaultStatus'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
-        $order->method('getIsInProcess')->willReturn(false);
-
-        // Avoid early return
-        $order->method('isCanceled')->willReturn(false);
-        $order->method('canUnhold')->willReturn(false);
-        $order->method('canInvoice')->willReturn(false);
-        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([]));
-        $order->method('getTotalDue')->willReturn(0);
-
-        // Closed state via areAllItemsFulfilled
-        $order->method('canCreditmemo')->willReturn(false);
-        $order->method('getIsNotVirtual')->willReturn(true);
-        $order->method('canShip')->willReturn(true);
-
-        $parentWithSwitchingBehavior = $this->createSwitchingParentForBundleSelection();
-        $childItem = $this->createChildItemForParent($parentWithSwitchingBehavior, 0);
-        $order->method('getAllItems')->willReturn([$childItem]);
-
-        $order->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_CLOSED)
-            ->willReturnSelf();
-
-        $config->expects($this->once())
-            ->method('getStateDefaultStatus')
-            ->with(Order::STATE_CLOSED)
-            ->willReturn('closed');
-
-        $order->expects($this->once())
-            ->method('setStatus')
-            ->with('closed')
-            ->willReturnSelf();
-
-        $order->method('getConfig')->willReturn($config);
-
-        $this->subject->check($order);
-    }
-
     private function createBundleParentShippedTogetherFulfilled(): object
     {
         $bundleProduct = new class {
@@ -385,19 +337,7 @@ class StateTest extends TestCase
             {
                 return $this->bundleProduct;
             }
-            public function getQtyOrdered()
-            {
-                return 1;
-            }
-            public function getQtyCanceled()
-            {
-                return 0;
-            }
-            public function getQtyShipped()
-            {
-                return 1;
-            }
-            public function getQtyRefunded()
+            public function getSimpleQtyToShip()
             {
                 return 0;
             }
@@ -431,88 +371,14 @@ class StateTest extends TestCase
             {
                 return null;
             }
-            public function getQtyOrdered()
+            public function getSimpleQtyToShip()
             {
-                return 1;
-            }
-            public function getQtyCanceled()
-            {
-                return 0;
-            }
-            public function getQtyShipped()
-            {
-                return $this->shipped;
-            }
-            public function getQtyRefunded()
-            {
-                return 0;
+                return max(1 - $this->shipped, 0);
             }
         };
         $child->parent = $parent;
         $child->shipped = $shipped;
         return $child;
-    }
-
-    private function createSwitchingParentForBundleSelection(): object
-    {
-        return new class {
-            /** @var int */
-            private $typeCall = 0;
-            /** @var int */
-            private $productCall = 0;
-            public function getIsVirtual()
-            {
-                return false;
-            }
-            public function getLockedDoShip()
-            {
-                return false;
-            }
-            public function getParentItem()
-            {
-                return null;
-            }
-            public function getProductType()
-            {
-                $this->typeCall++;
-                return $this->typeCall === 1 ? 'simple' : Type::TYPE_BUNDLE;
-            }
-            public function getProduct()
-            {
-                $this->productCall++;
-                $callIndex = $this->productCall;
-                return new class($callIndex) {
-                    /** @var int */
-                    private $callIndex;
-                    public function __construct($callIndex)
-                    {
-                        $this->callIndex = $callIndex;
-                    }
-                    public function getShipmentType()
-                    {
-                        return $this->callIndex === 1
-                            ? AbstractType::SHIPMENT_SEPARATELY
-                            : AbstractType::SHIPMENT_TOGETHER;
-                    }
-                };
-            }
-            public function getQtyOrdered()
-            {
-                return 1;
-            }
-            public function getQtyCanceled()
-            {
-                return 0;
-            }
-            public function getQtyShipped()
-            {
-                return 1;
-            }
-            public function getQtyRefunded()
-            {
-                return 0;
-            }
-        };
     }
 
     public function testEarlyReturnWhenOpenInvoiceAndTotalDue(): void
@@ -624,6 +490,77 @@ class StateTest extends TestCase
         $this->subject->check($order);
     }
 
+    #[DataProvider('partiallyShippedDecimalQtyProvider')]
+    public function testOrderStaysProcessingWhenDecimalQtyIsNotFullyShipped(float $ordered, float $shipped): void
+    {
+        /** @var Order|MockObject $order */
+        $order = $this->createOrderMock();
+
+        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
+        $order->method('getIsInProcess')->willReturn(false);
+        $order->method('isCanceled')->willReturn(false);
+        $order->method('canUnhold')->willReturn(false);
+        $order->method('canInvoice')->willReturn(false);
+        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([]));
+        $order->method('getTotalDue')->willReturn(0);
+        $order->method('canShip')->willReturn(true);
+        $order->method('canCreditmemo')->willReturn(false);
+        $order->method('getIsNotVirtual')->willReturn(true);
+        $order->method('getAllItems')->willReturn([
+            $this->createOrderItemStub($ordered, 0, $shipped, 0)
+        ]);
+
+        $order->expects($this->never())->method('setState');
+
+        $this->subject->check($order);
+    }
+
+    /**
+     * @return array
+     */
+    public static function partiallyShippedDecimalQtyProvider(): array
+    {
+        return [
+            'nothing shipped, qty below 1' => [0.5, 0.0],
+            'fraction left after whole units shipped' => [1.5, 1.0],
+        ];
+    }
+
+    public function testSetsCompleteWhenDecimalQtyIsFullyShipped(): void
+    {
+        /** @var Order|MockObject $order */
+        $order = $this->createOrderMock();
+
+        $config = $this->getMockBuilder(Config::class)
+            ->onlyMethods(['getStateDefaultStatus'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order->method('getState')->willReturn(Order::STATE_PROCESSING);
+        $order->method('getIsInProcess')->willReturn(false);
+        $order->method('isCanceled')->willReturn(false);
+        $order->method('canUnhold')->willReturn(false);
+        $order->method('canInvoice')->willReturn(false);
+        $order->method('getInvoiceCollection')->willReturn($this->createInvoiceCollection([]));
+        $order->method('getTotalDue')->willReturn(0);
+        $order->method('canShip')->willReturn(true);
+        $order->method('canCreditmemo')->willReturn(true);
+        $order->method('getAllItems')->willReturn([
+            $this->createOrderItemStub(1.5, 0, 1.5, 0)
+        ]);
+
+        $order->expects($this->once())
+            ->method('setState')
+            ->with(Order::STATE_COMPLETE)
+            ->willReturnSelf();
+
+        $config->method('getStateDefaultStatus')->with(Order::STATE_COMPLETE)->willReturn('complete');
+        $order->method('setStatus')->with('complete')->willReturnSelf();
+        $order->method('getConfig')->willReturn($config);
+
+        $this->subject->check($order);
+    }
+
     public function testSetsClosedForVirtualOrderWithClosedStatus(): void
     {
         /** @var Order|MockObject $order */
@@ -712,21 +649,21 @@ class StateTest extends TestCase
     }
 
     /**
-     * Create a minimal order item stub that exposes the quantities used by State::areAllItemsFulfilled().
+     * Create a minimal order item stub that exposes the quantity used by State::areAllItemsFulfilled().
      */
-    private function createOrderItemStub(int $ordered, int $canceled, int $shipped, int $refunded): object
+    private function createOrderItemStub(float $ordered, float $canceled, float $shipped, float $refunded): object
     {
         return new class($ordered, $canceled, $shipped, $refunded) {
-            /** @var int */
+            /** @var float */
             private $ordered;
-            /** @var int */
+            /** @var float */
             private $canceled;
-            /** @var int */
+            /** @var float */
             private $shipped;
-            /** @var int */
+            /** @var float */
             private $refunded;
 
-            public function __construct(int $ordered, int $canceled, int $shipped, int $refunded)
+            public function __construct(float $ordered, float $canceled, float $shipped, float $refunded)
             {
                 $this->ordered = $ordered;
                 $this->canceled = $canceled;
@@ -746,21 +683,9 @@ class StateTest extends TestCase
             {
                 return null;
             }
-            public function getQtyOrdered(): int
+            public function getSimpleQtyToShip(): float
             {
-                return $this->ordered;
-            }
-            public function getQtyCanceled(): int
-            {
-                return $this->canceled;
-            }
-            public function getQtyShipped(): int
-            {
-                return $this->shipped;
-            }
-            public function getQtyRefunded(): int
-            {
-                return $this->refunded;
+                return max($this->ordered - $this->canceled - $this->shipped - $this->refunded, 0);
             }
         };
     }
