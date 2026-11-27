@@ -453,6 +453,38 @@ class DbTest extends TestCase
         $this->assertEquals($countSql, $this->collection->getSize());
     }
 
+    public function testGetSizeCountsSubselectWhenHavingIsPresent()
+    {
+        $adapter = $this->createPartialMock(Mysql::class, ['select', 'fetchOne', 'quoteIdentifier', 'quoteInto']);
+        $adapter->method('quoteInto')
+            ->willReturnCallback(fn ($text, $value) => str_replace('?', (string)$value, $text));
+        $adapter->method('quoteIdentifier')->willReturnCallback(fn ($value) => '`' . $value . '`');
+        $adapter->method('select')->willReturnCallback(
+            fn () => new Select($adapter, $this->getSelectRenderer($this->objectManager))
+        );
+        $this->collection->setConnection($adapter);
+        $this->collection->getSelect()
+            ->from(['main_table' => 'item'], ['id', 'total' => 'SUM(qty)'])
+            ->group('id')
+            ->having('total <= ?', 0)
+            ->order('id ASC')
+            ->limit(20, 40);
+
+        $countSql = null;
+        $adapter->expects($this->once())
+            ->method('fetchOne')
+            ->willReturnCallback(function ($select) use (&$countSql) {
+                $countSql = (string)$select;
+                return 7;
+            });
+
+        $this->assertSame(7, $this->collection->getSize());
+        $this->assertStringStartsWith('SELECT COUNT(*) FROM (SELECT', $countSql);
+        $this->assertStringContainsString('HAVING (total <= 0)', $countSql);
+        $this->assertStringNotContainsString('LIMIT', $countSql);
+        $this->assertStringNotContainsString('ORDER BY', $countSql);
+    }
+
     public function testGetSelectSql()
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
