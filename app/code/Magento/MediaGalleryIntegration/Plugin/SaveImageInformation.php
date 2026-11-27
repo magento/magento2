@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Psr\Log\LoggerInterface;
@@ -82,22 +82,20 @@ class SaveImageInformation
      * @param array $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
+     * @throws LocalizedException
      */
     public function afterSave(Uploader $subject, array $result): array
     {
         $mediaFolder = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
 
-        if (!$this->config->isEnabled() || substr($result['path'] ?? '', 0, strlen($mediaFolder)) !== $mediaFolder) {
-            return $result;
-        }
+        if ($this->config->isEnabled() && strpos($result['path'] ?? '', $mediaFolder) === 0) {
+            $uploadedFile = rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/');
+            $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($uploadedFile);
 
-        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getRelativePath(rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/'));
-
-        if (!$this->isApplicable($path)) {
-            return $result;
+            if ($this->isApplicable($path)) {
+                $this->synchronizeFiles->execute([$path]);
+            }
         }
-        $this->synchronizeFiles->execute([$path]);
 
         return $result;
     }
@@ -113,7 +111,7 @@ class SaveImageInformation
         try {
             return $path
                 && !$this->isPathExcluded->execute($path)
-                && preg_match('#\.(' . implode("|", $this->imageExtensions) . ')$# i', $path);
+                && preg_match('#\.(' . implode('|', $this->imageExtensions) . ')$# i', $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;
