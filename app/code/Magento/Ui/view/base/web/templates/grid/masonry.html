@@ -9,7 +9,7 @@
         <div outerfasteach="data: getVisible(), as: '$col'" template="getBody()"></div>
     </div>
     <div if="!hasData() && !getErrorMessageUnsanitizedHtml()" class="no-data-message-container">
-        <span translate="'We couldn\'t find any records.'"></span>
+        <span text="emptyText"></span>
     </div>
     <div if="getErrorMessageUnsanitizedHtml()" class="error-message-container">
         <span html="getErrorMessageUnsanitizedHtml()"></span>

@@ -15,7 +15,7 @@
                     css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"></td>
             </tr>
             <tr ifnot="hasData()" class="data-grid-tr-no-data">
-                <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"></td>
+                <td attr="colspan: countVisible()" text="emptyText"></td>
             </tr>
         </tbody>
     </table>
