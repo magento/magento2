@@ -707,6 +707,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $options = $optionCollection->appendSelections($selectionCollection, true, $_appendAllSelections);
 
                 $selections = $this->mergeSelectionsWithOptions($options, $selections);
+                $this->addSelectionsToBuyRequest($buyRequest, $product, $selections);
             }
             if ((is_array($selections) && count($selections) > 0) || !$isStrictProcessMode) {
                 $uniqueKey = [$product->getId()];
@@ -1392,6 +1393,33 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return array_merge([], ...$selections);
+    }
+
+    /**
+     * Record selections picked without a bundle_option request as if the customer had chosen them
+     *
+     * Without bundle_option in the stored buy request, checkProductBuyState() flags the cart item as unconfigured.
+     *
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\DataObject[] $selections
+     * @return void
+     */
+    private function addSelectionsToBuyRequest(
+        \Magento\Framework\DataObject $buyRequest,
+        \Magento\Catalog\Model\Product $product,
+        array $selections
+    ): void {
+        if (!$selections) {
+            return;
+        }
+
+        $bundleOption = [];
+        foreach ($selections as $selection) {
+            $bundleOption[(int)$selection->getOptionId()] = (int)$selection->getSelectionId();
+        }
+        $buyRequest->setBundleOption($bundleOption);
+        $product->addCustomOption('info_buyRequest', $this->serializer->serialize($buyRequest->getData()));
     }
 
     /**
