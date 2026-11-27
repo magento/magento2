@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="promo">
+            <group id="graphql" translate="label" showInDefault="1" sortOrder="10">
+                <label>GraphQl Configurations</label>
+                <field id="share_applied_cart_rule" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Share Applied Cart Rules</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow to retrieve applied cart rules via GraphQL API</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
