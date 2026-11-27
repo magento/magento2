@@ -85,8 +85,32 @@ class ModuleListTest extends TestCase
      */
     public function testGetOne(): void
     {
+        $this->setLoadAllExpectation(false);
+        $this->setLoadConfigExpectation();
+        $this->loader->expects($this->once())
+            ->method('loadModule')
+            ->with('foo')
+            ->willReturn(self::$allFixture['foo']);
+        $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
+        $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
+        $this->assertNull($this->model->getOne('bar'));
+    }
+
+    public function testGetOneLoadsMissingDefinitionOnce(): void
+    {
+        $this->setLoadAllExpectation(false);
+        $this->setLoadConfigExpectation();
+        $this->loader->expects($this->once())->method('loadModule')->with('foo')->willReturn(null);
+        $this->assertNull($this->model->getOne('foo'));
+        $this->assertNull($this->model->getOne('foo'));
+    }
+
+    public function testGetOneReusesLoadedModules(): void
+    {
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
+        $this->loader->expects($this->never())->method('loadModule');
+        $this->model->getAll();
         $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
         $this->assertNull($this->model->getOne('bar'));
     }
