@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Directory\Model\Currency;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
@@ -104,6 +105,38 @@ class PriceTest extends TestCase
          $this->model->setData('name', $itemName);
          $dataSource = $this->model->prepareDataSource($dataSource);
          $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+    }
+
+    /**
+     * Rows of a deleted store view fall back to the default store currency
+     */
+    public function testPrepareDataSourceWithDeletedStore(): void
+    {
+        $currencyMock = $this->createMock(Currency::class);
+        $currencyMock->expects($this->once())->method('getCurrencyCode')->willReturn('USD');
+        $defaultStore = $this->createMock(Store::class);
+        $defaultStore->expects($this->once())->method('getBaseCurrency')->willReturn($currencyMock);
+        $this->storeManagerMock->expects($this->exactly(2))
+            ->method('getStore')
+            ->willReturnCallback(
+                static function ($storeId) use ($defaultStore) {
+                    if ($storeId === Store::DEFAULT_STORE_ID) {
+                        return $defaultStore;
+                    }
+                    throw new NoSuchEntityException(__('The store that was requested wasn\'t found.'));
+                }
+            );
+        $this->currencyMock->expects($this->once())->method('load')->with('USD')->willReturnSelf();
+        $this->currencyMock->expects($this->once())
+            ->method('format')
+            ->with('10.0000', [], false)
+            ->willReturn('$10.00');
+
+        $this->model->setData('name', 'base_grand_total');
+        $dataSource = $this->model->prepareDataSource(
+            ['data' => ['items' => [['base_grand_total' => '10.0000', 'store_id' => '5']]]]
+        );
+        $this->assertSame('$10.00', $dataSource['data']['items'][0]['base_grand_total']);
     }
 
     /**
