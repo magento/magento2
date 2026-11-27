@@ -52,8 +52,22 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
     {
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
-            $order = $shipment->getOrder();
+            try {
+                $shipment = $this->_objectManager->create(
+                    \Magento\Sales\Api\ShipmentRepositoryInterface::class
+                )->get($shipmentId);
+                $order = $shipment->getOrder();
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
+                /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+                if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+                    $resultRedirect->setPath('*/*/history');
+                } else {
+                    $resultRedirect->setPath('sales/guest/form');
+                }
+                return $resultRedirect;
+            }
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
