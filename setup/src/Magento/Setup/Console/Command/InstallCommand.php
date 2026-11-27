@@ -236,8 +236,10 @@ class InstallCommand extends AbstractSetupCommand
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);
         $isInteractiveSetup = $input->getOption(self::INPUT_KEY_INTERACTIVE_SETUP) ?? false;
-        $installer->install($isInteractiveSetup ? array_merge($input->getOptions(), $this->interactiveSetupUserInput) :
-            $input->getOptions());
+        $request = $input->getOptions();
+        // A bare --dry-run leaves this VALUE_OPTIONAL option at null instead of its false default
+        $request[DryRunLogger::INPUT_KEY_DRY_RUN_MODE] ??= true;
+        $installer->install($isInteractiveSetup ? array_merge($request, $this->interactiveSetupUserInput) : $request);
 
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
