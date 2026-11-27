@@ -654,4 +654,59 @@ class AwsS3Test extends TestCase
             ]
         ];
     }
+
+    /**
+     * @param string $mode
+     * @param bool $writes
+     */
+    #[DataProvider('fileCloseWriteModesDataProvider')]
+    public function testFileCloseWritesOnlyWritableModes(string $mode, bool $writes): void
+    {
+        $this->adapterMock->method('fileExists')->willReturn(true);
+        $this->adapterMock->method('read')->willReturn('content');
+        $this->adapterMock->expects($writes ? $this->once() : $this->never())
+            ->method('writeStream');
+
+        $resource = $this->driver->fileOpen('test/path', $mode);
+        $this->driver->fileClose($resource);
+    }
+
+    /**
+     * @return array
+     */
+    public static function fileCloseWriteModesDataProvider(): array
+    {
+        return [
+            ['mode' => 'r', 'writes' => false],
+            ['mode' => 'rb', 'writes' => false],
+            ['mode' => 'r+', 'writes' => true],
+            ['mode' => 'w', 'writes' => true],
+            ['mode' => 'wb', 'writes' => true],
+            ['mode' => 'a', 'writes' => true],
+            ['mode' => 'a+', 'writes' => true],
+        ];
+    }
+
+    public function testDestructorDoesNotUploadReadOnlyStream(): void
+    {
+        $this->adapterMock->method('fileExists')->willReturn(true);
+        $this->adapterMock->method('read')->willReturn('content');
+        $this->adapterMock->expects($this->never())
+            ->method('writeStream');
+
+        $this->driver->fileOpen('test/path', 'r');
+        $this->driver = null;
+    }
+
+    public function testReadThenWriteOnSamePathStillUploads(): void
+    {
+        $this->adapterMock->method('fileExists')->willReturn(true);
+        $this->adapterMock->method('read')->willReturn('content');
+        $this->adapterMock->expects($this->once())
+            ->method('writeStream');
+
+        $this->driver->fileOpen('test/path', 'r');
+        $resource = $this->driver->fileOpen('test/path', 'w');
+        $this->driver->fileClose($resource);
+    }
 }
