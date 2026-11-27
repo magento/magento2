@@ -61,7 +61,12 @@ class DataProvider
                 . '")',
         ];
 
-        return array_merge_recursive($buttonData, $this->data);
+        $data = array_merge_recursive($buttonData, $this->data);
+        if (isset($data['label']) && is_string($data['label'])) {
+            $data['label'] = __($data['label']);
+        }
+
+        return $data;
     }
 
     /**
