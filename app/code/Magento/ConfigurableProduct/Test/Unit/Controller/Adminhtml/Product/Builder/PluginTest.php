@@ -260,4 +260,26 @@ class PluginTest extends TestCase
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
         );
     }
+
+    public function testAfterBuildPreservesTypeWhenAttributesParamIsNull()
+    {
+        $valueMap = [
+            ['attributes', null, null],
+            ['popup', null, false],
+            ['product', null, 'product'],
+            ['id', false, false],
+        ];
+        $this->requestMock->expects($this->once())->method('has')->with('attributes')->willReturn(true);
+        $this->requestMock->expects($this->any())->method('getParam')->willReturnMap($valueMap);
+
+        // When attributes param is null (not an array), setTypeId must not be called
+        $this->productMock->expects($this->never())->method('setTypeId');
+
+        $this->productFactoryMock->expects($this->never())->method('create');
+
+        $this->assertEquals(
+            $this->productMock,
+            $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
+        );
+    }
 }
