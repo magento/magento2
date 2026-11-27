@@ -15,8 +15,6 @@ use Magento\Framework\DataObject;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product gallery block
@@ -130,19 +128,15 @@ class Gallery extends AbstractView
      */
     public function getGalleryImagesJson()
     {
-        $storeFlag = '';
-        if ($this->_scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL)) {
-            $storeFlag = '?' . StoreManagerInterface::PARAM_NAME . '=' . $this->getProduct()->getStore()->getCode();
-        }
         $imagesItems = [];
         /** @var DataObject $image */
         foreach ($this->getGalleryImages() as $image) {
             $mediaType = $image->getMediaType();
             $imageItem = new DataObject(
                 [
-                    'thumb' => $image->getData('small_image_url') . $storeFlag,
-                    'img' => $image->getData('medium_image_url') . $storeFlag,
-                    'full' => $image->getData('large_image_url') . $storeFlag,
+                    'thumb' => $image->getData('small_image_url'),
+                    'img' => $image->getData('medium_image_url'),
+                    'full' => $image->getData('large_image_url'),
                     'caption' => $image->getLabel() ?: $this->getProduct()->getName(),
                     'position' => $image->getData('position'),
                     'isMain' => $this->isMainImage($image),
@@ -154,7 +148,7 @@ class Gallery extends AbstractView
             foreach ($this->getGalleryImagesConfig()->getItems() as $imageConfig) {
                 $imageItem->setData(
                     $imageConfig->getData('json_object_key'),
-                    $image->getData($imageConfig->getData('data_object_key')) . $storeFlag
+                    $image->getData($imageConfig->getData('data_object_key'))
                 );
             }
             $imagesItems[] = $imageItem->toArray();
