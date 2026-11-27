@@ -11,11 +11,18 @@ namespace Magento\Framework\View\Asset;
 class PropertyGroup extends Collection
 {
     /**
-     * Properties
+     * Values that all assets of the group share
      *
      * @var array
      */
     protected $properties = [];
+
+    /**
+     * Attributes of individual assets that do not take part in grouping
+     *
+     * @var array
+     */
+    private $assetAttributes = [];
 
     /**
      * Constructor
@@ -46,5 +53,41 @@ class PropertyGroup extends Collection
     public function getProperty($name)
     {
         return $this->properties[$name] ?? null;
+    }
+
+    /**
+     * Set attributes that apply to a single asset of the group
+     *
+     * @param string $identifier
+     * @param array $attributes
+     * @return void
+     */
+    public function setAssetAttributes($identifier, array $attributes)
+    {
+        if ($attributes) {
+            $this->assetAttributes[$identifier] = $attributes;
+        } else {
+            unset($this->assetAttributes[$identifier]);
+        }
+    }
+
+    /**
+     * Retrieve attributes that apply to a single asset of the group
+     *
+     * @param string $identifier
+     * @return array
+     */
+    public function getAssetAttributes($identifier): array
+    {
+        return $this->assetAttributes[$identifier] ?? [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove($identifier)
+    {
+        parent::remove($identifier);
+        unset($this->assetAttributes[$identifier]);
     }
 }
