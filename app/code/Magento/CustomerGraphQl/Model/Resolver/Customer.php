@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -31,15 +32,24 @@ class Customer implements ResolverInterface
     private $extractCustomerData;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param ExtractCustomerData $extractCustomerData
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         GetCustomer $getCustomer,
-        ExtractCustomerData $extractCustomerData
+        ExtractCustomerData $extractCustomerData,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->getCustomer = $getCustomer;
         $this->extractCustomerData = $extractCustomerData;
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -53,9 +63,7 @@ class Customer implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         $customer = $this->getCustomer->execute($context);
         return $this->extractCustomerData->execute($customer);

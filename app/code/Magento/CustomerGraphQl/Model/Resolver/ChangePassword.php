@@ -12,10 +12,10 @@ use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerPassword;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\CustomerGraphQl\Model\Customer\ValidateCustomerAuthorization;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -52,18 +52,25 @@ class ChangePassword implements ResolverInterface
     private $emailNotification;
 
     /**
+     * @var ValidateCustomerAuthorization
+     */
+    private $validateCustomerAuthorization;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param AccountManagementInterface $accountManagement
      * @param ExtractCustomerData $extractCustomerData
      * @param EmailNotificationInterface|null $emailNotification
+     * @param ValidateCustomerAuthorization|null $validateCustomerAuthorization
      */
     public function __construct(
         GetCustomer $getCustomer,
         CheckCustomerPassword $checkCustomerPassword,
         AccountManagementInterface $accountManagement,
         ExtractCustomerData $extractCustomerData,
-        ?EmailNotificationInterface $emailNotification = null
+        ?EmailNotificationInterface $emailNotification = null,
+        ?ValidateCustomerAuthorization $validateCustomerAuthorization = null
     ) {
         $this->getCustomer = $getCustomer;
         $this->checkCustomerPassword = $checkCustomerPassword;
@@ -71,6 +78,8 @@ class ChangePassword implements ResolverInterface
         $this->extractCustomerData = $extractCustomerData;
         $this->emailNotification = $emailNotification
             ?? ObjectManager::getInstance()->get(EmailNotificationInterface::class);
+        $this->validateCustomerAuthorization = $validateCustomerAuthorization
+            ?? ObjectManager::getInstance()->get(ValidateCustomerAuthorization::class);
     }
 
     /**
@@ -84,9 +93,7 @@ class ChangePassword implements ResolverInterface
         ?array $args = null
     ) {
         /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
+        $this->validateCustomerAuthorization->execute($context);
 
         if (!isset($args['currentPassword']) || '' == trim($args['currentPassword'])) {
             throw new GraphQlInputException(__('Specify the "currentPassword" value.'));
