@@ -200,6 +200,7 @@ define([
             var element,
                 imgElement,
                 lastElement,
+                $survivors,
                 count,
                 position;
 
@@ -207,14 +208,16 @@ define([
                 count = this._initializedItemCount++;
                 lastElement = this._lastInitializedElement;
             } else {
-                count = this.element.find(this.options.imageSelector).length;
-                lastElement = this.element.find(this.options.imageSelector + ':last');
+                $survivors = this.element.find(this.options.imageSelector + ':not(.removed)');
+                count = $survivors.length;
+                lastElement = $survivors.last();
             }
 
             position = count + 1;
 
             if (lastElement && lastElement.length === 1) {
-                position = parseInt(lastElement.data('imageData').position || count, 10) + 1;
+                position = lastElement.find('.position').val() || lastElement.data('imageData').position;
+                position = parseInt(position === undefined ? count : position, 10) + 1;
             }
             imageData = $.extend({
                 'file_id': imageData['value_id'] ? imageData['value_id'] : Math.random().toString(33).substr(2, 18),
@@ -366,7 +369,7 @@ define([
                 this.options.types[index].value = 'no_selection';
             }, this));
 
-            this._contentUpdated();
+            this._resort();
         },
 
         /**
@@ -399,12 +402,17 @@ define([
          * @private
          */
         _resort: function () {
-            this.element.find('.position').each($.proxy(function (index, element) {
-                var value = $(element).val();
+            var $images = this.element.find(this.options.imageSelector + ':not(.removed)');
+
+            $images.find('.position').each($.proxy(function (index, element) {
+                var value = $(element).val(),
+                    imageData = $(element).closest(this.options.imageSelector).data('imageData');
+
+                imageData.position = index;
 
                 if (value != index) { //eslint-disable-line eqeqeq
                     this.element.trigger('moveElement', {
-                        imageData: $(element).closest(this.options.imageSelector).data('imageData'),
+                        imageData: imageData,
                         position: index
                     });
                     $(element).val(index);
@@ -422,7 +430,8 @@ define([
          */
         _setPosition: function (event, data) {
             var $element = this.findElement(data.imageData),
-                curIndex = this.element.find(this.options.imageSelector).index($element),
+                $images = this.element.find(this.options.imageSelector + ':not(.removed)'),
+                curIndex = $images.index($element),
                 newPosition = data.position + (curIndex > data.position ? -1 : 0);
 
             if (data.position != curIndex) { //eslint-disable-line eqeqeq
@@ -430,7 +439,7 @@ define([
                     this.element.prepend($element);
                 } else {
                     $element.insertAfter(
-                        this.element.find(this.options.imageSelector).eq(newPosition)
+                        $images.eq(newPosition)
                     );
                 }
                 this.element.trigger('resort');
