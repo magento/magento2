@@ -71,32 +71,26 @@ class ImageResizeAfterProductSaveTest extends TestCase
     protected function setUp(): void
     {
         $this->imagePath = 'path/to/image.jpg';
-        $images = [new DataObject(['file' => $this->imagePath])];
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->createPartialMockWithReflection(
             Event::class,
             ['getProduct']
         );
-        $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getMediaGalleryImages']);
+        $this->productMock = $this->createPartialMock(
+            Product::class,
+            ['getId', 'getMediaGalleryImages', 'getData', 'getOrigData']
+        );
         $this->stateMock = $this->createPartialMock(State::class, ['isAreaCodeEmulated']);
         $this->catalogMediaConfigMock = $this->createPartialMock(CatalogMediaConfig::class, ['getMediaUrlFormat']);
         $this->imageResizeSchedulerMock = $this->createPartialMock(ImageResizeScheduler::class, ['schedule']);
         $this->imageResizeMock = $this->createPartialMock(ImageResize::class, ['resizeFromImageName']);
 
         $this->observerMock
-            ->expects($this->once())
             ->method('getEvent')
             ->willReturn($this->eventMock);
         $this->eventMock
-            ->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock
-            ->method('getId')->willReturn(null);
-        $this->productMock
-            ->expects($this->once())
-            ->method('getMediaGalleryImages')
-            ->willReturn($images);
     }
 
     /**
@@ -104,6 +98,7 @@ class ImageResizeAfterProductSaveTest extends TestCase
      */
     public function testExecuteImageResizeScheduler(): void
     {
+        $this->setUpNewProduct();
         $observer = new ImageResizeAfterProductSave(
             $this->imageResizeMock,
             $this->stateMock,
@@ -126,6 +121,7 @@ class ImageResizeAfterProductSaveTest extends TestCase
      */
     public function testExecuteImageResize(): void
     {
+        $this->setUpNewProduct();
         $observer = new ImageResizeAfterProductSave(
             $this->imageResizeMock,
             $this->stateMock,
@@ -141,5 +137,73 @@ class ImageResizeAfterProductSaveTest extends TestCase
             ->expects($this->never())
             ->method('schedule');
         $observer->execute($this->observerMock);
+    }
+
+    /**
+     * Images flagged as removed before saving an existing product must not be scheduled for resize.
+     *
+     * @see https://github.com/magento/magento2/issues/39146
+     */
+    public function testExecuteSkipsImagesFlaggedAsRemoved(): void
+    {
+        $existingImage = 'path/to/existing-image.jpg';
+        $removedImage = 'path/to/removed-image.tmp';
+        $newImage = 'path/to/new-image.jpg';
+
+        $this->productMock
+            ->method('getId')
+            ->willReturn(1);
+        $this->productMock
+            ->expects($this->never())
+            ->method('getMediaGalleryImages');
+        $this->productMock
+            ->method('getData')
+            ->with('media_gallery')
+            ->willReturn([
+                'images' => [
+                    ['file' => $existingImage],
+                    ['file' => $removedImage, 'removed' => '1'],
+                    ['file' => $newImage],
+                ],
+            ]);
+        $this->productMock
+            ->method('getOrigData')
+            ->with('media_gallery')
+            ->willReturn([
+                'images' => [
+                    ['file' => $existingImage],
+                ],
+            ]);
+
+        $observer = new ImageResizeAfterProductSave(
+            $this->imageResizeMock,
+            $this->stateMock,
+            $this->catalogMediaConfigMock,
+            $this->imageResizeSchedulerMock,
+            true
+        );
+        $this->imageResizeMock
+            ->expects($this->never())
+            ->method('resizeFromImageName');
+        $this->imageResizeSchedulerMock
+            ->expects($this->once())
+            ->method('schedule')
+            ->with($newImage);
+        $observer->execute($this->observerMock);
+    }
+
+    /**
+     * Configure the product mock for the new-product code path.
+     */
+    private function setUpNewProduct(): void
+    {
+        $images = [new DataObject(['file' => $this->imagePath])];
+        $this->productMock
+            ->method('getId')
+            ->willReturn(null);
+        $this->productMock
+            ->expects($this->once())
+            ->method('getMediaGalleryImages')
+            ->willReturn($images);
     }
 }
