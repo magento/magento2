@@ -301,7 +301,7 @@ class CreateTest extends TestCase
             ['getPostValue']
         );
         $requestMock->method('getPostValue')->willReturn(null);
-        
+
         $customerForm = $this->createMock(Form::class);
         $customerForm->method('getAttributes')
             ->willReturn([$attributeMocks[1]]);
@@ -331,7 +331,7 @@ class CreateTest extends TestCase
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
-                ['group_id' => 1],
+                ['group_id' => 1, CustomerInterface::TAXVAT => null],
                 CustomerInterface::class
             );
 
