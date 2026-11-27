@@ -26,7 +26,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Catalog Product Mass processing resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Action extends AbstractResource
@@ -52,6 +51,13 @@ class Action extends AbstractResource
      * @var array
      */
     private $typeIdValuesToSave = [];
+
+    /**
+     * Link field values per table and attribute whose non-default store values are removed in single store mode
+     *
+     * @var array
+     */
+    private $nonDefaultStoreValuesToDelete = [];
 
     /**
      * @param Context $context
@@ -156,7 +162,6 @@ class Action extends AbstractResource
      */
     protected function _saveAttributeValue($object, $attribute, $value)
     {
-        $connection = $this->getConnection();
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
         $table = $attribute->getBackend()->getTable();
 
@@ -169,14 +174,7 @@ class Action extends AbstractResource
          */
         if ($this->_storeManager->hasSingleStore() && !$attribute->isStatic()) {
             $storeId = $this->getDefaultStoreId();
-            $connection->delete(
-                $table,
-                [
-                    'attribute_id = ?' => $attribute->getAttributeId(),
-                    $this->getLinkField() . ' = ?' => $entityId,
-                    'store_id <> ?' => $storeId
-                ]
-            );
+            $this->nonDefaultStoreValuesToDelete[$table][$attribute->getAttributeId()][] = $entityId;
         }
 
         $data = $attribute->isStatic()
@@ -219,6 +217,38 @@ class Action extends AbstractResource
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _processAttributeValues()
+    {
+        $connection = $this->getConnection();
+        foreach ($this->nonDefaultStoreValuesToDelete as $table => $entityIdsByAttribute) {
+            foreach ($entityIdsByAttribute as $attributeId => $entityIds) {
+                $connection->delete(
+                    $table,
+                    [
+                        'attribute_id = ?' => $attributeId,
+                        $this->getLinkField() . ' IN (?)' => $entityIds,
+                        'store_id <> ?' => $this->getDefaultStoreId()
+                    ]
+                );
+            }
+        }
+        $this->nonDefaultStoreValuesToDelete = [];
+
+        return parent::_processAttributeValues();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->nonDefaultStoreValuesToDelete = [];
     }
 
     /**
