@@ -36,16 +36,25 @@ class FieldMetaReader
     private $deprecatedAnnotationReader;
 
     /**
+     * @var DirectiveReaderInterface[]
+     */
+    private $directiveReaders;
+
+    /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
      * @param CacheAnnotationReader|null $cacheAnnotationReader
      * @param DeprecatedAnnotationReader|null $deprecatedAnnotationReader
+     * @param DirectiveReaderInterface[] $directiveReaders Custom directive readers, keyed by the name under
+     *        which their result is exposed by Field::getDirectives()
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
         ?CacheAnnotationReader $cacheAnnotationReader = null,
-        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null,
+        array $directiveReaders = []
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
@@ -53,6 +62,18 @@ class FieldMetaReader
             ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CacheAnnotationReader::class);
         $this->deprecatedAnnotationReader = $deprecatedAnnotationReader
             ?? \Magento\Framework\App\ObjectManager::getInstance()->get(DeprecatedAnnotationReader::class);
+        foreach ($directiveReaders as $name => $directiveReader) {
+            if (!$directiveReader instanceof DirectiveReaderInterface) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'GraphQL directive reader "%s" must implement %s.',
+                        $name,
+                        DirectiveReaderInterface::class
+                    )
+                );
+            }
+        }
+        $this->directiveReaders = $directiveReaders;
     }
 
     /**
@@ -90,6 +111,13 @@ class FieldMetaReader
 
         if ($this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives)) {
             $result['deprecated'] = $this->deprecatedAnnotationReader->read($fieldMeta->astNode->directives);
+        }
+
+        foreach ($this->directiveReaders as $name => $directiveReader) {
+            $directive = $directiveReader->read($fieldMeta->astNode->directives);
+            if (!empty($directive)) {
+                $result['directives'][$name] = $directive;
+            }
         }
 
         $arguments = $fieldMeta->args;

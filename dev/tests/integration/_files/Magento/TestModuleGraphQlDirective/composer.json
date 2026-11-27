@@ -1,0 +1,21 @@
+{
+    "name": "magento/module-test-graphql-directive",
+    "description": "Test module exposing a custom GraphQL field directive",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.3.0||~8.4.0||~8.5.0",
+        "magento/framework": "*",
+        "magento/module-graph-ql": "*"
+    },
+    "type": "magento2-module",
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/TestModuleGraphQlDirective"
+            ]
+        ]
+    }
+}

@@ -61,6 +61,11 @@ class Field implements OutputFieldInterface
     private $deprecated;
 
     /**
+     * @var array
+     */
+    private $directives;
+
+    /**
      * @param string $name
      * @param string $type
      * @param bool $required
@@ -71,6 +76,7 @@ class Field implements OutputFieldInterface
      * @param array $arguments
      * @param array $cache
      * @param array $deprecated
+     * @param array $directives
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -83,7 +89,8 @@ class Field implements OutputFieldInterface
         string $description = '',
         array $arguments = [],
         array $cache = [],
-        array $deprecated = []
+        array $deprecated = [],
+        array $directives = []
     ) {
         $this->name = $name;
         $this->type = $isList ? $itemType : $type;
@@ -94,6 +101,7 @@ class Field implements OutputFieldInterface
         $this->arguments = $arguments;
         $this->cache = $cache;
         $this->deprecated = $deprecated;
+        $this->directives = $directives;
     }
 
     /**
@@ -184,5 +192,17 @@ class Field implements OutputFieldInterface
     public function getDeprecated() : array
     {
         return $this->deprecated;
+    }
+
+    /**
+     * Return the custom directives of the field, read by the directive readers of FieldMetaReader.
+     *
+     * Format: [$readerName => $readerResult, ...]. Only the directives present on the field are returned.
+     *
+     * @return array
+     */
+    public function getDirectives() : array
+    {
+        return $this->directives;
     }
 }
