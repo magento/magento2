@@ -312,17 +312,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
             return false;
         }
 
-        $whereCondition = [];
-
-        foreach ($selectResult as $date) {
-            $whereCondition[] = $connection->prepareSqlCondition($periodColumn, ['like' => $date]);
-        }
-        $whereCondition = implode(' OR ', $whereCondition);
-        if ($whereCondition == '') {
-            $whereCondition = '1=0';  // FALSE condition!
+        if (empty($selectResult)) {
+            return '1=0';
         }
 
-        return $whereCondition;
+        return $connection->prepareSqlCondition($periodColumn, ['in' => $selectResult]);
     }
 
     /**
