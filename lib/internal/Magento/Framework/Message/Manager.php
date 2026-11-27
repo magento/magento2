@@ -134,6 +134,7 @@ class Manager implements ManagerInterface
      */
     public function addMessage(MessageInterface $message, $group = null)
     {
+        $this->session->startWriting();
         $this->hasMessages = true;
         $this->getMessages(false, $group)->addMessage($message);
         $this->eventManager->dispatch('session_abstract_add_message');

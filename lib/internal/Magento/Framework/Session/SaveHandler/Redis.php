@@ -14,13 +14,19 @@ use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Session\SessionAccessModeAwareInterface;
 
-class Redis implements \SessionHandlerInterface
+class Redis implements \SessionHandlerInterface, SessionAccessModeAwareInterface
 {
     /**
      * @var \Cm\RedisSession\Handler[]
      */
     private array $connection = [];
+
+    /**
+     * Whether the session must initially be opened without a write lock.
+     */
+    private bool $readOnly = false;
 
     /**
      * @param ConfigInterface $config
@@ -46,12 +52,23 @@ class Redis implements \SessionHandlerInterface
         $pid = getmypid();
         if (!isset($this->connection[$pid])) {
             try {
-                $this->connection[$pid] = new \Cm\RedisSession\Handler($this->config, $this->logger);
+                $this->connection[$pid] = new \Cm\RedisSession\Handler($this->config, $this->logger, $this->readOnly);
             } catch (ConnectionFailedException $e) {
                 throw new SessionException(new Phrase($e->getMessage()));
             }
         }
         return $this->connection[$pid];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
+        foreach ($this->connection as $connection) {
+            $connection->setReadOnly($readOnly);
+        }
     }
 
     /**
