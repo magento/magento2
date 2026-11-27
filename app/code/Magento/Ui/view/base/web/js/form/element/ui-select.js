@@ -169,6 +169,7 @@ define([
             separator: 'optgroup',
             searchOptions: false,
             loading: false,
+            loadRequest: null,
             searchUrl: false,
             lastSearchKey: '',
             lastSearchPage: 1,
@@ -1251,7 +1252,10 @@ define([
         processRequest: function (searchKey, page) {
             this.loading(true);
             this.currentSearchKey = searchKey;
-            $.ajax({
+            if (this.loadRequest && this.loadRequest.readyState !== 4) {
+                this.loadRequest.abort();
+            }
+            this.loadRequest = $.ajax({
                 url: this.searchUrl,
                 type: 'get',
                 dataType: 'json',
