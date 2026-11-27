@@ -208,7 +208,7 @@ class GalleryManagementTest extends TestCase
         $this->productMock->method('getMediaAttributes')->willReturn(['small_image' => $attributeMock]);
 
         $this->defaultValueProcessor->expects($this->once())->method('process')
-            ->with($this->newProductMock);
+            ->with($this->productMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->create($productSku, $this->mediaGalleryEntryMock);
@@ -296,7 +296,7 @@ class GalleryManagementTest extends TestCase
         $entryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->any())->method('getId')->willReturn($entryId);
         $this->defaultValueProcessor->expects($this->once())->method('process')
-            ->with($this->newProductMock);
+            ->with($this->productMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->update($productSku, $entryMock);
@@ -338,7 +338,7 @@ class GalleryManagementTest extends TestCase
             ->with([$entryMock, $existingSecondEntryMock])
             ->willReturnSelf();
         $this->defaultValueProcessor->expects($this->once())->method('process')
-            ->with($this->newProductMock);
+            ->with($this->productMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
 
         $this->assertTrue($this->model->update($productSku, $entryMock));
@@ -383,7 +383,7 @@ class GalleryManagementTest extends TestCase
         $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([]);
         $this->defaultValueProcessor->expects($this->once())->method('process')
-            ->with($this->newProductMock);
+            ->with($this->productMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
         $this->assertTrue($this->model->remove($productSku, $entryId));
     }
