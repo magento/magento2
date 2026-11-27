@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -24,6 +24,7 @@ use Magento\Framework\Session\Config as SessionConfig;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Visitor responsible for initializing visitor's.
@@ -91,6 +92,11 @@ class Visitor extends AbstractModel
     private $requestSafety;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private ?StoreManagerInterface $storeManager;
+
+    /**
      * @param ModelContext $context
      * @param Registry $registry
      * @param SessionManagerInterface $session
@@ -98,6 +104,7 @@ class Visitor extends AbstractModel
      * @param ScopeConfigInterface $scopeConfig
      * @param DateTime $dateTime
      * @param IndexerRegistry $indexerRegistry
+     * @param StoreManagerInterface|null $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $ignoredUserAgents
@@ -114,6 +121,7 @@ class Visitor extends AbstractModel
         ScopeConfigInterface $scopeConfig,
         DateTime $dateTime,
         IndexerRegistry $indexerRegistry,
+        ?StoreManagerInterface $storeManager = null,
         ?AbstractResource $resource = null,
         ?AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
@@ -129,6 +137,7 @@ class Visitor extends AbstractModel
         $this->scopeConfig = $scopeConfig;
         $this->dateTime = $dateTime;
         $this->indexerRegistry = $indexerRegistry;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->requestSafety = $requestSafety ?? ObjectManager::getInstance()->get(RequestSafetyInterface::class);
     }
 
@@ -201,6 +210,18 @@ class Visitor extends AbstractModel
     public function beforeSave()
     {
         $this->unsetData("session_id");
+
+        if (!$this->getWebsiteId()) {
+            try {
+                $this->setWebsiteId($this->storeManager->getWebsite()->getId());
+            } catch (\Exception $e) {
+                $this->_logger->critical(
+                    'Unable to set website ID from StoreManager',
+                    ['exception' => $e]
+                );
+            }
+        }
+
         return parent::beforeSave();
     }
 
