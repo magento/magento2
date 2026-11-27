@@ -24,6 +24,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\TestFramework\Fixture\DbIsolation;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -308,6 +309,52 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     public static function runExtendedDataProvider()
     {
         return self::runLockDataProvider();
+    }
+
+    /**
+     * Tests that --lock-env preserves the original value in env.php even when a backend model
+     * transforms it in beforeSave() (e.g. Encrypted backend encrypts the value for DB storage).
+     *
+     * @see https://github.com/magento/magento2/issues/39836
+     */
+    #[DbIsolation(true)]
+    public function testLockEnvPreservesValueBeforeBackendModelTransformation()
+    {
+        $path = 'system/smtp/password';
+        $value = 'my_secret_password';
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        $scopeCode = null;
+
+        $this->inputMock->expects($this->any())
+            ->method('getArgument')
+            ->willReturnMap([
+                [ConfigSetCommand::ARG_PATH, $path],
+                [ConfigSetCommand::ARG_VALUE, $value]
+            ]);
+        $this->inputMock->expects($this->any())
+            ->method('getOption')
+            ->willReturnMap([
+                [ConfigSetCommand::OPTION_LOCK_ENV, true],
+                [ConfigSetCommand::OPTION_SCOPE, $scope],
+                [ConfigSetCommand::OPTION_SCOPE_CODE, $scopeCode]
+            ]);
+        $this->outputMock->expects($this->once())
+            ->method('writeln')
+            ->with('<info>Value was saved in app/etc/env.php and locked.</info>');
+
+        /** @var ConfigSetCommand $command */
+        $command = $this->objectManager->create(ConfigSetCommand::class);
+        /** @var ConfigPathResolver $resolver */
+        $resolver = $this->objectManager->get(ConfigPathResolver::class);
+
+        $status = $command->run($this->inputMock, $this->outputMock);
+        $this->appConfig->reinit();
+
+        $configPath = $resolver->resolve($path, $scope, $scopeCode, 'system');
+        $storedValue = $this->arrayManager->get($configPath, $this->loadConfig());
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $status);
+        $this->assertSame($value, $storedValue, 'env.php must store the original value, not the encrypted form');
     }
 
     /**
