@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 class AreBundleOptionsSalable
 {
@@ -92,12 +93,24 @@ class AreBundleOptionsSalable
             . " AND child_status_store.store_id = {$storeId}",
             []
         );
-        $isOptionSalableExpr = new \Zend_Db_Expr(
-            sprintf(
-                'MAX(IFNULL(child_status_store.value, child_status_global.value) != %s)',
-                ProductStatus::STATUS_DISABLED
-            )
+        $isSalableCondition = sprintf(
+            'IFNULL(child_status_store.value, child_status_global.value) != %s',
+            ProductStatus::STATUS_DISABLED
         );
+        if ($storeId !== Store::DEFAULT_STORE_ID) {
+            $optionsSaleabilitySelect->joinInner(
+                ['store' => $this->resourceConnection->getTableName('store')],
+                "store.store_id = {$storeId}",
+                []
+            )->joinLeft(
+                ['child_website' => $this->resourceConnection->getTableName('catalog_product_website')],
+                'child_website.product_id = child_products.entity_id'
+                . ' AND child_website.website_id = store.website_id',
+                []
+            );
+            $isSalableCondition .= ' AND child_website.website_id IS NOT NULL';
+        }
+        $isOptionSalableExpr = new \Zend_Db_Expr('MAX(' . $isSalableCondition . ')');
         $isRequiredOptionUnsalable = $connection->getCheckSql(
             'required = 1 AND ' . $isOptionSalableExpr . ' = 0',
             '1',
