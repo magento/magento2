@@ -72,8 +72,8 @@ class LockTest extends TestCase
         $tableName = 'queue_lock_mock';
         $this->resourceConnectionMock->expects($this->once())->method('getTableName')->willReturn($tableName);
         $this->dateTimeMock->expects($this->once())->method('gmtTimestamp')->willReturn(1000000000);
-        /** Date for timestamp 1000000000 + 86400 */
-        $date = new \DateTime('2001-09-09T18:46:40-0700');
+        /** Date for timestamp 1000000000 - 86400 (default interval) */
+        $date = new \DateTime('2001-09-07T18:46:40-0700');
 
         $adapterMock->expects($this->once())->method('delete')->with($tableName, ['created_at <= ?' => $date]);
         $this->lockResourceModel->releaseOutdatedLocks();
