@@ -703,9 +703,11 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                     'total' => 'SUM(main_table.base_grand_total)',
                     'invoiced' => 'SUM(main_table.base_total_paid)',
                     'refunded' => 'SUM(main_table.base_total_refunded)',
-                    'profit' => "SUM({$baseSubtotalInvoiced}) " .
-                    "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) " .
-                    "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})",
+                    'profit' => new \Zend_Db_Expr(
+                        "SUM({$baseSubtotalInvoiced}) " .
+                        "+ SUM({$baseDiscountRefunded}) - SUM({$baseSubtotalRefunded}) " .
+                        "- SUM({$baseDiscountInvoiced}) - SUM({$baseTotalInvocedCost})"
+                    ),
                 ]
             );
         } else {
@@ -718,11 +720,13 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                     'total' => 'SUM(main_table.base_grand_total * main_table.base_to_global_rate)',
                     'invoiced' => 'SUM(main_table.base_total_paid * main_table.base_to_global_rate)',
                     'refunded' => 'SUM(main_table.base_total_refunded * main_table.base_to_global_rate)',
-                    'profit' => "SUM({$baseSubtotalInvoiced} *  main_table.base_to_global_rate) " .
-                    "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) " .
-                    "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)",
+                    'profit' => new \Zend_Db_Expr(
+                        "SUM({$baseSubtotalInvoiced} *  main_table.base_to_global_rate) " .
+                        "+ SUM({$baseDiscountRefunded} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseSubtotalRefunded} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseDiscountInvoiced} * main_table.base_to_global_rate) " .
+                        "- SUM({$baseTotalInvocedCost} * main_table.base_to_global_rate)"
+                    ),
                 ]
             );
         }
