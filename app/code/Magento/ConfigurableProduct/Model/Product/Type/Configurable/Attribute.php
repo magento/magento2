@@ -91,13 +91,25 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function getLabel()
     {
-        if ($this->getData('use_default') && $this->getProductAttribute()) {
+        if (($this->getData('use_default') || $this->getData(self::KEY_IS_USE_DEFAULT)) && $this->getProductAttribute()) {
             return $this->getProductAttribute()->getStoreLabel();
         } elseif ($this->getData(self::KEY_LABEL) === null && $this->getProductAttribute()) {
             $this->setData(self::KEY_LABEL, $this->getProductAttribute()->getStoreLabel());
         }
 
         return $this->getData(self::KEY_LABEL);
+    }
+
+    /**
+     * Return whether the attribute label should fall back to the EAV attribute default.
+     * Checks both the DB-loaded 'use_default' key and the API-supplied 'is_use_default' key,
+     * because the REST API populates is_use_default while the internal model uses use_default.
+     *
+     * @return bool
+     */
+    public function getUseDefault()
+    {
+        return $this->getData('use_default') ?: $this->getData(self::KEY_IS_USE_DEFAULT);
     }
 
     /**
