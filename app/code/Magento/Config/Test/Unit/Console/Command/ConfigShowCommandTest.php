@@ -90,7 +90,8 @@ class ConfigShowCommandTest extends TestCase
         $this->configSourceMock = $this->createMock(ConfigSourceInterface::class);
         $this->pathValidatorMock = $this->createMock(PathValidator::class);
         $pathValidatorFactoryMock = $this->createMock(PathValidatorFactory::class);
-        $pathValidatorFactoryMock->expects($this->atMost(1))
+        // The command no longer pre-validates the path via PathValidator, so it must never be created.
+        $pathValidatorFactoryMock->expects($this->never())
             ->method('create')
             ->willReturn($this->pathValidatorMock);
 
@@ -165,6 +166,58 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
+     * A stored "0" is a real value, not a missing path.
+     *
+     * Every disabled flag in the config tree is stored as "0", so treating a falsy
+     * value as "path doesn't exist" would break `config:show web/seo/use_rewrites`
+     * and everything like it.
+     *
+     * @return void
+     */
+    public function testExecuteWithFalsyConfigValue(): void
+    {
+        $resolvedConfigPath = 'someScope/someScopeCode/web/seo/use_rewrites';
+
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with(self::SCOPE, self::SCOPE_CODE)
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->any())
+            ->method('resolve')
+            ->willReturn($resolvedConfigPath);
+        $this->configSourceMock->expects($this->any())
+            ->method('get')
+            ->willReturn('0');
+        $this->valueProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(self::SCOPE, self::SCOPE_CODE, '0', self::CONFIG_PATH)
+            ->willReturn('0');
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
+
+        $tester = $this->getConfigShowCommandTester(
+            self::CONFIG_PATH,
+            self::SCOPE,
+            self::SCOPE_CODE
+        );
+
+        $this->assertEquals(
+            Cli::RETURN_SUCCESS,
+            $tester->getStatusCode(),
+            'A stored "0" must be reported as a value, not as a missing path'
+        );
+        $this->assertStringContainsString('0', $tester->getDisplay());
+    }
+
+    /**
      * Test not valid scope or scope code
      *
      * @return void
@@ -203,20 +256,25 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
-     * Test get config value for not existed path.
+     * Test that a path which resolves to no configuration value (e.g. a made up or invalid
+     * partial path) still produces an error, even though it is no longer rejected up front by
+     * PathValidator.
      *
      * @return void
      */
     public function testConfigPathNotExist(): void
     {
-        $exception = new LocalizedException(
-            __('The  "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)
-        );
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, '')
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->exactly(2))
+            ->method('resolve')
+            ->willReturn('default//' . self::CONFIG_PATH);
+        $this->configSourceMock->expects($this->exactly(3))
+            ->method('get')
+            ->willReturn(null);
 
-        $this->pathValidatorMock->expects($this->once())
-            ->method('validate')
-            ->with(self::CONFIG_PATH)
-            ->willThrowException($exception);
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willReturnCallback(function ($function) {
@@ -236,7 +294,7 @@ class ConfigShowCommandTest extends TestCase
             $tester->getStatusCode()
         );
         $this->assertStringContainsString(
-            __('The  "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)->render(),
+            __('The "%1" path doesn\'t exist. Verify and try again.', self::CONFIG_PATH)->render(),
             $tester->getDisplay()
         );
     }
@@ -267,7 +325,8 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
-     * Test that design configuration paths are validated correctly using Theme PathValidator
+     * Test that design configuration paths are still resolved correctly now that the command
+     * no longer runs them through PathValidator before resolving.
      *
      * @return void
      */
@@ -286,7 +345,8 @@ class ConfigShowCommandTest extends TestCase
         // Use Theme PathValidator mock instead of base PathValidator
         $themePathValidatorMock = $this->createMock(\Magento\Theme\Model\Config\PathValidator::class);
         $pathValidatorFactoryMock = $this->createMock(PathValidatorFactory::class);
-        $pathValidatorFactoryMock->expects($this->atMost(1))
+        // The command no longer pre-validates the path, so PathValidator must never be created/invoked.
+        $pathValidatorFactoryMock->expects($this->never())
             ->method('create')
             ->willReturn($themePathValidatorMock);
 
@@ -311,7 +371,7 @@ class ConfigShowCommandTest extends TestCase
             ->with(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, '')
             ->willReturn(true);
 
-        $themePathValidatorMock->expects($this->once())
+        $themePathValidatorMock->expects($this->never())
             ->method('validate')
             ->with($designPath)
             ->willReturn(true);
