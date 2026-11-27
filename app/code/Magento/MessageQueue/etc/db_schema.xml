@@ -22,6 +22,11 @@
         </constraint>
     </table>
     <table name="queue_poison_pill" resource="default" engine="innodb" comment="Sequence table for poison pill versions">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
         <column xsi:type="varchar" name="version" length="255" nullable="false" comment="Poison Pill version."/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
     </table>
 </schema>
