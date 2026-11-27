@@ -7,8 +7,6 @@ namespace Magento\Framework\Backup\Filesystem\Iterator;
 
 /**
  * File lines iterator
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class File extends \SplFileObject
 {
