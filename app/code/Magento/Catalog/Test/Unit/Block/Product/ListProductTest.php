@@ -19,6 +19,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Checkout\Helper\Cart;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Render;
@@ -35,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ListProductTest extends TestCase
 {
@@ -113,6 +115,11 @@ class ListProductTest extends TestCase
      */
     private CollectionFactory $collectionFactory;
 
+    /**
+     * @var ResponseHttp|MockObject
+     */
+    private ResponseHttp $responseMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -150,6 +157,7 @@ class ListProductTest extends TestCase
         $inlineTranslation = $this->createMock(StateInterface::class);
         $this->context->expects($this->any())->method('getInlineTranslation')->willReturn($inlineTranslation);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
 
         $this->block = $objectManager->getObject(
             ListProduct::class,
@@ -160,7 +168,8 @@ class ListProductTest extends TestCase
                 'cartHelper' => $this->cartHelperMock,
                 'postDataHelper' => $this->postDataHelperMock,
                 'urlHelper' => $this->urlHelperMock,
-                'collectionFactory' => $this->collectionFactory
+                'collectionFactory' => $this->collectionFactory,
+                'response' => $this->responseMock
             ]
         );
         $this->block->setToolbarBlockName('mock');
@@ -194,6 +203,93 @@ class ListProductTest extends TestCase
         $this->layerMock->expects($this->any())
             ->method('getCurrentCategory')
             ->willReturn($currentCategory);
+        $this->block->toHtml();
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testSetNoCacheHeadersWhenProductCollectionFailsToLoad(): void
+    {
+        $this->responseMock->expects($this->once())
+            ->method('setNoCacheHeaders');
+        $this->block->setData('translate_inline', true);
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willThrowException(new \Exception('No items found.'));
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $collection->expects($this->once())->method('addFieldToFilter');
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->willReturn('1');
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($currentCategory);
+
+        $this->block->toHtml();
+
+        $this->assertTrue((bool)$this->block->getData('has_error'));
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testNoCacheHeadersNotSetWhenProductCollectionLoads(): void
+    {
+        $this->responseMock->expects($this->never())
+            ->method('setNoCacheHeaders');
+        $this->block->setData('translate_inline', true);
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([]);
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->willReturn('1');
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($currentCategory);
+
+        $this->block->toHtml();
+
+        $this->assertNull($this->block->getData('has_error'));
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testProgrammingErrorsWhileLoadingCollectionAreNotSwallowed(): void
+    {
+        $this->responseMock->expects($this->never())
+            ->method('setNoCacheHeaders');
+        $this->block->setData('translate_inline', true);
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willThrowException(new \TypeError('Unexpected type.'));
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->willReturn('1');
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($currentCategory);
+
+        $this->expectException(\TypeError::class);
+
         $this->block->toHtml();
     }
 
