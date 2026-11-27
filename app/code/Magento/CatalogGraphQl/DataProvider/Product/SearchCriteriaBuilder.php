@@ -100,7 +100,12 @@ class SearchCriteriaBuilder
             $this->addDefaultSortOrder($searchCriteria, $args, $isSearch);
         }
         $this->addEntityIdSort($searchCriteria);
-        $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']['category_id']));
+        $this->addVisibilityFilter(
+            $searchCriteria,
+            $isSearch,
+            !empty($args['filter']['category_id']),
+            !empty($args['filter']['url_key'])
+        );
 
         return $searchCriteria;
     }
@@ -169,15 +174,22 @@ class SearchCriteriaBuilder
      * @param SearchCriteriaInterface $searchCriteria
      * @param bool $isSearch
      * @param bool $isFilter
+     * @param bool $hasUrlKeyFilter When true, include catalog-only products (e.g. configurable children)
      */
-    private function addVisibilityFilter(SearchCriteriaInterface $searchCriteria, bool $isSearch, bool $isFilter): void
-    {
+    private function addVisibilityFilter(
+        SearchCriteriaInterface $searchCriteria,
+        bool $isSearch,
+        bool $isFilter,
+        bool $hasUrlKeyFilter = false
+    ): void {
         if ($isFilter && $isSearch) {
             // Index already contains products filtered by visibility: catalog, search, both
             return;
         }
         $visibilityIds = $isSearch
-            ? $this->visibility->getVisibleInSearchIds()
+            ? ($hasUrlKeyFilter
+                ? $this->visibility->getVisibleInSiteIds()
+                : $this->visibility->getVisibleInSearchIds())
             : $this->visibility->getVisibleInCatalogIds();
 
         $this->addFilter($searchCriteria, 'visibility', $visibilityIds, 'in');
