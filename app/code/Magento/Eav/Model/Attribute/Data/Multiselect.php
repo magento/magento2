@@ -131,8 +131,8 @@ class Multiselect extends AbstractData
         $errors = [];
         foreach ($values as $value) {
             $optionText = $this->getAttribute()->getSource()->getOptionText($value);
-            // Sources report a missing option either with false or with null, while a valid label may be "0"
-            if ($optionText === false || $optionText === null) {
+            // A missing option comes back as false, null or an empty label list; a valid label may be "0"
+            if ($optionText === false || $optionText === null || $optionText === []) {
                 $errors[] = __(
                     'Attribute %1 does not contain option with Id %2',
                     $this->getAttribute()->getAttributeCode(),

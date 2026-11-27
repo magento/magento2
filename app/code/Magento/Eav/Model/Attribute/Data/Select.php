@@ -56,8 +56,8 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         if (!empty($value) && $attribute->getSourceModel()) {
             $optionText = $attribute->getSource()->getOptionText($value);
-            // Sources report a missing option either with false or with null, while a valid label may be "0"
-            if ($optionText === false || $optionText === null) {
+            // A missing option comes back as false, null or an empty label list; a valid label may be "0"
+            if ($optionText === false || $optionText === null || $optionText === []) {
                 $errors[] = __(
                     'Attribute %1 does not contain option with Id %2',
                     $attribute->getAttributeCode(),
