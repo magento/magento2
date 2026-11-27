@@ -1,9 +1,6 @@
 {
     "name": "magento/module-advanced-search",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "magento/framework": "*",
         "magento/module-backend": "*",
