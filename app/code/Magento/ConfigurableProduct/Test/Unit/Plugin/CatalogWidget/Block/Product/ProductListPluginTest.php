@@ -89,37 +89,24 @@ class ProductListPluginTest extends TestCase
     }
 
     /**
+     * The products matching the widget condition reach the configurable lookup as a subquery, not as an id list
+     *
      * @return void
      * @throws LocalizedException
      */
-    public function testAfterCreateCollectionNoCount(): void
-    {
-        $subject = $this->createMock(ProductsList::class);
-        $baseCollection = $this->createMock(Collection::class);
-        $baseCollection->expects($this->once())->method('getAllIds')->willReturn([]);
-        $subject->expects($this->once())->method('getBaseCollection')->willReturn($baseCollection);
-        $result = $this->createMock(Collection::class);
-        $result->expects($this->once())->method('getAllIds')->willReturn([]);
-
-        $this->assertSame($result, $this->plugin->afterCreateCollection($subject, $result));
-    }
-
-    /**
-     * @return void
-     * @throws LocalizedException
-     */
-    public function testAfterCreateCollectionSuccess(): void
+    public function testAfterCreateCollectionLooksUpConfigurablesBySubquery(): void
     {
         $storeId = 1;
         $visibilityAttributeId = 1;
         $linkField = 'entity_id';
-        $baseIds = [2];
-        $resultIds = [1];
         $visibleCatalogIds = [Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH];
         $configurableEntityIds = [3];
 
+        $baseIdsSelect = $this->createMock(Select::class);
+        $baseIdsSelect->expects($this->once())->method('resetJoinLeft')->willReturnSelf();
         $baseCollection = $this->createMock(Collection::class);
-        $baseCollection->expects($this->once())->method('getAllIds')->willReturn($baseIds);
+        $baseCollection->expects($this->once())->method('getAllIdsSql')->willReturn($baseIdsSelect);
+        $baseCollection->expects($this->never())->method('getAllIds');
         $subject = $this->createMock(ProductsList::class);
         $subject->expects($this->once())->method('getBaseCollection')->willReturn($baseCollection);
 
@@ -129,7 +116,7 @@ class ProductListPluginTest extends TestCase
             ->with('e.entity_id IN (?)', $configurableEntityIds)
             ->willReturnSelf();
         $result = $this->createMock(Collection::class);
-        $result->expects($this->once())->method('getAllIds')->willReturn($resultIds);
+        $result->expects($this->never())->method('getAllIds');
         $result->expects($this->once())->method('getSelect')->willReturn($resultSelect);
         $entity = $this->createMock(EntityMetadataInterface::class);
         $entity->expects($this->once())->method('getLinkField')->willReturn($linkField);
@@ -157,12 +144,16 @@ class ProductListPluginTest extends TestCase
         $select->expects($this->once())
             ->method('joinLeft')
             ->willReturnSelf();
+        $whereConditions = [];
         $select->expects($this->exactly(2))
             ->method('where')
-            ->willReturnSelf();
+            ->willReturnCallback(function ($condition, $value) use (&$whereConditions, $select) {
+                $whereConditions[] = [$condition, $value];
+                return $select;
+            });
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
-        $connection->expects($this->once())->method('fetchCol')->willReturn($baseIds);
+        $connection->expects($this->never())->method('fetchCol');
         $this->resource->expects($this->once())->method('getConnection')->willReturn($connection);
         $this->resource->expects($this->exactly(5))
             ->method('getTableName')
@@ -177,10 +168,11 @@ class ProductListPluginTest extends TestCase
         $this->catalogProductVisibility->expects($this->once())
             ->method('getVisibleInCatalogIds')
             ->willReturn($visibleCatalogIds);
-        $collection->expects($this->once())->method('setVisibility');
-        $collection->expects($this->once())->method('addIdFilter');
+        $collection->expects($this->once())->method('setVisibility')->with($visibleCatalogIds);
+        $collection->expects($this->once())->method('addFieldToFilter')->with('entity_id', ['in' => $select]);
         $collection->expects($this->once())->method('getAllIds')->willReturn($configurableEntityIds);
 
         $this->assertSame($result, $this->plugin->afterCreateCollection($subject, $result));
+        $this->assertSame(['link_table.product_id IN (?)', $baseIdsSelect], $whereConditions[0]);
     }
 }
