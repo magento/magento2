@@ -331,6 +331,12 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $storeId = $hasSingleStore
             ? $this->getDefaultStoreId()
             : (int) $this->_storeManager->getStore($object->getStoreId())->getId();
+        $needToUpdateMultipleStores = !$hasSingleStore
+            && $storeId != $this->getDefaultStoreId()
+            && $attribute->isScopeWebsite();
+        if ($needToUpdateMultipleStores) {
+            return $this->updateWebsiteAttribute($object, $attribute, $value, $storeId);
+        }
         if ($valueId > 0 && array_key_exists('store_id', $row) && $storeId === $row['store_id']) {
             $table = $attribute->getBackend()->getTable();
             $connection = $this->getConnection();
@@ -344,6 +350,49 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         } else {
             return $this->_saveAttributeValue($object, $attribute, $value);
         }
+    }
+
+    /**
+     * Update existing website values and insert only missing store values.
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @param AbstractAttribute $attribute
+     * @param mixed $value
+     * @param int $storeId
+     * @return $this
+     */
+    private function updateWebsiteAttribute($object, $attribute, $value, int $storeId)
+    {
+        $connection = $this->getConnection();
+        $table = $attribute->getBackend()->getTable();
+        $linkField = $this->getLinkField();
+        $storeIds = $this->_storeManager->getStore($storeId)->getWebsite()->getStoreIds(true);
+        $value = $this->_prepareValueForSave($value, $attribute);
+        $conditions = [
+            $linkField . ' = ?' => $object->getData($linkField),
+            'attribute_id = ?' => $attribute->getId(),
+            'store_id IN (?)' => $storeIds,
+        ];
+        $connection->update($table, ['value' => $value], $conditions);
+
+        $select = $connection->select()->from($table, ['store_id']);
+        foreach ($conditions as $condition => $conditionValue) {
+            $select->where($condition, $conditionValue);
+        }
+        $missingStoreIds = array_diff($storeIds, $connection->fetchCol($select));
+        $rows = [];
+        foreach ($missingStoreIds as $missingStoreId) {
+            $rows[] = [
+                $linkField => $object->getData($linkField),
+                'attribute_id' => $attribute->getId(),
+                'store_id' => (int) $missingStoreId,
+                'value' => $value,
+            ];
+        }
+        if ($rows) {
+            $connection->insertOnDuplicate($table, $rows, ['value']);
+        }
+        return $this;
     }
 
     /**
