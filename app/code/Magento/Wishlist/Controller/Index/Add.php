@@ -101,12 +101,15 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $session = $this->_customerSession;
-        $data = empty($session->getBeforeWishlistUrl())
-            ? $this->getRequest()->getParams()
-            : $session->getBeforeRequestParams();
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setPath('*/');
+        }
+
+        $session = $this->_customerSession;
+        $referer = $session->getBeforeWishlistUrl();
+        $data = $referer ? $session->getBeforeRequestParams() : $this->getRequest()->getParams();
+        if ($referer) {
+            $session->setBeforeWishlistUrl(null);
         }
 
         $wishlist = $this->wishlistProvider->getWishlist();
@@ -147,10 +150,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
                 ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
             );
 
-            $referer = $session->getBeforeWishlistUrl();
-            if ($referer) {
-                $session->setBeforeWishlistUrl(null);
-            } else {
+            if (!$referer) {
                 // phpcs:ignore
                 $referer = $this->_redirect->getRefererUrl();
             }

@@ -287,6 +287,33 @@ class AddTest extends AbstractController
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testAddToWishlistAfterRejectedGuestReplay(): void
+    {
+        $unavailableProduct = $this->productRepository->get('simple3');
+        $replayData = ['product' => (int)$unavailableProduct->getId()];
+        $this->customerSession->setCustomerId(1);
+        $this->customerSession->setBeforeWishlistUrl('http://localhost/test');
+        $this->customerSession->setBeforeRequestParams($replayData);
+        $this->performAddToWishListRequest($replayData);
+        $expectedMessage = $this->escaper->escapeHtml("We can't specify a product.");
+        $this->assertSessionMessages($this->equalTo([(string)__($expectedMessage)]), MessageInterface::TYPE_ERROR);
+
+        Bootstrap::getInstance()->getBootstrap()->getApplication()->reinitialize();
+        $this->_objectManager = Bootstrap::getObjectManager();
+        $this->customerSession = $this->_objectManager->get(Session::class);
+        $this->_request = null;
+        $this->_response = null;
+
+        $availableProduct = $this->productRepository->get('simple2');
+        $this->prepareReferer();
+        $this->performAddToWishListRequest(['product' => (int)$availableProduct->getId()]);
+        $this->assertSuccess(1, 1, $availableProduct->getName());
+    }
+
+    /**
      * Perform request add item to wish list.
      *
      * @param array $params
