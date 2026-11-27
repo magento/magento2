@@ -11,6 +11,7 @@ use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Registry;
 use Magento\Indexer\Model\ProcessManager;
+use Magento\Indexer\Model\ProcessTitle;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -35,12 +36,14 @@ class ProcessManagerTest extends TestCase
         $registryMock = $this->createMock(Registry::class);
         $loggerMock = $this->createMock(LoggerInterface::class);
         $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processTitleMock = $this->createMock(ProcessTitle::class);
         $processManager = new ProcessManager(
             $connectionMock,
             $registryMock,
             $threadsCount,
             $loggerMock,
-            $amqpConfigPoolMock
+            $amqpConfigPoolMock,
+            $processTitleMock
         );
 
         $connectionMock->expects($this->once())
@@ -128,12 +131,14 @@ class ProcessManagerTest extends TestCase
         $registryMock = $this->createMock(Registry::class);
         $loggerMock = $this->createMock(LoggerInterface::class);
         $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processTitleMock = $this->createMock(ProcessTitle::class);
         $processManager = new ProcessManager(
             $connectionMock,
             $registryMock,
             $threadsCount,
             $loggerMock,
-            $amqpConfigPoolMock
+            $amqpConfigPoolMock,
+            $processTitleMock
         );
 
         $connectionMock->expects($this->once())
@@ -221,12 +226,14 @@ class ProcessManagerTest extends TestCase
         $registryMock = $this->createMock(Registry::class);
         $loggerMock = $this->createMock(LoggerInterface::class);
         $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processTitleMock = $this->createMock(ProcessTitle::class);
         $processManager = new ProcessManager(
             $connectionMock,
             $registryMock,
             $threadsCount,
             $loggerMock,
-            $amqpConfigPoolMock
+            $amqpConfigPoolMock,
+            $processTitleMock
         );
         $this->assertEquals($expectedResult, $processManager->isMultiThreadsExecute());
     }

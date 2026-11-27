@@ -18,6 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Magento\Indexer\Model\ProcessTitle;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -71,6 +72,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $loggerMock;
 
     /**
+     * @var ProcessTitle|MockObject
+     */
+    private $processTitleMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -87,6 +93,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             'config' => $this->configMock,
         ]);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->processTitleMock = $this->createMock(ProcessTitle::class);
         parent::setUp();
     }
 
@@ -111,7 +118,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
             $this->makeSharedValidMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->processTitleMock
         );
         $optionsList = $this->command->getInputList();
         $this->assertCount(1, $optionsList);
@@ -138,12 +146,18 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ]
         );
         $this->indexerFactory->expects($this->never())->method('create');
+        $this->processTitleMock->expects($this->once())
+            ->method('setIndexerContext')
+            ->with('id_indexerOne');
+        $this->processTitleMock->expects($this->once())
+            ->method('restore');
         $this->command = new IndexerReindexCommand(
             $this->objectManagerFactory,
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
             $this->makeSharedValidMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->processTitleMock
         );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
@@ -220,7 +234,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
             $this->makeSharedValidMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->processTitleMock
         );
 
         $commandTester = new CommandTester($this->command);
@@ -464,12 +479,18 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ->method('reindexAll')
             ->willThrowException(new \Exception());
         $this->initIndexerCollectionByItems([$indexerOne]);
+        $this->processTitleMock->expects($this->once())
+            ->method('setIndexerContext')
+            ->with('indexer_1');
+        $this->processTitleMock->expects($this->once())
+            ->method('restore');
         $this->command = new IndexerReindexCommand(
             $this->objectManagerFactory,
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
             $this->makeSharedValidMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->processTitleMock
         );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => ['indexer_1']]);
@@ -517,7 +538,8 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             $this->indexerRegistryMock,
             $this->dependencyInfoProviderMock,
             $this->makeSharedValidMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->processTitleMock
         );
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => $inputIndexers]);
