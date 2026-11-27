@@ -38,4 +38,33 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
         $this->assertEquals('new_products', $code);
     }
+
+    /**
+     * The New Products widget can be placed below Related Products and Up-Sells on the product page.
+     *
+     * @return void
+     */
+    public function testNewProductsWidgetSupportsMainContentAsideAndBottom(): void
+    {
+        /** @var $model \Magento\Widget\Model\Widget\Instance */
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Widget\Model\Widget\Instance::class
+        );
+        $model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
+
+        $containers = $model->getWidgetSupportedContainers();
+        $this->assertContains('content.aside', $containers);
+        $this->assertContains('content.bottom', $containers);
+
+        foreach (['content.aside', 'content.bottom'] as $container) {
+            $templates = array_column($model->getWidgetSupportedTemplatesByContainer($container), 'value');
+            $this->assertEquals(
+                $model->getWidgetSupportedTemplatesByContainer('content'),
+                $model->getWidgetSupportedTemplatesByContainer($container),
+                "Container $container must offer the same templates as Main Content Area"
+            );
+            $this->assertContains('product/widget/new/content/new_grid.phtml', $templates);
+            $this->assertContains('product/widget/new/content/new_list.phtml', $templates);
+        }
+    }
 }
