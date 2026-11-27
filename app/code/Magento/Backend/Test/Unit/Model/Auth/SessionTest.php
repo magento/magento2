@@ -167,6 +167,44 @@ class SessionTest extends TestCase
         ];
     }
 
+    public function testProcessLoginRegeneratesSessionIdBeforeUserIsStored(): void
+    {
+        $storage = new Storage('admin');
+        $session = $this->getMockBuilder(Session::class)
+            ->setConstructorArgs(
+                $this->objectManager->getConstructArguments(
+                    Session::class,
+                    [
+                        'config' => $this->config,
+                        'sessionConfig' => $this->sessionConfig,
+                        'cookieManager' => $this->cookieManager,
+                        'cookieMetadataFactory' => $this->cookieMetadataFactory,
+                        'storage' => $storage,
+                        'aclBuilder' => $this->aclBuilder
+                    ]
+                )
+            )
+            ->onlyMethods(['regenerateId'])
+            ->getMock();
+        $user = $this->createMock(User::class);
+        $userAtRegeneration = 'not called';
+        $session->expects($this->once())
+            ->method('regenerateId')
+            ->willReturnCallback(
+                function () use ($storage, $session, &$userAtRegeneration) {
+                    $userAtRegeneration = $storage->getData('user');
+                    return $session;
+                }
+            );
+        $this->aclBuilder->method('getAcl')->willReturn($this->createMock(Acl::class));
+
+        $session->setUser($user);
+        $session->processLogin();
+
+        $this->assertNull($userAtRegeneration);
+        $this->assertSame($user, $session->getUser());
+    }
+
     public function testIsLoggedInPositive()
     {
         $user = $this->createPartialMock(User::class, ['getId', '__wakeup']);
