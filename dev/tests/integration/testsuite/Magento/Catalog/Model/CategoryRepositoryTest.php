@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreManagementInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -189,6 +190,28 @@ class CategoryRepositoryTest extends TestCase
         foreach ($dataForDefaultStore as $key => $value) {
             $this->assertNotEquals($value, $categorySecondStore->getData($key));
         }
+    }
+
+    #[DataFixture('Magento/Store/_files/core_fixturestore.php')]
+    #[DataFixture('Magento/Catalog/_files/category_with_two_stores.php')]
+    public function testUpdateCategoryInStoreDifferentFromCurrentStore(): void
+    {
+        $categoryId = 555;
+        $currentStoreId = (int)$this->storeManager->getStore()->getId();
+        $fixtureStoreId = (int)$this->storeManager->getStore('fixturestore')->getId();
+        $this->assertNotSame($currentStoreId, $fixtureStoreId);
+
+        $category = $this->categoryRepository->get($categoryId, $fixtureStoreId);
+        $category->setName('Renamed in fixture store');
+        $updatedCategory = $this->categoryRepository->save($category);
+
+        $this->assertSame($fixtureStoreId, (int)$updatedCategory->getStoreId());
+        $this->assertSame('Renamed in fixture store', $updatedCategory->getName());
+        $this->assertSame(
+            'category-defaultstore',
+            $this->categoryRepository->get($categoryId, $currentStoreId)->getName()
+        );
+        $this->assertSame('category-admin', $this->categoryRepository->get($categoryId, 0)->getName());
     }
 
     /**
