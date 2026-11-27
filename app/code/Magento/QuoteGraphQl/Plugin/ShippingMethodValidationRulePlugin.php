@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Plugin;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\ValidationRules\ShippingMethodValidationRule;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Validation\ValidationResult;
@@ -20,11 +23,20 @@ class ShippingMethodValidationRulePlugin
     private $validationResultFactory;
 
     /**
-     * @param ValidationResultFactory $validationResultFactory
+     * @var AddressFactory
      */
-    public function __construct(ValidationResultFactory $validationResultFactory)
-    {
+    private $addressFactory;
+
+    /**
+     * @param ValidationResultFactory $validationResultFactory
+     * @param AddressFactory|null $addressFactory
+     */
+    public function __construct(
+        ValidationResultFactory $validationResultFactory,
+        ?AddressFactory $addressFactory = null
+    ) {
         $this->validationResultFactory = $validationResultFactory;
+        $this->addressFactory = $addressFactory ?? ObjectManager::getInstance()->get(AddressFactory::class);
     }
 
     /**
@@ -48,7 +60,7 @@ class ShippingMethodValidationRulePlugin
 
         $shippingMethod = $shippingAddress->getShippingMethod();
         $shippingRate = $shippingMethod ? $shippingAddress->getShippingRateByCode($shippingMethod) : null;
-        $validationResult = $shippingMethod && $shippingRate && $shippingAddress->requestShippingRates();
+        $validationResult = $shippingMethod && $shippingRate && $this->isShippingMethodAvailable($shippingAddress);
 
         if ($validationResult) {
             return $result;
@@ -62,5 +74,24 @@ class ShippingMethodValidationRulePlugin
         }
 
         return $result;
+    }
+
+    /**
+     * Check that carriers still offer the selected shipping method
+     *
+     * Address::requestShippingRates() writes the raw carrier price into the shipping amounts and adds
+     * the collected rates to the address, so the rates are requested on a copy that is never saved.
+     *
+     * @param Address $shippingAddress
+     * @return bool
+     */
+    private function isShippingMethodAvailable(Address $shippingAddress): bool
+    {
+        $address = $this->addressFactory->create();
+        $address->setData($shippingAddress->getData());
+        $address->unsetData($address->getIdFieldName());
+        $address->setQuote($shippingAddress->getQuote());
+
+        return (bool) $address->requestShippingRates();
     }
 }
