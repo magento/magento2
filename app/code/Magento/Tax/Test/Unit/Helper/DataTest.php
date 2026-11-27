@@ -170,6 +170,49 @@ class DataTest extends TestCase
     }
 
     /**
+     * @param array $amounts
+     * @param array $expected
+     * @return void
+     */
+    #[DataProvider('splitTaxAmountsDataProvider')]
+    public function testGetCalculatedTaxesRowsAddUpToRoundedTotal(array $amounts, array $expected): void
+    {
+        $appliedTaxes = [];
+        foreach ($amounts as $code => $amount) {
+            $appliedTax = $this->createStub(OrderTaxDetailsAppliedTaxInterface::class);
+            $appliedTax->method('getCode')->willReturn($code);
+            $appliedTax->method('getAmount')->willReturn($amount);
+            $appliedTax->method('getBaseAmount')->willReturn($amount);
+            $appliedTaxes[] = $appliedTax;
+        }
+        $orderDetails = $this->createStub(OrderTaxDetailsInterface::class);
+        $orderDetails->method('getAppliedTaxes')->willReturn($appliedTaxes);
+        $this->orderTaxManagementMock->method('getOrderTaxDetails')->willReturn($orderDetails);
+        $this->priceCurrencyMock->method('round')->willReturnCallback(fn ($price) => round((float)(string)$price, 2));
+
+        $result = $this->helper->getCalculatedTaxes($this->createStub(Order::class));
+
+        // Compared as strings: a zero row must not become the negative zero, which == treats as equal.
+        $expected = array_map('strval', $expected);
+        $this->assertSame($expected, array_map('strval', array_column($result, 'tax_amount')));
+        $this->assertSame($expected, array_map('strval', array_column($result, 'base_tax_amount')));
+    }
+
+    /**
+     * @return array
+     */
+    public static function splitTaxAmountsDataProvider(): array
+    {
+        return [
+            'both rows round up' => [['GST' => 1.925, 'PST' => 2.695], [1.93, 2.69]],
+            'all rows round down' => [['A' => 1 / 3, 'B' => 1 / 3, 'C' => 1 / 3], [0.33, 0.34, 0.33]],
+            'rows without rounding difference' => [['A' => 1.25, 'B' => 2.5], [1.25, 2.5]],
+            'row order does not change the amounts' => [['PST' => 2.695, 'GST' => 1.925], [2.69, 1.93]],
+            'zero row stays zero' => [['GST' => 1.925, 'NONE' => 0.0, 'PST' => 2.695], [1.93, 0.0, 2.69]],
+        ];
+    }
+
+    /**
      * Create OrderTaxDetails mock from array of data.
      *
      * @param $inputArray
