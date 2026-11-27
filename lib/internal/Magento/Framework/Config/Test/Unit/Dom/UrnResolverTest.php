@@ -9,7 +9,9 @@ namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UrnResolverTest extends TestCase
@@ -85,5 +87,27 @@ class UrnResolverTest extends TestCase
         );
         $xsdUrn = 'urn:magento:module:Magento_Test:test.xsd';
         $this->urnResolver->getRealPath($xsdUrn);
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     * @throws LocalizedException
+     */
+    #[DataProvider('registerEntityLoaderWithUrlDataProvider')]
+    public function testRegisterEntityLoaderWithUrl(string $path): void
+    {
+        self::assertNotFalse($this->urnResolver->registerEntityLoader(null, $path, []));
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function registerEntityLoaderWithUrlDataProvider(): array
+    {
+        return [
+            ['path' => 'https://example.com/'],
+            ['path' => 'urn:magento:framework:Config/Test/Unit/_files/sample.xsd'],
+        ];
     }
 }
