@@ -65,7 +65,7 @@ class Input extends AbstractFilter
     protected function applyFilter(): void
     {
         $value = $this->filterData[$this->getName()] ?? '';
-        if (strlen($value) > 0) {
+        if (is_scalar($value) && strlen((string)$value) > 0) {
             $conditionType = self::CONDITION_LIKE;
             $valueExpression = null;
             $filterConfig = $this->getData('config/filter');

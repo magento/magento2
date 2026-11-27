@@ -138,6 +138,8 @@ class InputTest extends TestCase
             $this->filterBuilderMock->expects($this->once())
                 ->method('create')
                 ->willReturn($filterMock);
+        } else {
+            $this->filterBuilderMock->expects($this->never())->method('create');
         }
 
         $date = new Input(
@@ -173,6 +175,13 @@ class InputTest extends TestCase
                     'name' => 'test_date',
                 ],
                 ['test_date' => null],
+                null,
+            ],
+            [
+                [
+                    'name' => 'test_date',
+                ],
+                ['test_date' => ['some_value']],
                 null,
             ],
             [
