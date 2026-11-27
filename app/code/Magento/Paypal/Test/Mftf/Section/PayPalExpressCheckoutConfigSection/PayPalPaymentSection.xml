@@ -12,7 +12,7 @@
         <element name="loginSection" type="input" selector=" #main&gt;#login"/>
         <element name="existingAccountLoginBtn" type="input" selector="#loginSection a"/>
         <element name="email" type="input" selector="//input[contains(@name, 'email') and not(contains(@style, 'display:none'))]"/>
-        <element name="password" type="input" selector="//input[contains(@name, 'password') and not(contains(@style, 'display:none'))]"/>
+        <element name="password" type="input" selector="(//input[contains(@name, 'password') and not(contains(@style, 'display:none'))])[1]"/>
         <element name="loginBtn" type="input" selector="//button[normalize-space(text())='Log In']"/>
         <element name="reviewUserInfo" type="text" selector="[data-testid=personalized-banner-content]"/>
         <element name="cartIcon" type="text" selector="[data-testid='header-show-cart-dropdown-btn']"/>
