@@ -337,7 +337,8 @@ class CarrierTest extends TestCase
                     [
                         'order' => new DataObject(
                             [
-                                'subtotal' => '10.00'
+                                'subtotal' => '10.00',
+                                'invoice_collection' => []
                             ]
                         )
                     ]
@@ -893,7 +894,8 @@ class CarrierTest extends TestCase
                     [
                         'order' => new DataObject(
                             [
-                                'subtotal' => '10.00'
+                                'subtotal' => '10.00',
+                                'invoice_collection' => []
                             ]
                         )
                     ]

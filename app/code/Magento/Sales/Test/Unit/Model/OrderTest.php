@@ -29,6 +29,7 @@ use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as OrderCreditmemoCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as OrderInvoiceCollection;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
@@ -36,6 +37,7 @@ use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory as OrderItemC
 use Magento\Sales\Model\ResourceModel\Order\Payment;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory as PaymentCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as OrderShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -622,16 +624,48 @@ class OrderTest extends TestCase
 
     public function testCanEditIfHasInvoices()
     {
-        $invoiceCollection = $this->createPartialMock(OrderInvoiceCollection::class, ['count']);
+        $invoiceCollection = $this->createPartialMock(OrderInvoiceCollection::class, ['getSize', 'count', 'load']);
 
         $invoiceCollection->expects($this->once())
-            ->method('count')
+            ->method('getSize')
             ->willReturn(2);
+        $invoiceCollection->expects($this->never())
+            ->method('count');
+        $invoiceCollection->expects($this->never())
+            ->method('load');
 
         $this->order->setInvoiceCollection($invoiceCollection);
         $this->order->setState(Order::STATE_PROCESSING);
 
         $this->assertFalse($this->order->canEdit());
+    }
+
+    #[DataProvider('hasRelatedDocumentsDataProvider')]
+    public function testHasRelatedDocumentsUsesGetSize(
+        string $method,
+        string $collectionGetter,
+        string $collectionClass,
+        int $size,
+        bool $expected
+    ): void {
+        $collection = $this->createPartialMock($collectionClass, ['getSize', 'count', 'load']);
+        $collection->expects($this->once())
+            ->method('getSize')
+            ->willReturn($size);
+        $collection->expects($this->never())
+            ->method('count');
+        $collection->expects($this->never())
+            ->method('load');
+
+        $order = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([$collectionGetter])
+            ->getMock();
+        $order->expects($this->once())
+            ->method($collectionGetter)
+            ->willReturn($collection);
+
+        $this->assertSame($expected, $order->$method());
     }
 
     /**
@@ -1343,6 +1377,18 @@ class OrderTest extends TestCase
             [Order::STATE_CANCELED],
             [Order::STATE_CLOSED],
             [Order::STATE_PAYMENT_REVIEW]
+        ];
+    }
+
+    public static function hasRelatedDocumentsDataProvider(): array
+    {
+        return [
+            ['hasInvoices', 'getInvoiceCollection', OrderInvoiceCollection::class, 1, true],
+            ['hasInvoices', 'getInvoiceCollection', OrderInvoiceCollection::class, 0, false],
+            ['hasShipments', 'getShipmentsCollection', OrderShipmentCollection::class, 1, true],
+            ['hasShipments', 'getShipmentsCollection', OrderShipmentCollection::class, 0, false],
+            ['hasCreditmemos', 'getCreditmemosCollection', OrderCreditmemoCollection::class, 1, true],
+            ['hasCreditmemos', 'getCreditmemosCollection', OrderCreditmemoCollection::class, 0, false],
         ];
     }
 }
