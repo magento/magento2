@@ -31,6 +31,8 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus('bulk-uuid-2'));
         $this->assertEquals(BulkSummaryInterface::FINISHED_SUCCESSFULLY, $this->model->getBulkStatus('bulk-uuid-4'));
         $this->assertEquals(BulkSummaryInterface::FINISHED_WITH_FAILURE, $this->model->getBulkStatus('bulk-uuid-5'));
+        $this->assertEquals(BulkSummaryInterface::NOT_STARTED, $this->model->getBulkStatus('bulk-uuid-6'));
+        $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus('bulk-uuid-7'));
     }
 
     /**
@@ -39,9 +41,17 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
     public function testGetBulksByUser()
     {
         /** @var \Magento\AsynchronousOperations\Model\BulkSummary[] $bulks */
-        $bulksUuidArray = ['bulk-uuid-1', 'bulk-uuid-2', 'bulk-uuid-3', 'bulk-uuid-4', 'bulk-uuid-5'];
+        $bulksUuidArray = [
+            'bulk-uuid-1',
+            'bulk-uuid-2',
+            'bulk-uuid-3',
+            'bulk-uuid-4',
+            'bulk-uuid-5',
+            'bulk-uuid-6',
+            'bulk-uuid-7'
+        ];
         $bulks =  $this->model->getBulksByUser(1);
-        $this->assertCount(5, $bulks);
+        $this->assertCount(7, $bulks);
         foreach ($bulks as $bulk) {
             $this->assertTrue(in_array($bulk->getBulkId(), $bulksUuidArray));
         }
