@@ -13,8 +13,6 @@ use Magento\Framework\DataObject;
 
 /**
  * EAV attribute data validator
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\Validator\AbstractValidator
 {

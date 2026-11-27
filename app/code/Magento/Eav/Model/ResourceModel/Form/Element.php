@@ -7,8 +7,6 @@ namespace Magento\Eav\Model\ResourceModel\Form;
 
 /**
  * Eav Form Element Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Element extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
