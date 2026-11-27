@@ -667,6 +667,62 @@ class UtilityTest extends TestCase
     }
 
     /**
+     * Eligible bundle children count toward the total quantity multiplied by the bundle quantity.
+     *
+     * @return void
+     */
+    public function testCanProcessRuleEligibleTotalsUseBundleChildTotalQty(): void
+    {
+        $bundleParent = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getProductType', 'getQty'])
+            ->getMock();
+        $bundleParent->method('getProductType')->willReturn('bundle');
+        $bundleParent->method('getQty')->willReturn(3.0);
+        $bundleChild = $this->eligibleTotalsItemStub([
+            'getParentItem' => $bundleParent,
+            'getHasChildren' => false,
+            'getChildren' => [],
+            'isChildrenCalculated' => true,
+            'getNoDiscount' => false,
+            'getQty' => 1.0,
+        ]);
+        $bundleItem = $this->eligibleTotalsItemStub([
+            'getParentItem' => null,
+            'getHasChildren' => true,
+            'getChildren' => [$bundleChild],
+            'isChildrenCalculated' => true,
+            'getNoDiscount' => false,
+        ]);
+
+        $actionsCombine = $this->createMock(RuleCombine::class);
+        $actionsCombine->method('getConditions')->willReturn([$this->createStub(AbstractCondition::class)]);
+        $actionsCombine->method('validate')->willReturnCallback(fn ($item): bool => $item === $bundleChild);
+
+        $addressState = $this->defaultEligibleTotalsAddressState();
+        $address = $this->createAddressMockWithTrackedTotals($addressState, [$bundleItem, $bundleChild]);
+        $qtyDuringValidation = null;
+        $rule = $this->createPartialMock(Rule::class, [
+            'getActions', 'validate', 'hasIsValidForAddress', 'getIsValidForAddress',
+            'setIsValidForAddress', 'afterLoad'
+        ]);
+        $rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $rule->method('hasIsValidForAddress')->willReturn(false);
+        $rule->method('getActions')->willReturn($actionsCombine);
+        $rule->method('validate')->willReturnCallback(
+            function () use (&$addressState, &$qtyDuringValidation): bool {
+                $qtyDuringValidation = $addressState['total_qty'];
+                return true;
+            }
+        );
+        $this->validateCoupon->method('execute')->willReturn(true);
+
+        $this->assertTrue($this->utility->canProcessRule($rule, $address));
+        $this->assertSame(3.0, $qtyDuringValidation);
+        $this->assertSame(10.0, $addressState['total_qty']);
+    }
+
+    /**
      * @return array<string, float>
      */
     private function defaultEligibleTotalsAddressState(): array

@@ -212,7 +212,7 @@ class Utility
             }
             $baseSubtotal += (float) $item->getBaseRowTotal();
             $baseSubtotalInclTax += (float) $item->getBaseRowTotalInclTax();
-            $totalQty += (float) $item->getQty();
+            $totalQty += (float) $item->getTotalQty();
             $weight += (float) $item->getRowWeight();
         }
 
