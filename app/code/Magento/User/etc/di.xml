@@ -14,6 +14,8 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="UnlockAdminAccountCommand" xsi:type="object">Magento\User\Console\UnlockAdminAccountCommand</item>
+                <item name="assignAdminToRoleCommand"
+                      xsi:type="object">Magento\User\Console\AssignAdminToRoleCommand</item>
             </argument>
         </arguments>
     </type>
