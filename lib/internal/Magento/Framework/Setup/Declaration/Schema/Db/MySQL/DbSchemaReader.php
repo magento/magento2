@@ -84,7 +84,21 @@ class DbSchemaReader implements DbSchemaReaderInterface
             ->where('TABLE_SCHEMA = ?', $dbName)
             ->where('TABLE_NAME = ?', $tableName);
 
-        return $adapter->fetchRow($stmt);
+        $row = $adapter->fetchRow($stmt);
+
+        // MySQL >= 8.0.28 reports the utf8 charset as utf8mb3 in information_schema.
+        // Normalize it back to the canonical form used in db_schema.xml declarations
+        // (utf8 and utf8mb3 are aliases of the same charset), otherwise the table-level
+        // diff (charset/collation are part of getDiffSensitiveParams()) flags every
+        // utf8 table as modified on every setup:upgrade run.
+        if (isset($row['charset'])) {
+            $row['charset'] = str_replace('utf8mb3', 'utf8', $row['charset']);
+        }
+        if (isset($row['collation'])) {
+            $row['collation'] = str_replace('utf8mb3_', 'utf8_', $row['collation']);
+        }
+
+        return $row;
     }
 
     /**
