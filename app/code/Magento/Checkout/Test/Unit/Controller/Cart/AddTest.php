@@ -26,6 +26,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -213,5 +214,59 @@ class AddTest extends TestCase
             ->willReturn(true);
 
         $this->assertEquals($this->response, $this->cartAdd->execute());
+    }
+
+    /**
+     * @param mixed $related
+     * @return void
+     */
+    #[DataProvider('nonStringRelatedProductProvider')]
+    public function testExecuteIgnoresNonStringRelatedProduct(mixed $related): void
+    {
+        $productId = 1;
+        $storeId = 1;
+        $params = ['qty' => 1];
+        $product = $this->createMock(Product::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(Store::class);
+        $storeManager->method('getStore')->willReturn($store);
+        $store->method('getId')->willReturn($storeId);
+        $this->request->method('getParam')
+            ->willReturnMap([
+                ['product', null, $productId],
+                ['related_product', null, $related],
+                ['return_url', null, '/sku.html']
+            ]);
+        $this->request->method('getParams')->willReturn($params);
+        $this->request->method('isAjax')->willReturn(true);
+        $this->productRepository->method('getById')->willReturn($product);
+        $this->objectManagerMock->method('get')
+            ->willReturnMap([
+                [StoreManagerInterface::class, $storeManager],
+                [ResolverInterface::class, $this->createMock(ResolverInterface::class)],
+                [JsonSerializer::class, $this->createMock(JsonSerializer::class)],
+            ]);
+        $this->addProductToCart->expects($this->once())
+            ->method('execute')
+            ->with($this->cart, $product, $params, [])
+            ->willReturn(true);
+        $this->quantityProcessor->method('prepareQuantity')->willReturn($params['qty']);
+        $this->cart->method('getQuote')->willReturn($this->createMock(Quote::class));
+        $this->formKeyValidator->method('validate')->willReturn(true);
+
+        $this->assertEquals($this->response, $this->cartAdd->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public static function nonStringRelatedProductProvider(): array
+    {
+        return [
+            'array' => [['1']],
+            'nested array' => [[['1']]],
+            'empty string' => [''],
+            'null' => [null],
+        ];
     }
 }
