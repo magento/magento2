@@ -60,9 +60,8 @@ for _, id in ipairs(ids) do
     if condition == "all" then
         should_delete = true
     elseif condition == "expired" then
-        -- Check if key expired (has TTL <= 0)
-        local ttl = redis.call('TTL', cache_key)
-        if ttl == -2 or ttl == -1 then
+        -- TTL -2: the key is gone (expired); -1: the key exists without an expiry and is live
+        if redis.call('TTL', cache_key) == -2 then
             should_delete = true
         end
     end
@@ -179,7 +178,7 @@ LUA;
     private const SCRIPT_CLEAR_ALL_INDICES = <<<'LUA'
 -- KEYS[1]: tag pattern (e.g., "cache:tags:69d_*")
 -- KEYS[2]: reverse index pattern (e.g., "cache:id_tags:69d_*")
--- KEYS[3]: all_ids set key (e.g., "cache:all_ids")
+-- KEYS[3]: all_ids set key (e.g., "cache:all_ids:69d_")
 -- ARGV[1]: batch size for SCAN operations
 
 local tag_pattern = KEYS[1]
@@ -413,7 +412,7 @@ LUA;
         // Build patterns
         $tagPattern = 'cache:tags:' . $namespace . '*';
         $reversePattern = 'cache:id_tags:' . $namespace . '*';
-        $allIdsKey = 'cache:all_ids';
+        $allIdsKey = 'cache:all_ids:' . $namespace;
 
         try {
             $result = $this->evalShaScript(
