@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Denied extends \Magento\Backend\App\Action
 {
     public const ADMIN_RESOURCE = 'Magento_Backend::admin';

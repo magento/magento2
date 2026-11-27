@@ -5,10 +5,12 @@
  */
 namespace Magento\Security\Controller\Adminhtml\Session;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Admin session activity
  */
-class Activity extends \Magento\Backend\App\Action
+class Activity extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     public const ADMIN_RESOURCE = 'Magento_Backend::admin';
 

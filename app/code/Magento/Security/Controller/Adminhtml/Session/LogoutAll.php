@@ -6,12 +6,13 @@
 namespace Magento\Security\Controller\Adminhtml\Session;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Security\Model\AdminSessionsManager;
 
 /**
  * Admin session logout all
  */
-class LogoutAll extends \Magento\Backend\App\Action
+class LogoutAll extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     public const ADMIN_RESOURCE = 'Magento_Backend::admin';
 
