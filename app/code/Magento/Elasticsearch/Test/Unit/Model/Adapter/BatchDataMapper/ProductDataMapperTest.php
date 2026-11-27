@@ -305,6 +305,18 @@ class ProductDataMapperTest extends TestCase
                 [10 => '1', 11 => '2'],
                 ['status' => 1],
             ],
+            'url_key of child excluded from merge' => [
+                10,
+                [
+                    'attribute_code' => 'url_key',
+                    'backend_type' => 'varchar',
+                    'frontend_input' => 'text',
+                    'is_searchable' => false,
+                    'options' => [],
+                ],
+                [10 => 'bundle-parent', 11 => 'simple-child'],
+                ['url_key' => 'bundle-parent'],
+            ],
             'select without options' => [
                 10,
                 [
