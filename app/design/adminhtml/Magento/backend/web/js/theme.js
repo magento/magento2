@@ -108,6 +108,14 @@ define('globalNavigationScroll', [
         positionMenu();
     });
 
+    win.on('pageshow', function (event) {
+        if (event.originalEvent.persisted) {
+            winTopLast = 0;
+            nextTop = 0;
+            positionMenu();
+        }
+    });
+
     win.on('resize', function () {
 
         winHeight = win.height();
@@ -172,6 +180,19 @@ define('globalNavigation', [
 
             this._initOverlay()
                 ._bind();
+
+            this._on(window, {
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        var openItem = this.menu.find(this.options.selectors.topLevelItem + '._show'),
+                            openSubMenu = $(this.options.selectors.subMenu, openItem);
+
+                        this.overlay.hide(0).off('click');
+                        openSubMenu.attr('aria-expanded', 'false');
+                        openItem.removeClass('_show _active');
+                    }
+                }
+            });
         },
 
         /**
@@ -329,6 +350,13 @@ define('globalSearch', [
             this.field = $(this.options.field);
             this.input = $(this.options.input);
             this._events();
+            this._on(window, {
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted && !this.input.val()) {
+                        this.field.removeClass(this.options.fieldActiveClass);
+                    }
+                }
+            });
         },
 
         /**
@@ -517,6 +545,13 @@ define('loadingPopup', [
 
             this._show();
             this._events();
+            this._on(window, {
+                'pageshow': function (event) {
+                    if (event.originalEvent.persisted) {
+                        this._hide();
+                    }
+                }
+            });
         },
 
         /**
