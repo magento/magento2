@@ -81,6 +81,17 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        initObservable: function () {
+            this._super();
+            this.validatedPage = this.currentPage();
+            this.validatedPageSize = this.pageSize;
+
+            return this;
+        },
+
+        /**
          * Initializes sizes component.
          *
          * @returns {Paging} Chainable.
@@ -171,11 +182,67 @@ define([
          * Handles changes of the page size.
          */
         onPageSizeChange: function () {
+            if (this.restoringPageSize) {
+                return;
+            }
+
             resolver(function () {
                 if (this.elems().length) {
+                    if (this.pageSizeInitialized && !this.validateElements()) {
+                        this.restoringPageSize = true;
+                        this.set('pageSize', this.validatedPageSize);
+                        this.restoringPageSize = false;
+
+                        return;
+                    }
+                    this.validatedPageSize = this.pageSize;
+                    this.pageSizeInitialized = true;
                     this.reload();
+                } else {
+                    this.validatedPageSize = this.pageSize;
                 }
             }, this);
+        },
+
+        /**
+         * Validate rendered selections before changing the page.
+         *
+         * @param {Number} page
+         * @returns {Boolean}
+         */
+        changePage: function (page) {
+            if (this.restoringPage) {
+                return false;
+            }
+
+            if (!this.validateElements()) {
+                this.restoringPage = true;
+                this.currentPage(this.validatedPage);
+                this.restoringPage = false;
+
+                return false;
+            }
+
+            this.validatedPage = ~~page;
+
+            return this._super(page);
+        },
+
+        /**
+         * Validate all rendered fields, including unchanged values.
+         *
+         * @returns {Boolean}
+         */
+        validateElements: function () {
+            var invalid = _.find(this.delegate('validate'), function (result) {
+                return result && result.valid === false;
+            });
+
+            if (invalid && _.isFunction(invalid.target.focused)) {
+                invalid.target.focused(true);
+            }
+
+            return !invalid;
         },
 
         /**
