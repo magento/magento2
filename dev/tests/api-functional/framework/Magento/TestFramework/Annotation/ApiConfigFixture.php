@@ -167,6 +167,7 @@ class ApiConfigFixture extends ConfigFixture
             }
         }
         $this->websiteConfigValues = [];
+        $this->valuesToDeleteFromDatabase = [];
         if ($needUpdates) {
             $this->putPill();
         }
