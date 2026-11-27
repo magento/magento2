@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Bundle\Pricing\Render\FinalPriceBox;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\Amount\Base as PriceAmount;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -83,10 +84,10 @@ class FinalPriceBoxTest extends TestCase
 
         $bundlePrice->expects($this->once())
             ->method('getMinimalPrice')
-            ->willReturn($optMinValue);
+            ->willReturn(new PriceAmount($optMinValue));
         $bundlePrice->expects($this->once())
             ->method('getMaximalPrice')
-            ->willReturn($optMaxValue);
+            ->willReturn(new PriceAmount($optMaxValue));
 
         if ($enableCustomOptionMocks) {
             $customOptionPrice
@@ -95,6 +96,34 @@ class FinalPriceBoxTest extends TestCase
         }
 
         $this->assertEquals($expectedShowRange, $this->model->showRangePrice());
+    }
+
+    /**
+     * Equal minimal and maximal amounts that differ only in their adjustment breakdown must not show a range.
+     *
+     * @return void
+     */
+    public function testShowRangePriceForEqualAmountValuesWithDifferentAdjustments(): void
+    {
+        $minimalPrice = new PriceAmount(10.0, ['tax' => 1.0]);
+        $maximalPrice = new PriceAmount(10.0, ['weee' => 2.0]);
+
+        $priceInfo = $this->createMock(Base::class);
+        $bundlePrice = $this->createMock(FinalPrice::class);
+        $customOptionPrice = $this->createMock(CustomOptionPrice::class);
+
+        $this->saleableItem->method('getPriceInfo')->willReturn($priceInfo);
+
+        $priceInfo->method('getPrice')->willReturnMap([
+            [FinalPrice::PRICE_CODE, $bundlePrice],
+            [CustomOptionPrice::PRICE_CODE, $customOptionPrice],
+        ]);
+
+        $bundlePrice->method('getMinimalPrice')->willReturn($minimalPrice);
+        $bundlePrice->method('getMaximalPrice')->willReturn($maximalPrice);
+        $customOptionPrice->method('getCustomOptionRange')->willReturn(0.0);
+
+        $this->assertFalse($this->model->showRangePrice());
     }
 
     /**
