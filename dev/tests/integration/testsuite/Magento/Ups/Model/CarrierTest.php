@@ -85,6 +85,15 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->httpClient->setDeferredResponseMock(null);
+        $this->httpClient->nextResponses([]);
+    }
+
+    /**
      * @return void
      */
     public function testGetShipAcceptUrl()
@@ -441,6 +450,64 @@ class CarrierTest extends TestCase
         $error->setErrorMessage($this->carrier->getConfigData('specificerrmsg'));
 
         $this->assertEquals($error, $resultRate);
+        $this->assertDebugLogContains('Exception message');
+    }
+
+    /**
+     * Test get carriers rates if UPS returns an HTTP error status.
+     *
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS_REST
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/debug 1
+     * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
+     * @magentoConfigFixture default_store currency/options/base GBP
+     */
+    public function testGetRatesWithHttpErrorStatus(): void
+    {
+        $errorBody = '{"response":{"errors":[{"code":"250002","message":"Invalid Authentication Information."}]}}';
+        $this->httpClient->nextResponses([new Response(401, [], $errorBody)]);
+        $this->upsAuthMock->method('getAccessToken')
+            ->willReturn('abcdefghijklmnop');
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'GB',
+                    'dest_postal' => '01105',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'KGS',
+                    'base_currency' => new DataObject(['code' => 'GBP'])
+                ]
+            ]
+        );
+        $resultRate = $this->carrier->collectRates($request)->getAllRates()[0];
+
+        $this->assertInstanceOf(Error::class, $resultRate);
+        $this->assertDebugLogContains('Invalid Authentication Information.');
+        $this->assertDebugLogContains("'code' => 401");
+    }
+
+    /**
+     * Assert that a debug log entry contains the given text.
+     *
+     * @param string $needle
+     * @return void
+     */
+    private function assertDebugLogContains(string $needle): void
+    {
+        foreach ($this->logs as $log) {
+            if (str_contains($log, $needle)) {
+                $this->addToAssertionCount(1);
+                return;
+            }
+        }
+        $this->fail(sprintf('No debug log entry contains "%s".', $needle));
     }
 
     /**
