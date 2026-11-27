@@ -42,8 +42,8 @@
     <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
     <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
     <preference for="Magento\Framework\App\RequestSafetyInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup" />
-    <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup" />
+    <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Framework\Setup\SchemaSetup" />
+    <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Framework\Setup\ModuleDataSetup" />
     <preference for="Magento\Framework\App\ExceptionHandlerInterface" type="Magento\Framework\App\ExceptionHandler" />
     <type name="Magento\Store\Model\Store">
         <arguments>
@@ -114,7 +114,7 @@
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
     <preference for="Magento\Framework\Acl\Data\CacheInterface" type="Magento\Framework\Acl\Data\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
-    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
+    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Framework\Setup\ModuleDataSetup" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
