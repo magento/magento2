@@ -245,6 +245,42 @@ class PriceTest extends TestCase
     }
 
     /**
+     * The special_from_date and special_to_date checks each contain an OR, so each must be grouped:
+     * otherwise a scheduled special price is indexed as soon as special_to_date is in the future.
+     *
+     * @throws ReflectionException
+     */
+    public function testPrepareBundlePriceGroupsSpecialPriceDateChecks(): void
+    {
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('joinInner')->willReturnSelf();
+        $select->method('joinLeft')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $this->connectionMock->method('select')->willReturn($select);
+        $conditions = [];
+        $this->connectionMock->method('getCheckSql')
+            ->willReturnCallback(function ($condition) use (&$conditions) {
+                $conditions[] = (string)$condition;
+            });
+
+        $method = new \ReflectionMethod(Price::class, 'prepareBundlePriceByType');
+        $method->invoke($this->priceModel, \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED, []);
+
+        $specialPriceConditions = array_filter(
+            $conditions,
+            fn ($condition) => str_contains($condition, 'cwd.website_date')
+        );
+        $this->assertCount(2, $specialPriceConditions);
+        foreach ($specialPriceConditions as $condition) {
+            $this->assertMatchesRegularExpression(
+                '/ AND \([^()]* <= cwd\.website_date\) AND \([^()]* >= cwd\.website_date\)$/',
+                $condition
+            );
+        }
+    }
+
+    /**
      * Tests create Bundle Price temporary table
      */
     public function testGetBundlePriceTable(): void
