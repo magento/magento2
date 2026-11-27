@@ -80,8 +80,8 @@ class CountryofmanufactureTest extends TestCase
     /**
      * Test for getAllOptions method
      *
-     * @param $cachedDataSrl
-     * @param $cachedDataUnsrl
+     * @param string $cachedDataSrl
+     * @param array $cachedDataUnsrl
      */
     #[DataProvider('getAllOptionsDataProvider')]
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
@@ -110,5 +110,49 @@ class CountryofmanufactureTest extends TestCase
             [
                 ['cachedDataSrl' => json_encode(['key' => 'data']), 'cachedDataUnsrl' => ['key' => 'data']]
             ];
+    }
+
+    /**
+     * @param string|null $value
+     * @param string|bool $expected
+     * @return void
+     */
+    #[DataProvider('getOptionTextDataProvider')]
+    public function testGetOptionText($value, $expected): void
+    {
+        $options = [
+            ['value' => '', 'label' => ' '],
+            ['value' => 'US', 'label' => 'United States'],
+            ['value' => 'GB', 'label' => 'United Kingdom'],
+        ];
+        $serializedOptions = json_encode($options);
+
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->localeResolverMock->expects($this->once())->method('getLocale')->willReturn('en_US');
+        $this->cacheConfig->expects($this->once())
+            ->method('load')
+            ->with('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code_LOCALE_en_US')
+            ->willReturn($serializedOptions);
+        $this->serializerMock->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
+
+        $this->assertSame($expected, $this->countryOfManufacture->getOptionText($value));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOptionTextDataProvider(): array
+    {
+        return [
+            'empty country' => ['', ''],
+            'unassigned country' => [null, ''],
+            'United States' => ['US', 'United States'],
+            'United Kingdom' => ['GB', 'United Kingdom'],
+            'unknown country' => ['XX', false],
+        ];
     }
 }
