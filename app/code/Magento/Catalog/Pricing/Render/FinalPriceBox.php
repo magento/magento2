@@ -154,17 +154,20 @@ class FinalPriceBox extends BasePriceBox
     public function hasSpecialPrice()
     {
         if ($this->isProductList()) {
-            if (!$this->getData('special_price_map')) {
+            $specialPriceMap = $this->getData('special_price_map');
+            if (!$specialPriceMap || !is_array($specialPriceMap)) {
                 return false;
             }
-
-            return (bool)$this->getData('special_price_map')[$this->saleableItem->getId()];
-        } else {
-            $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_CODE)->getAmount()->getValue();
-            $displayFinalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
-
-            return $displayFinalPrice < $displayRegularPrice;
+            $productId = $this->saleableItem->getId();
+            if (array_key_exists($productId, $specialPriceMap)) {
+                return (bool)$specialPriceMap[$productId];
+            }
         }
+
+        $displayRegularPrice = $this->getPriceType(Price\RegularPrice::PRICE_CODE)->getAmount()->getValue();
+        $displayFinalPrice = $this->getPriceType(Price\FinalPrice::PRICE_CODE)->getAmount()->getValue();
+
+        return $displayFinalPrice < $displayRegularPrice;
     }
 
     /**
