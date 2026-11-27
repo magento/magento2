@@ -191,6 +191,55 @@ define([
         },
 
         /**
+         * Load the selected rows from the server with the grid's own filters modifier.
+         *
+         * Select All across more than one page loads the selected rows from the server. The grid hides the product
+         * being edited, the products already used and products without the configurable attributes through its
+         * filters modifier, which the parent request leaves out, so those products were added as well.
+         *
+         * @param {Object} selections
+         * @param {String} itemsType
+         * @returns {Object} request - deferred that will be resolved when ajax is done
+         */
+        updateFromServerData: function (selections, itemsType) {
+            var selectionsData = _.extend({}, this.params || {}, selections.params),
+                filtersModifier = _.extend({}, this.externalFiltersModifier),
+                ids = selections[itemsType] || [],
+                hidden = filtersModifier[this.indexField],
+                request;
+
+            if (ids.length && selections.excludeMode) {
+                filtersModifier[this.indexField] = {
+                    'condition_type': 'nin',
+                    value: _.union(hidden && hidden['condition_type'] === 'nin' ? hidden.value : [], ids)
+                };
+            } else if (ids.length) {
+                selectionsData.filters = {};
+                filtersModifier[this.indexField] = {
+                    'condition_type': 'in',
+                    value: ids
+                };
+            }
+
+            selectionsData['filters_modifier'] = filtersModifier;
+            selectionsData.paging = {
+                notLimits: 1
+            };
+
+            request = this.requestData(selectionsData, {
+                method: this.requestConfig.method
+            });
+            request
+                .done(function (data) {
+                    this.setExternalValue(data.items || data);
+                    this.loading(false);
+                }.bind(this))
+                .fail(this.onError);
+
+            return request;
+        },
+
+        /**
          * Get attribute codes.
          *
          * @returns {Array}
