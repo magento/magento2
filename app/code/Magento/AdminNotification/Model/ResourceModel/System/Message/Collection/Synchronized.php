@@ -5,6 +5,8 @@
  */
 namespace Magento\AdminNotification\Model\ResourceModel\System\Message\Collection;
 
+use Magento\Framework\Exception\AlreadyExistsException;
+
 /**
  * @api
  * @since 100.0.2
@@ -45,7 +47,12 @@ class Synchronized extends \Magento\AdminNotification\Model\ResourceModel\System
         }
         foreach ($unread as $unreadItem) {
             $item = $this->getNewEmptyItem();
-            $item->setIdentity($unreadItem->getIdentity())->setSeverity($unreadItem->getSeverity())->save();
+            try {
+                $item->setIdentity($unreadItem->getIdentity())->setSeverity($unreadItem->getSeverity())->save();
+            } catch (AlreadyExistsException) {
+                // Another request persisted the same system message after this collection was loaded.
+                continue;
+            }
         }
         if (count($removed) || count($unread)) {
             $this->_unreadMessages = $unread;
