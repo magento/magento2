@@ -71,7 +71,6 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                     <div class="admin__data-grid-pager-wrap">
                         <select name="<?= $escaper->escapeHtmlAttr($block->getVarNameLimit()) ?>"
                                 id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                                onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)"
                             <?= /* @noEscape */ $block->getUiId('per-page') ?>
                                 class="admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
@@ -90,6 +89,11 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 selected="selected"<?php endif; ?>>200
                             </option>
                         </select>
+                        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                            'onchange',
+                            $block->getJsObjectName() . '.loadByElement(this)',
+                            'select#' . $escaper->escapeJs($block->getHtmlId()) . '_page-limit'
+                        ) ?>
                         <label for="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-limit"
                             class="admin__control-support-text"><?= $escaper->escapeHtml(__('per page')) ?></label>
                         <div class="admin__data-grid-pager">
