@@ -397,6 +397,45 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Get the image files assigned to the given image roles of a product, falling back to the default scope.
+     *
+     * @param string $sku
+     * @param int $storeId
+     * @param string[] $attributeCodes
+     * @return string[] Image file per attribute code
+     */
+    public function getImageRoleValues(string $sku, int $storeId, array $attributeCodes): array
+    {
+        $this->initMediaGalleryResources();
+        $linkField = $this->getProductEntityLinkField();
+        $result = [];
+        foreach ($attributeCodes as $attributeCode) {
+            $attribute = $this->getResource()->getAttribute($attributeCode);
+            if (!$attribute) {
+                continue;
+            }
+            $select = $this->connection->select()
+                ->from(['value_table' => $attribute->getBackendTable()], ['value'])
+                ->join(
+                    ['pe' => $this->productEntityTableName],
+                    "pe.{$linkField} = value_table.{$linkField}",
+                    []
+                )
+                ->where('pe.sku = ?', $sku)
+                ->where('value_table.attribute_id = ?', $attribute->getId())
+                ->where('value_table.store_id IN (?)', [Store::DEFAULT_STORE_ID, $storeId])
+                ->order('value_table.store_id DESC')
+                ->limit(1);
+            $value = $this->connection->fetchOne($select);
+            if ($value) {
+                $result[$attributeCode] = (string)$value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Init media gallery resources.
      *
      * @return void
