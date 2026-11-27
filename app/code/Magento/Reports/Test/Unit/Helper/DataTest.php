@@ -115,6 +115,26 @@ class DataTest extends TestCase
         $this->data->prepareIntervalsCollection($collection, $from, $to, $period);
     }
 
+    #[DataProvider('monthIntervalsDataProvider')]
+    public function testMonthIntervalsIncludeEveryCalendarMonth(string $from, string $to, array $expected): void
+    {
+        $this->assertSame($expected, $this->data->getIntervals($from, $to, Data::REPORT_PERIOD_TYPE_MONTH));
+    }
+
+    public static function monthIntervalsDataProvider(): array
+    {
+        return [
+            'January 31' => ['2023-01-31', '2023-04-10', ['2023-01', '2023-02', '2023-03', '2023-04']],
+            'January 30 non-leap year' => ['2023-01-30', '2023-03-10', ['2023-01', '2023-02', '2023-03']],
+            'January 29 leap year' => ['2024-01-29', '2024-04-10', ['2024-01', '2024-02', '2024-03', '2024-04']],
+            'August 31' => ['2023-08-31', '2023-11-10', ['2023-08', '2023-09', '2023-10', '2023-11']],
+            'mid-month' => ['2023-01-15', '2023-03-10', ['2023-01', '2023-02', '2023-03']],
+            'year boundary' => ['2023-12-31', '2024-03-10', ['2023-12', '2024-01', '2024-02', '2024-03']],
+            'adjacent months' => ['2023-01-31', '2023-02-10', ['2023-01', '2023-02']],
+            'same month' => ['2023-01-29', '2023-01-31', ['2023-01']],
+        ];
+    }
+
     /**
      * @return array
      */
