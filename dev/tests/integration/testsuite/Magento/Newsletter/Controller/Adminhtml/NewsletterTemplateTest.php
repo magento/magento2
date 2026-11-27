@@ -156,6 +156,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->getRequest()->setMethod(\Laminas\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
-        $this->assertEquals(404, $this->getResponse()->getStatusCode());
+        $this->assertEquals(405, $this->getResponse()->getStatusCode());
+        $this->assertEquals('POST', $this->getResponse()->getHeader('Allow')->getFieldValue());
     }
 }
