@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model\StoreSwitcher;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
@@ -28,15 +30,23 @@ class RewriteUrl implements StoreSwitcherInterface
     private $requestFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param UrlFinderInterface $urlFinder
      * @param \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         UrlFinderInterface $urlFinder,
-        \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory
+        \Magento\Framework\HTTP\PhpEnvironment\RequestFactory $requestFactory,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->urlFinder = $urlFinder;
         $this->requestFactory = $requestFactory;
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -77,7 +87,13 @@ class RewriteUrl implements StoreSwitcherInterface
                 $targetUrl .= $currentRewrite->getRequestPath();
             }
         } else {
-            $existingRewrite = $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => $urlPath]);
+            // a rewrite that only exists in an unrelated website must not send the customer to the home page
+            $existingRewrite = $this->urlFinder->findOneByData(
+                [
+                    UrlRewrite::REQUEST_PATH => $urlPath,
+                    UrlRewrite::STORE_ID => $this->getWebsiteStoreIds($fromStore, $targetStore),
+                ]
+            );
             $currentRewrite = $this->urlFinder->findOneByData(
                 [
                     UrlRewrite::REQUEST_PATH => $urlPath,
@@ -91,6 +107,26 @@ class RewriteUrl implements StoreSwitcherInterface
             }
         }
         return $targetUrl;
+    }
+
+    /**
+     * Get the ids of all stores in the websites of the from and target stores
+     *
+     * @param StoreInterface $fromStore
+     * @param StoreInterface $targetStore
+     * @return int[]
+     */
+    private function getWebsiteStoreIds(StoreInterface $fromStore, StoreInterface $targetStore): array
+    {
+        $storeIds = [];
+        foreach ([$fromStore, $targetStore] as $store) {
+            $website = $this->storeManager->getWebsite($store->getWebsiteId());
+            foreach ($website->getStoreIds() as $storeId) {
+                $storeIds[(int)$storeId] = (int)$storeId;
+            }
+        }
+
+        return array_values($storeIds);
     }
 
     /**
