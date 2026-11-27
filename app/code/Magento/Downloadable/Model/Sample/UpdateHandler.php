@@ -43,9 +43,12 @@ class UpdateHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = []): ProductInterface
     {
-        $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
+        if ($entity->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
+            return $entity;
+        }
 
-        if ($samples && $entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
+        $samples = $entity->getExtensionAttributes()?->getDownloadableProductSamples();
+        if ($samples !== null) {
             $this->updateSamples($entity, $samples);
         }
 
