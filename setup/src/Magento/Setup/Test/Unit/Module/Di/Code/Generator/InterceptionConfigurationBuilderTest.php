@@ -14,6 +14,7 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Setup\Module\Di\Code\Generator\PluginList;
+use Magento\Setup\Module\Di\Code\Reader\OrphanedPluginList;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -56,16 +57,22 @@ class InterceptionConfigurationBuilderTest extends TestCase
      */
     private $omConfig;
 
+    /**
+     * @var OrphanedPluginList|MockObject
+     */
+    private $orphanedPluginList;
+
     protected function setUp(): void
     {
         $this->interceptionConfig = $this->createPartialMock(Config::class, ['hasPlugins']);
         $this->pluginList = $this->createPartialMock(
             PluginList::class,
-            ['setInterceptedClasses', 'setScopePriorityScheme', 'getPluginsConfig']
+            ['setInterceptedClasses', 'setScopePriorityScheme', 'getPluginsConfig', 'getConfiguredPluginData']
         );
         $this->cacheManager = $this->createMock(Manager::class);
         $this->interceptableValidator = $this->createMock(InterceptableValidator::class);
         $this->omConfig = $this->createMock(ConfigInterface::class);
+        $this->orphanedPluginList = $this->createMock(OrphanedPluginList::class);
 
         $this->typeReader = $this->createPartialMock(Type::class, ['isConcrete']);
         $this->model = new InterceptionConfigurationBuilder(
@@ -74,7 +81,8 @@ class InterceptionConfigurationBuilderTest extends TestCase
             $this->typeReader,
             $this->cacheManager,
             $this->interceptableValidator,
-            $this->omConfig
+            $this->omConfig,
+            $this->orphanedPluginList
         );
     }
 
@@ -111,6 +119,20 @@ class InterceptionConfigurationBuilderTest extends TestCase
         $this->pluginList->expects($this->once())
             ->method('getPluginsConfig')
             ->willReturn(['instance' => $plugins]);
+        $configuredPluginData = ['Missing\\Target' => $plugins ?? []];
+        $this->pluginList->expects($this->once())
+            ->method('getConfiguredPluginData')
+            ->willReturn($configuredPluginData);
+        $this->orphanedPluginList->expects($this->once())
+            ->method('collectFromPluginData')
+            ->with($configuredPluginData);
+        $virtualTypes = ['customCacheInstance' => 'stdClass'];
+        $this->omConfig->expects($this->once())
+            ->method('getVirtualTypes')
+            ->willReturn($virtualTypes);
+        $this->orphanedPluginList->expects($this->once())
+            ->method('collectVirtualTypes')
+            ->with($virtualTypes);
 
         $this->omConfig->expects($this->any())
             ->method('getOriginalInstanceType')
