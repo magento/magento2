@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMediaGalleryAssertRestrictedFolderModalActionGroup">
+        <annotations>
+            <description>Verify the restricted folder creation message provides allowed-folder guidance.</description>
+        </annotations>
+        <arguments>
+            <argument name="folderName" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminMediaGalleryAttentionModalSection.attentionModalHeader('Attention')}}"
+                               stepKey="waitForModalHeader"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryAttentionModalSection.restrictedFolderContent(folderName)}}"
+                               stepKey="waitForModalContent"/>
+    </actionGroup>
+</actionGroups>
