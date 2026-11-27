@@ -233,7 +233,37 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             }
         }
 
+        $this->prepareCollectionPrices($collection);
+
         return parent::_beforeToHtml();
+    }
+
+    /**
+     * Load price data for the whole listing in one query per data set.
+     *
+     * Without this, tier prices and catalog price rule prices are resolved one
+     * product at a time while the listing renders. Both data sets are already
+     * loadable in bulk: the collection exposes addTierPriceData(), and the
+     * prepare_catalog_product_collection_prices event lets Magento_CatalogRule
+     * fetch the rule prices for every product in a single query. The same two
+     * steps are performed by Magento\Quote\Model\ResourceModel\Quote\Item\Collection
+     * and Magento\Bundle\Model\Product\Price before their collections are priced.
+     *
+     * @param Collection $collection
+     * @return void
+     */
+    private function prepareCollectionPrices(Collection $collection): void
+    {
+        if (!$collection->isLoaded() || !$collection->count()) {
+            return;
+        }
+
+        $collection->addTierPriceData();
+
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_collection_prices',
+            ['collection' => $collection, 'store_id' => $this->_storeManager->getStore()->getId()]
+        );
     }
 
     /**
