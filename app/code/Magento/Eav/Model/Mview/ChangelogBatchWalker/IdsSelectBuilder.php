@@ -52,7 +52,7 @@ class IdsSelectBuilder implements IdsSelectBuilderInterface
 
         $columns = [
             $changelog->getColumnName(),
-            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
+            'attribute_ids' => new Expression('GROUP_CONCAT(DISTINCT attribute_id)'),
             'store_id'
         ];
 
