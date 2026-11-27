@@ -5,8 +5,8 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\Action;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
@@ -20,6 +20,8 @@ use Magento\Tax\Model\Calculation\Rate;
  */
 class AjaxLoadRates extends Action implements HttpGetActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+
     /**
      * @var RatesProvider
      */

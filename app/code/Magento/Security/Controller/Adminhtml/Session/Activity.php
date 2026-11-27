@@ -10,7 +10,11 @@ namespace Magento\Security\Controller\Adminhtml\Session;
  */
 class Activity extends \Magento\Backend\App\Action
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
+     * Render the admin sessions activity page
+     *
      * @return void
      */
     public function execute()

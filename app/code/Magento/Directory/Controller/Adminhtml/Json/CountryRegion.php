@@ -7,6 +7,8 @@ namespace Magento\Directory\Controller\Adminhtml\Json;
 
 class CountryRegion extends \Magento\Backend\App\Action
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
      * Return JSON-encoded array of country regions
      *

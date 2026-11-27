@@ -13,6 +13,8 @@ use Magento\Security\Model\AdminSessionsManager;
  */
 class LogoutAll extends \Magento\Backend\App\Action
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
      * @var AdminSessionsManager
      */
@@ -32,6 +34,8 @@ class LogoutAll extends \Magento\Backend\App\Action
     }
 
     /**
+     * Log out all other sessions of the current admin user
+     *
      * @return void
      */
     public function execute()

@@ -3,7 +3,7 @@ Magento\Security\Controller\Adminhtml\Session\LogoutAll
 Magento\Backend\Controller\Adminhtml\Denied
 Magento\Backend\Controller\Adminhtml\Noroute\Index
 Magento\Directory\Controller\Adminhtml\Json\CountryRegion
-Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates
+Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotified
 # List of classes that locates in controllers folder but don't inherit base admin controller MAGETWO-70433.
 Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
 Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
