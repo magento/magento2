@@ -16,7 +16,7 @@
             <argument name="creditCardDetails" defaultValue="VisaDefaultCard"/>
         </arguments>
         <!--Fill the required details for Credit card-->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="waitForCreditCardField"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.creditCardField}}" time="120" stepKey="waitForCreditCardField"/>
         <scrollTo selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="scrollToPayment" />
         <click selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="clickCreditCardField"/>
         <fillField selector ="{{CheckoutPaymentSection.creditCardField}}" userInput="{{creditCardDetails.cardNumber}}" stepKey="inputCreditcardNumber"/>
