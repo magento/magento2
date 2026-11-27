@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Import image file to the media gallery asset table
@@ -26,15 +29,23 @@ class ImportMediaAsset implements ImportFilesInterface
     private $getAssetFromPath;
 
     /**
+     * @var LoggerInterface
+     */
+    private $log;
+
+    /**
      * @param SaveAssetsInterface $saveAssets
      * @param GetAssetFromPath $getAssetFromPath
+     * @param LoggerInterface|null $log
      */
     public function __construct(
         SaveAssetsInterface $saveAssets,
-        GetAssetFromPath $getAssetFromPath
+        GetAssetFromPath $getAssetFromPath,
+        ?LoggerInterface $log = null
     ) {
         $this->saveAssets = $saveAssets;
         $this->getAssetFromPath = $getAssetFromPath;
+        $this->log = $log ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -45,7 +56,14 @@ class ImportMediaAsset implements ImportFilesInterface
         $assets = [];
 
         foreach ($paths as $path) {
-            $assets[] = $this->getAssetFromPath->execute($path);
+            try {
+                $assets[] = $this->getAssetFromPath->execute($path);
+            } catch (FileSystemException | \RuntimeException $exception) {
+                $this->log->warning(
+                    'Media gallery synchronization skipped a file that cannot be read.',
+                    ['path' => $path, 'exception' => $exception]
+                );
+            }
         }
 
         $this->saveAssets->execute($assets);
