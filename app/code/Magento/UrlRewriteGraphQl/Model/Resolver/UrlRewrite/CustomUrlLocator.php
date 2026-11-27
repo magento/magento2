@@ -13,16 +13,11 @@ namespace Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite;
 class CustomUrlLocator implements CustomUrlLocatorInterface
 {
     /**
-     * @var CustomUrlLocatorInterface[]
-     */
-    private $urlLocators;
-
-    /**
      * @param CustomUrlLocatorInterface[] $urlLocators
      */
-    public function __construct(array $urlLocators = [])
-    {
-        $this->urlLocators = $urlLocators;
+    public function __construct(
+        private readonly array $urlLocators = []
+    ) {
     }
 
     /**
