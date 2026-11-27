@@ -445,8 +445,8 @@ LUA;
         // Sort ascending so the smallest set is first — SINTER is most efficient that way
         array_multisort($sizes, SORT_ASC, $tagKeys);
 
-        // When the smallest set is large, a single SINTER would block Valkey, so distribute
-        // the work as multiple O(N) SMEMBERS calls intersected in PHP instead.
+        // Above this size a single SINTER can block Valkey. Filter the smallest set with
+        // SMISMEMBER so the larger sets, including the scope tag, stay on the server.
         if ($sizes[0] > self::SINTER_SAFE_SIZE) {
             return $this->intersectViaMembers($tagKeys);
         }
@@ -496,7 +496,7 @@ LUA;
      */
     private function intersectSmallestByMembership(array $tagKeys): ?array
     {
-        $probe = $this->callSmismember($tagKeys[0], ["\0"]);
+        $probe = $this->callSmismember($tagKeys[0], ['__magento_smismember_probe__']);
         if ($probe === null) {
             return null;
         }
@@ -541,6 +541,7 @@ LUA;
      * Ask Redis which of these members are in the set
      *
      * A null return means the server or the client cannot run SMISMEMBER.
+     * phpredis returns false when the command fails. That is not "member absent".
      *
      * @param string $tagKey
      * @param string[] $members
@@ -558,20 +559,59 @@ LUA;
             return null;
         }
 
-        if (is_int($result) || is_bool($result)) {
-            $result = [(int) ((bool) $result)];
+        return $this->normalizeSmismemberResult($result, count($members));
+    }
+
+    /**
+     * Turn a SMISMEMBER reply into one 0/1 flag per requested member
+     *
+     * @param mixed $result
+     * @param int $expected
+     * @return int[]|null
+     */
+    private function normalizeSmismemberResult(mixed $result, int $expected): ?array
+    {
+        if ($result === false || $result === null) {
+            return null;
         }
 
-        if (!is_array($result) || count($result) !== count($members)) {
+        if (!is_array($result)) {
+            $flag = $this->smismemberFlag($result);
+            $result = $flag === null ? null : [$flag];
+        }
+
+        if (!is_array($result) || count($result) !== $expected) {
             return null;
         }
 
         $flags = [];
-        foreach ($result as $flag) {
-            $flags[] = (int) $flag === 1 ? 1 : 0;
+        foreach (array_values($result) as $flag) {
+            $normalized = $this->smismemberFlag($flag);
+            if ($normalized === null) {
+                return null;
+            }
+            $flags[] = $normalized;
         }
 
         return $flags;
+    }
+
+    /**
+     * Read one SMISMEMBER flag
+     *
+     * @param mixed $flag
+     * @return int|null
+     */
+    private function smismemberFlag(mixed $flag): ?int
+    {
+        if (is_bool($flag)) {
+            return $flag ? 1 : 0;
+        }
+        if (is_int($flag) || (is_string($flag) && is_numeric($flag))) {
+            return (int) $flag === 1 ? 1 : 0;
+        }
+
+        return null;
     }
 
     /**
@@ -586,7 +626,11 @@ LUA;
         foreach ($tagKeys as $key) {
             $pipeline->sMembers($key);
         }
-        $sets = array_map([$this, 'toIdsArray'], (array)$this->executePipeline($pipeline));
+        $loaded = $this->executePipeline($pipeline);
+        if (!is_array($loaded) || $loaded === []) {
+            return [];
+        }
+        $sets = array_map([$this, 'toIdsArray'], $loaded);
 
         return array_values(array_intersect(...$sets));
     }
