@@ -36,9 +36,7 @@ class QuantityCollector
                         $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $child->getQty() * $item->getQty());
                     }
                 }
-            }
-
-            if ($item->getProduct()->getIsVirtual()) {
+            } elseif ($item->getProduct()->getIsVirtual()) {
                 $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $item->getQty());
             }
             $quote->setItemsCount($quote->getItemsCount() + 1);
