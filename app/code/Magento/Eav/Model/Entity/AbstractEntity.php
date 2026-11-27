@@ -1696,6 +1696,15 @@ abstract class AbstractEntity extends AbstractResource implements
         $table = $backend->getTable();
         $entity = $attribute->getEntity();
         $connection = $this->getConnection();
+        if ($attribute->isStatic()) {
+            $newValue = $object->getData($attributeCode);
+            $connection->update(
+                $this->getEntityTable(),
+                [$attributeCode => $attribute->isValueEmpty($newValue) ? null : $newValue],
+                [$this->getLinkField() . ' = ?' => $object->getData($this->getLinkField())]
+            );
+            return $this;
+        }
         $row = $this->getAttributeRow($entity, $object, $attribute);
 
         $newValue = $object->getData($attributeCode);
