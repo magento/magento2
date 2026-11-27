@@ -32,6 +32,20 @@ class Queue
     public const DEFAULT_MAX_EXEC_TIME = 900;
 
     /**
+     * How long to wait between checks on running deployment processes, in microseconds.
+     *
+     * Worker status is checked with a non-blocking pcntl_waitpid(), so this interval only exists
+     * to keep the loop from spinning. It also decides how long a finished worker's slot stays
+     * idle: measured on a 12-package install, 500ms cost 6.15s, 100ms 5.24s and 20ms 5.16s.
+     */
+    private const STATUS_POLL_INTERVAL = 20000;
+
+    /**
+     * How often to print a progress marker while waiting, in seconds.
+     */
+    private const STATUS_LOG_INTERVAL = 5;
+
+    /**
      * @var array
      */
     private $packages = [];
@@ -99,7 +113,7 @@ class Queue
     /**
      * @var int
      */
-    private $logDelay;
+    private $lastStatusLog;
 
     /**
      * @param AppState $appState
@@ -167,7 +181,7 @@ class Queue
     public function process()
     {
         $returnStatus = 0;
-        $this->logDelay = 10;
+        $this->lastStatusLog = 0;
         $this->start = $this->lastJobStarted = time();
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
@@ -181,7 +195,7 @@ class Queue
             if ($this->isCanBeParalleled()) {
                 // in parallel mode sleep before trying to check status and run new jobs
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                usleep(500000); // 0.5 sec (less sleep == less time waste)
+                usleep(self::STATUS_POLL_INTERVAL);
 
                 foreach ($this->inProgress as $name => $package) {
                     if ($this->isDeployed($package)) {
@@ -201,17 +215,19 @@ class Queue
     }
 
     /**
-     * Refresh current status in console once in 10 iterations (once in 5 sec)
+     * Refresh current status in console, at most once every STATUS_LOG_INTERVAL seconds.
+     *
+     * Timed rather than counted in iterations, so the cadence does not change with the status
+     * poll interval - the command runs at verbose verbosity and every call prints a line.
      *
      * @return void
      */
     private function refreshStatus(): void
     {
-        if ($this->logDelay >= 10) {
+        $now = time();
+        if ($now - $this->lastStatusLog >= self::STATUS_LOG_INTERVAL) {
             $this->logger->info('.');
-            $this->logDelay = 0;
-        } else {
-            $this->logDelay++;
+            $this->lastStatusLog = $now;
         }
     }
 
@@ -295,7 +311,7 @@ class Queue
 
             // sleep before checking parallel jobs status
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            usleep(500000); // 0.5 sec (less sleep == less time waste)
+            usleep(self::STATUS_POLL_INTERVAL);
         }
         if ($this->isCanBeParalleled()) {
             // close connections only if ran with forks
