@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -79,5 +81,44 @@ class CategoryTest extends TestCase
     {
         $this->provider->setCategoryId(111);
         $this->assertFalse($this->provider->isValid());
+    }
+
+    /**
+     * Data provider uses repository when loading category; same instance as controller load (no duplicate DB load).
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoAppArea frontend
+     *
+     * @return void
+     */
+    public function testGetCategoryUsesRepositoryCacheWhenCategoryAlreadyLoaded(): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var CategoryRepositoryInterface $categoryRepository */
+        $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $objectManager->get(StoreManagerInterface::class);
+        $storeId = (int) $storeManager->getStore()->getId();
+        $categoryId = 333;
+
+        // Simulate controller: load category via repository (populates repository cache).
+        $categoryFromRepository = $categoryRepository->get($categoryId, $storeId);
+        $this->assertSame($categoryId, (int) $categoryFromRepository->getId());
+
+        // Build layer with current category and create data provider (gets same repository from DI).
+        $layer = $objectManager->create(
+            \Magento\Catalog\Model\Layer\Category::class,
+            ['data' => ['current_category' => $categoryFromRepository]]
+        );
+        $provider = $objectManager->create(Category::class, ['layer' => $layer]);
+        $provider->setCategoryId($categoryId);
+
+        // Data provider should return the same instance from repository cache (no second DB load).
+        $categoryFromProvider = $provider->getCategory();
+        $this->assertSame(
+            $categoryFromRepository,
+            $categoryFromProvider,
+            'Data provider must return the same category instance from repository cache to avoid duplicate DB load'
+        );
     }
 }

@@ -5,9 +5,12 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 use Magento\Catalog\Model\Layer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 
 class Category
@@ -39,23 +42,33 @@ class Category
 
     /**
      * @var CategoryModelFactory
+     * @deprecated The category is loaded through the repository, which reuses already loaded instances.
+     * @see CategoryRepositoryInterface::get()
      */
     private $categoryFactory;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
 
     /**
      * @param Registry $coreRegistry
      * @param CategoryModelFactory $categoryFactory
      * @param Layer $layer
-     * @internal param $data
+     * @param CategoryRepositoryInterface|null $categoryRepository
      */
     public function __construct(
         Registry $coreRegistry,
         CategoryModelFactory $categoryFactory,
-        Layer $layer
+        Layer $layer,
+        ?CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->layer = $layer;
         $this->categoryFactory = $categoryFactory;
+        $this->categoryRepository = $categoryRepository
+            ?? ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
     }
 
     /**
@@ -81,6 +94,8 @@ class Category
     }
 
     /**
+     * Set the id of the category to use as filter
+     *
      * @param int $categoryId
      * @return $this
      */
@@ -94,6 +109,8 @@ class Category
     }
 
     /**
+     * Check whether a category id was set
+     *
      * @return boolean
      */
     private function isApplied()
@@ -109,16 +126,9 @@ class Category
     public function getCategory()
     {
         if ($this->category === null) {
-            /** @var CategoryModel|null $category */
             $category = null;
             if ($this->categoryId !== null) {
-                $category = $this->categoryFactory->create()
-                    ->setStoreId(
-                        $this->getLayer()
-                            ->getCurrentStore()
-                            ->getId()
-                    )
-                    ->load($this->categoryId);
+                $category = $this->loadCategory();
             }
 
             if ($category === null || !$category->getId()) {
@@ -131,6 +141,29 @@ class Category
         }
 
         return $this->category;
+    }
+
+    /**
+     * Load the category for the current store
+     *
+     * The repository keeps loaded categories in memory, so a category already loaded during the request
+     *
+     * @return CategoryModel|null
+     */
+    private function loadCategory()
+    {
+        if (!is_numeric($this->categoryId)) {
+            return null;
+        }
+
+        try {
+            return $this->categoryRepository->get(
+                (int) $this->categoryId,
+                $this->getLayer()->getCurrentStore()->getId()
+            );
+        } catch (NoSuchEntityException $e) {
+            return null;
+        }
     }
 
     /**
