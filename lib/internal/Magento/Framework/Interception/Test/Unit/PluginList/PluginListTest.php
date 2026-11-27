@@ -239,6 +239,33 @@ class PluginListTest extends TestCase
         );
     }
 
+    public function testGetPluginAfterAnotherScopeWasLoaded()
+    {
+        $inheritPlugins = function ($type) {
+            if ($type === Item::class) {
+                /** @phpstan-ignore-next-line */
+                $this->_inherited[$type] = ['simple_plugin' => ['sortOrder' => 10, 'instance' => Simple::class]];
+            } else {
+                $this->_inherited[$type] = null; /** @phpstan-ignore-line */
+            }
+        };
+        $this->object->method('_inheritPlugins')
+            ->willReturnCallback($inheritPlugins->bindTo($this->object, PluginList::class));
+        $this->configLoaderMock->method('load')->willReturn([[], [], []]);
+        $currentScope = 'backend';
+        $this->configScopeMock->method('getCurrentScope')->willReturnCallback(
+            function () use (&$currentScope) {
+                return $currentScope;
+            }
+        );
+
+        $this->object->getNext(Item::class, 'getName');
+        $currentScope = 'frontend';
+        $this->object->getNext(ItemContainer::class, 'getName');
+
+        $this->assertEquals(Simple::class, $this->object->getPlugin(Item::class, 'simple_plugin'));
+    }
+
     /**
      * @param array $expectedResult
      * @param string $type
