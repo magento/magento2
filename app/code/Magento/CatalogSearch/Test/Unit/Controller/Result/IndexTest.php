@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Test\Unit\Controller\Result;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Layer\Search as SearchLayer;
+use Magento\Catalog\Model\Layer\SearchFactory as SearchLayerFactory;
 use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogSearch\Controller\Result\Index;
 use Magento\Framework\App\Action\Context;
@@ -19,6 +22,8 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Layout\Element as LayoutElement;
+use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Search\Model\PopularSearchTerms;
@@ -102,6 +107,36 @@ class IndexTest extends TestCase
     private $toolbarMemorizer;
 
     /**
+     * @var SearchLayerFactory|MockObject
+     */
+    private $searchLayerFactory;
+
+    /**
+     * @var Collection|MockObject
+     */
+    private $productCollection;
+
+    /**
+     * @var int
+     */
+    private $collectionSize = 0;
+
+    /**
+     * @var string
+     */
+    private $fileLayoutUpdatesXml = '<layouts><handle id="catalogsearch_result_index_noresults"/></layouts>';
+
+    /**
+     * @var ProcessorInterface|MockObject
+     */
+    private $layoutUpdate;
+
+    /**
+     * @var Page|MockObject
+     */
+    private $page;
+
+    /**
      * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
@@ -164,15 +199,17 @@ class IndexTest extends TestCase
         $this->context->method('getUrl')->willReturn($this->url);
         $this->context->method('getObjectManager')->willReturn($this->objectManager);
 
-        $layoutUpdate = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
-        $layoutUpdate->method('getHandles')->willReturn([]);
+        $this->layoutUpdate = $this->createMock(ProcessorInterface::class);
+        $this->layoutUpdate->method('getHandles')->willReturn([]);
+        $this->layoutUpdate->method('getFileLayoutUpdatesXml')
+            ->willReturnCallback(fn() => new LayoutElement($this->fileLayoutUpdatesXml));
         $layout = $this->createMock(LayoutInterface::class);
-        $layout->method('getUpdate')->willReturn($layoutUpdate);
-        $page = $this->createMock(Page::class);
-        $page->method('initLayout')->willReturnSelf();
-        $page->method('getLayout')->willReturn($layout);
+        $layout->method('getUpdate')->willReturn($this->layoutUpdate);
+        $this->page = $this->createMock(Page::class);
+        $this->page->method('initLayout')->willReturnSelf();
+        $this->page->method('getLayout')->willReturn($layout);
         $this->view = $this->createMock(ViewInterface::class);
-        $this->view->method('getPage')->willReturn($page);
+        $this->view->method('getPage')->willReturn($this->page);
         $this->view->method('getLayout')->willReturn($layout);
         $this->context->method('getView')->willReturn($this->view);
 
@@ -189,13 +226,22 @@ class IndexTest extends TestCase
         $catalogSession = $this->createMock(Session::class);
         $this->toolbarMemorizer = $this->createMock(ToolbarMemorizer::class);
 
+        $this->productCollection = $this->createMock(Collection::class);
+        $this->productCollection->method('setPageSize')->with(1)->willReturnSelf();
+        $this->productCollection->method('getSize')->willReturnCallback(fn() => $this->collectionSize);
+        $searchLayer = $this->createMock(SearchLayer::class);
+        $searchLayer->method('getProductCollection')->willReturn($this->productCollection);
+        $this->searchLayerFactory = $this->createMock(SearchLayerFactory::class);
+        $this->searchLayerFactory->method('create')->willReturn($searchLayer);
+
         $this->controller = new Index(
             $this->context,
             $catalogSession,
             $this->storeManager,
             $this->queryFactory,
             $this->layerResolver,
-            $this->toolbarMemorizer
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
         );
     }
 
@@ -303,29 +349,29 @@ class IndexTest extends TestCase
      * Create a query stub for getCacheableResult / getNotCacheableResult (magic on real Query).
      *
      * @param string $queryText Query text
-     * @param int $numResults Number of results
+     * @param int|string|null $numResults Number of results (stored value, may be a DB string or null)
      * @param string|null $redirect Redirect URL or null
      * @return object Query-like stub
      */
     private function createQueryStub(
         string $queryText = 'search term',
-        int $numResults = 0,
+        int|string|null $numResults = 0,
         ?string $redirect = null
     ): object {
         return new class($queryText, $numResults, $redirect) {
             /** @var string */
             private string $queryText;
-            /** @var int */
-            private int $numResults;
+            /** @var int|string|null */
+            private int|string|null $numResults;
             /** @var string|null */
             private ?string $redirect;
 
             /**
              * @param string $queryText
-             * @param int $numResults
+             * @param int|string|null $numResults
              * @param string|null $redirect
              */
-            public function __construct(string $queryText, int $numResults, ?string $redirect)
+            public function __construct(string $queryText, int|string|null $numResults, ?string $redirect)
             {
                 $this->queryText = $queryText;
                 $this->numResults = $numResults;
@@ -342,7 +388,7 @@ class IndexTest extends TestCase
                 return $this->queryText;
             }
 
-            public function getNumResults(): int
+            public function getNumResults(): int|string|null
             {
                 return $this->numResults;
             }
@@ -414,7 +460,8 @@ class IndexTest extends TestCase
             $this->storeManager,
             $queryFactory,
             $this->layerResolver,
-            $this->toolbarMemorizer
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
         );
         $controller->execute();
 
@@ -464,7 +511,8 @@ class IndexTest extends TestCase
             $this->storeManager,
             $queryFactory,
             $this->layerResolver,
-            $this->toolbarMemorizer
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
         );
         $controller->execute();
     }
@@ -510,7 +558,8 @@ class IndexTest extends TestCase
             $this->storeManager,
             $queryFactory,
             $this->layerResolver,
-            $this->toolbarMemorizer
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
         );
         $controller->execute();
 
@@ -558,10 +607,256 @@ class IndexTest extends TestCase
             $this->storeManager,
             $queryFactory,
             $this->layerResolver,
-            $this->toolbarMemorizer
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
         );
         $controller->execute();
 
         $this->assertTrue($this->responseStub->setNoCacheHeadersCalled);
+    }
+
+    /**
+     * Run execute() through the cacheable (no extra params) or not cacheable (extra params) result path.
+     *
+     * @param object $queryStub
+     * @param bool $cacheable
+     * @param bool $isMinQueryLength
+     * @return void
+     */
+    private function executeSearch(
+        object $queryStub,
+        bool $cacheable = true,
+        bool $isMinQueryLength = true
+    ): void {
+        $queryText = $queryStub->getQueryText();
+        $queryFactory = $this->createMock(QueryFactory::class);
+        $queryFactory->method('get')->willReturn($queryStub);
+
+        $catalogSearchHelper = $this->createMock(\Magento\CatalogSearch\Helper\Data::class);
+        $catalogSearchHelper->method('isMinQueryLength')->willReturn($isMinQueryLength);
+        $popularSearchTerms = $this->createMock(PopularSearchTerms::class);
+        $popularSearchTerms->method('isCacheable')->willReturn(true);
+        $this->objectManager->method('get')->willReturnMap([
+            [\Magento\CatalogSearch\Helper\Data::class, $catalogSearchHelper],
+            [PopularSearchTerms::class, $popularSearchTerms],
+        ]);
+
+        $params = [QueryFactory::QUERY_VAR_NAME => $queryText];
+        if (!$cacheable) {
+            $params['foo'] = 'bar';
+        }
+        $this->request->method('getParam')->with(Toolbar::PAGE_PARM_NAME)->willReturn(null);
+        $this->request->method('getParams')->willReturn($params);
+        $this->toolbarMemorizer->method('isMemorizingAllowed')->willReturn(false);
+        $this->store->method('getId')->willReturn(1);
+
+        $controller = new Index(
+            $this->context,
+            $this->createMock(Session::class),
+            $this->storeManager,
+            $queryFactory,
+            $this->layerResolver,
+            $this->toolbarMemorizer,
+            $this->searchLayerFactory
+        );
+        $controller->execute();
+    }
+
+    /**
+     * Stored num_results > 0: no layer is built, no collection is counted and the layout gets null handles.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @param bool $cacheable
+     * @dataProvider resultPathDataProvider
+     * @return void
+     */
+    public function testExecuteSkipsCountWhenStoredNumResultsPositive(bool $cacheable): void
+    {
+        $this->searchLayerFactory->expects($this->never())->method('create');
+        $this->productCollection->expects($this->never())->method('getSize');
+        $this->view->expects($this->once())->method('loadLayout')->with($this->isNull());
+        $this->view->expects($this->once())->method('renderLayout');
+
+        $this->executeSearch($this->createQueryStub('search term', 5), $cacheable);
+    }
+
+    /**
+     * Stored num_results is 0/absent and the real collection is empty: no results handle is added.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @param int|string|null $storedNumResults
+     * @param bool $cacheable
+     * @dataProvider noStoredResultsDataProvider
+     * @return void
+     */
+    public function testExecuteAddsNoResultsHandleWhenCollectionIsEmpty($storedNumResults, bool $cacheable): void
+    {
+        $this->productCollection->expects($this->once())->method('getSize');
+        $this->view->expects($this->once())->method('loadLayout')->with(
+            $this->equalTo([Index::DEFAULT_NO_RESULT_HANDLE])
+        );
+
+        $this->executeSearch($this->createQueryStub('search term', $storedNumResults), $cacheable);
+    }
+
+    /**
+     * Stored num_results is 0/absent but the collection has products: handle is not added (stale stored value).
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @param int|string|null $storedNumResults
+     * @param bool $cacheable
+     * @dataProvider noStoredResultsDataProvider
+     * @return void
+     */
+    public function testExecuteDoesNotAddNoResultsHandleWhenCollectionHasProducts(
+        $storedNumResults,
+        bool $cacheable
+    ): void {
+        $this->collectionSize = 7;
+        $this->productCollection->expects($this->once())->method('getSize');
+        $this->view->expects($this->once())->method('loadLayout')->with($this->isNull());
+
+        $this->executeSearch($this->createQueryStub('search term', $storedNumResults), $cacheable);
+    }
+
+    /**
+     * No layout defines the no results handle: nothing is counted and the layout gets null handles.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @param int|string|null $storedNumResults
+     * @param bool $cacheable
+     * @dataProvider noStoredResultsDataProvider
+     * @return void
+     */
+    public function testExecuteSkipsCountWhenNoResultsHandleIsNotDefined($storedNumResults, bool $cacheable): void
+    {
+        $this->fileLayoutUpdatesXml = '<layouts/>';
+        $this->searchLayerFactory->expects($this->never())->method('create');
+        $this->productCollection->expects($this->never())->method('getSize');
+        $this->view->expects($this->once())->method('loadLayout')->with($this->isNull());
+        $this->view->expects($this->once())->method('renderLayout');
+
+        $this->executeSearch($this->createQueryStub('search term', $storedNumResults), $cacheable);
+    }
+
+    /**
+     * No layout defines the no results handle: the default layout handles are not initialized by the controller.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @return void
+     */
+    public function testExecuteDoesNotInitLayoutWhenNoResultsHandleIsNotDefined(): void
+    {
+        $this->fileLayoutUpdatesXml = '<layouts/>';
+        $this->page->expects($this->never())->method('initLayout');
+        $this->layoutUpdate->expects($this->never())->method('getHandles');
+
+        $this->executeSearch($this->createQueryStub('search term', 0));
+    }
+
+    /**
+     * The no results handle is defined by a layout file: the stored value is checked as before.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @return void
+     */
+    public function testExecuteInitializesLayoutAndAddsHandleWhenNoResultsHandleIsDefined(): void
+    {
+        $this->page->expects($this->once())->method('initLayout');
+        $this->layoutUpdate->expects($this->once())->method('getHandles');
+        $this->view->expects($this->once())->method('loadLayout')->with(
+            $this->equalTo([Index::DEFAULT_NO_RESULT_HANDLE])
+        );
+
+        $this->executeSearch($this->createQueryStub('search term', 0));
+    }
+
+    /**
+     * Stored num_results is read from DB as a string; it is cast before comparing.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @return void
+     */
+    public function testExecuteCastsStoredStringNumResultsToInt(): void
+    {
+        $this->searchLayerFactory->expects($this->never())->method('create');
+        $this->view->expects($this->once())->method('loadLayout')->with($this->isNull());
+
+        $this->executeSearch($this->createQueryStub('search term', '12'));
+    }
+
+    /**
+     * Term redirect happens before the layout is loaded, so results are never counted.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @param bool $cacheable
+     * @dataProvider resultPathDataProvider
+     * @return void
+     */
+    public function testExecuteDoesNotCountResultsOnTermRedirect(bool $cacheable): void
+    {
+        $redirectUrl = 'http://example.com/redirect-target';
+        $this->url->method('getCurrentUrl')->willReturn('http://example.com/other');
+        $this->searchLayerFactory->expects($this->never())->method('create');
+        $this->view->expects($this->never())->method('loadLayout');
+
+        $this->executeSearch(
+            $this->createQueryStub('search term', 0, $redirectUrl),
+            $cacheable,
+            false
+        );
+
+        $this->assertSame($redirectUrl, $this->responseStub->redirectUrl);
+    }
+
+    /**
+     * Toolbar redirect happens before the layout is loaded, so results are never counted.
+     *
+     * @covers \Magento\CatalogSearch\Controller\Result\Index::execute
+     * @return void
+     */
+    public function testExecuteDoesNotCountResultsOnToolbarRedirect(): void
+    {
+        $redirectUrl = 'http://example.com/catalogsearch/result/?order=name';
+        $this->store->method('getId')->willReturn(1);
+        $this->query->method('setStoreId')->willReturnSelf();
+        $this->query->method('getQueryText')->willReturn('search term');
+        $this->request->method('getParam')->with(Toolbar::PAGE_PARM_NAME)->willReturn(null);
+        $this->request->method('getParams')->willReturn(['q' => 'search term', Toolbar::ORDER_PARAM_NAME => 'name']);
+        $this->toolbarMemorizer->method('isMemorizingAllowed')->willReturn(true);
+        $this->objectManager->method('get')->willReturn($this->createMock(\Magento\CatalogSearch\Helper\Data::class));
+        $this->redirect->method('getRedirectUrl')->willReturn($redirectUrl);
+        $this->searchLayerFactory->expects($this->never())->method('create');
+        $this->view->expects($this->never())->method('loadLayout');
+
+        $this->controller->execute();
+
+        $this->assertSame($redirectUrl, $this->responseStub->redirectUrl);
+    }
+
+    /**
+     * @return array
+     */
+    public static function resultPathDataProvider(): array
+    {
+        return [
+            'cacheable path' => [true],
+            'not cacheable path' => [false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function noStoredResultsDataProvider(): array
+    {
+        $data = [];
+        foreach ([true, false] as $cacheable) {
+            $path = $cacheable ? 'cacheable' : 'not cacheable';
+            $data["int 0, $path"] = [0, $cacheable];
+            $data["string '0', $path"] = ['0', $cacheable];
+            $data["no stored row (null), $path"] = [null, $cacheable];
+        }
+        return $data;
     }
 }
