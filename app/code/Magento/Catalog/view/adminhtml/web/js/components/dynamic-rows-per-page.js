@@ -54,7 +54,8 @@ define([
             },
             modules: {
                 sizes: '${ $.sizesConfig.name }'
-            }
+            },
+            currentPageSize: undefined
         },
 
         /**
@@ -100,7 +101,23 @@ define([
          * Handles changes of the page size.
          */
         onPageSizeChange: function () {
+            var pageSize = parseInt(this.pageSize, 10);
+
+            if (this.currentPageSize === undefined) {
+                this.currentPageSize = pageSize;
+
+                return;
+            }
+
             resolver(function () {
+                pageSize = parseInt(this.pageSize, 10);
+
+                if (pageSize === this.currentPageSize) {
+                    return;
+                }
+
+                this.currentPageSize = pageSize;
+
                 if (this.elems().length) {
                     this.reload();
                 }
