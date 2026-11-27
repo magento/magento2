@@ -154,7 +154,8 @@ class Config
      *
      * @return \Magento\Framework\App\State
      *
-     * @deprecated 100.0.7
+     * @deprecated 100.0.7 Workaround for a dependency that is not injected via the constructor.
+     * @see \Magento\Framework\App\State
      */
     private function getAreaResolver()
     {
@@ -298,7 +299,7 @@ class Config
             && strtolower($this->metadata[self::META_CONTENT_TYPE]) === 'auto') {
             $this->metadata[self::META_CONTENT_TYPE] = $this->getMediaType() . '; charset=' . $this->getCharset();
         }
-        return $this->metadata[self::META_CONTENT_TYPE];
+        return (string)$this->metadata[self::META_CONTENT_TYPE];
     }
 
     /**
@@ -326,7 +327,7 @@ class Config
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata[self::META_MEDIA_TYPE];
+        return (string)$this->metadata[self::META_MEDIA_TYPE];
     }
 
     /**
@@ -354,7 +355,7 @@ class Config
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata[self::META_CHARSET];
+        return (string)$this->metadata[self::META_CHARSET];
     }
 
     /**
@@ -382,7 +383,7 @@ class Config
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata[self::META_DESCRIPTION];
+        return (string)$this->metadata[self::META_DESCRIPTION];
     }
 
     /**
@@ -437,7 +438,7 @@ class Config
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata[self::META_KEYWORDS];
+        return (string)$this->metadata[self::META_KEYWORDS];
     }
 
     /**
@@ -469,7 +470,7 @@ class Config
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->metadata[self::META_ROBOTS];
+        return (string)$this->metadata[self::META_ROBOTS];
     }
 
     /**
