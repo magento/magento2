@@ -22,7 +22,7 @@ class Scope implements ScopeInterface
     private $value;
 
     /**
-     * @var string
+     * @var ScopeInterface|null
      */
     private $fallback;
 
@@ -60,7 +60,7 @@ class Scope implements ScopeInterface
     }
 
     /**
-     * @return ScopeInterface
+     * @return ScopeInterface|null
      */
     public function getFallback()
     {

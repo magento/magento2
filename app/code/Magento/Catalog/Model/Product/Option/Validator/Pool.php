@@ -11,7 +11,7 @@ use Laminas\Validator\ValidatorInterface;
 class Pool
 {
     /**
-     * @var ValidatorInterface
+     * @var ValidatorInterface[]
      */
     protected $validators;
 

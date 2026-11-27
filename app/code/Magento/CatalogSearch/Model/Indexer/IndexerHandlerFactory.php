@@ -27,7 +27,7 @@ class IndexerHandlerFactory
     /**
      * Instance name to create
      *
-     * @var string
+     * @var string[]
      */
     protected $handlers = null;
 

@@ -28,7 +28,7 @@ class IndexStructureFactory
     /**
      * Instance name to create
      *
-     * @var string
+     * @var string[]
      * @since 100.1.0
      */
     protected $structures = null;
