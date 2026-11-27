@@ -1831,6 +1831,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
 
         $buyRequest->setResetCount(true);
+        // The reset above is only applied by Item\Processor when the buy request carries the id of
+        // the item being updated. The request rebuilt from an options product (e.g. configurable)
+        // has none, so without this the item qty is doubled on re-add instead of reset-then-set.
+        if ($buyRequest->getId() === null) {
+            $buyRequest->setId($itemId);
+        }
         $resultItem = $this->addProduct($product, $buyRequest);
 
         if (is_string($resultItem)) {
