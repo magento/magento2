@@ -572,20 +572,14 @@ class Application
         $this->runPostInstallCommands();
         $this->makeIndexStatusRealtime();
 
-        // enable only specified list of caches
-        $initParamsQuery = $this->getInitParamsQuery();
-
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-            [BP . '/bin/magento', $initParamsQuery]
-        );
-
+        $objectManager = Helper\Bootstrap::getObjectManager();
+        $cacheManager = $objectManager->get(\Magento\Framework\App\Cache\Manager::class);
         $enabledCaches = $this->getEnabledCaches();
-
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv ' . str_repeat('%s ', count($enabledCaches)) . ' --bootstrap=%s',
-            [BP . '/bin/magento', ...$enabledCaches, $initParamsQuery]
-        );
+        $cacheManager->setEnabled(array_diff($cacheManager->getAvailableTypes(), $enabledCaches), false);
+        $cacheManager->setEnabled($enabledCaches, true);
+        $cacheManager->clean($enabledCaches);
+        // initialize() replaces DeploymentConfig; reload cache state against that configuration.
+        $objectManager->removeSharedInstance(\Magento\Framework\App\Cache\StateInterface::class, true);
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
         if (!$db->isDbDumpExists() && $this->dumpDb) {
