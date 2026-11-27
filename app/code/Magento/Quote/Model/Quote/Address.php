@@ -469,7 +469,10 @@ class Address extends AbstractAddress implements
                 $this->setCustomerAddressId($this->getCustomerAddressData()->getId());
             }
 
-            if (!$this->getId() || $this->getQuote()->dataHasChangedFor('customer_id')) {
+            if (!$this->getId()
+                || ($this->getQuote()->dataHasChangedFor('customer_id')
+                    && ($this->getSameAsBilling() === null || (int)$this->getSameAsBilling() !== 0))
+            ) {
                 $this->setSameAsBilling((int)$this->_isSameAsBilling());
             }
         }
