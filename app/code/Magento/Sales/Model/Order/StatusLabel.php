@@ -8,13 +8,15 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Sales\Model\Order\StatusFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StatusLabel is responsible for retrieving order status labels based on store of order
  */
-class StatusLabel
+class StatusLabel implements ResetAfterRequestInterface
 {
     /**
      * @var StatusFactory
@@ -32,18 +34,31 @@ class StatusLabel
     private $maskStatusesMapping;
 
     /**
+     * @var array
+     */
+    private $statusLabels = [];
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param StatusFactory $orderStatusFactory
      * @param State $state
      * @param array $maskStatusesMapping
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         StatusFactory $orderStatusFactory,
         State $state,
-        array $maskStatusesMapping = []
+        array $maskStatusesMapping = [],
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
         $this->state = $state;
         $this->maskStatusesMapping = $maskStatusesMapping;
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -57,13 +72,37 @@ class StatusLabel
     public function getStatusFrontendLabel(?string $code, string $area, ?int $storeId = null): ?string
     {
         $code = $this->maskStatusForArea($area, $code);
-        $status = $this->orderStatusFactory->create()->load($code);
-
-        if ($area === Area::AREA_ADMINHTML) {
-            return $status->getLabel();
+        $storeId = $area === Area::AREA_ADMINHTML ? 0 : (int)$this->storeManager->getStore($storeId)->getId();
+        if (!array_key_exists($code, $this->statusLabels[$area][$storeId] ?? [])) {
+            $status = $this->orderStatusFactory->create()->load($code);
+            $storeLabels = $area === Area::AREA_ADMINHTML ? [] : $status->getStoreLabels();
+            $hasStoreLabel = isset($storeLabels[$storeId]);
+            $this->statusLabels[$area][$storeId][$code] = [
+                'label' => $hasStoreLabel ? (string)$storeLabels[$storeId] : $status->getLabel(),
+                'translate' => $area !== Area::AREA_ADMINHTML && !$hasStoreLabel,
+            ];
         }
 
-        return (string) $status->getStoreLabel($storeId);
+        $label = $this->statusLabels[$area][$storeId][$code];
+        return $label['translate'] ? (string)__($label['label']) : $label['label'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearCache();
+    }
+
+    /**
+     * Clear cached order status labels.
+     *
+     * @return void
+     */
+    public function clearCache(): void
+    {
+        $this->statusLabels = [];
     }
 
     /**
@@ -85,7 +124,7 @@ class StatusLabel
     /**
      * Retrieve status label for detected area
      *
-     * @param $code
+     * @param string|null $code
      * @return string|null
      */
     public function getStatusLabel($code)
