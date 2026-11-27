@@ -74,8 +74,10 @@ class MethodList
 
         foreach ($this->getPaymentMethodList()->getActiveList($store) as $method) {
             $methodInstance = $this->getPaymentMethodInstanceFactory()->create($method);
-            if ($methodInstance->isAvailable($quote) && $this->_canUseMethod($methodInstance, $quote)) {
+            if ($quote) {
                 $methodInstance->setInfoInstance($quote->getPayment());
+            }
+            if ($methodInstance->isAvailable($quote) && $this->_canUseMethod($methodInstance, $quote)) {
                 $availableMethods[] = $methodInstance;
             }
         }
