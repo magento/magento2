@@ -142,6 +142,44 @@ class SequenceTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testContextGetters(): void
+    {
+        $this->meta->setData(['entity_type' => 'order', 'store_id' => '2']);
+        $this->meta->method('getActiveProfile')->willReturn($this->profile);
+
+        $this->assertSame('order', $this->sequence->getEntityType());
+        $this->assertSame(2, $this->sequence->getStoreId());
+        $this->assertSame($this->profile, $this->sequence->getMetaProfile());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCalculateCurrentValueIsNullBeforeFirstValue(): void
+    {
+        $this->assertNull($this->sequence->calculateCurrentValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testCalculateCurrentValueReturnsNumberOfGeneratedValue(): void
+    {
+        $this->meta->method('getSequenceTable')->willReturn($this->sequenceParameters()->testTable);
+        $this->meta->method('getActiveProfile')->willReturn($this->profile);
+        $this->profile->method('getPrefix')->willReturn($this->sequenceParameters()->prefix);
+        $this->profile->method('getSuffix')->willReturn($this->sequenceParameters()->suffix);
+        $this->profile->method('getStartValue')->willReturn('3');
+        $this->profile->method('getStep')->willReturn('777');
+        $this->connectionMock->method('lastInsertId')->willReturn('4');
+
+        $this->assertSame('AA-000000780-0', $this->sequence->getNextValue());
+        $this->assertSame(780, $this->sequence->calculateCurrentValue());
+    }
+
+    /**
      * @param $sequenceNumber
      */
     private function nextIncrementStep($sequenceNumber)
