@@ -59,7 +59,7 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function add($sku, ProductTierPriceInterface $tierPrice)
     {
@@ -76,6 +76,8 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
+     * Replace the matching tier price or append the new one.
+     *
      * @param array $tierPrices
      * @param ProductTierPriceInterface $tierPrice
      * @return ProductTierPriceInterface[]|null
@@ -104,6 +106,8 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
+     * Get website id of the current scope according to the price scope config.
+     *
      * @return int
      */
     private function getWebsiteId()
@@ -118,6 +122,8 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
+     * Validate tier price qty and value.
+     *
      * @param ProductTierPriceInterface $tierPrice
      * @throws \Magento\Framework\Exception\InputException
      * @return void
@@ -135,22 +141,26 @@ class ScopedTierPriceManagement implements ScopedProductTierPriceManagementInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($sku, ProductTierPriceInterface $tierPrice)
     {
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
+        $extensionAttributes = $tierPrice->getExtensionAttributes();
+        $websiteId = $extensionAttributes && $extensionAttributes->getWebsiteId() !== null
+            ? $extensionAttributes->getWebsiteId()
+            : $this->getWebsiteId();
         $this->priceModifier->removeTierPrice(
             $product,
             $tierPrice->getCustomerGroupId(),
             $tierPrice->getQty(),
-            $this->getWebsiteId()
+            $websiteId
         );
         return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList($sku, $customerGroupId)
     {
