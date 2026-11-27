@@ -581,7 +581,6 @@ class Session implements ConfigOptionsListInterface
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
-        $inputToConfigMap = [];
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         //Set session-save option
@@ -602,12 +601,13 @@ class Session implements ConfigOptionsListInterface
             }
         }
 
-        if (ConfigOptionsListConstants::SESSION_SAVE_REDIS) {
-            //Set all Redis options that are specified
-            $inputToConfigMap = $this->redisInputKeyToConfigPathMap;
-        } elseif (ConfigOptionsListConstants::SESSION_SAVE_VALKEY) {
+        $saveHandler = $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE] ?? null;
+        if ($saveHandler === ConfigOptionsListConstants::SESSION_SAVE_VALKEY) {
             //Set all Valkey options that are specified
             $inputToConfigMap = $this->valkeyInputKeyToConfigPathMap;
+        } else {
+            //Set all Redis options that are specified
+            $inputToConfigMap = $this->redisInputKeyToConfigPathMap;
         }
 
         foreach ($inputToConfigMap as $inputKey => $configPath) {
