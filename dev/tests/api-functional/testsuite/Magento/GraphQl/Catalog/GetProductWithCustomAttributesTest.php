@@ -67,6 +67,24 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         'multiselect_custom_attribute_option_2'
     ),
     DataFixture(
+        Attribute::class,
+        [
+            'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            'attribute_code' => 'product_custom_attribute_without_value'
+        ],
+        'varchar_custom_attribute_without_value'
+    ),
+    DataFixture(
+        MultiselectAttribute::class,
+        [
+            'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
+            'source_model' => Table::class,
+            'backend_model' => ArrayBackend::class,
+            'attribute_code' => 'product_custom_attribute_multiselect_without_value'
+        ],
+        'multiselect_custom_attribute_without_value'
+    ),
+    DataFixture(
         ProductFixture::class,
         [
             'custom_attributes' => [
@@ -305,6 +323,179 @@ QUERY;
 QUERY;
 
         $this->graphQlQuery($query);
+    }
+
+    public function testGetProductCustomAttributesByCodes()
+    {
+        $multiselectCode = $this->multiselectCustomAttribute->getAttributeCode();
+        $varcharCode = $this->varcharCustomAttribute->getAttributeCode();
+
+        $response = $this->graphQlQuery(
+            $this->getCustomAttributesByCodesQuery("attributeCodes: [\"{$multiselectCode}\", \"{$varcharCode}\"]")
+        );
+
+        $this->assertEquals(
+            [
+                'items' => [
+                    [
+                        'code' => $multiselectCode,
+                        'selected_options' => [
+                            [
+                                'label' => $this->multiselectCustomAttributeOption2->getLabel(),
+                                'value' => $this->multiselectCustomAttributeOption2->getValue(),
+                            ],
+                            [
+                                'label' => $this->multiselectCustomAttributeOption1->getLabel(),
+                                'value' => $this->multiselectCustomAttributeOption1->getValue(),
+                            ]
+                        ]
+                    ],
+                    [
+                        'code' => $varcharCode,
+                        'value' => 'test_value'
+                    ]
+                ],
+                'errors' => []
+            ],
+            $response['products']['items'][0]['custom_attributesV2']
+        );
+    }
+
+    public function testGetProductCustomAttributesByCodesReportsUnavailableCodes()
+    {
+        $varcharCode = $this->varcharCustomAttribute->getAttributeCode();
+
+        $response = $this->graphQlQuery(
+            $this->getCustomAttributesByCodesQuery(
+                "attributeCodes: [\"{$varcharCode}\", \"not_existing_attribute\", \"sku\"]"
+            )
+        );
+
+        $this->assertEquals(
+            [
+                'items' => [
+                    [
+                        'code' => $varcharCode,
+                        'value' => 'test_value'
+                    ]
+                ],
+                'errors' => [
+                    [
+                        'type' => 'ATTRIBUTE_NOT_FOUND',
+                        'message' => 'Attribute code "not_existing_attribute" could not be found.'
+                    ],
+                    [
+                        'type' => 'ATTRIBUTE_NOT_FOUND',
+                        'message' => 'Attribute code "sku" could not be found.'
+                    ]
+                ]
+            ],
+            $response['products']['items'][0]['custom_attributesV2']
+        );
+    }
+
+    public function testGetProductCustomAttributesByCodesReturnsAttributesWithoutValue()
+    {
+        $varcharCode = $this->varcharCustomAttribute->getAttributeCode();
+
+        $response = $this->graphQlQuery(
+            $this->getCustomAttributesByCodesQuery(
+                'attributeCodes: ["product_custom_attribute_without_value", '
+                . "\"product_custom_attribute_multiselect_without_value\", \"{$varcharCode}\"]"
+            )
+        );
+
+        $this->assertEquals(
+            [
+                'items' => [
+                    [
+                        'code' => 'product_custom_attribute_without_value',
+                        'value' => ''
+                    ],
+                    [
+                        'code' => 'product_custom_attribute_multiselect_without_value',
+                        'selected_options' => []
+                    ],
+                    [
+                        'code' => $varcharCode,
+                        'value' => 'test_value'
+                    ]
+                ],
+                'errors' => []
+            ],
+            $response['products']['items'][0]['custom_attributesV2']
+        );
+    }
+
+    public function testGetProductCustomAttributesByCodesAndFilters()
+    {
+        $multiselectCode = $this->multiselectCustomAttribute->getAttributeCode();
+        $varcharCode = $this->varcharCustomAttribute->getAttributeCode();
+
+        $response = $this->graphQlQuery(
+            $this->getCustomAttributesByCodesQuery(
+                'filters: {is_comparable: true, is_visible_on_front: true}, '
+                . "attributeCodes: [\"{$multiselectCode}\", \"{$varcharCode}\"]"
+            )
+        );
+
+        $this->assertEquals(
+            [
+                'items' => [
+                    [
+                        'code' => $varcharCode,
+                        'value' => 'test_value'
+                    ]
+                ],
+                'errors' => [
+                    [
+                        'type' => 'ATTRIBUTE_NOT_FOUND',
+                        'message' => 'Attribute code "' . $multiselectCode . '" could not be found.'
+                    ]
+                ]
+            ],
+            $response['products']['items'][0]['custom_attributesV2']
+        );
+    }
+
+    /**
+     * Get the product query selecting custom_attributesV2 with the given arguments
+     *
+     * @param string $arguments
+     * @return string
+     */
+    private function getCustomAttributesByCodesQuery(string $arguments): string
+    {
+        $productSku = $this->product->getSku();
+
+        return <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items
+        {
+            custom_attributesV2({$arguments}) {
+                items {
+                    code
+                    ... on AttributeValue {
+                        value
+                    }
+                    ... on AttributeSelectedOptions {
+                        selected_options {
+                            label
+                            value
+                        }
+                    }
+                },
+                errors {
+                    type
+                    message
+                }
+            }
+        }
+    }
+}
+QUERY;
     }
 
     /**
