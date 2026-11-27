@@ -1424,6 +1424,8 @@ class Installer
         }
         $this->log->logMeta('Updating modules:');
         $this->createModulesConfig([]);
+        // reset object manager so that newly enabled modules are visible to the schema and data installers
+        $this->objectManagerProvider->reset();
     }
 
     /**
