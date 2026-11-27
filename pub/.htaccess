@@ -38,30 +38,6 @@
 
     DirectoryIndex index.php
 
-<IfModule mod_php7.c>
-############################################
-## Adjust memory limit
-
-    php_value memory_limit 756M
-    php_value max_execution_time 18000
-
-############################################
-## Disable automatic session start
-## before autoload was initialized
-
-    php_flag session.auto_start off
-
-############################################
-## Enable resulting html compression
-
-    #php_flag zlib.output_compression on
-
-###########################################
-# Disable user agent verification to not break multiple image upload
-
-    php_flag suhosin.session.cryptua off
-</IfModule>
-
 <IfModule mod_php.c>
 ############################################
 ## Adjust memory limit
@@ -74,6 +50,16 @@
 ## before autoload was initialized
 
     php_flag session.auto_start off
+
+############################################
+## Disable session upload progress, which Magento does not use
+
+    php_flag session.upload_progress.enabled off
+
+############################################
+## Do not derive $argv from the query string
+
+    php_flag register_argc_argv off
 
 ############################################
 ## Enable resulting html compression
