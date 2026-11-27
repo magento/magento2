@@ -10,6 +10,8 @@ namespace Magento\Catalog\Test\Unit\Model;
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Catalog\Model\Category\Image as CategoryImage;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Catalog\Model\Indexer\Category\Product;
@@ -537,6 +539,11 @@ class CategoryTest extends TestCase
     {
         return [
             ['testimage', 'http://www.example.com/catalog/category/testimage'],
+            [
+                '/media/catalog/category/testimage',
+                'http://www.example.com/catalog/category/testimage'
+            ],
+            ['/other/testimage', '/other/testimage'],
             [false, false]
         ];
     }
@@ -564,7 +571,8 @@ class CategoryTest extends TestCase
         $model = $this->objectManager->getObject(
             Category::class,
             [
-                'storeManager' => $storeManager
+                'storeManager' => $storeManager,
+                'categoryImage' => $this->createCategoryImage($storeManager)
             ]
         );
 
@@ -592,7 +600,8 @@ class CategoryTest extends TestCase
 
         /** @var Category $model */
         $model = $this->objectManager->getObject(Category::class, [
-            'storeManager' => $storeManager
+            'storeManager' => $storeManager,
+            'categoryImage' => $this->createCategoryImage($storeManager)
         ]);
 
         $model->setData('image', 'myimage');
@@ -600,5 +609,20 @@ class CategoryTest extends TestCase
         $result = $model->getImageUrl();
 
         $this->assertEquals('http://www.example.com/catalog/category/myimage', $result);
+    }
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @return CategoryImage
+     */
+    private function createCategoryImage(StoreManagerInterface $storeManager): CategoryImage
+    {
+        $fileInfo = $this->createMock(FileInfo::class);
+        $fileInfo->method('isBeginsWithMediaDirectoryPath')
+            ->willReturnCallback(static fn ($path) => str_starts_with(ltrim($path, '/'), 'media/'));
+        $fileInfo->method('getRelativePathToMediaDirectory')
+            ->willReturnCallback(static fn ($path) => substr(ltrim($path, '/'), strlen('media/')));
+
+        return new CategoryImage($fileInfo, $storeManager);
     }
 }

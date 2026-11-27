@@ -7,8 +7,10 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category\Image as CategoryImage;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -210,6 +212,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /**
+     * @var CategoryImage|null
+     */
+    private $categoryImage;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -231,6 +238,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CategoryImage|null $categoryImage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -254,8 +262,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         CategoryRepositoryInterface $categoryRepository,
         ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?CategoryImage $categoryImage = null
     ) {
+        $this->categoryImage = $categoryImage;
         $this->metadataService = $metadataService;
         $this->_treeModel = $categoryTreeResource;
         $this->_categoryTreeFactory = $categoryTreeFactory;
@@ -667,33 +677,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getImageUrl($attributeCode = 'image')
     {
-        $url = false;
-        $image = $this->getData($attributeCode);
-        if ($image) {
-            if (is_string($image)) {
-                $store = $this->_storeManager->getStore();
-
-                $isRelativeUrl = substr($image, 0, 1) === '/';
-
-                $mediaBaseUrl = $store->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                );
-
-                if ($isRelativeUrl) {
-                    $url = $image;
-                } else {
-                    $url = $mediaBaseUrl
-                        . ltrim(\Magento\Catalog\Model\Category\FileInfo::ENTITY_MEDIA_PATH, '/')
-                        . '/'
-                        . $image;
-                }
-            } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while getting the image url.')
-                );
-            }
+        if (!$this->getData($attributeCode)) {
+            return false;
         }
-        return $url;
+
+        return $this->getCategoryImage()->getUrl($this, $attributeCode);
+    }
+
+    /**
+     * Get category image URL resolver
+     *
+     * @return CategoryImage
+     */
+    private function getCategoryImage(): CategoryImage
+    {
+        if ($this->categoryImage === null) {
+            $this->categoryImage = ObjectManager::getInstance()->get(CategoryImage::class);
+        }
+
+        return $this->categoryImage;
     }
 
     /**
