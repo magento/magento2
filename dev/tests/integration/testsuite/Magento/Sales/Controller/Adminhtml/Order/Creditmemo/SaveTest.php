@@ -8,8 +8,12 @@ declare(strict_types=1);
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Escaper;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
@@ -127,6 +131,136 @@ class SaveTest extends AbstractCreditmemoControllerTest
 
         $this->assertSame('complete', $updatedOrder->getStatus());
         $this->assertSame('complete', $updatedOrder->getState());
+    }
+
+    /**
+     * A refund amount below the adjustment fee must not create a credit memo when zero totals are allowed.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/invoice.php
+     * @magentoConfigFixture current_store sales/zerograndtotal_creditmemo/allow_zero_grandtotal 1
+     * @param string $doOffline
+     * @return void
+     */
+    #[DataProvider('refundActionDataProvider')]
+    public function testNegativeTotalIsRejectedWhenZeroTotalIsAllowed(string $doOffline): void
+    {
+        $this->assertNegativeTotalIsRejected($doOffline);
+    }
+
+    /**
+     * A refund amount below the adjustment fee must not create a credit memo when zero totals are not allowed.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/invoice.php
+     * @magentoConfigFixture current_store sales/zerograndtotal_creditmemo/allow_zero_grandtotal 0
+     * @param string $doOffline
+     * @return void
+     */
+    #[DataProvider('refundActionDataProvider')]
+    public function testNegativeTotalIsRejectedWhenZeroTotalIsNotAllowed(string $doOffline): void
+    {
+        $this->assertNegativeTotalIsRejected($doOffline);
+    }
+
+    /**
+     * A zero total offline credit memo is created when zero totals are allowed.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/invoice.php
+     * @magentoConfigFixture current_store sales/zerograndtotal_creditmemo/allow_zero_grandtotal 1
+     * @return void
+     */
+    public function testZeroTotalIsCreatedWhenZeroTotalIsAllowed(): void
+    {
+        $order = $this->prepareAdjustmentRequest('1', '10', '10');
+        $this->dispatch($this->uri);
+
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the credit memo.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $creditMemo = $this->getCreditMemo($order);
+        $this->assertNotNull($creditMemo->getEntityId());
+        $this->assertEquals(0, $creditMemo->getGrandTotal());
+        $this->assertEquals(10, $creditMemo->getAdjustmentNegative());
+    }
+
+    /**
+     * Returns the validation error as the session stores it (HTML-escaped).
+     *
+     * @return string
+     */
+    private function getPositiveTotalMessage(): string
+    {
+        return $this->_objectManager->get(Escaper::class)
+            ->escapeHtml((string)__('The credit memo\'s total must be positive.'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function refundActionDataProvider(): array
+    {
+        return [
+            'refund' => ['0'],
+            'refund offline' => ['1'],
+        ];
+    }
+
+    /**
+     * Posts a $10 refund with a $20 adjustment fee and checks that nothing was refunded.
+     *
+     * @param string $doOffline
+     * @return void
+     */
+    private function assertNegativeTotalIsRejected(string $doOffline): void
+    {
+        $order = $this->prepareAdjustmentRequest($doOffline, '10', '20');
+        $this->dispatch($this->uri);
+
+        $this->assertSessionMessages(
+            $this->equalTo([$this->getPositiveTotalMessage()]),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertNull($this->getCreditMemo($order)->getEntityId());
+        $updatedOrder = $this->getOrder($order->getIncrementId());
+        $this->assertEquals($order->getTotalRefunded(), $updatedOrder->getTotalRefunded());
+        $this->assertEquals($order->getBaseTotalRefunded(), $updatedOrder->getBaseTotalRefunded());
+        $this->assertEquals($order->getTotalOfflineRefunded(), $updatedOrder->getTotalOfflineRefunded());
+        $this->assertEquals($order->getTotalOnlineRefunded(), $updatedOrder->getTotalOnlineRefunded());
+    }
+
+    /**
+     * Prepares a credit memo request that refunds no items or shipping, only the given adjustments.
+     *
+     * @param string $doOffline
+     * @param string $adjustmentRefund
+     * @param string $adjustmentFee
+     * @return \Magento\Sales\Api\Data\OrderInterface|null
+     */
+    private function prepareAdjustmentRequest(string $doOffline, string $adjustmentRefund, string $adjustmentFee)
+    {
+        $order = $this->getOrder('100000001');
+        // Adjustments are converted to the order currency with this rate; the fixture order does not set it.
+        $order->setBaseToOrderRate(1);
+        $this->_objectManager->get(OrderRepositoryInterface::class)->save($order);
+        $items = [];
+        foreach ($order->getAllItems() as $item) {
+            $items[$item->getItemId()] = ['qty' => 0];
+        }
+
+        return $this->prepareRequest(
+            [
+                'creditmemo' => [
+                    'items' => $items,
+                    'do_offline' => $doOffline,
+                    'shipping_amount' => '0',
+                    'adjustment_positive' => $adjustmentRefund,
+                    'adjustment_negative' => $adjustmentFee,
+                ],
+            ]
+        );
     }
 
     /**
