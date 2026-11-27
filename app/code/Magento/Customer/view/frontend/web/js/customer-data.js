@@ -101,10 +101,24 @@ define([
             } : [];
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
-            return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
+            return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR, textStatus) {
+                var message;
+
                 // don't throw error if the request is cancelled or blocked
                 if (jqXHR.status !== 0) {
-                    throw new Error(jqXHR);
+                    message = 'Customer sections request failed: ' + jqXHR.status;
+
+                    if (jqXHR.statusText) {
+                        message += ' ' + jqXHR.statusText;
+                    }
+
+                    if (textStatus === 'parsererror') {
+                        message += ' (response is not valid JSON)';
+                    } else if (jqXHR.responseJSON && _.isString(jqXHR.responseJSON.message)) {
+                        message += ': ' + jqXHR.responseJSON.message;
+                    }
+
+                    throw new Error(message);
                 }
             });
         }

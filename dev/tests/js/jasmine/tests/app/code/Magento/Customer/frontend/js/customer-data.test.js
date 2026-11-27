@@ -491,6 +491,95 @@ define([
                     }
                 }));
             });
+
+            describe('when the section request fails', function () {
+                /**
+                 * @param {Object} jqXHR
+                 * @param {String} textStatus
+                 */
+                function failRequestWith(jqXHR, textStatus) {
+                    $.getJSON = jasmine.createSpy().and.callFake(function () {
+                        return $.Deferred().reject(jqXHR, textStatus).promise();
+                    });
+                }
+
+                it('Reports the HTTP status and the server message of a JSON error response', function () {
+                    failRequestWith({
+                        status: 400,
+                        statusText: 'Bad Request',
+                        responseText: '{"message":"Invalid section"}',
+                        responseJSON: {
+                            message: 'Invalid section'
+                        }
+                    }, 'error');
+
+                    expect(function () {
+                        obj.reload(['cart'], true);
+                    }).toThrowError(Error, /400 Bad Request.*Invalid section/);
+                });
+
+                it('Reports the HTTP status of a response that is not JSON without its body', function () {
+                    failRequestWith({
+                        status: 200,
+                        statusText: 'OK',
+                        responseText: '<html><body>Maintenance</body></html>'
+                    }, 'parsererror');
+
+                    expect(function () {
+                        obj.reload(['cart'], true);
+                    }).toThrowMatching(function (error) {
+                        return /200 OK/.test(error.message) &&
+                            error.message.indexOf('<') === -1 &&
+                            error.message.indexOf('Maintenance') === -1 &&
+                            error.message.indexOf('[object Object]') === -1;
+                    });
+                });
+
+                it('Reports the HTTP status of an HTML error page without its body', function () {
+                    failRequestWith({
+                        status: 503,
+                        statusText: 'Service Unavailable',
+                        responseText: '<html><body>Down for maintenance</body></html>'
+                    }, 'error');
+
+                    expect(function () {
+                        obj.reload(['cart'], true);
+                    }).toThrowMatching(function (error) {
+                        return /503 Service Unavailable/.test(error.message) &&
+                            error.message.indexOf('<') === -1 &&
+                            error.message.indexOf('maintenance') === -1;
+                    });
+                });
+
+                it('Does not pad the message when the status text is empty', function () {
+                    failRequestWith({
+                        status: 400,
+                        statusText: '',
+                        responseJSON: {
+                            message: 'X'
+                        }
+                    }, 'error');
+
+                    expect(function () {
+                        obj.reload(['cart'], true);
+                    }).toThrowMatching(function (error) {
+                        return /400: X$/.test(error.message) &&
+                            error.message.indexOf('  ') === -1 &&
+                            error.message.indexOf(' :') === -1;
+                    });
+                });
+
+                it('Does not throw when the request was cancelled', function () {
+                    failRequestWith({
+                        status: 0,
+                        statusText: 'abort'
+                    }, 'abort');
+
+                    expect(function () {
+                        obj.reload(['cart'], true);
+                    }).not.toThrow();
+                });
+            });
         });
 
         describe('"disposableCustomerData" extender', function () {
