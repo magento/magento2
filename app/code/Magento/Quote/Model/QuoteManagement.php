@@ -501,6 +501,12 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                 if ($billingAddress->getMiddlename() !== null) {
                     $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
+                if ($billingAddress->getPrefix() !== null) {
+                    $quote->setCustomerPrefix($billingAddress->getPrefix());
+                }
+                if ($billingAddress->getSuffix() !== null) {
+                    $quote->setCustomerSuffix($billingAddress->getSuffix());
+                }
             }
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(
