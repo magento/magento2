@@ -10,6 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Transparent;
  *
  * @package Magento\Paypal\Controller\Adminhtml\Transparent
  */
+// phpcs:ignore Magento2.Security.AdminhtmlControllerAuthorization.InvalidParent,Magento2.Security.AdminhtmlControllerAcl.MissingAdminResource
 class Response extends \Magento\Paypal\Controller\Transparent\Response
 {
 }

@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rule;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\App\Response\Http as Response;
 use Magento\Framework\Controller\Result\Json;

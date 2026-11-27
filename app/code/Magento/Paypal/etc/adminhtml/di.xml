@@ -79,4 +79,13 @@
             <argument name="sessionTransparent" xsi:type="object">Magento\Framework\Session\Generic</argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Plugin\Framework\App\Router\ActionList\RestrictToBackendActionsPlugin">
+        <arguments>
+            <argument name="allowedActions" xsi:type="array">
+                <item name="paypal_transparent_redirect" xsi:type="string">Magento\Paypal\Controller\Adminhtml\Transparent\Redirect</item>
+                <item name="paypal_transparent_response" xsi:type="string">Magento\Paypal\Controller\Adminhtml\Transparent\Response</item>
+                <item name="paypal_transparent_request_secure_token" xsi:type="string">Magento\Paypal\Controller\Adminhtml\Transparent\RequestSecureToken</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

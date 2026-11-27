@@ -10,6 +10,8 @@ namespace Magento\Backend\Controller\Adminhtml\Noroute;
  */
 class Index extends \Magento\Backend\App\Action
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */

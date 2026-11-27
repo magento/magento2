@@ -21,6 +21,8 @@ use Psr\Log\LoggerInterface;
  */
 class MarkUserNotified extends Action implements HttpPostActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
      * @var ProductMetadataInterface
      */

@@ -5,12 +5,17 @@
  */
 namespace Magento\Directory\Controller\Adminhtml\Json;
 
-class CountryRegion extends \Magento\Backend\App\Action
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class CountryRegion extends \Magento\Backend\App\Action implements HttpGetActionInterface, HttpPostActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     /**
      * Return JSON-encoded array of country regions
      *
-     * @return string
+     * @return void
      */
     public function execute()
     {
