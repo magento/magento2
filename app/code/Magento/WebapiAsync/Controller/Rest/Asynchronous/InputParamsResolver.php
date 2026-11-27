@@ -184,6 +184,12 @@ class InputParamsResolver
             $inputData = array_merge($requestBodyParams, $inputData);
         }
 
+        if ($this->isXmlBody()) {
+            // XML has no top-level list, so each bulk item is its own element (item_0, item_1, ...).
+            // Renumber them: their keys become the integer operation keys of the bulk.
+            $inputData = array_values($inputData);
+        }
+
         $this->inputData = array_map(function ($singleEntityParams) {
             if (is_array($singleEntityParams)) {
                 $singleEntityParams = $this->filterInputData($singleEntityParams);
@@ -197,6 +203,22 @@ class InputParamsResolver
         }, $inputData);
 
         return $this->inputData;
+    }
+
+    /**
+     * Check whether the request body was sent as XML
+     *
+     * @return bool
+     * @throws InputException
+     */
+    private function isXmlBody(): bool
+    {
+        $httpMethod = $this->request->getHttpMethod();
+        if ($httpMethod !== RestRequest::HTTP_METHOD_POST && $httpMethod !== RestRequest::HTTP_METHOD_PUT) {
+            return false;
+        }
+
+        return str_ends_with(strtolower($this->request->getContentType()), 'xml');
     }
 
     /**
