@@ -963,7 +963,9 @@
             <xs:element name="required" type="translatableString">
                 <xs:annotation>
                     <xs:documentation>
-                        Defines whether the rendered field is required.
+                        Controls required styling for group components, including multiline.
+                        Form elements based on Magento_Ui/js/form/element/abstract derive requiredness
+                        from the required-entry validation rule instead.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
