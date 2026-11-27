@@ -48,6 +48,7 @@ class Cart implements ResolverInterface
 
         return [
             'model' => $cart,
+            'masked_id' => $maskedCartId,
         ];
     }
 }
