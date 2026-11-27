@@ -200,6 +200,13 @@ class ParamsBuilder
                 ScopeInterface::SCOPE_STORE,
                 $scopeId
             );
+            $opacity = $opacity === '' ? null : $opacity;
+            $position = $position === '' ? null : $position;
+
+            if (is_numeric($opacity) && (float) $opacity === 0.0) {
+                return [];
+            }
+
             $width = !empty($size['0']) ? $size['0'] : null;
             $height = !empty($size['1']) ? $size['1'] : null;
 
