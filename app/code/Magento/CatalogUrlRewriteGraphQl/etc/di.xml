@@ -30,6 +30,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\BatchUrlRewrite">
+        <arguments>
+            <argument name="entityTypeMapping" xsi:type="array">
+                <item name="catalog_product" xsi:type="const">Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE</item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Magento\UrlRewriteGraphQl\Model\DataProvider\EntityDataProviderComposite">
         <arguments>
