@@ -11,15 +11,18 @@
 $width = (int)$block->getWidth();
 $height = (int)$block->getHeight();
 $paddingBottom = $block->getRatio() * 100;
+$customAttributes = $block->getCustomAttributes() ?? [];
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-            <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+            <?php foreach ($customAttributes as $name => $value): ?>
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
             <?php endforeach; ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+            <?php if (!isset($customAttributes['loading'])): ?>
             loading="lazy"
+            <?php endif; ?>
             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>

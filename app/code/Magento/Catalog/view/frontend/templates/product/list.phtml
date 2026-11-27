@@ -43,6 +43,7 @@ $_helper = $block->getData('outputHelper');
      * Position for actions regarding image size changing in vde if needed
      */
     $pos = $block->getPositioned();
+    $imageAttributes = ['loading' => 'eager', 'fetchpriority' => 'high'];
     ?>
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <ol class="products list items product-items">
@@ -53,7 +54,8 @@ $_helper = $block->getData('outputHelper');
                      id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
                      data-container="product-<?= /* @noEscape */ $viewMode ?>">
                     <?php
-                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    $productImage = $block->getImage($_product, $imageDisplayArea, $imageAttributes);
+                    $imageAttributes = [];
                     if ($pos != null) {
                         $position = 'left:' . $productImage->getWidth() . 'px;'
                             . 'top:' . $productImage->getHeight() . 'px;';
