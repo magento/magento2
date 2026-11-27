@@ -53,6 +53,64 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
      */
     public function updateReportRatingPos($connection, $type, $column, $mainTable, $aggregationTable)
     {
+        return $this->updateRatingPos($connection, $type, $column, $mainTable, $aggregationTable, null);
+    }
+
+    /**
+     * Update rating position only for the periods that contain the given dates
+     *
+     * The periods are days, months or years depending on $type. When any value is not a valid Y-m-d
+     * date, every period is recalculated.
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string|null $type
+     * @param string $column
+     * @param string $mainTable
+     * @param string $aggregationTable
+     * @param array $periods Dates in Y-m-d format
+     * @return $this
+     */
+    public function updateReportRatingPosForPeriods(
+        $connection,
+        $type,
+        $column,
+        $mainTable,
+        $aggregationTable,
+        array $periods
+    ) {
+        if ($periods === []) {
+            return $this;
+        }
+
+        return $this->updateRatingPos(
+            $connection,
+            $type,
+            $column,
+            $mainTable,
+            $aggregationTable,
+            $this->getPeriodsCondition($connection, $type, $periods)
+        );
+    }
+
+    /**
+     * Update rating position of the main table rows matching the condition, or of all rows when null
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string|null $type
+     * @param string $column
+     * @param string $mainTable
+     * @param string $aggregationTable
+     * @param string|null $periodsCondition
+     * @return $this
+     */
+    private function updateRatingPos(
+        $connection,
+        $type,
+        $column,
+        $mainTable,
+        $aggregationTable,
+        ?string $periodsCondition
+    ) {
         foreach ($this->storeManager->getStores(true) as $store) {
             $periodSubSelect = $connection->select();
             $ratingSubSelect = $connection->select();
@@ -99,6 +157,9 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
             )->order(
                 ['t.store_id', $periodCol, 'total_qty DESC']
             );
+            if ($periodsCondition !== null) {
+                $periodSubSelect->where($periodsCondition);
+            }
 
             $cols = $columns;
             $cols[$column] = 't.total_qty';
@@ -126,5 +187,65 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
         }
 
         return $this;
+    }
+
+    /**
+     * Build a condition on the main table rows that belong to the periods containing the given dates
+     *
+     * Returns null when any value is not a valid Y-m-d date.
+     *
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string|null $type
+     * @param array $dates
+     * @return string|null
+     */
+    private function getPeriodsCondition($connection, ?string $type, array $dates): ?string
+    {
+        $ranges = [];
+        foreach ($dates as $value) {
+            $date = $this->parseDate($value);
+            if ($date === null) {
+                return null;
+            }
+            switch ($type) {
+                case 'year':
+                    $ranges[$date->format('Y-01-01')] = $date->format('Y-12-31');
+                    break;
+                case 'month':
+                    $ranges[$date->format('Y-m-01')] = $date->format('Y-m-t');
+                    break;
+                default:
+                    $ranges[$date->format('Y-m-d')] = $date->format('Y-m-d');
+                    break;
+            }
+        }
+        ksort($ranges);
+
+        if (!in_array($type, ['year', 'month'], true)) {
+            return $connection->prepareSqlCondition('t.period', ['in' => array_keys($ranges)]);
+        }
+
+        $conditions = [];
+        foreach ($ranges as $start => $end) {
+            $conditions[] = '(' . $connection->prepareSqlCondition('t.period', ['from' => $start, 'to' => $end]) . ')';
+        }
+
+        return implode(' OR ', $conditions);
+    }
+
+    /**
+     * Parse a Y-m-d date, rejecting any other value and dates that do not exist
+     *
+     * @param mixed $value
+     * @return \DateTimeImmutable|null
+     */
+    private function parseDate($value): ?\DateTimeImmutable
+    {
+        if (!is_string($value)) {
+            return null;
+        }
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $value);
+
+        return $date !== false && $date->format('Y-m-d') === $value ? $date : null;
     }
 }
