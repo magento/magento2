@@ -37,7 +37,7 @@ Shipments,Shipments
 "We can't delete tracking number.","We can't delete tracking number."
 "We can't load track with retrieving identifier right now.","We can't load track with retrieving identifier right now."
 "We can't save the shipment right now.","We can't save the shipment right now."
-"""Shipment Document Validation Error(s):\n"" .","""Shipment Document Validation Error(s):\n"" ."
+"Shipment Document Validation Error(s):","Shipment Document Validation Error(s):"
 "The shipment has been created.","The shipment has been created."
 "Cannot save shipment.","Cannot save shipment."
 "The order no longer exists.","The order no longer exists."

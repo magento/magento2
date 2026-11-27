@@ -152,7 +152,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             if ($validationResult->hasMessages()) {
                 $this->messageManager->addErrorMessage(
-                    __("Shipment Document Validation Error(s):\n" . implode("\n", $validationResult->getMessages()))
+                    __('Shipment Document Validation Error(s):') . "\n"
+                    . implode("\n", $validationResult->getMessages())
                 );
                 return $resultRedirect->setPath('*/*/new', ['order_id' => $orderId]);
             }

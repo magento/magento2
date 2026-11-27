@@ -211,9 +211,9 @@ class InvoiceOrder implements InvoiceOrderInterface
             $arguments
         );
         if ($errorMessages->hasMessages()) {
-            throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages->getMessages()))
-            );
+            $message = __('Invoice Document Validation Error(s):') . "\n"
+                . implode("\n", $errorMessages->getMessages());
+            throw new \Magento\Sales\Exception\DocumentValidationException(__('%1', $message));
         }
         try {
             $order = $this->paymentAdapter->pay($order, $invoice, $capture);

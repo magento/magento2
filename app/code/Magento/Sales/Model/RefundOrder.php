@@ -190,9 +190,9 @@ class RefundOrder implements RefundOrderInterface
             $arguments
         );
         if ($validationMessages->hasMessages()) {
-            throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
-            );
+            $message = __('Creditmemo Document Validation Error(s):') . "\n"
+                . implode("\n", $validationMessages->getMessages());
+            throw new \Magento\Sales\Exception\DocumentValidationException(__('%1', $message));
         }
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);

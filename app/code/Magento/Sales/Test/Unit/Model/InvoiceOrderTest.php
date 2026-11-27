@@ -11,6 +11,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
@@ -128,8 +130,14 @@ class InvoiceOrderTest extends TestCase
      */
     private $errorMessagesMock;
 
+    /**
+     * @var RendererInterface
+     */
+    private $defaultRenderer;
+
     protected function setUp(): void
     {
+        $this->defaultRenderer = Phrase::getRenderer();
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
         $this->invoiceDocumentFactoryMock = $this->createMock(InvoiceDocumentFactory::class);
@@ -164,6 +172,11 @@ class InvoiceOrderTest extends TestCase
             $this->loggerMock,
             new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0))
         );
+    }
+
+    protected function tearDown(): void
+    {
+        Phrase::setRenderer($this->defaultRenderer);
     }
 
     /**
@@ -268,6 +281,14 @@ class InvoiceOrderTest extends TestCase
     public function testDocumentValidationException()
     {
         $this->expectException('Magento\Sales\Api\Exception\DocumentValidationExceptionInterface');
+        $this->expectExceptionMessage("Translated Invoice Document Validation Error(s):\nerror1\nerror2");
+        $renderer = $this->createStub(RendererInterface::class);
+        $renderer->method('render')->willReturnCallback(
+            fn (array $source, array $arguments) => end($source) === 'Invoice Document Validation Error(s):'
+                ? 'Translated Invoice Document Validation Error(s):'
+                : $this->defaultRenderer->render($source, $arguments)
+        );
+        Phrase::setRenderer($renderer);
         $orderId = 1;
         $capture = true;
         $items = [1 => 2];
