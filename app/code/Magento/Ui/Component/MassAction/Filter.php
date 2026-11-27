@@ -206,7 +206,7 @@ class Filter
      *
      * @return DataProviderInterface
      */
-    private function getDataProvider()
+    public function getDataProvider()
     {
         if (!$this->dataProvider) {
             $component = $this->getComponent();
