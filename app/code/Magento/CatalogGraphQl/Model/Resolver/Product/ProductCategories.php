@@ -82,6 +82,42 @@ class ProductCategories
     }
 
     /**
+     * Get category ids for several products at once, keyed by product id
+     *
+     * @param int[] $productIds
+     * @param int $storeId
+     * @return array<int, string[]>
+     */
+    public function getCategoryIdsByProducts(array $productIds, int $storeId): array
+    {
+        if (!$productIds) {
+            return [];
+        }
+        $connection = $this->resourceConnection->getConnection();
+        $categoryProductTable = $this->getCatalogCategoryProductTableName($storeId);
+        $storeTable = $this->resourceConnection->getTableName(Store::ENTITY);
+        $storeGroupTable = $this->resourceConnection->getTableName(Group::ENTITY);
+
+        $select = $connection->select()
+            ->from(['cat_index' => $categoryProductTable], ['product_id', 'category_id'])
+            ->joinInner(['store' => $storeTable], $connection->quoteInto('store.store_id = ?', $storeId), [])
+            ->joinInner(
+                ['store_group' => $storeGroupTable],
+                'store.group_id = store_group.group_id AND NOT EXISTS
+                (SELECT 1 FROM ' . $storeGroupTable . ' WHERE cat_index.category_id IN (store_group.root_category_id))',
+                []
+            )
+            ->where('cat_index.product_id IN (?)', array_map('intval', $productIds), \Zend_Db::INT_TYPE);
+
+        $categoryIds = [];
+        foreach ($connection->fetchAll($select) as $row) {
+            $categoryIds[(int)$row['product_id']][] = $row['category_id'];
+        }
+
+        return $categoryIds;
+    }
+
+    /**
      * Get catalog_category_product table name
      *
      * @param int $storeId
