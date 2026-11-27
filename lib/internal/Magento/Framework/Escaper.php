@@ -18,6 +18,14 @@ use Exception;
 class Escaper
 {
     /**
+     * libxml2 errors raised for markup that is still parsed correctly, mapped to the PHP error level they arrive as
+     *
+     * XML_HTML_UNKNOWN_TAG (801): 2.9.x reports HTML5, custom and namespaced elements with it.
+     * XML_NS_ERR_UNDEFINED_NAMESPACE (201): 2.9.10 and older also report the prefix of a namespaced element.
+     */
+    private const IGNORED_LIBXML_ERRORS = [801 => E_WARNING, 201 => E_NOTICE];
+
+    /**
      * HTML special characters flag
      * @var int
      */
@@ -92,12 +100,7 @@ class Escaper
                 $allowedTags = $this->filterProhibitedTags($allowedTags);
                 $wrapperElementId = uniqid();
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
-                set_error_handler(
-                    function ($errorNumber, $errorString) {
-                        // phpcs:ignore Magento2.Exceptions.DirectThrow
-                        throw new \InvalidArgumentException($errorString, $errorNumber);
-                    }
-                );
+                set_error_handler($this->handleLoadHtmlError(...));
                 $data = $this->prepareUnescapedCharacters($data);
                 $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
                 $string = mb_encode_numericentity(
@@ -141,6 +144,26 @@ class Escaper
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Throw on errors raised while loading HTML, except for unknown or namespaced element names
+     *
+     * @param int $errorNumber
+     * @param string $errorString
+     * @throws \InvalidArgumentException
+     */
+    private function handleLoadHtmlError(int $errorNumber, string $errorString): bool
+    {
+        $libxmlError = libxml_get_last_error();
+        if ($libxmlError !== false
+            && (self::IGNORED_LIBXML_ERRORS[$libxmlError->code] ?? null) === $errorNumber
+            && str_contains($errorString, trim($libxmlError->message))
+        ) {
+            return true;
+        }
+        // phpcs:ignore Magento2.Exceptions.DirectThrow
+        throw new \InvalidArgumentException($errorString, $errorNumber);
     }
 
     /**

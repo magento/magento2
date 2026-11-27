@@ -247,6 +247,71 @@ class EscaperTest extends TestCase
     }
 
     /**
+     * @covers \Magento\Framework\Escaper::escapeHtml
+     */
+    #[DataProvider('escapeHtmlUnknownTagDataProvider')]
+    public function testEscapeHtmlWithTagUnknownToLibxmlDoesNotLogCritical(
+        string $data,
+        string $expected,
+        array $allowedTags
+    ): void {
+        $this->loggerMock->expects($this->never())
+            ->method('critical');
+        $actual = $this->escaper->escapeHtml($data, $allowedTags);
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return array
+     */
+    public static function escapeHtmlUnknownTagDataProvider(): array
+    {
+        return [
+            'namespaced xml element' => [
+                'data' => '<soap-env:Envelope><soap-env:Body>text</soap-env:Body></soap-env:Envelope>',
+                'expected' => 'text',
+                'allowedTags' => ['b'],
+            ],
+            'custom element next to allowed tag' => [
+                'data' => '<custom-element>text</custom-element> and <b>bold</b>',
+                'expected' => 'text and <b>bold</b>',
+                'allowedTags' => ['b'],
+            ],
+            'html5 element in allowed tags' => [
+                'data' => '<section>text</section>',
+                'expected' => '<section>text</section>',
+                'allowedTags' => ['section'],
+            ],
+        ];
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeHtml
+     */
+    public function testEscapeHtmlWithUnknownTagFollowedByAnotherLibxmlWarningLogsCritical(): void
+    {
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($this->callback(
+                static fn (\Throwable $e): bool => str_contains($e->getMessage(), 'Unexpected end tag : span')
+            ));
+        $this->assertEquals('<section>text</section>', $this->escaper->escapeHtml('<section>text</span>', ['section']));
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::escapeHtml
+     */
+    public function testNonLibxmlWarningAfterUnknownTagParseStillThrows(): void
+    {
+        $this->escaper->escapeHtml('<section>text</section>', ['section']);
+        $handler = new \ReflectionMethod(Escaper::class, 'handleLoadHtmlError');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('unrelated warning');
+        $handler->invoke($this->escaper, E_WARNING, 'unrelated warning');
+    }
+
+    /**
      * @return array
      */
     public static function escapeHtmlDataProvider()
