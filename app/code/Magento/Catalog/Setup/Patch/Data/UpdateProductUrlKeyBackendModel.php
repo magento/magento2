@@ -42,7 +42,10 @@ class UpdateProductUrlKeyBackendModel implements DataPatchInterface, PatchRevert
      */
     public static function getDependencies()
     {
-        return [];
+        return [
+            UpdateProductAttributes::class,
+            \Magento\CatalogUrlRewrite\Setup\Patch\Data\CreateUrlAttributes::class
+        ];
     }
 
     /**
