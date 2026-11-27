@@ -438,4 +438,32 @@ class TransportTest extends TestCase
 
         $transport->sendMessage();
     }
+
+    /**
+     * Verify the SMTP settings are read for the store the message is sent for.
+     *
+     * @return void
+     * @covers ::getTransport
+     * @covers ::createSmtpTransport
+     */
+    public function testSmtpSettingsAreReadForGivenStore(): void
+    {
+        $storeConfig = [
+            2 => ['system/smtp/transport' => 'smtp', 'system/smtp/host' => 'store2.example.com',
+                'system/smtp/auth' => 'none'],
+            0 => ['system/smtp/transport' => 'smtp', 'system/smtp/host' => 'default.example.com',
+                'system/smtp/auth' => 'none'],
+        ];
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig->method('getValue')
+            ->willReturnCallback(
+                fn($path, $scope, $scopeCode = null) => $scope === 'store'
+                    ? ($storeConfig[(int) $scopeCode][$path] ?? null)
+                    : null
+            );
+
+        $transport = new Transport($this->emailMessageMock, $scopeConfig, $this->loggerMock, 2);
+
+        $this->assertSame('store2.example.com', $transport->getTransport()->getStream()->getHost());
+    }
 }
