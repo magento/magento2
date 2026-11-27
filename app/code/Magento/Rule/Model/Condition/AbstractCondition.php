@@ -108,7 +108,8 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'date' => ['==', '>=', '<='],
                 'select' => ['==', '!=', '<=>'],
                 'boolean' => ['==', '!=', '<=>'],
-                'multiselect' => ['{}', '!{}', '()', '!()'],
+                // Multiselect gains "is undefined" so empty values can be targeted (or inverted via a FALSE combine).
+                'multiselect' => ['{}', '!{}', '()', '!()', '<=>'],
                 'grid' => ['()', '!()'],
             ];
             $this->_arrayInputTypes = ['multiselect', 'grid'];
@@ -786,6 +787,11 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
          */
         $option = $this->getOperatorForValidate();
 
+        // "is undefined" does not use a condition value and must not depend on array-operator typing.
+        if ($option === '<=>') {
+            return $this->isAttributeValueUndefined($validatedValue);
+        }
+
         // if operator requires array and it is not, or on opposite, return false
         if ($this->isArrayOperatorType() xor is_array($value)) {
             return false;
@@ -837,8 +843,10 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                         }
                     }
                 } elseif (is_array($value)) {
+                    // Empty product values do not "contain" the needle. For !{} the final
                     if (!is_array($validatedValue) || empty($validatedValue)) {
-                        return false;
+                        $result = false;
+                        break;
                     }
                     $result = array_intersect($value, $validatedValue);
                     $result = !empty($result);
@@ -877,6 +885,24 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         }
 
         return $result;
+    }
+
+    /**
+     * Whether a product attribute value is considered undefined/empty for rule matching.
+     *
+     * @param mixed $validatedValue
+     * @return bool
+     */
+    protected function isAttributeValueUndefined($validatedValue): bool
+    {
+        if ($validatedValue === null || $validatedValue === '') {
+            return true;
+        }
+        if (is_array($validatedValue) && $validatedValue === []) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
