@@ -151,8 +151,8 @@ class Escaper
      */
     private function prepareUnescapedCharacters(string $data): ?string
     {
-        $patterns = ['/\&/u'];
-        $replacements = ['&amp;'];
+        $patterns = ['/\&/u', '/<(?![a-zA-Z\/!])/u'];
+        $replacements = ['&amp;', '&lt;'];
         return \preg_replace($patterns, $replacements, $data);
     }
 
