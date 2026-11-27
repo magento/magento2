@@ -207,9 +207,6 @@
                 <dataType>text</dataType>
                 <label translate="true">City</label>
                 <visible>true</visible>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
             </settings>
         </field>
         <field name="postcode" component="Magento_Ui/js/form/element/post-code" sortOrder="120" formElement="input">
