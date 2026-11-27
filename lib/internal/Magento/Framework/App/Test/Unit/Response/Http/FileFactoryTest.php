@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -141,7 +142,8 @@ class FileFactoryTest extends TestCase
                     'contentType' => 'application/octet-stream',
                     'contentLength' => $fileSize,
                     'directoryCode' => DirectoryList::ROOT,
-                    'remove' => false
+                    'remove' => false,
+                    'attachment' => true
                 ]
             ])
             ->willReturn($responseMock);
@@ -179,7 +181,8 @@ class FileFactoryTest extends TestCase
                     'contentType' => 'application/octet-stream',
                     'contentLength' => $fileSize,
                     'directoryCode' => DirectoryList::ROOT,
-                    'remove' => true
+                    'remove' => true,
+                    'attachment' => true
                 ]
             ])
             ->willReturn($responseMock);
@@ -206,6 +209,100 @@ class FileFactoryTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('writeFile')
             ->with('fileName', 'content', 'w+');
+        $this->fileResponseFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'options' => [
+                    'filePath' => 'fileName',
+                    'fileName' => 'fileName',
+                    'contentType' => 'application/octet-stream',
+                    'contentLength' => null,
+                    'directoryCode' => DirectoryList::ROOT,
+                    'remove' => false,
+                    'attachment' => true
+                ]
+            ])
+            ->willReturn($this->createStub(ResponseInterface::class));
         $this->model->create('fileName', 'content');
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateNullContentIsSentAsAttachment(): void
+    {
+        $this->dirMock->expects($this->never())
+            ->method('writeFile');
+        $this->fileResponseFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'options' => [
+                    'filePath' => null,
+                    'fileName' => 'fileName',
+                    'contentType' => 'application/octet-stream',
+                    'contentLength' => 10,
+                    'directoryCode' => DirectoryList::ROOT,
+                    'remove' => false,
+                    'attachment' => true
+                ]
+            ])
+            ->willReturn($this->createStub(ResponseInterface::class));
+        $this->model->create('fileName', null, DirectoryList::ROOT, 'application/octet-stream', 10);
+    }
+
+    /**
+     * @param array $content
+     * @param bool $expectedAttachment
+     * @param bool $expectedRemove
+     * @return void
+     */
+    #[DataProvider('attachmentDataProvider')]
+    public function testCreateForwardsAttachmentOption(
+        array $content,
+        bool $expectedAttachment,
+        bool $expectedRemove
+    ): void {
+        $this->dirMock->expects($this->once())
+            ->method('isFile')
+            ->with('some_file')
+            ->willReturn(true);
+        $this->dirMock->expects($this->once())
+            ->method('stat')
+            ->willReturn(['size' => 100]);
+        $this->fileResponseFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'options' => [
+                    'filePath' => 'some_file',
+                    'fileName' => 'fileName',
+                    'contentType' => 'application/pdf',
+                    'contentLength' => 100,
+                    'directoryCode' => DirectoryList::ROOT,
+                    'remove' => $expectedRemove,
+                    'attachment' => $expectedAttachment
+                ]
+            ])
+            ->willReturn($this->createStub(ResponseInterface::class));
+        $this->model->create(
+            'fileName',
+            ['type' => 'filename', 'value' => 'some_file'] + $content,
+            DirectoryList::ROOT,
+            'application/pdf'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function attachmentDataProvider(): array
+    {
+        return [
+            'omitted' => [[], true, false],
+            'true' => [['attachment' => true], true, false],
+            'false' => [['attachment' => false], false, false],
+            'null' => [['attachment' => null], true, false],
+            'falsy legacy value' => [['attachment' => 0], false, false],
+            'inline with rm' => [['attachment' => false, 'rm' => 1], false, true],
+        ];
     }
 }
