@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\View\Test\Unit\Result;
 
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -20,6 +21,7 @@ use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Renderer;
 use Magento\Framework\View\Page\Config\RendererFactory;
 use Magento\Framework\View\Result\Page;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -94,7 +96,7 @@ class PageTest extends TestCase
     {
         $this->layout = $this->createPartialMockWithReflection(
             Layout::class,
-            ['getUpdate', 'addHandle', 'isLayoutDefined']
+            ['getUpdate', 'addHandle', 'isLayoutDefined', 'getOutput', 'getBlock']
         );
 
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
@@ -331,5 +333,63 @@ class PageTest extends TestCase
             ->willReturnSelf();
 
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
+    }
+
+    /**
+     * @param array $constructorArguments
+     * @param string $expectedFileId
+     * @return void
+     */
+    #[DataProvider('loaderIconDataProvider')]
+    public function testRenderUsesConfiguredLoaderIcon(array $constructorArguments, string $expectedFileId): void
+    {
+        $rendererFactory = $this->createMock(RendererFactory::class);
+        $rendererFactory->method('create')->willReturn($this->pageConfigRenderer);
+        $page = (new ObjectManager($this))->getObject(
+            Page::class,
+            array_merge(
+                [
+                    'isIsolated' => true,
+                    'layoutFactory' => $this->layoutFactory,
+                    'context' => $this->context,
+                    'translateInline' => $this->translateInline,
+                    'pageConfigRendererFactory' => $rendererFactory,
+                    'entitySpecificHandlesList' => $this->entitySpecificHandlesListMock,
+                    'template' => 'root.phtml'
+                ],
+                $constructorArguments
+            )
+        );
+
+        $templateFile = tempnam(sys_get_temp_dir(), 'page');
+        file_put_contents($templateFile, '<?= $loaderIcon ?>');
+        $this->viewFileSystem->method('getTemplateFileName')->willReturn($templateFile);
+        $this->pageConfig->method('getPageLayout')->willReturn('1column');
+        $this->layout->method('getOutput')->willReturn('');
+        $this->context->getAssetRepository()
+            ->expects($this->once())
+            ->method('getUrlWithParams')
+            ->with($expectedFileId, $this->anything())
+            ->willReturn('loader-url');
+
+        $response = $this->createMock(HttpResponseInterface::class);
+        $response->expects($this->once())->method('appendBody')->with('loader-url');
+
+        try {
+            (new \ReflectionMethod($page, 'render'))->invoke($page, $response);
+        } finally {
+            unlink($templateFile);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function loaderIconDataProvider(): array
+    {
+        return [
+            'default' => [[], 'images/loader-2.gif'],
+            'custom' => [['loaderIcon' => 'images/custom-loader.svg'], 'images/custom-loader.svg']
+        ];
     }
 }

@@ -112,6 +112,11 @@ class Page extends Layout
     private $entitySpecificHandlesList;
 
     /**
+     * @var string
+     */
+    private $loaderIcon;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -125,6 +130,7 @@ class Page extends Layout
      * @param string $template
      * @param bool $isIsolated
      * @param EntitySpecificHandlesList $entitySpecificHandlesList
+     * @param string $loaderIcon View file ID of the page loader icon
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -139,7 +145,8 @@ class Page extends Layout
         PageLayoutReader $pageLayoutReader,
         $template,
         $isIsolated = false,
-        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null,
+        string $loaderIcon = 'images/loader-2.gif'
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();
@@ -152,6 +159,7 @@ class Page extends Layout
         $this->template = $template;
         $this->entitySpecificHandlesList = $entitySpecificHandlesList
             ?: ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
+        $this->loaderIcon = $loaderIcon;
         parent::__construct(
             $context,
             $layoutFactory,
@@ -278,7 +286,7 @@ class Page extends Layout
                 'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
                 'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
                 'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
-                'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
+                'loaderIcon' => $this->getViewFileUrl($this->loaderIcon),
             ]);
 
             $output = $this->getLayout()->getOutput();
