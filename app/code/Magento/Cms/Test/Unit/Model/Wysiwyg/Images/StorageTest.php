@@ -22,6 +22,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
+use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -56,6 +58,8 @@ class StorageTest extends TestCase
     private const STORAGE_ROOT_DIR = '/storage/root/dir/';
 
     private const INVALID_DIRECTORY_OVER_ROOT = '/storage/some/another/dir';
+
+    private const GIF_1X1 = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
     /**
      * @var Storage
@@ -178,6 +182,11 @@ class StorageTest extends TestCase
     private $coreConfigMock;
 
     /**
+     * @var Mime|MockObject
+     */
+    private $mimeMock;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -195,8 +204,8 @@ class StorageTest extends TestCase
             $this->any()
         )->method(
             'getDriver'
-        )->willReturn(
-            $this->driverMock
+        )->willReturnCallback(
+            fn () => $this->driverMock
         );
 
         $this->filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
@@ -274,6 +283,7 @@ class StorageTest extends TestCase
             ]
         );
         $this->backendUrlMock = $this->createMock(Url::class);
+        $this->mimeMock = $this->createMock(Mime::class);
 
         $this->coreFileStorageMock = $this->getMockBuilder(MediaStorageHelperFileStorageDatabase::class)
             ->disableOriginalConstructor()
@@ -323,7 +333,8 @@ class StorageTest extends TestCase
                 'file' => $this->fileMock,
                 'ioFile' => $this->ioFileMock,
                 'coreConfig' => $this->coreConfigMock,
-                'logger' => $this->loggerMock
+                'logger' => $this->loggerMock,
+                'mime' => $this->mimeMock
             ]
         );
     }
@@ -514,6 +525,191 @@ class StorageTest extends TestCase
                     )
             ],
         ];
+    }
+
+    /**
+     * Local image MIME type comes from the header that is read for the dimensions, not from a second read
+     *
+     * @return void
+     */
+    public function testGetFilesCollectionTakesLocalImageMimeTypeFromImageHeader(): void
+    {
+        $imageItem = $this->createFileItem('image.png', 'png-header-says-gif.png');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->expects($this->once())
+            ->method('fileGetContents')
+            ->willReturn(base64_decode(self::GIF_1X1));
+        $this->mimeMock->expects($this->never())->method('getMimeType');
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame('image/gif', $imageItem->getMimeType());
+        $this->assertSame(1, $imageItem->getWidth());
+        $this->assertSame(1, $imageItem->getHeight());
+    }
+
+    /**
+     * The header MIME type is used only where getimagesize() and MIME detection name the type alike
+     *
+     * @param string $header
+     * @param string|null $detectedMimeType
+     * @param string $expectedMimeType
+     * @return void
+     */
+    #[DataProvider('imageHeaderMimeTypeDataProvider')]
+    public function testGetFilesCollectionUsesImageHeaderMimeTypeOnlyForMatchingTypes(
+        string $header,
+        ?string $detectedMimeType,
+        string $expectedMimeType
+    ): void {
+        $imageItem = $this->createFileItem('image.jpg', 'image.jpg');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->method('fileGetContents')->willReturn(base64_decode($header));
+        $this->mimeMock->expects($detectedMimeType === null ? $this->never() : $this->once())
+            ->method('getMimeType')
+            ->with('/webroot/pub/media/wysiwyg/image.jpg')
+            ->willReturn((string)$detectedMimeType);
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame($expectedMimeType, $imageItem->getMimeType());
+        $this->assertSame(1, $imageItem->getWidth());
+    }
+
+    /**
+     * Image headers under a .jpg name with the MIME type the listing must report
+     *
+     * @return array[]
+     */
+    public static function imageHeaderMimeTypeDataProvider(): array
+    {
+        return [
+            'jpeg' => ['/9j/wAALCAABAAEBAREA/9k=', null, 'image/jpeg'],
+            'png' => [
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgYGAAAAAEAAGj'
+                . 'ChXjAAAAAElFTkSuQmCC',
+                null,
+                'image/png'
+            ],
+            'gif' => [self::GIF_1X1, null, 'image/gif'],
+            'psd' => [
+                'OEJQUwABAAAAAAAAAAMAAAABAAAAAQAIAAMAAAAAAAAAAAAAAAAAAAAA',
+                'image/vnd.adobe.photoshop',
+                'image/vnd.adobe.photoshop'
+            ],
+            'bmp' => [
+                'Qk05AAAAAAAAADYAAAAoAAAAAQAAAAEAAAABABgAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==',
+                'image/bmp',
+                'image/bmp'
+            ],
+            'tiff' => ['SUkqAAgAAAACAAABBAABAAAAAQAAAAEBBAABAAAAAQAAAAAAAAA=', 'image/tiff', 'image/tiff'],
+            'ico' => [
+                'AAABAAEAAQEAAAEAIAAoAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=',
+                'image/vnd.microsoft.icon',
+                'image/vnd.microsoft.icon'
+            ],
+        ];
+    }
+
+    /**
+     * A file with an image extension but no readable image header falls back to MIME detection
+     *
+     * @return void
+     */
+    public function testGetFilesCollectionDetectsMimeTypeWhenImageHeaderIsUnreadable(): void
+    {
+        $imageItem = $this->createFileItem('image.jpg', 'not-an-image.jpg');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->method('fileGetContents')->willReturn(str_repeat('plain text ', 100));
+        $this->mimeMock->expects($this->once())
+            ->method('getMimeType')
+            ->with('/webroot/pub/media/wysiwyg/not-an-image.jpg')
+            ->willReturn('text/plain');
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame('text/plain', $imageItem->getMimeType());
+    }
+
+    /**
+     * A file that is not listed as an image still gets its MIME type detected
+     *
+     * @return void
+     */
+    public function testGetFilesCollectionDetectsMimeTypeOfInvalidImage(): void
+    {
+        $imageItem = $this->createFileItem('image.exe', 'wrong-image.exe');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->expects($this->never())->method('fileGetContents');
+        $this->mimeMock->expects($this->once())
+            ->method('getMimeType')
+            ->willReturn('application/x-dosexec');
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame('application/x-dosexec', $imageItem->getMimeType());
+    }
+
+    /**
+     * Remote storage keeps the MIME type stored with the object
+     *
+     * @return void
+     */
+    public function testGetFilesCollectionKeepsStoredMimeTypeOfRemoteImage(): void
+    {
+        $this->driverMock = $this->createMock(ExtendedDriverInterface::class);
+        $imageItem = $this->createFileItem('image.png', 'remote.png');
+        $this->mockFilesCollection($imageItem);
+        $this->driverMock->method('stat')->willReturn(['size' => 1024]);
+        $this->driverMock->method('fileGetContents')->willReturn(base64_decode(self::GIF_1X1));
+        $this->mimeMock->expects($this->once())
+            ->method('getMimeType')
+            ->with('/webroot/pub/media/wysiwyg/remote.png')
+            ->willReturn('image/png');
+
+        $this->imagesStorage->getFilesCollection('/webroot/pub/media/', 'image');
+
+        $this->assertSame('image/png', $imageItem->getMimeType());
+        $this->assertSame(1, $imageItem->getWidth());
+    }
+
+    /**
+     * Create a collection item the way the filesystem collection does
+     *
+     * @param string $id
+     * @param string $basename
+     * @return DataObject
+     */
+    private function createFileItem(string $id, string $basename): DataObject
+    {
+        return new DataObject(
+            [
+                'id' => $id,
+                'basename' => $basename,
+                'filename' => '/webroot/pub/media/wysiwyg/' . $basename,
+            ]
+        );
+    }
+
+    /**
+     * Make the storage list the given item
+     *
+     * @param DataObject $item
+     * @return void
+     */
+    private function mockFilesCollection(DataObject $item): void
+    {
+        $storageCollectionMock = $this->createMock(StorageCollection::class);
+        $storageCollectionMock->method('setCollectDirs')->willReturnSelf();
+        $storageCollectionMock->method('setCollectFiles')->willReturnSelf();
+        $storageCollectionMock->method('setCollectRecursively')->willReturnSelf();
+        $storageCollectionMock->method('setOrder')->willReturnSelf();
+        $storageCollectionMock->method('getIterator')->willReturn(new \ArrayIterator([$item]));
+        $this->storageCollectionFactoryMock->method('create')->willReturn($storageCollectionMock);
     }
 
     /**
