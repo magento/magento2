@@ -94,6 +94,53 @@ class StoreValidatorTest extends TestCase
     }
 
     /**
+     * Verify the error message stays valid UTF-8 when the header contains invalid UTF-8
+     *
+     * @param string $header
+     * @param string $expectedMessage
+     */
+    #[DataProvider('unknownStoreCodeProvider')]
+    public function testValidateUnknownStoreCodeProducesValidUtf8Message(string $header, string $expectedMessage): void
+    {
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getHeader')
+            ->with('Store')
+            ->willReturn($header);
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('getStores')
+            ->with(false, true)
+            ->willReturn([]);
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('setCurrentStore')
+            ->with(null);
+
+        try {
+            $this->storeValidator->validate($this->requestMock);
+            $this->fail('Expected ' . GraphQlInputException::class);
+        } catch (GraphQlInputException $e) {
+            $this->assertSame($expectedMessage, $e->getMessage());
+            $this->assertTrue(mb_check_encoding($e->getMessage(), 'UTF-8'));
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function unknownStoreCodeProvider(): array
+    {
+        return [
+            'valid utf-8 is echoed unchanged' => ["caf\u{E9}", "Requested store is not found (caf\u{E9})"],
+            'invalid utf-8 is scrubbed' => [
+                "\xC3\x28",
+                'Requested store is not found (' . mb_scrub("\xC3\x28", 'UTF-8') . ')',
+            ],
+        ];
+    }
+
+    /**
      * Verify validate with active store
      *
      * @param array $config

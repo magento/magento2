@@ -52,6 +52,10 @@ QUERY;
             'inactive_store' => [
                 'inactive_store',
                 'Requested store is not found'
+            ],
+            'invalid_utf8' => [
+                "\xC3\x28",
+                'Requested store is not found'
             ]
         ];
     }
