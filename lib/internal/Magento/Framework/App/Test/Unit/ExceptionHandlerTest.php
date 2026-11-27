@@ -16,10 +16,12 @@ use Magento\Framework\App\SetupInfo;
 use Magento\Framework\Debug;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Exception\SessionExpiredException;
 use Magento\Framework\Exception\State\InitException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Constraint\StringStartsWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -163,6 +165,88 @@ class ExceptionHandlerTest extends TestCase
             $this->exceptionHandler->handle(
                 $bootstrap,
                 new SessionException(new Phrase('Test')),
+                $this->responseMock,
+                $this->requestMock
+            )
+        );
+    }
+
+    /**
+     * Expired session is redirected in every mode, back to the same URL only for a safe request to a local path
+     *
+     * @param bool $isGet
+     * @param bool $isHead
+     * @param string $requestUri
+     * @param string $expectedRedirect
+     * @return void
+     */
+    #[DataProvider('sessionExpiredExceptionDataProvider')]
+    public function testHandleSessionExpiredException(
+        bool $isGet,
+        bool $isHead,
+        string $requestUri,
+        string $expectedRedirect
+    ): void {
+        $this->requestMock->method('isGet')->willReturn($isGet);
+        $this->requestMock->method('isHead')->willReturn($isHead);
+        $this->requestMock->method('getRequestUri')->willReturn($requestUri);
+        $this->requestMock->method('getDistroBaseUrl')->willReturn('https://example.com/');
+        $this->responseMock->expects($this->once())
+            ->method('setRedirect')
+            ->with($expectedRedirect);
+        $this->responseMock->expects($this->once())
+            ->method('sendHeaders');
+        $this->responseMock->expects($this->never())
+            ->method('setBody');
+        /** @var Bootstrap|MockObject $bootstrap */
+        $bootstrap = $this->createMock(Bootstrap::class);
+        $bootstrap->method('isDeveloperMode')
+            ->willReturn(true);
+        $this->assertTrue(
+            $this->exceptionHandler->handle(
+                $bootstrap,
+                new SessionExpiredException(new Phrase('The session has expired, please login again.')),
+                $this->responseMock,
+                $this->requestMock
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function sessionExpiredExceptionDataProvider(): array
+    {
+        return [
+            'GET request' => [true, false, '/customer/account/?a=1', '/customer/account/?a=1'],
+            'HEAD request' => [false, true, '/customer/account/', '/customer/account/'],
+            'POST request' => [false, false, '/customer/account/editPost/', 'https://example.com/'],
+            'protocol-relative URI' => [true, false, '//evil.example/path', 'https://example.com/'],
+            'backslash URI' => [true, false, '/\\evil.example/path', 'https://example.com/'],
+            'empty URI' => [true, false, '', 'https://example.com/'],
+        ];
+    }
+
+    public function testHandleDeveloperModeSessionException(): void
+    {
+        $this->responseMock->expects($this->never())
+            ->method('setRedirect');
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(500);
+        $this->responseMock->expects($this->once())
+            ->method('setBody')
+            ->with(new StringStartsWith('1 exception(s):'));
+        $this->responseMock->expects($this->once())
+            ->method('sendResponse');
+        /** @var Bootstrap|MockObject $bootstrap */
+        $bootstrap = $this->createMock(Bootstrap::class);
+        $bootstrap->method('isDeveloperMode')
+            ->willReturn(true);
+        $this->assertTrue(
+            $this->exceptionHandler->handle(
+                $bootstrap,
+                new SessionException(new Phrase('Area code not set')),
                 $this->responseMock,
                 $this->requestMock
             )
