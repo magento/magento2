@@ -66,6 +66,14 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
     private $changelogBatchSize;
 
     /**
+     * Maximum changelog size (distinct entity count) per view_id before forcing a full reindex.
+     * Keyed by view_id. If not set for a view, full reindex is never forced.
+     *
+     * @var array
+     */
+    private $changelogMaxSize;
+
+    /**
      * @var ChangelogBatchWalkerFactory
      */
     private $changelogBatchWalkerFactory;
@@ -79,6 +87,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
      * @param array $data
      * @param array $changelogBatchSize
      * @param ChangelogBatchWalkerFactory $changelogBatchWalkerFactory
+     * @param array $changelogMaxSize
      */
     public function __construct(
         ConfigInterface $config,
@@ -88,7 +97,8 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ?ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
+        ?ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null,
+        array $changelogMaxSize = []
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -96,6 +106,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         $this->changelog = $changelog;
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
+        $this->changelogMaxSize = $changelogMaxSize;
         parent::__construct($data);
         $this->changelogBatchWalkerFactory = $changelogBatchWalkerFactory ?:
             ObjectManager::getInstance()->get(ChangelogBatchWalkerFactory::class);
@@ -302,7 +313,9 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
     }
 
     /**
-     * Execute action from last version to current version, by batches
+     * Execute action from last version to current version, by batches.
+     * If changelogMaxSize is configured for the current view and the pending changelog count
+     * exceeds the threshold, a full reindex is triggered instead of incremental.
      *
      * @param ActionInterface $action
      * @param int $lastVersionId
@@ -312,8 +325,23 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
      */
     private function executeAction(ActionInterface $action, int $lastVersionId, int $currentVersionId)
     {
-        $batchSize = isset($this->changelogBatchSize[$this->getChangelog()->getViewId()])
-            ? (int) $this->changelogBatchSize[$this->getChangelog()->getViewId()]
+        $viewId = $this->getChangelog()->getViewId();
+
+        // Check if a max changelog size is configured for this view
+        if (isset($this->changelogMaxSize[$viewId])
+            && method_exists($action, 'executeFull')
+            && $lastVersionId !== $currentVersionId
+        ) {
+            $maxSize = (int)$this->changelogMaxSize[$viewId];
+            $pendingCount = $this->getChangelog()->getPendingCount($lastVersionId, $currentVersionId);
+            if ($pendingCount > $maxSize) {
+                $action->executeFull();
+                return;
+            }
+        }
+
+        $batchSize = isset($this->changelogBatchSize[$viewId])
+            ? (int) $this->changelogBatchSize[$viewId]
             : self::DEFAULT_BATCH_SIZE;
 
         $batches = $this->getWalker()->walk($this->getChangelog(), $lastVersionId, $currentVersionId, $batchSize);
