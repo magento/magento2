@@ -13,6 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -190,6 +191,55 @@ class ResponseTest extends TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(ResultInterface::class, $this->object->execute());
+    }
+
+    public function testExecuteWithExceptionAndNoQuoteSkipsFailureNotification(): void
+    {
+        $this->expectDeclinedResponseRendered();
+        $this->sessionTransparent->method('getQuoteId')
+            ->willReturn(null);
+        $this->paymentFailures->expects($this->never())
+            ->method('handle');
+
+        $this->assertInstanceOf(ResultInterface::class, $this->object->execute());
+    }
+
+    public function testExecuteWithExceptionAndMissingQuoteStillRendersError(): void
+    {
+        $this->expectDeclinedResponseRendered();
+        $this->sessionTransparent->method('getQuoteId')
+            ->willReturn(42);
+        $this->paymentFailures->expects($this->once())
+            ->method('handle')
+            ->with(42, 'Declined')
+            ->willThrowException(NoSuchEntityException::singleField('cartId', 42));
+
+        $this->assertInstanceOf(ResultInterface::class, $this->object->execute());
+    }
+
+    private function expectDeclinedResponseRendered(): void
+    {
+        $objectMock = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->transactionMock->expects($this->once())
+            ->method('getResponseObject')
+            ->willReturn($objectMock);
+        $this->responseValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($objectMock, $this->payflowFacade)
+            ->willThrowException(new LocalizedException(__('Declined')));
+        $this->transactionMock->expects($this->never())
+            ->method('savePaymentInQuote');
+        $this->coreRegistryMock->expects($this->once())
+            ->method('register')
+            ->with('transparent_form_params', ['error' => true, 'error_msg' => 'Declined']);
+        $this->resultLayoutMock->expects($this->once())
+            ->method('addDefaultHandle')
+            ->willReturnSelf();
+        $this->resultLayoutMock->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($this->getLayoutMock());
     }
 
     /**

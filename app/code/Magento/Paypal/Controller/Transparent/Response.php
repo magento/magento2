@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Block\Transparent\Iframe;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
@@ -126,7 +127,7 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();
-            $this->paymentFailures->handle((int)$this->sessionTransparent->getQuoteId(), $parameters['error_msg']);
+            $this->notifyPaymentFailure((int)$this->sessionTransparent->getQuoteId(), $parameters['error_msg']);
         }
 
         $this->coreRegistry->register(Iframe::REGISTRY_KEY, $parameters);
@@ -136,5 +137,25 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         $resultLayout->getLayout()->getUpdate()->load(['transparent_payment_response']);
 
         return $resultLayout;
+    }
+
+    /**
+     * Sends the payment failure notification for the session quote, if it still exists
+     *
+     * @param int $quoteId
+     * @param string $message
+     * @return void
+     */
+    private function notifyPaymentFailure(int $quoteId, string $message): void
+    {
+        if ($quoteId === 0) {
+            return;
+        }
+
+        try {
+            $this->paymentFailures->handle($quoteId, $message);
+        } catch (NoSuchEntityException) {
+            return;
+        }
     }
 }
