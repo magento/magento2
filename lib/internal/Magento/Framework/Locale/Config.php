@@ -276,6 +276,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'VUV', /*Vanuatu Vatu*/
         'VEB', /*Venezuelan Bolivar*/
         'VEF', /*Venezuelan bolívar fuerte*/
+        'VED', /*Venezuelan bolívar digital*/
         'VND', /*Vietnamese Dong*/
         'CHE', /*WIR Euro*/
         'CHW', /*WIR Franc*/
