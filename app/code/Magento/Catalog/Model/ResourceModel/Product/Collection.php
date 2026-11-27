@@ -1686,12 +1686,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         if (!empty($productsByLinkId)) {
             $options = $this->_productOptionFactory->create()->getCollection()->addTitleToResult(
-                $this->_storeManager->getStore()->getId()
+                $this->getStoreId()
             )->addPriceToResult(
-                $this->_storeManager->getStore()->getId()
+                $this->getStoreId()
             )->addProductToFilter(
                 array_keys($productsByLinkId)
-            )->addValuesToResult();
+            )->addValuesToResult($this->getStoreId());
 
             foreach ($options as $option) {
                 if (isset($productsByLinkId[$option->getProductId()])) {
