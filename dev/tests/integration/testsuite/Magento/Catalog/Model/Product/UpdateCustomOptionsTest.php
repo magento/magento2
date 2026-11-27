@@ -302,6 +302,63 @@ class UpdateCustomOptionsTest extends TestCase
     }
 
     /**
+     * Test update preserves custom option and value identifiers when they are omitted.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     * @return void
+     */
+    public function testUpdateCustomOptionWithoutIdentifiers(): void
+    {
+        $productSku = 'simple';
+        $optionData = [
+            'product_sku' => $productSku,
+            'title' => 'UOM',
+            'type' => ProductCustomOptionInterface::OPTION_TYPE_RADIO,
+            'is_require' => false,
+        ];
+        $valueData = [
+            [
+                'title' => 'Pack of 10',
+                'sort_order' => 1,
+                'price' => 0,
+                'price_type' => 'fixed',
+                'sku' => 'PK',
+            ],
+            [
+                'title' => 'Case of 100',
+                'sort_order' => 2,
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'CS',
+            ],
+        ];
+
+        $this->saveOptionWithoutIdentifiers($optionData, $valueData, $productSku);
+        $createdOption = $this->getProductOptionByProductSku($productSku);
+        $createdValueIds = $this->getValueIdsBySku($createdOption);
+
+        $this->saveOptionWithoutIdentifiers($optionData, $valueData, $productSku);
+        $unchangedOption = $this->getProductOptionByProductSku($productSku);
+        $this->assertSame($createdOption->getOptionId(), $unchangedOption->getOptionId());
+        $this->assertSame($createdValueIds, $this->getValueIdsBySku($unchangedOption));
+
+        $valueData[1]['title'] = 'Case of 120';
+        $valueData[1]['price'] = 12;
+        $this->saveOptionWithoutIdentifiers($optionData, $valueData, $productSku);
+        $updatedOption = $this->getProductOptionByProductSku($productSku);
+        $updatedValues = $updatedOption->getValues();
+
+        $this->assertSame($createdOption->getOptionId(), $updatedOption->getOptionId());
+        $this->assertSame($createdValueIds, $this->getValueIdsBySku($updatedOption));
+        foreach ($updatedValues as $updatedValue) {
+            if ($updatedValue->getSku() === 'CS') {
+                $this->assertSame('Case of 120', $updatedValue->getTitle());
+                $this->assertEquals(12, $updatedValue->getPrice());
+            }
+        }
+    }
+
+    /**
      * Update product custom options which are not from "select" group and assert updated data.
      *
      * @param array $optionData
@@ -481,5 +538,43 @@ class UpdateCustomOptionsTest extends TestCase
         $optionValues = $customOption->getValues();
 
         return reset($optionValues);
+    }
+
+    /**
+     * Save a newly hydrated custom option without database identifiers.
+     *
+     * @param array $optionData
+     * @param array $valueData
+     * @param string $productSku
+     * @return void
+     */
+    private function saveOptionWithoutIdentifiers(array $optionData, array $valueData, string $productSku): void
+    {
+        $values = [];
+        foreach ($valueData as $data) {
+            $values[] = $this->customOptionValueFactory->create(['data' => $data]);
+        }
+        $option = $this->customOptionFactory->create(['data' => $optionData]);
+        $option->setValues($values);
+        $product = $this->productRepository->get($productSku);
+        $product->setOptions([$option]);
+        $this->productRepository->save($product);
+    }
+
+    /**
+     * Return custom option value identifiers indexed by SKU.
+     *
+     * @param ProductCustomOptionInterface $option
+     * @return array
+     */
+    private function getValueIdsBySku(ProductCustomOptionInterface $option): array
+    {
+        $valueIds = [];
+        foreach ($option->getValues() as $value) {
+            $valueIds[$value->getSku()] = $value->getOptionTypeId();
+        }
+        ksort($valueIds);
+
+        return $valueIds;
     }
 }
