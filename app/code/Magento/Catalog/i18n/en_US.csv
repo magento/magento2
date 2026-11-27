@@ -876,3 +876,4 @@ Details,Details
 "Invalid quote path.","Invalid quote path."
 "Invalid order path.","Invalid order path."
 "A category cannot be assigned to one of its own descendants.","A category cannot be assigned to one of its own descendants."
+"The request contains invalid characters.","The request contains invalid characters."

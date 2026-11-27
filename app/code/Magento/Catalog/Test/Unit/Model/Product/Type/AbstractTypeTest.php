@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -132,5 +134,42 @@ class AbstractTypeTest extends TestCase
     {
         $this->product->expects($this->once())->method('getHasOptions')->willReturn(true);
         $this->assertTrue($this->model->hasOptions($this->product));
+    }
+
+    public function testPrepareForCartAdvancedRejectsBuyRequestWithInvalidUtf8(): void
+    {
+        $model = $this->objectManagerHelper->getObject(Simple::class, ['serializer' => new Json()]);
+        $product = $this->createPartialMock(
+            Product::class,
+            ['prepareCustomOptions', 'addCustomOption']
+        );
+        $product->expects($this->never())->method('addCustomOption');
+
+        $result = $model->prepareForCartAdvanced(
+            new DataObject(['product' => 4, 'qty' => 1, 'note' => "\xFF\xFE"]),
+            $product
+        );
+
+        $this->assertSame('The request contains invalid characters.', $result);
+    }
+
+    public function testPrepareForCartAdvancedStoresSerializedBuyRequest(): void
+    {
+        $model = $this->objectManagerHelper->getObject(Simple::class, ['serializer' => new Json()]);
+        $product = $this->createPartialMock(
+            Product::class,
+            ['prepareCustomOptions', 'addCustomOption']
+        );
+        $product->expects($this->once())
+            ->method('addCustomOption')
+            ->with('info_buyRequest', '{"product":4,"qty":1,"note":"gift"}');
+
+        $result = $model->prepareForCartAdvanced(
+            new DataObject(['product' => 4, 'qty' => 1, 'note' => 'gift']),
+            $product
+        );
+
+        $this->assertSame([$product], $result);
+        $this->assertSame(1.0, $product->getQty());
     }
 }
