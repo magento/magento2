@@ -16,4 +16,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\QuoteIdMask">
+        <plugin name="persistent_convert_customer_cart_before_guest_access" type="Magento\Persistent\Model\QuoteIdMaskPlugin" />
+    </type>
 </config>
