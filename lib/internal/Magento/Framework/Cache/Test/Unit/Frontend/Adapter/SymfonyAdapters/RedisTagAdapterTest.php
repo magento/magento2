@@ -110,6 +110,64 @@ class RedisTagAdapterTest extends TestCase
     }
 
     /**
+     * A scope set larger than the tag set is checked with SMISMEMBER and is not loaded.
+     */
+    public function testGetIdsMatchingTagsDoesNotLoadTheLargerSet(): void
+    {
+        $small = [];
+        for ($i = 0; $i < 600; $i++) {
+            $small[] = 'id_' . $i;
+        }
+        [$redis, $state] = $this->makeMembershipRedis([600, 300000], $small, ['id_1', 'id_2']);
+
+        $adapter = $this->createAdapter($redis);
+        $result = $adapter->getIdsMatchingTags(['tagA', 'tagB']);
+
+        sort($result);
+        $this->assertSame(['id_1', 'id_2'], $result);
+        $this->assertSame(['cache:tags:tagA'], $state->sMembersKeys);
+        $this->assertFalse($state->sinterCalled, 'sinter must not be used for sets above SINTER_SAFE_SIZE');
+    }
+
+    /**
+     * A member has to belong to every larger set, not only the first one.
+     */
+    public function testGetIdsMatchingTagsKeepsOnlyMembersOfEverySet(): void
+    {
+        [$redis, $state] = $this->makeMembershipRedis(
+            [600, 300000, 400000],
+            ['id_1', 'id_2', 'id_3'],
+            [],
+            ['tagB' => ['id_1', 'id_2'], 'tagC' => ['id_1']]
+        );
+
+        $adapter = $this->createAdapter($redis);
+        $result = $adapter->getIdsMatchingTags(['tagA', 'tagB', 'tagC']);
+
+        sort($result);
+        $this->assertSame(['id_1'], $result);
+        $this->assertSame(['cache:tags:tagA'], $state->sMembersKeys);
+    }
+
+    /**
+     * A failed SMISMEMBER must not be read as "nobody is a member".
+     */
+    public function testGetIdsMatchingTagsFallsBackWhenSmismemberFails(): void
+    {
+        [$redis] = $this->makeFakeRedis(
+            scardResults: [600, 800],
+            sMembersPipelineResults: [['id1', 'id2', 'id3'], ['id2', 'id3', 'id4']],
+            smismemberResult: false
+        );
+
+        $adapter = $this->createAdapter($redis);
+        $result = $adapter->getIdsMatchingTags(['tagA', 'tagB']);
+
+        sort($result);
+        $this->assertSame(['id2', 'id3'], $result);
+    }
+
+    /**
      * Create a RedisTagAdapter with an injected fake Redis client.
      *
      * ReflectionProperty::setValue() works on private properties without setAccessible()
@@ -149,13 +207,15 @@ class RedisTagAdapterTest extends TestCase
     private function makeFakeRedis(
         array $scardResults = [],
         array $sMembersPipelineResults = [],
-        array $sinterResult = []
+        array $sinterResult = [],
+        mixed $smismemberResult = null
     ): array {
         $state = new stdClass();
         $state->sinterCalled          = false;
         $state->sinterResult          = $sinterResult;
         $state->sMembersCalled        = false;
         $state->sMembersResult        = [];
+        $state->smismemberResult      = $smismemberResult;
 
         // Pipeline stub: scard/sMembers calls are queued via __call; execute() returns pre-set results.
         $pipeline = new class {
@@ -214,6 +274,120 @@ class RedisTagAdapterTest extends TestCase
                 if ($lower === 'smembers') {
                     $this->st->sMembersCalled = true;
                     return $this->st->sMembersResult;
+                }
+
+                if ($lower === 'smismember') {
+                    return $this->st->smismemberResult;
+                }
+
+                return null;
+            }
+        };
+
+        return [$redis, $state];
+    }
+
+    /**
+     * Redis stub whose SMISMEMBER answers membership without returning the large set.
+     *
+     * @param int[] $scardResults
+     * @param string[] $smallMembers
+     * @param string[] $presentInLargeSet
+     * @param array<string, string[]> $presentByTag
+     * @return array{0: object, 1: stdClass}
+     */
+    private function makeMembershipRedis(
+        array $scardResults,
+        array $smallMembers,
+        array $presentInLargeSet,
+        array $presentByTag = []
+    ): array {
+        $state = new stdClass();
+        $state->sinterCalled = false;
+        $state->sMembersKeys = [];
+
+        $pipeline = new class {
+            /** @var array */
+            public array $execQueue = [];
+
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            public function __call($method, $args): static
+            {
+                return $this;
+            }
+
+            public function execute(): array
+            {
+                return array_shift($this->execQueue) ?? [];
+            }
+        };
+        $pipeline->execQueue = [$scardResults];
+
+        $present = array_fill_keys($presentInLargeSet, true);
+        $presentByKey = [];
+        foreach ($presentByTag as $tag => $ids) {
+            $presentByKey['cache:tags:' . $tag] = array_fill_keys($ids, true);
+        }
+        $redis = new class ($pipeline, $state, $smallMembers, $present, $presentByKey) extends OptimizedPredisClient {
+            /** @var object */
+            private object $pipe;
+
+            /** @var stdClass */
+            private stdClass $st;
+
+            /** @var string[] */
+            private array $smallMembers;
+
+            /** @var array<string, true> */
+            private array $present;
+
+            /** @var array<string, array<string, true>> */
+            private array $presentByKey;
+
+            public function __construct(
+                object $pipe,
+                stdClass $st,
+                array $smallMembers,
+                array $present,
+                array $presentByKey
+            ) {
+                $this->pipe = $pipe;
+                $this->st = $st;
+                $this->smallMembers = $smallMembers;
+                $this->present = $present;
+                $this->presentByKey = $presentByKey;
+            }
+
+            public function pipeline(...$_arguments)
+            {
+                return $this->pipe;
+            }
+
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            public function __call($commandID, $arguments)
+            {
+                $lower = strtolower((string)$commandID);
+
+                if ($lower === 'sinter') {
+                    $this->st->sinterCalled = true;
+                    return [];
+                }
+
+                if ($lower === 'smembers') {
+                    $key = (string)($arguments[0] ?? '');
+                    $this->st->sMembersKeys[] = $key;
+                    return $key === 'cache:tags:tagA' ? $this->smallMembers : [];
+                }
+
+                if ($lower === 'smismember') {
+                    $key = (string)($arguments[0] ?? '');
+                    $members = array_slice($arguments, 1);
+                    $allowed = $this->presentByKey[$key] ?? $this->present;
+                    $flags = [];
+                    foreach ($members as $member) {
+                        $flags[] = isset($allowed[$member]) ? 1 : 0;
+                    }
+                    return $flags;
                 }
 
                 return null;
