@@ -188,9 +188,10 @@ class File implements MergeableInterface
         $attempt    = 0;
         while ($attempt < self::MAX_READ_ATTEMPTS) {
             $attempt++;
-            $content = trim($this->source->getContent($this));
+            $content = $this->source->getContent($this);
 
-            if ($content) {
+            // Trim only to detect an empty read; merged JS relies on e.g. the trailing newline after a // comment
+            if (trim((string)$content)) {
                 return $content;
             }
 
