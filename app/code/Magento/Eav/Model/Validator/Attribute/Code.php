@@ -35,6 +35,7 @@ class Code extends AbstractValidator
      */
     public function isValid($attributeCode): bool
     {
+        $this->_clearMessages();
         $errorMessages = [];
         /**
          * Check attribute_code for allowed characters
