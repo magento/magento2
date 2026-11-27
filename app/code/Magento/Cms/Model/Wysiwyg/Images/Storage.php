@@ -14,6 +14,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Driver\File as LocalFileDriver;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * Wysiwyg Images model.
@@ -426,9 +429,7 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
-                    $size = getimagesizefromstring(
-                        $driver->fileGetContents($item->getFilename())
-                    );
+                    $size = $this->getImageSize($driver, $item->getFilename());
 
                     if (is_array($size)) {
                         $item->setWidth($size[0]);
@@ -1083,5 +1084,29 @@ class Storage extends \Magento\Framework\DataObject
     private function isImageValid($item)
     {
         return $this->isImage($item->getBasename()) && $item->getSize() > 0;
+    }
+
+    /**
+     * Get image width and height without reading the whole file where the driver allows it.
+     *
+     * @param DriverInterface $driver
+     * @param string $path
+     * @return array|false
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function getImageSize(DriverInterface $driver, string $path)
+    {
+        if ($driver instanceof ExtendedDriverInterface) {
+            $extra = $driver->getMetadata($path)['extra'] ?? [];
+            if (isset($extra['image-width'], $extra['image-height'])) {
+                return [(int)$extra['image-width'], (int)$extra['image-height']];
+            }
+        } elseif ($driver instanceof LocalFileDriver) {
+            // getimagesize() reads only the image header; the suggested alternative needs the full content
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            return getimagesize($path);
+        }
+
+        return getimagesizefromstring($driver->fileGetContents($path));
     }
 }
