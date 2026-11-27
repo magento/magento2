@@ -398,10 +398,13 @@ class ProcessCronQueueObserver implements ObserverInterface
                     $e
                 );
             }
+            $this->eventManager->dispatch('cron_job_error', ['job_name' => 'cron/' . $groupId . '/' . $jobCode, 'exception' => $e]);
             throw $e;
         } finally {
             $this->stopProfiling($jobCode);
         }
+        
+        $this->eventManager->dispatch('cron_job_success', ['job_name' => 'cron/' . $groupId . '/' . $jobCode]);
 
         $schedule->setStatus(
             Schedule::STATUS_SUCCESS
