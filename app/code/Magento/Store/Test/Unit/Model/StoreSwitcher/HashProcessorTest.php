@@ -16,6 +16,7 @@ use Magento\Store\Model\StoreSwitcher\ContextInterfaceFactory;
 use Magento\Store\Model\StoreSwitcher\HashProcessor;
 use Magento\Store\Model\StoreSwitcher\RedirectDataInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataInterfaceFactory;
+use Magento\Store\Model\StoreSwitcher\RedirectDataNotFoundException;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataValidator;
@@ -57,6 +58,10 @@ class HashProcessorTest extends TestCase
      */
     private $store2;
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
+    /**
      * @var HashProcessor
      */
     private $model;
@@ -74,7 +79,7 @@ class HashProcessorTest extends TestCase
         $contextFactory = $this->createMock(ContextInterfaceFactory::class);
         $dataFactory = $this->createMock(RedirectDataInterfaceFactory::class);
         $this->dataValidator = $this->createMock(RedirectDataValidator::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->store1 = $this->createMock(StoreInterface::class);
         $this->store2 = $this->createMock(StoreInterface::class);
         $this->model = new HashProcessor(
@@ -85,7 +90,7 @@ class HashProcessorTest extends TestCase
             $contextFactory,
             $dataFactory,
             $this->dataValidator,
-            $logger
+            $this->logger
         );
 
         $contextFactory->method('create')
@@ -172,9 +177,36 @@ class HashProcessorTest extends TestCase
             ->willThrowException(new InvalidArgumentException('Invalid token supplied'));
         $this->postprocessor->expects($this->never())
             ->method('process');
+        $this->logger->expects($this->once())
+            ->method('error');
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
             ->with('Something went wrong.');
+
+        $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
+    }
+
+    public function testShouldNotReportErrorIfRedirectDataWasAlreadyConsumed(): void
+    {
+        $redirectUrl = '/category-1/category-1.1.html';
+        $this->request->method('getParam')
+            ->willReturnMap(
+                [
+                    ['time_stamp', null, time() - 1],
+                    ['data', null, '7ddf32e17a6ac5ce04a8ecbf782ca509'],
+                    ['signature', null, 'randomstring'],
+                ]
+            );
+        $this->dataValidator->method('validate')
+            ->willReturn(true);
+        $this->dataSerializer->method('unserialize')
+            ->willThrowException(new RedirectDataNotFoundException('Couldn\'t retrieve data from cache.'));
+        $this->postprocessor->expects($this->never())
+            ->method('process');
+        $this->messageManager->expects($this->never())
+            ->method('addErrorMessage');
+        $this->logger->expects($this->never())
+            ->method('error');
 
         $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
     }

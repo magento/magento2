@@ -123,6 +123,9 @@ class HashProcessor implements StoreSwitcherInterface
                         __('The requested store cannot be found. Please check the request and try again.')
                     );
                 }
+            } catch (RedirectDataNotFoundException $exception) {
+                // A reused link whose one-time data is gone has nothing left to restore; the switch itself is complete.
+                $this->logger->debug($exception->getMessage());
             } catch (LocalizedException $exception) {
                 $this->messageManager->addErrorMessage($exception->getMessage());
             } catch (\Throwable $exception) {
