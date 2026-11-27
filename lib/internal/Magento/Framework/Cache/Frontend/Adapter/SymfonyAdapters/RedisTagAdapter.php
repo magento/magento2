@@ -115,9 +115,14 @@ LUA;
     private const SUNION_CHUNK_SIZE = 500;
 
     /**
-     * Limits SINTER to safe set sizes; larger sets use SMEMBERS with PHP array_intersect to avoid Valkey blocking.
+     * Limits SINTER to safe set sizes; larger sets use membership checks or a PHP intersect.
      */
     private const SINTER_SAFE_SIZE = 500;
+
+    /**
+     * Members sent to one SMISMEMBER call. Each call stays O(chunk) on the server.
+     */
+    private const SMISMEMBER_CHUNK_SIZE = 1000;
 
     /**
      * Maximum number of IDs to be removed at a time - matches Zend's $_removeChunkSize
@@ -416,7 +421,8 @@ LUA;
     /**
      * @inheritDoc
      *
-     * Uses SINTER for small sets and SMEMBERS + PHP array_intersect for large sets to avoid blocking Valkey.
+     * Uses SINTER for small sets. Larger sets filter the smallest set with SMISMEMBER so the
+     * scope tag is not loaded into PHP. SMEMBERS of every set remains the fallback.
      */
     public function getIdsMatchingTags(array $tags): array
     {
@@ -465,12 +471,116 @@ LUA;
     }
 
     /**
-     * Intersect the given sets client-side using SMEMBERS + array_intersect
+     * Intersect large sets without loading every set into PHP
+     *
+     * @param string[] $tagKeys Sorted smallest-first
+     * @return string[]
+     */
+    private function intersectViaMembers(array $tagKeys): array
+    {
+        $filtered = $this->intersectSmallestByMembership($tagKeys);
+        if ($filtered !== null) {
+            return $filtered;
+        }
+
+        return $this->intersectByLoadingMembers($tagKeys);
+    }
+
+    /**
+     * Keep members of the smallest set that belong to every larger set
+     *
+     * Returns null when SMISMEMBER cannot be used, so the caller loads the sets instead.
+     *
+     * @param string[] $tagKeys
+     * @return string[]|null
+     */
+    private function intersectSmallestByMembership(array $tagKeys): ?array
+    {
+        $probe = $this->callSmismember($tagKeys[0], ["\0"]);
+        if ($probe === null) {
+            return null;
+        }
+
+        $members = $this->toIdsArray($this->redis->sMembers($tagKeys[0]));
+        foreach (array_slice($tagKeys, 1) as $tagKey) {
+            $members = $this->keepMembersPresentInSet($tagKey, $members);
+            if ($members === null) {
+                return null;
+            }
+        }
+
+        return $members;
+    }
+
+    /**
+     * Drop members that are absent from the given set
+     *
+     * @param string $tagKey
+     * @param string[] $members
+     * @return string[]|null
+     */
+    private function keepMembersPresentInSet(string $tagKey, array $members): ?array
+    {
+        $kept = [];
+        foreach (array_chunk($members, self::SMISMEMBER_CHUNK_SIZE) as $chunk) {
+            $flags = $this->callSmismember($tagKey, $chunk);
+            if ($flags === null) {
+                return null;
+            }
+            foreach ($chunk as $index => $member) {
+                if ($flags[$index] === 1) {
+                    $kept[] = $member;
+                }
+            }
+        }
+
+        return $kept;
+    }
+
+    /**
+     * Ask Redis which of these members are in the set
+     *
+     * A null return means the server or the client cannot run SMISMEMBER.
+     *
+     * @param string $tagKey
+     * @param string[] $members
+     * @return int[]|null 1 when the member is present, 0 when it is not
+     */
+    private function callSmismember(string $tagKey, array $members): ?array
+    {
+        if ($members === []) {
+            return [];
+        }
+
+        try {
+            $result = $this->redis->sMisMember($tagKey, ...$members);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        if (is_int($result) || is_bool($result)) {
+            $result = [(int) ((bool) $result)];
+        }
+
+        if (!is_array($result) || count($result) !== count($members)) {
+            return null;
+        }
+
+        $flags = [];
+        foreach ($result as $flag) {
+            $flags[] = (int) $flag === 1 ? 1 : 0;
+        }
+
+        return $flags;
+    }
+
+    /**
+     * Intersect the given sets by loading each one with SMEMBERS
      *
      * @param string[] $tagKeys
      * @return string[]
      */
-    private function intersectViaMembers(array $tagKeys): array
+    private function intersectByLoadingMembers(array $tagKeys): array
     {
         $pipeline = $this->createPipeline();
         foreach ($tagKeys as $key) {

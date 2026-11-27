@@ -110,6 +110,26 @@ class RedisTagAdapterTest extends TestCase
     }
 
     /**
+     * A scope set larger than the tag set is checked with SMISMEMBER and is not loaded.
+     */
+    public function testGetIdsMatchingTagsDoesNotLoadTheLargerSet(): void
+    {
+        $small = [];
+        for ($i = 0; $i < 600; $i++) {
+            $small[] = 'id_' . $i;
+        }
+        [$redis, $state] = $this->makeMembershipRedis([600, 300000], $small, ['id_1', 'id_2']);
+
+        $adapter = $this->createAdapter($redis);
+        $result = $adapter->getIdsMatchingTags(['tagA', 'tagB']);
+
+        sort($result);
+        $this->assertSame(['id_1', 'id_2'], $result);
+        $this->assertSame(['cache:tags:tagA'], $state->sMembersKeys);
+        $this->assertFalse($state->sinterCalled, 'sinter must not be used for sets above SINTER_SAFE_SIZE');
+    }
+
+    /**
      * Create a RedisTagAdapter with an injected fake Redis client.
      *
      * ReflectionProperty::setValue() works on private properties without setAccessible()
@@ -214,6 +234,96 @@ class RedisTagAdapterTest extends TestCase
                 if ($lower === 'smembers') {
                     $this->st->sMembersCalled = true;
                     return $this->st->sMembersResult;
+                }
+
+                return null;
+            }
+        };
+
+        return [$redis, $state];
+    }
+
+    /**
+     * Redis stub whose SMISMEMBER answers membership without returning the large set.
+     *
+     * @param int[] $scardResults
+     * @param string[] $smallMembers
+     * @param string[] $presentInLargeSet
+     * @return array{0: object, 1: stdClass}
+     */
+    private function makeMembershipRedis(array $scardResults, array $smallMembers, array $presentInLargeSet): array
+    {
+        $state = new stdClass();
+        $state->sinterCalled = false;
+        $state->sMembersKeys = [];
+
+        $pipeline = new class {
+            /** @var array */
+            public array $execQueue = [];
+
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            public function __call($method, $args): static
+            {
+                return $this;
+            }
+
+            public function execute(): array
+            {
+                return array_shift($this->execQueue) ?? [];
+            }
+        };
+        $pipeline->execQueue = [$scardResults];
+
+        $present = array_fill_keys($presentInLargeSet, true);
+        $redis = new class ($pipeline, $state, $smallMembers, $present) extends OptimizedPredisClient {
+            /** @var object */
+            private object $pipe;
+
+            /** @var stdClass */
+            private stdClass $st;
+
+            /** @var string[] */
+            private array $smallMembers;
+
+            /** @var array<string, true> */
+            private array $present;
+
+            public function __construct(object $pipe, stdClass $st, array $smallMembers, array $present)
+            {
+                $this->pipe = $pipe;
+                $this->st = $st;
+                $this->smallMembers = $smallMembers;
+                $this->present = $present;
+            }
+
+            public function pipeline(...$_arguments)
+            {
+                return $this->pipe;
+            }
+
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            public function __call($commandID, $arguments)
+            {
+                $lower = strtolower((string)$commandID);
+
+                if ($lower === 'sinter') {
+                    $this->st->sinterCalled = true;
+                    return [];
+                }
+
+                if ($lower === 'smembers') {
+                    $key = (string)($arguments[0] ?? '');
+                    $this->st->sMembersKeys[] = $key;
+                    return $key === 'cache:tags:tagA' ? $this->smallMembers : [];
+                }
+
+                if ($lower === 'smismember') {
+                    $members = array_slice($arguments, 1);
+                    $flags = [];
+                    foreach ($members as $member) {
+                        $flags[] = isset($this->present[$member]) ? 1 : 0;
+                    }
+                    return $flags;
                 }
 
                 return null;
