@@ -15,7 +15,9 @@ define([
         var injector = new Squire(),
             checkoutDataResolver = null,
             checkoutData = null,
-            quote = null;
+            quote = null,
+            addressList = null,
+            selectShippingAddress = null;
 
         beforeEach(function (done) {
             var mocks = {
@@ -30,10 +32,14 @@ define([
                     getSelectedBillingAddress: jasmine.createSpy(),
                     getBillingAddressFromData: jasmine.createSpy(),
                     getNewCustomerBillingAddress: jasmine.createSpy(),
-                    setBillingAddressFromData: jasmine.createSpy()
+                    setBillingAddressFromData: jasmine.createSpy(),
+                    getShippingAddressFromData: jasmine.createSpy(),
+                    setShippingAddressFromData: jasmine.createSpy(),
+                    getSelectedShippingAddress: jasmine.createSpy(),
+                    getNewCustomerShippingAddress: jasmine.createSpy()
                 },
-                'Magento_Checkout/js/action/create-shipping-address': {},
-                'Magento_Checkout/js/action/select-shipping-address': {},
+                'Magento_Checkout/js/action/create-shipping-address': jasmine.createSpy(),
+                'Magento_Checkout/js/action/select-shipping-address': jasmine.createSpy(),
                 'Magento_Checkout/js/action/select-shipping-method': {},
                 'Magento_Checkout/js/model/payment-service': {},
                 'Magento_Checkout/js/action/select-payment-method': {}
@@ -44,6 +50,8 @@ define([
                 checkoutDataResolver = instance;
                 quote = mocks['Magento_Checkout/js/model/quote'];
                 checkoutData = mocks['Magento_Checkout/js/checkout-data'];
+                addressList = mocks['Magento_Customer/js/model/address-list'];
+                selectShippingAddress = mocks['Magento_Checkout/js/action/select-shipping-address'];
                 done();
             });
             window.checkoutConfig = window.checkoutConfig || {};
@@ -91,6 +99,49 @@ define([
                     });
                 }
             );
+        });
+
+        describe('resolveEstimationAddress()', function () {
+            var savedAddress = {
+                    getKey: function () {
+                        return 'customer-address1';
+                    },
+                    isDefaultShipping: function () {
+                        return false;
+                    }
+                },
+                shippingAddressFromData = {
+                    firstname: 'John',
+                    lastname: 'Doe',
+                    'country_id': 'US',
+                    'region_id': '12',
+                    postcode: '90210'
+                };
+
+            beforeEach(function () {
+                addressList([savedAddress]);
+                checkoutData.getShippingAddressFromData.and.returnValue(shippingAddressFromData);
+            });
+
+            it('uses the saved address the customer selected instead of the shipping address form data', function () {
+                checkoutData.getSelectedShippingAddress.and.returnValue('customer-address1');
+                checkoutDataResolver.resolveEstimationAddress();
+                expect(selectShippingAddress).toHaveBeenCalledWith(savedAddress);
+            });
+
+            it('uses the shipping address form data when no saved address is selected', function () {
+                checkoutData.getSelectedShippingAddress.and.returnValue(null);
+                checkoutDataResolver.resolveEstimationAddress();
+                expect(selectShippingAddress).toHaveBeenCalledTimes(1);
+                expect(selectShippingAddress.calls.mostRecent().args[0].postcode).toEqual('90210');
+            });
+
+            it('uses the shipping address form data when the new address is selected', function () {
+                checkoutData.getSelectedShippingAddress.and.returnValue('new-customer-address');
+                checkoutDataResolver.resolveEstimationAddress();
+                expect(selectShippingAddress).toHaveBeenCalledTimes(1);
+                expect(selectShippingAddress.calls.mostRecent().args[0].postcode).toEqual('90210');
+            });
         });
     });
 });
