@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Constraints;
 
+use Magento\Framework\DB\Ddl\Table as DdlTable;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementDiffAwareInterface;
@@ -19,7 +20,7 @@ class Reference extends Constraint implements ElementDiffAwareInterface
      * In case if we will need to change this object: add, modify or drop, we will need
      * to define it by its type.
      */
-    const TYPE = 'reference';
+    public const TYPE = 'reference';
 
     /**
      * @var Column
@@ -132,7 +133,9 @@ class Reference extends Constraint implements ElementDiffAwareInterface
             'referenceColumn' => $this->getReferenceColumn()->getName(),
             'referenceTableName' => $this->getReferenceTable()->getName(),
             'tableName' => $this->getTable()->getName(),
-            'onDelete' => $this->getOnDelete(),
+            'onDelete' => $this->getOnDelete() === DdlTable::ACTION_RESTRICT
+                ? DdlTable::ACTION_NO_ACTION
+                : $this->getOnDelete(),
             'resource' => $this->getTable()->getResource()
         ];
     }
