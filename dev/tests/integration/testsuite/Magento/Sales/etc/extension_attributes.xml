@@ -7,6 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
+        <attribute code="test_status" type="string">
+            <join reference_table="sales_order_status" join_on_field="sku" reference_field="status">
+                <field>status</field>
+            </join>
+        </attribute>
+    </extension_attributes>
     <extension_attributes for="Magento\Sales\Api\Data\ShipmentInterface">
         <attribute code="test_attribute_value" type="string"/>
     </extension_attributes>
