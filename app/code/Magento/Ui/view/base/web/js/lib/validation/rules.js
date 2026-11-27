@@ -723,7 +723,7 @@ define([
                     return true;
                 }
 
-                isNumeric = /^(?:\d+\.?\d*|\.\d+)$/.test(value);
+                isNumeric = /^-?(?:\d+\.?\d*|\.\d+)$/.test(value);
 
                 if (!isNumeric) {
                     return false;
