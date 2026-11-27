@@ -77,6 +77,13 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
 
         if ($driver instanceof Filesystem\ExtendedDriverInterface) {
             $meta = $driver->getMetadata($absolutePath);
+            if (!isset($meta['extra']['image-width'], $meta['extra']['image-height'])) {
+                // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
+                $size = @getimagesizefromstring($driver->fileGetContents($absolutePath));
+                if ($size !== false) {
+                    $meta['extra'] = ['image-width' => $size[0], 'image-height' => $size[1]];
+                }
+            }
         } else {
             /**
              * SPL file info is not compatible with remote storages and must not be used.
