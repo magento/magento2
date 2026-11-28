@@ -12,13 +12,15 @@ define([
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     'uiLayout',
-    'uiCollection'
-], function (ko, _, loader, resolver, layout, Collection) {
+    'uiCollection',
+    'mage/translate'
+], function (ko, _, loader, resolver, layout, Collection, $t) {
     'use strict';
 
     return Collection.extend({
         defaults: {
             template: 'ui/grid/listing',
+            emptyText: $t('We couldn\'t find any records.'),
             listTemplate: 'ui/list/listing',
             stickyTmpl: 'ui/grid/sticky/listing',
             viewSwitcherTmpl: 'ui/grid/view-switcher',

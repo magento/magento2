@@ -83,5 +83,19 @@ define([
                 expect(setLayoutStyles).toHaveBeenCalled();
             });
         });
+        describe('empty text', function () {
+            it('uses the default empty text', function () {
+                expect(Component.emptyText).toBe("We couldn't find any records.");
+            });
+
+            it('allows a custom empty text', function () {
+                var customComponent = new Masonry({
+                    emptyText: 'No images found.'
+                });
+
+                expect(customComponent.emptyText).toBe('No images found.');
+                customComponent.clear();
+            });
+        });
     });
 });
