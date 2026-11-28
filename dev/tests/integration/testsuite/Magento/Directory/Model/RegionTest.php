@@ -66,7 +66,7 @@ class RegionTest extends TestCase
         return [
             ['US'], ['CA'], ['CN'], ['IN'], ['AU'], ['BE'], ['CO'], ['MX'], ['PL'], ['IT'],
             ['BG'], ['AR'], ['BO'], ['CL'], ['EC'], ['GY'], ['PY'], ['PE'], ['SR'], ['VE'],
-            ['PT'], ['IS'], ['SE'], ['GR'], ['DK'], ['AL'], ['BY'], ['UA'],
+            ['PT'], ['IS'], ['SE'], ['GR'], ['DK'], ['AL'], ['BY'], ['UA'], ['ID'],
         ];
     }
 
